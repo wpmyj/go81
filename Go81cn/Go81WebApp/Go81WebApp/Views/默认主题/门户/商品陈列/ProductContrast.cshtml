@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "商品对比";
+}
+@using Go81WebApp.Models.数据模型.商品数据模型;
+<table class="product_contrast_table" cellspacing="0" cellpadding="0" style="width:100%">
+    <tr>
+        <th class="lab">属性列表</th>
+        @for (int i = 0; i < int.Parse(ViewData["contrasecount"].ToString()); i++)
+        {
+            <th>
+                商品@(i + 1)
+            </th>
+        }
+    </tr>
+    <tr>
+        <td class="lab">商品名称</td>
+        @foreach (var temp in (IList<商品>)ViewData["对比商品集合"])
+        {
+            <td>@temp.商品信息.商品名</td>
+        }
+    </tr>
+    <tr>
+        <td class="lab">商品图片</td>
+        @foreach (var temp in (IList<商品>)ViewData["对比商品集合"])
+        {
+            <td>
+                @if (temp.商品信息.商品图片.Count > 0)
+                {
+                    <img src="@temp.商品信息.商品图片[0]" width="100" height="100" />
+                }
+                else
+                {
+                    <img src="~/images/noimage.jpg" width="100" height="100" />
+                }
+            </td>
+        }
+    </tr>
+    <tr>
+        <td class="lab">商品价格</td>
+        @foreach (var temp in (IList<商品>)ViewData["对比商品集合"])
+        {
+                <td style="color:red ;font-size:14px;">
+                    @if (temp.销售信息.价格 != null)
+                    {
+                        <span>￥@temp.销售信息.价格.ToString()</span>
+                    }
+                    else
+                    {
+                        <span>未填写</span>
+                    }
+                </td>
+        }
+    </tr>
+    @foreach (var arr in (Dictionary<string, Dictionary<string, 商品属性数据>>)ViewData["商品分类属性"])
+    {
+        <tr style="background-color:#e8edbc;">
+            <td>@arr.Key</td>
+            @foreach (var proname in (IList<商品>)ViewData["对比商品集合"])
+            {
+                <td>@proname.商品信息.商品名</td>
+            }
+        </tr>
+        foreach (var item in arr.Value)
+        {
+            <tr>
+                <td>@item.Key</td>
+                @foreach (var temp in (IList<商品>)ViewData["对比商品集合"])
+                {
+                    <td>&nbsp;
+                        @foreach (var templist in temp.商品数据.商品属性)
+                        {
+                            if (templist.Key == arr.Key)
+                            {
+                                //外观templist.Key
+                                foreach (var templista in templist.Value)
+                                {
+                                    if (templista.Key == item.Key)
+                                    {
+                                        foreach (var val in templista.Value)
+                                        {
+                                            <span style="padding-right:10px;">@(val)</span>
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    }
+</table>

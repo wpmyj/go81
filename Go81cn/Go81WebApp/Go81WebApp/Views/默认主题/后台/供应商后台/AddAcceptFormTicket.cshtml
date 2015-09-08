@@ -1,0 +1,560 @@
+﻿﻿@model Go81WebApp.Models.数据模型.项目数据模型.机票验收单
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.项目数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型
+@{
+    ViewBag.Title = "添加验收单";
+    Layout = "_BackLayout.cshtml";
+}
+<link href="~/css/css.css" rel="stylesheet" />
+@*<script src="~/Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>*@
+<script src="~/JS/myComfirm.js" type="text/javascript"></script>
+<script type="text/javascript" src="~/JS/NTClientJavascript.js"></script>
+@*<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+    <script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+    <script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>*@
+<style type="text/css">
+    .accept {
+        width: 1150px;
+        padding: 20px;
+        margin: 30px auto;
+        background: #fff;
+    }
+
+        .accept th {
+            background: none repeat scroll 0 0 #DEDEDE;
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .accept td {
+            line-height: 30px;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            border-right: none;
+        }
+
+            .accept td.left_none {
+                border-left: none;
+            }
+
+        .accept .align {
+            text-align: right;
+            width: 150px;
+            font-size: 16px;
+        }
+
+        .accept span {
+            color: red;
+            font-size: 12px;
+        }
+
+        .accept .lis {
+            text-align: right;
+            font-size: 14px;
+            color: #575757;
+        }
+
+    .gys_ztbsearch_contentbox a {
+        margin-left: 5px;
+    }
+
+    #good_list td {
+        border: none;
+    }
+
+    .select_unit {
+        display: none;
+    }
+
+    .del_good_list {
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+     .wenxintishi {
+        text-indent: 2.0em;
+    }
+
+    .modal {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        position: fixed;
+        display: none;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: 600px;
+        margin: 15% auto;
+    }
+
+    .modal-content {
+        position: relative;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, .2);
+        border-radius: 6px;
+        outline: 0;
+        -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    }
+
+    .close {
+        margin-top: -2px;
+        float: right;
+        font-size: 21px;
+        font-weight: bold;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        filter: alpha(opacity=20);
+        opacity: .2;
+        -webkit-appearance: none;
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+    }
+
+    h4 {
+        font-size: 18px;
+    }
+
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .modal-header {
+        min-height: 16.42857143px;
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .modal-title {
+        margin: 0;
+        line-height: 1.42857143;
+    }
+
+    .modal-body {
+        position: relative;
+        padding: 15px;
+    }
+
+    .modal-footer {
+        padding: 15px;
+        text-align: right;
+        border-top: 1px solid #e5e5e5;
+    }
+</style>
+<div id="indexpagemodal1" class="modal fade" style="display:none;">
+    <input type="hidden" id="ssid" name="ssid" value="@ViewData["Message"]" style="width:300px;" />
+    <input type="hidden" id="HidIAID" name="HidIAID" style="width:300px;" />
+    <input type="hidden" id="HidDigest" name="HidDigest" style="width:300px;" />
+    <div class="modal-dialog" style="margin: 10% auto;">
+        <div class="modal-content" style="height:230px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal1').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px;">请输入安全证书密码</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 100px; text-align:center; line-height:25px;">
+                    <input type="password" id="password" name="password" style=" height:25px; width:250px; line-height:25px; " /><br />
+                    <span style="color:red;" id="errortips"></span>
+                </div>
+                <div style="width: 100%; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" id="submitpassword" class="gys_ztbsearch_search_botton" style="margin-left:0;" value="确  定" onclick="return OnLogon();" /></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="f1" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>正在上传，请稍等...</span>
+    </div>
+</div>
+@*@if (ViewData["是否持有U盾"] != null && ViewData["是否持有U盾"] == "1")
+{*@
+
+<div class="bg_outdiv">
+    <div id="title_div" class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">新增验收单</div>
+        <a href="/供应商后台/AcceptanceTicketList" style="padding-top: 8px; float: left; margin-left: 25px;">返回到验收单列表</a>
+    </div>
+    @using (Html.BeginForm("AddAcceptenceTicket", "供应商后台", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div style=" width:1200px;margin:30px auto;background:#fff;border-radius:5px;">
+            <table class="accept" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="right">验收单经办人：</td>
+                    <td class="left_none">@Html.TextBoxFor(m => m.供货单位承办人, new { @id="gyscbr"})</td>
+                    <td class="left_none" align="right">验收单经办人电话：</td>
+                    <td style="width:315px;border-right:1px solid #ccc" class="left_none">@Html.TextBoxFor(m => m.供货单位承办人电话, new { @id="cbrtel"})</td>
+                </tr>
+                <tr>
+                    <td class="align" valign="top">服务列表：</td>
+                    <td colspan="7" width="870px">
+                        <table style="width:100%;" id="good_list" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th width="20%">航班号</th>
+                                <th width="15%">行程单号（电子客票号）</th>
+                                <th width="20%">旅客姓名</th>
+                                @*<th width="10%">计量单位</th>
+                                <th width="8%">数量</th>*@
+                                <th width="8%">价格</th>
+                                <th width="5%">操作</th>
+                            </tr>
+                            <tr>
+
+                                
+                                @*<td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='服务列表[`].航班号' value='' type='text'></td>
+   
+                                <td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='服务列表[`].行程单号' value='' type='text'></td>
+                     
+                                <td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='服务列表[`].客户姓名' value='' type='text'></td>
+                                <td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='服务列表[`].计量单位' value='' type='text' style='width:60px;'></td>
+
+                                <td style='text-align:center'><input placeholder='必填' style='width:70px;' class='text-box single-line' data-val='true' data-val-number='字段 数量 必须是一个数字。' data-val-required='数量 字段是必需的。' name='服务列表[`].数量' value='' type='number' onkeyup='checkNum(this)' min='1'></td>
+                               
+   
+                                <td style='text-align:center'><input placeholder='必填' style='width:70px;' class='text-box single-line' data-val='true' data-val-number='字段 单价 必须是一个数字。' data-val-required='单价 字段是必需的。' name='服务列表[`].单价' value='' type='text' title='`' onkeyup='checkPrice(this)'></td>
+            
+                                <td style='text-align:center;border-right:1px solid #aaa'><a class='del_good_list' onclick='DelGoodList(this)' id='`'>删除</a></td>*@
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border-top:none"></td>
+                    <td class="align" style="text-align:left;padding-left:10px;border-right:1px solid #aaa" colspan="7">
+                        <div style="width:140px; border: 1px solid #C0C0C0; padding-left: 5px;padding-right: 5px; margin-bottom: 5px;margin-top:5px; cursor: pointer;background: none repeat scroll 0% 0% #F0EBEB;font-size: 13px;text-indent:0;" id="add_good_list1" onclick="addFi(this)">
+                            <a style="background: url('../Images/AddDel20x20.png') left center no-repeat scroll transparent;width:20px;height:20px;margin-bottom:3px;margin-right:4px; vertical-align:middle; display:inline-block"> </a>
+                            添加行程单与客户
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:center;border-left:none;padding-top:10px;">
+                        <button class="gys_ztbsearch_search_botton" type="submit" id="btn_sub" value="保存">保存</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+   
+</div>
+@*}
+else
+{
+    <h4 style="color:gray;text-align:center;">您还未持有安全证书或安全证书已过期，为保证数据的安全性，暂时无法使用验收单功能，如有疑问，请联系客服。</h4>
+}*@
+<script type="text/javascript">
+    //服务列表
+    var t = "<tr>";
+    t += "<td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='服务列表[`].航班号' value='' type='text'></td>";
+    t += "<td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='服务列表[`].行程单号' value='' type='text'></td></td>";
+    t += "<td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='服务列表[`].客户姓名' value='' type='text'></td>";
+    t += "<td style='text-align:center'><input placeholder='必填' style='width:70px;' class='text-box single-line' data-val='true' data-val-number='字段 单价 必须是一个数字。' data-val-required='单价 字段是必需的。' name='服务列表[`].单价' value='' type='text' title='`'></td>";
+    t += "<td style='text-align:center;border-right:1px solid #aaa'><a class='del_good_list' onclick='DelGoodList(this)' id='`'>删除</a></td>";
+    t += "</tr>";
+
+    var count = 0;//列表索引
+    //新增单个物资  或添加物资清单
+    function addFi(e) {
+        $('#good_list').append(t.replace(/`/g, count++));
+    }
+
+    //删除某行物资
+    function DelGoodList(a) {
+        var k = $(a).attr("id");
+        $(a).parent().parent().parent().children().eq(parseInt(k) + 2).hide();//查找到要删除的哪一行并隐藏
+        var d = $(a).parent().parent().parent().children().eq(parseInt(k) + 2).find("input");//列出该行中所有输入框
+        $(d).each(function (index, domEle) {
+            var v = $(domEle).val("");         //将该行中的输入框的数据清空
+        });
+    }
+
+
+    var b = false;//判断是否正式提交
+    $("#btn_sub").click(function () {
+        var isnull;
+        var list = $(".go_od:visible");
+        if ($("#gyscbr").val() == "") {
+            if ($("#comfirm-m").length > 0) {
+                $("#comfirm-m").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-m",
+                    btncloseid: "btnclose9",
+                    btnsubid: "btnsub9",
+                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                    content: "请填写经办人！",  //提示信息内容 必须
+                    iscomfirm: false,
+                    onComfirm: function () {
+                        $("#comfirm-m").fadeOut(200);
+                    },
+                });
+            }
+            return false;
+        }
+        if ($("#cbrtel").val() == "") {
+            if ($("#comfirm-n").length > 0) {
+                $("#comfirm-n").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-n",
+                    btncloseid: "btnclose10",
+                    btnsubid: "btnsub10",
+                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                    content: "请填写经办人电话！",  //提示信息内容 必须
+                    iscomfirm: false,
+                    onComfirm: function () {
+                        $("#comfirm-n").fadeOut(200);
+                    },
+                });
+            }
+            return false;
+        }
+        var d = $("#good_list").find("input:visible");  //物资列表信息是否完善
+        if (d.length <= 0) {
+            if ($("#comfirm-a").length > 0) {
+                $("#comfirm-a").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-a",
+                    btncloseid: "btnclose1",
+                    btnsubid: "btnsub1",
+                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                    content: "您未添加任何服务信息！",  //提示信息内容 必须
+                    iscomfirm: false,
+                    onComfirm: function () {
+                        $("#comfirm-a").fadeOut(200);
+                    },
+                });
+            }
+            return false;
+        }
+        $(d).each(function (index, domEle) {
+            var v = $(domEle).val();
+            if (v == "" || v==undefined) {
+                isnull = true;
+            }
+        });
+
+        if (isnull) {
+            if ($("#comfirm-g").length > 0) {
+                $("#comfirm-g").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-g",
+                    btncloseid: "btnclose6",
+                    btnsubid: "btnsub6",
+                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                    content: "请将信息填写完善！",  //提示信息内容 必须
+                    iscomfirm: false,
+                    onComfirm: function () {
+                        $("#comfirm-g").fadeOut(200);
+                    },
+                });
+            }
+            return false;
+        }
+        if (!isnull) {
+            if (!b) {
+                b = true;
+                if ($("#comfirm-e").length > 0) {
+                    $("#comfirm-e").fadeIn(200);
+                    return false;
+                }
+                else {
+                    $("body").myComfirm({
+                        index: "comfirm-e",
+                        btncloseid: "btnclose4",
+                        btnsubid: "btnsube4",
+                        img: "url('../Images/alert-comfirm.png') 160px 0", //提示信息相应图片  必须
+                        content: "是否提交并保存验收单?",  //提示信息内容 必须
+                        iscomfirm: true,
+                        onComfirm: function () {
+                            $("#btn_sub").click();
+
+                            $("#comfirm-e").fadeOut(200);
+                            setTimeout(function () {
+                                if ($("#comfirm-h").length > 0) {
+                                    $("#comfirm-h").fadeIn(200);
+                                    return false;
+                                }
+                                else {
+                                    $("body").myComfirm({
+                                        index: "comfirm-h",
+                                        btncloseid: "btnclose7",
+                                        btnsubid: "btnsub7",
+                                        img: "url('../Images/alert-comfirm.png') 0 70px", //提示信息相应图片  必须
+                                        content: "已提交，请等待审核！",  //提示信息内容 必须
+                                        iscomfirm: false,
+                                        onComfirm: function () {
+                                            //$.fn.myComfirm.close("comfirm-h",200);
+                                            $("#comfirm-h").fadeOut(200);
+                                        },
+                                    });
+                                }
+                            }, 300);
+                        },
+                        onCancel: function () {
+                            $("#comfirm-e").fadeOut(200);
+                            b = false;
+                        },
+                    });
+                    return false;
+                };
+            }
+        }
+    });
+    $("#unit_user").change(function () {
+        var id = $(this).find("option:selected").attr("value");
+        $("#unit_user_id").val(id);
+    });
+
+
+    @*var i = @(int.Parse(ViewData["currentpage"].ToString()));
+    var j=@(int.Parse(ViewData["pagecount"].ToString()));*@
+
+</script>
+
+@if (ViewData["是否持有U盾"] == "1")
+{
+    @*<script type="text/javascript">
+        $(function () {
+            $(".bg_outdiv").hide();
+            if (!getcheck()) {
+                $(".bg_outdiv").hide();
+                $("#indexpagemodal1").hide();
+            }
+            else {
+                $("#indexpagemodal1").show();
+            }
+        });
+
+        function getcheck() {
+            var flage = true;
+
+            var browser = DetectBrowser();
+            if (browser == "Unknown") {
+                alert("不支持该浏览器， 如果您在使用傲游或类似浏览器，请切换到IE模式，建议使用Google浏览器！");
+                flage = false;
+            }
+            createElementNT199();
+            var create = DetectNT199Plugin();
+            if (create == false) {
+                alert("插件未安装,,请直接安装CD区的插件!");
+                flage = false;
+            }
+
+            var Rtn = NT199_Find();
+            if (Rtn < 1) {
+                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                flage = false;
+            }
+
+            if (flage) {
+                $("#indexpagemodal1").show();
+                $("#password").focus();
+            }
+            return flage;
+        }
+        function OnLogon() {
+            var Rtn = NT199_Find();
+            if (Rtn < 1) {
+                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                return false;
+            }
+            var pwd = document.getElementById("password").value;
+            if (pwd == "") {
+                alert("用户密码不能为空");
+                return false;
+            }
+            var retVal = NT199_CheckPassword(pwd);
+            if (retVal != 0) {
+                if (retVal == 1) {
+                    alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                }
+                else {
+                    alert("ErrorCode:" + NT199_GetLastError() + "   密码不正确");
+                }
+                return false;
+            }
+            var IAID = NT199_GetHardwareId();
+
+            var randomMessageFromServer = "@ViewData["Message"]";
+            var hashVal = NT199_Sha1WithSeed(randomMessageFromServer);
+
+            document.getElementById("HidDigest").value = hashVal;
+            document.getElementById("HidIAID").value = IAID;
+
+            var tempparm = "HidDigest=" + hashVal + "&HidIAID=" + IAID + "&ssid=" + $("#ssid").val();
+
+            $("#indexpagemodal1").hide();
+            $("#errortips").html("");
+            $.ajax({
+                cache: false,
+                async: false,
+                //dataType: 'json', type: 'post',
+                type: 'POST',
+                url: "/供应商后台/CheckUOfYsd",
+                data: tempparm,
+                success: function (data) {
+                    if (data== "1") {
+                        $(".bg_outdiv").show();
+                        return true;
+                    }
+                    else {
+                        $("#indexpagemodal1").show();
+                        $("#errortips").html(data);
+                    }
+                }
+            });
+            return false;
+        }
+    </script>*@
+}
+else
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#reciever").val($("#unit_user").val());
+            var id = $("#unit_user").val();
+            $("#unit_user_id").val(id);
+
+            $("#unit_user_sh").val($("#selectSh_unit").val());
+
+            var u = $("#hideuser").val();
+            $("#sender").val(u);
+            $("#新增及打印验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#新增及打印验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+    </script>
+}

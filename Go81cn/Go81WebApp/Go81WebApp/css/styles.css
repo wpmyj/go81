@@ -1,0 +1,120 @@
+
+/*弹出提示插件样式开始*/
+body{margin:0;padding:0;}
+.my-comfirm-modal-out{
+	width:100%;
+	height:100%;
+	position:fixed;
+    top:0;
+    left:0;
+}
+.my-comfirm-modal{
+	width:100%;
+	height:100%;
+	left:0;
+	top:0;
+	position:fixed;
+	background:#C3C3C3;
+	opacity:0.5;
+}
+.my-comfirm-modal-content{
+	position: relative;
+	width:380px;
+	height:195px;
+	margin:10% auto;
+	background:#fff;
+	border:1px solid #C9D2CF;
+}
+.my-comfirm-modal-content h3{
+    margin:0;
+    padding:0;
+    font-size: 12px;
+    font-family: "微软雅黑","黑体","宋体";
+    color: #272727;
+	line-height: 40px;
+	text-indent: 2em;
+}
+.my-comfirm-modal-content hr{ 
+	border-color: #FFF;
+	width: 88%;
+	margin: 0 auto;
+	opacity: 0.3;
+}
+.my-comfirm-modal-content .my-comfirm-info{ 
+	width: 350px;
+	height: 85px;
+	max-height: 85px;
+	margin:10px auto;
+	text-indent: 22px;
+	line-height: 70px;
+}
+.my-comfirm-modal-content .my-comfirm-info p{
+	display: inline-block;
+	margin-bottom: 7px;
+	margin-left: 7px;
+	text-indent: 0px;
+	line-height: 20px;
+	width: 240px;
+	font-size: 13px;
+	max-height: 80px;
+	overflow: hidden;
+    font-family: "微软雅黑","黑体","宋体";
+    color: #272727;
+    vertical-align: middle;
+}
+.my-comfirm-modal-content .my-comfirm-info img{
+	margin-top: 7px;
+	display: inline-block;
+	width:80px;
+	height: 69px;
+    vertical-align:middle;
+}
+.my-comfirm-modal-content .my-comfirm-btn{
+	text-align: right;
+	margin-top:6px;
+}
+.my-comfirm-modal-content .my-comfirm-btn input{ 
+	width: 70px;
+	height: 30px;
+	outline: none;
+	border:none;
+	cursor: pointer;
+	background: #19C577;
+	border-radius: 3px;
+	color: #fff;
+}
+.my-comfirm-modal-content .my-comfirm-btn input.btn-sub{ 
+	margin-right: 23px;
+}
+.my-comfirm-modal-content .my-comfirm-btn input.btn-close{ 
+	margin-right: 27px;
+}
+/*弹出提示插件样式结束*/
+
+.adhidentexares {
+                   width: 880px; height: 20px; font-size:16px; border: none;font-family: 'Microsoft yahei';line-height: 25px;color: #5C5C5C;resize:none;background: #fff;overflow-y: hidden;
+               }
+.adhidentexares:focus{ outline:none } 
+/*导航栏鼠标一上去后的下拉菜单*/
+.drop_menu {
+    position: absolute;
+    display: none;
+    z-index: 100;
+    width:100%;
+    top:40px;
+    left:0px;
+    padding:0px;
+}
+.drop_menu_bt {
+    display: block;
+    width: 100%;
+    height: 40px;
+    color: #000;
+    line-height: 40px;
+    text-align: center;
+    font-size:14px;
+    font-weight:bold;
+}
+.drop_menu_bt:hover{
+    background-color:#D67C24;
+}

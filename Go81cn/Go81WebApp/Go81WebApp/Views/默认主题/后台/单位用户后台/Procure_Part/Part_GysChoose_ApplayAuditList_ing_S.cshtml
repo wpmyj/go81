@@ -1,0 +1,85 @@
+﻿@using Go81WebApp.Models.数据模型
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <th width="16%">申请人</th>
+            <th width="16%">项目名称</th>
+            <th width="10%">项目编号</th>
+            <th width="17%">评标时间</th>
+            <th width="17%">申请时间</th>
+            <th width="12%">申请状态</th>
+            <th width="12%">操作</th>
+        </tr>
+        @{
+            IEnumerable<供应商抽选记录> list = ViewData["供应商抽取已批准列表"] as IEnumerable<供应商抽选记录>;
+            if (list != null && list.Any())
+            {
+                foreach (var i in list)
+                {
+                    <tr>
+                        @if (i.经办人 != null && i.经办人.用户数据 != null && i.经办人.用户数据.联系方式 != null && !string.IsNullOrWhiteSpace(i.经办人.用户数据.联系方式.联系人))
+                        {
+                            <td>@i.经办人.用户数据.联系方式.联系人</td>
+                        }
+                        else
+                        {
+                            <td>未填写</td>
+                        }
+                        <td>@i.项目名称</td>
+                        <td>@i.项目编号</td>
+                        <td>@i.评标时间.ToString()</td>
+                        <td>@i.申请时间.ToString()</td>
+                        <td>@i.申请抽选状态</td>
+                        <td class="gys_znxx_content_tabletime">
+                            @Html.ActionLink("进行抽选", "GysChoose", new { id = i.Id })
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7">暂无相关列表</td>
+                </tr>
+            }
+        }
+    </table>
+<div class="gys_znxx_content_detailbox">
+    @if (int.Parse(ViewData["ing_currentPage"].ToString()) == 1)
+    {
+        <a class="currentPage">首页</a>
+    }
+    else
+    {
+        <a id="1" onclick="changeing_page(this)">首页</a>
+    }
+    @for (int i = 0; i <= 10; i++)
+    {                       //一共最多显示10个页码，前面5个，后面5个
+        if ((int.Parse(ViewData["ing_currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["ing_currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["ing_pagecount"].ToString()))
+        {
+            if (5 == i)
+            {                               //当前页处理
+                <a style="border:1px solid #ff0000;">@int.Parse(ViewData["ing_currentPage"].ToString())</a>
+            }
+            else
+            {                               //一般页处理
+                <a id="@(int.Parse(ViewData["ing_currentPage"].ToString()) + i - 5)" onclick="changeing_page(this)">@(int.Parse(ViewData["ing_currentPage"].ToString()) + i - 5)</a>
+
+            }
+        }
+    }
+    @if (int.Parse(ViewData["ing_currentPage"].ToString()) == int.Parse(ViewData["ing_pagecount"].ToString()))
+    {
+        <a class="currentPage">末页</a>
+    }
+    else
+    {
+        <a id="@int.Parse(ViewData["ing_pagecount"].ToString())" onclick="changeing_page(this)">末页</a>
+    }
+
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#我提交的供应商抽取申请").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#我提交的供应商抽取申请").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

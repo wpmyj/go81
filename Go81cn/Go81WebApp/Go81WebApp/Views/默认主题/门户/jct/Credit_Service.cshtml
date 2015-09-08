@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "网站特有的军队物资供应商信用评级服务";
+    Layout = "~/Views/默认主题/_Shared/_Layout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("Part_PublicPuRNav", "jct")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div>
+            <div style="color:#bb0202; float:left; width:auto; font-size:24px;">网站特有的军队物资供应商信用评级服务</div>
+            <div style="clear:both; padding-top:1px; color:#606060;line-height:25px; font-size:16px;">
+                <h4 style="color:orange">服务内容</h4>
+                <p style="text-indent:2em;">本网站专门针对军队物资采购的独特性，研制开发了全军首个军队物资供应商信用评价体系，通过记录供应商在平台内的交易记录、资质等行为给予供应商相应的信用积分，一方面向采购机构提供企业长期信用的参考数据，另一方面对信用等级达到指定级别的供应商提供更多政策扶持，帮助企业在本平台更好地成长，获得更多的采购机会。</p>
+                <p style="text-indent:2em;">在成都军区范围内的招标采购项目也会将本网站供应商信用评级分数纳入评标考核环节。
+</p>
+            </div>
+            <div><a href="/jct/Applyvip?sure=true" style="display:block; width:150px ;height:30px; text-align:center; line-height:30px; border:1px solid red; background-color:#E78E8E; color:white; margin:0px auto;">军采通会员可申请</a></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(".action_link").each(function () {
+        if ($(this).text() == "军采通") {
+            $(this).parent("div").addClass("on");
+        }
+    });
+</script>

@@ -1,0 +1,51 @@
+﻿@{
+    ViewBag.Title = "供应商推广列表";
+    Layout = "_BackLayout.cshtml";
+}
+@model Go81WebApp.Models.数据模型.推广业务数据模型.商品推广
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<link href="~/css/index.css" rel="stylesheet" />
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div id="title_div" class="title-base-middle">
+                <div class="title-base-inner">添加推广商品</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div>
+                <a style="display:none;" id="GId">@ViewData["id"]</a>
+                @using (Html.BeginForm("AddRecommendGood", "运营团队后台", FormMethod.Post))
+                {
+                    <input type="hidden" value="" id="gId" name="商品.商品ID" />
+                    <table width="100%">
+                        <tr><td width="50%" align="right">显示位置：</td><td width="50%" align="left">@Html.EnumDropDownListFor(m => m.广告位置, new { style = "width:155px;" })</td></tr>
+                        <tr>
+                            <td align="right">显示级别：</td>
+                            <td align="left">
+                                @Html.EnumDropDownListFor(m => m.显示级别, new { style="width:155px;"})
+                            </td>
+                        </tr>
+                        <tr><td align="right">开始时间：</td><td align="left">@Html.TextBoxFor(m => m.显示时间, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd HH:mm:ss'})" })</td></tr>
+                        <tr><td align="right">结束时间：</td><td align="left">@Html.TextBoxFor(m => m.结束时间, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd HH:mm:ss'})" })</td></tr>
+                        <tr><td colspan="2" align="center"><input style="width:100px; height:30px; background-color:green; color:white; border:none;" type="submit" value="确定" /></td></tr>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#供应商推广列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#供应商推广列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    $(document).ready(function () {
+        $("#gId").val($("#GId").text());
+    });
+</script>

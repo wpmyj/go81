@@ -1,0 +1,1091 @@
+﻿@model Go81WebApp.Controllers.基本功能.登录Controller.LoginInfo
+@using Go81WebApp.Models.数据模型.内容数据模型;
+
+<script src="~/JS/s3Slider.js" type="text/javascript"></script>
+<script src="~/JS/clickStatistics.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#sliderPlay').sliderPlay();
+        $('#sliderPlay2').sliderPlay({
+            speed: 500, //动画效果持续时间
+            timeout: 4000,//幻灯间隔时间
+            btnBox: 'btnBox2', //按钮的容器id
+            btnCurClassName: 'cur', //当前按钮的className,
+            direction: 'up', //left , up
+            mouseEvent: 'hover' //事件类型，默认是click ,hover
+        });
+    });
+</script>
+<div class="index_content_box">
+    <div class="index_content_leftbox">
+        <div style="width:100%;float:left">
+            <!--图片新闻-->
+            <div class="index_content_left_picbox" style="height: 278px;float:left">
+                <div class="index_content_newsbox_top">
+                    <div class="news_title">新闻·动态</div>
+                    <a target="_blank" href="~/新闻/NewsList" class="more">更多+</a>
+                </div>
+                <div style="margin-top:7px;">
+                    <div class='sliderPlay' id='sliderPlay' style="margin-left: 0; margin-right: 0">
+                        @{
+                        IEnumerable<新闻> news = ViewData["图片新闻动态"] as IEnumerable<新闻>;
+                        <ul class='slider'>
+                            @foreach (var k in news)
+                            {
+                                <li><a target="_blank" href='/新闻/NewsDetail?id=@k.Id'><span class="title">@k.内容主体.标题</span><img src='@k.内容主体.图片[0]' /></a></li>
+                            }
+                        </ul>
+                            <div id='btnBox' class='btnBox'>
+                                <span class='btn'>1</span>
+                                <span class='btn'>2</span>
+                                <span class='btn'>3</span>
+                                <span class='btn'>4</span>
+                                <span class='btn'>5</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <!--业务通知-->
+            <div class="index_content_left_picbox" style="height: 278px;float:right">
+                <div class="index_content_newsbox_top">
+                    <div class="news_title">业务通知</div>
+                    <a target="_blank" href="~/通知/NoticeList" class="more">更多+</a>
+                </div>
+                <div class="index_content_news">
+                    <ul>
+                        @{var ih = 0;}
+                        @foreach (var item in (IEnumerable<通知>)ViewData["通知"])
+                        {
+                            TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                            if (ih % 2 == 0)
+                            {
+                        <li class="oddlinecolor">
+                            @if (ts.TotalHours < 360)
+                                    {
+                                    <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                    <a class="new" target="_blank" style="color:red;" href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                    }
+                                    else
+                                    {
+                                    <a target="_blank" href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                    }
+                        </li>
+                            }
+                            else
+                            {
+                        <li class="oddlinecolor_exp">
+                            @if (ts.TotalHours < 360)
+                                    {
+                                    <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+    <a class="new" target="_blank" style="color:red;" href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                    }
+                            else
+                            {
+                                    <a target="_blank" href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                    }
+                        </li>
+                            }
+                            ih++;
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="width:100%;clear:both;float:left;margin-top:10px;">
+            <!--公开招标-->
+            @{
+                int i = 0;
+                IEnumerable<公告> Message = ViewData["全部公开招标公告"] as IEnumerable<公告>;
+                var newNumber = Message.Where(o => o.内容主体.发布时间.AddHours(72) > DateTime.Now).Count();
+            }
+            <div class="index_content_left_picbox" style="height: 278px;float:left">
+                <div class="index_bottom_zb_topbox outtab">
+                    <div class="tabbox_zb">
+                        <div class="index_bottom_zb_top_title" style="position:relative">公开招标<span style="font-size:12px;padding-left:0;width:20px;" class="newNumber">@newNumber</span></div>
+                        <div class="tabmenu_zb">
+                            <ul>
+                                <li index="1" class="changetab">发标公告</li>
+                                <li index="2" class="changetab">需求公告</li>
+                                <li index="3" class="changetab">其他</li>
+                            </ul>
+                        </div><a target="_blank" href="~/公告/AnnounceList/公开招标" class="more" style="color:#fff;">更多+</a>
+                    </div>
+                </div>
+                <div class="index_bottom_zb_content_box tabcontent" id="tabcontent_zb" style="height: 235px; width: 356px;">
+                    <ul class="fdiv">
+                       
+                        @if (Message.Count() == 0)
+                        {
+                            <li style="background-image: none; border: none;"><div style="width:356px; height:270px; color:lightgray; font-size: 40px; text-align: center; line-height:220px; font-style:italic;">暂无此类信息</div></li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["全部公开招标公告"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+
+                    </ul>
+                    <ul>
+                        @{
+                            i = 0;
+                            Message = ViewData["发标公告"] as IEnumerable<公告>;
+                        }
+                        @if (Message.Count() == 0)
+                        {
+                            <li style="background-image: none; border: none;"><div style="width: 710px; height: 270px; color: lightgray; font-size: 40px; text-align: center; line-height: 220px; font-style: italic;">暂无此类信息</div></li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["发标公告"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+
+                    </ul>
+                    <ul>
+                        @{
+                            i = 0;
+                            Message = ViewData["预公告"] as IEnumerable<公告>;
+                        }
+                        @if (Message.Count() == 0)
+                        {
+                            <li style="background-image: none; border: none;"><div style="width:710px; height:270px; color:lightgray; font-size: 40px; text-align: center; line-height:220px; font-style:italic;">暂无此类信息</div></li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["预公告"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+                    </ul>
+                    <ul>
+                        @{
+                            i = 0;
+                            Message = ViewData["技术公告"] as IEnumerable<公告>;
+                        }
+                        @if (Message.Count() == 0)
+                        {
+                            <li style="background-image: none; border: none;"><div style="width:710px; height:270px; color:lightgray; font-size: 40px; text-align: center; line-height:220px; font-style:italic;">暂无此类信息</div></li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["技术公告"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+            <!--结果公示-->
+            @{
+                i = 0;
+                Message = ViewData["全部结果公示"] as IEnumerable<公告>;
+                newNumber = Message.Where(o => o.内容主体.发布时间.AddHours(72) > DateTime.Now).Count();
+            }
+            <div class="index_content_left_picbox" style="height: 278px;float:right">
+                <div class="index_bottom_zb_topbox outtab">
+                    <div class="tabbox_zb">
+                        <div class="index_bottom_zb_top_title" style="position:relative">结果公示<span style="font-size:12px;padding-left:0;width:20px;" class="newNumber">@newNumber</span></div>
+                        <div class="tabmenu_zb">
+                            <ul>
+                                <li index="1" class="changetab">中标公告</li>
+                                <li index="2" class="changetab">废标公告</li>
+                                <li index="3" class="changetab">流标公告</li>
+                            </ul>
+                        </div>
+                        <a class="more" target="_blank" href="~/公告/AnnounceList/公开招标" style="color:#fff;">更多+</a>
+                    </div>
+                </div>
+                <div class="index_bottom_zb_content_box tabcontent" id="tabcontent_jg">
+                    <ul class="fdiv">
+                        @if (Message.Count() == 0)
+                        {
+                            <li class="no_data">
+                                <div style="width:356px;">暂无此类信息</div>
+                            </li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["全部结果公示"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:205px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:205px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+
+                    </ul>
+                    <ul>
+                        @{
+                            i = 0;
+                            Message = ViewData["中标公告"] as IEnumerable<公告>;
+                        }
+                        @if (Message.Count() == 0)
+                        {
+                            <li class="no_data">
+                                <div>暂无此类信息</div>
+                            </li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["中标公告"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+
+                    </ul>
+                    <ul>
+                        @{
+                            i = 0;
+                            Message = ViewData["废标公告"] as IEnumerable<公告>;
+                        }
+                        @if (Message.Count() == 0)
+                        {
+                            <li class="no_data">
+                                <div>暂无此类信息</div>
+                            </li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["废标公告"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 48)
+                                        {
+                                            <img src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 48)
+                                        {
+                                            <img src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+                    </ul>
+                    <ul>
+                        @{
+                            i = 0;
+                            Message = ViewData["流标公告"] as IEnumerable<公告>;
+                        }
+                        @if (Message.Count() == 0)
+                        {
+                            <li class="no_data">
+                                <div>暂无此类信息</div>
+                            </li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["流标公告"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 48)
+                                        {
+                                            <img src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 48)
+                                        {
+                                            <img src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:195px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>    
+        </div>
+        
+        <div style="width:100%;clear:both;float:left;margin-top:10px;">
+            <!--采购公告-->
+            @{
+                i = 0;
+                Message = ViewData["全部采购公告"] as IEnumerable<公告>;
+                newNumber = Message.Where(o => o.内容主体.发布时间.AddHours(72) > DateTime.Now).Count();
+            }
+            <div class="index_content_left_picbox" style="height: 278px;float:left;">
+                <div class="index_bottom_zb_topbox outtab">
+                    <div class=" tabbox_zb">
+                        <div class="index_bottom_zb_top_title" style="position:relative">采购公告<span style="font-size:12px;padding-left:0;width:20px;" class="newNumber">@newNumber</span></div>
+                        <div class="tabmenu_zb" style="margin-left:10px;">
+                            <ul>
+                                <li index="1" class="changetab">邀请招标</li>
+                                <li index="2" class="changetab">竞争性谈判</li>
+                                <li index="3" class="changetab">询价采购</li>
+                                @*<li index="4" class="changetab">单一来源</li>*@
+                            </ul>
+                        </div><a target="_blank" href="~/公告/AnnounceList/采购公告" class="more" style="color:#fff;">更多+</a>
+                    </div>
+                </div>
+                <div class="index_bottom_zb_content_box tabcontent" style=" height: 240px;width:356px" id="tabcontent_cg">
+                    <ul class="fdiv">
+                        @if (Message.Count() == 0)
+                        {
+                            <li class="no_data">
+                                <div style="width:356px;">暂无此类信息</div>
+                            </li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["全部采购公告"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" target="_blank" style="width:190px" href="@Url.Encode("/公告/AnnounceDetail")?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" style="width:225px" href="@Url.Encode("/公告/AnnounceDetail")?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" target="_blank" style="width:190px" href="@Url.Encode("/公告/AnnounceDetail")?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" style="width:225px" href="@Url.Encode("/公告/AnnounceDetail")?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+                    </ul>
+                    <ul>
+                        @{
+                            i = 0;
+                            Message = ViewData["邀请招标"] as IEnumerable<公告>;
+                        }
+                        @if (Message.Count() == 0)
+                        {
+                            <li style="background-image: none; border: none;padding:0;margin:0;"><div style="width: 356px; height: 225px; color: lightgray; font-size: 40px; text-align: center; line-height: 220px; font-style: italic;">暂无此类信息</div></li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["邀请招标"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:210px" @*style="width: 195px;"*@ target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" style="width:225px" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:210px" @*style="width: 195px;"*@ target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" style="width:225px" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+                    </ul>
+                    <ul>
+                        @{
+                            i = 0;
+                            Message = ViewData["竞争性谈判"] as IEnumerable<公告>;
+                        }
+                        @if (Message.Count() == 0)
+                        {
+                            <li style="background-image: none; border: none;padding:0;margin:0;"><div style="width: 356px; height: 225px; color: lightgray; font-size: 40px; text-align: center; line-height: 220px; font-style: italic;">暂无此类信息</div></li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["竞争性谈判"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:210px" @*style="width:195px;"*@ target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" style="width:225px" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:210px" @*style="width: 195px;"*@ target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" style="width:225px" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+                    </ul>
+                    <ul>
+                        @{
+                            i = 0;
+                            Message = ViewData["询价采购"] as IEnumerable<公告>;
+                        }
+                        @if (Message.Count() == 0)
+                        {
+                            <li style="background-image: none; border: none;padding:0;margin:0;"><div style="width: 356px; height: 225px; color: lightgray; font-size: 40px; text-align: center; line-height: 220px; font-style: italic;">暂无此类信息</div></li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["询价采购"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:210px" @*style="width: 195px;"*@ target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" style="width:225px" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width:210px" @*style="width: 195px;"*@ target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" style="width:225px" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+                    </ul>
+                 
+                    @*<ul>
+                        @{
+                            i = 0;
+                            Message = ViewData["单一来源"] as IEnumerable<公告>;
+                        }
+                        @if (Message.Count() == 0)
+                        {
+                            <li style="background-image: none; border: none;padding:0;margin:0"><div style="width: 356px; height: 225px; color: lightgray; font-size: 40px; text-align: center; line-height: 220px; font-style: italic;">暂无此类信息</div></li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["单一来源"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 48)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 580px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" style="width:580px" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 48)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 580px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" style="width:580px" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+                    </ul>*@
+                </div>
+            </div>
+            <!--单一来源-->
+            @{
+                i = 0;
+                Message = ViewData["单一来源"] as IEnumerable<公告>;
+                newNumber = Message.Where(o => o.内容主体.发布时间.AddHours(72) > DateTime.Now).Count();
+            }
+            <div class="index_content_left_picbox" style="height: 278px;float:right">
+                <div class="index_bottom_zb_topbox outtab">
+                    <div class=" tabbox_zb">
+                        <div class="index_bottom_zb_top_title" style="position:relative;width:112px;background: url('../Images/titlebg.jpg') no-repeat top center;">单一来源公示<span style="font-size:12px;padding-left:0;width:20px;" class="newNumber">@newNumber</span></div>
+                        <a class="more" target="_blank" href="~/公告/AnnounceList/公开招标" style="color:#fff;">更多+</a>
+                    </div>
+                </div>
+                <div class="index_bottom_zb_content_box tabcontent" id="tabcontent_jg">
+                    <ul class="fdiv">
+                        @if (Message.Count() == 0)
+                        {
+                            <li style="background-image: none; border: none;padding:0;margin:0"><div style="width: 356px; height: 225px; color: lightgray; font-size: 40px; text-align: center; line-height: 220px; font-style: italic;">暂无此类信息</div></li>
+                        }
+                        else
+                        {
+                            foreach (var item in (IEnumerable<公告>)ViewData["单一来源"])
+                            {
+                                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                                if (i % 2 == 0)
+                                {
+                                    <li>
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 190px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="oddlinecolor">
+                                        @if (ts.TotalHours < 72)
+                                        {
+                                            <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a class="new" style="width: 190px;" target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
+                                            <a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                        }
+                                    </li>
+                                }
+                                i++;
+                            }
+                        }
+                    </ul>
+                </div>
+            </div> 
+        </div>
+
+    </div>
+
+    <div class="index_content_rightbox">
+        <!--登录模块-->
+        <div class="index_content_loginbox" style="width:99%;margin-top:45px;border:2px solid #666633">
+            @using (Html.BeginForm("Login", "登录",FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <div class="index_content_login_content" style="width:100%;padding-top:20px; height:196px;background:url('../Images/dlbg.jpg') repeat-x">
+                    <div style="margin: 0 auto;width: 260px;height:55px;" class="loginspan">
+                        <label style="font-weight:normal;font-size:12px;font-family:STSong;width:48px;text-align:right">用户名：</label>
+                        <div style="*width:193px;_width:193px; height: 30px;display: inline-block; *display:inline;_display:inline; background: #fff;border: 1px solid #ccc;">
+                            <i style="padding-right: 8px;border-right: 1px solid #ccc;vertical-align: middle;display: inline-block;width: 14px;height: 20px;background: url('../Images/login_user.jpg') no-repeat center left;margin-left: 10px;"></i>
+                            @Html.TextBoxFor(model => model.LoginName, new { @style = "*vertical-align:middle;_vertical-align:middle;text-indent: 1em;padding: 2px 0 3px;width:150px; height: 25px; line-height:25px;border: none;", placeholder = "请输入用户名", autocomplete = "off" })
+                        </div>
+                        <div style="padding-left:56px;">
+                            @Html.ValidationMessageFor(model => model.LoginName)
+                        </div>
+                    </div>
+                    <div style="margin: 0 auto;width: 260px;height:55px;" class="loginspan">
+                        <label style="font-weight:normal;font-size:12px;font-family:STSong;width:48px;text-align:right;">密&nbsp;&nbsp;码：</label>
+                        <div style="*width:193px;_width:193px;height: 30px;display: inline-block; *display:inline;_display:inline;background: #fff;border: 1px solid #ccc;">
+                            <i style="padding-right: 8px;border-right: 1px solid #ccc;vertical-align: middle;display: inline-block;width: 14px;height: 20px;background: url('../Images/login_pwd.jpg') no-repeat center left;margin-left: 10px;"></i>
+                            @Html.PasswordFor(model => model.LoginPwd, new { @style = "*vertical-align:middle;_vertical-align:middle;text-indent: 1em;padding: 2px 0 3px;width:150px; height: 25px; line-height:25px;border: none;", placeholder = "请输入密码", autocomplete = "off" })
+                        </div>
+                        <div style="padding-left:56px;">
+                            @Html.ValidationMessageFor(model => model.LoginPwd)
+                        </div>
+                    </div>
+                    <div style="margin: 0 auto;width: 260px; height:55px;" class="loginspan">
+                        <label style="font-weight:normal;font-size:12px;font-family:STSong;width:48px;text-align:right;">验证码：</label>
+                        <img id="yzcode" src=@Url.Action("NewVCodeImage", "登录") style="cursor:pointer; vertical-align:middle;height:32px;" title="看不清，换一张" alt="看不清，换一张" onclick='$(this).attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());' />
+                        <div style="*width:193px;_width:193px;height: 30px;display: inline-block; *display:inline;_display:inline;background: #fff;border: 1px solid #ccc;vertical-align:middle">
+                            @Html.TextBoxFor(model => model.VerifyCode, new { @style = "text-indent: 1em;padding: 2px 0 3px;height: 25px;line-height:25px; border: none;width:109px;", placeholder = "请输入验证码" })
+                        </div>
+                        <div style="padding-left:56px;">
+                            <span>@ViewBag.WrongLoginMessage</span>
+                        </div>
+                    </div>
+                    <div style="text-align:center">
+                        <input type="submit" style="width:69px;height:27px;border:none;text-align:center; color:#fff;cursor:pointer;  background:url('../Images/login-btn_bg.jpg') no-repeat" value="登录" />
+                        <input type="reset" style="width:69px;height:27px;border:none;text-align:center;color:#fff;cursor:pointer; background:url('../Images/login-btn_bg.jpg') no-repeat" value="重置" />
+                    </div>
+
+                @*<div class="index_content_login_btndiv">
+                        <a href=@Url.Action("Login/供应商", "登录")><img src="~/Images/gysreg.png" class="index_content_login_list"></a>
+                    </div>
+                    <div class="index_content_login_btndiv">
+                        <a href=@Url.Action("Login/单位用户", "登录")><img src="~/Images/unitreg.png" class="index_content_login_list"></a>
+                    </div>
+                    <div class="index_content_login_btndiv">
+                        <a href=@Url.Action("Login/评审专家", "登录")><img src="~/Images/expreg.png" class="index_content_login_list"></a>
+                    </div>
+                    <div class="index_content_login_btndiv">
+                        <a href=@Url.Action("Login/个人用户", "登录")><img src="~/Images/myreg.png" class="index_content_login_list"></a>
+                    </div>*@
+
+                 </div>
+            }
+          
+        </div>
+
+        <!--业务范围-->
+        <div style="margin-top:19px;">
+            <div class="index_content_newsbox_top">
+                <div class="news_title">业务范围</div>
+            </div>
+            <div>
+                <div style="margin: 12px;text-align: center;">
+                    <a href="/注册/Register_Gys_Agree" style="display:inline-block; width:122px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.jpg') no-repeat">供应商注册</a>
+                    <a href="/注册/Register_Unit" style="display:inline-block;margin-left:20px; width:122px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.jpg') no-repeat">采购人注册</a>
+                </div>
+                <div style="margin: 12px;text-align: center;">
+                    <a href="/注册/Register_Expert_Agree" style="display:inline-block; width:122px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.jpg') no-repeat">评审专家申请</a>
+                    <a href="###" style="display:inline-block;margin-left:20px; width:122px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.jpg') no-repeat">个人用户注册</a>
+                </div>
+                <div style="margin: 12px;text-align: center;">
+                    <a href="/政策法规/ZcfgList" style="display:inline-block; width:122px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.jpg') no-repeat">政策法规</a>
+                    <a href="/办事指南/ServiceGuideList" style="display:inline-block;margin-left:20px; width:122px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.jpg') no-repeat">服务指南</a>
+                </div>
+                <div style="margin: 12px;text-align: center;">
+                    <a href="#" style="display:inline-block; width:122px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.jpg') no-repeat">价格指数</a>
+                    <a href="通知/Exposure" style="display:inline-block;margin-left:20px; width:122px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.jpg') no-repeat">曝光台</a>
+                </div>
+            </div>
+        </div>
+        
+        <!--政策法规-->
+        <div style="margin-top:25px;">
+            <div class="index_content_newsbox_top">
+                <div class="news_title">政策法规</div>
+                <a target="_blank" href="~/政策法规/ZcfgList" class="more" style="padding-top:13px;color:#003399;">更多+</a>    
+            </div>
+            <div class="index_content_news">
+                <ul>
+                    @{var ipp = 0;}
+                    @foreach (var item in (IEnumerable<政策法规>)ViewData["政策法规"])
+                    {
+                        TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                        if (ipp % 2 == 0)
+                        {
+                            <li>
+                                @if (ts.TotalHours < 360)
+                                {
+                                    <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                    <a class="new" style="width: 250px; " target="_blank" href="~/政策法规/ZcfgDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                }
+                                else
+                                {
+                                    <a style="width: 280px;" target="_blank" href="~/政策法规/ZcfgDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                }
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="oddlinecolor">
+                                @if (ts.TotalHours < 360)
+                                {
+                                    <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                    <a class="new" style="width: 250px; " target="_blank" href="~/政策法规/ZcfgDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                }
+                                else
+                                {
+                                    <a style="width: 280px;" target="_blank" href="~/政策法规/ZcfgDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                }
+                            </li>
+                        }
+                        ipp++;
+                    }
+                </ul>
+            </div>
+        </div>
+        @*<div class="index_content_zcfgbox">
+            政策法规模块
+            <div class="index_content_zcfg_topbox">
+                <div class="tabbox_zcfg">
+                    <div class="tabmenu_zcfg">     
+                        <span>通知</span><a target="_blank" href="~/通知/NoticeList" style=" font-size:12px; float:right; padding-right:5px; line-height:20px;  font-weight:normal;">更多▶</a>
+                    </div>
+                </div>
+            </div>
+            <div class="index_content_zcfg_content" id="tabcontent_zcfg">
+                <ul>
+                    @{ i = 0;}
+                    @foreach (var item in (IEnumerable<通知>)ViewData["通知"])
+                    {
+                        TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                        if (i % 2 == 0)
+                        {
+                            <li>
+                                @if (ts.TotalHours < 48)
+                                {
+                                    <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                    <a class="new" target="_blank" href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                }
+                                else
+                                {
+                                    <a target="_blank"  href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                }
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="oddlinecolor_exp">
+                                @if (ts.TotalHours < 48)
+                                {
+                                    <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                    <a class="new" target="_blank" href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题+@item.内容主体.标题+@item.内容主体.标题</a>
+                                }
+                                else
+                                {
+                                    <a target="_blank" href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                }
+                            </li>
+                        }
+                        i++;
+                    }
+                </ul>
+
+            </div>
+        </div>*@
+        <!--政策法规模块-->
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var timer;
+        $("li.changetab").hover(function () {
+            var tab = $(this);
+            timer = setTimeout(function () {
+                var index = tab.attr("index");
+                var divs = tab.parents(".outtab").next(".tabcontent");
+                tab.addClass("cli").siblings().removeClass("cli");
+                divs.children().hide().eq(index).show("fast");
+            }, 500);
+        }, function () {
+            clearTimeout(timer);
+        });
+        $("div.Page0").addClass("on");
+    });
+    $(".index_content_login_list").hover(function () {
+        $(this).animate({ opacity: '1' });
+    }, function () {
+        $(this).animate({ opacity: '0.9' }, 200);
+    });
+</script>

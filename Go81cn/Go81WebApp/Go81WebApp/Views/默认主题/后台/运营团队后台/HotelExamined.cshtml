@@ -1,0 +1,86 @@
+﻿@using Go81WebApp.Models.数据模型
+@{
+    ViewBag.Title = "酒店审核-已审核";
+    Layout = "_BackLayout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <link rel="stylesheet" href="~/css/index.css" type="text/css">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">已审核酒店列表</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div class="gys_ztbsearch_contentbox">
+                @foreach (var item in (IEnumerable<酒店>)ViewData["酒店列表"])
+                {
+                    <div class="gyspage_list_content">
+                        <div class="gyspage_list_content_imgdiv">
+                            <a>
+                                @if (item.酒店基本信息.照片.Count > 0)
+                                {
+                                    <img src="@item.酒店基本信息.照片[0].Replace("original/", "150X150/")" width="100" height="100" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/noimage.jpg" width="100" height="100" />
+                                }
+                            </a>
+                        </div>
+                        <div class="gyspage_list_content_listdiv">
+                            <div class="gyspage_list_content_list">
+                                <div class="gyspage_list_content_list_cont">名称：@item.酒店基本信息.酒店名</div>
+                                <div class="gyspage_list_content_list_cont">所在地：@item.酒店基本信息.所属地域.地域</div>
+                                <div class="gyspage_list_content_list_cont">
+                                    联系电话：
+                                    @try
+                                    {
+                                        @item.酒店基本信息.联系电话
+                                    }
+                                    catch
+                                    {
+                                        <span>未知</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="gyspage_list_content_list">
+                                <a href="~/运营团队后台/HotelDetail?id=@item.Id&action=exd" style="padding:0 10px 0 0;">查看详情</a>
+                                <a class="del_hotel" id="@item.Id" style="padding:0 10px 0 0;">删除</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (ViewData["listcount"].ToString() != "0")
+                {
+                    <div class="gys_znxx_content_detailbox">
+                        @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+                    </div>
+                }
+                else
+                {
+                    <div class="gys_znxx_content_detailbox">
+                        暂无信息
+                    </div>
+
+                }
+            </div>
+        </div>
+        <script type="text/javascript" language="javascript">
+        var num =@(int.Parse(ViewData["page"].ToString()))
+        $(document).ready(function () {
+            $(".gys_znxx_content_detailbox a").each(function () {
+                if ($(this).text() == num) {
+                    $(this).addClass("currentPage");
+                }
+            });
+            $("#已审核酒店").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#已审核酒店").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+        </script>
+    </div>
+</div>
+

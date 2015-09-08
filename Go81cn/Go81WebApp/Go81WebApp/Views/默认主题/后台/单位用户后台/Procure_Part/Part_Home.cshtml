@@ -1,0 +1,111 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.消息数据模型
+@model Go81WebApp.Models.数据模型.用户数据模型.单位用户
+<div style="width:940px; height:auto; overflow: hidden; ">
+    @if (WebApiApplication.IsIntranet)
+    {
+        <div style="font-size:16px;margin-top:30px;">@Model.登录信息.登录名，欢迎登录成都军区物资采购网</div>
+    }
+    else
+    {
+        <div style="font-size:16px;margin-top:30px;">@Model.登录信息.登录名，欢迎登录西南物资采购网</div>
+    }
+    <div style="font-size:16px;margin-top:30px;">
+        该账号联系人姓名：
+        @if (null != Model && null != Model.联系方式 && !string.IsNullOrWhiteSpace(Model.联系方式.联系人) && Model.联系方式.联系人 != "联系人" && !string.IsNullOrWhiteSpace(Model.联系方式.手机))
+        {
+            @Model.联系方式.联系人
+        }
+        else
+        {
+            if (WebApiApplication.IsIntranet)
+            {
+                <a href="/单位用户后台/MessageModify" style="color: red; text-decoration: underline;">【未完善联系人信息,点击这里进行完善】</a>
+                <br /><b style="color:red;">您还未完善联系人信息，暂不能使用网站功能，请先完善联系人信息！</b>
+            }
+            else
+            {
+                <a href="#" style="color: red; text-decoration: underline;">【未填写联系人,请及时在内网完善联系人信息】</a>
+            }
+        }
+    </div>
+
+    
+        @if (null == Model || null == Model.登录信息 || Model.登录信息.密码 == "7C4A8D09CA3762AF61E59520943DC26494F8941B")
+        {
+            if (WebApiApplication.IsIntranet)
+            {
+                <div style="font-size:16px;margin-top:30px;">
+                    <a href="/单位用户后台/MessageKeyword" style="color: red; text-decoration: underline;">【您还未修改初始密码，点击这里进行修改】</a>
+                    <br /><b style="color:red;">您还未修改初始密码，暂不能使用网站功能，请先修改初始密码！</b>
+                </div>
+            }
+        }
+                
+
+
+    <div style=" margin-top:20px; " id="tb1">
+        <div style="font-size:14px;">
+            @if (int.Parse(ViewData["msg_count"].ToString()) == 0)
+            {
+                <p>没有未读站内消息</p>
+            }
+            else
+            {
+                <p style="color:red;">您有@(ViewData["msg_count"])条未读站内消息，<a href="/单位用户后台/Procure_Znxx" style="text-decoration:underline; color:red;">请点击此处查看>></a></p>
+            }
+            @if (int.Parse(ViewData["msg"].ToString()) != 0)
+            {
+                <p style="color:red;">您有@(ViewData["msg"])条未审核公告，<a href="/单位用户后台/Procure_AdSendList" style="text-decoration:underline; color:red;">请点击此处审核公告>></a></p>
+            }
+            @if (int.Parse(ViewData["ysd"].ToString()) != 0)
+            {
+                <p style="color:red;">您有@(ViewData["ysd"])个验收单未审核，<a href="/单位用户后台/AcceptanceList" style="text-decoration:underline; color:red;">请点击此处审核验收单>></a></p>
+            }
+            @if (WebApiApplication.IsIntranet)
+            {
+                if (int.Parse(ViewData["UnitUser"].ToString()) != 0)
+                {
+                    <p style="color:red;">您有@(ViewData["UnitUser"])位单位用户未审核，<a href="/单位用户后台/DepartmentAuditList" style="text-decoration:underline; color:red;">请点击此处审核单位用户>></a></p>
+                }
+
+                if (int.Parse(ViewData["Demand"].ToString()) != 0)
+                {
+                    <p style="color:red;">您有@(ViewData["Demand"])项需求计划未处理，<a href="/单位用户后台/DemandCheck" style="text-decoration:underline; color:red;">请点击此处进行处理>></a></p>
+                }
+            }
+        </div>
+    </div>
+    <div style=" height:auto; overflow: hidden;">
+        <h2 style="color: #333;">账号申请流程：</h2>
+        <div style="float: left; font-weight: bold; width:100%">方式一：向网站管理中心申请，拨打网站客服热线。<br />方式二：在内网中进行注册，审核通过后开通。</div>
+        <img style="padding-top:10px;" src="~/Images/p_1.png" />
+        <h2 style="color: #333;">公告发布流程：</h2>
+        <div style="float: left; font-weight: bold;width:100%">网站管理中心传真号码：028-83190790。</div>
+        <img style="padding-top:10px;" src="~/Images/p_2.png" />
+    </div>
+</div>
+
+
+<div id="tip" style="background-color:rgb(117, 117, 85); padding:10px; color:white;position:fixed;right:0px;bottom:-170px; text-align:center; line-height:30px;">
+    @if (ViewData["msg_count"] != null && ViewData["msg_count"].ToString() != "0")
+    {
+        <a style="color:white; display:block; text-decoration:underline;" href="/单位用户后台/Procure_Znxx">您有@(ViewData["msg_count"])条未读消息</a>
+    }
+
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#欢迎页面").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#欢迎页面").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        var count = @ViewData["msg_count"].ToString();
+        if(count == "0"){
+            $("div#tip").hide();
+        }
+        else{
+            $("div#tip").animate({ "bottom": "0px" }, 1000);
+        }
+    });
+</script>
+
+

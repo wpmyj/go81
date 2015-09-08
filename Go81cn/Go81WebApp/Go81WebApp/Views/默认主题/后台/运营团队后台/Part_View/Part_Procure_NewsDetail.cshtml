@@ -1,0 +1,55 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.新闻
+
+<link rel="stylesheet" href="~/css/index.css" type="text/css">
+
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">新闻详情</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_xttz_contentbox">
+        <div class="gys_xttz_contentbox_news_title">@Html.DisplayFor(model => model.内容主体.标题)</div>
+        <div class="gys_xttz_contentbox_news_from">
+            @if (Model.新闻来源 != null)
+            {
+                if (!string.IsNullOrEmpty(Model.新闻来源.来源名称))
+                {
+                    <span style="padding:0 10px 0 10px;">来源名称:@Model.新闻来源.来源名称</span>
+                }
+                if (!string.IsNullOrEmpty(Model.新闻来源.来源链接))
+                {
+                    <span style="padding:0 10px 0 10px;">
+                        来源地址:
+                        @if (Model.新闻来源.来源链接.Length > 20)
+                        {
+                            <a target="_blank" title="@Model.新闻来源.来源链接" href="@Model.新闻来源.来源链接">@Model.新闻来源.来源链接.Substring(0, 20)</a>
+                        }
+                        else
+                        {
+                            <a target="_blank" title="@Model.新闻来源.来源链接" href="@Model.新闻来源.来源链接">@Model.新闻来源.来源链接</a>
+                        }
+                    </span>
+                }
+            }
+            @if (!string.IsNullOrEmpty(Model.内容主体.摘要))
+            {
+                <span style="padding:0 10px 0 10px;">摘要:@Model.内容主体.摘要</span>
+            }
+            <span style="padding:0 10px 0 10px;">时间:@Model.内容主体.发布时间.ToString("yyyy-MM-dd")</span>
+        </div>
+        <div class="gys_xttz_contentbox_news_text">
+            @if (Model.图片新闻)
+            {
+                <div style="margin: 0 auto;width:720px;height:300px;"><img src="@Model.内容主体.图片[0]" style="margin-left:-23px;width:720px;height:300px;" /></div>
+            }
+            <p>@Html.Raw(Model.内容主体.内容)</p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#新闻列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#新闻列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

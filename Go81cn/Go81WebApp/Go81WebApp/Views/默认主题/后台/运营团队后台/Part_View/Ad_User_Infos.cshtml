@@ -1,0 +1,136 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.运营团队
+<link href="~/css/Bk_Mangage.css" rel="stylesheet" />
+<div>
+    <div style="height:36px;background-image: url(/images/index_content_bg.jpg); font-size:15px;"> 添加服务</div>
+    <div style="width:920px; height:auto; margin-left:30px; margin-right:auto;">
+        <div id="sp">
+            <span onmouseover="change_box(this,'Login')">登录信息</span>
+            <span onmouseover="change_box(this,'Contact')">联系方式</span>
+            <span onmouseover="change_box(this,'Address')">地址信息</span>
+            <span onmouseover="change_box(this,'Part_Man')">角色信息</span>
+            <span onmouseover="change_box(this,'Group')">角色</span>
+        </div>
+        <div id="User_Info">
+            @using (Html.BeginForm("添加用户", "运营团队后台"))
+            {
+                <div id="Login" style="background-color:rgb(241, 248, 240); width:520px; height:300px; position:absolute; z-index:1; margin:0px;">
+                    <table>
+                        <tr><td>登录名：</td><td>@Html.TextBoxFor(model => model.登录信息.登录名)
+                             @Html.ValidationMessageFor(m => m.登录信息.登录名)</td></tr>
+                        <tr><td>密码：</td><td>@Html.EditorFor(model => model.登录信息.密码) @Html.ValidationMessageFor(m => m.登录信息.密码)</td></tr>
+                        <tr><td>昵称：</td><td>@Html.EditorFor(model => model.登录信息.显示名) @Html.ValidationMessageFor(m => m.登录信息.显示名)</td></tr>
+                    </table>
+                </div>
+
+                <div id="Contact" style="background-color:rgb(241, 248, 240);width:540px; height:300px; position:absolute;z-index:1; margin:0px;">
+                    <table>
+                        <tr>
+                            <td>联系人：</td>
+                            <td>@Html.EditorFor(model => model.联系方式.联系人)</td>
+                        </tr>
+                        <tr>
+                            <td>电子邮件：</td>
+                            <td>@Html.EditorFor(model => model.联系方式.电子邮件)</td>
+                        </tr>
+                        <tr>
+                            <td>手机：</td>
+                            <td>@Html.EditorFor(model => model.联系方式.手机)</td>
+                        </tr>
+                        <tr>
+                            <td>Q Q:</td>
+                            <td>@Html.EditorFor(model => model.联系方式.QQ)</td>
+                        </tr>
+                        <tr>
+                            <td>微信：</td>
+                            <td>@Html.EditorFor(model => model.联系方式.微信)</td>
+                        </tr>
+                        <tr>
+                            <td>微博：</td>
+                            <td>@Html.EditorFor(model => model.联系方式.微博)</td>
+                        </tr>
+                        <tr>
+                            <td>传真：</td>
+                            <td>@Html.EditorFor(model => model.联系方式.传真)</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="Address" style="background-color:rgb(241, 248, 240);width:520px; height:300px; position:absolute;z-index:1; margin:0px;">
+                    <table>
+                        <tr>
+                            <td>地址类型：</td>
+                            <td>
+                                @Html.DropDownListFor(model => model.地址信息[0].地址类型, ViewData["list"] as SelectList, new { @style = "width:155px;" })
+
+                        </tr>
+                        <tr>
+                            <td>省份：</td>
+                            <td>
+                                @Html.EditorFor(model => model.地址信息[0].省份)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>城市：</td>
+                            <td>
+                                @Html.EditorFor(model => model.地址信息[0].城市)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>县区:</td>
+                            <td>
+                                @Html.EditorFor(model => model.地址信息[0].区县)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>街道：</td>
+                            <td>
+                                @Html.EditorFor(model => model.地址信息[0].街道)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>邮政编码：</td>
+                            <td>
+                                @Html.EditorFor(model => model.地址信息[0].邮政编码)
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="Part_Man" style="background-color:rgb(241, 248, 240);width:520px; height:300px; position:absolute;z-index:1; margin:0px;">
+                    <table>
+                        <tr><td>用户角色：</td><td></td></tr>
+                    </table>
+                </div>
+
+                <div id="Group" style="background-color:rgb(241, 248, 240);width:520px; height:300px; position:absolute;z-index:1; margin:0px;">
+                    <table>
+                        <tr><td>角色：</td><td></td></tr>
+                    </table>
+                </div>
+                <div style="text-align:center; position:absolute; z-index:11; margin-top:320px;">
+                    <input type="submit" value="添加" class="t" />
+                    <input type="reset" value="重填" class="t" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#sp span:first").css({ "background-color": "red" });
+        $("#User_Info #Login").css({ "z-index": "10", "border-top-color": "red", "border-top-style": "solid", "border-top-width": "1px" });
+    });
+    $(document).ready(function () {
+        $("table tr td :input").focus(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").blur(function () { $(this).next("div").hide(); });
+    });
+    function show_tip(t) {
+        $(t).next("div").show();
+        $(t).next("div").css("display", "inline-block");
+    }
+    function hide_tip(t) {
+        $(t).next("div").hide();
+    }
+</script>
+
+

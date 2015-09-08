@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "应急采购供应商列表";
+}
+
+<div style="height:auto; overflow:hidden; margin-bottom:5px; ">
+    <div class="prodtpage_leftbox" style="float:left; margin-top:5px;">
+        @Html.Action("Part_Recommend", "应急采购")
+    </div>
+    @*<div id="top" style="background-image:url(../images/menu_topbg.jpg); margin-top: 5px; width: 949px; margin-left: 250px;">
+        <span style="display: inline-block; background-color: rgb(94, 111, 0); font-size: 25px; font-weight: bold;"><a style="color:white; font-family: cursive;" href="/应急采购/Index">通用办公物资协议采购目录</a></span>
+            <span style="display: inline-block; font-size: 25px; font-weight: bold; margin-left: 10px;"><a style="font-family: cursive;" href="/应急采购/GysList">供应商目录</a></span>
+        <span style="display: inline-block; font-size: 25px; font-weight: bold; margin-left: 10px;">供应商目录</span>
+    </div>*@
+    <div>
+        <div class="prodtpage_rightbox" id="em_list" style="float:left; margin-top:5px;margin-left:8px;">
+            @Html.Action("Part_GysList", "应急采购")
+        </div>
+    </div>
+</div>
+

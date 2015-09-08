@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "协议采购";
+}
+<div style="height:auto; overflow:hidden; margin-bottom:5px;">
+    <div class="prodtpage_leftbox" style="float:left; margin-top:5px;">
+        @Html.Action("Part_Recommend", "协议采购")
+    </div>
+    <div class="prodtpage_rightbox" style="float:left; margin-top:5px;margin-left:10px;">
+        @Html.Action("Part_Agreement_Good_Details", "协议采购", new { id = ViewData["商品ID"], fid = ViewData["分类ID"] })
+    </div>
+
+</div>

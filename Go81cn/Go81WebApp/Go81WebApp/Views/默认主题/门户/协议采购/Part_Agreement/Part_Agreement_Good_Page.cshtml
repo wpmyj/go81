@@ -1,0 +1,147 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+
+
+@{ var index=0;
+   var AgreeGood = ViewData["分类商品"] as IEnumerable<KeyValuePair<商品,List<string>>>;
+   var X = 1;
+    if(AgreeGood!=null)
+    {
+       foreach (var good in AgreeGood)
+        {
+            var src = good.Key.商品信息.商品图片.Any() ? good.Key.商品信息.商品图片.Last() : "~/images/noimage.jpg";
+            index++;
+        <div class='agreement_good_class_detail' id="agreement_good_class">
+            <div class='agreement_good_class_pic'>
+                <div class='div_pic'>
+                    <a href='/协议采购/Agreement_Good_Details?pid=@good.Key.Id&fid=@ViewData["商品分类ID"]' target='_blank'>
+                        <img src="@src" />
+                    </a>
+                </div>
+                <div class='div_input'>
+                    <label>序号:</label>
+                    <span>@index</span>
+                    <input id='@good.Key.Id' name='@good.Key.商品信息.商品名' class='compare_other' type='checkbox' />对比
+                </div>
+            </div>
+            <div class='agreement_good_class_para'>
+                <ul>
+                    <li>
+                        <a class='parts' id='select_parts' href='/协议采购/Agreement_Good_Details?pid=@good.Key.Id&fid=@ViewData["商品分类ID"]' target='_blank'>基本参数</a>
+                        <a class='parts' id='gys' href='/协议采购/Agreement_Good_Details?pid=@good.Key.Id&fid=@ViewData["商品分类ID"]&come=gys' target='_blank'>协议供应商</a>
+                    </li>
+                    <li>所属供应商：<span>@good.Key.商品信息.所属供应商.用户数据.企业基本信息.企业名称</span></li>
+                    <li>型号：<span>@good.Key.商品信息.型号</span></li>
+                    <li>价格：
+                        <span class='price'>￥@good.Key.销售信息.价格 
+
+
+                            @{var s="(";}
+                            @for (var j = 0; j < good.Value.Count(); j++)
+                            {
+                                if(j==0)
+                                {
+                                    s +="同型号最低价:￥"+ good.Value[0] + " / ";
+                                }
+                                if(j==1)
+                                {
+                                    s +="同型号最高价:￥"+ good.Value[1] + ")";
+                                }
+                            }
+                            <strong>@s</strong>
+                        </span>
+                    </li>
+                    @if(good.Key.商品数据.商品属性!=null)
+                    {
+                        var p=0;
+                        foreach(var attr in good.Key.商品数据.商品属性.Keys)
+                        {
+                            foreach(var at in good.Key.商品数据.商品属性[attr].Keys)
+                            {
+                                p++;
+                                if(p<5 && at.Trim()!="型号")
+                                {
+                                    <li>
+                                        @at：
+                                        @foreach(var a in good.Key.商品数据.商品属性[attr][at])
+                                        {
+                                            <span>@(a + " ")</span>
+                                        }
+                                    </li>
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        }
+    }
+    else
+   {
+       <h3>根据条件未找到相关信息</h3>
+   }
+}
+
+    @if (ViewData["currentPage"] != null)
+    {
+        <div class="gys_znxx_content_detailbox">
+            @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+            {
+                <a>首页</a>
+            }
+            else
+            {
+                <a id="1" class="page">首页</a>
+            }
+            @for (int i = 0; i <= 10; i++)
+            {                       //一共最多显示10个页码，前面5个，后面5个
+                if ((int.Parse(ViewData["currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                {
+                    if (5 == i)
+                    {                               //当前页处理
+                        <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentPage"].ToString())</a>
+                    }
+                    else
+                    {                               //一般页处理
+                        <a class="page" id="@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)">@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)</a>
+
+                    }
+                }
+            }
+            @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+            {
+                <a>末页</a>
+            }
+            else
+            {
+                <a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+            }
+
+        </div>
+    }
+<script type="text/javascript">
+    $("a.page").click(function () {
+        var page=$(this).attr("id");
+        var city = $("#delivercity").find("option:selected").text();
+        var provence = $("#deliverprovince").find("option:selected").text();
+        var area = $("#deliverarea").find("option:selected").text();
+        var price = $("#search_price").val();
+        var gys = $("#search_gys").val();
+        var id = $(".hid").val();
+        var type = unescape($("#brand_t").val());
+
+            $.get('/协议采购/Part_Agreement_Good_Page/',
+            {
+                city: city, provence: provence, area: area, price: price, gys: gys, id: id, type: type,page:page
+        },
+           function (data) {
+               $(".agreement_good_class").empty().append(data);
+           }
+        );
+    });
+</script>
+

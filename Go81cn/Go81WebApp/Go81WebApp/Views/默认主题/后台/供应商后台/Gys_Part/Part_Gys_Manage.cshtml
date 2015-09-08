@@ -1,0 +1,747 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+<style>
+    table tr td span {
+        background-color: #ffebeb;
+        font-size: 12px;
+        color: red;
+    }
+        .out_box {
+            display:block;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 3%;
+    }
+
+    .out_box_insecond_child {
+        width:625px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+        border:1px solid red;
+    }
+
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
+    #detailA,#detailB,#detailC,#detailD{display:none;}
+</style>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<script src="~/JS/provinceandcity_all.js"></script>
+<div id="pdf1" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" title="关闭窗口" onclick="hidebox('#pdf1')">×</a></div>
+            <div style="width:625px; height:360px; overflow-y:scroll; overflow-x:hidden;">
+                <div id="content" style="padding-left:10px; line-height:30px;">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="f1" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>正在上传，请稍等...</span>
+    </div>
+</div>
+<div id="detailA">
+    <h2 style="text-align:center;">A类供应商主要有</h2>
+    <ul style="list-style-type:decimal;">
+        <li>通用设备制造企业：生产锅炉及原动机，金属加工机械，起重设备，泵，阀门，压缩机及类似机械，轴承，齿轮，传动和驱动部件等通用设备</li>
+        <li>专用设备制造企业：生产矿山、冶金、建筑、化工、木材、非金属加工、食品、饮料、烟草及饲料生产、印刷、只要、日化生产、纺织、服装和皮革工业、电子和电工机械、农、林、牧、渔、医疗仪器设备及器械、环保、社会公共安全等行业专用设备。</li>
+        <li>交通运输设备制造企业：生产铁路机车、汽车、摩托车、船舶及浮动装置、航空航天器设备。</li>
+        <li>电气机械及器材制造企业：生产电机、输配电及控制设备、电线、电缆、光缆及电工器材、电池、家用电力器具、非电力家用器具、照明器具、其他电器机械吉器材等产品。</li>
+        <li>通信设备、计算机及其他电子设备制造企业：生产通信设备、雷达机配套设备、广播电视设备、电子计算机、电子元器件、家用视听设备、其他电子设备等产品。</li>
+    </ul>
+</div>
+<div id="detailB">
+    <h2 style="text-align:center;">B类供应商主要有</h2>
+    <ul style="list-style-type:decimal;">
+        <li>生产纺织、服装、皮革、食品、家具、药品、医疗器械、仪器仪表、原材料、化工材料、文体器材、办公设备等行业的产品。</li>
+    </ul>
+</div>
+<div id="detailC">
+    <h2 style="text-align:center;">C类供应商主要有</h2>
+    <ul style="list-style-type:decimal;">
+        <li>流通企业：从事产品经销、代理、批发、零售活动。</li>
+        <li>信息传输、计算及服务和软件企业：从事电信、互联网、广播电视、卫星等信息传输，计算机服务和维修、数据处理；软件设计、编制、分析、测试等活动。</li>
+        <li>物流配送企业：从事产品的仓储、配送等活动。</li>
+    </ul>
+</div>
+<div id="detailD">
+    <h2 style="text-align:center;">D类供应商主要有</h2>
+    <div>A、B、C以外的其他企业</div>
+</div>
+@{
+    string path = "";
+    if (Model.供应商用户信息.供应商图片 != null && Model.供应商用户信息.供应商图片.Count!=0)
+    {
+        foreach(var item in Model.供应商用户信息.供应商图片)
+        {
+            path += item + "|";
+        }
+    }
+}
+<div class="gys_znxx_box" style="border:none;margin-top:0px;">
+    <div id="title_div" class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">
+            企业基本信息
+            @if (Model.供应商用户信息.已提交)
+            {
+                <span style="font-size:15px; color:red;"><em>您已提交过申请，不能修改信息。如需修改信息，请联系网站管理员。</em></span>
+            }
+        </div>
+    </div>
+    <div style="font-size:14px;border:1px solid green; margin-top:8px;">
+    @using (Html.BeginForm("Gys_Info_Edit", "供应商后台", FormMethod.Post, new { enctype = "multipart/form-data", name = "basicInfo" }))
+            {   @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.所属地域.城市)
+            @Html.HiddenFor(m => m.所属地域.省份)
+            @Html.HiddenFor(m => m.所属地域.区县)
+            @Html.HiddenFor(m => m.供应商用户信息.认证级别)
+            @Html.HiddenFor(m => m.供应商用户信息.展示图片, new { id = "showpic" })
+            @Html.HiddenFor(m => m.企业基本信息.所属行业)
+            @Html.HiddenFor(m => m.企业基本信息.所属行业二级分类)
+                if (Model.供应商用户信息.协议供应商所属地区 != null && Model.供应商用户信息.协议供应商所属地区.Count() != 0)
+                {
+                    for (int i = 0; i < Model.供应商用户信息.协议供应商所属地区.Count(); i++)
+                    {
+                        @Html.HiddenFor(m => m.供应商用户信息.协议供应商所属地区[i].省份)
+                        @Html.HiddenFor(m => m.供应商用户信息.协议供应商所属地区[i].城市)
+                        @Html.HiddenFor(m => m.供应商用户信息.协议供应商所属地区[i].区县)
+                    }
+                }
+                @Html.HiddenFor(m => m.企业基本信息.地图坐标, new { id = "locate" })
+                <input type="hidden" value="@path" id="picture" name="picture" lang="@Model.Id" />
+                <div class="company_msg">
+                    <table width="90%">
+                        <tr>
+                            <td width="25%" align="right" class="lab">企业中文名称：</td>
+                            <td width="25%">
+                                @Html.TextBoxFor(m => m.企业基本信息.企业名称)
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写企业名称，如未来科技有限企业</div>
+                                </div>@Html.ValidationMessageFor(m => m.企业基本信息.企业名称)
+                                @if (string.IsNullOrWhiteSpace(Model.企业基本信息.企业名称))
+                            {
+                                    <span>*必需</span>
+                            }
+                            </td>
+                            <td width="25%" align="right" class="lab">企业英文名称：</td>
+                            <td width="25%">
+                                @Html.TextBoxFor(m => m.企业基本信息.英文名称)
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写企业名称，如未来科技有限企业</div>
+                                </div>@Html.ValidationMessageFor(m => m.企业基本信息.企业名称)
+                                @if (string.IsNullOrWhiteSpace(Model.企业基本信息.企业名称))
+                            {
+                                    <span>*必需</span>
+                            }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="25%" align="right" class="lab">企业简称：</td>
+                            <td width="25%">
+                                @Html.TextBoxFor(m => m.企业基本信息.简称)
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">如果企业有简称，您可以填写</div>
+                                </div>@Html.ValidationMessageFor(m => m.企业基本信息.简称)
+                            </td>
+                            <td width="25%" align="right" class="lab">注册地址：</td>
+                            <td width="25%">
+                                @Html.TextBoxFor(m => m.企业基本信息.注册地址)
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写企业注册地址，如四川省广安市工商局</div>
+                                </div>@Html.ValidationMessageFor(m => m.企业基本信息.注册地址)
+                                @if (string.IsNullOrWhiteSpace(Model.企业基本信息.注册地址))
+                            {
+                                    <span>*必需</span>
+                            }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" class="lab">邮政编码：</td>
+                            <td>
+                                @Html.TextBoxFor(m => m.企业基本信息.邮政编码)
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写企业所在地的邮政编码，如637211</div>
+                                </div>@Html.ValidationMessageFor(m => m.企业基本信息.邮政编码)
+                                @if (string.IsNullOrWhiteSpace(Model.企业基本信息.邮政编码))
+                            {
+                                    <span>*必需</span>
+                            }
+                            </td>
+                            <td align="right" class="lab">员工人数：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(m => m.企业基本信息.员工人数, new { @style = "width:154px; margin-left:2px;" })
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请选择企业员工人数</div>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.企业基本信息.员工人数)
+                                @if (Model.企业基本信息.员工人数 == 供应商.员工人数.未设置)
+                                {
+                                    <span>*必需</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" class="lab">成立时间：</td>
+                            <td>
+                                @Html.TextBoxFor(m => m.企业基本信息.成立时间, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写日期，如：2012/02/05</div>
+                                </div>@Html.ValidationMessageFor(m => m.企业基本信息.成立时间)
+                            </td>
+                            <td align="right" class="lab">经济性质：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(m => m.企业基本信息.经济性质, new { @style = "margin-left:2px; width:154px;" })
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写企业经济性质</div>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.企业基本信息.经济性质)
+                                @if (Model.企业基本信息.经济性质 == 供应商.经济性质.未设置)
+                                {
+                                    <span>*必需</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" class="lab">企业网址：</td>
+                            <td colspan="3">
+                                @Html.TextBoxFor(m => m.企业基本信息.网站网址)
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写企业网址，如http://www.pgy.com</div>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.企业基本信息.网站网址)
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td align="right" class="lab">经营类型：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(m => m.企业基本信息.经营类型, new { @style = "width:90px; margin-left:2px;",id="jy" })
+                                @Html.ValidationMessageFor(m => m.企业基本信息.经营类型)
+                                @if (Model.企业基本信息.经营类型 == 供应商.经营类型.未填写)
+                                {
+                                    <span>*必需</span>
+                                }
+                                @Html.EnumDropDownListFor(m => m.企业基本信息.供应商类别, new{id="catorgray",style="width:90px;"})
+                            </td>
+                            <td align="right" class="lab">经营子类型：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(m => m.企业基本信息.经营子类型, new { @style = "width:154px;margin-left:2px;" })
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请选择企业经营子类型</div>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.企业基本信息.经营子类型)
+                                @if (Model.企业基本信息.经营子类型 == 供应商.经营子类型.未填写)
+                                {
+                                    <span>*必需</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" class="lab" valign="top">企业简介：</td>
+                            <td colspan="3">
+                                @Html.TextAreaFor(m => m.企业基本信息.企业简介, new { cols = "79", rows = "5",style="resize:none;" })
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请对企业做简单介绍</div>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.企业基本信息.企业简介)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" align="center">
+                                @if (!Model.供应商用户信息.已提交)
+                            {<em style="color:red;">在地图上点击鼠标左键就能够定位企业地理位置了</em>}
+                            </td>
+                        </tr>
+                        <tr><td align="right" valign="top">地理位置：</td><td colspan="3"><div style="width:577px;height:300px;border:#ccc solid 1px;" id="dituContent"></div></td></tr>
+                    </table>
+                </div>
+            }
+    <div id="title_div">
+        <div style="margin-left:110px;font-size:16px; font-weight:bold;">
+            企业展示图片：<span style="color:red;">
+                @if (Model.供应商用户信息.供应商图片 == null || Model.供应商用户信息.供应商图片.Count() == 0)
+                    {
+                    <span style="font-size:16px; font-weight:bold; color:red;" id="showPic">还没有展示图片</span>
+                    }
+                @if (!Model.供应商用户信息.已提交)
+                    {
+                    <a style="font-size:16px; font-weight:bold; color:red;" href="###" onclick="showUpload(this)">【点击添加图片】</a>
+                    }
+            </span>
+        </div>
+    </div>
+    <div class="gys_znxx_box" style="border:none;">
+        <div id="pBox" style="width:720px; margin:0px auto 0px auto; overflow:hidden;">
+            @if (Model.供应商用户信息.供应商图片 != null && Model.供应商用户信息.供应商图片.Count() != 0)
+            {
+                <table id="pics">
+                    <tr>
+                        @for (int i = 0; i < Model.供应商用户信息.供应商图片.Count(); i++)
+                        {
+                            if (!Model.供应商用户信息.已提交)
+                            {
+                                if (System.IO.File.Exists(Server.MapPath(@Model.供应商用户信息.供应商图片[i])))
+                                {
+                                    if (Model.供应商用户信息.供应商图片[i] == Model.供应商用户信息.展示图片)
+                                    {
+                                        <td><a style="display:block; position:absolute; width:15px;height:15px; margin-left:85px; background-color:red; line-height:15px; text-align:center; cursor:pointer; color:white;" id="@Model.Id" lang="@Model.供应商用户信息.供应商图片[i]" onclick="delPic(this)" title="删除">×</a><a target="_blank" title="点击查看大图" href="@(Model.供应商用户信息.供应商图片[i])"><img height="50" width="100" src="@(Model.供应商用户信息.供应商图片[i])" /><br /><input type="radio" checked="checked" onclick="choosePic(this)" title="点击单选按钮选择在网站首页要显示的公司展示图片" name="aaa" value="@Model.供应商用户信息.供应商图片[i]" />展示图片</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td><a style="display:block; position:absolute; width:15px;height:15px; margin-left:85px; background-color:red; line-height:15px; text-align:center; cursor:pointer; color:white;" id="@Model.Id" lang="@Model.供应商用户信息.供应商图片[i]" onclick="delPic(this)" title="删除">×</a><a target="_blank" title="点击查看大图" href="@(Model.供应商用户信息.供应商图片[i])"><img height="50" width="100" src="@(Model.供应商用户信息.供应商图片[i])" /><br /><input type="radio" onclick="choosePic(this)" title="点击单选按钮选择在网站首页要显示的公司展示图片" name="aaa" value="@Model.供应商用户信息.供应商图片[i]" />展示图片</a></td>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (System.IO.File.Exists(Server.MapPath(@Model.供应商用户信息.供应商图片[i])))
+                                {
+                                    <td><a target="_blank" title="点击查看大图" href="@(Model.供应商用户信息.供应商图片[i])"><img height="50" width="100" src="@(Model.供应商用户信息.供应商图片[i])" /></a></td>
+                                }
+                            }
+                        }
+                    </tr>
+                </table>
+            }
+
+        </div>
+        </div>
+            <div id="Uppicture" style="display:none;">
+                <form action="/供应商后台/SavePicture" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                    <input type="hidden" value="showPic" name="pic1" />
+                    <table width="100%" style="font-size:14px;margin-left: 167px;">
+                        <tr>
+                            <td width="25%" align="right">请选择展示图片：</td>
+                            <td width="75%">
+                                <input type="file" accept="image/jpeg" onchange="fileChange()" multiple="multiple" name="file1" style="width:72px;" />
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请上传企业图片(企业建筑物或室内图片)，本图片用于网站首页展示。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+                <div id="framebox" style="display:none;margin-left:180px;width:700px;  margin-right: auto;">
+                    <iframe name="showPic" id="showPic" frameborder="0" height="150" width="100%"></iframe>
+                </div>
+            </div>
+        </div>
+    @if (!Model.供应商用户信息.已提交)
+    {
+        <table width="100%">
+            <tr>
+                <td style="display:inline-block;height:50px; text-align:center; width:900px;"><input type="button" style="background-color:lightgray; color:white;" onclick="postInfo()" disabled="disabled" id="submit_btn" value="保  存" /><a style="margin-left:20px; display:inline-block; cursor:pointer;" class="modify" id="submit_btn">修  改</a></td>
+            </tr>
+        </table>
+    }
+</div>
+<script type="text/javascript" language="javascript">
+    var interval = null;
+    $(document).ready(function () {
+        interval = setInterval("picScroll()", 2000);
+    });
+    $("table#pics").mouseover(function () {
+        clearInterval(interval);
+    });
+    $("table#pics").mouseout(function () {
+        interval = setInterval("picScroll()", 2000);
+    });
+    function picScroll() {
+        if ($("table#pics tr:first td").length > 7) {
+            $("table#pics").animate({ "margin-left": "-100" },
+                    function () {
+                        var s = $("table#pics tr td:first img:first").attr("src");
+                        var h1 = $("table#pics tr td:first a:eq(0)").attr("href");
+                        var h = $("table#pics tr td:first a:eq(1)").attr("href");
+                        $("table#pics tr td:first").remove();
+                        $("table#pics tr").append("<td><a target='_blank' href='" + h1 + "'><img width='100' height='50' src='" + s + "'/></a><br/><a style='text-decoration:underline;' href=" + h + ">删除</a></td>");
+                        $("table#pics").css("margin-left", "0px");
+                    })
+        }
+    }
+    function showUpload(th) {
+        $("#Uppicture").css("display", "inline-block");
+        $(th).hide();
+    }
+    function postInfo() {
+        document.forms["basicInfo"].submit();
+    }
+    function choosePic(th)
+    {
+        document.getElementById("showpic").value=th.value;
+    }
+    $(function () {
+        var optionlist = $(".industry").children();
+        optionlist.each(function (index, domEle) {
+            if ($(domEle).text() == $("#hidden").val()) {
+                $(domEle).attr("selected", "selected");
+            }
+        });
+        $("#企业基本信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#企业基本信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function showPic(th) {
+        $("#picture img").attr("src", th.title);
+        $("#picture").css("visibility", "visible");
+    }
+    function hidePic() {
+        $("#picture").css("visibility", "hidden");
+    }
+    $(".industry").blur(function () {
+        var val = $(".industry option:selected").text();
+        $("#hidden").val(val);
+    });
+    $("select.twoCls").blur(function () {
+        var val = $(this).val();
+        $("#twoClass").val(val);
+    });
+    $("#deliverprovince").blur(function () {
+        var val = $("select#deliverprovince").val();
+        $("#provence").val(val);
+    });
+    $("#delivercity").blur(function () {
+        var val = $("select#delivercity").val();
+        $("#city").val(val);
+    });
+    $("#deliverarea").blur(function () {
+        var val = $("select#deliverarea").val();
+        $("#area").val(val);
+    });
+    $(document).ready(function () {
+        $("a.modify").click(function () {
+            $(".company_msg :text,.company_msg select,.company_msg textarea,.company_msg :checkbox,.company_msg :file").each(function () { $(this).removeAttr("disabled"); }); $(".company_msg a.add").show(); $("#submit_btn").removeAttr("disabled"); $("#submit_btn").css({ "background-color": "#2c5735", "cursor": "pointer" }); $("input[type='file']").removeAttr("disabled");
+            if ($(".company_msg select#manager").val() != 0) { $(".company_msg select#manager").attr("disabled", "disabled"); }
+        });
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+    });
+    function show_tip(t) {
+        $(t).next("div").show();
+        $(t).next("div").css("display", "inline-block");
+    }
+    function hide_tip(t) {
+        $(t).next("div").hide();
+    }
+    function showdiv(th) {
+        $(th).parent().children("div").show();
+        $(th).parent().children("div").css("display", "inline-block");
+    }
+    function hidediv(th) {
+        $(th).parent().children("div").hide();
+    }
+
+    function fileChange() {
+        document.forms["upload"].submit();
+        $("#f1").show();
+    }
+    function secondCls(th, th1) {
+        $.get('/供应商后台/types/',
+            { n: $(th).val() },
+            function (data) {
+                SetVal(data.Data, th1);
+            }
+        );
+        if ($(th).val() != "请选择行业") {
+            $(th1).show();
+        }
+        else {
+            $(th1).hide();
+        }
+    }
+    function SetVal(data, th) {
+        var str = "";
+        for (var i = 0; i < data.length; i++) {
+            str += "<option value=" + data[i] + ">" + data[i] + "</option>";
+        }
+        $("select" + th).html(str);
+    }
+    $(".company_msg a.add").hide();
+    $(".company_msg :text,.company_msg select,.company_msg textarea,.company_msg :checkbox,.company_msg :file,.company_msg :submit").each(function () { $(this).attr("disabled", "disabled"); $(this).css("background-color", "white"); });
+    $(document).ready(function () {
+        $("select.twoCls").removeAttr("disabled");
+        $("select.twoCls").html("<option>" + $("#twoClass").val() + "</option>");
+        $("select.twoCls").attr("disabled", "disabled");
+    });
+    $("#jy").change(function(){
+        var str=parseInt($(this).val());
+        switch(str)
+        {
+            case 0:
+                var value="<option value='0' selected='selected'>未选择</option>";
+                $("#catorgray").html(value);
+                break;
+            case 1:
+                var value="<option value='0' selected='selected'>未选择</option><option value='1'>A</option><option value='2'>B</option>"
+                $("#catorgray").html(value);
+                break;
+            case 2:
+                var value="<option value='0' selected='selected'>未选择</option><option value='3'>C</option><option value='4'>D</option>"
+                $("#catorgray").html(value);
+                break;
+            case 3:
+                var value="<option value='0' selected='selected'>未选择</option><option value='4'>D</option>"
+                $("#catorgray").html(value);
+                break;
+
+        }
+    });
+    $("#catorgray").change(function(){
+        var str=parseInt($(this).val());
+        switch(str)
+        {
+            case 1:;$("#content").html($("#detailA").html());$("#pdf1").show();break;
+            case 2:$("#content").html($("#detailB").html());$("#pdf1").show();break;
+            case 3:$("#content").html($("#detailC").html());$("#pdf1").show();break;
+            case 4:$("#content").html($("#detailD").html());$("#pdf1").show();break;
+        }
+    });
+    function hidebox(th)
+    {
+        $(th).hide();
+    }
+</script>
+@{string position = "104.072522,30.665034";
+if (Model.企业基本信息.地图坐标 != null)
+{
+    position = Model.企业基本信息.地图坐标;
+}
+}
+<script type="text/javascript">
+    /*function locate(lng,lat)
+    {
+        $.get("/供应商后台/SavePoint",{x:lng,y:lat},function(data){if(data==1){alert('定位成功！');}});
+    }
+    $(function () {
+        $("#地理位置").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#地理位置").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });*/
+    //创建和初始化地图函数：
+    function initMap() {
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addMarker();//向地图中添加marker
+    }
+
+    //创建地图函数：
+    function createMap() {
+        var map = new BMap.Map("dituContent", { defaultCursor: 'default' });//在百度地图容器中创建一个地图
+        var point = new BMap.Point(@position.Split(',')[0],@position.Split(',')[1]);//定义一个中心点坐标
+        map.centerAndZoom(point, 17);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+
+    //地图事件设置函数：
+    function setMapEvent() {
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+
+    //地图控件添加函数：
+    function addMapControl() {
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1 });
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+        map.addControl(ctrl_sca);
+    }
+    //标注点数组
+    var markerArr = [{ title: "@Model.企业基本信息.企业名称", content: "@Model.所属地域.地域", point: "@position.Split(',')[0]|@position.Split(',')[1]", isOpen: 0, icon: { w: 21, h: 21, l: 0, t: 0, x: 6, lb: 5 } }
+    ];
+    //创建marker
+    function addMarker() {
+        for (var i = 0; i < markerArr.length; i++) {
+            var json = markerArr[i];
+            var p0 = json.point.split("|")[0];
+            var p1 = json.point.split("|")[1];
+            var point = new BMap.Point(p0, p1);
+            //var iconImg = createIcon(json.icon);
+            var iconImg=new BMap.Icon("../Images/ditu.png", new BMap.Size(30, 40));
+            var marker = new BMap.Marker(point, { icon: iconImg });
+            var iw = createInfoWindow(i);
+            var label = new BMap.Label(json.title, { "offset": new BMap.Size(json.icon.lb - json.icon.x + 10, -20) });
+            //marker.setLabel(label);
+            map.addOverlay(marker);
+            label.setStyle({
+                borderColor: "#808080",
+                color: "#333",
+                cursor: "pointer"
+            });
+
+            (function () {
+                var index = i;
+                var _iw = createInfoWindow(i);
+                var _marker = marker;
+                _marker.addEventListener("click", function () {
+                    this.openInfoWindow(_iw);
+                });
+                _iw.addEventListener("open", function () {
+                    _marker.getLabel().hide();
+                })
+                _iw.addEventListener("close", function () {
+                    _marker.getLabel().show();
+                })
+                label.addEventListener("click", function () {
+                    _marker.openInfoWindow(_iw);
+                })
+                if (!!json.isOpen) {
+                    label.hide();
+                    _marker.openInfoWindow(_iw);
+                }
+            })()
+        }
+    }
+    //创建InfoWindow
+    function createInfoWindow(i,th) {
+        var json =i;
+        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'></div>");
+        return iw;
+    }
+    //创建一个Icon
+    function createIcon(json) {
+        var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w, json.h), { imageOffset: new BMap.Size(-json.l, -json.t), infoWindowOffset: new BMap.Size(json.lb + 5, 1), offset: new BMap.Size(json.x, json.h) })
+        return icon;
+    }
+
+    initMap();//创建和初始化地图
+    map.addEventListener("click", function (e)
+    {   //单击地图，形成折线覆盖物
+        var info = new BMap.InfoWindow('', { width: 260 });
+        map.panTo(e.point);
+        map.clearOverlays();
+        var json = { title: "@Model.企业基本信息.企业名称", content: "", point: "116.397657|39.957866", isOpen: 0, icon: { w: 21, h: 21, l: 0, t: 0, x: 6, lb: 5 } };
+        var p0 =e.point.lng;
+        var p1 =e.point.lat;
+        var point = new BMap.Point(p0, p1);
+        var iconImg = new BMap.Icon("../Images/ditu.png", new BMap.Size(30, 40));
+        var marker = new BMap.Marker(point, { icon: iconImg });
+        var geoc = new BMap.Geocoder();
+        geoc.getLocation(e.point, function (rs)
+        {
+            var addComp = rs.addressComponents;
+            lngLatStr ="<br /><span>"+ addComp.province + "" + addComp.city + "" + addComp.district + "" + addComp.street + "" + addComp.streetNumber + "</span><br />";
+            info.setContent(lngLatStr);
+            map.openInfoWindow(info,e.point);
+        });
+        map.addOverlay(marker);
+        $(":input#locate").val(p0+","+p1);
+    });
+    function setPic(th) {
+        var str = "<table>";
+        var id=$(th).attr("lang");
+        var path = $(th).val();
+        var path1 = path.split('|');
+        var row = parseInt((path1.length - 1) / 4);
+        var maintain = parseInt((path1.length - 1) % 4);
+        var count = 0;
+        if (row > 0) {
+            for (var i = 0; i < row; i++) {
+                str += "<tr>";
+                for (var j = 0; j < 4; j++) {
+                    str += "<td><a title='删除' id='"+id+"' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /><br /><input type='radio' onclick='choosePic(this)' title='点击单选按钮选择在网站首页要显示的公司展示图片' name='aaa' value='"+path1[count]+"'/>展示图片</a></td>"
+                    count++;
+                }
+                str += "</tr>";
+            }
+        }
+        if (maintain > 0) {
+            str += "<tr>";
+            for (var m = 0; m < maintain; m++) {
+                str += "<td><a title='删除' id='"+id+"' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /><br /><input type='radio' onclick='choosePic(this)' title='点击单选按钮选择在网站首页要显示的公司展示图片' name='aaa' value='"+path1[count]+"'/>展示图片</a></td>";
+                count++;
+            }
+            str += "</tr>";
+        }
+        str += "</table>";
+        document.getElementById("pBox").innerHTML = str;
+        $("#f").hide();
+        $("#f1").hide();
+    }
+    function delPic(th) {
+        var id = $(th).attr("id");
+        var path = $(th).attr("lang");
+        $.get('/供应商后台/Del_gysPic', { n: path,gid:id },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+        var newpath = document.getElementById("picture").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("picture").value = str;
+        setPic("#picture");
+    }
+</script>

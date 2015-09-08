@@ -1,0 +1,636 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@model Go81WebApp.Models.数据模型.内容数据模型.公告
+@using Go81WebApp.Models.数据模型.内容数据模型
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<script>
+    var editor;
+    KindEditor.ready(function (K) {
+        editor = K.create('#content', {
+            cssPath: '../../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true
+        });
+        $("#modiibutton").click(function () {
+            var id1 = $("#hy option:selected").attr("id");
+            var id2 = $("#secondclass option:selected").attr("id");
+            if (id1 == -1 || id2 == -1) {
+                //$("#tips").css("display", "block");
+                //$("#tips img").remove();
+                //$("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+                //$("#tips div#tips1").text('相关行业必须选到二级分类！');
+                $("#hy").focus();
+                return false;
+            }
+
+            //var val = del_html_tags(editor.html()).trim();
+            if (editor.html() == "" || editor.html() == null) {
+                $("#tips").css("display", "block");
+                $("#tips img").remove();
+                $("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+                $("#tips div#tips1").text('请填写公告内容！');
+                return false;
+            }
+        });
+    });
+    function shutdown() {
+        $("#tips").fadeOut(500);
+    }
+    function del_html_tags(str) {
+        var words = '';
+        words = str.replace(/<[^>]+>/g, "");
+        return words;
+    }
+</script>
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+@*<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery-1.4.2.min.js" charset="gb2312"></script>*@
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<script src="~/JS/provinceandcity_all.js"></script>
+<style type="text/css">
+    #ShowImage .uploadifyQueueItem {
+        font: 11px Verdana, Geneva, sans-serif;
+        margin-top: 5px;
+        padding: 5px;
+        width: 650px;
+        height: 30px;
+        margin-right: 5px;
+        float: left;
+        text-align: left;
+    }
+
+    .procure_selectlistdiv input {
+        width: 13px;
+        height: 13px;
+        line-height: 25px;
+    }
+
+    .procureinputdiv {
+        height: auto;
+        overflow: hidden;
+    }
+</style>
+<div id="f1" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>正在上传，请稍等...</span>
+    </div>
+</div>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">修改公告</div>
+    </div>
+</div>
+<div class="gys_znxx_box" onkeypress="BindEnter(event,'btn')">
+    @using (Html.BeginForm("Procure_AdModify", "单位用户后台", FormMethod.Post, new { enctype = "multipart/form-data", name = "Info" }))
+    {
+        @Html.HiddenFor(m => m.Id)
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+                @if (Model != null)
+                {
+                    @Html.HiddenFor(model => model.内容主体.发布时间)
+                    @*<div class="procureinputdiv">
+                        <div class="procureinputdiv_title">公告标题：</div>
+                        <div class="procure_formlistdiv">
+                            @Html.TextBoxFor(model => model.内容主体.标题, new { id = "checktxt" })
+                            @*<span class="tipmessage"></span>
+                            <span style="color:red">Html.ValidationMessageFor(model => model.内容主体.标题)</span>
+                        </div>
+                    </div>*@
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">发布单位：</div>
+                        <div class="procure_formlistdiv">
+                            @Html.TextBoxFor(model => model.公告信息.需求单位, new { id = "needunit" })
+                            <span style="color:red">*</span>
+                        </div>
+                    </div>
+                    @*<div class="procureinputdiv">
+                            <div class="procureinputdiv_title">来源名称：</div>
+                            <div class="procure_formlistdiv">
+                                @Html.EditorFor(model => model.公告来源.来源名称)
+                            </div>
+                        </div>*@
+
+                    @*<div class="procureinputdiv">
+                            <div class="procureinputdiv_title">来源链接：</div>
+                            <div class="procure_formlistdiv">
+                                @Html.EditorFor(model => model.公告来源.来源链接)
+                                <span style="color:red">@Html.ValidationMessageFor(model => model.公告来源.来源链接)</span>
+                            </div>
+                        </div>*@
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">发布时间：</div>
+                        <div class="procure_formlistdiv">
+                            <input id="publishtime" value="@Model.内容主体.发布时间" style="width: 300px;" name="publishtime" type="text" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd HH:mm:ss' })" /><span style="font-size: 14px; padding-left: 10px;">如果是转载的内容，请选择原时间，该时间将显示在页面上(可不填)</span>
+                        </div>
+                    </div>
+                    @*<div class="procureinputdiv">
+                            <div class="procureinputdiv_title">相关行业：</div>
+                            <div class="procure_formlistdiv">
+                                @{IEnumerable<商品分类> goodclass = ViewData["行业列表"] as IEnumerable<商品分类>;
+                                if (goodclass != null && goodclass.Any())
+                                {
+                                    <select id="hy" name="hy" style="width:200px; height:30px;" onchange="getLowerClass(this)">
+                                        <option value="请选择行业" id="-1">--请选择行业--</option>
+                                        @foreach (var i in goodclass)
+                                        {
+                                            if (Model.公告信息.一级分类 != i.分类名)
+                                            {
+                                                <option class="yjfn" value="@i.分类名" id="@i.Id">@i.分类名</option>
+                                            }
+                                            else
+                                            {
+                                                <option class="yjfn" value="@i.分类名" id="@i.Id" selected="selected">@i.分类名</option>
+                                            }
+                                        }
+                                    </select>
+                                }
+                                }
+
+                                <select id="secondclass" name="secondclass" style="width:200px; height:30px;" onchange="getLowerClass(this)">
+                                    <option class="yjfn" value="不限" id="-1">不限</option>
+                                    @if (ViewData["行业列表_s"] != null)
+                                    {
+                                        IEnumerable<商品分类> goodclass_s = ViewData["行业列表_s"] as IEnumerable<商品分类>;
+                                        if (goodclass_s != null && goodclass_s.Any())
+                                        {
+                                            foreach (var i in goodclass_s)
+                                            {
+                                                if (Model.公告信息.二级分类 != i.分类名)
+                                                {
+                                                    <option class="yjfn" value="@i.分类名" id="@i.Id">@i.分类名</option>
+                                                }
+                                                else
+                                                {
+                                                    <option class="yjfn" value="@i.分类名" id="@i.Id" selected="selected">@i.分类名</option>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </select>
+
+                                <select id="thirdclass" name="thirdclass" style="width: 200px; height: 30px;">
+                                    <option class="yjfn" value="不限" id="-1">不限</option>
+                                    @if (ViewData["行业列表_t"] != null)
+                                    {
+                                        IEnumerable<商品分类> goodclass_t = ViewData["行业列表_t"] as IEnumerable<商品分类>;
+                                        if (goodclass_t != null && goodclass_t.Any())
+                                        {
+                                            foreach (var i in goodclass_t)
+                                            {
+                                                if (Model.公告信息.三级分类 != i.分类名)
+                                                {
+                                                    <option class="yjfn" value="@i.分类名" id="@i.Id">@i.分类名</option>
+                                                }
+                                                else
+                                                {
+                                                    <option class="yjfn" value="@i.分类名" id="@i.Id" selected="selected">@i.分类名</option>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </select>
+                                <span style="color:red">*(至少选到二级)</span>
+                            </div>
+
+
+                            <script type="text/javascript">
+                                function getLowerClass(obj) {
+                                    var id = $("#hy option:selected").attr("id");
+                                    var classname = obj.getAttribute("id");
+                                    if (classname == "hy") {
+                                        $("#thirdclass").empty();
+                                        $("#thirdclass").html("<option value=\"不限\" id=\"-1\"  class=\"yjfn\">不限</option>");
+
+                                        if (id == -1) {
+                                            $("#secondclass").empty();
+                                            $("#secondclass").html("<option value=\"不限\" id=\"-1\"  class=\"yjfn\">不限</option>");
+                                            return;
+                                        }
+                                    }
+                                    if (classname == "secondclass") {
+                                        $("#thirdclass").empty();
+                                        $("#thirdclass").html("<option value=\"不限\" id=\"-1\"  class=\"yjfn\">不限</option>");
+                                        id = $("#secondclass option:selected").attr("id");
+                                    }
+
+                                    $.get("/单位用户后台/ProductClass?classid=" + encodeURI(id), function (response) {
+                                        if (classname == "hy") {
+                                            $("#secondclass").html("<option value=\"不限\" id=\"-1\"  class=\"yjfn\">不限</option>" + response);
+                                        }
+                                        if (classname == "secondclass") {
+                                            $("#thirdclass").html("<option value=\"不限\" id=\"-1\"  class=\"yjfn\">不限</option>" + response);
+                                        }
+                                    });
+                                }
+                            </script>
+
+
+                        </div>*@
+                    @*<div class="procureinputdiv">
+                            <div class="procureinputdiv_title">所在地域：</div>
+                            <div class="procure_formlistdiv">
+                                <select id="deliverprovince" name="deliverprovince" style="width: 200px; height: 30px;"></select>
+                                <select id="delivercity" name="delivercity" style="width: 200px; height: 30px;"></select>
+                                <select id="deliverarea" name="deliverarea" style="width: 200px; height: 30px;"></select>
+                                <script>
+                                    window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea", "@Model.公告信息.所属地域.省份", "@Model.公告信息.所属地域.城市", "@Model.公告信息.所属地域.区县"); }
+                                </script>
+
+                            </div>
+
+                        </div>*@
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">项目名称：</div>
+                        <div class="procure_formlistdiv">
+                            @Html.TextBoxFor(model => model.项目信息.项目名称, new { id = "proName" })
+                            <span style="color:red">*@Html.ValidationMessageFor(model => model.项目信息.项目名称)</span>
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">项目编号：</div>
+                        <div class="procure_formlistdiv">
+                            @Html.TextBoxFor(model => model.项目信息.项目编号, new { id = "proNumber" })
+                            <span style="color:red">*@Html.ValidationMessageFor(model => model.项目信息.项目编号)</span>
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">公告类别：</div>
+                        <div class="procure_selectlistdiv">
+                            <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "公开招标", new { @class = "procure_radioinput" })公开招标</div>
+                            <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "邀请招标", new { @class = "procure_radioinput" })邀请招标</div>
+                            <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "竞争性谈判", new { @class = "procure_radioinput" })竞争性谈判</div>
+                            <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "询价采购", new { @class = "procure_radioinput" })询价采购</div>
+                            @*<div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "协议采购", new { @class = "procure_radioinput" })协议采购</div>*@
+                            <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "单一来源", new { @class = "procure_radioinput" })单一来源</div>
+                            <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "网上竞标", new { @class = "procure_radioinput" })网上竞价</div>
+                            @*<div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "其他", new { @class = "procure_radioinput", @checked = "checked" })其他</div>*@
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">公告性质：</div>
+                        <div class="procure_selectlistdiv">
+                            <div id="mainSelect">
+                                @*<div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告性质, "预公告", new { @class = "procure_radioinput", @checked = "checked" })预公告</div>*@
+                                <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告性质, "需求公告", new { @class = "procure_radioinput", @checked = "checked" })需求公告</div>
+                                @*<div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告性质, "技术公告", new { @class = "procure_radioinput" })技术公告</div>*@
+                                <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告性质, "采购公告", new { @class = "procure_radioinput" })采购公告</div>
+                                <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告性质, "中标结果公示", new { @class = "procure_radioinput" })中标结果公示</div>
+                            </div>
+                        </div>
+                        <div class="procure_selectlistdiv" style="margin-left:100px;">
+                            <table style="width:100%;border:none;" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="border:none;"><div class="procure_selectlist" style="width:100px;">评标结果公示：</div></td>
+                                    <td style="border:none;">
+                                        <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告性质, "废标公告", new { @class = "procure_radioinput" })废标公告</div>
+                                        <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告性质, "流标公告", new { @class = "procure_radioinput" })流标公告</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none;" valign="top"><div class="procure_selectlist" style="width:50px;">其他：</div></td>
+                                    <td style="border:none;">
+                                        <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告性质, "更正公告", new { @class = "procure_radioinput" })更正公告</div>
+                                        <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告性质, "补遗公告", new { @class = "procure_radioinput" })补遗公告</div>
+                                        <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告性质, "变更公告", new { @class = "procure_radioinput" })变更公告</div>
+                                        <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告性质, "答疑公告", new { @class = "procure_radioinput" })答疑公告</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    @*<div class="procureinputdiv">
+                            <div class="procureinputdiv_title">公告版本：</div>
+                            <div class="procure_selectlistdiv">
+                                <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告版本, "正常", new { @class = "procure_radioinput" })正常</div>
+                                <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告版本, "变更", new { @class = "procure_radioinput" })变更</div>
+                                <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告版本, "更正", new { @class = "procure_radioinput" })更正</div>
+                                <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告版本, "补遗", new { @class = "procure_radioinput" })补遗</div>
+                            </div>
+                        </div>*@
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">
+
+                        </div>
+                    </div>
+
+                    <div style="position:relative">
+                        @Html.TextAreaFor(model => model.内容主体.内容, new { style = "width: 880px; height: 550px;", id = "content" })
+                        <div style="text-align:center;color:red; position:absolute; background-color:#EFF0E7; margin-top:-355px; margin-left:310px; display:none; width:300px; height:100px; border-radius:3px; font-size:12px;" id="tips">
+                            <div style="width:auto"><a href="###" onclick="shutdown()" style="float:right;margin-top:10px; margin-right:10px">关闭</a></div>
+                            <div style="clear:both; width:250px;height:30px;margin-left:35px;margin-top:40px;">
+                                <div id="tips1" style="color:red; font-size:14px; float:left;margin-left:10px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                            string path = "";
+                            string path1 = "";
+                            if (Model.内容主体.图片 != null && Model.内容主体.图片.Count > 0)
+                            {
+                                <div class="showattachment" style="width:100%;">扫描件列表:</div>
+                                foreach (var item in Model.内容主体.图片)
+                                {
+                                    <div class="showattachment_list" style="width: 140px; height: 120px; padding: 10px; float: left; background-color: #eee; margin: 10px; text-align: center">
+                                        <a target="_blank" href="@item">
+                                            <img style="width: 140px; height: 100px; border: none" src="@item" />
+                                        </a>
+                                        <a style="cursor: pointer" id="@item" lang="@item" onclick="delPic1(this)">删除</a>
+                                    </div>
+                                    path += item + "|";
+                                }
+                            }
+                            <input type="hidden" name="smPath" id="smPath" value="@path" />
+                    if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
+                    {
+                        <div class="showattachment" style="width: 800px;">附件列表:</div>
+                        foreach (var item in Model.内容主体.附件)
+                        {
+                            <div class="showattachment_list"><a target="_blank" href="@item">@item</a><a href="###" style="color:red; display:inline-block;" lang="@item" id="@item" onclick="delAttach1(this)">删除</a></div>
+                            path1 += item + "|";
+                        }
+                    }
+                    <input type="hidden" name="attachpath" id="attachpath" value="@path1" />
+                }
+                else
+                {
+                    <div class="gys_xttz_contentbox_news_title">暂无此类信息</div>
+                }
+            </div>
+        </div>
+        <input type="hidden" name="attachtext_s" id="attachtext_s" value="" />
+        <input type="hidden" name="attachtext" id="path" value="" />
+        <input type="hidden" name="delPath" id="delPath" value="" />
+    }
+    @*<div style="margin-left:20px;">
+            <div class="procureinputdiv">
+                <div class="procureinputdiv_title">是否增加扫描件：</div>
+                <div class="procure_selectlistdiv">
+                    <div class="procure_selectlist" style="width: 50px;"><input type="radio" value="1" name="isattach_s" onclick="showattach_s(this)" />是</div>
+                    <div class="procure_selectlist" style="width: 50px;"><input type="radio" value="0" name="isattach_s" onclick="showattach_s(this)" checked="checked" />否</div>
+                    <span style="color:red; font-size: 13px; line-height: 30px;">（扫描件：在这里上传公告的扫描件）</span>
+                </div>
+            </div>
+            <script type="text/javascript">
+                function showattach_s(a) {
+                    if (a.value == "1")
+                        document.getElementById("attachdiv_s").style.display = "block";
+                    else {
+                        document.getElementById("attachdiv_s").style.display = "none";
+                    }
+                }
+            </script>
+
+            <div id="attachdiv_s" class="attachdiv">
+                <div class="attachtitle" style="padding-left: 10px;">添加扫描件<span style="color: red; font-size: 12px; padding-left: 10px;">(单个扫描件大小不超过100M，请上传jpg,bmp或者gif格式的图片)</span></div>
+                <div style="text-align:center; margin-left: 20px;">
+                    <div></div>
+                    <div id="ShowImage_s" class="product_add_upimagesbox"></div>
+                    <div class="product_add_upimagesbox_image"></div>
+                    <div style="padding-top:5px">
+                        <div id="Uppicture">
+                            <form action="/单位用户后台/UploadImage" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                                <input type="hidden" value="sm" name="pic1" />
+                                <table width="100%" style="font-size:14px;">
+                                    <tr>
+                                        <td width="50%" align="right">请选择扫描件：</td>
+                                        <td width="50%" align="left">
+                                            <input type="file" onchange="fileChange()" multiple="multiple" name="file1" style="width: 71px;" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                            <div id="pBox1">
+
+                            </div>
+                            <div style="display:none;margin-left:180px;width:700px;  margin-right: auto;">
+                                <iframe name="showPic" id="showPic" frameborder="0" height="150" width="100%"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <div style="margin-left:20px;">
+        <div class="procureinputdiv">
+            <div class="procureinputdiv_title">是否增加附件：</div>
+            <div class="procure_selectlistdiv">
+                <div class="procure_selectlist" style="width: 50px;"><input type="radio" value="1" name="isattach" onclick="showattach(this)" />是</div>
+                <div class="procure_selectlist" style="width: 50px;"><input type="radio" value="0" name="isattach" onclick="showattach(this)" checked="checked" />否</div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            function showattach(a) {
+                if (a.value == "1")
+                    document.getElementById("attachdiv").style.display = "block";
+                else {
+                    document.getElementById("attachdiv").style.display = "none";
+                }
+            }
+        </script>
+
+        <div id="attachdiv" class="attachdiv">
+            <div class="attachtitle" style="padding-left: 10px;">添加附件<span style="color: red; font-size: 12px; padding-left: 10px;">(单个附件大小不超过100M，可多选上传，如WORD,EXCEL,PPT等文件)</span></div>
+            <div style="text-align:center; margin-left: 20px;">
+                <div></div>
+                <div id="ShowImage" class="product_add_upimagesbox"></div>
+                <div class="product_add_upimagesbox_image"></div>
+                <div style="padding-top:5px">
+                    <div id="Uppicture">
+                        <form action="/单位用户后台/UploadImages" method="post" name="upload1" enctype="multipart/form-data" target="showPic1">
+                            <input type="hidden" value="attach" name="guide" />
+                            <table width="100%" style="font-size:14px;">
+                                <tr>
+                                    <td width="50%" align="right">请选择附件：</td>
+                                    <td width="50%" align="left">
+                                        <input type="file" accept="application/msword" onchange="fileChange1()" multiple="multiple" name="file1" style="width: 71px;" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <div id="pBox">
+
+                        </div>
+                        <div style="display:none;margin-left:180px;width:700px;  margin-right: auto;">
+                            <iframe name="showPic1" id="showPic1" frameborder="0" height="150" width="100%"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align:center">
+        <input onclick="sendData()" type="button" id="btn" style="margin-top:20px; display:block; margin-left:auto; margin-right:auto; text-align:center; line-height:40px;" value="保      存" class="front_login_rightbox_button" />
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#我的采购公告").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#我的采购公告").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function fileChange() {
+        document.forms["upload"].submit();
+        $("#f1").show();
+    }
+    function fileChange1() {
+        document.forms["upload1"].submit();
+        $("#f1").show();
+    }
+    function sendData() {
+        if ($(":input#checktxt").val() == "") {
+            alert("请填写标题");
+            $(":input#checktxt").focus();
+            return false;
+        }
+        if ($(":input#needunit").val() == "") {
+            alert("请填写需求单位");
+            $(":input#needunit").focus();
+            return false;
+        }
+        if ($(":input#proName").val() == "") {
+            alert("请填写项目名称");
+            $(":input#proName").focus();
+            return false;
+        }
+        if ($(":input#proNumber").val() == "") {
+            alert("请填写项目编号");
+            $(":input#proNumber").focus();
+            return false;
+        }
+        var id1 = $("#hy option:selected").attr("id");
+        var id2 = $("#secondclass option:selected").attr("id");
+        if (id1 == -1 || id2 == -1) {
+            //$("#tips").css("display", "block");
+            //$("#tips img").remove();
+            //$("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+            //$("#tips div#tips1").text('相关行业必须选到二级分类！');
+            $("#hy").focus();
+            return false;
+        }
+        editor.sync("content");
+        if (editor.html() == "") {
+            alert("请填写内容！");
+            $("#content").focus();
+            return false;
+        }
+        if (!confirm("公告一旦发布则不能进行修改，请检查各项内容是否正确。确认无误？")) {
+            return false;
+        }
+        document.forms["Info"].submit();
+    }
+    function setPic(th) {
+        var str = "<table>";
+        var path = $(th).val();
+        var path1 = path.split('|');
+        var row = parseInt((path1.length - 1) / 4);
+        var maintain = parseInt((path1.length - 1) % 4);
+        var count = 0;
+        if (row > 0) {
+            for (var i = 0; i < row; i++) {
+                str += "<tr>";
+                for (var j = 0; j < 4; j++) {
+                    str += "<td><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />" +
+                        "<a href='###' title='删除' onclick='delPic(this)' style='color:white; position:absolute; margin-top:-80px; margin-left:90px; display:block; width:10px; background-color:red; width:10px; height:10px; line-height:10px; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a></td>"
+                    count++;
+                }
+                str += "</tr>";
+            }
+        }
+        if (maintain > 0) {
+            str += "<tr>";
+            for (var m = 0; m < maintain; m++) {
+                str += "<td><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />"
+                    + "<a href='###' title='删除' onclick='delPic(this)' style='color:white; position:absolute; margin-top:-80px; margin-left:90px; display:block; width:10px; height:10px; line-height:10px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a></td>";
+                count++;
+            }
+            str += "</tr>";
+        }
+        str += "</table>";
+        document.getElementById("pBox1").innerHTML = str;
+    }
+    function delPic(th) {
+        var path = $(th).attr("lang");
+        $.get('/单位用户后台/DeleteImages', { uri: path },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+        var newpath = document.getElementById("attachtext_s").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("attachtext_s").value = str;
+        setPic("#attachtext_s");
+    }
+    function delAttach(th) {
+        var path = $(th).attr("lang");
+        $.get('/单位用户后台/DeleteImages', { uri: path },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+        var newpath = document.getElementById("path").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("path").value = str;
+    }
+    function delPic1(th) {
+        var path = $(th).attr("lang");
+        $(th).parent().remove();
+        var newpath = document.getElementById("smPath").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("smPath").value = str;
+        document.getElementById("delPath").value += path + "|";
+    }
+    function delAttach1(th) {
+        var path = $(th).attr("lang");
+        $(th).parent().remove();
+        var newpath = document.getElementById("attachpath").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("attachpath").value = str;
+        document.getElementById("delPath").value += path + "|";
+    }
+    $("#mainSelect .procure_radioinput").click(function () {
+        $(".hiddenbox").hide();
+        $(".multiple").parent("div").show();
+        if ($(this).val() == "其他") {
+            $("#others").show();
+            this.checked = false;
+            $(this).parent("div").hide();
+        }
+        else if ($(this).val() == "评标结果") {
+            $("#pb").show();
+            this.checked = false;
+            $(this).parent("div").hide();
+        }
+    });
+</script>

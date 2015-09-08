@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "推送消息发送结果页面";
+    Layout = "_BackLayout.cshtml";
+}
+
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="gys_znxx_box">
+            <div class="title-base-out">
+                <div class="title-base-middle">
+                    <div class="title-base-inner">消息发送结果显示</div>
+                </div>
+            </div>
+            <div class="gys_znxx_contentbox">
+                <div class="gys_znxx_content">
+                    @ViewData["sendmessageresult"]
+                    <br/><br/>
+                    <a style="background-color: #6b8e23; padding: 5px; float: right" href="/运营团队后台/SendMessageAuditList">返回</a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+</div>
+

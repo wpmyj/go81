@@ -1,0 +1,39 @@
+﻿@model Go81WebApp._Code.Controllers.后台.专家后台Controller.password
+@{
+    ViewBag.Title = "修改密码";
+    Layout = "_BackLayout.cshtml";
+}
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div style="width:920px; margin-top:14px; border-bottom:2px solid #3C890F;">修改密码</div>
+        <div style="font-size:16px;margin-top:30px; width:90%; margin-left:auto; margin-right:auto;margin-top:30px;">
+            @using (Html.BeginForm("ModifyPwd", "专家后台", FormMethod.Post))
+            {
+                <table>
+                    <tr>
+                        <td>请输入新密码：</td>
+                        <td>@Html.PasswordFor(m=>m.Pwd)</td>
+                        <td>@Html.ValidationMessageFor(m=>m.Pwd)</td>
+                    </tr>
+                    <tr>
+                        <td>请再次输入密码：</td>
+                        <td>@Html.PasswordFor(m=>m.PwdConfirm)</td>
+                        <td>@Html.ValidationMessageFor(m => m.PwdConfirm)</td>
+                    </tr>
+                    <tr><td  align="center" colspan="2"><input type="submit" id="submit_btn" value="提交" /></td></tr>
+                </table>
+            }
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    $(function () {
+        $("#修改密码").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#修改密码").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

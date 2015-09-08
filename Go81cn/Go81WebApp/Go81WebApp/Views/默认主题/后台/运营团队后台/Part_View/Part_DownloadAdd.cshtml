@@ -1,0 +1,171 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.下载
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<script>
+    var editor
+    KindEditor.ready(function (K) {
+        editor = K.create('#content', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true
+        });
+        $("#modiibutton").click(function () {
+            if (editor.html() == null || editor.html() == "") {
+                $("#tips").css("display", "block");
+                $("#tips img").remove();
+                $("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+                $("#tips div#tips1").text('请填写内容！');
+                return false;
+            }
+            if ($("#attachtext").val() == null || $("#attachtext").val() == "") {
+                $("#tips").css("display", "block");
+                $("#tips img").remove();
+                $("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+                $("#tips div#tips1").text('请上传下载文件！');
+                return false;
+            }
+        });
+    });
+    function shutdown() {
+        $("#tips").fadeOut(500);
+    }
+</script>
+
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript">
+    var attchtextstring = "";
+    $(document).ready(function () {
+        $("#uploadify").uploadify({
+            'uploader': '../../JS/jquery.uploadify-v2.1.4/uploadify.swf',
+            'script': '/运营团队后台/UploadAttachment_Download',
+            'cancelImg': '../../JS/jquery.uploadify-v2.1.4/cancel.png',
+            'folder': 'UploadFile',
+            'sizeLimit': 1024 * 1024 * 100,
+            'queueSizeLimit': 50,
+            //'fileDesc': '只允许上传bmp,gif,jpg,jpeg图片',
+            //'fileExt': '*.bmp;*.gif;*.jpg;*.jpeg',
+            'method': 'Post',
+            'queueID': 'ShowImage',
+            'buttonImg': '../../JS/jquery.uploadify-v2.1.4/btn.jpg',
+            'wmode': 'transparent',
+            'auto': false,
+            'multi': true,
+            'onComplete': function (e, q, f, data, d) {
+                attchtextstring = document.getElementById("attachtext").value + data + "|";
+                document.getElementById("attachtext").value = attchtextstring;
+                var filename = data;
+                var Delete = "<a href=\"javascript:DeleteAttachment('" + q + "','" + data + "')\" style='color:red; padding-left:20px;'>删除</a>";
+                var Div = "<div style='margin-top:5px;text-align:center'>" + filename + Delete + "</div>";
+                $("#uploadify" + q).html(name + Div);
+            }
+        });
+        $("#btnBegin").click(function () { $("#uploadify").uploadifyUpload(); return false; });
+    });
+    function DeleteAttachment(q, n) {
+        $.ajax({
+            type: "POST",
+            url: "/运营团队后台/DeleteAttachment?q=" + q + "&n=" + n,
+            success: function (msg) {
+                if (msg != "0") {
+                    document.getElementById("attachtext").value = document.getElementById("attachtext").value.replace(n + "|", "");
+                    jQuery("#uploadify").uploadifyCancel(msg);
+                }
+            }
+        });
+    }
+</script>
+<style type="text/css">
+    .uploadifyQueueItem {
+        font: 11px Verdana, Geneva, sans-serif;
+        margin-top: 5px;
+        padding: 5px;
+        width: 650px;
+        height: 30px;
+        margin-right: 5px;
+        float: left;
+        text-align: left;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">添加下载</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+                @*<div class="procuretipmessage"> @TempData["AddTipMessage"]</div>*@
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">标题：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.内容主体.标题)
+                        <span style="color:red;">@Html.ValidationMessageFor(model => model.内容主体.标题)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">文件类型：</div>
+                    <div style="padding-top:5px; width:600px;">
+                        @Html.RadioButtonFor(model => model.下载类型, "标书", new { @class = "procure_radioinput" })标书
+                        @Html.RadioButtonFor(model => model.下载类型, "工具软件", new { @class = "procure_radioinput" })工具软件
+                        @Html.RadioButtonFor(model => model.下载类型, "普通", new { @class = "procure_radioinput", @checked = "checked" })普通
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">
+                        内容：
+                        <span class="tipmessage" id="contenerror"></span>
+                    </div>
+                </div>
+                @*<textarea id="content" style="width: 880px; height: 550px; visibility: hidden;"></textarea>*@
+                <div style="position:relative">
+                    @Html.TextAreaFor(model => model.内容主体.内容, new { style = "width: 880px; height: 550px; visibility: hidden;", id = "content" })
+                    <div style="text-align:center;color:red; position:absolute; background-color:#EFF0E7; margin-top:-355px; margin-left:310px; display:none; width:250px; height:100px; border-radius:3px; font-size:12px;" id="tips">
+                        <div style="width:auto"><a href="###" onclick="shutdown()" style="float:right;margin-top:10px; margin-right:10px">关闭</a></div>
+                        <div style="clear:both; width:200px;height:30px;margin-left:35px;margin-top:40px;">
+                            <div id="tips1" style="color:red; font-size:14px; float:left;margin-left:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="attachdiv" class="attachdiv" style="display:block;">
+                    <div class="attachtitle">添加下载文件</div>
+                    <br />上传说明：
+                    <font color="red">附件大小不超过100M</font><br />
+                    <div style="text-align:center">
+                        <div></div>
+                        <div id="ShowImage" class="product_add_upimagesbox"></div>
+                        <div class="product_add_upimagesbox_image"></div>
+                        <div style="padding-top:5px;">
+                            <input type="file" name="uploadify" id="uploadify" />&nbsp;&nbsp;
+                            <a id="btnBegin" href="javascript:return false"><img alt="开始上传" src="~/js/jquery.uploadify-v2.1.4/btn1.jpg" width="120" height="30" style="border:0px" /></a>
+                        </div>
+                    </div>
+                </div>
+                @Html.TextAreaFor(model => model.内容主体.附件, new { style = "width:500px; height:100px; display:none", id = "attachtext" })
+
+                @*<textarea id="content" style="width: 880px; height: 550px; visibility: hidden;"></textarea>*@
+
+                <div style="text-align:center;"><input id="modiibutton" name="submitcontent" type="submit" @*onclick="return checkcontent();"*@ style="margin-top:20px;" class="front_login_rightbox_button" value="确定"></div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $("#添加下载").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#添加下载").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+
+

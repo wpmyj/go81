@@ -1,0 +1,75 @@
+﻿@using Go81WebApp.Models.管理器
+@using Go81WebApp.Models.数据模型.消息数据模型
+<link href="~/css/index.css" rel="stylesheet" />
+<div class="gys_znxx_topbox">
+    <div class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">我的投诉<a style="color:red;" href="/供应商后台/Gys_ComplainAdd">【点击此处发起投诉】</a></div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th>标题</th>
+                    <th>投诉时间/修改时间</th>
+                    <th>当前状态</th>
+                    <th>操作</th>
+                </tr>
+                @{IEnumerable<投诉> complain=ViewData["投诉管理"] as IEnumerable<投诉>;}
+                @if (complain.Count()==0)
+                {
+                    <tr><td colspan="4">您没有投诉过</td></tr>
+                }
+                else
+                {
+                    foreach (var item in complain)
+                    {
+                        foreach (var m in item.对话消息)
+                        {
+                            <tr>
+                                <td width="45%"><a href="/供应商后台/Gys_ComplainDetail?id=@item.Id" target="_blank">@m.消息主体.标题</a></td>
+                                <td width="30%" align="center">@item.基本数据.添加时间.ToString("yyyy-MM-dd HH:MM") / @item.基本数据.修改时间.ToString("yyyy-MM-dd HH:MM") </td>
+                                <td width="12%" align="center">@item.处理状态</td>
+                                <td width="13%" align="center"><a href="/供应商后台/Gys_Del_Complain/@item.Id">删除</a></td>
+                            </tr>
+                            break;
+                        }
+                    }
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString()))
+            </div>
+        </div>
+        </div>
+    </div>
+        <script type="text/javascript" language="javascript">
+            $(document).ready(function () { $("#tb1 table tr:odd").mouseover(function () { $(this).css("background-color", "red"); }); });
+        </script>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).addClass("currentPage");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#我的投诉").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#我的投诉").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

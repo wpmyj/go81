@@ -1,0 +1,707 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+<link href="~/css/index.css" rel="stylesheet" />
+<script src="~/JS/provinceandcity_all.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style>
+                .out_box {
+        display: none;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 20%;
+    }
+
+    .out_box_insecond_child {
+        width:600px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+    }
+
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
+    div#pager {
+        text-align: center;
+    }
+
+        div#pager a, .gys_znxx_content_detailbox a {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+            line-height: 25px;
+            font-size: 12px;
+            height: 25px;
+            border: 1px solid rgb(204, 204, 204);
+            margin-top: 10px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+            div#pager a:hover {
+                background-color: rgb(243, 243, 243);
+            }
+</style>
+@{
+        IEnumerable<供应商> supplier = ViewData["supplier"] as IEnumerable<供应商>;
+        IEnumerable<供应商> gys = ViewData["gys"] as IEnumerable<供应商>;//待审核供应商
+}
+ 
+<div id="f" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" title="关闭窗口" onclick="$('#f').hide()">×</a></div>
+            <div style="width:600px; height:270px; overflow:hidden;">
+                <table width="90%" cellpadding="0" cellspacing="0" style="margin:0px auto;">
+                    <tr><th>待审核供应商名称</th></tr>
+                    @foreach(var item in gys)
+                    {
+                        <tr><td style="border-bottom:1px dashed #808080;line-height:30px;">@item.企业基本信息.企业名称</td></tr>
+                    }
+                </table>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">供应商列表<span style="color:red; font-size:16px;">【目前总共有 @ViewData["allSupplier"] 家供应商.其中,@ViewData["checkedSupplier"] 家已审核,@ViewData["waitSupplier"] 家等待审核,@ViewData["nopassSupplier"] 家未通过审核】</span><a style="cursor: pointer;color:#ff0000;" onclick="$('#f').show()" >查看待审核供应商</a></div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <table width="80%" style="margin-left:20px; margin-top:10px;">
+            <tr>
+                <td align="right">供应商名称：</td>
+                <td>
+                    <input type="text" id="name" />
+                </td>
+                <td align="right">所属行业：</td>
+                <td><input type="text" id="factory" /></td>
+            </tr>
+            <tr>
+                <td align="right">认证级别：</td>
+                <td>
+                    <select name="c" id="cls" style="width:153px; margin-left:2px;">
+                        <option value="1">不限级别</option>
+                        <option value="@((int)供应商.认证级别.一级供应商)">一级供应商</option>
+                        <option value="@((int)供应商.认证级别.二级供应商)">二级供应商</option>
+                        <option value="@((int)供应商.认证级别.军采通基础会员)">军采通基础会员</option>
+                        <option value="@((int)供应商.认证级别.军采通标准会员)">军采通标准会员</option>
+                        <option value="@((int)供应商.认证级别.军采通商务会员)">军采通商务会员</option>
+                    </select>
+                </td>
+                <td align="right">审核状态：</td>
+                <td>
+                    <select name="s" id="status" style="width:153px; margin-left:2px;">
+                        <option value="1">已审核</option>
+                        <option value="0">未审核</option>
+                        <option value="2">审核未通过</option>
+                        <option value="-1" selected="selected">不限</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">是否提交：</td>
+                <td align="left" colspan="3">
+                    <select id="sub" style="width:153px;margin-left:2px;">
+                        <option value="1">未选择</option>
+                        <option value="2">已提交</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">注册时间：</td>
+                <td align="left" colspan="3">
+                    <input type="text" readonly="readonly" value="2014/07/1" onfocus="WdatePicker({dateFmt:'yyyy/MM/dd'})" id="s_regTime" />-><input type="text" value="2016/07/1" onfocus="WdatePicker({dateFmt:'yyyy/MM/dd'})" id="e_regTime" />
+                </td>
+            </tr>
+            <tr>
+                <td align="right">地区：</td>
+                <td colspan="3">
+                    <select id="deliverprovince" name="deliverprovince" style="width:153px; margin-left:2px;"></select>
+                    <select id="delivercity" name="delivercity" style="width:153px;"></select>
+                    <select id="deliverarea" name="deliverarea" style="width:153px;"></select>
+                    <script>
+                        window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                    </script>
+                </td>
+            </tr>
+            <tr><td colspan="4" align="left" height="50"><input type="button" id="search" onclick="sh()" style="width:100px; margin-left:350px; border:none; background-color:green; cursor:pointer; color:white; height:30px; font-size:15px;" value="查询" /></td></tr>
+        </table>
+        <div class="gys_znxx_content">
+            <div style="font-size:12px;" id="tb1">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr><td colspan="12" style="text-align:right;"><a href="###" lang="all" onclick="outPutExcel(this)">导出EXCEL表格</a><a href="###" lang="phone" onclick="outPutExcel(this)">导出手机号</a></td></tr>
+                    <tr><th>序号</th><th>供应商名称</th><th>所属行业</th><th>认证级别</th><th>U盾</th><th>注册时间</th><th>审核状态</th><th>是否提交</th><th colspan="2">操作</th><th>Excel<input id="allCheck" name="parent" type="checkbox" value="" onclick="selectAll()" /></th></tr>
+                    @for (int i = 0; i < supplier.Count(); i++)
+                    {
+                        <tr>
+                            <td style="text-align: center; width:5%;">@(i + 1)</td>
+                            <td style="text-align: center; width:14%;">
+                                <a target="_blank" href="/运营团队后台/Modify_Supplier_Info?id=@supplier.ElementAt(i).Id">@supplier.ElementAt(i).企业基本信息.企业名称</a>
+                            </td>
+                            <td style="text-align: center; width:12%;">@supplier.ElementAt(i).企业基本信息.所属行业</td>
+                            <td style="text-align: center; width:12%;">
+                                <a href="/运营团队后台/ValueAddedService?id=@supplier.ElementAt(i).Id">@supplier.ElementAt(i).供应商用户信息.认证级别</a>
+                            </td>
+                            <td style="text-align: center; width:8%;">
+                                @if (supplier.ElementAt(i).供应商用户信息.U盾信息 != null && !string.IsNullOrWhiteSpace(supplier.ElementAt(i).供应商用户信息.U盾信息.序列号))
+                                {
+                                    <a target="_blank" href="/运营团队后台/SignUp_U?id=@supplier.ElementAt(i).Id">已购买</a>
+                                }
+                                else
+                                {
+                                    <a target="_blank" href="/运营团队后台/SignUp_U?id=@supplier.ElementAt(i).Id" style="color:red;">未购买</a>
+                                }
+
+                            </td>
+                            <td style="text-align:center; width:10%;">@supplier.ElementAt(i).基本数据.添加时间.ToString("yyyy-MM-dd")</td>
+                            @if (supplier.ElementAt(i).供应商用户信息.复审数据.审核状态 != Go81WebApp.Models.数据模型.审核状态.审核通过)
+                            {
+                                <td style="text-align:center; color:red; width:6%; cursor:pointer" id="@supplier.ElementAt(i).Id" class="skan-exam">@*@supplier.ElementAt(i).审核数据.审核状态.ToString()*@ 查看进度</td>
+                                if (!supplier.ElementAt(i).供应商用户信息.已提交)
+                                {
+                                    <td width="6%" style="color:red;">未提交</td>
+                                }
+                                else
+                                {
+                                    <td width="6%" style="color:#1f9434;">已提交</td>
+                                }
+                            }
+                            else
+                            {
+                                <td style="text-align:center; width:6%;color:#1f9434;cursor:pointer;" id="@supplier.ElementAt(i).Id" class="skan-exam">@supplier.ElementAt(i).供应商用户信息.复审数据.审核状态.ToString()</td>
+                                if (supplier.ElementAt(i).供应商用户信息.已提交)
+                                {
+                                    <td width="6%" style="color:#1f9434">已提交</td>
+                                }
+                                else
+                                {
+                                    <td width="6%">未提交</td>
+                                }
+                            }
+                            <td style="text-align: center; width:6%;"><a onclick="del(@supplier.ElementAt(i).Id)">删除</a></td>
+                            <td style="text-align: center; width:6%;"><a target="_blank" href="/运营团队后台/Print_Detail?id=@supplier.ElementAt(i).Id">打印</a></td>
+                            <td style="text-align: center; width:6%;"><input name="item" type="checkbox" value="@supplier.ElementAt(i).Id" onclick="selectThis()" /></td>
+                        </tr>
+                    }
+                </table>
+                <div class="gys_znxx_content_detailbox">
+                    @{
+                        int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                        int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                        if (Pagecount <= 6)
+                        {
+                            for (int i = 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/运营团队后台/Supplier_PssInfo?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/运营团队后台/Supplier_PssInfo?page=@i'>@i</a>
+                                }
+                            }
+                            if (Pagecount != 0)
+                            {
+                                <span>@(CurrentPage)/@(Pagecount) 页</span>
+                            }
+                        }
+                        else
+                        {
+                            if (CurrentPage < 6)
+                            {
+                                if (CurrentPage != 1)
+                                {
+                                    <a href="/运营团队后台/Supplier_PssInfo?page=@(CurrentPage-1)">上一页</a>
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/运营团队后台/Supplier_PssInfo?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/运营团队后台/Supplier_PssInfo?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/运营团队后台/Supplier_PssInfo?page=@(Pagecount)">@Pagecount</a><a href="/运营团队后台/Supplier_PssInfo?page=@(CurrentPage+1)">下一页</a>
+                                    <span>@(CurrentPage)/@(Pagecount) 页</span>
+                                }
+                                else
+                                {
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/运营团队后台/Supplier_PssInfo?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/运营团队后台/Supplier_PssInfo?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/运营团队后台/Supplier_PssInfo?page=@(Pagecount)">@Pagecount</a><a href="/运营团队后台/Supplier_PssInfo?page=@(CurrentPage+1)">下一页</a>
+                                    <span>@(CurrentPage)/@(Pagecount) 页</span>
+                                }
+                            }
+                            else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                            {
+                                <a href="/运营团队后台/Supplier_PssInfo?page=@(CurrentPage-1)">上一页</a><a href="/运营团队后台/Supplier_PssInfo?page=1">1</a><span>...</span>
+                                for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/运营团队后台/Supplier_PssInfo?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/运营团队后台/Supplier_PssInfo?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/运营团队后台/Supplier_PssInfo?page=@(Pagecount)">@Pagecount</a><a href="/运营团队后台/Supplier_PssInfo?page=@(CurrentPage+1)">下一页</a>
+                                <span>@(CurrentPage)/@(Pagecount) 页</span>
+                            }
+                            else if (CurrentPage >= Pagecount - 3)
+                            {
+                                <a href="/运营团队后台/Supplier_PssInfo?page=@(CurrentPage-1)">上一页</a><a href="/运营团队后台/Supplier_PssInfo?page=1">1</a><span>...</span>
+                                for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/运营团队后台/Supplier_PssInfo?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/运营团队后台/Supplier_PssInfo?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>@(CurrentPage)/@(Pagecount) 页</span>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+            <div id="pager"></div>
+        </div>
+    </div>
+</div>
+<!--查看审核进度-->
+<div id="skan-exam-con" class="modal_out">
+    <div class="modal_in" style="background: #595858"></div>
+    <div class="modal_content_loading" style="height:300px;width:625px; border:1px solid #ccc;margin:10% auto">
+    </div>
+</div>
+
+
+<script type="text/javascript" language="javascript">
+    var s = "";
+    var status = "-1";
+    var str = "1";
+    var number = 1;
+    var page_Size = 0;
+    function setValue(data) {
+        var sum = 1;
+        var str = "<table cellspacing='0' width='100%'><tr><td colspan='11' style='text-align:right;'><a href='###' onclick='outPutExcel(this)'>导出EXCEL表格</a><a href='###'  onclick='outPutExcel(this)'>导出手机号</a></td></tr><tr><th>序号</th><th>供应商名称</th><th>所属行业</th><th>认证级别</th><th>U盾</th><th>注册时间</th><th>审核状态</th><th>是否提交</th><th colspan='2'>操作</th><th>Excel<input id='allCheck' name='parent' type='checkbox' value='' onclick='selectAll()'/></th></tr>";
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].Industry == null) {
+                if (data[i].status != "审核通过") {
+                    if (data[i].IsSubmit) {
+                        if (data[i].number == "已购买") {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + " </td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:12%; color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td style='color:red;' width='6%'>已提交</td><td style='text-align:center; width:6%;'><a  target='_blank' href='/运营团队后台/Supplier_Checked?id=" + data[i].Id + "'>审核</a></td><td style='text-align:center; width:6%;'><a onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:6%;'><a target='_blank'href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:6%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                        else {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + " </td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' style='color:red;' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:12%; color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td style='color:red;' width='6%'>已提交</td><td style='text-align:center; width:6%;'><a onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:6%;'><a target='_blank'href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:6%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                    }
+                    else {
+                        if (data[i].number == "已购买") {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + " </td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:12%; color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td width='6%'>未提交</td><td style='text-align:center; width:6%;'><a  onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:6%;'><a   target='_blank'href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:6%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                        else {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + " </td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' style='color:red;' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:12%; color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td width='6%'>未提交</td><td style='text-align:center; width:6%;'><a  onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:6%;'><a   target='_blank'href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:6%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                    }
+                }
+                else {
+                    if (data[i].IsSubmit) {
+                        if (data[i].number == "已购买") {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + " </td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%; color:red;'  id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td style='color:red;' width='6%'>已提交</td><td style='text-align:center; width:8%;'><a  onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:8%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:8%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                        else {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + " </td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' style='color:red;' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%; color:red;'  id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td style='color:red;' width='6%'>已提交</td><td style='text-align:center; width:8%;'><a  onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:8%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:8%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                    }
+                    else {
+                        if (data[i].number == "已购买") {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + " </td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%; color:red;'  id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td width='6%'>未提交</td><td style='text-align:center; width:8%;'><a onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:8%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:8%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                        else {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + " </td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' style='color:red;' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%; color:red;'  id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td width='6%'>未提交</td><td style='text-align:center; width:8%;'><a onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:8%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:8%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                    }
+                }
+            }
+            else {
+                if (data[i].status != "审核通过") {
+                    if (data[i].IsSubmit) {
+                        if (data[i].number == "已购买") {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + "</td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%; color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td style='color:red;' width='6%'>已提交</td><td style='text-align:center; width:6%;'><a onclick='del(" + data[i].Id + ")' href=###'>删除</a></td><td style='text-align:center; width:6%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:6%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                        else {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + "</td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' style='color:red;' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%; color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td style='color:red;' width='6%'>已提交</td><td style='text-align:center; width:6%;'><a onclick='del(" + data[i].Id + ")' href=###'>删除</a></td><td style='text-align:center; width:6%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:6%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                    }
+                    else {
+                        if (data[i].number == "已购买") {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + "</td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%; color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td width='6%'>未提交</td><td style='text-align:center; width:6%;'><a  onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:6%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:6%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                        else {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + "</td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' style='color:red;' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%; color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td width='6%'>未提交</td><td style='text-align:center; width:6%;'><a  onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:6%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:6%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                    }
+                }
+                else {
+                    if (data[i].IsSubmit) {
+                        if (data[i].number == "已购买") {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + "</td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%;'  color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td style='color:red;' width='6%'>已提交</td><td style='text-align:center; width:6%;'><a  onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:8%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:8%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                        else {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + "</td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a style='color:red;' target='_blank' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%;'  color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td style='color:red;' width='6%'>已提交</td><td style='text-align:center; width:6%;'><a  onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:8%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:8%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                    }
+                    else {
+                        if (data[i].number == "已购买") {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + "</td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%;'  color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td width='6%'>未提交</td><td style='text-align:center; width:6%;'><a onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:8%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:8%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                        else {
+                            str += "<tr><td style='text-align:center; width:5%;'>" + sum + "</td><td style='text-align:center; width:14%;'><a  target='_blank' href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].Id + "'>" + data[i].Name + "</a></td><td style='text-align:center; width:12%;'>" + data[i].Industry + "</td><td style='text-align:center; width:12%;'><a href='/运营团队后台/ValueAddedService?id=" + data[i].Id + "' target='_blank'>" + data[i].Cls + "</a></td><td width='8%'><a target='_blank' style='color:red;' href='/运营团队后台/SignUp_U?id=" + data[i].Id + "'>" + data[i].number + "</a></td><td style='text-align:center; width:10%;'>" + data[i].time + "</td><td style='text-align:center; width:8%;'  color:red;' id='" + data[i].Id + "' onclick='showProgress(this)' class='skan-exam'>查看进度</td><td width='6%'>未提交</td><td style='text-align:center; width:6%;'><a onclick='del(" + data[i].Id + ")' href='###'>删除</a></td><td style='text-align:center; width:8%;'><a  target='_blank' href='/运营团队后台/Print_Detail?id=" + data[i].Id + "'>打印</a></td><td style='text-align: center; width:8%;'><input type='checkbox' value='" + data[i].Id + "' name='item' onclick='selectThis()' /></td></tr>";
+                        }
+                    }
+                }
+            }
+            sum++;
+        }
+        str += "</table>";
+        $("#tb1").html(str);
+    }
+    function setPage(pgCount, currentPage) {
+        if (pgCount <= 6) {
+            var str = '';
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+            }
+            if (pgCount != 0) {
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (currentPage < 6) {
+                var str = "<a onclick='pre_page()'>上一页</a>";
+                for (var i = 1; i < 6; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='current_page(" + pgCount + ")'>" + pgCount + "</a><a onclick='next_page()'>下一页</a>";
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                var str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(" + 1 + ")'>1</a>...";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='current_page(" + pgCount + ")'>" + pgCount + "</a><a onclick='next_page()'>下一页</a>";
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+            else if (currentPage >= pgCount - 3) {
+                var str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(1)'>1</a>...";
+                for (var i = pgCount - 5 + 1; i < pgCount; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "<a onclick='current_page(" + pgCount + ")'>" + pgCount + "</a>";
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    function current_page(num) {
+        $.get('/运营团队后台/Search_Supplier',
+            {
+                sub:$("#sub").val(),
+                stime: $("#s_regTime").val(),
+                etime: $("#e_regTime").val(),
+                name: $("#name").val(),
+                factory: $("#factory").val(),
+                cls: str, sts: status, skip: num,
+                provice: $("select#deliverprovince").val(),
+                city: $("select#delivercity").val(),
+                area: $("select#deliverarea").val(),
+            },
+            function (data) {
+                //$("#tb1").html(data.Data[0]);
+                setValue(data.Data.Slist);
+                var pageSize = data.Data.pageSize;
+                $("div#pager").show();
+                setPage(pageSize, num);
+                number = num;
+            }
+        );
+    }
+    function pre_page() {
+        if (number > 1) {
+            number--;
+            $.get('/运营团队后台/Search_Supplier',
+                {
+                    sub: $("#sub").val(),
+                    stime: $("#s_regTime").val(),
+                    etime: $("#e_regTime").val(),
+                    name: $("#name").val(),
+                    factory: $("#factory").val(),
+                    cls: str, sts: status, skip: number,
+                    provice: $("select#deliverprovince").val(),
+                    city: $("select#delivercity").val(),
+                    area: $("select#deliverarea").val(),
+                },
+                function (data) {
+                    setValue(data.Data.Slist);
+                    var pageSize = data.Data.pageSize;
+                    $("div#pager").show();
+                    setPage(page_Size, number);
+                }
+            );
+        }
+    }
+    function next_page() {
+        if (number < page_Size) {
+            number++;
+            $.get('/运营团队后台/Search_Supplier',
+                {
+                    sub: $("#sub").val(),
+                    stime: $("#s_regTime").val(),
+                    etime: $("#e_regTime").val(),
+                    name: $("#name").val(),
+                    factory: $("#factory").val(),
+                    cls: str, sts: status, skip: number,
+                    provice: $("select#deliverprovince").val(),
+                    city: $("select#delivercity").val(),
+                    area: $("select#deliverarea").val(),
+                },
+                function (data) {
+                    setValue(data.Data.Slist);
+                    var pageSize = data.Data.pageSize;
+                    page_Size = pageSize;
+                    $("div#pager").show();
+                    setPage(page_Size, number);
+                }
+            );
+        }
+    }
+    $(document).ready(function () {
+        $("select#cls").change(function () { str = $(this).val(); sh(); });
+        $("select#status").change(function () { status = $(this).val(); number = 1; sh(); });
+    });
+    function sh() {
+        $.get('/运营团队后台/Search_Supplier',
+            {
+                sub:$("#sub").val(),
+                stime: $("#s_regTime").val(),
+                etime: $("#e_regTime").val(),
+                name: $("#name").val(),
+                factory: $("#factory").val(),
+                cls: str, sts: status, skip: 1,
+                provice: $("select#deliverprovince").val(),
+                city: $("select#delivercity").val(),
+                area: $("select#deliverarea").val(),
+            },
+            function (data) {
+                setValue(data.Data.Slist);
+                var pageSize = data.Data.pageSize;
+                page_Size = pageSize;
+                setPage(pageSize, 1);
+            }
+        );
+        s = "";
+    }
+    function del(num) {
+        if (confirm("点击确定即将删除此用户！确定删除吗？")) {
+            window.location = "/运营团队后台/Supplier_Delete?id=" + num;
+        }
+    }
+    function selectAll() {
+        s = "";
+        var th = document.getElementsByName('parent').item(0);
+        var items = document.getElementsByName('item');
+        if (th.checked) {
+            for (var i = 0; i < items.length; i++) {
+                items.item(i).checked = true;
+                s += items.item(i).value + ",";
+            }
+        }
+        else {
+            for (var i = 0; i < items.length; i++) {
+                items.item(i).checked = false;
+            }
+            s = "";
+        }
+    }
+    function selectThis() {
+        s = "";
+        var noallSelected=false;
+        var items = document.getElementsByName('item');
+        for (var i = 0; i < items.length; i++) {
+            if (!items.item(i).checked) {
+                noallSelected = true;
+                break;
+            }
+        }
+        for (var i = 0; i < items.length; i++) {
+            if (items.item(i).checked) {
+                s += items.item(i).value + ",";
+            }
+        }
+        if(noallSelected)
+        {
+            document.getElementsByName('parent').item(0).checked=false;
+        }
+        else
+        {
+            document.getElementsByName('parent').item(0).checked=true;
+        }
+    }
+    function outPutExcel(str) {
+        if (s == "") {
+            alert("请选择要导出的数据！");
+        }
+        else {
+            if (str.lang == "all") {
+                window.location = "/运营团队后台/putOutExcel?id=" + s+"&type=supplier";
+            }
+            else {
+                window.location = "/运营团队后台/putOutExcel_phone?id=" + s;
+            }
+        }
+    }
+
+    $(".skan-exam").bind('click', function () {
+        var id = $(this).attr("id");
+        $.ajax({
+            url: "/运营团队后台/Part_SkanExam",
+            data: { id: id },
+            success: function (data) {
+                $("#skan-exam-con").find(".modal_content_loading").html(data).end().fadeIn(200);
+            },
+            error: function () {
+                if ($("#comfirm-a").length > 0) {
+                    $("#comfirm-a").fadeIn(200);
+                }
+                else {
+                    $("body").myComfirm({
+                        index: "comfirm-a",
+                        title: "提示",
+                        btncloseid: "btnclose0",
+                        btnsubid: "btnsub0",
+                        img: "url('../Images/alert-comfirm.png') 0 0", //提示信息相应图片  必须
+                        content: "获取信息失败！",  //提示信息内容 必须
+                        iscomfirm: false,
+                        onComfirm: function () {
+                            $("#comfirm-a").fadeOut(200);
+                        },
+                    });
+                }
+            },
+        });
+    });
+    function showProgress(th) {
+        var id = $(th).attr("id");
+        $.ajax({
+            url: "/运营团队后台/Part_SkanExam",
+            data: { id: id },
+            success: function (data) {
+                $("#skan-exam-con").find(".modal_content_loading").html(data).end().fadeIn(200);
+            },
+            error: function () {
+                if ($("#comfirm-a").length > 0) {
+                    $("#comfirm-a").fadeIn(200);
+                }
+                else {
+                    $("body").myComfirm({
+                        index: "comfirm-a",
+                        title: "提示",
+                        btncloseid: "btnclose0",
+                        btnsubid: "btnsub0",
+                        img: "url('../Images/alert-comfirm.png') 0 0", //提示信息相应图片  必须
+                        content: "获取信息失败！",  //提示信息内容 必须
+                        iscomfirm: false,
+                        onComfirm: function () {
+                            $("#comfirm-a").fadeOut(200);
+                        },
+                    });
+                }
+            },
+        });
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#供应商列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#供应商列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+
+
+
+
+
+
+

@@ -1,0 +1,149 @@
+﻿
+@{
+    ViewBag.Title = "西南物资采购网";
+}
+<style type="text/css">
+    .wenxintishi {
+        text-indent: 2.0em;
+    }
+
+    .modal {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        position: fixed;
+        display: none;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: 600px;
+        margin: 15% auto;
+    }
+
+    .modal-content {
+        position: relative;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, .2);
+        border-radius: 6px;
+        outline: 0;
+        -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    }
+
+    .close {
+        margin-top: -2px;
+        float: right;
+        font-size: 21px;
+        font-weight: bold;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        filter: alpha(opacity=20);
+        opacity: .2;
+        -webkit-appearance: none;
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+    }
+
+    h4 {
+        font-size: 18px;
+    }
+
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .modal-header {
+        min-height: 16.42857143px;
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .modal-title {
+        margin: 0;
+        line-height: 1.42857143;
+    }
+
+    .modal-body {
+        position: relative;
+        padding: 15px;
+    }
+
+    .modal-footer {
+        padding: 15px;
+        text-align: right;
+        border-top: 1px solid #e5e5e5;
+    }
+</style>
+
+<div id="indexpagemodal0" class="modal fade" style="display:block;">
+    <div class="modal-dialog" style="margin: 3% auto;">
+        <div class="modal-content" style="height:500px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal0').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">物资采购管理处关于验收单规范开取的通知
+</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 350px; overflow-y: scroll; line-height:25px;">
+                    <p><h4>各办公物资定点协议供应商：</h4></p>
+                    <p class="wenxintishi">
+                        为加强军区办公物资采购集中管理，规范采购行为，现对军区物资集中采购验收单填写格式作如下要求：
+                    </p>
+                    <p class="wenxintishi">
+                        1、收货单位：军区机关二级部（局），填写为：军区XXX部XXX部（只填写到二级部，不写到处）；其他部队统一填写部队编号，填写为：XXXXXXX部队XXX部。
+                    </p>
+                    <p class="wenxintishi">
+                        2、物资名称，填写为：品牌+型号。
+                    </p>
+                    <p class="wenxintishi">
+                        3、物资清单未超过8项的，不能填写为一批物资并附表
+                    </p>
+                    <p class="wenxintishi">
+                        4、验收单上下两联需请需求部门验收人在意见反馈上填写意见（或打钩），签名字并留军线座机电话，然后再20天内将第一联扫描回传至网上平台。
+                    </p>
+                    <p class="wenxintishi">
+                        5、同单位同一项预算，不允许拆分价格开取验收单，单项采购金额在2万元（含2万元）批量采购在5万元（含5万元）以上的，必须由成都物资采购站组织招标，并填写采购合同号，我处将会同财务部门定期对验收单进行查验，凡出现将应以招标方式采购的物资采购项目化整为零或以其他方式规避招标的行为，将按相关规定对协议定点供应商进行处理。
+                    </p>
+                    <p class="wenxintishi" style="text-align:right; padding-right:20px;">物资采购管理处</p>
+                    <p class="wenxintishi" style="text-align:right; padding-right:20px;"> 二O一五年八月二十八日</p>
+                </div>
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="关闭" onclick="$('#indexpagemodal0').hide(); $('#indexpagemodal1').show();" /></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="main_content">
+    <div class="main_content_topbox">                  
+        <div class="left_menu">@Html.Action("Part_Index_LeftMenu", "首页")</div>
+        <div class="index_content">@Html.Action("Part_Index_Content", "首页")</div>
+    </div>
+    <div class="main_content_bottombox">
+        @Html.Action("Part_Index_Bottom", "首页")
+    </div>
+</div>
+
+<script type="text/javascript" language="javascript">
+    function clearCookie() {
+        var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+        if (keys) {
+            for (var i = keys.length; i--;)
+                document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+        }
+    }
+</script>

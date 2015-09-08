@@ -1,0 +1,279 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.机票验收单
+@using Go81WebApp.Models.数据模型.项目数据模型
+@{
+    ViewBag.Title = "机票管理";
+    Layout = "_BackLayout.cshtml";
+}
+<div id="f" style="display:none;">
+    <div style="position:fixed; z-index:5; top:0px; left:0px; text-align:center; right:0; bottom:0px; background-color:black; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50); height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="position:fixed; left:0px; top:30%; width:100%;z-index:20;">
+        <div style="width:500px; position:relative; z-index:30; margin:0px auto; height:220px; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="$('#f').hide()">×</a></div>
+            <div style="float:right;width:100%; text-align:center;">
+                <span style="color:red;">请在此处上传验真单</span>
+                <div id="Uppicture" style="position:absolute; width:50%; margin-top:10px; margin-left:0px;">
+                    <form action="/运营团队后台/UploadImages1" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                        <table width="100%" style="font-size:14px; margin-left:30px;">
+                            <tr>
+                                <td>
+                                    <input type="file" accept="image/*" onchange="filechange(this)" multiple="multiple" id="filebt" name="file1" style="width:70px;" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <form action="/运营团队后台/AddTicket" method="post" target="result1" name="result">
+                        <input type="hidden" name="id" id="user" value="@ViewData["id"]" />
+                        <input type="hidden" value="" name="index" id="index" />
+                        <input type="hidden" value="" id="picture" name="picture" />
+                        <input type="hidden" value="" id="reason" name="reason" />
+                        <div id="pBox"></div>
+                    </form>
+                    <div id="framebox" style="display:none;margin-left:20px; margin-top:10px;width:700px;  margin-right: auto;">
+                        <iframe name="showPic" id="showPic" frameborder="0" height="150" width="100%"></iframe>
+                    </div>
+                    <div id="framebox" style="display:none;margin-left:20px; margin-top:10px;width:700px;  margin-right: auto;">
+                        <iframe name="result1" id="result1" frameborder="0" height="150" width="100%"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div id="title_div" class="title-base-middle">
+                <div class="title-base-inner">机票管理</div>
+            </div>
+        </div>
+        <div class="gys_znxx_content">
+            <table id="list" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th>航班号</th>
+                    <th>行程单号</th>
+                    <th>乘客姓名</th>
+                    <th>计量单位</th>
+                    <th>总价</th>
+                    <th>验真状态</th>
+                    <th>操作</th>
+                </tr>
+                @if (Model.服务列表 != null && Model.服务列表.Count != 0)
+                {
+                    for (int i = 0; i < Model.服务列表.Count; i++)
+                    {
+                        <tr>
+                            <td>@Model.服务列表[i].航班号</td>
+                            <td>@Model.服务列表[i].行程单号</td>
+                            <td>@Model.服务列表[i].客户姓名</td>
+                            <td>@Model.服务列表[i].计量单位</td>
+                            <td>@(Model.服务列表[i].单价 * Model.服务列表[i].数量)</td>
+                            <td>
+                                @if (Model.服务列表[i].验证状态 == 机票验证状态.已验证)
+                                {
+                                    <span style="color:green;">@Model.服务列表[i].验证状态</span>
+                                }
+                                else
+                                {
+                                    <span style="color:red;">@Model.服务列表[i].验证状态</span>
+                                }
+                            </td>
+                            <td>
+                                @if (string.IsNullOrWhiteSpace(Model.服务列表[i].验证附件路径))
+                                {
+
+                                    switch (Model.服务列表[i].验证状态.ToString())
+                                    {
+                                        case "已验证":
+                                            <span style="display:none;">
+                                                <input type="radio" name="re@(i)" value="待验证" lang="@i,5,6" onclick="checkout(this)" />待验证<br />
+                                                <input type="radio" name="re@(i)" checked="checked" value="已验证" lang="@i,5,6" onclick="checkout(this)" />已验证<br />
+                                                <input type="radio" name="re@(i)" value="查无此票" lang="@i,5,6" onclick="checkout(this)" />查无此票<br />
+                                                <input type="radio" name="re@(i)" value="价格不匹配" lang="@i,5,6" onclick="checkout(this)" />价格不匹配<br />
+                                                <input type="radio" name="re@(i)" value="行程不匹配" lang="@i,5,6" onclick="checkout(this)" />行程不匹配
+                                            </span>; break;
+                                        case "待验证":
+                                        <span>
+                                            <input type="radio" name="re@(i)" checked="checked" value="待验证" lang="@i,5,6" onclick="checkout(this)" />待验证<br />
+                                            <input type="radio" name="re@(i)" value="已验证" lang="@i,5,6" onclick="checkout(this)" />已验证<br />
+                                            <input type="radio" name="re@(i)" value="查无此票" lang="@i,5,6" onclick="checkout(this)" />查无此票<br />
+                                            <input type="radio" name="re@(i)" value="价格不匹配" lang="@i,5,6" onclick="checkout(this)" />价格不匹配<br />
+                                            <input type="radio" name="re@(i)" value="行程不匹配" lang="@i,5,6" onclick="checkout(this)" />行程不匹配
+                                        </span>; break;
+                                        case "查无此票":
+                                        <span>
+                                            <input type="radio" name="re@(i)" value="待验证" lang="@i,5,6" onclick="checkout(this)" />待验证<br />
+                                            <input type="radio" name="re@(i)" value="已验证" lang="@i,5,6" onclick="checkout(this)" />已验证<br />
+                                            <input type="radio" name="re@(i)" checked="checked" value="查无此票" lang="@i,5,6" onclick="checkout(this)" />查无此票<br />
+                                            <input type="radio" name="re@(i)" value="价格不匹配" lang="@i,5,6" onclick="checkout(this)" />价格不匹配<br />
+                                            <input type="radio" name="re@(i)" value="行程不匹配" lang="@i,5,6" onclick="checkout(this)" />行程不匹配
+                                        </span>;
+                                        break;
+                                        case "价格不匹配":
+                                        <span>
+                                            <input type="radio" name="re@(i)" value="待验证" lang="@i,5,6" onclick="checkout(this)" />待验证<br />
+                                            <input type="radio" name="re@(i)" value="已验证" lang="@i,5,6" onclick="checkout(this)" />已验证<br />
+                                            <input type="radio" name="re@(i)" value="查无此票" lang="@i,5,6" onclick="checkout(this)" />查无此票<br />
+                                            <input type="radio" name="re@(i)" checked="checked" value="价格不匹配" lang="@i,5,6" onclick="checkout(this)" />价格不匹配<br />
+                                            <input type="radio" name="re@(i)" value="行程不匹配" lang="@i,5,6" onclick="checkout(this)" />行程不匹配
+                                        </span>;
+                                        break;
+                                        case "行程不匹配":
+                                        <span>
+                                            <input type="radio" name="re@(i)" value="待验证" lang="@i,5,6" onclick="checkout(this)" />待验证<br />
+                                            <input type="radio" name="re@(i)" value="已验证" lang="@i,5,6" onclick="checkout(this)" />已验证<br />
+                                            <input type="radio" name="re@(i)" value="查无此票" lang="@i,5,6" onclick="checkout(this)" />查无此票<br />
+                                            <input type="radio" name="re@(i)" value="价格不匹配" lang="@i,5,6" onclick="checkout(this)" />价格不匹配<br />
+                                            <input type="radio" name="re@(i)" checked="checked" value="行程不匹配" lang="@i,5,6" onclick="checkout(this)" />行程不匹配
+                                        </span>;
+                                        break;
+                                    }
+
+                                }
+                                else
+                                {
+                                    switch (Model.服务列表[i].验证状态.ToString())
+                                    {
+                                        case "已验证":
+                                            <span style="display:none;">
+                                                <input type="radio" name="re@(i)" value="待验证" lang="@i,5,6" onclick="checkout(this)" />待验证<br />
+                                                <input type="radio" name="re@(i)" checked="checked" value="已验证" lang="@i,5,6" onclick="checkout(this)" />已验证<br />
+                                                <input type="radio" name="re@(i)" value="查无此票" lang="@i,5,6" onclick="checkout(this)" />查无此票<br />
+                                                <input type="radio" name="re@(i)" value="价格不匹配" lang="@i,5,6" onclick="checkout(this)" />价格不匹配<br />
+                                                <input type="radio" name="re@(i)" value="行程不匹配" lang="@i,5,6" onclick="checkout(this)" />行程不匹配
+                                            </span>; break;
+                                        case "待验证":
+                                        <span style="display:none;">
+                                            <input type="radio" name="re@(i)" checked="checked" value="待验证" lang="@i,5,6" onclick="checkout(this)" />待验证<br />
+                                            <input type="radio" name="re@(i)" value="已验证" lang="@i,5,6" onclick="checkout(this)" />已验证<br />
+                                            <input type="radio" name="re@(i)" value="查无此票" lang="@i,5,6" onclick="checkout(this)" />查无此票<br />
+                                            <input type="radio" name="re@(i)" value="价格不匹配" lang="@i,5,6" onclick="checkout(this)" />价格不匹配<br />
+                                            <input type="radio" name="re@(i)" value="行程不匹配" lang="@i,5,6" onclick="checkout(this)" />行程不匹配
+                                        </span>; break;
+                                        case "查无此票":
+                                        <span style="display:none;">
+                                            <input type="radio" name="re@(i)" value="待验证" lang="@i,5,6" onclick="checkout(this)" />待验证<br />
+                                            <input type="radio" name="re@(i)" value="已验证" lang="@i,5,6" onclick="checkout(this)" />已验证<br />
+                                            <input type="radio" name="re@(i)" checked="checked" value="查无此票" lang="@i,5,6" onclick="checkout(this)" />查无此票<br />
+                                            <input type="radio" name="re@(i)" value="价格不匹配" lang="@i,5,6" onclick="checkout(this)" />价格不匹配<br />
+                                            <input type="radio" name="re@(i)" value="行程不匹配" lang="@i,5,6" onclick="checkout(this)" />行程不匹配
+                                        </span>;
+                                        break;
+                                        case "价格不匹配":
+                                        <span style="display:none;">
+                                            <input type="radio" name="re@(i)" value="待验证" lang="@i,5,6" onclick="checkout(this)" />待验证<br />
+                                            <input type="radio" name="re@(i)" value="已验证" lang="@i,5,6" onclick="checkout(this)" />已验证<br />
+                                            <input type="radio" name="re@(i)" value="查无此票" lang="@i,5,6" onclick="checkout(this)" />查无此票<br />
+                                            <input type="radio" name="re@(i)" checked="checked" value="价格不匹配" lang="@i,5,6" onclick="checkout(this)" />价格不匹配<br />
+                                            <input type="radio" name="re@(i)" value="行程不匹配" lang="@i,5,6" onclick="checkout(this)" />行程不匹配
+                                        </span>;
+                                        break;
+                                        case "行程不匹配":
+                                        <span style="display:none;">
+                                            <input type="radio" name="re@(i)" value="待验证" lang="@i,5,6" onclick="checkout(this)" />待验证<br />
+                                            <input type="radio" name="re@(i)" value="已验证" lang="@i,5,6" onclick="checkout(this)" />已验证<br />
+                                            <input type="radio" name="re@(i)" value="查无此票" lang="@i,5,6" onclick="checkout(this)" />查无此票<br />
+                                            <input type="radio" name="re@(i)" value="价格不匹配" lang="@i,5,6" onclick="checkout(this)" />价格不匹配<br />
+                                            <input type="radio" name="re@(i)" checked="checked" value="行程不匹配" lang="@i,5,6" onclick="checkout(this)" />行程不匹配
+                                        </span>                                ;
+                                                                        break;
+                                    }
+                                    <div>
+                                        <span onmouseover="$(this).children('a').eq(1).css('display', 'inline-block');" onmouseout="    $(this).children('a').eq(1).css('display', 'none');"><a href="@Model.服务列表[i].验证附件路径 " target=" _blank"><img src="@Model.服务列表[i].验证附件路径" width="80" height="45" /></a>
+                                        <a style="color:red; display:none; position:absolute; width:70px; height:15px; text-align:center; line-height:15px; margin-top:26px; opacity:0.8; filter:alpha(opacity=80); background-color:white; margin-left:-85px;" onclick=" $(this).parent().parent().prev('span').show(); $(this).parent().parent().remove();">修改</a>
+                                        </span>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#机票验收单管理").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#机票验收单管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function filechange(th) {
+        document.forms["upload"].submit();
+    }
+    function setPic(th) {
+        var str = "<table style='border:none;'>";
+        var path = $(th).val();
+        var path1 = path.split('|');
+        var row = parseInt((path1.length - 1) / 4);
+        var maintain = parseInt((path1.length - 1) % 4);
+        var count = 0;
+        if (row > 0) {
+            for (var i = 0; i < row; i++) {
+                str += "<tr>";
+                for (var j = 0; j < 4; j++) {
+                    str += "<td  style='border:none;'><a title='删除' id='' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:16px; text-decoration:none; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /></td>"
+                    count++;
+                }
+                str += "</tr>";
+            }
+        }
+        if (maintain > 0) {
+            str += "<tr>";
+            for (var m = 0; m < maintain; m++) {
+                str += "<td  style='border:none;'><a title='删除' id='' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:16px; text-decoration:none; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /></td>";
+                count++;
+            }
+            str += "</tr>";
+        }
+        str += "</table>";
+        document.getElementById("pBox").innerHTML = str;
+        $("#f1").hide();
+        if ($("#pBox img").length == 0) {
+            $("#sbt").remove();
+        }
+        else {
+            $("#pBox").append("<input type='button' onclick='subResult()' id='sbt' style='width:50px;border:none; float:left; cursor:pointer; background-color:red; color:white; height:30px;' value='保存'/>");
+        }
+    }
+    function delPic(th) {
+        var id = $(th).attr("id");
+        var path = $(th).attr("lang");
+        $.get('/运营团队后台/DeleteImages', { n: path, q: "123" },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+        var newpath = document.getElementById("picture").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("picture").value = str;
+        setPic("#picture");
+    }
+    function subResult() {
+        var reason = $("#reason").val();
+        var url = $("#picture").val().split('|')[0];
+        var tr = parseInt($("#index").val().split(',')[0]);
+        var col0 = parseInt($("#index").val().split(',')[1]);
+        var col1 = parseInt($("#index").val().split(',')[2]);
+        $("table#list tr").eq(tr + 1).children("td").eq(col0).html("<span style='color:green;'>" + reason + "</span>");
+        $("table#list tr").eq(tr + 1).children("td").eq(col1).html("<a href='" + url + "' target='_blank'><img width='80' height='45' src='" + url + "'/></a>");
+        document.forms["result"].submit();
+        $("#picture").val("");
+        $("#pBox").html("");
+        $("#f").hide();
+    }
+    function checkout(th) {
+        $("#reason").val($(th).val());
+        $("#index").val($(th).attr("lang"));
+        $('#f').show();
+        $('#filebt').show();
+    }
+</script>

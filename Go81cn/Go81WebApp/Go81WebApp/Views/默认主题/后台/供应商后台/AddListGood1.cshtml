@@ -1,0 +1,104 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    ViewBag.Title = "批量添加商品";
+    Layout = "_BackLayout.cshtml";
+    
+}
+<script type="text/javascript" src="~/JS/Get_productClass.js"></script>
+<style type="text/css">
+   .step {
+       text-indent: 2em;
+       clear: left;
+       color: #F38652;
+   }
+   .container-temp {
+       padding-left: 60px;
+   }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="gys_xttz_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">批量添加商品</div>
+            </div>
+        </div>
+        <div class="gys_xttz_contentbox gys_znxx_box" style="min-height:initial">
+            <p class="step"><strong>第三步：上传已填写完整的模板</strong></p>
+            <form action="/供应商后台/UploadGood" name="uploadgood" method="POST" enctype="multipart/form-data" target="result_frame">
+                <div class="container-temp">
+                    <input name="good_template" onchange="filechange();" type="file" />
+                </div>
+            </form>
+            <iframe id="uploadframegood" name="result_frame" style="height:30px;margin-left: 55px;" scrolling="no" frameborder="0"></iframe>
+            <p class="step"><strong>第四步：上传商品图片</strong></p>
+            <form action="/供应商后台/UploadPicures" name="uploadpic" method="POST" enctype="multipart/form-data" target="result_frame1">
+                <div class="container-temp">
+                    <input type="file" onchange="filechange1()" name="pic_template" />
+                </div>
+            </form>
+            <iframe id="uploadframepic" name="result_frame1" style="height:30px;margin-left: 55px;" scrolling="no" frameborder="0"></iframe>
+            <p class="step"><strong>第五步：上传</strong></p>           
+            <div style="padding-bottom: 25px;">
+                @*<input type="hidden" name="tempdata" id="tempdata_id" />
+                <input type="hidden" name="temppic" id="temppic_id" />*@
+                <input id="upload_submit" class="front_login_rightbox_button" style="width: 140px;height: 35px;margin-left: 65px;" type="submit" value="点   击   导   入" />
+            </div>
+            <div id="Error" style="padding-bottom: 20px;"></div>
+        </div>
+    </div>
+</div>
+<div id="waitfor" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>请稍等...</span>
+    </div>
+</div>
+<script type="text/javascript">
+    function filechange() {//上传附件
+        $("#waitfor").show();
+        document.forms["uploadgood"].submit();
+    }
+    function filechange1() {
+        $("#waitfor").show();
+        document.forms["uploadpic"].submit();
+    }
+
+    $("#upload_submit").click(function () {
+        var dat = $("#uploadframegood").contents().find("#pldata_id").val();
+        var pic = $("#uploadframepic").contents().find("#plpic_id").val();
+        $.ajax({
+            url: '/供应商后台/UploadExcelGood',
+            data: { datas: dat, pics: pic },
+            beforeSend: function () {
+                $("#waitfor").show();
+            },
+            success: function (data) {
+                $("#waitfor").hide();
+                if (!(data == "导入成功！")) {
+                    alert("导入失败！商品图片不对应或待导入的商品已存在商品库。请根据情况更新商品或者添加可添加的商品！");
+                    $("#Error").html(data);
+                };
+                if (data == "导入成功！") {
+                    alert(data);
+                    window.location = "/供应商后台/AddListGood1";
+                }
+            },
+            error:function() {
+                alert("无法导入！请检查数据是否完整、正确。");
+                $("#waitfor").hide();
+            },
+        });
+    });
+    
+    
+
+    $(function () {
+        $("#新增商品信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#新增商品信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+

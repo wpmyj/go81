@@ -1,0 +1,39 @@
+﻿
+
+
+<div style="font-size:13px">
+    <div>公告月发布数量</div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc">
+        @{
+            var 公告月发布数量 = ViewData["公告月发布数量"] as List<Tuple<string, string, string>>;
+            if (公告月发布数量.Any())
+            {
+                <tr>
+                    <td style="border-top:1px solid #ccc;border-left:1px solid #ccc;line-height:30px;text-indent:10px;">统计月份</td>
+                    @foreach (var item in 公告月发布数量)
+                    {
+                        <td style="border-top:1px solid #ccc;border-left:1px solid #ccc;line-height:30px;text-indent:10px;">@item.Item1</td>
+                    }
+                </tr>
+                <tr>
+                    <td style="border-top:1px solid #ccc;border-left:1px solid #ccc;line-height:30px;text-indent:10px;">总数量</td>
+                    @foreach (var item in 公告月发布数量)
+                    {
+                        <td style="border-top:1px solid #ccc;border-left:1px solid #ccc;line-height:30px;text-indent:10px;">@item.Item2</td>
+                    }
+                </tr>
+                <tr>
+                    <td style="border-top:1px solid #ccc;border-left:1px solid #ccc;line-height:30px;text-indent:10px;">平均每日</td>
+                    @foreach (var item in 公告月发布数量)
+                    {
+                        <td style="border-top:1px solid #ccc;border-left:1px solid #ccc;line-height:30px;text-indent:10px;">@item.Item3</td>
+                    }
+                </tr>
+            }
+        }
+
+    </table>
+
+
+
+</div>

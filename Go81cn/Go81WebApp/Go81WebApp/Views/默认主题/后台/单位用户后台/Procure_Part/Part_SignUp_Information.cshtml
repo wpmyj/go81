@@ -1,0 +1,235 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.招标采购预报名
+<style type="text/css">
+    .procure_formlistdiv {
+        width: 510px;
+    }
+
+        .procure_formlistdiv input {
+            width: 500px;
+        }
+
+    .procureinputdiv_title {
+        width: 200px;
+        text-align: right;
+    }
+
+    .procureinputdiv_title {
+        line-height: 30px;
+    }
+
+    .procure_formlistdiv {
+        line-height: 30px;
+    }
+
+    #gys_signup_information tr td {
+        text-align: center;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="gys_znxx_topbox">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">招标采购预报名详情</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+
+                @if (Model != null)
+                {
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">项目名称：</div>
+                        <div class="procure_formlistdiv">
+                            @Model.所属公告链接.公告.项目信息.项目名称
+                        </div>
+                    </div>
+
+
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">项目编号：</div>
+                        <div class="procure_formlistdiv">
+                            @Model.所属公告链接.公告.项目信息.项目编号
+                        </div>
+                    </div>
+
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">报名状态：</div>
+                        <div class="procure_formlistdiv">
+                            @if (Model.预报名已关闭)
+                            {
+                                <span>已关闭</span>
+                            }
+                            else
+                            {
+                                <span>进行中</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">公告名称：</div>
+                        <div class="procure_formlistdiv">
+                            <a style="text-decoration: underline;" target="_blank" href="/公告/AnnounceDetail?id=@Model.所属公告链接.公告.Id">@Model.所属公告链接.公告.内容主体.标题</a>
+                        </div>
+                    </div>
+
+                    <div class="procureinputdiv" style=" height:auto; overflow:hidden">
+                        <div class="procureinputdiv_title">供应商所需资料：</div>
+                    </div>
+                    <table style="display:none;">
+                        <tbody id="addexample">
+                            <tr>
+                                <td style="padding:5px 0 5px 0;"><input id="informationtitle__a" name="informationtitle__a" type="text" style="width:95%; height:30px; line-height:30px;" /></td>
+                                <td><input id="informationflag__a" name="informationflag__a" type="checkbox" /></td>
+                                <td><input type="button" id="btn__a" style="height:30px;" value="删除该资料" onclick="deletethisinformation(this);" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+
+                    <table width="100%" cellpadding="0" cellspacing="0" id="gys_signup_information">
+                        <tr id="tablehead">
+                            <th width="70%">资料名称</th>
+                            <th width="15%">是否需上传复印件</th>
+                            <th width="15%">删除该资料</th>
+                        </tr>
+                        @if (Model.供应商所需资料.Any())
+                        {
+                            var item = Model.供应商所需资料;
+
+                            for (var i = 0; i < item.Count; i++)
+                            {
+                                <tr>
+                                    <td style="padding:5px 0 5px 0;"><input id="informationtitle__@i" name="informationtitle__@i" type="text" value="@item[i].资料名" style="width:95%; height:30px; line-height:30px;" /></td>
+                                    @if (item[i].图片)
+                                    {
+                                        <td><input id="informationflag__@i" name="informationflag__@i" type="checkbox" checked="checked" /></td>
+                                    }
+                                    else
+                                    {
+                                        <td><input id="informationflag__@i" name="informationflag__@i" type="checkbox" /></td>
+                                    }
+                                    <td><input type="button" id="btn__@i" style="height:30px;" value="删除该资料" onclick="deletethisinformation(this);" /></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td style="padding:5px 0 5px 0;"><input id="informationtitle__0" name="informationtitle__0" type="text" style="width:95%; height:30px; line-height:30px;" /></td>
+                                <td><input id="informationflag__0" name="informationflag__0" type="checkbox" /></td>
+                                <td><input type="button" id="btn__0" style="height:30px;" value="删除该资料" onclick="deletethisinformation(this);" /></td>
+                            </tr>
+                        }
+                    </table>
+                    <div style="height:auto; overflow:hidden; width:900px;">
+                        <input type="button" value="增加所需资料" style="width:100px; height:30px; float:right; margin-top:5px;" onclick="addinformation();" />
+                    </div>
+                    <div style="text-align:center;">
+                        @if (Model.预报名已关闭)
+                        {
+                            <input type="radio" name="closeybm" value="0" /><span>打开预报名</span>
+                            <input type="radio" name="closeybm" value="1" checked="checked" /><span>关闭预报名</span>
+                        }
+                        else
+                        {
+                            <input type="radio" name="closeybm" value="0" checked="checked" /><span>打开预报名</span>
+                            <input type="radio" name="closeybm" value="1" /><span>关闭预报名</span>
+                        }
+                    </div>
+                    <div style="text-align:center;">
+                        <input id="modiibutton" name="submitcontent" type="submit" style="margin-top:20px;" onclick="return setisbuybs();" class="front_login_rightbox_button" value="确定">
+                    </div>
+                }
+                else
+                {
+                    <div style="text-align:center;">
+                        无此信息
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+    <input type="hidden" id="linecount" name="linecount" value="@ViewData["已有条件数"]" />
+    <input type="hidden" id="checkstr" name="checkstr" value="" />
+}
+<script type="text/javascript">
+    function addinformation() {
+        var count = $("#linecount").val();
+        var content = $("#addexample").html();
+        $("#gys_signup_information").append(content.replace(/__a/g, "__" + count))
+        $("#linecount").val(++count);
+    }
+    function deletethisinformation(obj) {
+        if (confirm("确定删除本行资料？")) {
+
+            $(obj).parent().parent().remove();
+
+            var count = $("#linecount").val();
+            var num = $(obj).attr("id").replace("btn__", "");
+
+
+            if (count > 1) {
+                for (var j = (parseInt(num) + 1) ; j < count; j++) {
+                    var reg = new RegExp("__" + j, "g");
+
+                    var title = $("#informationtitle__" + j).val();
+                    var flag = false;
+                    if ($("#informationflag__" + j).is(":checked")) {
+                        flag = true;
+                    }
+                    var oldhtml = $("#informationtitle__" + j).parent().parent().html();
+
+                    $("#informationtitle__" + j).parent().parent().html(oldhtml.replace(reg, "__" + (j - 1)));
+                    $("#informationtitle__" + (j - 1)).val(title);
+                    if (flag) {
+                        $("#informationflag__" + (j - 1)).prop("checked", true);
+                    }
+                }
+
+            }
+            $("#linecount").val(--count);
+
+
+        }
+    }
+
+    function setisbuybs() {
+        if (!confirm("确定提交本次数据？")) {
+            return false;
+        }
+        var falge = false;
+        $("#gys_signup_information :text").each(function () {
+            if ($(this).val() == "") {
+                alert("资料名称必须填写");
+                $(this).focus();
+                falge = true;
+                return false;
+            }
+        });
+        if (falge) {
+            return false;
+        }
+
+
+        $("#checkstr").val("");
+        var checkstr = "";
+        $("#gys_signup_information :checkbox").each(function () {
+            if ($(this).is(":checked")) {
+                checkstr += "1|";
+            }
+            else {
+                checkstr += "0|";
+            }
+        });
+        $("#checkstr").val(checkstr);
+    }
+    $(function () {
+        $("#招标采购预报名列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#招标采购预报名列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

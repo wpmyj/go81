@@ -1,0 +1,125 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型
+<table width="100%" id="con" cellpadding="0" cellspacing="0">
+    <tr>
+        <th align="center">用户ID</th>
+        <th align="center">登录名</th>
+        <th align="center">单位代号</th>
+        <th align="center">联系人</th>
+        <th align="center">联系人手机</th>
+        <th align="center">所属用户组</th>
+        <th align="center">审核状态</th>
+        <th>操作</th>
+    </tr>
+    @foreach (var item in ViewData["user"] as IEnumerable<用户基本数据>)
+    {
+        var m = item as 单位用户;
+        <tr>
+            <td>@m.Id</td>
+            <td><a href="/单位用户后台/Department_Detail?id=@item.Id">@item.登录信息.登录名</a></td>
+            <td><a href="/单位用户后台/Department_Detail?id=@item.Id">@m.单位信息.单位代号</a></td>
+            <td>@m.联系方式.联系人</td>
+            <td>@m.联系方式.手机</td>
+            <td>
+                @foreach (var k in m.用户组)
+                {
+                    <label>@k</label><br />
+                }
+            </td>
+            @if (m.审核数据.审核状态 == 审核状态.审核通过)
+            {
+                <td>@m.审核数据.审核状态</td>
+            }
+            else if (m.审核数据.审核状态 == 审核状态.审核未通过)
+            {
+                <td style="color: red;">@m.审核数据.审核状态</td>
+            }
+            else
+            {
+                <td style="color: #3333ff;">@m.审核数据.审核状态</td>
+            }
+            <td>
+                @*@if (m.用户组.Contains("超级管理员") || m.用户组.Contains("两库管理专员") || m.用户组.Contains("一级管理员账号") || m.用户组.Contains("二级管理员账号") || m.用户组.Contains("操作员账号A") || m.用户组.Contains("验收单管理专员") || m.用户组.Contains("采购处管理员账号"))
+                {
+
+                }
+                else
+                {*@
+                    @*<a href="/单位用户后台/DepartmentModify?id=@item.Id">编辑</a>*@<a onclick="del(@item.Id)">删除</a>
+                @*}*@
+            </td>
+        </tr>
+    }
+</table>
+<div class="gys_znxx_content_detailbox">
+    @if (ViewData["currentpage"] != null && ViewData["pagecount"].ToString() != "1")
+    {
+        <div class="gys_znxx_content_detailbox">
+            @if (int.Parse(ViewData["currentpage"].ToString()) == 1)
+            {
+                <a>首页</a>
+            }
+            else
+            {
+                <a onclick=" changeMesspage(this) " id="1" class="page">首页</a>
+            }
+            @for (int i = 0; i <= 10; i++)
+            {
+                //一共最多显示10个页码，前面5个，后面5个
+                if ((int.Parse(ViewData["currentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentpage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                {
+                    if (5 == i)
+                    {
+                        //当前页处理
+                        <a>@int.Parse(ViewData["currentpage"].ToString())</a>
+                    }
+                    else
+                    {
+                        //一般页处理
+                        <a onclick=" changeMesspage(this) " class="page" id="@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)">@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)</a>
+
+                    }
+                }
+            }
+            @if (int.Parse(ViewData["currentpage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+            {
+                <a>末页</a>
+            }
+            else
+            {
+                <a onclick=" changeMesspage(this) " id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+            }
+            @ViewData["currentpage"].ToString()/@ViewData["pagecount"].ToString()
+        </div>
+    }
+</div>
+
+<script type="text/javascript" language="javascript">
+    $("a.page").click(function () {
+        var page=$(this).attr("id");
+       
+        $.get('/单位用户后台/Part_DepartmentListSearch/',
+           { name: $(":text#name").val(), num: $(":text#number").val(), catorgray: $("select").val(),p: page},
+           function (data) {
+               $("#contentdiv").html(data);
+           }
+        );
+    });
+
+
+    var i = @(int.Parse(ViewData["currentpage"].ToString()));
+    var j=@(int.Parse(ViewData["pagecount"].ToString()))
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == i) {
+                $(this).addClass("currentPage");
+            }
+            if (i== j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (i == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");;
+            }
+        });
+    });
+</script>

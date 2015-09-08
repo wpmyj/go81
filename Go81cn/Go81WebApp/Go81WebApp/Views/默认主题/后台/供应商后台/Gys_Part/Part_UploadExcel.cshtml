@@ -1,0 +1,241 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+
+@{
+   var 图片不正确商品列表=  ViewData["图片不正确商品列表"] as List<商品>;
+    var 已存在商品=ViewData["已存在商品"] as List<商品>;
+    var 有效商品 = ViewData["有效商品"] as List<商品>;
+    var 数据库已存在商品 = ViewData["数据库已存在商品"] as List<商品>;
+}
+<style type="text/css">
+    .static-info {
+       border: 1px solid #ccc;
+        background: #EEE;
+        width: 99%;
+        margin: 0 auto;
+    }
+    .static-info p {
+        display: inline-block;
+        width: 303px;
+        text-align: center;
+    }
+    .table-title {
+        font-size: 20px;
+        padding-left: 30px;
+        color: #F38652;
+    }
+    .list-good table {
+        width: 890px;
+        margin-left: 40px;
+    }
+    .list-good table tr td {
+        text-indent: 20px;
+        line-height: 30px;
+    }
+    .compare-table {
+        background: #FCFFDF;
+        
+    }
+    .compare-table tr td {
+        text-indent: 0;
+        border-bottom: 1px solid #cccccc;
+    }
+</style>
+<div class="static-info">
+    <p style="color: #228b22">可导入商品库商品个数:<span>@有效商品.Count</span></p>
+    <p style="color: #E99518">已存在商品库商品个数:<span>@已存在商品.Count</span></p>
+    <p style="color: red">商品与图片不一致商品个数:<span>@图片不正确商品列表.Count</span></p>
+</div>
+<p class="table-title">商品与图片不一致的商品:</p>
+<div class="list-good">
+    @if (图片不正确商品列表.Count > 0)
+    {
+        <table cellpadding="0" cellspacing="0">
+            @foreach (var k in 图片不正确商品列表)
+            {
+                <tr>
+                    <td style="border: 1px solid #ccc;border-right:none ">商品名:@k.商品信息.商品名</td>
+                    <td style="border-bottom: 1px solid #ccc;border-top: 1px solid #ccc">型号:@k.商品信息.型号 /@k.商品信息.精确型号</td>
+                    <td style="border: 1px solid #ccc;border-left: none">价格:@k.销售信息.价格</td>
+                </tr>
+
+            }
+        </table>
+    }
+    else
+    {
+        <span style="margin-left: 50px;">无数据!</span>
+    }
+</div>
+<p class="table-title">商品库已存在的商品:</p>
+<div class="list-good">
+    @if (已存在商品.Count > 0)
+    {
+         <p style="text-indent: 40px;color: red;">对于要导入的商品已存在商品库的情况,可以勾选复选框选择需要更新的商品以进行更新.</p>
+        <table cellspacing="0" cellpadding="0">
+            @foreach (var k in 已存在商品)
+            {
+                <tr>
+                    <td style="border: 1px solid #ccc;border-right:none;width: 40px; text-indent: 10px"><input class="checkbox" type="checkbox"/></td>
+                    <td style="border-bottom: 1px solid #ccc;border-top: 1px solid #ccc">商品名:@k.商品信息.商品名</td>
+                    <td style="border-bottom: 1px solid #ccc;border-top: 1px solid #ccc">型号:@k.商品信息.型号@k.商品信息.精确型号</td>
+                    <td style="border-bottom: 1px solid #ccc;border-top: 1px solid #ccc" >价格:@k.销售信息.价格</td>
+                    <td style="border: 1px solid #ccc;border-left: none;cursor: pointer" class="look-compare">查看对比(仅对比了部分信息)</td>
+                </tr>
+                <tr show="false" style="display: none">
+                    <td colspan="5">
+                        <table class="compare-table" style="margin-left: 0;" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td></td>
+                                <td style="color: #09B66A;line-height: 40px;">商品库已存在的商品</td>
+                                <td style="color: #4328D3">Excel中的商品</td>
+                            </tr>
+                            <tr>
+                                <td>商品名</td>
+                                @foreach (var ki in 数据库已存在商品)
+                                {
+                                    if (ki.商品信息.商品名 == k.商品信息.商品名)
+                                    {
+                                        <td id="@ki.Id">@ki.商品信息.商品名</td>
+                                    }
+                                }
+                                <td>@k.商品信息.商品名</td>
+                            </tr>
+                            <tr>
+                                <td>价格</td>
+                                @foreach (var ki in 数据库已存在商品)
+                                {
+                                    if (ki.商品信息.商品名 == k.商品信息.商品名)
+                                    {
+                                        <td>@ki.销售信息.价格</td>
+                                    }
+                                }
+                                <td>@k.销售信息.价格</td>
+                            </tr>
+                            <tr>
+                                <td>上次修改时间</td>
+                                @foreach (var ki in 数据库已存在商品)
+                                {
+                                    if (ki.商品信息.商品名 == k.商品信息.商品名)
+                                    {
+                                        <td>@ki.基本数据.修改时间</td>
+                                    }
+                                }
+                                <td>@k.基本数据.修改时间</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </table>
+        <input type="hidden" id="tempid"/>
+        <div>
+            <input id="update_submit" class="front_login_rightbox_button" style="width: 140px;height: 35px;margin-left: 65px;" type="submit" value="更新选中项" />
+        </div>
+    }
+    else
+    {
+        <span style="margin-left: 50px;">无数据!</span>
+    }
+</div>
+<p class="table-title">可导入商品库的商品:</p>
+<div class="list-good">
+    @if (有效商品.Count > 0)
+    {
+        <table cellpadding="0" cellspacing="0" id="import-good">
+            @foreach (var k in 有效商品)
+            {
+                <tr>
+                    <td style="border: 1px solid #ccc;border-right:none ">商品名:@k.商品信息.商品名</td>
+                    <td style="border-bottom: 1px solid #ccc;border-top: 1px solid #ccc">型号:@k.商品信息.型号 /@k.商品信息.精确型号</td>
+                    <td style="border: 1px solid #ccc;border-left: none">价格:@k.销售信息.价格</td>
+                </tr>
+            }
+        </table>
+        <div>
+            <input id="import_submit" class="front_login_rightbox_button" style="width: 140px;height: 35px;margin-left: 65px;" type="submit" value="导入商品库" />
+        </div>
+    }
+    else
+    {
+        <span style="margin-left: 50px;">无数据!</span>
+    }
+    
+</div>
+
+
+<script type="text/javascript">
+    $(".look-compare").click(function () {
+        var isShow = $(this).parent("tr").next().attr("show");
+        if (isShow == "false") {
+            $(this).parent().next().slideDown(300).attr({ "show": "true" });
+        }
+        if (isShow == "true") {
+            $(this).parent().next().slideUp(300).attr({ "show": "false" });
+        }
+    });
+    
+    //更新选中商品
+    $("#update_submit").click(function () {
+        var dat = $("#uploadframegood").contents().find("#pldata_id").val();
+        var pic = $("#uploadframepic").contents().find("#plpic_id").val();
+        var checkbox = $("input[type='checkbox']");
+        var idstr = "";
+        var num_checkbox = 0;
+        $.each(checkbox, function (index, domEle) {
+            if ($(domEle).is(':checked')) {
+                num_checkbox++;
+                idstr += $(domEle).parents("tr").next().find("table").children().children().eq(1).children().eq(1).attr("id")+"|";
+            }
+        });
+        if (checkbox.length <= 0 || num_checkbox<=0) {
+            alert("请先选择需要更新的商品！");
+        }
+        else {
+            $.ajax({
+                url: '/供应商后台/UpdateExistGood',
+                data: { datas: dat, pics: pic, id: idstr },
+                beforeSend: function () {
+                    $("#waitfor").show();
+                },
+                success: function () {
+                    $.each(checkbox, function (index, domEle) {
+                        if ($(domEle).is(':checked')) {
+                            $(domEle).parents("tr").next().remove();
+                            $(domEle).parents("tr").remove();
+                        }
+                    });
+                    $("#waitfor").hide();
+                    alert("更新成功");
+                },
+                error: function () {
+                    $("#waitfor").hide();
+                    alert("更新失败");
+                },
+            });
+        }
+        
+    });
+
+    //导入与图片一致的商品
+    $("#import_submit").click(function() {
+        var dat = $("#uploadframegood").contents().find("#pldata_id").val();
+        var pic = $("#uploadframepic").contents().find("#plpic_id").val();
+        $.ajax({
+            url: '/供应商后台/ImportGood',
+            data: { datas: dat, pics: pic },
+            beforeSend: function () {
+                $("#waitfor").show();
+            },
+            success: function () {
+                $("#waitfor").hide();
+                $("#import-good").remove();
+                $("#import_submit").parent().html("<span style='margin-left: 50px;'>无数据!</span>").end().remove();
+                alert("导入成功");
+            },
+            error: function () {
+                $("#waitfor").hide();
+                alert("导入失败");
+            },
+        });
+    });
+</script>

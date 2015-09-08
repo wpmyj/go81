@@ -1,0 +1,365 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@*<script src="~/js/jquery-1.2.6.pack.js" type=text/javascript></script>*@
+<script src="~/js/base.js" type=text/javascript></script>
+@model Go81WebApp.Models.数据模型.商品数据模型.商品
+<script language="javascript" type="application/javascript" src="~/JS/tblmenu.js"></script>
+<link href="~/css/css.css" type="text/css" rel="stylesheet" />
+@*<script src="~/js/jquery-1.2.6.pack.js" type=text/javascript></script>*@
+<script src="~/js/base.js" type=text/javascript></script>
+
+<!--[if lt IE 9]>@Scripts.Render("~/Scripts/flot/excanvas.min.js")<![endif]-->
+@Scripts.Render("~/Scripts/flot/jquery.flot.min.js", "~/Scripts/flot/jquery.flot.time.min.js")
+@Scripts.Render("~/JS/PriceHistory.js")
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div style="height:auto; overflow:hidden; background-color:#fff;">
+        @*<div class="prodtpage_positionbox"> 当前位置：<a href="#">XXXX</a>→<a href="#">XXXX</a>→<a href="#">XXXX</a>→<a href="#">XXXX</a> </div>*@
+        <div class="prodtpage_detail_topbox">
+            <div class="prodtpage_detail_topbox_left">
+                <div id=preview>
+                    <div class="jqzoom" id="spec-n1">
+                        @if (Model.商品信息.商品图片.Count > 0)
+                        {
+                            <img id="bgimgbox" src="@Model.商品信息.商品图片[0].Replace("original/", "350X350/")" jqimg="@Model.商品信息.商品图片[0]" />
+                        }
+                        else
+                        {
+                            <img id="bgimgbox" src="~/images/noimage.jpg" jqimg="~/images/noimage.jpg" />
+                        }
+                    </div>
+                    <div id=spec-n5>
+                        <div id=spec-list>
+                            <ul class=list-h>
+                                @if (Model.商品信息.商品图片.Count > 0)
+                                {
+                                    for (int i = 0; i < Model.商品信息.商品图片.Count && i < 4; i++)
+                                    {
+                                        <li><img src="@Model.商品信息.商品图片[i].Replace("original/", "50X50/")" onmouseover='document.getElementById("bgimgbox").setAttribute("src", this.getAttribute("src").replace("50X50/", "350X350/")); document.getElementById("bgimgbox").setAttribute("jqimg", this.getAttribute("src").replace("50X50/", "original/")); this.style.border = "2px solid #ff6600"; this.style.padding = "1px";' onmouseout="    this.style.border = '1px solid #ccc'; this.style.padding = '2px'; "> </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li><img src="~/images/noimage.jpg" onmouseover='document.getElementById("bgimgbox").setAttribute("src", this.getAttribute("src")); document.getElementById("bgimgbox").setAttribute("jqimg", this.getAttribute("src")); this.style.border = "2px solid #ff6600"; this.style.padding = "1px"; ' onmouseout="    this.style.border = '1px solid #ccc'; this.style.padding = '2px'; "> </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <script type=text/javascript>
+                    $(function () {
+                        $(".jqzoom").jqueryzoom({
+                            xzoom: 400,
+                            yzoom: 400,
+                            offset: 10,
+                            position: "right",
+                            preload: 1,
+                            lens: 1
+                        });
+                        $("#spec-list").jdMarquee({
+                            deriction: "left",
+                            width: 350,
+                            height: 56,
+                            step: 2,
+                            speed: 4,
+                            delay: 10,
+                            control: true,
+                            _front: "#spec-right",
+                            _back: "#spec-left"
+                        });
+                        $("#spec-list img").bind("mouseover", function () {
+                            var src = $(this).attr("src");
+                            $("#spec-n1 img").eq(0).attr({
+                                src: src.replace("\/n5\/", "\/n1\/").replace("50X50/", "350X350/"),
+                                jqimg: src.replace("\/n5\/", "\/n0\/").replace("50X50/", "original/")
+                            });
+                            $(this).css({
+                                "border": "2px solid #ff6600",
+                                "padding": "1px"
+                            });
+                        }).bind("mouseout", function () {
+                            $(this).css({
+                                "border": "1px solid #ccc",
+                                "padding": "2px"
+                            });
+                        });
+                    })
+                </script>
+                <script src="~/js/lib.js" type=text/javascript></script>
+                <script src="~/js/163css.js" type=text/javascript></script>
+            </div>
+            <div class="prodtpage_detail_topbox_right">
+                <div class="prodtpage_detail_topbox_right_titlebox">
+                    <h4>@Model.商品信息.商品名</h4>
+                    @*<strong>货到付款。经典爆款，好评上万，大品牌值得推荐！</strong>*@
+                </div>
+                <div class="prodtpage_detail_topbox_right_contentbox">
+                    <div class="prodtpage_detail_topbox_right_contentlist">
+                        <div class="prodtpage_detail_topbox_right_contentleft">价　　格：</div>
+                        <div class="prodtpage_detail_topbox_right_contentright" id="product_price">
+                            ￥
+                            @try
+                            {
+                                @(string.Format("{0:0.00}", Model.销售信息.价格))
+                            }
+                            catch
+                            {
+                                <span>未填写</span>
+                            }
+                        </div>
+                    </div>
+                    <br />
+                    <div class="prodtpage_detail_topbox_right_contentlist">
+                        <div class="prodtpage_detail_topbox_right_contentleft">商家地区：</div>
+                        <div class="prodtpage_detail_topbox_right_contentright">
+                            @try
+                            {
+                                @Model.商品信息.所属供应商.用户数据.所属地域.省份
+                            }
+                            catch
+                            {
+                                <span>未填写</span>
+                            }
+                        </div>
+                    </div>
+                    <br />
+                    <div class="prodtpage_detail_topbox_right_contentlist">
+                        <div class="prodtpage_detail_topbox_right_contentleft">联系方式：</div>
+                        <div class="prodtpage_detail_topbox_right_contentright">
+                            @try
+                            {
+                                @Model.商品信息.所属供应商.用户数据.企业联系人信息.联系人地址
+                            }
+                            catch
+                            {
+                                <span>未知</span>
+                            }
+                        </div>
+                    </div>
+                    <br />
+                    <div class="prodtpage_detail_topbox_right_contentlist">
+                        <div class="prodtpage_detail_topbox_right_contentleft">联系电话：</div>
+                        <div class="prodtpage_detail_topbox_right_contentright">
+                            @try
+                            {
+                                @Model.商品信息.所属供应商.用户数据.企业联系人信息.联系人固定电话
+                            }
+                            catch
+                            {
+                                <span>未填写</span>
+                            }
+                        </div>
+                    </div>
+                    <br />
+                    <div class="prodtpage_detail_topbox_right_contentlist">
+                        <div class="prodtpage_detail_topbox_right_contentleft">商家信用认证：</div>
+                        <div class="prodtpage_detail_topbox_right_contentright">
+                            @try
+                            {
+                                if (ViewBag.data == 0 || ViewBag.data == 1)
+                                {
+                                    <img src="../../Images/star.png" />
+                                }
+                            }
+                            catch
+                            {
+                                <span>未知</span>
+                            }
+                            <a style="display:inline-block; height:30px; color:black; margin-top:-10px;" href="###">查看积分</a>
+                        </div>
+                    </div>
+                    <br />
+                    @if (Model.销售信息 != null && Model.销售信息.价格属性组合 != null && Model.销售信息.价格属性组合.组合列表 != null)
+                    {
+                        <div class="prodtpage_detail_topbox_right_contentlist">
+                            <div class="prodtpage_detail_topbox_right_contentleft">可选配置：</div>
+                            <div class="prodtpage_detail_topbox_right_contentright" style="width: 430px;">
+
+                                @foreach (var item in Model.销售信息.价格属性组合.组合列表)
+                                {
+                                    <a style="margin-right: 10px; cursor: pointer; border: 1px solid #aaa; padding: 2px; margin-bottom: 10px; float: left;" id="@item.价格" onclick=" changeprice(this) ">
+                                        @foreach (var it in item.属性值表)
+                                        {
+                                            @it
+                                            if (it != item.属性值表[item.属性值表.Count - 1])
+                                            {
+                                                <span>/</span>
+                                            }
+                                        }
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="prodtpage_detail_rightbox" style="float: left; margin-left: 0;">
+            <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////<!-->
+            <div class="product_tabmenu_box">
+                <!--招标公告模块-->
+                <div class="title-base-out outtab">
+                    <div class="title-base-middle">
+                        <div class="title-base-inner" style="float:left">商品信息</div>
+                        <div class="product_tabmenu_tabmenu">
+                            <ul>
+                                <li index="0" class="changetab cli">商品描述</li>
+                                <li index="1" class="changetab">商品图片</li>
+                                <li index="2" class="changetab">商品参数</li>
+                                <li index="3" class="changetab">售后服务</li>
+                                <li index="4" class="changetab">历史价格</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="product_tabmenu_content_box tabcontent" id="tabcontent_spdt">
+                    <!--  招标公告内容-->
+                    <div class="divhide fdiv">
+                        <ul class="fdiv">
+                            <div style=" width: 900px; font-size: 16px; font-weight: bold; margin-top: 20px;">
+                                商品名称: @Model.商品信息.商品名
+                            </div>
+                            <div style=" width: 900px; font-size: 16px; font-weight: bold; margin-top: 20px;">
+                                商品品牌:
+                                @Model.商品信息.品牌
+                            </div>
+                            <div style=" width: 900px; font-size: 16px; font-weight: bold; margin-top: 20px;">商品简介:</div>
+                            <div style="width: 900px; font-size: 14px;  margin-top: 20px; text-indent:20pt; ">
+                                @Model.商品数据.商品简介
+                            </div>
+                            <div style=" width:900px; font-size:16px; font-weight:bold; margin-top:20px;">
+                                商品详情：
+                            </div>
+                            <div style="width: 900px; font-size: 14px;  margin-top: 20px; text-indent:20pt; ">
+                                @Html.Raw(Model.商品数据.商品详情)
+                            </div>
+                        </ul>
+                    </div>
+                    <div class="divhide">
+                        <ul>
+                            @foreach (var temppic in Model.商品信息.商品图片)
+                            {
+                                <div style="padding:10px; float:left;"><img src="@temppic.Replace("original/", "350X350/")" width="200" height="200"></div>
+                            }
+                        </ul>
+                    </div>
+                    <div class="divhide">
+                        <ul>
+                            <div class="product_detaildiv">
+                                @if (Model.商品数据.商品属性.Any())
+                                {
+                                    foreach (var arr in Model.商品信息.所属商品分类.商品分类.商品属性模板)
+                                    {
+                                        <table cellspacing="0" cellpadding="0" width="100%">
+                                            <tr>
+                                                <th style="" colspan="2">@arr.Key</th>
+                                            </tr>
+                                            @foreach (var proname in arr.Value)
+                                            {
+                                                <tr>
+                                                    <td width="20%" style="text-align: right;">@proname.Key:</td>
+                                                    <td>
+                                                        @{ var vals = Model.商品数据.商品属性[arr.Key][proname.Key]; }
+                                                        @foreach (var list in proname.Value.值)
+                                                        {
+                                                            if (proname.Value.属性类型 == 属性类型.复选)
+                                                            {
+                                                                if (vals.Contains(list))
+                                                                {
+                                                                    @list<span>、</span>
+                                                                    @*if (list != proname.Value.值[proname.Value.值.Count - 1])
+                                                                        {<span>、</span>}*@
+                                                                }
+                                                            }
+                                                        }
+                                                        @foreach (var list in vals)
+                                                        {
+                                                            if (!proname.Value.值.Contains(list))
+                                                            {
+                                                                if (proname.Value.属性类型 == 属性类型.复选)
+                                                                {
+                                                                    @list<span style="color: red;">[用户新增]</span>
+                                                                    if (list != vals[vals.Count - 1])
+                                                                    {
+                                                                        <span>、</span>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    @list
+                                                                }
+                                                            }
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    }
+                                }
+                            </div>
+                        </ul>
+                    </div>
+                    <div class="divhide">
+                        <ul>
+                            @Html.Raw(Model.商品数据.售后服务)
+                        </ul>
+                    </div>
+                    <div class="divhide">
+                        <ul>
+                            <div id="historyPrices" style="width:800px;height:400px;" pdata="@ViewBag.L1"></div>
+                        </ul>
+                    </div>
+                    <!--  招标公告内容结束-->
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div style=" width:500px; margin:0 auto; margin-top:20px;">
+        <input type="submit" value="审核通过" name="action" class="front_login_rightbox_button_less">
+        <input type="submit" value="审核不通过" name="action" class="front_login_rightbox_button_less" onclick="return showreason()">
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            var timer;
+            $("li.changetab").hover(function () {
+                var tab = $(this);
+                timer = setTimeout(function () {
+                    var index = tab.attr("index");
+                    var divs = tab.parents(".outtab").next(".tabcontent");
+                    tab.addClass("cli").siblings().removeClass("cli");
+                    divs.children().hide().eq(index).show();
+                }, 200);
+            }, function () {
+                clearTimeout(timer);
+            });
+
+            $("#待审核商品").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#待审核商品").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+        function changeprice(a) {
+            var pricebox = a.parentNode;
+            var alist = pricebox.getElementsByTagName("a");
+            for (var i = 0; i < alist.length; i++) {
+                if (alist[i] !== a) {
+                    alist[i].style.border = " 1px solid #aaa";
+                }
+            }
+
+            a.style.border = " 1px solid #f00";
+
+            document.getElementById("product_price").innerHTML = "￥ " + parseFloat(a.getAttribute("id")).toFixed(2);
+        }
+
+        function showreason() {
+            var str = prompt("请输入值", "");
+            alert(str);
+            if (str == null) {
+                alert("aaaaaaaaaa");
+            }
+            return false;
+        }
+    </script>
+}

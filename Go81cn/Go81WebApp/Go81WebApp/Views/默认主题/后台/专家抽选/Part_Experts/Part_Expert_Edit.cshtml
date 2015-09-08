@@ -1,0 +1,364 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.专家
+ @using Go81WebApp.Models.数据模型.用户数据模型
+<script src="~/JS/provinceandcity_all.js"></script>
+<style type="text/css">
+.expert {
+        width: 927px;
+        height: auto;
+        overflow: hidden;
+        padding: 10px;
+        border: 1px solid #aaa;
+    }
+.expert p{background:#7BAFA5;font-weight:bold; text-indent:2em; height:30px; line-height:30px;}
+
+.expert_identity table tr td{ width:300px;}
+.expert_identity table tr td input{width:180px;}
+.expert_identity table tr td select{width:185px; text-align:center;}
+.expert_identity table tr td.lab{width:150px; text-align:right;}
+.expert textarea{width:638px;height:100px;}
+.tabletable tr td.lac{ width:90px; text-align:right;}
+.tabletable tr td.lad{ width:264px;}
+.expert span{ font-size:12px; color:red;}
+</style>
+
+@using (Html.BeginForm("AddExpert", "专家", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.AntiForgeryToken();
+    @Html.HiddenFor(model=>model.Id)
+    <div class="expert">
+        <div class="gys_znxx_topbox">
+            <div class="gys_znxx_topbg">
+                <div class="index_bottom_zb_top_title">添加评审专家</div>
+            </div>
+        </div>
+        <!--身份信息-->
+        <p class="title">身份信息</p>
+        <div class="expert_identity">
+            <table>
+                <tr>
+                    <td class="lab">评审专家类型</td>
+                    <td>
+                        @Html.EnumDropDownListFor(model => model.身份信息.专家类型)
+                        @Html.ValidationMessageFor(model=>model.身份信息.专家类型)
+                        @*<select>
+                                <option>技术</option>
+                                <option>法律</option>
+                                <option>经济</option>
+                            </select>*@
+                    </td>
+                    <td class="lab">姓名</td>
+                    <td>@Html.EditorFor(Model => Model.身份信息.姓名)
+                        @Html.ValidationMessageFor(model => model.身份信息.姓名)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab">性别</td>
+                    <td>
+                        @Html.EnumDropDownListFor(model => model.身份信息.性别)
+                        @Html.ValidationMessageFor(model => model.身份信息.性别)
+                    </td>
+                    <td class="lab">民族</td>
+                    <td>
+                        @Html.EnumDropDownListFor(model => model.身份信息.民族)
+                        @Html.ValidationMessageFor(model => model.身份信息.民族)
+                        @*<select>
+                                <option>汉族</option>
+                                <option>回族</option>
+                                <option>少数民族</option>
+                            </select>*@
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab">政治面貌</td>
+                    <td>
+                        @Html.EnumDropDownListFor(model => model.身份信息.政治面貌)
+                        @Html.ValidationMessageFor(model => model.身份信息.政治面貌)
+                        @*<select>
+                                <option>党员</option>
+                                <option>团员</option>
+                                <option>群众</option>
+                            </select>*@
+                    </td>
+                    <td class="lab">出生年月</td>
+                    <td>
+                        @Html.EditorFor(model => model.身份信息.出生年月)
+                        @Html.ValidationMessageFor(model => model.身份信息.出生年月)
+                    </td>
+                </tr>
+                <tr>
+                    @*<td class="lab">证件类型</td>
+                    <td>
+                        @Html.EnumDropDownListFor(model => model.身份信息.证件类型)
+                        @Html.ValidationMessageFor(model => model.身份信息.证件类型)
+                        
+                    </td>*@
+                    <td class="lab">身份证号</td>
+                    <td>@Html.EditorFor(model => model.身份信息.证件号)
+                        @Html.ValidationMessageFor(model => model.身份信息.证件号)
+                    </td>
+                    <td class="lab">评审专家类别</td>
+                    <td>
+                        @Html.EnumDropDownListFor(model => model.身份信息.专家类别)
+                        @Html.ValidationMessageFor(model => model.身份信息.专家类别)
+                    </td>
+                </tr>
+                <tr>
+                    <td>专家证号：</td>
+                    <td>@Html.TextBoxFor(m => m.身份信息.专家证号)</td>
+                    <td>专家证电子扫描件：</td>
+                    <td>
+                        <input type="file" name="file" size="30" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab">证件电子扫描件</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.身份信息.证件电子扫描件, new { @type="file", @name="file"})
+                        @Html.ValidationMessageFor(model => model.身份信息.证件电子扫描件)
+                    </td>
+                    <td class="lab">本人照片电子扫描件</td>
+                    <td> @Html.TextBoxFor(model => model.身份信息.本人照片电子扫描件, new { @type = "file", @name = "file" })
+                    @Html.ValidationMessageFor(model => model.身份信息.本人照片电子扫描件)</td>
+                </tr>
+                <tr>
+                    <td class="lab">所在地区</td>
+                    <td>
+                        @Html.HiddenFor(m => m.所属地域.省份, new { id = "provence" })
+                        @Html.HiddenFor(m => m.所属地域.城市, new { id = "city" })
+                        @Html.HiddenFor(m => m.所属地域.区县, new { id = "area" })
+                        <select id="deliverprovince" name="deliverprovince" style="width:95px;"></select>
+                        <select id="delivercity" name="delivercity" style="width:95px;"></select>
+                        <select id="deliverarea" name="deliverarea" style="width:95px;"></select>
+                        <script>
+                            window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                        </script>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+
+        <!--学历信息-->
+
+        <p>学历信息</p>
+        <div class="expert_identity">
+            <table>
+                <tr>
+                    <td class="lab">毕业院校</td>
+                    <td>@Html.EditorFor(model => model.学历信息.毕业院校)
+                        @Html.ValidationMessageFor(model => model.学历信息.毕业院校)
+                    </td>
+                    <td class="lab">专业技术职称</td>
+                    <td>
+                        @Html.EnumDropDownListFor(model => model.学历信息.专业技术职称)
+                        @Html.ValidationMessageFor(model => model.学历信息.专业技术职称)
+                        @*<select>
+                                <option>教授</option>
+                                <option>副教授</option>
+                                <option>研究员</option>
+                                <option>副研究员</option>
+                                <option>主任医师</option>
+                            </select>*@
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab">取得现技术职称时间</td>
+                    <td>@Html.EditorFor(model => model.学历信息.取得现技术职称时间)
+                        @Html.ValidationMessageFor(model => model.学历信息.取得现技术职称时间)
+                    </td>
+                    <td class="lab">职称证书电子扫描件</td>
+                    <td>@Html.TextBoxFor(model => model.学历信息.职称证书电子扫描件, new { @type = "file", @name = "file" })
+                    @Html.ValidationMessageFor(model => model.学历信息.职称证书电子扫描件)</td>
+                </tr>
+                <tr>
+                    <td class="lab">最高学历</td>
+                    <td>
+                        @Html.EnumDropDownListFor(model => model.学历信息.最高学历)
+                        @Html.ValidationMessageFor(model => model.学历信息.最高学历)
+                        @*<select>
+                                <option>大专及以下</option>
+                                <option>本科</option>
+                                <option>研究生</option>
+                                <option>博士</option>
+                            </select>*@
+                    </td>
+                    <td class="lab">最高学位</td>
+                    <td>
+                        @Html.EnumDropDownListFor(model => model.学历信息.最高学位)
+                        @Html.ValidationMessageFor(model => model.学历信息.最高学位)
+                        @*<select>
+                                <option>无</option>
+                                <option>学士</option>
+                                <option>硕士</option>
+                                <option>博士</option>
+                                <option>博士后</option>
+                            </select>*@
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!--工作经历-->
+
+        <p>工作经历</p>
+        <div class="expert_identity">
+            <table>
+                <tr>
+                    <td class="lab">参加工作时间</td>
+                    <td>@Html.EditorFor(model => model.工作经历信息.参加工作时间)
+                        @Html.ValidationMessageFor(model => model.工作经历信息.参加工作时间)
+                    </td>
+                    <td class="lab">从事专业</td>
+                    <td>@Html.EditorFor(model => model.工作经历信息.从事专业)
+                        @Html.ValidationMessageFor(model => model.工作经历信息.从事专业)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab">从事专业起始年度</td>
+                    <td>@Html.EditorFor(model => model.工作经历信息.从事专业起始年度)
+                        @Html.ValidationMessageFor(model => model.工作经历信息.从事专业起始年度)
+                    </td>
+                    <td class="lab">工作单位</td>
+                    <td>@Html.EditorFor(model => model.工作经历信息.工作单位)
+                        @Html.ValidationMessageFor(model => model.工作经历信息.工作单位)
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td class="lab">健康状况</td>
+                    <td>
+                        @Html.EnumDropDownListFor(model => model.工作经历信息.健康状况)
+                        @Html.ValidationMessageFor(model => model.工作经历信息.健康状况)
+                        @*@*<select>
+                                <option>良好</option>
+                                <option>一般</option>
+                                <option>其他</option>
+                            </select>*@
+                    </td>
+                    <td class="lab">现任职务</td>
+                    <td>@Html.EditorFor(model => model.工作经历信息.现任职务)
+                        @Html.ValidationMessageFor(model => model.工作经历信息.现任职务)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab" valign="top">单位地址</td>
+                    <td colspan="3">
+                        <table class="tabletable">
+                            <tr>
+                                <td class="lac">地址类型</td>
+                                <td class="lad">@Html.EnumDropDownListFor(model => model.工作经历信息.单位地址.地址类型)
+                                                @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.地址类型)
+                                </td>
+                                <td class="lac">联系人</td>
+                                <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.联系人)
+                                                @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.联系人)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lac">手机</td>
+                                <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.手机)
+                                                @Html.ValidationMessageFor(model=>model.工作经历信息.单位地址.手机)
+                                </td>
+                                <td class="lac">固定电话</td>
+                                <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.固定电话)
+                                                @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.固定电话)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lac">电子邮件</td>
+                                <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.电子邮件)
+                                                @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.电子邮件)
+                                </td>
+                                <td class="lac">省份</td>
+                                <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.省份)
+                                                @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.省份)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lac">城市</td>
+                                <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.城市)
+                                                @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.城市)
+                                </td>
+                                <td class="lac">区县</td>
+                                <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.区县)
+                                                @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.区县)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lac">街道</td>
+                                <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.街道)
+                                                @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.街道)
+                                </td>
+                                <td class="lac">邮政编码</td>
+                                <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.邮政编码)
+                                                @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.邮政编码)
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="lab" valign="top">社会兼聘职情况</td>
+                    <td colspan="3">@Html.TextAreaFor(model => model.工作经历信息.社会兼聘职情况)
+                    @Html.ValidationMessageFor(model=>model.工作经历信息.社会兼聘职情况)
+                    
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab" valign="top">本人参加过何种项目招标及评标</td>
+                    <td colspan="3">@Html.TextAreaFor(model => model.工作经历信息.本人参加过何种项目招标及评标)
+                        @Html.ValidationMessageFor(model => model.工作经历信息.本人参加过何种项目招标及评标)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab" valign="top">本人专业领域研究及成果</td>
+                    <td colspan="3">@Html.TextAreaFor(model => model.工作经历信息.本人专业领域研究及成果)
+                        @Html.ValidationMessageFor(model => model.工作经历信息.本人专业领域研究及成果)
+                    
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab" valign="top">主要工作经历</td>
+                    <td colspan="3">@Html.TextAreaFor(model => model.工作经历信息.主要工作经历)
+                        @Html.ValidationMessageFor(model => model.工作经历信息.主要工作经历)
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="text-align:center;"><button style="width: 60px; height: 35px; width:100px; font-weight:bold; font-size:16px;text-align: center; color:#d7d2d2; line-height: 35px; border-width: 0px; background-color:#2c5735;" id="btn_sub" type="submit">提交</button></td>
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+
+}
+
+   <script type="text/javascript">
+       $("#btn_sub").click(function () {
+           var provence = $("#deliverprovince").find("option:selected").text();
+           var city = $("#delivercity").find("option:selected").text();
+           var area = $("#deliverarea").find("option:selected").text();
+           $("#provence").val(provence);
+           $("#city").val(city);
+           $("#area").val(area);
+       });
+       
+       //$(function(){
+       //    $("#deliverprovince").change(function () {
+               
+               
+       //    });
+       //    $("#delivercity").change(function () {
+       //        var val = $("#delivercity option:selected").text();
+       //        var area = $("#deliverarea").find("option:selected").text();
+       //        $("#city").val(val);
+       //        $("#area").val(val);
+       //    });
+       //    $("#deliverarea").change(function () {
+       //        var val = $("#deliverarea option:selected").text();
+       //        $("#area").val(val);
+       //    });
+       //});
+       
+   </script> 

@@ -1,0 +1,482 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.招标采购预报名
+<style type="text/css">
+    .procure_formlistdiv {
+        width: 510px;
+    }
+
+        .procure_formlistdiv input {
+            width: 500px;
+        }
+
+    .procureinputdiv_title {
+        width: 200px;
+        text-align: right;
+    }
+
+    .procureinputdiv_title {
+        line-height: 30px;
+    }
+
+    .procure_formlistdiv {
+        line-height: 30px;
+    }
+
+    #gys_signup_information tr td {
+        text-align: center;
+    }
+</style>
+<div id="f1" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>正在上传，请稍等...</span>
+    </div>
+</div>
+
+<div class="gys_znxx_topbox">
+    <div class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">标书信息</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+
+
+            @using (Html.BeginForm("SignUp_BiaoShu", "单位用户后台", FormMethod.Post, new { enctype = "multipart/form-data", name = "BiaoShuForm" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                if (Model != null)
+                {
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">项目名称：</div>
+                        <div class="procure_formlistdiv">
+                            @Model.所属公告链接.公告.项目信息.项目名称
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">项目编号：</div>
+                        <div class="procure_formlistdiv">
+                            @Model.所属公告链接.公告.项目信息.项目编号
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">报名状态：</div>
+                        <div class="procure_formlistdiv">
+                            @if (Model.预报名已关闭)
+                            {
+                                <span>已关闭</span>
+                            }
+                            else
+                            {
+                                <span>进行中</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">公告名称：</div>
+                        <div class="procure_formlistdiv">
+                            <a style="text-decoration: underline;" target="_blank" href="/公告/AnnounceDetail?id=@Model.所属公告链接.公告.Id">@Model.所属公告链接.公告.内容主体.标题</a>
+                        </div>
+                    </div>
+                    <input type="hidden" value="@Model.Id" name="idstr" id="idstr" />
+                    <input type="hidden" value="@ViewData["已上传附件"].ToString()" name="oldattstr" id="oldattstr" />
+                    <input type="hidden" value="" name="deleteattstr" id="deleteattstr" />
+                    <input type="hidden" value="" name="addattstr" id="addattstr" />
+
+
+                    <input type="hidden" value="" name="closeybm" id="closeybm" />
+                    <input type="hidden" value="" name="Remarks" id="Remarks" />
+
+                }
+                else
+                {
+                    <div style="text-align:center;">
+                        无此信息
+                    </div>
+                }
+            }
+            <div class="procureinputdiv" style=" height:auto; overflow:hidden; width:100%">
+                <div class="procureinputdiv_title">标书信息：</div>
+                <div class="procure_formlistdiv" style="height:auto; overflow:hidden; width:650px;">
+                    @*@if (Model.标书信息 != null && (Model.标书信息.备注 != null || Model.标书信息.内容.Any()))
+                    {
+                        <div style="height:auto; overflow:hidden; width:100%">
+                            <div style="float:left;">备注：</div>
+                            <textarea id="Remarks1" name="Remarks1" style="width:500px; height:100px;">@Model.标书信息.备注</textarea>
+                        </div>
+                        <div style="height:auto; overflow:hidden; width:100%">
+                            <div style="float:left;">附件：</div><br />
+                               @foreach (var item in Model.标书信息.内容)
+                               {
+                                <div><a href="@item" target="_blank" style="width:480px; overflow:hidden;white-space: nowrap;text-overflow: ellipsis;display: inline-block;" title="下载查看">@item</a><a key="@item" style="cursor:pointer; color:red; padding-left:20px; text-decoration:underline; overflow:hidden;display: inline-block;" onclick="deleteoldatt(this);">删除</a></div>
+                                }
+
+                        </div>
+                    }
+                    else
+                    {*@
+                        <div style="height:auto; overflow:hidden; width:100%">
+                            <div style="float:left;">备注：</div>
+                            @if (Model.标书信息 != null)
+                            {
+                                <textarea id="Remarks1" name="Remarks1" style="width:500px; height:100px;">@Model.标书信息.备注</textarea>
+                            }
+                            else
+                            {
+                                <textarea id="Remarks1" name="Remarks1" style="width:500px; height:100px;"></textarea>
+                            }
+                        </div>
+                        <div style="height:auto; overflow:hidden; width:100%">
+                            <div style="float:left;">附件：</div>
+                            <div style="float:left; width:550px;">
+                                @foreach (var item in Model.标书信息.内容)
+                                {
+                                    <div><a href="@item" target="_blank" style="width:480px; overflow:hidden;white-space: nowrap;text-overflow: ellipsis;display: inline-block;" title="下载查看">@item</a><a key="@item" style="cursor:pointer; color:red; padding-left:20px; text-decoration:underline; overflow:hidden;display: inline-block;" onclick="deleteoldatt(this);">删除</a></div>
+                                }
+                            </div>
+                            <div style="float:left;">是否添加附件：</div>
+                            <div style="float:left; width:500px;">
+                                <div style="width: 50px; float:left;"><input type="radio" style="width:15px; height:15px;" value="1" name="isattach" onclick="showattach(this)" />是</div>
+                                <div style="width: 50px; float:left;"><input type="radio" style="width:15px; height:15px;" value="0" name="isattach" onclick="showattach(this)" checked="checked" />否</div>
+                            </div>
+
+                            <div id="attachdiv_s" class="attachdiv" style="width:620px;">
+                                <div class="attachtitle" style="padding-left: 10px; width:610px;">添加附件<span style="color: red; font-size: 12px; padding-left: 10px;">（单个附件大小不超过100M）</span></div>
+                                <div style="padding-top:5px; padding-left:20px;">
+                                    <div id="Uppicture">
+                                        <form action="/单位用户后台/UploadImage_BiaoShu" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                                            <input type="file" onchange="fileChange()" multiple="multiple" name="file1" style="width: 71px;" />
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="framediv" style="display:none;width:100%; ">
+                                <iframe name="showPic" id="showPic" frameborder="0" width="100%"></iframe>
+                            </div>
+                        </div>
+
+                    @*}*@
+                </div>
+                <div style="text-align:center; float:left; width:900px; padding-top:20px;">
+                    @if (Model.预报名已关闭)
+                    {
+                        <input type="radio" name="closeybm1" value="0" /><span>打开预报名</span>
+                        <input type="radio" name="closeybm1" value="1" checked="checked" /><span>关闭预报名</span>
+                    }
+                    else
+                    {
+                        <input type="radio" name="closeybm1" value="0" checked="checked" /><span>打开预报名</span>
+                        <input type="radio" name="closeybm1" value="1" /><span>关闭预报名</span>
+                    }
+                </div>
+                <div style="text-align:center; width:900px;">
+                    <input id="modiibutton" name="submitcontent" type="submit" style="margin-top:20px;" onclick="return setisbuybs();" class="front_login_rightbox_button" value="确定">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function deleteoldatt(obj) {
+        var attstr = $(obj).attr("key");
+        $(obj).parent().remove();
+        $("#deleteattstr").val($("#deleteattstr").val() + attstr + "|");
+        $("#oldattstr").val($("#oldattstr").val().replace(attstr + "|", ""));
+    }
+    function fileChange() {
+        document.forms["upload"].submit();
+        $("#f1").show();
+    }
+    function showattach(obj) {
+        if ($(obj).val() == "1") {
+            $("#attachdiv_s").show();
+        }
+        else {
+            $("#attachdiv_s").hide();
+        }
+    }
+
+    function setisbuybs() {
+
+        if (!confirm("确定提交本次数据？")) {
+            return false;
+        }
+        $("#Remarks").val($("#Remarks1").val());
+        $("#closeybm").val($('input[name="closeybm1"]:checked').val());
+        document.forms["BiaoShuForm"].submit();
+    }
+    $(function () {
+        $("#招标采购预报名列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#招标采购预报名列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*@model Go81WebApp.Models.数据模型.项目数据模型.招标采购预报名
+    <style type="text/css">
+        .procure_formlistdiv {
+            width: 510px;
+        }
+
+            .procure_formlistdiv input {
+                width: 500px;
+            }
+
+        .procureinputdiv_title {
+            width: 200px;
+            text-align: right;
+        }
+
+        .procureinputdiv_title {
+            line-height: 30px;
+        }
+
+        .procure_formlistdiv {
+            line-height: 30px;
+        }
+
+        #gys_signup_information tr td {
+            text-align: center;
+        }
+    </style>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="gys_znxx_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">招标采购预报名详情</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div class="gys_znxx_contentbox">
+                <div class="gys_znxx_content">
+
+                    @if (Model != null)
+                    {
+                        <div class="procureinputdiv">
+                            <div class="procureinputdiv_title">项目名称：</div>
+                            <div class="procure_formlistdiv">
+                                @Model.所属公告链接.公告.项目信息.项目名称
+                            </div>
+                        </div>
+
+
+                        <div class="procureinputdiv">
+                            <div class="procureinputdiv_title">项目编号：</div>
+                            <div class="procure_formlistdiv">
+                                @Model.所属公告链接.公告.项目信息.项目编号
+                            </div>
+                        </div>
+
+                        <div class="procureinputdiv">
+                            <div class="procureinputdiv_title">报名状态：</div>
+                            <div class="procure_formlistdiv">
+                                @if (Model.预报名已关闭)
+                                {
+                                    <span>已关闭</span>
+                                }
+                                else
+                                {
+                                    <span>进行中</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="procureinputdiv">
+                            <div class="procureinputdiv_title">公告名称：</div>
+                            <div class="procure_formlistdiv">
+                                <a style="text-decoration: underline;" target="_blank" href="/公告/AnnounceDetail?id=@Model.所属公告链接.公告.Id">@Model.所属公告链接.公告.内容主体.标题</a>
+                            </div>
+                        </div>
+
+                        <div class="procureinputdiv" style=" height:auto; overflow:hidden">
+                            <div class="procureinputdiv_title">供应商所需资料：</div>
+                        </div>
+                        <table style="display:none;">
+                            <tbody id="addexample">
+                                <tr>
+                                    <td style="padding:5px 0 5px 0;"><input id="informationtitle__a" name="informationtitle__a" type="text" style="width:95%; height:30px; line-height:30px;" /></td>
+                                    <td id="informationflag__a"><input type="file" id="filebtn__a" value="上传文件" onclick="alert($(this).attr('id'))"  style="width:90%"/></td>
+                                    <td><input type="button" id="btn__a" style="height:30px;" value="删除该标书" onclick="deletethisinformation(this);" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+
+                        <table width="100%" cellpadding="0" cellspacing="0" id="gys_signup_information">
+                            <tr id="tablehead">
+                                <th width="30%">标题</th>
+                                <th width="55%">标书文件</th>
+                                <th width="15%">删除该标书</th>
+                            </tr>
+                            @if (Model.标书信息.Any())
+                            {
+                                var item = Model.标书信息;
+
+                                for (var i = 0; i < item.Count; i++)
+                                {
+                                    <tr>
+                                        <td style="padding:5px 0 5px 0;"><input id="informationtitle__@i" name="informationtitle__@i" type="text" value="@item[i].标题" style="width:95%; height:30px; line-height:30px;" /></td>
+                                        @if (item[i].内容.Any())
+                                        {
+                                            <td id="informationflag__@i">
+                                                @foreach (var it in item[i].内容)
+                                                {
+                                                    <a href="@it">@it</a><br />
+                                                }
+                                                <input type="file" id="filebtn__@i" onclick="alert($(this).attr('id'))" />
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td id="informationflag__@i"><input type="file" id="filebtn__@i" onclick="alert($(this).attr('id'))" style="width:90%" /></td>
+                                        }
+                                        <td><input type="button" id="btn__@i" value="删除该标书" onclick="deletethisinformation(this);" style="height:30px;" /></td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td style="padding:5px 0 5px 0;"><input id="informationtitle__0" name="informationtitle__0" type="text" style="width:95%; height:30px; line-height:30px;" /></td>
+                                    <td id="informationflag__0"><input type="file" id="filebtn__0" onclick="alert($(this).attr('id'))" style="width:90%" /></td>
+                                    <td><input type="button" id="btn__0" style="height:30px;" value="删除该资料" onclick="deletethisinformation(this);" /></td>
+                                </tr>
+                            }
+                        </table>
+                        <div style="height:auto; overflow:hidden; width:900px;">
+                            <input type="button" value="增加所需资料" style="width:100px; height:30px; float:right; margin-top:5px;" onclick="addinformation();" />
+                        </div>
+                        <div style="text-align:center;">
+                            @if (Model.预报名已关闭)
+                            {
+                                <input type="radio" name="closeybm" value="0" /><span>打开预报名</span>
+                                <input type="radio" name="closeybm" value="1" checked="checked" /><span>关闭预报名</span>
+                            }
+                            else
+                            {
+                                <input type="radio" name="closeybm" value="0" checked="checked" /><span>打开预报名</span>
+                                <input type="radio" name="closeybm" value="1" /><span>关闭预报名</span>
+                            }
+                        </div>
+                        <div style="text-align:center;">
+                            <input id="modiibutton" name="submitcontent" type="submit" style="margin-top:20px;" onclick="return setisbuybs();" class="front_login_rightbox_button" value="确定">
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="text-align:center;">
+                            无此信息
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+        <input type="hidden" id="linecount" name="linecount" value="@ViewData["已有标书数"]" />
+        <input type="hidden" id="checkstr" name="checkstr" value="" />
+    }
+    <script type="text/javascript">
+        function addinformation() {
+            var count = $("#linecount").val();
+            var content = $("#addexample").html();
+            $("#gys_signup_information").append(content.replace(/__a/g, "__" + count))
+            $("#linecount").val(++count);
+        }
+        function deletethisinformation(obj) {
+            if (confirm("确定删除本行资料？")) {
+
+                $(obj).parent().parent().remove();
+
+                var count = $("#linecount").val();
+                var num = $(obj).attr("id").replace("btn__", "");
+
+
+                if (count > 1) {
+                    for (var j = (parseInt(num) + 1) ; j < count; j++) {
+                        var reg = new RegExp("__" + j, "g");
+
+                        var title = $("#informationtitle__" + j).val();
+                        var flag = false;
+                        if ($("#informationflag__" + j).is(":checked")) {
+                            flag = true;
+                        }
+                        var oldhtml = $("#informationtitle__" + j).parent().parent().html();
+
+                        $("#informationtitle__" + j).parent().parent().html(oldhtml.replace(reg, "__" + (j - 1)));
+                        $("#informationtitle__" + (j - 1)).val(title);
+                        if (flag) {
+                            $("#informationflag__" + (j - 1)).prop("checked", true);
+                        }
+                    }
+
+                }
+                $("#linecount").val(--count);
+
+
+            }
+        }
+
+        function setisbuybs() {
+            if (!confirm("确定提交本次数据？")) {
+                return false;
+            }
+            var falge = false;
+            $("#gys_signup_information :text").each(function () {
+                if ($(this).val() == "") {
+                    alert("资料名称必须填写");
+                    $(this).focus();
+                    falge = true;
+                    return false;
+                }
+            });
+            if (falge) {
+                return false;
+            }
+
+
+            $("#checkstr").val("");
+            var checkstr = "";
+            $("#gys_signup_information :checkbox").each(function () {
+                if ($(this).is(":checked")) {
+                    checkstr += "1|";
+                }
+                else {
+                    checkstr += "0|";
+                }
+            });
+            $("#checkstr").val(checkstr);
+        }
+        $(function () {
+            $("#招标采购预报名列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#招标采购预报名列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+    </script>*@

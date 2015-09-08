@@ -1,0 +1,72 @@
+﻿@using Go81WebApp.Models.数据模型.消息数据模型
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">建议管理</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    @{IEnumerable<建议> Msg = ViewData["建议列表"] as IEnumerable<建议>;}
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="15%">建议人</th>
+                    <th width="40%">标题</th>
+                    <th width="32%">建议时间/处理时间</th>
+                    <th width="13%">操作</th>
+                </tr>
+                @if (Msg.Count()==0)
+                {
+                    <tr><td colspan="4">暂时没有建议</td></tr>
+                }
+                else
+                {
+                    foreach (var item in Msg)
+                    {
+                        foreach (var m in item.对话消息)
+                        {
+                            <tr>
+                                <td style="text-align:center;">@item.发起者.用户数据.登录信息.登录名</td>
+                                <td style="text-align:center;">@m.消息主体.标题</td>
+                                <td style="text-align:center;">@item.基本数据.添加时间.ToString("yyyy-MM-dd hh:mm") / @item.基本数据.修改时间.ToString("yyyy-MM-dd hh:mm")</td>
+                                <td style="text-align:center;">
+                                    <a href="/运营团队后台/Request_Detail?id=@item.Id" target="_blank">回复</a>
+                                    <a href="/运营团队后台/Requstion_Del?id=@item.Id">删除</a>
+                                </td>
+                            </tr>
+                            break;
+                        }
+                    }
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).addClass("currentPage");;
+            }
+        });
+        $("#已处理建议").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#已处理建议").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

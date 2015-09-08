@@ -1,0 +1,46 @@
+﻿@using Go81WebApp.Models.数据模型.项目数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+@model IEnumerable<Go81WebApp.Models.数据模型.推广业务数据模型.供应商服务记录>
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <script type="text/javascript" language="javascript" src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/JS/provinceandcity_all.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>西南物资采购网评审专家入库申请</title>
+    <link href="~/css/WeChat.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="outbox">
+        <div style="text-align:center; font-size:16px; font-weight:bold; line-height:50px;">您所申请的服务如下</div>
+        <div style="width:100%; height:auto;">
+            <div class="serviceheader" style="width:49%;">服务名称</div><div class="serviceheader" style="width:20%;">开通时长</div><div class="serviceheader" style="width:30%;border-right:none;">是否结束</div>
+            @foreach (var item in Model)
+            {
+                foreach (var item1 in item.已开通的服务)
+                {
+                    <div style="border-bottom: 1px dashed #808080;">
+                        <div class="servicItem" style="width:49%;">@item1.所申请项目名</div>
+                        <div class="servicItem" style="width:20%; height:auto; text-align:center;">@item1.服务期限</div>
+                        <div class="servicItem" style="width:30%;text-align:center;">
+                            @if (item1.结束时间 < DateTime.Now)
+                            {
+                                <span style="color:red;">已结束</span>
+                            }
+                            else
+                            {
+                                <span>进行中...</span>
+                            }
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                }
+            }
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</body>
+</html>

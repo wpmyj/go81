@@ -1,0 +1,315 @@
+﻿@using Go81WebApp.Models.数据模型.项目数据模型
+@model IEnumerable<招标采购预报名>
+<style>
+    .gys_znxx_content table tr:hover td {
+        background-color: #f6f1f1;
+    }
+
+    div#pager a {
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        line-height: 25px;
+        font-size: 12px;
+        height: 25px;
+        border: 1px solid gray;
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+        div#pager a:hover {
+            background-color: rgb(243, 243, 243);
+        }
+
+    .goforward {
+        display:block;
+        width: 60px;
+        height: 25px;
+        background-color: #E78E8E;
+        border: 1px solid red;
+        margin: 0px auto;
+        text-align: center;
+        line-height: 25px;
+    }
+
+    a.goforward:hover {
+        background-color: red;
+        color: white;
+        border-radius: 5px;
+        border: 1px solid white;
+    }
+</style>
+<link href="~/css/index.css" rel="stylesheet" />
+<div id="title_div" class="gys_xttz_topbg">
+    <div class="index_bottom_zb_top_title">我的预报名</div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table class="cons" width="100%" cellpadding="0" cellspacing="0">
+                <tr><th width="28%">项目名称</th><th width="25%">公告名称</th><th width="12%">报名时间</th><th width="10%">预报名数</th>@*<th width="10%">状态</th>*@<th width="7%">标书</th><th width="33%">操作</th></tr>
+                @if (Model != null && Model.Count() != 0)
+                {
+                    foreach (var m in Model)
+                    {
+                        foreach (var item in m.预报名供应商列表)
+                        {
+                            if (item.供应商链接.用户ID == long.Parse(ViewData["id"].ToString()))
+                            {
+                                <tr>
+                                    <td>@m.所属公告链接.公告.内容主体.标题</td>
+                                    <td><a target="_blank" href="/公告/AnnounceDetail?id=@m.所属公告链接.公告ID">@m.所属公告链接.公告.内容主体.标题</a></td>
+                                    <td style="text-align:center;">@item.报名时间.ToString("yyyy-MM-dd")</td>
+                                    <td style="text-align:center;">@m.预报名供应商列表.Count</td>
+                                    @*@if (item.审核数据.审核状态 != Go81WebApp.Models.数据模型.审核状态.审核未通过)
+                                    {
+                                        <td>@item.审核数据.审核状态</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.审核数据.审核状态<span style="color:red;">(@item.审核数据.未通过理由)</span></td>
+                                    }*@
+                                    @if (item.已购买标书)
+                                    {
+                                        <td>已购买</td>
+                                    }
+                                    else
+                                    {
+                                        <td style="color:red;">未购买</td>
+                                    }
+                                    <td>
+                                    @*@if (item.供应商提交资料!= null&&item.供应商提交资料.Count()!=0)
+                                    {
+                                        <a href="/供应商后台/Editenroll?id=@m.Id" class="goforward" style="background-color:#11ACDD;border:1px solid #0F90B9;" target="_blank">修改资料</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/供应商后台/enrollMaterial?id=@m.Id" target="_blank" class="goforward">上传资料</a>
+                                    }*@
+                                        <a class="goforward" style="background-color:red;" target="_blank" href="/供应商后台/SignUp_BiaoShuDownload?id=@m.Id">下载标书</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                }
+            </table>
+            <div style="text-align:center;" id="pager">
+                <div class="gys_znxx_content_detailbox">
+                    @{
+                        int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                        int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                        if (Pagecount <= 6)
+                        {
+                            for (int i = 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/供应商后台/gys_enroll?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/供应商后台/gys_enroll?page=@i'>@i</a>
+                                }
+                            }
+                            if (Pagecount != 0)
+                            {
+                                <span>@(CurrentPage)/@(Pagecount) 页</span>
+                            }
+                        }
+                        else
+                        {
+                            if (CurrentPage < 6)
+                            {
+                                if (CurrentPage != 1)
+                                {
+                                    <a href="/供应商后台/gys_enroll?page=@(CurrentPage-1)">上一页</a>
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/供应商后台/gys_enroll?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/供应商后台/gys_enroll?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/供应商后台/gys_enroll?page=@(Pagecount)">@Pagecount</a><a href="/供应商后台/gys_enroll?page=@(CurrentPage+1)">下一页</a>
+                                    <span>@(CurrentPage)/@(Pagecount) 页</span>
+                                }
+                                else
+                                {
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/供应商后台/gys_enroll?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/供应商后台/gys_enroll?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/供应商后台/gys_enroll?page=@(Pagecount)">@Pagecount</a><a href="/供应商后台/gys_enroll?page=@(CurrentPage+1)">下一页</a>
+                                    <span>@(CurrentPage)/@(Pagecount) 页</span>
+                                }
+                            }
+                            else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                            {
+                                <a href="/供应商后台/gys_enroll?page=@(CurrentPage-1)">上一页</a><a href="/供应商后台/gys_enroll?page=1">1</a><span>...</span>
+                                for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/供应商后台/gys_enroll?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/供应商后台/gys_enroll?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/供应商后台/gys_enroll?page=@(Pagecount)">@Pagecount</a><a href="/供应商后台/gys_enroll?page=@(CurrentPage+1)">下一页</a>
+                                <span>@(CurrentPage)/@(Pagecount) 页</span>
+                            }
+                            else if (CurrentPage >= Pagecount - 3)
+                            {
+                                <a href="/供应商后台/gys_enroll?page=@(CurrentPage-1)">上一页</a><a href="/供应商后台/gys_enroll?page=1">1</a><span>...</span>
+                                for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/供应商后台/gys_enroll?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/供应商后台/gys_enroll?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>@(CurrentPage)/@(Pagecount) 页</span>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#我的预报名").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $(".goforward").css({ "color": "white", "text-decoration": "none" });
+        $("#我的预报名").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    function setValue(data) {
+        var str = "<tr><th>项目名称</th><th>预报名时间</th></tr>";
+        for (var i = 0; i < data.length; i++) {
+            str += "<tr><td style='text-align:center;'><a href='/公告/AnnounceDetail?id=" + data[i].id + "'>" + data[i].name + "</a></td><td>" + data[i].time + "</td></tr>";
+        }
+        $("table.cons").html(str);
+    }
+    function setPage(pg_count, current_page) {
+        if (pg_count <= 6) {
+            str = '';
+            for (var i = 1; i <= pg_count; i++) {
+                str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (current_page < 6) {
+                if (current_page != 1) {
+                    var str = "<a onclick='pre_page()'>上一页</a>";
+                    for (var i = 1; i < 6; i++) {
+                        str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
+                    $("div#pager").html(str);
+                }
+                else {
+                    var str = "";
+                    for (var i = 1; i < 6; i++) {
+                        str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
+                    $("div#pager").html(str);
+                }
+            }
+            else if (current_page >= 6 && current_page < pg_count - 3) {
+                var str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(" + 1 + ")'>1</a>...";
+                for (var i = (current_page - 4 + 1) ; i <= current_page; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
+                $("div#pager").html(str);
+            }
+            else if (current_page >= pg_count - 3) {
+                str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(1)'>1</a>...";
+                for (var i = pg_count - 5 + 1; i < pg_count; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == current_page.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    var number = 1;
+    var list_count = 0;
+    function Find_User() {
+        var page = '1';
+        $.get('/供应商后台/Search_Eroll/',
+            { p: page },
+            function (data) {
+                setValue(data.Data.dt);
+                number = 1;
+                list_count = data.Data.p;
+                setPage(list_count, number);
+            }
+        );
+    }
+    function current_page(num) {
+        $.get('/供应商后台/Search_Eroll/',
+            { p: num },
+            function (data) {
+                setValue(data.Data.dt);
+                setPage(data.Data.p, num);
+            }
+        );
+        number = num;
+    }
+    function pre_page() {
+        if (number > 1) {
+            number--;
+            $.get('/供应商后台/Search_Eroll/',
+                { p: number },
+                function (data) {
+                    setValue(data.Data.dt);
+                    setPage(data.Data.p, number);
+                }
+            );
+        }
+    }
+    function next_page() {
+        if (number < list_count) {
+            number++;
+            $.get('/供应商后台/Search_Eroll/',
+                { p: number },
+                function (data) {
+                    setValue(data.Data.dt);
+                    setPage(data.Data.p, number);
+                }
+            );
+        }
+    }
+</script>

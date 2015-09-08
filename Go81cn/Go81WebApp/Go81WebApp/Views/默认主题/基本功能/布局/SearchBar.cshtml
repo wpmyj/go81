@@ -1,0 +1,302 @@
+﻿@*<script type="text/javascript" src="~/JS/jquery-1.6.min.js"></script>*@
+<script type="text/javascript" src="~/JS/jquery.autocomplete.js"></script>
+@*<link rel="Stylesheet" href="~/css/jquery.autocomplete.css" />*@
+
+@{
+    var intranet = 0;
+    if (WebApiApplication.IsIntranet)
+    {
+        intranet = 1;
+    }
+}
+
+<script type="text/javascript">
+    //var data = "";
+    //var gysdata = ""
+    var intra= @intranet;
+    $(document).ready(function () {
+        //    $.ajax({
+        //        type: "POST",
+        //        async: false,
+        //        url: "/商品陈列/AutoCompleteList?keyword=" + encodeURI($("#produserchtext").val()),
+        //        success: function (msg) {
+        //            data = msg.split(" ");
+        //            data.sort();
+        //            data = uniqueArray(data);
+        //        }
+        //    });
+        //    $.ajax({
+        //        type: "POST",
+        //        async: false,
+        //        url: "/商品陈列/AutoCompleteList_Gys?keyword=" + encodeURI($("#produserchtext").val()),
+        //        success: function (msg) {
+        //            gysdata = msg.split(" ");
+        //            gysdata.sort();
+        //            gysdata = uniqueArray(gysdata);
+        //        }
+        //    });
+        //    $('#produserchtext').autocomplete(data, {
+        //        minChars: 1,
+        //        matchCase: false, //不区分大小写
+        //        autoFill: false,
+        //        max: 10,
+        //        width: 430,
+        //        selectFirst: true
+        //    });
+        $('#produserchtext').bind('keypress', function (event) {
+            if (event.keyCode == "13") {
+                $("#search_bt").click();
+            }
+        });
+
+        $("#produserchtext").focus(function () {
+            if ($("#produserchtext").val() == '在这里输入商品名称') 
+            { 
+                if(intra==0){
+                    $("#produserchtext").val(''); $("#produserchtext").attr('style', 'color:#333'); 
+                }
+                else{
+                    $("#produserchtext").val(''); $("#produserchtext").attr('style', 'color:#333;width:550px;border-color: #207AD6'); 
+                }
+            }
+        });
+
+        $("#produserchtext").blur(function () {
+            if ($("#produserchtext").val() == '') 
+            { 
+                if(intra==0){
+                    $("#produserchtext").val('在这里输入商品名称'); $("#produserchtext").attr('style', 'color:#ddd'); 
+                }
+                else{
+                    $("#produserchtext").val('在这里输入商品名称'); $("#produserchtext").attr('style', 'color:#ddd;width:550px;border-color: #207AD6'); 
+                }
+            }
+        });
+    });
+    //function GetAutoComplete() {
+    //    $('#produserchtext').autocomplete(data, {
+    //        minChars: 1,
+    //        matchCase: false, //不区分大小写
+    //        autoFill: false,
+    //        max: 10,
+    //        width: 460,
+    //        selectFirst: true
+    //    });
+    //}
+    function uniqueArray(a) {
+        temp = new Array();
+        for (var i = 0; i < a.length; i++) {
+            if (!contains(temp, a[i])) {
+                temp.length += 1;
+                temp[temp.length - 1] = a[i];
+            }
+        }
+        return temp;
+    }
+    function contains(a, e) {
+        for (j = 0; j < a.length; j++) if (a[j] == e) return true;
+        return false;
+    }
+
+    function barchangeserachtype(obj) {
+        $(obj).parent().find("li").each(function () {
+            var searchtypename = $(this).html();
+            if (searchtypename == $(obj).html()) {
+                $(this).removeClass().addClass("serchbar_li_selecte_y");
+            }
+            else {
+                $(this).removeClass().addClass("serchbar_li_selecte_n");
+            }
+        });
+        if ($(obj).html() == "供应商") {
+            $(".b_box").hide();
+            $('#produserchtext').unbind();
+            //$('#produserchtext').autocomplete(gysdata, {
+            //    minChars: 1,
+            //    matchCase: false, //不区分大小写
+            //    autoFill: false,
+            //    max: 10,
+            //    width: 430,
+            //    selectFirst: true
+            //});
+            $('#produserchtext').bind('keypress', function (event) {
+                if (event.keyCode == "13") {
+                    $("#search_bt").click();
+                }
+            });
+
+
+            $("#produserchtext").val("在这里输入供应商名称"); 
+            if(intra==0){
+                $("#produserchtext").attr('style', 'color:#ddd');
+            }
+            else{
+                $("#produserchtext").attr('style', 'color:#ddd;width:550px;border-color: #207AD6');
+            }
+          
+            $("#produserchtext").focus(function () {
+                if ($("#produserchtext").val() == '在这里输入供应商名称') { 
+                    if(intra==0){
+                        $("#produserchtext").val(''); $("#produserchtext").attr('style', 'color:#333'); 
+                    }
+                    else{
+                        $("#produserchtext").val(''); $("#produserchtext").attr('style', 'color:#333;width:550px;border-color: #207AD6'); 
+                    }
+                }
+            });
+
+            $("#produserchtext").blur(function () {
+                if ($("#produserchtext").val() == '') { 
+                    if(intra==0){
+                        $("#produserchtext").val('在这里输入供应商名称'); $("#produserchtext").attr('style', 'color:#ddd'); 
+                    }
+                    else{
+                        $("#produserchtext").val('在这里输入供应商名称'); $("#produserchtext").attr('style', 'color:#ddd;width:550px;border-color: #207AD6'); 
+                    }
+                }
+            });
+        }
+        else {
+            $(".b_box").show();
+            $('#produserchtext').unbind();
+            //$('#produserchtext').autocomplete(data, {
+            //    minChars: 1,
+            //    matchCase: false, //不区分大小写
+            //    autoFill: false,
+            //    max: 10,
+            //    width: 430,
+            //    selectFirst: true
+            //});
+            $('#produserchtext').bind('keypress', function (event) {
+                if (event.keyCode == "13") {
+                    $("#search_bt").click();
+                }
+            });
+
+            $("#produserchtext").val("在这里输入商品名称"); 
+            
+            if(intra==0){
+                $("#produserchtext").attr('style', 'color:#ddd');
+            }
+            else{
+                $("#produserchtext").attr('style', 'color:#ddd;width:550px;border-color: #207AD6');
+            }
+            
+            $("#produserchtext").focus(function () {
+                if ($("#produserchtext").val() == '在这里输入商品名称') 
+                { 
+                    if(intra==0){
+                        $("#produserchtext").val(''); $("#produserchtext").attr('style', 'color:#333'); 
+                    }
+                    else{
+                        $("#produserchtext").val(''); $("#produserchtext").attr('style', 'color:#333;width:550px;border-color: #207AD6'); 
+                    }
+                }
+            });
+
+            $("#produserchtext").blur(function () {
+                if ($("#produserchtext").val() == '') 
+                { 
+                    if(intra==0){
+                        $("#produserchtext").val('在这里输入商品名称'); $("#produserchtext").attr('style', 'color:#ddd'); 
+                    }
+                    else{
+                        $("#produserchtext").val('在这里输入商品名称'); $("#produserchtext").attr('style', 'color:#ddd;width:550px;border-color: #207AD6'); 
+                    }
+                }
+            });
+        }
+    }
+</script>
+
+<div class="search_bar">
+    <div class="layout_other_imgbox">
+        @if (WebApiApplication.IsIntranet)
+        {
+            <div class="layout_logo_imgbox" style="width:210px; text-align:center;">
+                <a class="c_qrcode" style="display:inline-block; margin-top:5px;">
+                    <img src="~/Images/qrcode.png" style="width:100px;" />
+                </a>
+                </div>
+        }
+        else
+        {
+            <div class="layout_logo_imgbox" style="width:240px;">
+                <div style="width:240px;">
+                    <a href="http://www.go81.cn"><img src="~/Images/logo_O.png" /></a>
+                </div>
+            </div>
+        }
+        @if (!WebApiApplication.IsIntranet)
+        {
+            <div class="layout_search_box">
+
+                <div class="a_box" style="padding-top:10px;">
+
+                    <ul class="serchbar_ul" id="serchbar_ul">
+                        <li style="width:50px;" class="serchbar_li_selecte_y" onclick="barchangeserachtype(this);">商品</li>
+                        <li style="width:65px;" class="serchbar_li_selecte_n" onclick="barchangeserachtype(this);">供应商</li>
+                    </ul>
+                    <input type="text" id="produserchtext" name="produserchtext" value="在这里输入商品名称" /><span></span>
+                    <input onclick="searchProduct()" type="button" value="搜 索" id="search_bt" />
+                </div>
+                <div class="b_box">
+                    热门搜索:
+                    <a href="/商品陈列/ProductSearch?name=扫描仪" target="_blank">扫描仪</a>
+                    <a href="/商品陈列/ProductSearch?name=一体机" target="_blank">一体机</a>
+                    <a href="/商品陈列/ProductSearch?name=打印机" target="_blank">打印机</a>
+                    <a href="/商品陈列/ProductSearch?name=数码照相机" target="_blank">数码照相机</a>
+                    <a href="/商品陈列/ProductSearch?name=柴油发电机" target="_blank">柴油发电机</a>
+                    <a href="/商品陈列/ProductSearch?name=墨盒" target="_blank">墨盒</a>
+                </div>
+            </div>
+            <div class="layout_qrcode">
+                <div>
+                    <a class="a_qrcode" href="/jct/" target="_blank" >
+                        <img src="~/Images/jct.png" style="width:100px;" />
+                    </a>
+                    <a class="b_qrcode" style="margin-left :25px;">
+                        <img src="~/Images/onlinesever.png" style="width:100px;" />
+                    </a>
+                    <a class="c_qrcode" style="display:inline-block; margin-left:25px;">
+                        <img src="~/Images/qrcode.png" style="width:100px;" />
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="layout_search_box" style="padding-left:30px;">
+                <div class="a_box" style="padding-top:10px;width:650px;">
+                    <ul class="serchbar_ul" id="serchbar_ul">
+                        <li style="width:50px;" class="serchbar_li_selecte_y" onclick="barchangeserachtype(this);">商品</li>
+                        <li style="width:65px;" class="serchbar_li_selecte_n" onclick="barchangeserachtype(this);">供应商</li>
+                    </ul>
+                    <input type="text" id="produserchtext" name="produserchtext" value="在这里输入商品名称" style="width:550px; border-color:#207AD6;"/><span></span>
+                    <input onclick="searchProduct()" type="button" value="搜 索" id="search_bt" style="background-color:#207AD6;"/>
+                </div>
+                <div class="b_box">
+                    热门搜索:
+                    <a href="/商品陈列/ProductSearch?name=扫描仪" target="_blank">扫描仪</a>
+                    <a href="/商品陈列/ProductSearch?name=一体机" target="_blank">一体机</a>
+                    <a href="/商品陈列/ProductSearch?name=打印机" target="_blank">打印机</a>
+                    <a href="/商品陈列/ProductSearch?name=数码照相机" target="_blank">数码照相机</a>
+                    <a href="/商品陈列/ProductSearch?name=柴油发电机" target="_blank">柴油发电机</a>
+                    <a href="/商品陈列/ProductSearch?name=墨盒" target="_blank">墨盒</a>
+                </div>
+            </div>
+            <div class="layout_qrcode" style="margin-right:50px;">
+                <div>
+                    @*<a class="b_qrcode">
+                        <img src="~/Images/onlinesever.png" style="width:140px;" />
+
+                    </a>*@
+                    <a class="c_qrcode">
+                        <img src="~/Images/phoneonline.jpg" style="width:230px; height:88px;" />
+                    </a>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

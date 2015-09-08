@@ -1,0 +1,1763 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@using Go81WebApp.Models.数据模型.商品数据模型
+@{
+    ViewBag.Title = "修改供应商信息";
+    Layout = "_BackLayout.cshtml";
+}
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/index.css" rel="stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script src="~/JS/provinceandcity_all.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style>
+    table tr td span {
+        font-size: 12px;
+        color: red;
+    }
+
+    table tr td {
+        font-size: 14px;
+    }
+
+    .good_link {
+        color: red;
+    }
+
+        .good_link:hover {
+            text-decoration: underline;
+            color: red;
+        }
+
+    .list {
+        font-size: 14px;
+        width: 1003px;
+        background-image: url(/images/index_content_bg.jpg);
+    }
+
+        .list a {
+            width: 100px;
+            cursor: pointer;
+            height: 30px;
+            color: #336;
+            display: inline-block;
+            text-align: center;
+            line-height: 30px;
+        }
+
+    .submenulist li h3 a.on {
+        width: 241px;
+        color: #006400;
+        border: 1px solid #aaa;
+        border-right: none;
+        border-left: none;
+        overflow: hidden;
+        margin: 0;
+        height: 30px;
+        font-size: 14px;
+        line-height: 30px;
+        background: #fff;
+        box-shadow: -10px 0 14px #ccc;
+        z-index: 9999;
+        text-decoration: none;
+    }
+</style>
+<div id="gysarea" style="display:none;">
+    <div style="position:fixed; z-index:19; top:0px; left:0px; text-align:center; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50); right:0; bottom:0px; background-color:black; height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="width:100%;position:fixed; z-index:20; left:0px;top:20%;min-height:330px; font-size:18px; text-align:left; padding-left:20px; line-height:30px;">
+        <div style="width:500px;position:relative; border:1px solid red; margin:0px auto;z-index:12; height:300px; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#gysarea')">×</a></div>
+            <div style="float:right; width:100%; font-size:12px;">
+                <h2 style="text-align:center;">协议供应商所属地域</h2>
+                <div>
+                    <div>
+                        协议供应商所属地域<br />
+                        <select id="deliverprovince1" name="deliverprovince1" style="width:153px; margin-left:2px;"></select>
+                        <select id="delivercity1" name="delivercity1" style="width:153px; margin-left:2px;"></select>
+                        <select id="deliverarea1" name="deliverarea1" style="width:153px; margin-left:2px;"></select>
+                        <script>
+                        window.onload = function () { new PCAS("deliverprovince1", "delivercity1", "deliverarea1"); new PCAS("deliverprovince", "delivercity", "deliverarea","@Model.所属地域.省份","@Model.所属地域.城市","@Model.所属地域.区县"); }
+
+                        </script>
+                    </div>
+                    <div style="text-align:center;">
+                        <a href="###" onclick="addarea()" style="display:block; margin-left:auto; margin-right:auto; font-size:15px; background-color:green; color:white; margin-top:20px; width:100px; height:30px; text-align:center; line-height:30px;">添加</a>
+                    </div>
+                    <div class="gys_znxx_content" style="width:auto;">
+                        <table id="newarea" width="95%" cellpadding="0" cellspacing="0"></table>
+                    </div>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</div>
+<div id="Product" style="display:none;">
+    <div style="position:fixed; z-index:20; top:0px; opacity:0.5;filter:alpha(opacity=50); left:0px; text-align:center; right:0; bottom:0px; background-color:black; height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="width:100%;position:fixed; z-index:20; left:0px;top:2%;min-height:330px; font-size:18px; text-align:left; padding-left:20px; line-height:30px;">
+        <div style="width:780px;position:relative; border:1px solid red; margin:0px auto;z-index:12; height:auto; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;border:1px solid red;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#Product')">×</a></div>
+            <div style="float:right; width:100%; font-size:12px;">
+                <h2 style="text-align:center;">可提供商品类别</h2>
+                <div style="overflow-y:scroll;max-height:450px;">
+                    <form>
+                        <input type="radio" name="tp" onclick="search_type(this)" checked="checked" value="通用物资" /><span>通用物资</span>
+                        <input type="radio" name="tp" onclick="search_type(this)" value="专用物资" /><span>专用物资</span>
+                        <p />
+                        <span>一级分类名：</span>
+                        <select id="firstClass" onchange="searchtype(this)">
+                            @foreach (var item in ViewData["行业列表"] as IEnumerable<商品分类>)
+                            {
+                                if (item.分类性质.ToString() != "专用物资")
+                                {
+                            <option value="@item.分类名">@item.分类名</option>
+                                }
+                            }
+                        </select>
+                    </form>
+                    <div style=" width:100%;">
+                        <p>二级分类名：</p><table width="100%" id="thirdType"></table>
+                    </div>
+                    <div style="text-align: center;">
+                        <input type="button" disabled="disabled" onclick="sendGoodType()" id="bt" style="background-color:gray;border:none; color:white; width:50px; height:30px;" value="添加">
+
+                        <span style="display:block;" id="warn"></span>
+                    </div>
+                </div>
+
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</div>
+<div id="modifyProduct" style="display:none;">
+    <div style="position:fixed; z-index:20; top:0px; left:0px;opacity:0.7;filter:alpha(opacity=70); text-align:center; right:0; bottom:0px; background-color:black; height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="width:100%;position:fixed; z-index:20; left:0px;top:5%;min-height:330px; font-size:18px; text-align:left; padding-left:20px; line-height:30px;">
+        <div style="width:780px; border:1px solid red;position:relative; margin:0px auto;z-index:12; height:auto; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#modifyProduct')">×</a></div>
+            <div style="float:right; width:100%; font-size:12px;">
+                <h2 style="text-align:center;">可提供商品类别</h2>
+                <span>一级分类名：</span><a id="fClass"></a>
+                <div style="height:400px; width:100%;overflow-y:scroll;">
+                    <p>二级分类名：</p><table width="100%" id="sType"></table>
+                </div>
+                <div style="text-align: center;">
+                    <input type="button" disabled="disabled" onclick="ModifyGoodType()" id="mbt" style="background-color:gray; width:80px; height:30px; font-size:16px; border:none;color:white;" value="修改">
+                    <br />
+                    <span id="warn1"></span>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</div>
+
+<div id="f" style="display:none;">
+    <div style="position:fixed; z-index:20; top:0px; left:0px;opacity:0.7;filter:alpha(opacity=70); text-align:center; right:0; bottom:0px; background-color:black; height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="width:100%;position:fixed; z-index:20; left:0px;top:5%;min-height:330px; font-size:18px; text-align:left; padding-left:20px; line-height:30px;">
+        <div style="width:400px; border:1px solid red;position:relative; margin:0px auto;z-index:12; height:auto; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#f')">×</a></div>
+            <div style="float:right; width:100%; height:240px; text-align:center; font-size:12px;">
+                <form action="/运营团队后台/Supplier_Refused" method="post">
+                    @Html.HiddenFor(m=>m.Id)
+                    <table style="margin-top:50px; font-size:15px;">
+                        <tr><td align="left">请填写审核不通过原因：</td></tr>
+                        <tr>
+                            <td align="center">
+                                @Html.TextAreaFor(m => m.审核数据.审核不通过原因, new { rows = "5", cols = "50",style="resize:none;" })
+                            </td>
+                        </tr>
+                        <tr><td align="center"><input style="width:100px; height:40px; border:none; font-size:16px; font-weight:bolder; color:white; background-color:#506605; line-height:40px; text-align:center;" type="submit" value="确定" /></td></tr>
+                    </table>
+                </form>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</div>
+<div id="qualification" style="display:none;">
+    <div style="position:fixed; z-index:20; top:0px; left:0px; text-align:center; right:0; bottom:0px; background-color:black; height:100%; opacity:0.5;-moz-opacity:0.5;filter:alpha(opacity=50); width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="width:100%;position:fixed; z-index:20;left:0px;top:5%;min-height:330px; font-size:18px; text-align:left; padding-left:20px; line-height:30px;">
+        <div style="width:600px;position:relative; border:1px solid red; margin:0px auto;z-index:12; height:auto; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#qualification')">×</a></div>
+            <div style="float:right; width:100%; font-size:12px;">
+                <h2 style="text-align:center;">新增资质证书</h2>
+                <form action="/运营团队后台/Qualify_Manage" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <table width="100%">
+                        <tr>
+                            <td height="50" style="text-align:right;">证书名称：</td>
+                            <td>
+                                <input placeholder="资质证书名称" type="text" style="display:inline-block;width:150px;" class="form-control" value="" name="资质证书列表[0].名称" />
+                            </td>
+                            <td height="50" style="text-align:right;">资质级别：</td>
+                            <td>
+                                <input placeholder="资质级别" type="text" style="display:inline-block; width:150px;" class="form-control" value="" name="资质证书列表[0].等级" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="50" style="text-align:right;">
+                                发证机构名称：
+                            </td>
+                            <td>
+                                <input type="text" placeholder="发证机构名称" style="display:inline-block;width:150px;" class="form-control" value="" name="资质证书列表[0].发证机构" />
+                            </td>
+                            <td height="50" style="text-align:right;">年检日期：</td>
+                            <td>
+                                <input onfocus="WdatePicker({ isShowWeek: true })" placeholder="年检日期" type="text" style="display:inline-block; width:150px;" value="" name="资质证书列表[0].年检日期" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="50" style="text-align:right;">有效起始日期：</td>
+                            <td>
+                                <input onfocus="WdatePicker({ isShowWeek: true })" placeholder="证书有效起始日期" type="text" style="display:inline-block; width:150px;" value="" name="资质证书列表[0].有效期起始日期" />
+                            </td>
+                            <td height="50" style="text-align:right;">有效结束日期：</td>
+                            <td>
+                                <input placeholder="证书有效结束日期" onfocus="WdatePicker({isShowWeek: true })" type="text" style="display:inline-block; width:150px;" value="" name="资质证书列表[0].有效期结束日期" />
+                            </td>
+                        </tr>
+                        <tr><td height="50" style="text-align:right;">扫描件名称：</td><td><input placeholder="资质证书扫描件名称" style="display:inline-block; width:150px;" type="text" name="资质证书列表[0].资质证书电子扫描件[0].名称" /></td><td style="text-align:right;" height="50">扫描件说明：</td><td><input placeholder="扫描件简要说明" class="form-control" type="text" style="display:inline-block; width:150px;" name="资质证书列表[0].资质证书电子扫描件[0].说明" /></td></tr>
+                        <tr><td style="text-align:right;" height="50">上传扫描件：</td><td><input onchange="fileChange(this);" accept="image/jpeg" type="file" name="file" style="width:120px;" /></td></tr>
+                        <tr><td align="center" colspan="4"><input type="submit" style="background-color:green; width:100px; height:30px; cursor:pointer; font-size:16px; color:white; border:none;" value="保存" /></td></tr>
+                    </table>
+                </form>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+</div>
+<div id="service" style="display:none;">
+    <div style="position:fixed; z-index:20; top:0px; left:0px; text-align:center; right:0; bottom:0px; opacity:0.5;-moz-opacity:0.5;filter:alpha(opacity=50); background-color:black; height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="width:100%;position:fixed; z-index:21; left:0px;top:20%;min-height:330px; font-size:18px; text-align:left; padding-left:20px; line-height:30px;">
+        <div style="width:600px;position:relative; border:1px solid red; margin:0px auto; height:300px; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#service')">×</a></div>
+            <div style="float:right; width:100%; font-size:12px;">
+                <h2 style="text-align:center;">新增售后服务机构</h2>
+                <form action="/运营团队后台/AddServiceDepart" method="post">
+                    @Html.HiddenFor(m => m.Id)
+                    <table width="100%">
+                        <tr>
+                            <td width="20%" height="30" align="right">服务机构名称：</td>
+                            <td height="30" width="30%">
+                                <input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="售后服务机构列表[0].售后服务机构名称" />
+                            </td>
+                            <td height="30" width="20%" align="right">
+                                服务机构类别：
+                            </td>
+                            <td height="30" width="30%">
+                                <select onmouseover="show_tip(this)" onmouseout="hide_tip(this)" style="width:154px; margin-left:2px;" type="text" onblur="setCatorgray(this)" name="售后服务机构列表[0].售后服务机构类别">
+                                    <option value="0">未指定</option>
+                                    <option value="1">服务机构</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="30" align="right">
+                                省份：
+                            </td>
+                            <td height="30">
+                                <input type="text" name="售后服务机构列表[0].所在地.省份" onmouseover="show_tip(this)" onmouseout="hide_tip(this)" />
+                            </td>
+                            <td height="30" align="right">城市：</td>
+                            <td height="30">
+                                <input type="text" name="售后服务机构列表[0].所在地.城市" onmouseover="show_tip(this)" onmouseout="hide_tip(this)" />
+                            </td>
+                        <tr>
+                            <td height="30" align="right">
+                                区县：
+                            </td>
+                            <td height="30">
+                                <input type="text" name="售后服务机构列表[0].所在地.区县" onmouseover="show_tip(this)" onmouseout="hide_tip(this)" />
+                            </td>
+                            <td height="30" align="right">联系人：</td>
+                            <td height="30">
+                                <input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="售后服务机构列表[0].负责人联系方式.联系人" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="30" align="right">联系手机：</td>
+                            <td height="30">
+                                <input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="售后服务机构列表[0].负责人联系方式.手机" /><div class="out_box"><div class="arrow"></div><div class="con_box">请填写联系人手机号码，如13214789654</div></div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Toubiao" style="display:none;">
+    <div style="position:fixed; z-index:20; top:0px; left:0px; opacity:0.5;-moz-opacity:0.5;filter:alpha(opacity=50); text-align:center; right:0; bottom:0px; background-color:black; height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="width:100%;position:fixed; z-index:21; left:0px;top:20%;min-height:330px; font-size:18px; text-align:left; padding-left:20px; line-height:30px;">
+        <div style="width:600px;position:relative; border:1px solid red; margin:0px auto; height:300px; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#Toubiao')">×</a></div>
+            <div style="float:right; width:100%; font-size:12px;">
+                <h2 style="text-align:center;">新增招投标经历</h2>
+                <form action="/运营团队后台/AddToubiao" method="post">
+                    @Html.HiddenFor(m => m.Id)
+                    <table width="100%" style="margin-left:10px;">
+                        <tr>
+                            <td width="20%" height="30" align="right">项目名称：</td>
+                            <td width="30%" height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="历史参标记录[0].项目名称" /></td>
+
+                            <td width="20%" height="30" align="right">招标方：</td>
+                            <td width="30%" height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="历史参标记录[0].招标方" /></td>
+
+                        </tr>
+                        <tr>
+                            <td align="right" height="30">参标结果：</td>
+                            <td><select onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="历史参标记录[0].参标结果"><option value="0">请选择参标结果</option><option value="1">中标</option><option value="2">落标</option><option value="3">流标</option><option value="4">废标</option><option value="9999">其他</option></select><div class="out_box"><div class="arrow"></div><div class="con_box">请选择参标结果</div></div></td>
+
+                            <td align="right" height="30">参标时间：</td>
+                            <td><input onmouseout="hide_tip(this)" onmouseover="show_tip(this)" onfocus="WdatePicker({ isShowWeek: true })" type="text" name="历史参标记录[0].参标时间" /></td>
+                        </tr>
+                        <tr><td align="right"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" value="true" type="checkbox" name="历史参标记录[0].本平台项目" /><div class="out_box"><div class="arrow"></div><div class="con_box">是本平台项目，请选择，否则，不用选</div></div></td><td>是否是本平台项目</td></tr>
+                    </table>
+                    <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div id="Investor" style="display:none;">
+    <div style="position:fixed; z-index:20; top:0px; left:0px; text-align:center; right:0; opacity:0.5;-moz-opacity:0.5;filter:alpha(opacity=50); bottom:0px; background-color:black; height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="width:100%;position:fixed; z-index:21; left:0px;top:20%;min-height:330px; font-size:18px; text-align:left; padding-left:20px; line-height:30px;">
+        <div style="width:600px;position:relative; border:1px solid red; margin:0px auto; height:300px; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#Investor')">×</a></div>
+            <div style="float:right; width:100%; font-size:12px;">
+                <h2 style="text-align:center;">新增出资人信息</h2>
+                <form action="/运营团队后台/AddInvestor" method="post">
+                    @Html.HiddenFor(m => m.Id)
+                    <table width="100%">
+                        <tr>
+                            <td width="25%" height="30" align="right" class="lab">出资人或股东姓名：</td>
+                            <td width="25%" height="30"><input name="出资人或股东信息[0].出资人或股东姓名" type="text" value=""></td>
+                            <td width="25%" height="30" align="right" class="lab">国籍：</td>
+                            <td width="25%" height="30"><input name="出资人或股东信息[0].国籍" type="text" value=""></td>
+                        </tr>
+                        <tr>
+                            <td align="right" height="30" class="lab">身份证号：</td>
+                            <td height="30"><input name="出资人或股东信息[0].身份证号码" type="text" value=""></td>
+                            <td height="30" align="right" class="lab">出资人或股东性质：</td>
+                            <td height="30">
+                                <input name="出资人或股东信息[0].出资人或股东性质" type="text" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="30" align="right" class="lab">出资金额(万元)：</td>
+                            <td height="30"><input data-val="true" name="出资人或股东信息[0].出资金额" type="text" value="0"></td>
+                            <td align="right" class="lab">所占比例(%)：</td>
+                            <td><input name="出资人或股东信息[0].所占比例" type="text" value="0"></td>
+                        </tr>
+                    </table>
+                    <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div id="Financial" style="display:none;">
+    <div style="position:fixed; z-index:20; top:0px; left:0px; text-align:center; right:0; opacity:0.5;-moz-opacity:0.5;filter:alpha(opacity=50); bottom:0px; background-color:black; height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="width:100%;position:fixed; z-index:21; left:0px;top:20%;min-height:330px; font-size:18px; text-align:left; padding-left:20px; line-height:30px;">
+        <div style="width:600px;position:relative; border:1px solid red; margin:0px auto; height:400px; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#Financial')">×</a></div>
+            <div style="float:right; width:100%; font-size:12px;">
+                <h2 style="text-align:center;">新增财务信息</h2>
+                <form action="/运营团队后台/AddFinancial" method="post">
+                    @Html.HiddenFor(m => m.Id)
+                    <table width="100%" style="margin-left:-20px;">
+                        <tr>
+                            <td height="30" width="29%" align="right">年份：</td>
+                            <td height="30" width="21%"><input onmouseover="show_tip(this)" name="财务状况信息[0].年份" type="text" value="0"></td>
+                            <td height="30" width="23%" align="right">会计事务所名称：</td>
+                            <td height="30" width="27"><input name="财务状况信息[0].会计事务所名称" type="text" value=""></td>
+                        </tr>
+                        <tr><td height="30" align="right">会计事务所联系电话：</td><td><input name="财务状况信息[0].会计事务所联系电话" type="text" value=""></td><td height="30" align="right">资产总额(万元)：</td><td><input name="财务状况信息[0].资产总额" type="text" value="0.00"></td></tr>
+                        <tr><td height="30" align="right">负债总额(万元)：</td><td><input name="财务状况信息[0].负债总额" type="text" value="0.00" /></td><td height="30" align="right">资产负债率(%)：</td><td><input name="财务状况信息[0].资产负债率" type="text" value="0.00" /></td></tr>
+                        <tr><td height="30" align="right">销售收入(万元)：</td><td><input name="财务状况信息[0].销售收入" type="text" value="0.00"></td><td height="30" align="right">利润总额：</td><td><input name="财务状况信息[0].利润总额" type="text" value="0.00"></td></tr>
+                        <tr><td height="30" align="right">净利润：</td><td><input name="财务状况信息[0].净利润" type="text" value="0.00"></td><td colspan="2" align="right"><input name="财务状况信息[0].会计报表是否经注册会计师审计" type="checkbox" value="true">会计报表是否经注册会计师审计</td></tr>
+                        <tr><td height="30" align="right">资本金(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 净利润 必需是一个数字。" data-val-required="*请输入利润总额" name="财务状况信息[0].资本金" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写实收资本,如2200</div></div></td></tr>
+                    </table>
+                    <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="bg_outdiv">
+        <div class="bg_outdiv_left">
+            @Html.Action("LeftMenu", "布局")
+        </div>
+        <div class="bg_outdiv_right" style="z-index:1;">
+            <div class="title-base-out">
+                <div class="title-base-middle">
+                    <div class="title-base-inner">修改供应商信息</div>
+                </div>
+            </div>
+            @using (Html.BeginForm("Modify_SupplierInfo", "运营团队后台", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div id="supplierarea">
+                    @if (Model.供应商用户信息.协议供应商所属地区 != null && Model.供应商用户信息.协议供应商所属地区.Count() != 0)
+                    {
+                        int i = 0;
+                        foreach (var item in Model.供应商用户信息.协议供应商所属地区)
+                        {
+                            <input type="hidden" name="a@(i)" value="@item.地域" />
+                        }
+                    }
+                </div>
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.企业基本信息.地图坐标)
+                @Html.HiddenFor(m => m.供应商用户信息.已提交)
+                @Html.HiddenFor(m => m.工商注册信息.已填写完整)
+                @Html.HiddenFor(m => m.企业联系人信息.已填写完整)
+                @Html.HiddenFor(m => m.法定代表人信息.已填写完整)
+                @Html.HiddenFor(m => m.企业基本信息.已填写完整)
+                @Html.HiddenFor(m => m.税务信息.已填写完整)
+                @Html.HiddenFor(m => m.营业执照信息.已填写完整)
+                @Html.HiddenFor(m => m.供应商用户信息.已填写完整)
+                @Html.HiddenFor(m => m.企业基本信息.所属行业, new { id = "hidden" })
+                @Html.HiddenFor(m => m.企业基本信息.所属行业二级分类, new { id = "twoClass" })
+                <div class="gys_znxx_box" style="border:none;">
+                    <div style="width:940px;overflow: hidden;margin:8px auto;">
+                        <div class="list">
+                            <a onclick="checks(this, '.First_Page')">企业基本信息</a><a onclick="checks(this, '.Second_Page')">联系人信息</a><a onclick="checks(this, '.Fifth_Page')">法人代表</a><a onclick="checks(this, '.Third_Page')">营业信息</a><a onclick="checks(this, '.Forth_Page')">财务信息</a><a onclick="checks(this, '.six_Page')">税务信息</a><a onclick="checks(this, '.seven_Page')">参标经历</a><a onclick="checks(this, '.eight_Page')">出资人信息</a><a onclick="checks(this, '.nine_Page')" style="border-right:none;">售后服务机构</a>
+                        </div>
+                        <div class="First_Page" style="margin-left:0px; border:1px solid rgb(202, 195, 195); margin-top:0px;">
+                            <div>
+                                <div id="title_div" class="other_title title_addsupplier">企业基本信息</div>
+                                <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto;">
+                                    <table width="90%" style="margin-left:30px;">
+                                        <tr>
+                                            <td width="15%" align="right">企业中文名称：</td>
+                                            <td width="35%">
+
+                                                @Html.TextBoxFor(m => m.企业基本信息.企业名称)
+
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.企业名称)
+                                            </td>
+                                            <td width="25%" align="right" class="lab">企业英文名称：</td>
+                                            <td width="25%">
+                                                @Html.TextBoxFor(m => m.企业基本信息.英文名称)
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.企业名称)
+                                        </tr>
+                                        <tr>
+                                            <td width="25%" align="right" class="lab">企业简称：</td>
+                                            <td width="25%">
+                                                @Html.TextBoxFor(m => m.企业基本信息.简称)
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.简称)
+                                            </td>
+                                            <td width="15%" align="right">注册地址：</td>
+                                            <td width="35%">
+                                                @Html.TextBoxFor(m => m.企业基本信息.注册地址)
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.注册地址)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab">邮政编码：</td>
+                                            <td>
+                                                @Html.TextBoxFor(m => m.企业基本信息.邮政编码)
+
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.邮政编码)
+                                            </td>
+                                            <td align="right">成立时间：</td>
+                                            <td>
+
+                                                @Html.TextBoxFor(m => m.企业基本信息.成立时间, new { onfocus = "WdatePicker({isShowWeek:true})" })
+
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.成立时间)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="25%" align="right" class="lab">企业信用：</td>
+                                            <td width="25%">
+                                                @Html.EnumDropDownListFor(m => m.供应商用户信息.信用等级信息.信用等级)
+                                                @Html.ValidationMessageFor(m => m.供应商用户信息.信用等级信息.信用等级)
+                                            </td>
+                                            <td width="25%" align="right" class="lab">信用评定机构：</td>
+                                            <td width="25%">
+                                                @Html.TextBoxFor(m => m.供应商用户信息.信用等级信息.信用等级评定机构)
+                                                @Html.ValidationMessageFor(m => m.供应商用户信息.信用等级信息.信用等级评定机构)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab">信用评定时间：</td>
+                                            <td>
+                                                @Html.TextBoxFor(m => m.供应商用户信息.信用等级信息.评定时间, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })
+                                                @Html.ValidationMessageFor(m => m.供应商用户信息.信用等级信息.评定时间)
+                                            </td>
+                                            <td align="right" class="lab">网站地址：</td>
+                                            <td>
+                                                @Html.TextBoxFor(m => m.企业基本信息.网站网址)
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.网站网址)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab">经营类型：</td>
+                                            <td>
+
+                                                @Html.EnumDropDownListFor(m => m.企业基本信息.经营类型, new { @style = "width:153px; margin-left:2px;" })
+
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.经营类型)
+                                            </td>
+                                            <td align="right" class="lab">经营子类型：</td>
+                                            <td>
+                                                @Html.EnumDropDownListFor(m => m.企业基本信息.经营子类型, new { @style = "width:153px; margin-left:2px;" })
+
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.经营子类型)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab">员工人数：</td>
+                                            <td>
+
+                                                @Html.EnumDropDownListFor(m => m.企业基本信息.员工人数, new { @style = "width:153px; margin-left:2px;" })
+                                                <div class="out_box">
+                                                    <div class="arrow"></div>
+                                                    <div class="con_box">请选择员工人数</div>
+                                                </div>
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.员工人数)
+                                            </td>
+                                            <td align="right" class="lab">经济性质：</td>
+                                            <td>
+                                                @Html.EnumDropDownListFor(m => m.企业基本信息.经济性质, new { @style = "width:153px; margin-left:2px;" })
+
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.经济性质)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">所属管理单位：</td>
+                                            <td >@Html.EnumDropDownListFor(m => m.供应商用户信息.所属管理单位)</td>
+                                            <td align="right" class="lab">供应商类型：</td>
+                                            <td>
+                                                @Html.EnumDropDownListFor(m => m.供应商用户信息.供应商类型, new { @style = "width:153px; margin-left:2px;" })
+
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.经济性质)
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab">所属地域：</td>
+                                            <td colspan="3">
+
+                                                @Html.HiddenFor(m => m.所属地域.省份, new { id = "provence" })
+                                                @Html.HiddenFor(m => m.所属地域.城市, new { id = "city" })
+                                                @Html.HiddenFor(m => m.所属地域.区县, new { id = "area" })
+                                                <select id="deliverprovince" name="deliverprovince" style="width:153px; margin-left:2px;"></select>
+                                                <select id="delivercity" name="delivercity" style="width:153px; margin-left:2px;"></select>
+                                                <select id="deliverarea" name="deliverarea" style="width:153px; margin-left:2px;"></select>
+                                                <div class="out_box">
+                                                    <div class="arrow"></div>
+                                                    <div class="con_box">请选择贵企业所在地区</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top">展示图片：</td>
+                                            <td colspan="3">
+                                                @if (Model.供应商用户信息.供应商图片 != null && Model.供应商用户信息.供应商图片.Count() != 0)
+                                                {
+                                                    for (int i = 0; i < Model.供应商用户信息.供应商图片.Count(); i++)
+                                                    {
+                                                        if (System.IO.File.Exists(Server.MapPath(@Model.供应商用户信息.供应商图片[i])))
+                                                        {
+                                                            <span style="display:inline-block;">
+                                                                <a style="display:block; position:absolute; width:15px;height:15px; margin-left:85px; background-color:red; cursor:pointer; line-height:15px; text-align:center; color:white;" title="删除" href="/运营团队后台/Del_gysPic?index=@i&id=@Model.Id">×</a>
+                                                                <a target="_blank" title="点击查看大图" href="@(Model.供应商用户信息.供应商图片[i])"><img height="50" width="100" src="@(Model.供应商用户信息.供应商图片[i])" /></a>
+                                                            </span>
+                                                        }
+                                                    }
+
+
+                                                }
+                                                <span style="display:none;">
+                                                    <input type="file" style="display:inline; width:120px;" name="file" />
+                                                    <em style="color:red;">注：请上传2M以下的jpg格式的彩色图片</em>
+                                                </span>
+                                                <a href="###" onclick="modify(this)" style="color:red; font-size:16px; text-decoration:underline;">添加展示图</a>
+                                                <span></span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab" valign="top">企业简介：</td>
+                                            <td align="left" colspan="3">
+
+                                                @Html.TextAreaFor(m => m.企业基本信息.企业简介, new { cols = "80", rows = "5", style = "resize:none;" })
+
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.企业简介)
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div>
+                                <div id="Service" style="font-size:14px;">
+                                    <div id="title_div" class="gys_xttz_topbg" style="border-bottom:none;">
+                                        <div class="other_title">
+                                            可提供商品类别<a id="addtype" style="cursor:pointer; text-decoration:underline;" onclick="showBox('#Product')">【新增】</a><a target="_blank" href="/运营团队后台/GoodExamine?name=@Model.企业基本信息.企业名称" class="good_link">(已上传@(ViewData["goods"])件商品)</a>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <table style="width:100%">
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <div class="gys_znxx_content" style="width:auto">
+                                                            <table id="addedContainer" width="100%" cellpadding="0" cellspacing="0">
+                                                                <tr><th width="20%">一级分类名</th><th width="70%">二级分类名</th><th width="10%">操作</th></tr>
+                                                                @if (Model.可提供产品类别列表 != null && Model.可提供产品类别列表.Count() != 0)
+                                                                {
+                                                                    for (int i = 0; i < Model.可提供产品类别列表.Count(); i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td style="text-align:center;">@Model.可提供产品类别列表[i].一级分类</td>
+                                                                            <td>
+                                                                                @if (Model.可提供产品类别列表[i].二级分类 != null && Model.可提供产品类别列表[i].二级分类.Count() != 0)
+                                                                                {
+                                                                                    string s = "";
+                                                                                    foreach (var m in Model.可提供产品类别列表[i].二级分类)
+                                                                                    {
+                                                                                        <text>@(m)，</text>
+                                                                                    }
+                                                                                }
+                                                                            </td>
+                                                                            <td style="text-align:center;"><a id="addtype" lang="@Model.可提供产品类别列表[i].一级分类" href="###" onclick="mdialog(this,'#modifyProduct')">修改</a><a style="color:red;" href="/运营团队后台/delGtype?index=@i&id=@Model.Id">删除</a></td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                @if (Model.资质证书列表 != null && Model.资质证书列表.Count() != 0)
+                                {
+                                    <div id="Service1" style="font-size:14px;">
+                                        <div id="title_div" class="gys_xttz_topbg" style="border-bottom:none;">
+                                            <div class="other_title">
+                                                资质证书列表<a href="###" onclick="showBox('#qualification')">【新增】</a>
+                                            </div>
+                                        </div>
+                                        <div class="gys_znxx_content" style="width:auto">
+                                            <table id="tb" cellspacing="0" width="100%">
+                                                <tr>
+                                                    <th style="text-align:center;">资质证书名称</th>
+                                                    <th style="text-align:center;">等级</th>
+                                                    <th style="text-align:center;">发证机构</th>
+                                                    <th style="text-align:center;">年检日期</th>
+                                                    <th style="text-align:center;">操作</th>
+                                                </tr>
+                                                @for (int i = 0; i < Model.资质证书列表.Count(); i++)
+                                                {
+                                                    if (Model.资质证书列表[i].资质证书电子扫描件 != null && Model.资质证书列表[i].资质证书电子扫描件.Count() != 0)
+                                                    {
+                                                        if (!string.IsNullOrWhiteSpace(Model.资质证书列表[i].资质证书电子扫描件[0].路径))
+                                                        {
+                                                            <tr>
+                                                                <td width="20%">@Model.资质证书列表[i].名称</td>
+                                                                <td width="20%">@Model.资质证书列表[i].等级</td>
+                                                                <td width="20%">@Model.资质证书列表[i].发证机构</td>
+                                                                <td width="20%">@Model.资质证书列表[i].年检日期.ToString("yyyy-MM-dd")</td>
+                                                                <td width="20%">
+                                                                    <a href="@Model.资质证书列表[i].资质证书电子扫描件[0].路径" target="_blank">查看</a>
+                                                                    <a href="/运营团队后台/Qualify_Detail?index=@i&id=@Model.Id" style="margin-right:10px;margin-left:10px;">修改</a><a href="###" onclick="del_qualify(@i)">删除</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                        else
+                                                        {
+                                                            <tr>
+                                                                <td width="20%">@Model.资质证书列表[i].名称</td>
+                                                                <td width="20%">@Model.资质证书列表[i].等级</td>
+                                                                <td width="20%">@Model.资质证书列表[i].发证机构</td>
+                                                                <td width="20%">@Model.资质证书列表[i].年检日期.ToString("yyyy-MM-dd")</td>
+                                                                <td width="20%">
+                                                                    <a href="/运营团队后台/Qualify_Detail?index=@i&id=@Model.Id" class="btn btn-primary btn-sm" style="margin-right:10px;">修改</a><a class="btn btn-danger btn-sm" onclick="del_qualify(@i)">删除</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </table>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div>
+                                @if (Model.供应商用户信息.协议供应商所属地区 != null && Model.供应商用户信息.协议供应商所属地区.Count() != 0)
+                                {
+                                    <div id="Service1" style="font-size:14px;">
+                                        <div id="title_div" class="gys_xttz_topbg" style="border-bottom:none;">
+                                            <div class="other_title">协议供应商所属地域<a href="###" onclick="showBox('#gysarea')">【新增】</a></div>
+                                        </div>
+                                        <div class="gys_znxx_content" style="width:auto">
+                                            <table id="oldarea" width="100%" cellpadding="0" cellspacing="0">
+                                                <tr><th>省份</th><th>城市</th><th>区县</th><th>操作</th></tr>
+                                                @if (Model.供应商用户信息.协议供应商所属地区 != null && Model.供应商用户信息.协议供应商所属地区.Count() != 0)
+                                                {
+                                                    for (int index = 0; index < Model.供应商用户信息.协议供应商所属地区.Count(); index++)
+                                                    {
+                                                        <tr><td>@Model.供应商用户信息.协议供应商所属地区[index].省份</td><td>@Model.供应商用户信息.协议供应商所属地区[index].城市</td><td>@Model.供应商用户信息.协议供应商所属地区[index].区县</td><td width="10%"><a href="###" onclick="delArea(@index,this,@Model.Id)">删除</a></td></tr>
+                                                    }
+                                                }
+                                            </table>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div>
+                                <div id="title_div" class="other_title title_addsupplier">其他信息</div>
+                                <div class="gys_znxx_box" style="width:95%; height:auto; margin-left:auto; margin-right:auto; margin-bottom:10px;">
+                                    <table width="80%" style="margin-left:20px; margin-top:10px; margin-bottom:10px;">
+                                        <tr>
+                                            <td>@Html.CheckBoxFor(m => m.供应商用户信息.协议供应商, new { @type = "checkbox", id = "area1" })</td>
+                                            <td align="left">是否是协议供应商</td>
+                                            <td>@Html.CheckBoxFor(m => m.供应商用户信息.应急供应商, new { @type = "checkbox" })</td>
+                                            <td align="left">是否是应急供应商</td>
+                                            @if (Model.供应商用户信息.年检列表 != null && Model.供应商用户信息.年检列表.ContainsKey(DateTime.Now.Year.ToString()))
+                                            {
+                                                <td>
+                                                    <input type="checkbox" checked="checked" value="1" class="nianshen" name="nianshen" />
+                                                    @Html.HiddenFor(m => m.供应商用户信息.年检列表)
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td><input type="checkbox" value="0" class="nianshen" name="nianshen" /></td>
+                                            }
+                                            <td align="left">是否通过年检</td>
+                                            <td>@Html.CheckBoxFor(m => m.供应商用户信息.符合入库标准, new { @type = "checkbox", id = "rkbz" })是否符合入库标准</td>
+                                            <td><input type="checkbox" name="Sendmsg" id="msg" value="-1" onclick="message(this)"/>发送短信</td>
+                                        </tr>
+                                    </table>
+                                    <table width="100%" style="margin-left:20px; margin-top:10px; margin-bottom:10px;">
+                                        <tr>
+                                            <td align="left">入库级别：@Html.EnumDropDownListFor(m => m.供应商用户信息.入库级别)</td>
+                                            <td align="left">
+                                                入网方式：@Html.EnumDropDownListFor(m => m.供应商用户信息.用户来源)
+                                            </td>
+                                            <td>
+                                                认证级别：@Html.EnumDropDownListFor(m => m.供应商用户信息.认证级别)
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Second_Page" style="margin-left:0px; display:none;border-color:rgb(207, 197, 197); margin-top:0px; border-style:solid; border-width:1px;">
+                            <div id="title_div" class="other_title title_addsupplier">联系人信息</div>
+                            <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto; margin-bottom:10px;">
+                                <table width="80%" style="margin-bottom:10px;" cellspacing="5">
+                                    <tr>
+                                        <td width="25%" align="right">
+                                            联系人：
+                                        </td>
+                                        <td width="25%">
+
+                                            @Html.TextBoxFor(m => m.企业联系人信息.联系人姓名)
+
+                                            @Html.ValidationMessageFor(m => Model.企业联系人信息.联系人姓名)
+                                        </td>
+                                        <td width="25%" align="right">
+                                            性别：
+                                        </td>
+                                        <td width="25%">
+                                            @Html.EnumDropDownListFor(m => m.企业联系人信息.联系人性别, new { @style = "width:153px; margin-left:2px;" })
+
+                                            @Html.ValidationMessageFor(m => Model.企业联系人信息.联系人性别)
+                                        </td>
+                                    <tr>
+                                        <td align="right">
+
+                                            电子邮件：
+                                        </td>
+                                        <td>
+
+                                            @Html.EditorFor(m => m.企业联系人信息.联系人邮箱)
+
+                                            @Html.ValidationMessageFor(m => Model.企业联系人信息.联系人邮箱)
+                                        </td>
+                                        <td align="right">
+                                            手机：
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.企业联系人信息.联系人手机)
+
+                                        </td>
+                                    <tr>
+                                        <td align="right">
+                                            固定电话：
+                                        </td>
+                                        <td>
+
+                                            @Html.EditorFor(m => m.企业联系人信息.联系人固定电话)
+
+                                        </td>
+                                        <td align="right">
+                                            微信：
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.企业联系人信息.联系人传真)
+
+                                            @Html.ValidationMessageFor(m => Model.企业联系人信息.联系人传真)
+                                        </td>
+                                    </tr>
+                                    <tr><td align="right">联系人地址：</td><td colspan="3">@Html.EditorFor(m => m.企业联系人信息.联系人地址)</td></tr>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div class="Third_Page" style="margin-left:0px;display:none;border-color:rgb(207, 197, 197); margin-top:0px; border-style:solid; border-width:1px;">
+                            <div id="title_div" class="other_title title_addsupplier">营业信息</div>
+                            <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-bottom:10px; margin-right:auto;">
+                                <div style="margin-left:20px;">
+                                    <table width="100%" style="margin-left:-30px; margin-bottom:10px;">
+                                        <tr>
+                                            <td width="30%" align="right">组织机构代码：</td>
+                                            <td width="20%">
+
+                                                @Html.EditorFor(m => m.工商注册信息.组织机构代码)
+
+                                                @Html.ValidationMessageFor(m => m.工商注册信息.组织机构代码)
+                                            </td>
+                                            <td width="30%" align="right">基本账户开户银行：</td>
+                                            <td width="20%">
+
+                                                @Html.EditorFor(m => m.工商注册信息.基本账户开户银行)
+
+                                                @Html.ValidationMessageFor(m => m.工商注册信息.基本账户开户银行)
+                                            </td>
+                                        </tr>
+                                        <tr>
+
+                                            <td align="right">基本账户银行帐号：</td>
+                                            <td>
+
+                                                @Html.EditorFor(m => m.工商注册信息.基本账户银行帐号)
+
+                                                @Html.ValidationMessageFor(m => m.工商注册信息.基本账户银行帐号)
+                                            </td>
+                                            <td align="right">营业执照注册号：</td>
+                                            <td>
+
+                                                @Html.EditorFor(m => m.营业执照信息.营业执照注册号)
+
+
+                                                @Html.ValidationMessageFor(m => m.营业执照信息.营业执照注册号)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">
+                                                @Html.EditorFor(m => m.工商注册信息.基本账户开户银行资信证明)
+
+                                                @Html.ValidationMessageFor(m => m.工商注册信息.基本账户开户银行资信证明)
+                                            </td>
+                                            <td>基本账户开户银行资信证明</td>
+                                            <td align="right">营业执照发证机关：</td>
+                                            <td>
+
+                                                @Html.EditorFor(m => m.营业执照信息.营业执照发证机关)
+
+                                                @Html.ValidationMessageFor(m => m.营业执照信息.营业执照发证机关)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">
+
+                                                @Html.EditorFor(m => m.工商注册信息.近3年缴纳社会保证金证明)
+
+                                                @Html.ValidationMessageFor(m => m.工商注册信息.近3年缴纳社会保证金证明)
+                                            </td>
+                                            <td>是否有近3年缴纳社会保险金证明</td>
+                                            <td align="right">营业执照注册地址：</td>
+                                            <td>
+
+                                                @Html.EditorFor(m => m.营业执照信息.营业执照注册地址)
+
+                                                @Html.ValidationMessageFor(m => m.营业执照信息.营业执照注册地址)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">
+
+                                                @Html.EditorFor(m => m.工商注册信息.近3年有无重大违法记录)
+
+                                                @Html.ValidationMessageFor(m => m.工商注册信息.近3年有无重大违法记录)
+                                            </td>
+                                            <td>是否有行贿犯罪档案查询结果告知函</td>
+                                            <td align="right">营业执照注册资金(万元)：</td>
+                                            <td>
+
+                                                @Html.EditorFor(m => m.营业执照信息.营业执照注册资金)
+
+                                                @Html.ValidationMessageFor(m => m.营业执照信息.营业执照注册资金)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">营业执照有效期类型：</td>
+                                            <td>
+
+                                                @Html.EnumDropDownListFor(m => m.营业执照信息.营业执照有效期类型)
+
+                                                @Html.ValidationMessageFor(m => m.营业执照信息.营业执照有效期类型)
+                                            </td>
+                                            <td align="right">营业执照有效期起始日期：</td>
+                                            <td>
+
+                                                @Html.TextBoxFor(m => m.营业执照信息.营业执照有效期起始日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
+
+                                                @Html.ValidationMessageFor(m => m.营业执照信息.营业执照有效期起始日期)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">营业执照有效期结束日期：</td>
+                                            <td>
+
+                                                @Html.TextBoxFor(m => m.营业执照信息.营业执照有效期结束日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
+
+                                                @Html.ValidationMessageFor(m => m.营业执照信息.营业执照有效期结束日期)
+                                            </td>
+                                            <td align="right">营业执照最近年检日期：</td>
+                                            <td>
+
+                                                @Html.TextBoxFor(m => m.营业执照信息.营业执照最近年检日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
+
+                                                @Html.ValidationMessageFor(m => m.营业执照信息.营业执照最近年检日期)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top" align="right">经营范围（主营）：</td>
+                                            <td colspan="3">
+                                                @Html.TextAreaFor(m => m.营业执照信息.经营范围, new { cols = "80", rows = "5", style = "resize:none;" })
+                                                @Html.ValidationMessageFor(m => m.营业执照信息.经营范围)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top" align="right">经营范围（兼营）：</td>
+                                            <td colspan="3">
+                                                @Html.TextAreaFor(m => m.营业执照信息.兼营范围, new { cols = "80", rows = "5", style = "resize:none;" })
+                                                @Html.ValidationMessageFor(m => m.营业执照信息.兼营范围)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="30%" align="right">组织机构代码证电子扫描件：</td>
+                                            <td width="70%" colspan="3">
+                                                <span style="display:none;">
+                                                    <input type="file" style="display:inline; width:120px;" name="org" />
+                                                    <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em>
+                                                </span>
+                                                @if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.组织机构代码证电子扫描件)))
+                                                {
+                                                    <a href="###" onclick="modify(this)">修改</a>
+                                                    <span>
+                                                        <a href="@Model.工商注册信息.组织机构代码证电子扫描件" target="_blank" title="点击查看大图"><img width="50" height="30" src="@Model.工商注册信息.组织机构代码证电子扫描件" /></a>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <a href="###" onclick="modify(this)">点击添加</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">基本账户开户银行资信证明电子扫描件:</td>
+                                            <td colspan="3">
+                                                <span style="display:none;">
+                                                    <input type="file" style="display:inline; width:120px;" name="bank" />
+                                                    <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em>
+                                                </span>
+                                                @if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.基本账户开户银行资信证明电子扫描件)))
+                                                {
+                                                    <a href="###" onclick="modify(this)">修改</a>
+                                                    <span>
+                                                        <a href="@Model.工商注册信息.基本账户开户银行资信证明电子扫描件" target="_blank" title="点击查看大图"><img width="50" height="30" src="@Model.工商注册信息.基本账户开户银行资信证明电子扫描件" /></a>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <a href="###" onclick="modify(this)">点击添加</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td width="45%" align="right">近3年缴纳社会保证金证明电子扫描件：</td>
+                                            <td width="55%" colspan="3">
+                                                <span style="display:none;">
+                                                    <input type="file" style="display:inline; width:120px;" name="social" />
+                                                    <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em>
+                                                </span>
+                                                @if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.近3年缴纳社会保证金证明电子扫描件)))
+                                                {
+                                                    <a href="###" onclick="modify(this)">修改</a>
+                                                    <span>
+                                                        <a href="@Model.工商注册信息.近3年缴纳社会保证金证明电子扫描件" target="_blank" title="点击查看大图"><img width="50" height="30" src="@Model.工商注册信息.近3年缴纳社会保证金证明电子扫描件" /></a>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <a href="###" onclick="modify(this)">点击添加</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">行贿犯罪档案查询结果告知函：</td>
+                                            <td colspan="3">
+                                                <span style="display:none;">
+                                                    <input type="file" style="display:inline; width:120px;" name="illegal" />
+                                                    <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em>
+                                                </span>
+                                                @if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.近3年有无重大违法记录电子扫描件)))
+                                                {
+                                                    <a href="###" onclick="modify(this)">修改</a>
+                                                    <span>
+                                                        <a href="@Model.工商注册信息.近3年有无重大违法记录电子扫描件" target="_blank" title="点击查看大图"><img width="50" height="30" src="@Model.工商注册信息.近3年有无重大违法记录电子扫描件" /></a>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <a href="###" onclick="modify(this)">点击添加</a>
+                                                }
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td align="right">营业执照电子扫描件：</td>
+                                            <td colspan="3">
+                                                <span style="display:none;">
+                                                    <input type="file" style="display:inline; width:120px;" name="sales" />
+                                                    <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em>
+                                                </span>
+                                                @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.营业执照电子扫描件)))
+                                                {
+                                                    <a href="###" onclick="modify(this)">修改</a>
+                                                    <span>
+                                                        <a href="@Model.营业执照信息.营业执照电子扫描件" target="_blank" title="点击查看大图"><img width="50" height="30" src="@Model.营业执照信息.营业执照电子扫描件" /></a>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <a href="###" onclick="modify(this)">点击添加</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">税务登记证扫描件：</td>
+                                            <td colspan="3">
+                                                <span style="display:none;">
+                                                    <input type="file" style="display:inline; width:120px;" name="sales" />
+                                                    <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em>
+                                                </span>
+                                                @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.税务登记证电子扫描件)))
+                                                {
+                                                    <a href="###" onclick="modify(this)">修改</a>
+                                                    <span>
+                                                        <a href="@Model.营业执照信息.税务登记证电子扫描件" target="_blank" title="点击查看大图"><img width="50" height="30" src="@Model.营业执照信息.税务登记证电子扫描件" /></a>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <a href="###" onclick="modify(this)">点击添加</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Forth_Page" style="margin-left:0px;display:none;border-color:rgb(207, 197, 197); margin-top:0px; border-style:solid;border-width:1px;">
+                            <div id="title_div" class="other_title title_addsupplier">
+                                财务信息<a href="###" onclick="showBox('#Financial')">【新增】</a>
+                            </div>
+                            <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto; margin-bottom:10px;">
+                                <div id="financialInfo">
+                                    <div class="gys_znxx_content">
+                                        @if (Model.财务状况信息.Count != 0)
+                                        {
+                                            <table width="97%" cellpadding="0" style="margin-left:10px;" cellspacing="0">
+                                                <tr><th>年份</th><th>会计事务所名称</th><th>会计事务所电话</th><th>会计报表是否经注册会计师审计</th><th>资产总额(万元)</th><th>负债总额(万元)</th><th>销售收入(万元)</th><th>资产负债率(%)</th><th>利润总额(万元)</th><th>净利润(万元)</th><th>资本金（万元）</th><th>操作</th></tr>
+                                                @for (int i = 0; i < Model.财务状况信息.Count; ++i)
+                                                {
+                                                    <tr>
+                                                        <td width="5%">@Model.财务状况信息[i].年份</td>
+                                                        <td width="13%">@Model.财务状况信息[i].会计事务所名称</td>
+                                                        <td width="13%">@Model.财务状况信息[i].会计事务所联系电话</td>
+                                                        <td width="7%">
+                                                            @if (Model.财务状况信息[i].会计报表是否经注册会计师审计)
+                                                            {
+                                                                <span>是</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>否</span>
+                                                            }
+                                                        </td>
+                                                        <td width="7%">@Model.财务状况信息[i].资产总额</td>
+                                                        <td width="7%">@Model.财务状况信息[i].负债总额</td>
+                                                        <td width="7%">@Model.财务状况信息[i].销售收入</td>
+                                                        <td width="7%">@Model.财务状况信息[i].资产负债率</td>
+                                                        <td width="5%">@Model.财务状况信息[i].利润总额</td>
+                                                        <td width="7%">@Model.财务状况信息[i].净利润</td>
+                                                        <td width="7%">@Model.财务状况信息[i].资本金</td>
+                                                        <td width="10%"><a href="/运营团队后台/Modify_Finance?id=@Model.Id&index=@i">修改</a><a href="/运营团队后台/Delete_Finance?id=@Model.Id&index=@i">删除</a></td>
+                                                    </tr>
+                                                }
+                                            </table>
+                                        }
+                                        else
+                                        {
+                                            <h1 style="width: 100%; text-align: center; color: red;"><em>没有财务信息，点击【新增】按钮添加财务信息</em></h1>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="Fifth_Page" style="margin-left:0px;display:none;border-color:rgb(207, 197, 197); margin-top:0px; border-style:solid;border-width:1px;">
+                            <table width="100%" style="margin-left:-15px;">
+                                <tr>
+                                    <td width="20%" align="right">法定代表人姓名：</td>
+                                    <td width="30%">
+
+                                        @Html.EditorFor(m => m.法定代表人信息.法定代表人姓名)
+
+                                        @Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人姓名)
+                                    </td>
+                                    <td width="25%" align="right">法定代表人身份证号：</td>
+                                    <td width="25%">
+                                        @Html.EditorFor(m => m.法定代表人信息.法定代表人身份证号)
+
+                                        @Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人身份证号)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">法定代表人固定电话：</td>
+                                    <td>
+
+                                        @Html.TextBoxFor(m => m.法定代表人信息.法定代表人固定电话)
+
+                                        @Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人固定电话)
+                                    </td>
+                                    <td align="right">法定代表人手机：</td>
+                                    <td>
+                                        @Html.EditorFor(m => m.法定代表人信息.法定代表人手机)
+
+                                        @Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人手机)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="30%" align="right">法定代表人身份证电子扫描件：</td>
+                                    <td colspan="3">
+                                        <span style="display:none;">
+                                            <input type="file" style="display:inline; width:120px;" name="lawperson" />
+                                            <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em>
+                                        </span>
+                                        @if (System.IO.File.Exists(Server.MapPath(@Model.法定代表人信息.法定代表人身份证电子扫描件)))
+                                        {
+                                            <a href="###" onclick="modify(this)">修改</a>
+                                            <span>
+                                                <a href="@Model.法定代表人信息.法定代表人身份证电子扫描件" target="_blank" title="点击查看大图"><img width="50" height="30" src="@Model.法定代表人信息.法定代表人身份证电子扫描件" /></a>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <a href="###" onclick="modify(this)">添加</a>
+                                            <span style="color:red;">没有法定代表人扫描件</span>
+                                        }
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="six_Page" style="margin-left:0px;display:none;border-color:rgb(207, 197, 197); margin-top:0px; border-style:solid;border-width:1px;">
+                            <div id="title_div" class="other_title title_addsupplier">税务信息</div>
+                            <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-bottom:10px; margin-right:auto;">
+                                <table width="100%" style="margin-bottom:10px; margin-left:0px;">
+                                    <tr>
+                                        <td width="30%" align="right">国税税务登记证号：</td>
+                                        <td width="20%">
+
+                                            @Html.TextBoxFor(m => m.税务信息.国税税务登记证号)
+                                            @Html.ValidationMessageFor(m => m.税务信息.国税税务登记证号)
+                                        </td>
+                                        <td width="30%" align="right">国税税务登记证发证机关：</td>
+                                        <td width="20%">
+
+                                            @Html.EditorFor(m => m.税务信息.国税税务登记证发证机关)
+                                            @Html.ValidationMessageFor(m => m.税务信息.国税税务登记证发证机关)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">国税税务登记证有效期类型：</td>
+                                        <td>
+
+                                            @Html.EnumDropDownListFor(m => m.税务信息.国税税务登记证有效期类型, new { @style = "width:153px; margin-left:2px;" })
+                                            @Html.ValidationMessageFor(m => m.税务信息.国税税务登记证有效期类型)
+                                        </td>
+                                        <td align="right">国税税务登记证有效期起始日期：</td>
+                                        <td>
+
+                                            @Html.TextBoxFor(m => m.税务信息.国税税务登记证有效期起始日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
+                                            @Html.ValidationMessageFor(m => m.税务信息.国税税务登记证有效期起始日期)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">国税税务登记证有效期结束日期：</td>
+                                        <td>
+
+                                            @Html.TextBoxFor(m => m.税务信息.国税税务登记证有效期结束日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
+                                            @Html.ValidationMessageFor(m => m.税务信息.国税税务登记证有效期结束日期)
+                                        </td>
+                                        <td align="right"> 地税税务登记证号：</td>
+                                        <td>
+
+                                            @Html.EditorFor(m => m.税务信息.地税税务登记证号)
+                                            @Html.ValidationMessageFor(m => m.税务信息.地税税务登记证号)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">地税税务登记证发证机关：</td>
+                                        <td>
+
+                                            @Html.EditorFor(m => m.税务信息.地税税务登记证发证机关)
+                                            @Html.ValidationMessageFor(m => m.税务信息.地税税务登记证发证机关)
+                                        </td>
+                                        <td align="right">地税税务登记证有效期类型：</td>
+                                        <td>
+
+                                            @Html.EnumDropDownListFor(m => m.税务信息.地税税务登记证有效期类型, new { @style = "width:153px; margin-left:2px;" })
+                                            @Html.ValidationMessageFor(m => m.税务信息.地税税务登记证有效期类型)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">地税税务登记证有效期起始日期：</td>
+                                        <td>
+
+                                            @Html.TextBoxFor(m => m.税务信息.地税税务登记证有效期起始日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
+                                            @Html.ValidationMessageFor(m => m.税务信息.地税税务登记证有效期起始日期)
+                                        </td>
+                                        <td align="right">地税税务登记证有效期结束日期:</td>
+                                        <td>
+
+                                            @Html.TextBoxFor(m => m.税务信息.地税税务登记证有效期结束日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
+                                            @Html.ValidationMessageFor(m => m.税务信息.地税税务登记证有效期结束日期)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">@Html.EditorFor(m => m.税务信息.近3年完税证明)</td>
+                                        <td colspan="3">
+
+                                            近3年完税证明
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">近3年完税证明电子扫描件:
+                                        <td colspan="3">
+                                            <span style="display:none;">
+                                                <input type="file" style="display:inline;width:120px;" name="tax" />
+                                                <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em>
+                                            </span>
+                                            @if (System.IO.File.Exists(Server.MapPath(@Model.税务信息.近3年完税证明电子扫描件)))
+                                            {
+                                                <a href="###" onclick="modify(this)">修改</a>
+                                                <span>
+                                                    <a href="@Model.税务信息.近3年完税证明电子扫描件" target="_blank" title="点击查看大图"><img src="@Model.税务信息.近3年完税证明电子扫描件" width="50" height="30" /></a>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <a href="###" onclick="modify(this)">点击添加</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div class="seven_Page" style="margin-left:0px; display:none; border:1px solid rgb(202, 195, 195); margin-top:0px;">
+                            <div>
+                                <div id="title_div" class="other_title title_addsupplier">参标经历<a href="###" onclick="showBox('#Toubiao')">【新增】</a></div>
+                                <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto; margin-bottom:10px;">
+                                    <div id="toubiao" style="border-color:rgb(207, 197, 197);  margin-bottom:10px; margin-top:10px;">
+                                        <div class="gys_znxx_content">
+                                            @if (Model.历史参标记录.Count != 0)
+                                            {
+                                                <table width="95%" style="margin-left:10px;" cellpadding="0" cellspacing="0">
+                                                    <tr><th>项目名称</th><th>招标方</th><th>参标结果</th><th>参标时间</th><th>是否是本平台项目</th><th>操作</th></tr>
+                                                    @for (int i = 0; i < Model.历史参标记录.Count; i++)
+                                                    {
+                                                        <tr>
+                                                            <td width="30%">@Model.历史参标记录[i].项目名称</td>
+                                                            <td width="20%">@Model.历史参标记录[i].招标方</td>
+                                                            <td width="10%">@Model.历史参标记录[i].参标结果</td>
+                                                            <td width="10%">@Model.历史参标记录[i].参标时间.ToString("yyyy-MM-dd")</td>
+                                                            <td width="10%">
+                                                                @if (Model.历史参标记录[i].本平台项目)
+                                                                {
+                                                                    <span>是</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>否</span>
+                                                                }
+                                                            </td>
+                                                            <td width="10%"><a href="/运营团队后台/Modify_Toubiao?id=@Model.Id&index=@i">修改</a><a href="/运营团队后台/Delete_Toubiao?id=@Model.Id&index=@i">删除</a></td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                <h1 style="width: 100%; text-align: center; color: red;"><em>没有招投标信息，点击【新增】按钮添加招投标信息</em></h1>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="eight_Page" style="margin-left:0px; display:none; border:1px solid rgb(202, 195, 195); margin-top:0px;">
+                            <div>
+                                <div id="title_div" class="other_title title_addsupplier">出资人信息<a href="###" onclick="showBox('#Investor')">【新增】</a></div>
+                                <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto; margin-bottom:10px;">
+                                    <div id="user">
+                                        <div id="financialInfo" class="gys_znxx_box" style="border:none;">
+                                            <div class="gys_znxx_content">
+                                                @if (Model.出资人或股东信息.Count != 0)
+                                                {
+                                                    <table width="93%" cellpadding="0" cellspacing="0">
+                                                        <tr><th>姓名</th><th>国籍</th><th>身份证号</th><th>出资人或股东性质</th><th>出资金额(万元)</th><th>所占比例(%)</th><th>操作</th></tr>
+                                                        @for (int i = 0; i < Model.出资人或股东信息.Count; i++)
+                                                        {
+                                                            <tr><td>@Model.出资人或股东信息[i].出资人或股东姓名</td><td>@Model.出资人或股东信息[i].国籍</td><td>@Model.出资人或股东信息[i].身份证号码</td><td>@Model.出资人或股东信息[i].出资人或股东性质</td><td>@Model.出资人或股东信息[i].出资金额</td><td>@Model.出资人或股东信息[i].所占比例</td><td><a href="/运营团队后台/Modify_Investor?id=@Model.Id&index=@i">修改</a><a href="/运营团队后台/Delete_Investor?id=@Model.Id&index=@i">删除</a></td></tr>
+                                                        }
+                                                    </table>
+                                                }
+                                                else
+                                                {
+                                                    <h1 style="width: 100%; text-align: center; color:red;"><em>没有出资人信息，点击【新增】按钮添加出资人。</em></h1>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nine_Page" style="margin-left:0px; display:none; border:1px solid rgb(202, 195, 195); margin-top:0px;">
+                            <div>
+                                <div id="title_div" class="other_title title_addsupplier">售后服务机构列表<a href="###" onclick="showBox('#service')">【新增】</a></div>
+                                <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto; margin-bottom:10px;">
+                                    <div id="user">
+                                        <div id="financialInfo" class="gys_znxx_box" style="border:none;width:auto;">
+                                            <div class="gys_znxx_content" style="width:auto">
+                                                @if (Model.售后服务机构列表 != null && Model.售后服务机构列表.Count() != 0)
+                                                {
+                                                    <table width="100%" cellspacing="0" cellpadding="0">
+                                                        <tr><th>机构名称</th><th>机构类别</th><th>所在地</th><th>联系人</th><th>联系手机</th><th>操作</th></tr>
+                                                        @for (int i = 0; i < Model.售后服务机构列表.Count(); i++)
+                                                        {
+                                                            <tr>
+                                                                <td>@Model.售后服务机构列表[i].售后服务机构名称</td>
+                                                                <td>@Model.售后服务机构列表[i].售后服务机构类别</td>
+                                                                <td>@Model.售后服务机构列表[i].所在地.地域</td>
+                                                                <td>@Model.售后服务机构列表[i].负责人联系方式.联系人</td>
+                                                                <td>@Model.售后服务机构列表[i].负责人联系方式.手机</td>
+                                                                <td><a href="/运营团队后台/Modify_Servicdepartment?id=@Model.Id&index=@i">修改</a><a href="/运营团队后台/Delete_Servicdepartment?id=@Model.Id&index=@i">删除</a></td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                }
+                                                else
+                                                {
+                                                    <h1 style="width: 100%; text-align: center; color: red;"><em>没有服务机构信息，点击【新增】添加服务机构</em></h1>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align:center;">
+                    <a lang="/运营团队后台/Accept?id=@Model.Id" onclick="sendmsg(this)" style="display:inline-block; width:100px; height:40px; font-size:16px; color:white; font-weight:bolder; background-color:#506605; border:none; line-height:40px; text-align:center;">审核通过</a>
+                    <input class="front_login_rightbox_button" style="width:100px;background:#506605" type="submit" value="保存修改" />
+                    <a href="/运营团队后台/ReSubmit?id=@Model.Id&code=1" style="display:inline-block; width:100px; height:40px; color:white; border:none; background-color:#506605; line-height:40px; text-align:center; font-size:16px;">重新提交</a>
+                    <a href="###" style="display:inline-block; width:100px; height:40px; border:none; font-weight:bolder; font-size:16px; color:white; background-color:#506605; line-height:40px; text-align:center;" onclick="showBox('#f')">不通过</a>
+                    <a href="/运营团队后台/Check?id=@Model.Id&time=1" style="display:inline-block; width:100px; height:40px; color:white; border:none; background-color:#506605; line-height:40px; text-align:center; font-size:16px;">初审通过</a>
+                    <a href="/运营团队后台/Check?id=@Model.Id&time=2" style="display:inline-block; width:100px; height:40px; border:none; font-weight:bolder; font-size:16px; color:white; background-color:#506605; line-height:40px; text-align:center;">复审通过</a>
+                </div>
+            }
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        var alltype = "通用物资"
+        function setValue(data,container) {
+            var str = "";
+            var str1 = "<tr>";
+            var num = 0;
+            var rows = parseInt((data.length) / 4);
+            var maintain = parseInt((data.length) % 4);
+            for (var j = 0; j < rows; j++) {
+                var s1 = "";
+                for (var k = 0; k < 4; k++) {
+                    s1 += "<td><input type='checkbox' onclick='Set_Val()' value='" + data[num] + "'>" + data[num] + "</td>";
+                    num++;
+                }
+                str1 += s1 + "</tr>";
+            }
+            if (maintain > 0 && rows > 0) {
+                var s3 = "<tr>";
+                for (var m = 0; m < maintain; m++) {
+                    s3 += "<td><input type='checkbox' onclick='Set_Val()' value='" + data[num] + "'>" + data[num] + "</td>";
+                    num++;
+                }
+                s3 += "</tr>";
+                str1 += s3;
+            }
+            else if (maintain > 0 && rows == 0) {
+                var s3 = "<tr>";
+                for (var m = 0; m < maintain; m++) {
+                    s3 += "<td><input type='checkbox' onclick='Set_Val()' value='" + data[m] + "'>" + data[m] + "</td>";
+                }
+                s3 += "</tr>";
+                str1 += s3;
+            }
+            $(container).html(str1);
+        }
+        var name = '';
+        var which = 0;
+        var s = '';
+        function search_type(th) {
+            alltype = $(th).val();
+            var str = "";
+            name = $(th).val();
+            $.get('/运营团队后台/Search_Type/',
+                { n: name },
+                function (data) {
+                    for (var i = 0; i < data.Data.length; i++) {
+                        str += "<option value='" + data.Data[i] + "'>" + data.Data[i] + "</option>";
+                    }
+                    $("select#firstClass").html(str);
+                    searchtype("select#firstClass");
+                }
+            );
+        }
+        function Set_Val() {
+            s = '';
+            if(which==0)
+            {
+                $("table#thirdType :checkbox").each(
+                                function () {
+                                    if (this.checked) {
+                                        s += $(this).val() + ',';
+                                    }
+                                }
+                            );
+                s += "";
+                if (s != '') {
+                    $("#bt").removeAttr("disabled");
+                    $("#bt").css("background-color", "#506605");
+                }
+                else {
+                    $("#bt").attr("disabled", disabled);
+                    $("#bt").css("background-color", "gray");
+                }
+            }
+            else if(which==1)
+            {
+                $("table#sType :checkbox").each(
+                                            function () {
+                                                if (this.checked) {
+                                                    s += $(this).val() + ',';
+                                                }
+                                            }
+                                        );
+                s += "";
+                if (s != '') {
+                    $("#mbt").removeAttr("disabled");
+                    $("#mbt").css("background-color", "#506605");
+                }
+                else {
+                    $("#mbt").attr("disabled", disabled);
+                    $("#mbt").css("background-color", "gray");
+                }
+            }
+        }
+        function searchtype(th) {
+            $.get('/运营团队后台/ThirdClass', { n: $(th).val(), tpy: alltype }, function (data) { setValue(data.Data,"#thirdType"); });
+        }
+        function mdialog(th,bx) {
+            showBox(bx);
+            which = 1;
+            var firstCls = $(th).attr("lang");
+            $("#fClass").text(firstCls);
+            $.get('/运营团队后台/ThirdClass', { n: firstCls, tpy: alltype }, function (data) { setValue(data.Data, "#sType"); });
+        }
+        $(document).ready(function () {
+            if ($("select#firstClass").val() == undefined) {
+                $.get('/运营团队后台/TwoClass', { fclass: $("a#firstClass").text() }, function (data) { setValue(data.Data,"#thirdType"); });
+            }
+            else {
+                setTimeout(function () { searchtype("select#firstClass"); }, 500)
+            }
+        });
+        function sendGoodType() {
+            if(s!="")
+            {
+                var oldFirst = $("#addedContainer tr:eq(1) td:first").text();
+                var firstname = "";
+                if ($("select#firstClass").val() == undefined) {
+                    firstname = $("a#firstClass").text();
+                }
+                else {
+                    firstname = $("select#firstClass").val();
+                }
+                $.get('/运营团队后台/Add_Good_Type', { second_type: s, first_type: firstname, tpy: alltype, old: oldFirst,id:@Model.Id }, function (data) {
+                    if (data != '-1') {
+                        $("span#warn").text("添加成功").show();
+                        if (alltype == "专用物资") {
+                            $("a#addtype").hide();
+                            setTimeout("shade()", 500);
+                        }
+                        else {
+                            $("a#addtype").hide();
+                        }
+                        setTimeout("shade()", 500);
+                    }
+                    else {
+                        $("span#warn").text("添加失败！");
+                        setTimeout("shade()", 500);
+                    }
+                });
+            }
+            else
+            {
+                alert("您还没有选择二级分类");
+            }
+        }
+        function modify(th)
+        {
+            $(th).prev("span").show();
+            $(th).next("span").remove();
+            $(th).remove();
+        }
+        function del_qualify(number)
+        {
+            if(confirm("您真的要删除吗？"))
+            {
+                window.location = '/运营团队后台/Delete_Qualify?index='+number+"&id="+@Model.Id;
+            }
+        }
+        function shade() {
+            $("span#warn").hide();
+            window.location = "/运营团队后台/Modify_Supplier_Info?id=@Model.Id";
+        }
+        var areaCount=0;
+        function addarea()
+        {
+            if($('#deliverprovince1').val()==""||$('#delivercity1').val()==""||$('#deliverarea1').val()=="")
+            {
+                alert("请将省份，城市，区县填写完整");
+            }
+            else
+            {
+                var have=false;
+                for(var i=0;i<$("#supplierarea :input").length;i++)
+                {
+                    if($("#supplierarea :input:eq("+i+")").val()==$('#deliverprovince1').val()+$('#delivercity1').val()+$('#deliverarea1').val())
+                    {
+                        alert("您已经添加过了！");
+                        have=true;
+                        break;
+                    }
+                }
+                if(have==false)
+                {
+                    $("#supplierarea").append("<input type='hidden' name='供应商用户信息.协议供应商所属地区["+areaCount+"].省份' value='"+$('#deliverprovince1').val()+"'/><input type='hidden' name='供应商用户信息.协议供应商所属地区["+areaCount+"].城市' value='"+$('#delivercity1').val()+"'/><input type='hidden' name='供应商用户信息.协议供应商所属地区["+areaCount+"].区县' value='"+$('#deliverarea1').val()+"'/><input type='hidden' name='供应商用户信息.协议供应商所属地区["+areaCount+"].地域' value='"+$('#deliverprovince1').val()+$('#delivercity1').val()+$('#deliverarea1').val()+"'/>");
+                    $("#newarea").append("<tr><td>"+$('#deliverprovince1').val()+"</td><td>"+$('#delivercity1').val()+"</td><td>"+$('#deliverarea1').val()+"</td><td>"+$('#deliverprovince1').val()+$('#delivercity1').val()+$('#deliverarea1').val()+"</td></tr>");
+                    if($("table#oldarea")!=undefined)
+                    {
+                        $("table#oldarea").append("<tr><td>"+$('#deliverprovince1').val()+"</td><td>"+$('#delivercity1').val()+"</td><td>"+$('#deliverarea1').val()+"</td><td></td></tr>");
+                    }
+                    areaCount++;
+                }
+
+            }
+        }
+        function ModifyGoodType() {
+            if(s!="")
+            {
+                var firstname = $("#fClass").text();
+                $.get('/运营团队后台/Modify_Good_Type', { second_type: s, first_type: firstname,id:@Model.Id }, function (data) {
+                    if (data != '-1') {
+                        $("span#warn1").text(data).show();
+                        setTimeout("shade()", 1000);
+                    }
+                    else {
+                        $("span#warn1").text(data).show();
+                        setTimeout("shade()", 1000);
+                    }
+                });
+            }
+            else
+            {
+                alert("您还没有选择二级分类");
+            }
+        }
+        function delArea(number,th,Id)
+        {
+            $.get("/运营团队后台/DelArea",{index:number,id:Id},function(data){if(data==1){$(th).parent().parent().remove();}else{alert("出错啦");}});
+        }
+        function sendmsg(th)
+        {
+            var str=$(th).attr("lang");
+            str+="&msg="+$("#msg").val();
+            window.location=str;
+        }
+    </script>
+
+    <script type="text/javascript" language="javascript">
+        var number=@((int)Model.审核数据.审核状态)
+        $(document).ready(function (e) {
+            $(".list a:first").css({ "background-color": "rgb(94, 111, 0)", "color": "white" });
+
+            $("#供应商列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#供应商列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+        function checks(th, str) {
+            $(".list a").each(function () {
+                $(this).css({ "background-image": "url(/images/index_content_bg.jpg)", "color": "black" });
+            });
+            $(th).css({ "background-color": "rgb(94, 111, 0)", "color": "white", "background-image": "" });
+            $(".First_Page,.Second_Page,.Third_Page,.Forth_Page,.Fifth_Page,.six_Page,.seven_Page,.eight_Page,.nine_Page").hide();
+            $(str).show();
+        }
+        $(function () {
+            var optionlist = $(".industry").children();
+            optionlist.each(function (index, domEle) {
+                if ($(domEle).text() == $("#hidden").val()) {
+                    $(domEle).attr("selected", "selected")
+                }
+            });
+        });
+        function secondCls(th, th1) {
+            $.get('/运营团队后台/types',
+                { n: $(th).val() },
+                function (data) {
+                    SetVal(data.Data, th1);
+                }
+            );
+            if ($(th).val() != "请选择行业") {
+                $(th1).show();
+            }
+            else {
+                $(th1).hide();
+            }
+        }
+        function SetVal(data, th) {
+            var str = "";
+            for (var i = 0; i < data.length; i++) {
+                str += "<option value=" + data[i] + ">" + data[i] + "</option>";
+            }
+            $("select" + th).html(str);
+            $("#twoClass").val($("select" + th).val());
+        }
+        $(".industry").change(function () {
+            var val = $(".industry option:selected").text();
+            $("#hidden").val(val);
+        });
+        $("#deliverprovince").change(function () {
+            var val = $("#deliverprovince option:selected").text();
+            $("#provence").val(val);
+        });
+        $("#deliverprovince").change(function () {
+            var val = $("#deliverprovince option:selected").text();
+            $("#provence").val(val);
+        });
+        $("#delivercity").change(function () {
+            var val = $("#delivercity option:selected").text();
+            $("#city").val(val);
+        });
+        $("#deliverarea").change(function () {
+            var val = $("#deliverarea option:selected").text();
+            $("#area").val(val);
+        });
+        $("#submit_btn").click(function () {
+            var val = $("#delivercity").find("option:selected").text();
+            var vall = $("#deliverarea").find("option:selected").text();
+            $("#city").val(val);
+            $("#area").val(vall);
+        });
+        $("document").ready(function () {
+            $(":checkbox.nianshen").click(function () {
+                if (this.checked) {
+                    $(this).val("1");
+                } else {
+                    $(this).val("0");
+                }
+            });
+            $("select.twoCls").blur(function () {
+                var val = $(this).val();
+                $("#twoClass").val(val);
+            });
+        });
+        $("#area1").click(function(){
+            if(this.checked)
+            {
+                $("#gysarea").show(500);
+            }
+        });
+        $("a").each(function(){
+            if($(this).text()=="修改"||$(this).text()=="删除"||$(this).text()=="查看")
+            {
+                $(this).css("color","red");
+                $(this).mouseover(function(){$(this).css("text-decoration","underline");});
+                $(this).mouseout(function(){$(this).css("text-decoration","none");});
+            }
+        });
+        function message(th)
+        {
+            if(th.checked)
+            {
+                $(th).val(1);
+            }
+            else
+            {
+                $(th).val(-1);
+            }
+        }
+        $(document).ready(function () {
+            $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+            $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+        });
+        function show_tip(th) {
+            $(th).next("div").show();
+            $(th).next("div").css("display", "inline-block");
+        }
+        function hide_tip(th) {
+            $(th).next("div").hide();
+        }
+        function showBox(th)
+        {
+            $(th).show(500);
+        }
+        function hidebox(th) {
+            $(th).hide(500);
+        }
+    </script>

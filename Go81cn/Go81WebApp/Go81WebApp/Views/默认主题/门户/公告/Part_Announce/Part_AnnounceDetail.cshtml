@@ -1,0 +1,283 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@model Go81WebApp.Models.数据模型.内容数据模型.公告
+<style type="text/css">
+    <!--
+   
+    .successed_register {
+        height: auto;
+        overflow: hidden;
+        width: 940PX;
+        margin: 0 auto;
+        border: 1px solid skyblue;
+    }
+
+    .successed_register img {
+        float: left;
+    }
+
+    .links:hover {
+        text-decoration: underline;
+    }
+
+    .successed_register .success_content {
+        float: left;
+        margin-top: 0;
+        margin-left: 20px;
+    }
+
+    .wenxintishi {
+        text-indent: 2.0em;
+    }
+
+    .modal {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        position: fixed;
+        display: none;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: 600px;
+        margin: 15% auto;
+    }
+
+    .modal-content {
+        position: relative;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, .2);
+        border-radius: 6px;
+        outline: 0;
+        -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    }
+
+    .close {
+        margin-top: -2px;
+        float: right;
+        font-size: 21px;
+        font-weight: bold;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        filter: alpha(opacity=20);
+        opacity: .2;
+        -webkit-appearance: none;
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+    }
+
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .modal-header {
+        min-height: 16.42857143px;
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .modal-title {
+        margin: 0;
+        line-height: 1.42857143;
+    }
+
+    .modal-body {
+        position: relative;
+        padding: 15px;
+    }
+
+    .modal-footer {
+        padding: 15px;
+        text-align: right;
+        border-top: 1px solid #e5e5e5;
+    }
+
+    table {
+        border: 1px solid gray;
+        border-right: none;
+        border-bottom: none;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    table tr td {
+        border: 1px solid gray;
+        border-top: none;
+        border-left: none;
+    }
+
+    .addbt {
+        display: inline-block;
+        width: 100px;
+        text-indent: 0px;
+        height: 30px;
+        color: white;
+        text-align: center;
+        line-height: 30px;
+        font-size: 13px;
+        background-color: #0094ff;
+    }
+
+-->
+</style>
+@if (!WebApiApplication.IsIntranet)
+{
+    <style>
+         .gys_xttz_contentbox{
+        -webkit-user-select:none;
+        -moz-user-select:none;
+        -ms-user-select:none;
+        user-select:none;
+    }
+    </style>
+    <script type="text/javascript">
+        $(function(){
+            $(document).keydown(function(event) {
+                if (event.ctrlKey&&event.which==67) {
+                    alert("本页内容禁止转载，您不能进行复制，否则将追究相关法律责任！");
+                }
+            });
+        })
+    </script>
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div id="indexpagemodal1" class="modal fade" style="display:none;">
+        <div class="modal-dialog" style="margin: 10% auto;">
+            <div class="modal-content" style="height:230px;">
+                <div class="modal-header" style="padding-bottom: 20px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal1').hide();">×</button>
+                    <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">提示</div>
+                </div>
+                <div class="modal-body" style=" height:auto; overflow:hidden;">
+                    <div id="outlistdiv" style="height: 100px;  line-height:25px;">
+                        <p style="font-size:18px; text-align:center;" id="signuptipmessage"></p>
+                    </div>
+                    <div style="width: 500px; margin: 0 auto; text-align: center;"><input style=" margin-left: 0;" type="button" class="gys_ztbsearch_search_botton" value="确  定" onclick="$('#indexpagemodal1').hide();" /></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="gys_xttz_box">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">公告详情</div>
+            </div>
+        </div>
+        <div class="gys_xttz_contentbox" id="gys_xttz_contentbox">
+            @if (Model != null)
+            {
+                if (ViewData["登录"].ToString() != "1" && Model.公告信息.公告类别 != 公告.公告类别.公开招标 && Model.公告信息.公告类别 != 公告.公告类别.其他 && Model.公告信息.公告性质 != 公告.公告性质.中标结果公示)
+                {
+                    <div class="successed_register" style="margin-top: 20px;">
+                        <div style="width: 45%; height: auto; overflow: hidden; float: left; padding-left: 50px; padding-top: 30px;">
+                            <img src="~/Images/tip.png" />
+                            <div class="success_content" style="margin-left: 7px;">
+                                <p style="font-size: 18px; color: red;">此处信息需登录后查看！</p>
+                                <p>已有账号，可<a style="color: #ff0000; text-decoration: underline;" href="/登录/Login?ReturnUrl=@Url.Encode("/公告/AnnounceDetail")?id=@Model.Id">直接登录！</a></p>
+                            </div>
+                        </div>
+                        <div style="width: 45%; height: 160px; overflow: hidden; float: left; padding-bottom: 10px;">
+                            @*<div style="height: 130px; background: skyblue; width: 2px; float: left; margin-top: 20px;">&nbsp;</div>*@
+                            <div class="success_content" style="padding-left: 70px; float: left; height: auto; overflow: hidden; border-left: solid 2px skyblue; margin-top: 20px;">
+                                <p style="margin-top: 0;">没有账号？点击下方图片注册账号！</p>
+                                <div><a href="/注册/Register_Gys_Agree"><img src="/Images/gysreg.png" style="opacity: 0.8; margin-top: 0;"></a></div>
+                                <div><a href="/注册/Register_Expert_Agree"><img src="/Images/expreg.png" style="opacity: 0.8; margin-top: 10px;"></a></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="gys_xttz_contentbox_news_title" style="border-bottom:none;">@Model.内容主体.标题</div>
+                    <div class="gys_xttz_contentbox_news_from" style="border-bottom:1px solid #CCC; height:30px; width:100%;">
+                        @if (Model.公告来源 != null)
+                        {
+                            if (!string.IsNullOrEmpty(Model.公告来源.来源名称))
+                            {
+                                <span style="padding:0 10px 0 10px;">来源:<a class="links" href="@Model.公告来源.来源链接" target="_blank">@Model.公告来源.来源名称</a></span>
+                            }
+                            if (!string.IsNullOrEmpty(Model.公告信息.一级分类))
+                            {
+                                <span style="padding:0 10px 0 10px;">相关行业:@Model.公告信息.一级分类</span>
+                            }
+                        }
+                        <span style="padding:0 10px 0 10px;">时间:@Model.内容主体.发布时间.ToString("yyyy-MM-dd")</span>
+                        <span style="padding:0 10px 0 10px;">浏览次数:@Model.点击次数</span>
+                        <a class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>
+
+                    </div>
+                    <div class="gys_xttz_contentbox_news_text">
+                        @Html.Raw(Model.内容主体.内容)
+                    </div>
+                    if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
+                    {
+                        <div class="showattachment" style="width: 800px;">附件列表:</div>
+                        for (int i = 0; i < Model.内容主体.附件.Count; i++)
+                        {
+                            <div class="showattachment_list">
+                                <a target="_blank" href="@Model.内容主体.附件[i]">附件@(i + 1)</a>
+                            </div>
+                        }
+                    }
+                    if (ViewData["是否可以报名"] != null && ViewData["是否可以报名"].ToString() == "1")
+                    {
+                        <div style="text-align:center;">
+                            <input id="modiibutton" name="submitcontent" type="button" style="margin-top:20px;" onclick="signup();" class="front_login_rightbox_button" value="进行报名">
+                        </div>
+                    }
+                    if (Model.中标商品链接.Any())
+                    {
+                        <div style="text-align:center;">
+                            <a target="_blank" href="/公告/AnnounceBidGood?id=@Model.Id"><input class="front_login_rightbox_button" type="button" value="查看中标商品" /></a>    
+                        </div>
+                        
+                    }
+                }
+            }
+            else
+            {
+                <div class="gys_xttz_contentbox_news_title">暂无此类信息</div>
+            }
+        </div>
+    </div>
+
+}
+<script type="text/javascript">
+    function printpage() {
+        $(".printspan").hide();
+        document.body.innerHTML = document.getElementById('gys_xttz_contentbox').innerHTML;
+        window.print();
+    }
+    function signup() {
+        if (!confirm("报名后无法撤销，确认报名？")) {
+            return false;
+        }
+        var id = @(Model==null?0:Model.Id);
+        $.get("SignUpForAd?id=" + encodeURI(id), function (response) {
+            $("#signuptipmessage").html(response);
+            $("#indexpagemodal1").show();
+        });
+    }
+    $(document).ready(function () {
+        document.getElementById("hidetextarea").style.height = document.getElementById("hidetextarea").scrollHeight + 10 + "px";
+        $("table tr td:first").css("width","200px");
+    });
+</script>

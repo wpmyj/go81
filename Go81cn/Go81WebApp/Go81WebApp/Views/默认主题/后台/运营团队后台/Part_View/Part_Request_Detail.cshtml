@@ -1,0 +1,25 @@
+﻿@model Go81WebApp.Models.数据模型.消息数据模型.建议
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">建议详情</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div style="margin-left:20px;">
+            <table>
+                @foreach (var item in Model.对话消息)
+                {
+                    <tr><td align="left" valign="top">标题：@item.消息主体.标题"</td></tr>
+                    <tr><td>时间：@item.基本数据.修改时间</td></tr>
+                    <tr><td align="left" valign="top">内容：@Html.Raw(item.消息主体.内容)</td></tr>
+                    <tr><td align="center"><a href="/运营团队后台/Requestion_Replied" style="display:block;width:80px; height:40px;color:white; text-align:center; line-height:40px; background-color:rgb(76, 104, 62);">返回</a></td></tr>
+                    break;
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,294 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.推送数据模型
+@{
+    ViewBag.Title = "推送信息详情";
+}
+<script src="~/JS/provinceandcity_all.js"></script>
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<script>
+    KindEditor.ready(function (K) {
+        var editor = K.create('#content', {
+            cssPath: '../../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true
+        });
+        //K('input[name=submitcontent]').click(function (e) {
+        //    alert(editor.html());
+        //});
+
+    });
+</script>
+@using Go81WebApp.Models.数据模型.内容数据模型
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="gys_znxx_box">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">推送信息编辑</div>
+            </div>
+        </div>
+
+        <div class="gys_znxx_contentbox" style=" padding-bottom:10px; width:938px;">
+
+            <div class="gys_ztbsearch_contentbox" style=" margin-top: 10px; text-align:center;">
+                <div class="pushmessagetitle" style="text-align:left;">公告详情</div>
+                @try
+                {
+                    <input type="hidden" id="connectionid" name="connectionid" value="@(((公告推送)ViewData["公告推送信息"]).关联公告.公告ID)" />
+                    <div class="gys_xttz_contentbox_news_title">@(((公告推送)ViewData["公告推送信息"]).关联公告.公告.内容主体.标题)</div>
+                    <div class="gys_xttz_contentbox_news_from">@(((公告推送)ViewData["公告推送信息"]).关联公告.公告.基本数据.修改时间.ToString("yyyy-MM-dd"))</div>
+                    <div class="gys_xttz_contentbox_news_text">
+                        <textarea style=" width:880px; height:400px;" id="content" readonly="readonly">
+                            @(((公告推送)ViewData["公告推送信息"]).关联公告.公告.内容主体.内容)
+                        </textarea>
+                    </div>
+                }
+                catch
+                {
+                    <div class="gys_xttz_contentbox_news_title">无此条信息</div>
+                }
+            </div>
+            <div class="gys_ztbsearch_contentbox" style="margin-top: 10px;">
+                <div class="pushmessagetitle">推送标题</div>
+                <div style=" padding:10px;">
+                    <input type="text" style=" height:30px; width:400px;" id="pushtitle" name="pushtitle" value="@(((公告推送)ViewData["公告推送信息"]).电子邮件推送数据.标题)" />
+                </div>
+            </div>
+
+
+            <div style=" width:918px; margin:0 auto; height:auto; overflow: hidden;">
+                <div class="gys_ztbsearch_contentbox" style="margin-top: 10px; width: 450px; float: left;">
+                    <div class="pushmessagetitle" style=" width:450px;">站内消息推送</div>
+                    <div style=" padding:10px;">
+                        <select name="mail" style=" width:200px;">
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                        </select>
+                        <textarea style=" width:420px; height:100px;" name="znxxtextarea" id="znxxtextarea">@(((公告推送)ViewData["公告推送信息"]).站内消息推送数据.内容)</textarea>
+                    </div>
+                </div>
+
+                <div class="gys_ztbsearch_contentbox" style="margin-top: 10px; width: 450px; float: right;">
+                    <div class="pushmessagetitle" style=" width:450px;">短信推送</div>
+                    <div style=" padding:10px;">
+                        <select name="mail" style=" width:200px;">
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                        </select>
+                        <textarea style=" width:420px; height:100px;" name="messagetextarea" id="messagetextarea">@(((公告推送)ViewData["公告推送信息"]).短信推送数据.内容)</textarea>
+                    </div>
+                </div>
+
+                <div class="gys_ztbsearch_contentbox" style="margin-top: 10px; width: 450px; float: left;">
+                    <div class="pushmessagetitle" style=" width:450px;">邮箱推送</div>
+                    <div style=" padding:10px;">
+                        <select name="mail" style=" width:200px;">
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                        </select>
+                        <textarea style=" width:420px; height:100px;" name="mailtextarea" id="mailtextarea">@(((公告推送)ViewData["公告推送信息"]).电子邮件推送数据.内容)</textarea>
+                    </div>
+                </div>
+
+                <div class="gys_ztbsearch_contentbox" style="margin-top: 10px; width: 450px; float: right;">
+                    <div class="pushmessagetitle" style=" width:450px;" id="weixinmailtextarea">微信推送</div>
+                    <div style=" padding:10px;">
+                        <select name="mail" style=" width:200px;">
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                            <option id="1">模板1</option>
+                        </select>
+                        <textarea style=" width:420px; height:100px;" name="weixinmailtextarea" id="weixinmailtextarea">@(((公告推送)ViewData["公告推送信息"]).微信推送数据.内容)</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gys_ztbsearch_contentbox">
+                <div class="gys_ztbsearch_classbox">
+                    <div class="gys_ztbsearch_class">企业所属地区：</div>
+                    <div>
+                        <select id="deliverprovince" name="deliverprovince"></select>
+                        <select id="delivercity" name="delivercity"></select>
+                        <select id="deliverarea" name="deliverarea"></select>
+                        <script>
+                            window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                        </script>
+                    </div>
+                </div>
+                <div>
+                    <div class="gys_ztbsearch_class">&nbsp;&nbsp;所&nbsp;&nbsp;属&nbsp;&nbsp;行&nbsp;&nbsp;业：&nbsp;</div>
+                    <div class="">
+
+                        @{IEnumerable<商品分类> goodclass = ViewData["行业列表"] as IEnumerable<商品分类>;
+                        if (goodclass != null && goodclass.Any())
+                        {
+                            <select id="yjfn" style="width:108px;">
+                                <option>请选择行业</option>
+                                @foreach (var i in goodclass)
+                                {
+                                    <option class="yjfn" id="@i.Id" value="@i.分类名">@i.分类名</option>
+                                }
+                            </select>
+                        }
+                        }
+
+                    </div>
+                </div>
+                <div class="gys_ztbsearch_search" style="margin-bottom:20px;">
+
+                    <input id="ss_btn" type="button" class="gys_ztbsearch_search_botton" value="查询" onclick="getgyslist()" />
+
+
+                    <input id="ss_btn" type="button" class="gys_ztbsearch_search_botton" style="float:right; margin-right:100px;" value="确认此次选择" onclick="addgyslist()" />
+
+                </div>
+
+
+                <div class="pushmessagetitle" style="margin-top:60px;">供应商列表</div>
+                <div class="gys_znxx_content">
+                    <table width="100%" cellpadding="0" cellspacing="0" id="AdListTable">
+                        <tr>
+                            <th width="10%"><input type="checkbox" id="selectall" onclick="checkall(this)" />全选</th>
+                            <th width="10%">登录名</th>
+                            <th width="10%">联系人姓名</th>
+                            <th width="15%">企业名称</th>
+                            <th width="15%">所属行业</th>
+                            <th width="15%">联系方式</th>
+                            <th width="25%">地区</th>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            <script type="text/javascript">
+                function getgyslist() {
+                    var a = document.getElementById("deliverprovince").value + "|" + document.getElementById("delivercity").value + "|" + document.getElementById("deliverarea").value;
+                    var b = document.getElementById("yjfn").value;
+                    $.ajax({
+                        type: "POST",
+                        url: "/运营团队后台/GetGysListByCondition?place=" + encodeURI(a) + "&hy=" + encodeURI(b),
+                        success: function (msg) {
+                            if (msg != "0") {
+                                $("#AdListTable").html(msg);
+                                //document.getElementById("attachtext").value = document.getElementById("attachtext").value.replace(n + "|", "");
+                                //jQuery("#uploadify").uploadifyCancel(msg);
+                            }
+                        }
+                    });
+                }
+                function addgyslist() {
+                    $('input[type="checkbox"][name="checkboxid"]:checked').each(
+                 function () {
+                     //alert($(this).val());
+                     //alert($(this).parentNode.parentNode.innerHTML);
+                     var str = "<tr>" + $(this).parent().parent().html() + "</tr>";
+                     $("#AdListTableok").append(str);
+                 }
+             );
+                }
+            </script>
+
+
+
+            <div class="gys_ztbsearch_contentbox" style=" margin-bottom:10px;">
+                <div class="pushmessagetitle">最终选取结果</div>
+                <div class="gys_znxx_content">
+                    <table width="100%" cellpadding="0" cellspacing="0" id="AdListTableok">
+                        <tr>
+                            <th width="10%"><input type="checkbox" id="selectall" onclick="checkallok(this)" />全选</th>
+                            <th width="10%">登录名</th>
+                            <th width="10%">联系人姓名</th>
+                            <th width="15%">企业名称</th>
+                            <th width="15%">所属行业</th>
+                            <th width="15%">联系方式</th>
+                            <th width="25%">地区</th>
+                        </tr>
+                        @foreach (var item in ((公告推送)ViewData["公告推送信息"]).站内消息推送数据.收信人列表)
+                        {
+                            <tr>
+                                <td><input type="checkbox" checked="checked" id="@item.用户ID" value="@item.用户ID" name="checkboxid" /> </td>
+                                <td><a href="~/单位用户后台/AdListDetail?id=@item.用户ID" target="_blank">@item.用户数据.登录信息.登录名</a></td>
+                                <td>@((item.用户数据 as 供应商).企业联系人信息.联系人姓名)</td>
+                                <td>@((item.用户数据 as 供应商).企业基本信息.企业名称)</td>
+                                <td>@((item.用户数据 as 供应商).企业基本信息.所属行业)</td>
+                                <td>@(item.用户数据.联系方式.手机)<br />@(item.用户数据.联系方式.固定电话)</td>
+                                <td class="gys_znxx_content_tabletime">
+                                    @((item.用户数据 as 供应商).所属地域.地域)
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+
+
+
+            <input type="hidden" name="gysidlist" id="gysidlist" />
+            <div style=" width:600px; margin:0 auto; margin-top:20px; text-align:center;">
+                <input type="submit" value="保存" name="action" class="front_login_rightbox_button_less" onclick="return getgysidlist(this)">
+                <input type="submit" value="提交" name="action" class="front_login_rightbox_button_less" onclick="return getgysidlist(this)">
+            </div>
+
+
+
+
+        </div>
+
+    </div>
+}
+<script type="text/javascript">
+    function getgysidlist(a) {
+        var j = 0;
+        var str = ""
+        var box = document.getElementById("AdListTableok");
+        var checkboxs = box.getElementsByTagName("input");
+        for (var i = 0; i < checkboxs.length; i++) {
+            var e = checkboxs[i];
+            if (e.checked && e.getAttribute("id") != "selectall") {
+                j++;
+                str += e.getAttribute("id") + "|";
+            }
+        }
+        if (j == 0 && a.value == "提交") {
+            alert("没有选取供应商,不能进行提交")
+            return false;
+        }
+        $("#gysidlist").val(str);
+        return true;
+    }
+    function checkall(a) {
+        var box = document.getElementById("AdListTable");
+        var checkboxs = box.getElementsByTagName("input");
+        for (var i = 0; i < checkboxs.length; i++) {
+            var e = checkboxs[i];
+            //alert(e.getAttribute("id"));
+
+            e.checked = a.checked
+        }
+    }
+    function checkallok(a) {
+        var box = document.getElementById("AdListTableok");
+        var checkboxs = box.getElementsByTagName("input");
+        for (var i = 0; i < checkboxs.length; i++) {
+            var e = checkboxs[i];
+            //alert(e.getAttribute("id"));
+
+            e.checked = a.checked
+        }
+    }
+</script>

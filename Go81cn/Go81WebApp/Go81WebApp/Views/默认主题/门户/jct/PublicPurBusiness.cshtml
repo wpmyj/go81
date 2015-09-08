@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "企业推广";
+    Layout = "~/Views/默认主题/_Shared/_Layout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("Part_PublicPuRNav", "jct")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div>
+            <div style="color:#bb0202; float:left; width:200px; font-size:24px;">企业推广服务</div>
+            <div style="clear:both; padding-top:1px; color:#606060;line-height:25px; font-size:16px;">
+                <h4 style="color:orange">服务内容</h4>
+                <p style="text-indent:2em;">军采通会员在网站上将享有更多的企业展示机会，更多的商品发布窗口，以及更多精确的网站统计分析数据支持，可帮助会员更好地向采购机构进行宣传。</p>
+                <p style="text-indent:2em;">军采通会员还将享有优先内网数据同步更新的权利，让采购机构及时准确地关注到您的信息。</p>
+                <p style="text-indent:2em;">部分服务需按项目另行计费，详询网站客服。</p>
+
+            </div>
+            <div style="text-align:center; width:360px; height:330px; margin:0px auto; background-size:cover; margin-top:30px; margin-left:auto; margin-right:auto; background-image:url(/Images/coporation.JPG)">
+            </div>
+            <div style="clear:both; padding-top:20px; color:#606060;line-height:25px; font-size:16px;">
+                <h4 style="color:orange">体现价值</h4>
+                <p style="text-indent:2em;">网站直达部队用户，军采通会员的企业及商品信息将可以更加轻松地向采购机构进行传递，使会员更加高效、便捷地进行军队物资采购业务，节约大量营销费用、人力成本和时间成本。</p>
+            </div>
+            <div><a href="/jct/Applyvip?sure=true" style="display:block; width:150px ;height:30px; text-align:center; line-height:30px; border:1px solid red; background-color:#E78E8E; color:white; margin:0px auto;">申请加入军采通会员</a></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(".action_link").each(function () {
+        if ($(this).text() == "军采通") {
+            $(this).parent("div").addClass("on");
+        }
+    });
+</script>

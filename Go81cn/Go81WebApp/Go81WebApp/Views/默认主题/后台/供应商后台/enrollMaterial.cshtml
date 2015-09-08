@@ -1,0 +1,214 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.招标采购预报名
+@using Go81WebApp.Models.数据模型.用户数据模型
+    @{
+        ViewBag.Title = "添加预报名资料";
+        Layout = "_BackLayout.cshtml";
+    }
+    <style>
+        td span {
+            font-size: 12px;
+            color: red;
+        }
+    </style>
+    <link href="~/css/css.css" rel=" stylesheet" />
+    <link href="~/css/Msg_Tips.css" rel="stylesheet" />
+    <div id="f1" class="modal_out">
+        <div class="modal_in"></div>
+        <div class="modal_content_loading">
+            <img src="~/Images/ajax-loader.gif" />
+            <span>正在上传，请稍等...</span>
+        </div>
+    </div>
+    @{
+        供应商 supplier = ViewData["supplier"] as 供应商;
+    }
+    <div class="bg_outdiv">
+        <div class="bg_outdiv_left">
+            @Html.Action("LeftMenu", "布局")
+        </div>
+        <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+            <div id="title_div" class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">
+                    预报名资料<span style="color:red;">(在上传资料时，如果已有附件，请选择已有附件选项，否则选择新增附件)</span>
+                </div>
+            </div>
+            <div style="border:1px solid green; margin-top:8px;">
+                <form action="/供应商后台/AddEnroll" name="uploaddata" method="post">
+                    @Html.HiddenFor(m => m.Id)
+                    <table width="100%">
+                        @if (Model != null)
+                        {
+                            int index = 0;
+                            for (int i = 0; i < Model.供应商所需资料.Count(); i++)
+                            {
+                                <tr>
+                                    @if (!Model.供应商所需资料[i].图片)
+                                    {
+                                        <td width="35%" align="right">
+                                            @Html.HiddenFor(m => m.供应商所需资料[i].资料名)
+                                            @Model.供应商所需资料[i].资料名：
+                                        </td>
+                                        <td align="left">
+                                            <input type="hidden" name="zl1@(i)" value="@Model.供应商所需资料[i].资料名" />
+                                            <input type="text" name="zl@(i)" value="" />
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td><input type="hidden" name="picture@(i)" value="" id="picture@(i)" /></td>
+                                    }
+                                </tr>
+                            }
+                        }
+                    </table>
+                </form>
+                @if (Model != null)
+                {
+                    for (int i = 0; i < Model.供应商所需资料.Count(); i++)
+                    {
+                        if (Model.供应商所需资料[i].图片)
+                        {
+                            <form action="/供应商后台/UploadAttach_ysd" id="upload@(i)" name="upload@(i)" method="post" enctype="multipart/form-data" target="showPic">
+                                <table width="100%">
+                                    <tr>
+                                        <td width="35%" align="right">@Model.供应商所需资料[i].资料名：</td>
+                                        <td align="left">
+                                            <input type="hidden" name="picture" value="@Model.供应商所需资料[i].资料名" />
+                                            <input type="radio" onclick="showSelectCtl('#file@(i)','#selt@(i)','#pic@(i)')" name="attach@(i)" value="new" />新增附件
+                                            <input type="radio" onclick="showSelectCtl('#selt@(i)','#file@(i)','#pic@(i)')" name="attach@(i)" value="exist" />已有附件
+                                            <select id="selt@(i)" style="display:none;" onchange="showPicturs(this, '#pic@(i)','@(i)')">
+                                                <option value="">请选择附件类型</option>
+                                                <option value="lawperson">法定代表人信息</option>
+                                                <option value="qualify">资质证书信息</option>
+                                                <option value="tax">税务信息</option>
+                                                <option value="sale">营业信息</option>
+                                                @if (supplier.历史投标补充资料 != null)
+                                                {
+                                                    <option value="other">更多信息</option>
+                                                }
+                                            </select>
+                                            <input type="file" style="width:70px; display:none;" id="file@(i)" multiple="multiple" name="file@(i)" onchange="filechange('upload@(i)','picture@(i)')" />
+                                            <input type="hidden" name="which" value="@(i)" />
+                                        </td>
+                                    </tr>
+                                    <tr><td colspan="3" align="center"><div style="overflow:auto;width:500px; height:auto;" id="pic@(i)"></div></td></tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <div id="pBox@(i)">
+
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </form>
+                        }
+                    }
+                }
+                <div id="framebox" style="margin-left:20px; display:none; margin-top:10px;width:700px; height:auto;  margin-right: auto;">
+                    <iframe name="showPic" scrolling="no" id="showPic" frameborder="0" style="height:auto; width:100%;"></iframe>
+                </div>
+                <table width="100%">
+                    <tr><td align="center"><button style="width:100px; height:30px; background-color:green; border:none; color:white;" id="data">提交资料</button></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        function showSelectCtl(file, selt, pic) {
+            var reg1 = /file/g;
+            $(file).show();
+            $(selt).hide();
+            if (reg1.test(file)) {
+                $(pic).hide();
+            }
+            else {
+                $(pic).show();
+            }
+        }
+        function showPicturs(th, bx, pic) {
+            $(pic).show();
+            var url = "";
+            $.get("/供应商后台/Geturi", { which: $(th).val() }, function (data) {
+                if (data != "") {
+                    var u = data.split('|');
+                    url += "<div style='width:200px; height:auto; border:1px solid #F3E8E8; margin:0px auto;'>请选择以下附件</div><table><tr>";
+                    for (var m = 0; m < u.length - 1; m++) {
+                        url += "<td><a href='" + u[m] + "' target='_blank'><img width='50' height='30' src='" + u[m] + "'/></a><br/><input type='checkbox' value='" + u[m] + "' onclick='setPicture(this," + pic + ")'/></td>"
+                    }
+                }
+                url += "<tr/>";
+                $(bx).html(url);
+            });
+        }
+        function filechange(th) {//上传附件
+            $("#f1").css({ "display": "block" });
+            document.forms[th].submit();
+        }
+        function setPicture(th, pic) {
+            if (th.checked) {
+                var url = $("#picture" + pic).val();
+                url += $(th).val() + "|";
+                $("#picture" + pic).val(url);
+            }
+            else {
+                var newpath = "";
+                var path = $("#picture" + pic).val().split('|');
+                for (var n = 0; n < path.length - 1; n++) {
+                    if (path[n] != $(th).val()) {
+                        newpath += path[n] + "|";
+                    }
+                }
+                $("#picture" + pic).val(newpath);
+            }
+        }
+        function setPic(p, which) {
+            var str = "<table>";
+            var path1 = p.split('|');
+            for (var i = 0; i < path1.length - 1; i++) {
+                str += "<tr><td><a style='font-size:13px;' target='_blank' href='" + path1[i] + "'>" + path1[i] + "</a><a href='###' title='删除' onclick='delPic(this," + which + ")' style='color:white; position:absolute; margin-left:85px; display:inline-block; background-color:red; width:15px; height:15px; line-height:15px; text-align:center; font-size:12px;' lang='" + path1[i] + "'>×</a></td></tr>";
+            }
+            str += "</table>";
+            $("#pBox" + which).append(str);
+            //document.getElementById("pBox").innerHTML= str;
+        }
+        function delPic(th, which) {
+            var path = $(th).attr("lang");
+            $.get('/供应商后台/DeleteAttach_ysd', { n: path },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            var newpath = document.getElementById("picture" + which).value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
+                }
+                else {
+                    index = j;
+                }
+            }
+            document.getElementById("picture" + which).value = str;
+            setPic("picture" + which, which);
+        }
+        $("#data").click(function () {
+            var already = true;
+            $(":text").each(function () {
+                if ($(this).val() == "") {
+                    already = false;
+                }
+            });
+            if (already) {
+                document.forms["uploaddata"].submit();
+            }
+            else {
+                alert("请填写必要的内容!");
+            }
+        });
+        $(function () {
+            $("#我的预报名").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#我的预报名").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+    </script>

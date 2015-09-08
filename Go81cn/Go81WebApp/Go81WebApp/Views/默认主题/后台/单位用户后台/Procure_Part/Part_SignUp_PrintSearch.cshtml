@@ -1,0 +1,41 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.招标采购预报名
+<table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <th class="printhide"><input type="checkbox" id="select_all" onclick="selectAll(this)" all="false" />全选</th>
+        <th>供应商名称</th>
+        <th>报名时间</th>
+        @*<th>状态</th>*@
+    </tr>
+    @foreach (var item in (IEnumerable<Go81WebApp.Models.数据模型.项目数据模型.招标采购预报名._供应商预报名信息>)ViewData["预报名供应商列表"])
+    {
+        <tr>
+            <td class="printhide"><input type="checkbox" /></td>
+            <td>
+                <a style="text-decoration: underline;" target="_blank" href="/供应商陈列/Supplier_Destination?id=@item.供应商链接.用户ID">@item.供应商链接.用户数据.企业基本信息.企业名称</a>
+            </td>
+            <td>
+                @item.报名时间.ToString("yyyy-MM-dd HH:mm:ss")
+            </td>
+            @*@if (item.审核数据.审核状态 != Go81WebApp.Models.数据模型.审核状态.审核未通过)
+            {
+                <td>
+                    @item.审核数据.审核状态
+                </td>
+            }
+            else
+            {
+                <td>
+                    @item.审核数据.审核状态<span style="color:red">(@item.审核数据.未通过理由)</span>
+                </td>
+            }*@
+
+        </tr>
+    }
+</table>
+
+
+
+
+
+
+

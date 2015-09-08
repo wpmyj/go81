@@ -1,0 +1,58 @@
+﻿@using Go81WebApp.Models.数据模型.需求计划模型
+@{  var AssignmentTaskList = ViewData["pre_AssignmentTaskList"] as IEnumerable<需求计划>;}
+<table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <th>标题</th>
+        <th>联系人</th>
+        <th>联系电话</th>
+        <th>发起时间</th>
+        <th>操作</th>
+    </tr>
+    @foreach (var item in AssignmentTaskList)
+    {
+        <tr>
+            <td>@item.需求计划标题</td>
+            <td>@item.联系人</td>
+            <td>@item.联系电话</td>
+            <td>@item.基本数据.添加时间.ToString("yyyy/MM/dd")</td>
+            <td class="gys_znxx_content_tabletime">
+                <a href="/单位用户后台/Demand_Detail?id=@item.Id" target="_blank">查看详情</a>|@Html.ActionLink("编制任务", "AssignmentTask", new { id = item.Id }@*, new { target = "_blank" }*@)
+            </td>
+        </tr>
+    }
+</table>
+<div class="gys_znxx_content_detailbox">
+    @if (int.Parse(ViewData["pre_currentPage"].ToString()) == 1)
+    {
+        <a class="currentPage">首页</a>
+    }
+    else
+    {
+        <a id="1" onclick=" changepre_page(this) ">首页</a>
+    }
+    @for (int i = 0; i <= 10; i++)
+    {
+        //一共最多显示10个页码，前面5个，后面5个
+        if ((int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pre_pagecount"].ToString()))
+        {
+            if (5 == i)
+            {
+                //当前页处理
+                <a style="border:1px solid #ff0000;">@int.Parse(ViewData["pre_currentPage"].ToString())</a>
+            }
+            else
+            {
+                //一般页处理
+                <a id="@(int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5)" onclick=" changepre_page(this) ">@(int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5)</a>
+            }
+        }
+    }
+    @if (int.Parse(ViewData["pre_currentPage"].ToString()) == int.Parse(ViewData["pre_pagecount"].ToString()))
+    {
+        <a class="currentPage">末页</a>
+    }
+    else
+    {
+        <a id="@int.Parse(ViewData["pre_pagecount"].ToString())" onclick=" changepre_page(this) ">末页</a>
+    }
+</div>

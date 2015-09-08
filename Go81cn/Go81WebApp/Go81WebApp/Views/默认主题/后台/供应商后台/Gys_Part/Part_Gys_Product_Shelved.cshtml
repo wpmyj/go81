@@ -1,0 +1,268 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型;
+@using Go81WebApp.Models.数据模型.推广业务数据模型
+<script type="text/javascript" src="~/JS/GetProductClass.js"></script>
+<link rel="stylesheet" href="~/css/index.css" type="text/css">
+
+<div id="expertchoosewaitblock" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>正在处理，请稍等...</span>
+    </div>
+</div>
+
+<div class="gys_xttz_box">
+    <div class="gys_xttz_topbox">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title" style="width:900px;">
+                商品列表
+                <a href="/供应商后台/Gys_Product_AddStep1?id=0" style="color:red; text-decoration: underline;">【点击此处添加商品】</a>
+                <a href="/供应商后台/Gys_Product_AddStep1?id=1" style="color:red; text-decoration: underline;">【点击此处添加中标商品】</a>
+                @*<a href="/供应商后台/AddListGood" style="color:red; text-decoration: underline;">【点击此处批量添加商品】</a>*@
+                @if (ViewData["选择展示商品"] != null && ViewData["选择展示商品"].ToString() == "1")
+                {
+                    <a href="/供应商后台/choosepicture" style="color:red; text-decoration: underline;" target="_blank">【你还可以选择展示商品】</a>
+                }
+                @{
+                    if (ViewData["批量上传"] != null && ViewData["批量上传"].ToString() == "1")
+                    {
+                        <a href="/供应商后台/AddListGood" style="color:red; text-decoration: underline;">【批量上传商品】</a>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="gysid" name="gysid" value="@Model.Id" />
+    <div style="text-align:left; line-height:25px; padding-right:10px; color:purple; padding-top:10px;">
+        @if (ViewData["可上架商品个数"] == null || ViewData["可上架商品个数"].ToString() == "G")
+        {
+            <span>您目前订购的企业展示模板为G类，可上架8个商品</span>
+        }
+        else
+        {
+            if (ViewData["可上架商品个数"].ToString() == "A")
+            {
+                <span>您目前订购的企业展示模板为A类，可无限制上架商品</span>
+            }
+            if (ViewData["可上架商品个数"].ToString() == "B")
+            {
+                <span>您目前订购的企业展示模板为B类，可上架200个商品</span>
+            }
+            if (ViewData["可上架商品个数"].ToString() == "C")
+            {
+                <span>您目前订购的企业展示模板为C类，可上架80个商品</span>
+            }
+            if (ViewData["可上架商品个数"].ToString() == "D")
+            {
+                <span>您目前订购的企业展示模板为D类，可上架60个商品</span>
+            }
+            if (ViewData["可上架商品个数"].ToString() == "E")
+            {
+                <span>您目前订购的企业展示模板为E类，可上架40个商品</span>
+            }
+            if (ViewData["可上架商品个数"].ToString() == "F")
+            {
+                <span>您目前订购的企业展示模板为F类，可上架20个商品</span>
+            }
+        }
+        <span>（注：商品处于上架状态时才会出现在前台页面中！）</span>
+</div>
+    <div style="text-align:left; line-height:37px; padding-right:10px; color:purple; padding-top:10px;">
+        <input type="button" value="上架当页所有商品" class="index_online_btn" style="margin-right:10px; width:auto; overflow:hidden;" onclick="return doShelves(this);" />
+        <input type="button" value="下架当页所有商品" class="index_online_btn" style="margin-right:10px; width:auto; overflow:hidden;" onclick="return doShelves(this);" />
+        <input type="button" value="上架所有商品" class="index_online_btn" style="margin-right:10px; width:auto; overflow:hidden;" onclick="return doShelves(this);" />
+        <input type="button" value="下架所有商品" class="index_online_btn" style="margin-right:10px; width:auto; overflow:hidden;" onclick="return doShelves(this);" />
+
+        @*<input type="checkbox" value="-100" onclick="return doShelves(this);" />上架/下架当前页所有商品<input type="checkbox" value="-200" style="margin-left:20px;" onclick="return doShelves(this);" />上架/下架所有商品*@
+    </div>
+    <p style="color:red;font-size:12px;margin-top:0;">注：1、修改价格与修改商品信息的区别在于，修改价格不会影响商品的状态，修改商品信息会将会使商品置为未审核状态！&nbsp;&nbsp;&nbsp;2、商品是上架状态才会显示在前台页面上！</p>
+
+    <div class="gys_znxx_box">
+        @foreach (var item in (IEnumerable<商品>)ViewData["供应商商品信息"])
+        {
+            var kk = (long)-2;
+            if (item.审核数据.审核状态 == 审核状态.审核通过)
+            {
+                kk = item.Id;
+            }
+            <div class="gyspage_list_content" key="@kk">
+                <div class="gyspage_list_content_imgdiv">
+                    <a href="/供应商后台/Gys_Product_Detail?id=@item.Id">
+                        @if (item.商品信息.商品图片.Count > 0)
+                        {
+                            <img src="@item.商品信息.商品图片[0].Replace("original/", "150X150/")" width="100" height="100" />
+                        }
+                        else
+                        {
+                            <img src="~/images/noimage.jpg" width="100" height="100" />
+                        }
+                    </a>
+                </div>
+                <div class="gyspage_list_content_listdiv">
+                    <div class="gyspage_list_content_list">
+                        <div class="gyspage_list_content_list_cont">名称：@item.商品信息.商品名</div><div class="gyspage_list_content_list_cont">价格：￥@item.销售信息.价格</div><div class="gyspage_list_content_list_cont">
+                            状态：<font color="green">@item.审核数据.审核状态</font>@if (item.审核数据.审核状态 == 审核状态.审核未通过)
+                            {<font color="red">(@item.审核数据.审核不通过原因)</font>}
+                        </div><div class="gyspage_list_content_list_cont" id="sjShelves__@item.Id">
+                            上架：@if (item.基本数据.已屏蔽)
+                            {<font color="red">未上架</font>}
+                            else
+                            {<font color="green">已上架</font>}
+                        </div>
+                    </div>
+                    <div class="gyspage_list_content_list">
+                        <a href="~/供应商后台/Gys_Product_Detail?id=@item.Id" style="padding:0 10px 0 0;">预览</a>
+                        <a href="~/供应商后台/Gys_Product_Modify_Price?id=@item.Id&comes=h" style="padding:0 10px 0 0;">修改价格</a>
+                        <a href="~/供应商后台/Gys_Product_Modify?id=@item.Id&comes=h" style="padding:0 10px 0 10px;">修改商品信息</a>
+                        <a href="~/供应商后台/Gys_Product_Delete?id=@item.Id" style="padding:0 10px 0 10px;">删除</a>
+                    </div>
+
+                    <div class="gyspage_list_content_list">
+                        @if (item.审核数据.审核状态 == 审核状态.审核通过)
+                        {
+                            if (item.基本数据.已屏蔽)
+                            {
+                                <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" onclick="return doShelves(this);" title="点击上架" /><span>上架</span>
+                            }
+                            else
+                            {
+                                <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" checked="checked" onclick="return doShelves(this);" title="点击下架" /><span>上架</span>
+                            }
+                        }
+                        else
+                        {
+                            <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" disabled="disabled" title="未审核通过，不能上架" /><span>上架</span>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+
+        @if (ViewData["listcount"] != null && ViewData["listcount"].ToString() != "0")
+        {
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+                <div style="padding-top:10px;">
+                    跳转到<input id="jumpagetext" type="text" style="width:50px; height:20px; line-height:20px;" />页<input style="width:50px; height:25px; line-height:25px;" type="button" onclick="return Jumppage();" value="确定" />
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="gys_znxx_content_detailbox">
+                暂无信息
+            </div>
+
+        }
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).addClass("currentPage");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+
+        $("#当前上架的商品信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#当前上架的商品信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function Jumppage(){
+        var jumpage =  $("#jumpagetext").val();
+        if(jumpage==""){
+            return false;
+        }
+        window.location='/供应商后台/Gys_Product_Shelved?page='+jumpage;
+    }
+    function doShelves(obj){
+        if(!confirm("确定此项操作无误？")){
+            return false;
+        }
+        $("#expertchoosewaitblock").show();
+        var id = $(obj).val();
+        var status ="0"
+        if(id=="上架当页所有商品" || id=="上架所有商品"|| $(obj).is(':checked')){
+            status="1";
+        }
+        //改变的类型，选一个或选当前页为1，选择所有商品为2
+        var changetype="1"
+        //全选当前页
+        if(id=="上架当页所有商品" || id=="下架当页所有商品"){
+            var idstr = "";
+            $(".gyspage_list_content").each(function (){
+                var keyid = $(this).attr("key");
+                if(keyid!="-2"){
+                    idstr+=$(this).attr("key")+"|";
+                }
+            });
+            id=idstr;
+        }
+        else if(id == "上架所有商品" || id == "下架所有商品"){
+            //全选所有商品
+            id = $("#gysid").val();
+            changetype="2";
+        }
+        
+
+        $.ajax({
+            cache: false,
+            async: false,   // 太关键了，同步和异步的参数
+            //dataType: 'json', type: 'post',
+            type: 'POST',
+            //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
+            url: "/供应商后台/doProductShelves",
+            data: "id="+id+"&status="+status+"&changetype="+changetype,
+            success: function (data) {
+                if(data!="0"){
+                    if(data=="overflow"){
+                        alert("上架商品数已达到上限");
+                    }
+                    else{
+                        alert(data);
+                    }
+                    window.location='/供应商后台/Gys_Product_Shelved';
+                }
+                else{
+                    //所有商品
+                    if(changetype=="2"){
+                        window.location='/供应商后台/Gys_Product_Shelved';
+                    }
+                    else{
+                        if(id.indexOf("|")>-1){
+                            window.location='/供应商后台/Gys_Product_Shelved';
+                        }
+                        else{
+                            if(status=="0"){
+                                $("#sjShelves__"+id).html("上架：<font color='red'>未上架</font>");
+                            }
+                            else{
+                                $("#sjShelves__"+id).html("上架：<font color='green'>已上架</font>");
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        $("#expertchoosewaitblock").hide();
+    }
+</script>

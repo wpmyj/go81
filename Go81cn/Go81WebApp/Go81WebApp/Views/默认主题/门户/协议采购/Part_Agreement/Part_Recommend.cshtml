@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.商品数据模型.商品>
+<div class="title-base-out" style="margin-top:0;">
+    <div class="title-base-middle">
+        <div class="title-base-inner">推荐商品</div>
+    </div>
+</div>
+<div class="index_menu_content_box">
+    @if (Model != null && Model.Any())
+    {
+        int i = 0;
+        foreach (var t in Model)
+        {
+            i++;
+            if (i <= 4)
+            {
+                <div class="gyspage_detail_leftimgbox">
+                    <a href="~/商品陈列/Product_Detail?id=@t.Id" title="@t.商品信息.商品名">
+                        @if (t.商品信息.商品图片.Count > 0)
+                        {
+                            <img src="@t.商品信息.商品图片[0]" />
+                        }
+                        else
+                        {
+                            <img src="~/images/noimage.jpg" />
+                        }
+                    </a>
+                    <div class="gyspage_detail_leftimgbox_textexp">
+                        @if (t.商品信息.商品名.Length > 35)
+                        {
+                            <a target="_blank" title="@t.商品信息.商品名" href="~/商品陈列/Product_Detail?id=@t.Id">@t.商品信息.商品名.Substring(0, 35)</a>
+                        }
+                        else
+                        {
+                            <a target="_blank" title="@t.商品信息.商品名" href="~/商品陈列/Product_Detail?id=@t.Id">@t.商品信息.商品名</a>
+                        }
+                    </div>
+                    <div class="gyspage_detail_leftimgbox_textexp">
+                        <div style="width:66%; margin:0 auto; text-align:left;">￥@t.销售信息.价格</div>
+                        <div style="width:66%; margin:0 auto; text-align:left; font-size:13px;color:gray;">外网浏览：@t.销售信息.点击量</div>
+                        <div style="width:66%; margin:0 auto; text-align:left; font-size:13px;color:gray;">
+                            内网浏览：@if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                            {
+                                @t.销售信息.内网点击量
+                            }
+                            else
+                            {
+                                <a style="text-decoration:underline;color:#042FAB;padding-left:0;width:auto;overflow:auto;display:inline;" href="/登录/Login?ReturnUrl=/商品陈列/ProductList">登陆查看</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            { break; }
+        }
+    }
+    else
+    { <div>暂无推荐商品！</div>}
+</div>

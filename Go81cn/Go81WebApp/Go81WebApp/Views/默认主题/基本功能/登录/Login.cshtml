@@ -1,0 +1,185 @@
+﻿@{
+    ViewBag.Title = "登录";
+}
+@model Go81WebApp.Controllers.基本功能.登录Controller.LoginInfo
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    if (Request.Cookies["userInfo"] == null)
+    {
+        <div class="front_login_box">
+            <div style="width:100%;">
+                <div style="float:left; width:40%; text-align:center;"><a style="color:blue; text-shadow:0px 1px 1px gray;cursor:pointer;" title="还没账号和密码，请先注册">注册区</a></div>
+                <div style="float:left; width:60%; text-align:center;"><a style="color:blue; text-shadow:0px 1px 1px gray;cursor:pointer;" title="已有账号和密码，请直接登录">登录区</a></div>
+                <div style="clear:both;"></div>
+            </div>
+            <div style="width:100%;">
+                <div style="float:left; width:40%; text-align:center;"><div style="width:0px; height:0px; margin:0px auto;border-bottom:10px solid red; border-left:10px solid white;border-right:10px solid white; border-top:0px solid white;"></div></div>
+                <div style="float:left; width:60%; text-align:center;"><div  style="width:0px; height:0px; margin:0px auto;border-bottom:10px solid red; border-left:10px solid white;border-right:10px solid white; border-top:0px solid white;"></div></div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="front_login_leftbox">
+                <div><a href="/注册/Register_Gys_Agree" style="display:block;width:200px;height:40px;"><img src="~/Images/gysreg.png" /></a></div>
+                @if (WebApiApplication.IsIntranet)
+                {
+                    <div><a href="/注册/Register_Unit" style="display:block;width:200px;height:40px;"><img src="~/Images/unitregintranet.png" /></a></div>
+                }
+                else
+                {
+                    <div><a href="/注册/Register_Unit" style="display:block;width:200px;height:40px;"><img src="~/Images/unitreg.png" /></a></div>
+                }
+                <div><a href="/注册/Register_Expert_Agree" style="display:block;width:200px;height:40px;"><img src="~/Images/expreg.png" /></a></div>
+                <div><a href="###" style="display:block;width:200px;height:40px;"><img src="~/Images/myreg.png" /></a></div>
+
+                @*@if (ViewData["type"] != null)
+                    {
+                        switch (ViewData["type"].ToString())
+                        {
+                            case "单位用户":
+                                {
+                                    <div style="background:url(../Images/gysreg.png) no-repeat"><a href="/注册/Register_Gys_Agree">供应商注册</a></div>
+                                    <div style="background:url(../Images/unitreg.png) no-repeat;"><a href="/注册/Register_Unit">单位用户注册</a></div>
+                                    <div style="background:url(~/Images/expreg.png) no-repeat"><a href="/注册/Expert_Apply">评审专家申请</a></div>
+                                    <div style="background:url(~/Images/myreg.png) no-repeat"><a href="/注册/Register_Person">个人用户注册</a></div>
+                                    break;
+                                }
+                            case "评审专家":
+                                {
+                                    <div><a href="/注册/Register_Gys_Agree">供应商注册</a></div>
+                                    <div><a href="/注册/Register_Unit">单位用户注册</a></div>
+                                    <div style="background:url(../Images/expreg.png) no-repeat"><a href="/注册/Expert_Apply">评审专家申请</a></div>
+                                    <div><a href="/注册/Register_Person">个人用户注册</a></div>
+                                    break;
+                                }
+                            case "个人用户":
+                                {
+                                    <div><a href="/注册/Register_Gys_Agree">供应商注册</a></div>
+                                    <div><a href="/注册/Register_Unit">单位用户注册</a></div>
+                                    <div><a href="/注册/Expert_Apply家">评审专家申请</a></div>
+                                    <div style="background: url(../Images/myreg.png) no-repeat"><a href="/注册/Register_Person">个人用户注册</a></div>
+                                    break;
+                                }
+                            default:
+                                {
+                                    <div style="background: url(../Images/gysreg.png)"><a href="/注册/Register_Gys_Agree">供应商注册</a></div>
+                                    <div><a href="/注册/Register_Unit">单位用户注册</a></div>
+                                    <div><a href="/注册/Expert_Apply">评审专家申请</a></div>
+                                    <div><a href="/注册/Register_Person">个人用户注册</a></div>
+                                    break;
+                                }
+                        }
+                    }
+                    else
+                    {
+                        <div style="background:url(../Images/gysreg.png) no-repeat"><a href="/注册/Register_Gys_Agree"></a></div>
+                        <div><a href="/注册/Register_Unit">单位用户注册</a></div>
+                        <div><a href="/注册/Expert_Apply">评审专家申请</a></div>
+                        <div><a href="/注册/Register_Person">个人用户注册</a></div>
+                    }*@
+
+            </div>
+            <table class="login_table" cellpadding="0" cellspacing="0">
+                <tr class="login_table_tr">
+                    <td class="login_table_tr_td logincli">
+                        用户名：
+                    </td>
+                    <td class="login_table_tr_tdtxt">
+                        <div class="ico_login">
+                            @Html.TextBoxFor(model => model.LoginName, new { @style = "border:none;padding:2px 39px 3px 1px; font-size:14px;", placeholder = "请输入用户名", autocomplete = "off" })
+                            @*<label class="tipmessages">请输入用户名</label>*@
+                            <div style="background:url(../../Images/login-up-bg.png) right center no-repeat; width:35px;height:35px;float:left; position:absolute;right: 7px;"></div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.LoginName)
+                    </td>
+                </tr>
+                <tr class="login_table_tr">
+                    <td class="login_table_tr_td logincli">密码：</td>
+                    <td class="login_table_tr_tdtxt">
+                        <div class="ico_login">
+                            @Html.PasswordFor(model => model.LoginPwd, new { @style = "border:none; padding:2px 39px 3px 1px; font-size:14px;", placeholder = "请输入密码", autocomplete = "off" })
+                            @*<label class="tipmessages">请输入密码</label>*@
+                            <div style="background:url(../../Images/login-up-bg.png) top left no-repeat; width:35px;height:35px;float:left;position:absolute; right: 7px;"></div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.LoginPwd)
+                    </td>
+                </tr>
+                <tr class="login_table_tr">
+                    <td class="login_table_tr_td logincli">验证码：</td>
+                    <td class="login_table_tr_tdtxt">
+                        <div class="ico_login" style="width:150px;">
+                            @Html.TextBoxFor(model => model.VerifyCode, new { @style = "border:none;width:130px;padding:2px 20px 3px 0; font-size:14px;", placeholder = "请输入验证码" })
+                            @*<label class="tipmessages">请输入验证码</label>*@
+                            <img id="yzcode" src=@Url.Action("NewVCodeImage", "登录") style="cursor:pointer; position:absolute; margin-left:10px;height:36px; width:82px;" title="看不清，换一张" alt="看不清，换一张" onclick='$(this).attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());' />
+                            <a style="cursor:pointer; position:absolute; margin-left:98px;height:36px; width:150px; font-size: 14px;" onclick='$("#yzcode").attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());'>看不清，换一张</a>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="login_checkboxdiv" colspan="2" style="padding-left: 131px">
+                        @Html.CheckBoxFor(model => model.noExpire, new { @class = "front_login_rightbox_checkbox" })
+                        <span>记住登录</span>
+                        <span style="color: red;">@ViewBag.WrongLoginMessage</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="front_login_rightbox_inputdiv" colspan="2">
+                        <input type="submit" class="front_login_rightbox_button" style="margin-left: 135px;width: 244px; height: 40px;" value="登       录" />
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">  
+                @if (WebApiApplication.IsIntranet)
+                {
+                    <td colspan="2">@Html.ActionLink("供应商登录", "Login/供应商", "登录", null, new { @style = " font-size:14px; color:#666666; height:30px;margin-left: 80px;" }) / @Html.ActionLink("采购人登录", "Login/单位用户", "登录", null, new { @style = " font-size:14px; color:#666666; height:30px;" }) /  @Html.ActionLink("评审专家登陆", "Register_Expert_Agree", "注册", null, new { @style = " font-size:14px; color:#666666; height:30px" }) / @Html.ActionLink("个人用户登录", "Login/个人用户", "登录", null, new { @style = " font-size:14px; color:#666666;" })</td>
+                }
+                else
+                {
+                    <td colspan="2">@Html.ActionLink("评审专家申请", "Register_Expert_Agree", "注册", null, new { @style = " font-size:14px; color:#666666; height:30px;margin-left:80px" }) / @Html.ActionLink("个人用户登录", "Login/个人用户", "登录", null, new { @style = " font-size:14px; color:#666666;" }) / @Html.ActionLink("供应商登录", "Login/供应商", "登录", null, new { @style = " font-size:14px; color:#666666; height:30px;" }) / @Html.ActionLink("单位用户登录", "Login/单位用户", "登录", null, new { @style = " font-size:14px; color:#666666; height:30px;" })</td>
+                }  
+                </tr>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="front_login_box">
+            <div class="front_login_leftbox"> </div>
+            <div class="front_login_rightbox">
+                <div class="front_login_rightbox_listdiv">
+                    <div class="front_login_rightbox_title">已登录</div>
+                </div>
+                <div class="front_login_rightbox_listdiv">
+                    <div style=" width:250px; text-align:right;">@Html.ActionLink("个人用户注册", "Register_Person", "注册", null, new { @style = " font-size:14px; color:#666666;" }) / @Html.ActionLink("供应商注册", "Register_Gys_Agree", "注册", null, new { @style = " font-size:14px; color:#666666;" }) / @Html.ActionLink("单位用户注册", "Register_Unit", "注册", null, new { @style = " font-size:14px; color:#666666;" })</div>
+                </div>
+            </div>
+
+        </div>
+
+    }
+}
+<script type="text/javascript">
+    $(function () {
+        var ipt = $("input");
+        ipt.each(function (index, domEle) {
+            if ($(domEle).val() == null || $(domEle).val() == "") {
+                $(domEle).parent().children(".tipmessages").show();
+            }
+            else {
+                $(domEle).parent().children(".tipmessages").hide();
+            }
+        });
+    });
+    $("input").focus(function () {
+        if ($(this).attr("type") != "checkbox") {
+            $(this).parent().children(".tipmessages").hide();
+        }
+    }).blur(function () {
+        if ($(this).val() == null || $(this).val() == "") {
+            $(this).parent().children(".tipmessages").show();
+        }
+        else
+            $(this).parent().children(".tipmessages").hide();
+    });
+</script>

@@ -1,0 +1,262 @@
+﻿@*@model Go81WebApp.Models.数据模型.用户数据模型.专家*@
+@{
+    ViewBag.Title = "打印专家资料";
+    Layout = null;
+}
+<script src="~/Scripts/jquery-1.11.1.min.js"></script>
+
+    <style>
+        .print {
+            border: none;
+            width: 100px;
+            margin-top: 20px;
+            display: inline-block;
+            height: 30px;
+            background-color: yellowgreen;
+            text-align: center;
+            line-height: 30px;
+        }
+
+            .print:hover {
+                cursor: pointer;
+                color: white;
+                background-color: #5e6f00;
+            }
+
+        table {
+            border-left: 0.0625em solid black;
+            border-top: 0.0625em solid black;
+        }
+
+            table tr td {
+                line-height: 25px;
+                height: 50px;
+                border-right: 0.0625em solid black;
+                border-bottom: 0.0625em solid black;
+            }
+
+            table tr th {
+                line-height: 50px;
+                min-height: 25px;
+                font-family: '宋体';
+                font-size: 16px;
+                border-right: 0.0625em solid black;
+                border-bottom: 0.0625em solid black;
+            }
+
+        .innertext {
+            display: inline-block;
+            font-size: 0.85em;
+            font-family: '宋体';
+        }
+
+        .pageNext {
+            margin-top: 10px;
+            page-break-after: always;
+        }
+        .last-page {
+            page-break-after:avoid;
+        }
+    </style>
+    <div class="pageNext">
+        <div style="text-align: right; margin-bottom:50px; height:90px; margin-top:50px; font-size:25px; padding-right:0px;">
+            @*评审专家编号：<a style=" display:inline-block; width:200px; height:30px; border-bottom:1px solid black;"></a>*@
+        </div>
+        <div style="width:100%;text-align: center"><h1 style="width:100%; font-size:35px; text-align:center;letter-spacing:12px;">成都军区物资采购评审专家<br /><br />入库申请表</h1></div>
+        <div style="width:100%; margin-top:140px;font-size:18px;">
+            <div>
+                <table width="100%" style="border: none; font-size:24px; margin-left:auto; margin-top:260px; margin-right:auto;">
+                    <tr>
+                        <td width="40%" align="right" style="border: none;letter-spacing:10px;">专家姓名：</td>
+                        <td width="60%" style="border: none;">@*@Model.身份信息.姓名*@</td>
+                    </tr>
+                    <tr>
+                        <td align="right" style="border: none;letter-spacing:10px;">工作单位：</td>
+                        <td style="border: none;">@*@Model.工作经历信息.工作单位*@</td>
+                    </tr>
+                    <tr>
+                        <td align="right" style="border: none;letter-spacing:10px;">初审单位：</td>
+                        <td style="border: none;">@*@Model.所属管理单位.ToString()*@</td>
+                    </tr>
+                    <tr>
+                        <td align="right" style="border: none;letter-spacing:10px;">申请日期：</td>
+                        <td style="border: none;padding-left:72px;"><div id="date" style="letter-spacing:30px;">   年   月   日</div></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div style="margin-top:170px; font-size:20px; width:100%; text-align: center;"><h4>成都军区联勤部军需物资油料部监制</h4></div>
+    </div>
+    <div class="pageNext">
+        <div style="text-align: center; width:100%; font-size:24px;">
+            <h3>成都军区物资采购评审专家承诺函</h3>
+            <div style="width:694px;text-align: left; margin-right: auto; margin-left:auto; line-height:50px;">
+                <div style="text-indent:2em;">本人自愿申请加入成都军区物资采购评审专家库，并郑重作出如下承诺：</div>
+                <div style="text-indent:2em;">
+                    本人在《成都军区物资采购评审专家入库申请表》中登记的信息和注册入库后变更的信息，以及为注册登记和变更所提供的所有资料，均合法、真实、准确和有效，如有虚假愿承担全部法律责任。
+                    </div>
+                    <div style="text-indent:2em;">
+                        遵守物资采购的有关法规规定和评审纪律，坚持公平、公正的提出评审意见，保守军事秘密、商业秘密和评审秘密，如有违反愿接受成都军区物资采购管理部门的处理。
+                    </div>
+                    <div style="margin-top:140px; width:100%; font-size:24px;">
+                        <div style="width:75%;text-align: right;">评审专家（签字）：</div>
+                        <div style=" letter-spacing:36px; text-align: right; line-height:80px;">年月日</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="pageNext">
+        <div style="width:100%; height:auto;">
+            <div style="text-align:center;"><h1 style=" font-size:35px;">成都军区物资采购评审专家入库申请表</h1></div>
+            <table style="width:100%; margin-left:auto; margin-right:auto;" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="14%" align="center">姓名</td>
+                    <td width="15%" align="center">@*@Model.身份信息.姓名*@</td>
+                    <td width="14%" align="center">性别</td>
+                    <td width="15%" align="center">@*@Model.身份信息.性别*@</td>
+                    <td width="14%" align="center">出生年月</td>
+                    <td width="15%" align="center">@*@Model.身份信息.出生年月.ToString("yyyy-MM-dd")*@</td>
+                    <td width="13%" rowspan="3" style="width:50px; height:80px; text-align:center;">1寸免冠照片@*<img src="Model.身份信息.本人照片电子扫描件" style="display:block; width:100%; height:150px;" />*@</td>
+                </tr>
+                <tr>
+                    <td align="center">政治面貌</td>
+                    <td align="center">@*@Model.身份信息.政治面貌.ToString()*@</td>
+                    <td align="center">民族</td>
+                    <td align="center">@*@Model.身份信息.民族.ToString()*@</td>
+                    <td align="center">健康状况</td>
+                    <td align="center">@*@Model.工作经历信息.健康状况.ToString()*@</td>
+                </tr>
+                <tr>
+                    <td align="center">工作单位</td>
+                    <td align="center" colspan="5">@*@Model.工作经历信息.工作单位*@</td>
+                </tr>
+                <tr>
+                    <td align="center">单位地址</td>
+                    <td align="center" colspan="4">@*@(Model.工作经历信息.单位地址.省份)@(Model.工作经历信息.单位地址.城市)@(Model.工作经历信息.单位地址.区县)*@</td>
+                    <td align="center">邮编</td>
+                    <td align="center">@*@Model.工作经历信息.邮编*@</td>
+                </tr>
+                <tr>
+                    <td align="center">现任职务</td>
+                    <td align="center" colspan="3">@*@Model.工作经历信息.现任职务*@</td>
+                    <td align="center">专业技术</td>
+                    <td align="center" colspan="2">@*@Model.学历信息.专业技术职称*@</td>
+                </tr>
+                <tr>
+                    <td align="center">从事专业</td>
+                    <td align="center">@*@Model.工作经历信息.从事专业*@</td>
+                    <td align="center">从事专业<br />起始年度</td>
+                    <td align="center">@*@Model.工作经历信息.从事专业起始年度*@</td>
+                    <td align="center">取得技术</td>
+                    <td align="center" colspan="2">@*@Model.学历信息.取得现技术职称时间.ToString("yyyy-MM-dd")*@</td>
+                </tr>
+                <tr>
+                    <td align="center">专家类别</td>
+                    <td align="center">@*@Model.身份信息.专家类别.ToString()*@</td>
+                    <td align="center">证件类型</td>
+                    <td align="center">@*@Model.身份信息.证件类型.ToString()*@</td>
+                    <td align="center">证件号码</td>
+                    <td align="center" colspan="2">@*@Model.身份信息.证件号*@</td>
+                </tr>
+                <tr>
+                    <td align="center">学位</td>
+                    <td align="center">@*@Model.学历信息.最高学位*@</td>
+                    <td align="center">最高学历</td>
+                    <td align="center">@*@Model.学历信息.最高学历*@</td>
+                    <td align="center">毕业院校<br />及专业</td>
+                    <td align="center" colspan="2">@*@Model.学历信息.毕业院校*@</td>
+                </tr>
+                <tr>
+                    <td align="center">固定电话</td>
+                    <td align="center">@*@Model.工作经历信息.单位地址.固定电话*@</td>
+                    <td align="center">传真电话</td>
+                    <td align="center">@*@Model.工作经历信息.单位地址.传真*@</td>
+                    <td align="center">移动电话</td>
+                    <td align="center" colspan="2">@*@Model.工作经历信息.单位地址.手机*@</td>
+                </tr>
+                <tr>
+                    <td style="height:190px;" align="center">可参评的<br />物资类别</td>
+                    <td align="left" colspan="6">
+                        @*@{string g = "";}
+                        @if (Model.可参评物资类别列表 != null && Model.可参评物资类别列表.Count() != 0)
+                        {
+                        <table style="border:none;">
+                            @foreach (var item in Model.可参评物资类别列表)
+                                {
+                                <tr>
+                                    <td style="border:none;">
+                                        @item.一级分类
+                                        <table style="border:none;">
+                                            <tr>
+                                                <td style="border:none;">
+                                                    @if (item.二级分类 != null && item.二级分类.Count() != 0)
+                                                        {
+                                                            foreach (var m in item.二级分类)
+                                                            {
+                                                                g += m + "、"; ;
+                                                            }
+                                                        <span>@g</span>
+                                                        }
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                }
+                        </table>
+                        }*@
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height:190px;" align="center">参加物资<br />采购评审<br />情况</td>
+                    <td align="left" colspan="6">@*@Model.工作经历信息.本人参加过何种项目招标及评标*@</td>
+                </tr>
+                    
+            </table>
+        </div>
+    </div>
+    <div class="pageNext last-page">
+        <div style="width:100%; height:auto; font-size:13px;">
+            <table style="width:100%; margin-left:auto; margin-right:auto;" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td style="height:230px;" align="center">专业学术<br />成果</td>
+                    <td align="left" colspan="6">@*@Model.工作经历信息.本人专业领域研究及成果*@</td>
+                </tr>
+                <tr>
+                    <td width="14%" style="text-align:center;">主要工作<br />经历</td>
+                    <td align="left" colspan="2" style="height:200px;">@*@Model.工作经历信息.主要工作经历*@</td>
+                </tr>
+                <tr>
+                    <td align="center" style="text-align:center;">社会兼职<br />情况</td>
+                    <td align="left" colspan="2" style="height:200px;">@*@Model.工作经历信息.社会兼聘职情况*@</td>
+                </tr>
+                <tr>
+                    <td align="center" rowspan="3">本人所在<br />单位推荐<br />意见</td>
+                </tr>
+                <tr><td colspan="2" style="height:220px;"></td></tr>
+                <tr>
+                    <td style="border-right:none">&nbsp;单位名称(公章)：</td>
+
+                    <td style="width:50%">&nbsp;负责人：</td>
+                </tr>
+                <tr>
+                    <td align ="left"></td>
+                    <td align="left" style="border-right:none;"><span style="display:inline-block; float:left;">&nbsp;经办人：</span></td>
+                    <td align="left">
+                        日期：
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div id="print" style="text-align: center;">@*<span style="color:red;">*为了保证打印质量，减少不便，请使用IE浏览器打印。</span>*@<br /><a class="print" onclick="printPage()">打印</a></div>
+    <script type="text/javascript" language="javascript">
+        function printPage() {
+            $("#print").hide();
+            window.print();
+            $("#print").show();
+        }
+        /*var date = new Date();
+        document.getElementById("date").innerHTML = (date.getFullYear()).toString() + "年" + (date.getUTCMonth() + 1).toString() + "月" + (date.getUTCDate()).toString() + "日";*/
+    </script>

@@ -1,0 +1,77 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+<script type="text/javascript" src="~/JS/jquery-1.6.min.js"></script>
+@*<script type="text/javascript" src="~/JS/Get_ProductClass.js"></script>*@
+<link rel="stylesheet" href="~/css/index.css" type="text/css">
+
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">已审核商品列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_ztbsearch_contentbox">
+        @foreach (var item in (IEnumerable<商品>)ViewData["未审核商品信息"])
+        {
+            <div class="gyspage_list_content">
+                <div class="gyspage_list_content_imgdiv">
+                    <a href="~/商品陈列/Product_Detail?id=@item.Id">
+                        @if (item.商品信息.商品图片.Count > 0)
+                        {
+                            <img src="@item.商品信息.商品图片[0].Replace("original/", "150X150/")" width="100" height="100" />
+                        }
+                        else
+                        {
+                            <img src="~/images/noimage.jpg" width="100" height="100" />
+                        }
+                    </a>
+                </div>
+                <div class="gyspage_list_content_listdiv">
+                    <div class="gyspage_list_content_list">
+                        <div class="gyspage_list_content_list_cont">名称：@item.商品信息.商品名</div>
+                        <div class="gyspage_list_content_list_cont">价格：￥@item.销售信息.价格</div>
+                        <div class="gyspage_list_content_list_cont">
+                            供应商：
+                            @try
+                            {
+                                @item.商品信息.所属供应商.用户数据.企业基本信息.企业名称
+                            }
+                            catch
+                            {
+                                <span>未知</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="gyspage_list_content_list">
+                        <a href="~/运营团队后台/Gys_Product_Modify?id=@item.Id" style="padding:0 10px 0 0;">进行处理</a>
+                        <a href="~/运营团队后台/GoodExamineXiajia?id=@item.Id" style="padding:0 10px 0 0;">下架</a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (ViewData["listcount"].ToString() != "0")
+        {
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        }
+        else
+        {
+            <div class="gys_znxx_content_detailbox">
+                暂无信息
+            </div>
+
+        }
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    var num =@(int.Parse(ViewData["page"].ToString()))
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border", "1px solid #ff0000");
+            }
+        });
+        $("#已审核商品").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#已审核商品").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

@@ -1,0 +1,107 @@
+﻿@using Go81WebApp.Models.数据模型.权限数据模型
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">角色列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="220">&nbsp;</th>
+                    @foreach (var item in (IEnumerable<角色>)ViewData["角色列表"])
+                    {
+                        <th>
+                            <input style=" width: 100px;" type="text" name="@item.角色名" value="@item.角色名">
+                        </th>
+                    }
+                </tr>
+                @foreach (var item in (IEnumerable<用户组>)ViewData["用户组集合"])
+                {
+                    var str = "权限列表：";
+                    if (item.权限列表 != null && item.权限列表.Count>0)
+                    {
+                        foreach (var it in item.权限列表)
+                        {
+                            str += it + ",";
+                        }
+                    }
+                    <tr>
+                        <td title="@str">@item.用户组名</td>
+                        @foreach (var it in (IEnumerable<角色>)ViewData["角色列表"])
+                        {
+                            if (it.包含用户组 != null && it.包含用户组.Count>0 && it.包含用户组.Contains(item.用户组名))
+                            {
+                                <td style="text-align:center"><input type="checkbox" id="@it.Id" name="@it.角色名" value="@item.用户组名" checked="checked" /></td>
+                            }
+                            else
+                            {
+                                <td style="text-align:center"><input type="checkbox" id="@it.Id" name="@it.角色名" value="@item.用户组名" /></td>
+                            }
+                        }
+                    </tr>
+                }
+                <tr>
+                    <td><b>编辑</b></td>
+                    @foreach (var it in (IEnumerable<角色>)ViewData["角色列表"])
+                    {
+                        <td><a id="@it.Id" name="@it.角色名" onclick="modifiusergroup(this);">修改</a><a id="@it.Id" name="@it.角色名" onclick="deleteusergroup(this);">删除</a></td>
+                    }
+                </tr>
+
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+            <script language="javascript">
+                function modifiusergroup(ev) {
+                    var id = ev.getAttribute("id");
+                    var name = "";
+
+                    var liststr = "";
+                    var objname = ev.getAttribute("name");
+                    var obj = document.getElementsByName(objname);
+                    for (var i = 0; i < obj.length; i++) {
+                        if (obj[i].type == "checkbox" && obj[i].checked) {
+                            liststr += obj[i].value + ",";
+                        }
+                        if (obj[i].type == "text") {
+                            name = obj[i].value;
+                            if (name == "" || name == null) {
+                                alert("角色名不能为空！");
+                                obj[i].focus();
+                                return;
+                            }
+                        }
+                    }
+
+                    $.get("/运营团队后台/Role_Modify?id=" + encodeURI(id) + "&permissionstr=" + encodeURI(liststr) + "&name=" + encodeURI(name), function (response) {
+                        if (response == "success") {
+                            window.top.location = "/运营团队后台/Role_Mannage";
+                        }
+                        else {
+                            alert(response);
+                        }
+                    });
+                }
+                function deleteusergroup(ev) {
+                    var id = ev.getAttribute("id");
+                    $.get("/运营团队后台/Role_Delete?id=" + encodeURI(id), function (response) {
+                        if (response == "success") {
+                            alert("删除成功！");
+                            window.top.location = "/运营团队后台/Role_Mannage";
+                        }
+                        else {
+                            alert(response);
+                        }
+                    });
+                }
+                $(function () {
+                    $("#角色管理").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+                    $("#角色管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+                });
+            </script>
+        </div>
+    </div>
+</div>

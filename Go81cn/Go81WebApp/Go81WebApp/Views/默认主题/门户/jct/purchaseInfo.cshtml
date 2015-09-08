@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewBag.Title = "独家采购信息无限量查看";
+    Layout = "~/Views/默认主题/_Shared/_Layout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("Part_PublicPuRNav", "jct")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div>
+            <div style="color:#bb0202; width:auto; font-size:24px;">独家采购信息无限量查看服务</div>
+            <div style="background-image:url(/Images/southwest.jpg);width:596px; height:401px; margin:0 auto;">
+                
+            </div>
+            <div style="clear:both; padding-top:20px; color:#606060;line-height:25px; font-size:16px;">
+                <p style="text-indent:2em;">四川、云南、重庆、贵州、西藏，成都军区范围内的许多采购单位所发布的采购需求，网站将第一时间进行独家发布，军采通会员可以全年无限量的进行查看，先人一步，快人一步，抓住每一次的商机。</p>
+            </div>
+            <div><a href="/jct/Applyvip?sure=true" style="display:block; width:150px ;height:30px; text-align:center; line-height:30px; border:1px solid red; background-color:#E78E8E; color:white; margin:0px auto;">申请加入军采通会员</a></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(".action_link").each(function () {
+        if ($(this).text() == "军采通") {
+            $(this).parent("div").addClass("on");
+        }
+    });
+</script>

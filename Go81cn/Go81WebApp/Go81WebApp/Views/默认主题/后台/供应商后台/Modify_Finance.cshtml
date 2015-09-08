@@ -1,0 +1,100 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@{
+    ViewBag.Title = "修改财务信息";
+    //Layout = "_BackLayout.cshtml";
+}
+<style>
+    table tr td span {
+        font-size: 11px;
+        color: red;
+    }
+</style>
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+@{
+    int index = int.Parse(ViewData["index"].ToString());
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div id="title_div" class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">修改财务信息</div>
+        </div>
+        <div style="border:1px solid green; margin-top:8px;">
+            <form action="/供应商后台/Modify_finance" method="post">
+                <input type="hidden" name="index" value="@index" />
+                <table width="100%">
+                    <tr>
+                        <td height="30" width="20%" align="right">年份：</td>
+                        <td height="30" width="25%"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line input-validation-error" data-val="true" data-val-number="字段 年份 必需是一个数字。" data-val-required="请输入年份" name="财务状况信息[0].年份" type="text" value="@Model.财务状况信息[index].年份" aria-required="true" onfocus="WdatePicker({dateFmt:'yyyy'})" aria-invalid="true"><span>*</span></td>
+                        <td height="30" width="25%" align="right">会计事务所名称：</td>
+                        <td height="30" width="30%"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-required="*请输入会计事务所名称" name="财务状况信息[0].会计事务所名称" type="text" value="@Model.财务状况信息[index].会计事务所名称" aria-required="true" aria-invalid="false"></td>
+                    </tr>
+                    <tr>
+                        <td height="30" align="right">会计事务所联系电话：</td>
+                        <td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-regex="*请输入手机号码或固话号码" data-val-regex-pattern="[0-9]{11}|[0-9]{3}-[0-9]{8}|[0-9]{4}-[0-9]{7,8}" data-val-required="*请输入会计事务所联系电话" name="财务状况信息[0].会计事务所联系电话" type="text" value="@Model.财务状况信息[index].会计事务所联系电话" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">会计事务所联系电话，如：13214786542或028-14786523或0816-25894562</div></div></td>
+                        <td align="right">
+                            @if (Model.财务状况信息[index].会计报表是否经注册会计师审计)
+                            {
+                                <input onclick="checkRegist(this)" type="checkbox" checked="checked" onmouseover="showdiv(this)" onmouseout="hidediv(this)" value=""><input type="hidden" name="财务状况信息[0].会计报表是否经注册会计师审计" value="true" id="regist" /><div class="out_box"><div class="arrow"></div><div class="con_box">已注册请勾选，否则不勾选</div></div>
+                            }
+                            else
+                            {
+                                <input onclick="checkRegist(this)" type="checkbox" onmouseover="showdiv(this)" onmouseout="hidediv(this)" value=""><input type="hidden" name="财务状况信息[0].会计报表是否经注册会计师审计" value="false" id="regist" /><div class="out_box"><div class="arrow"></div><div class="con_box">已注册请勾选，否则不勾选</div></div>
+                            }
+                    </td>
+                    <td>会计报表是否经注册会计师审计</td>
+                </tr>
+                <tr><td height="30" align="right">资产总额(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 资产总额 必需是一个数字。" data-val-required="*请输入资产总额" name="财务状况信息[0].资产总额" type="text" value="@Model.财务状况信息[index].资产总额" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写资产总额,如100</div></div><span>*</span></td><td align="right"> 负债总额(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 负债总额 必需是一个数字。" data-val-required="*请输入负债总额" name="财务状况信息[0].负债总额" type="text" value="@Model.财务状况信息[index].负债总额" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写负债总额,如100</div></div><span>*</span></td></tr>
+                <tr><td height="30" align="right">销售收入(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 销售收入 必需是一个数字。" data-val-required="*请输入销售收入" name="财务状况信息[0].销售收入" type="text" value="@Model.财务状况信息[index].销售收入" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写销售收入,如120</div></div><span>*</span></td><td align="right">资产负债率(%)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 资产负债率 必需是一个数字。" data-val-required="*请输入资产负债率" name="财务状况信息[0].资产负债率" type="text" value="@Model.财务状况信息[index].资产负债率" aria-required="true"><div class="out_box"><div class="arrow"></div><div class="con_box">请直接填写数字,如20</div></div><span>*</span></td></tr>
+                <tr>
+                    <td height="30" align="right">利润总额(万元)：</td>
+                    <td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 净利润 必需是一个数字。" data-val-required="*请输入利润总额" name="财务状况信息[0].利润总额" type="text" value="@Model.财务状况信息[index].利润总额" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写利润总额,如2200000</div></div><span>*</span></td>
+                    <td height="30" align="right">净利润(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 净利润 必需是一个数字。" data-val-required="*请输入净利润" name="财务状况信息[0].净利润" type="text" value="@Model.财务状况信息[index].净利润" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写净利润,如2200000</div></div><span>*</span></td></tr>
+                    <tr><td height="30" align="right">资本金(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 净利润 必需是一个数字。" data-val-required="*请输入利润总额" name="财务状况信息[0].资本金" type="text" value="@Model.财务状况信息[index].资本金" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写实收资本,如2200</div></div><span>*</span></td></tr>
+            </table>
+            <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
+        </form>
+    </div>
+</div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("a.modify").click(function () { $(".company_msg :text,.company_msg :checkbox,.company_msg :file,.company_msg :submit").each(function () { $(this).removeAttr("disabled"); $(".company_msg a.add").show(); }); $(".company_msg :submit").css("background-color", "#2c5735"); });
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+
+        $("#财务信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#财务信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function checkRegist(th)
+    {
+        if(th.checked)
+        {
+            document.getElementById("regist").value = true;
+        }
+        else
+        {
+            document.getElementById("regist").value = false;
+        }
+    }
+    function show_tip(t) {
+        $(t).next("div").show();
+        $(t).next("div").css("display", "inline-block");
+    }
+    function hide_tip(t) {
+        $(t).next("div").hide();
+    }
+    function showdiv(th) {
+        $(th).parent().children("div").show();
+        $(th).parent().children("div").css("display", "inline-block");
+    }
+    function hidediv(th) {
+        $(th).parent().children("div").hide();
+    }
+</script>

@@ -1,0 +1,179 @@
+﻿
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+
+<script>
+    KindEditor.ready(function (K) {
+        var editor = K.create('#content', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true
+        });
+        K('input[name=submitcontent]').click(function (e) {
+            alert(editor.html());
+        });
+
+    });
+</script>
+
+<div class="gys_znxx_box">
+    <div class="gys_znxx_topbox">
+        <div class="gys_znxx_topbg">
+            <div class="index_bottom_zb_top_title">咨询详情</div>
+        </div>
+    </div>
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="5%">未读</th>
+                    <th width="60%">标题</th>
+                    <th width="20%">发信人</th>
+                    <th width="15%">日期</th>
+                </tr>
+                <tr>
+                    <td><img src="~/images/gys_znxx_newtip.jpg" /></td>
+                    <td><a href="#">11111111111111111111111111111111111111111111111111111111111111111111</a></td>
+                    <td>1111111111</td>
+                    <td class="gys_znxx_content_tabletime">1111111111</td>
+                </tr>
+                <tr>
+                    <td><img src="~/images/gys_znxx_newtip.jpg" /></td>
+                    <td><a href="#">1111111111</a></td>
+                    <td>1111111111</td>
+                    <td class="gys_znxx_content_tabletime">1111111111</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a href="#">1111111111</a></td>
+                    <td>1111111111</td>
+                    <td class="gys_znxx_content_tabletime">1111111111</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a href="#">1111111111</a></td>
+                    <td>1111111111</td>
+                    <td class="gys_znxx_content_tabletime">1111111111</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a href="#">1111111111</a></td>
+                    <td>1111111111</td>
+                    <td class="gys_znxx_content_tabletime">1111111111</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a href="#">1111111111</a></td>
+                    <td>1111111111</td>
+                    <td class="gys_znxx_content_tabletime">1111111111</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><a href="#">1111111111</a></td>
+                    <td>1111111111</td>
+                    <td class="gys_znxx_content_tabletime">1111111111</td>
+                </tr>
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                <div class="gys_znxx_content_detail_content">
+                    <div class="gys_znxx_content_detail_left">标题:</div>
+                    <div class="gys_znxx_content_detail_right">您的3304是什么颜色的</div>
+                </div>
+                <div class="gys_znxx_content_detail_content">
+                    <div class="gys_znxx_content_detail_left">发信人:</div>
+                    <div class="gys_znxx_content_detail_right">采购单位57</div>
+                </div>
+                <div class="gys_znxx_content_detail_content">
+                    <div class="gys_znxx_content_detail_left">内容:</div>
+                    <div class="gys_znxx_content_detail_right"> 内容 </div>
+                </div>
+                <div class="gys_znxx_content_detail_content_exp">
+                    <div class="gys_znxx_content_detail_left">回复:</div>
+                    <div class="gys_znxx_content_detail_right">
+                        <textarea id="content" style="width: 750px; height: 440px; visibility: hidden;"></textarea>
+                        <input name="submitcontent" type="button" class="gys_znxx_content_detail_button" onclick="getContent()" value="回复" />
+                    </div>
+                </div>
+                <div class="gys_znxx_content_detail_block">
+                    <div class="gys_znxx_content_detail_content">
+                        <div class="gys_znxx_content_detail_left">标题:</div>
+                        <div class="gys_znxx_content_detail_right">您的3304是什么颜色的</div>
+                    </div>
+                    <div class="gys_znxx_content_detail_content">
+                        <div class="gys_znxx_content_detail_left">发信人:</div>
+                        <div class="gys_znxx_content_detail_right">采购单位57</div>
+                    </div>
+                    <div class="gys_znxx_content_detail_content_exp">
+                        <div class="gys_znxx_content_detail_left">内容:</div>
+                        <div class="gys_znxx_content_detail_right"> 内容 </div>
+                    </div>
+                </div>
+
+                <div class="gys_znxx_content_detail_block">
+                    <div class="gys_znxx_content_detail_content">
+                        <div class="gys_znxx_content_detail_left">标题:</div>
+                        <div class="gys_znxx_content_detail_right">您的3304是什么颜色的</div>
+                    </div>
+                    <div class="gys_znxx_content_detail_content">
+                        <div class="gys_znxx_content_detail_left">发信人:</div>
+                        <div class="gys_znxx_content_detail_right">采购单位57</div>
+                    </div>
+                    <div class="gys_znxx_content_detail_content_exp">
+                        <div class="gys_znxx_content_detail_left">内容:</div>
+                        <div class="gys_znxx_content_detail_right"> 内容 </div>
+                    </div>
+                </div>
+
+                <div class="gys_znxx_content_detail_block">
+                    <div class="gys_znxx_content_detail_content">
+                        <div class="gys_znxx_content_detail_left">标题:</div>
+                        <div class="gys_znxx_content_detail_right">您的3304是什么颜色的</div>
+                    </div>
+                    <div class="gys_znxx_content_detail_content">
+                        <div class="gys_znxx_content_detail_left">发信人:</div>
+                        <div class="gys_znxx_content_detail_right">采购单位57</div>
+                    </div>
+                    <div class="gys_znxx_content_detail_content_exp">
+                        <div class="gys_znxx_content_detail_left">内容:</div>
+                        <div class="gys_znxx_content_detail_right"> 内容 </div>
+                    </div>
+                </div>
+
+                <div class="gys_znxx_content_detail_block">
+                    <div class="gys_znxx_content_detail_content">
+                        <div class="gys_znxx_content_detail_left">标题:</div>
+                        <div class="gys_znxx_content_detail_right">您的3304是什么颜色的</div>
+                    </div>
+                    <div class="gys_znxx_content_detail_content">
+                        <div class="gys_znxx_content_detail_left">发信人:</div>
+                        <div class="gys_znxx_content_detail_right">采购单位57</div>
+                    </div>
+                    <div class="gys_znxx_content_detail_content_exp">
+                        <div class="gys_znxx_content_detail_left">内容:</div>
+                        <div class="gys_znxx_content_detail_right"> 内容 </div>
+                    </div>
+                </div>
+
+                <div class="gys_znxx_content_detail_block">
+                    <div class="gys_znxx_content_detail_content">
+                        <div class="gys_znxx_content_detail_left">标题:</div>
+                        <div class="gys_znxx_content_detail_right">您的3304是什么颜色的</div>
+                    </div>
+                    <div class="gys_znxx_content_detail_content">
+                        <div class="gys_znxx_content_detail_left">发信人:</div>
+                        <div class="gys_znxx_content_detail_right">采购单位57</div>
+                    </div>
+                    <div class="gys_znxx_content_detail_content_exp">
+                        <div class="gys_znxx_content_detail_left">内容:</div>
+                        <div class="gys_znxx_content_detail_right"> 内容 </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

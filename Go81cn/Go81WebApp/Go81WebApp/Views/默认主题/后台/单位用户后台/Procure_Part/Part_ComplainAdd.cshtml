@@ -1,0 +1,74 @@
+﻿@model Go81WebApp.Models.数据模型.消息数据模型.对话消息
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<script type="text/javascript" language="javascript">
+    function Check_User() {
+        $.get(
+             '/单位用户后台/Check_User', { name: $(":input#Riseaver").val() },
+             function (data, status) {
+                 if (data == '1') {
+                     $(":submit").removeAttr("disabled");
+                     $("#tip").text('');
+                     $(":submit").css({ "background-color": "#737d46", "color": "white", "cursor": "pointer" });
+                 }
+                 else {
+                     $(":submit").attr("disabled", "disabled");
+                     $(":submit").css({ "background-color": "lightgray", "color": "gray" });
+                     $("#tip").text('*收信人不存在');
+                 }
+             }
+        );
+    }
+</script>
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<style type="text/css">
+    .uploadifyQueueItem {
+        font: 11px Verdana, Geneva, sans-serif;
+        margin-top: 5px;
+        padding: 5px;
+        width: 550px;
+        height: 30px;
+        margin-right: 5px;
+        float: left;
+        text-align: left;
+    }
+</style>
+
+<script>
+    KindEditor.ready(function (K) {
+        var editor = K.create('#content', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true,
+            items: ['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+'superscript', '|', 'selectall', '-',
+'title', 'fontname', 'fontsize', '|', 'textcolor', 'bgcolor', 'bold',
+'italic', 'underline', 'strikethrough', 'removeformat', '|', 'advtable', 'hr', 'emoticons', 'link', 'unlink', '|', 'about']
+        });
+
+    });
+</script>
+
+<div class="gys_znxx_box">
+    <div class="gys_znxx_topbox">
+        <div class="gys_znxx_topbg">
+            <div class="index_bottom_zb_top_title">发起投诉</div>
+        </div>
+    </div>
+    <form method="post" action="/单位用户后台/Gys_ComplainsAdd">
+        <table style="margin-top:30px;">
+            <tr><td width="50">收信人:<input type="text" onblur="Check_User()" style="width:647px;" name="jieshou" id="Riseaver" /></td><td><span id="tip" style="color:red; text-align:center;"></span></td></tr>
+            <tr><td>标&nbsp;&nbsp;题: @Html.TextBoxFor(m => m.消息主体.标题, new { @style = "width:647px;" })</td></tr>
+            <tr><td><table><tr><td valign="top">内&nbsp;&nbsp;容:<td>@Html.TextAreaFor(m => m.消息主体.内容, new { @style = "width: 500px; height: 450px;", id = "content" })</td></tr></table></td></tr>
+            <tr><td align="center"><input type="submit" disabled="disabled" name="submitcontent" value="发送" style="float:right;width:60px; height:35px; text-align:center; line-height:35px; margin-right:300px; border-width:0px; background-color:lightgray; color:gray;" /></td></tr>
+        </table>
+    </form>
+</div>

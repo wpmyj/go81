@@ -1,0 +1,205 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型
+<link href="~/css/index.css" rel="stylesheet" />
+<style>
+    div#pager{ width:100%; text-align:center;}
+    div#pager a {
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        line-height: 25px;
+        font-size: 12px;
+        height: 25px;
+        border: 1px solid gray;
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+        .gys_xttz_topbg a {
+        margin-top: 0;
+    }
+
+    .adaddtip {
+        font-weight: normal;
+        font-size: 16px;
+        padding-left: 10px;
+        text-decoration: underline;
+        color: red;
+        padding-top: 5px;
+    }
+</style>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">单位用户列表<a href="/单位用户后台/DepartmentAdd" class="adaddtip">【+添加新单位】</a></div>
+    </div>
+</div>
+<div class="gys_znxx_box" onkeypress="BindEnter(event, 'btn')">
+    <div class="gys_znxx_contentbox">
+        @if (ViewData["userid"] != null && ViewData["userid"].ToString() == "10") { 
+            <table width="90%" style="margin-left:20px; margin-top:10px;">
+                <tr>
+                    <td style="font-size:14px; text-align:right">单位编号：</td>
+                    <td><input type="text" id="number" style="width:200px;" /></td>
+                    <td style="font-size:14px;text-align:right">用户名称：</td>
+                    <td><input type="text" id="name" style="width:200px;" /></td>
+                </tr>
+                <tr>
+                    <td style="font-size:14px;text-align:right">单位级别：</td>
+                    <td>
+                        <select style="width:206px;">
+                            <option value="@((int)单位用户.单位级别.未设置)">未设置</option>
+                            <option value="@((int)单位用户.单位级别.正军级)">正军级</option>
+                            <option value="@((int)单位用户.单位级别.正师级)">正师级</option>
+                            <option value="@((int)单位用户.单位级别.正团级)">正团级</option>
+                            <option value="@((int)单位用户.单位级别.正营级)">正营级</option>
+                            <option value="@((int)单位用户.单位级别.副军级)">副军级</option>
+
+                            <option value="@((int)单位用户.单位级别.副师级)">副师级</option>
+                            <option value="@((int)单位用户.单位级别.副团级)">副团级</option>
+                            <option value="@((int)单位用户.单位级别.副营级)">副营级</option>
+                            <option value="@((int)单位用户.单位级别.营级以下)">营级以下</option>
+                        </select>
+                    </td>
+                    <td colspan="2" valign="middle" style="text-align:center">
+                        <input type="button" id="btn" style="width:206px;margin-left:7px; height:30px;" class="gys_ztbsearch_search_botton" onclick="Find_User()" value="查询所有单位" />
+                    </td>
+                </tr>
+            </table>
+        }
+        <div class="gys_znxx_content" id="contentdiv">
+            <table width="100%" id="con" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th align="center">用户ID</th>
+                    <th align="center">登录名</th>
+                    <th align="center">单位代号</th>
+                    <th align="center">联系人</th>
+                    <th align="center">联系人手机</th>
+                    <th align="center">所属用户组</th>
+                    <th align="center">审核状态</th>
+                    <th>操作</th>
+                </tr>
+                @foreach (var item in ViewData["user"] as IEnumerable<用户基本数据>)
+                {
+                    var m = item as 单位用户;
+                    <tr>
+                        <td>@m.Id</td>
+                        <td><a href="/单位用户后台/Department_Detail?id=@item.Id">@item.登录信息.登录名</a></td>
+                        <td><a href="/单位用户后台/Department_Detail?id=@item.Id">@m.单位信息.单位代号</a></td>
+                        <td>@m.联系方式.联系人</td>
+                        <td>@m.联系方式.手机</td>
+                        <td>
+                            @foreach(var k in m.用户组)
+                            {
+                                <label>@k</label><br />
+                            }
+                        </td>
+                        @if (m.审核数据.审核状态 == 审核状态.审核通过)
+                        {
+                            <td>@m.审核数据.审核状态</td>
+                        }
+                        else if (m.审核数据.审核状态 == 审核状态.审核未通过)
+                        {
+                            <td style="color: red;">@m.审核数据.审核状态</td>
+                        }
+                        else
+                        {
+                            <td style="color: #3333ff;">@m.审核数据.审核状态</td>
+                        }
+                        <td>
+                            @*@if (m.用户组.Contains("超级管理员") || m.用户组.Contains("两库管理专员") || m.用户组.Contains("一级管理员账号") || m.用户组.Contains("二级管理员账号") || m.用户组.Contains("操作员账号A") || m.用户组.Contains("验收单管理专员") || m.用户组.Contains("采购处管理员账号"))
+                            {
+                                
+                            }
+                            else
+                            {*@ 
+                                @*<a href="/单位用户后台/DepartmentModify?id=@item.Id">编辑</a>*@<a onclick="del(@item.Id)">删除</a>
+                            @*}*@
+                        </td>
+                    </tr>
+                }
+            </table>
+            @*<div class="gys_znxx_content_detailbox">
+                @if (ViewData["currentpage"] != null && ViewData["pagecount"].ToString() != "1")
+                {
+                    <div class="gys_znxx_content_detailbox">
+                        @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+                        {
+                            <a>首页</a>
+                        }
+                        else
+                        {
+                            <a onclick=" changeMesspage(this) " id="1" class="page">首页</a>
+                        }
+                        @for (int i = 0; i <= 10; i++)
+                        {
+                            //一共最多显示10个页码，前面5个，后面5个
+                            if ((int.Parse(ViewData["currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                            {
+                                if (5 == i)
+                                {
+                                    //当前页处理
+                                    <a>@int.Parse(ViewData["currentPage"].ToString())</a>
+                                }
+                                else
+                                {
+                                    //一般页处理
+                                    <a onclick=" changeMesspage(this) " class="page" id="@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)">@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)</a>
+
+                                }
+                            }
+                        }
+                        @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+                        {
+                            <a>末页</a>
+                        }
+                        else
+                        {
+                            <a onclick=" changeMesspage(this) " id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+                        }
+                        @ViewData["currentPage"].ToString()/@ViewData["pagecount"].ToString()
+                    </div>
+                }
+            </div>*@
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+        <div id="pager"></div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function Find_User() {
+        var page = '1';
+        $.get('/单位用户后台/Part_DepartmentListSearch/',
+            { name: $(":text#name").val(), num: $(":text#number").val(),catorgray: $("select").val(),p: page},
+            function (data) {
+                $("#contentdiv").html(data);
+            }
+        );
+    }
+    var num =@(int.Parse(ViewData["currentpage"].ToString()));
+    var j=@(int.Parse(ViewData["pagecount"].ToString()));
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).addClass("currentPage");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#已审核的附属账号").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#已审核的附属账号").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此用户！确定删除吗？"))
+        {
+            window.location="/单位用户后台/Del_Department?id="+num;
+        }
+    }
+</script>

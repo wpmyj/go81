@@ -1,0 +1,65 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.公告
+
+@{
+    ViewBag.Title = "公告中标商品";
+    
+}
+<div class="front_outdiv">
+    <div class="front_outdiv_left">
+        <div class="index_bottom_spdtbox">
+            <div class="index_bottom_spdt_content_box tabcontent" id="tabcontent_spdt" style="width:955PX;height:auto">
+                
+                    <ul style="padding:0;margin:0;position:initial">
+                        @if (Model.中标商品链接.Count() > 0)
+                        {
+                            foreach (var item in Model.中标商品链接)
+                            {
+                                <li style="height:255px;">
+                                    @if (item.商品 != null)
+                                    {
+                                        if (item.商品.商品信息.商品图片.Count > 0)
+                                        {
+                                            <div class="index_bottom_spdt_content_img"><a target="_blank" href="~/商品陈列/Product_Detail?id=@item.商品ID"><img src="@item.商品.商品信息.商品图片[0].Replace("original/", "150X150/")" width="220" height="132" /></a></div>
+                                        }
+                                        else
+                                        {
+                                            <div class="index_bottom_spdt_content_img"><a target="_blank" href="~/商品陈列/Product_Detail?id=@item.商品ID"><img src="~/images/noimage.jpg" width="220" height="132" /></a></div>
+                                        }
+                                        <div class="index_bottom_spdt_content_text" style="height:40px;">
+                                            <a class="proname" target="_blank" href="~/商品陈列/Product_Detail?id=@item.商品ID" title="@item.商品.商品信息.商品名">@item.商品.商品信息.商品名</a>
+                                        </div>
+                                        <em style="color:red; font-size:15px; font-weight:bolder;">￥@(string.Format("{0:0.00}", item.商品.销售信息.价格))</em><span style="padding-left:20px; color:#999; cursor:pointer;" title="报价时间">(@item.商品.销售信息.价格修改日期.ToString("yyyy-MM-dd"))</span>
+                                        <br />
+
+                                        <a class="links index_overflowspan" href="/供应商陈列/Supplier_Destination?id=@item.商品.商品信息.所属供应商.用户ID" target="_blank" title="@item.商品.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@item.商品.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
+                                        <a class="index_overflowspan" title="@item.商品.商品信息.所属供应商.用户数据.所属地域.地域">所在地域：@item.商品.商品信息.所属供应商.用户数据.所属地域.地域</a>
+                                        <span style="color:gray;">外网浏览:@item.商品.销售信息.点击量</span>
+                                        <span style="color:gray; float:right; padding-right:22px;">
+                                            内网浏览:
+                                            @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                                            {
+                                                <a>@item.商品.销售信息.内网点击量</a>
+                                            }
+                                            else
+                                            {
+                                                <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/首页/">登陆查看</a>
+                                            }
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <div class="index_bottom_spdt_content_img">商品不存在：ID为 @item.商品ID</div>
+                                    }
+                                </li>
+                            }
+                        }
+                    </ul>
+                
+            </div>
+        </div>
+    </div>
+    <div class="front_outdiv_right">
+        @Html.Action("Part_OtherList", "公告")
+    </div>
+</div>
+

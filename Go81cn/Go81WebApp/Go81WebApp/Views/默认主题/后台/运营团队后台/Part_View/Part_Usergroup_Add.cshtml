@@ -1,0 +1,136 @@
+﻿@model Go81WebApp.Models.数据模型.权限数据模型.用户组
+@using Go81WebApp.Models.数据模型.权限数据模型
+@using Go81WebApp.Models.管理器
+<style type="text/css">
+    .procure_formlistdiv input {
+        width: 500px;
+    }
+
+    .emunlist {
+        width: 190px;
+        height: 30px;
+        float: left;
+        padding: 10px;
+    }
+
+        .emunlist input {
+            width: 15px;
+            height: 15px;
+        }
+</style>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">添加用户组</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <div class="procureinputdiv">
+                <div class="procureinputdiv_title">用户组名称：</div>
+                <div class="procure_formlistdiv">
+                    @Html.TextBoxFor(model => model.用户组名, new { @id = "usergroupname" })
+                    <span class="errormessage">@Html.ValidationMessageFor(model => model.用户组名)</span>
+                </div>
+            </div>
+            <div class="procureinputdiv">
+                <div class="procureinputdiv_title">用户组权限:</div>
+                <div class="procure_formlistdiv" style="border: 1px solid #999; height: auto; overflow: hidden; width: 850px;">
+                    <table width="100%" cellpadding="0" cellspacing="0" id="qx_table" style="margin-top:0;border:none;">
+                        @{
+                            foreach (var item in (Dictionary<权限, object>)ViewData["权限集合"])
+                            {
+                                <tr>
+                                    <td colspan="3" onclick="showQx(this)">@item.Key<span style="float:right;font-size:18px; cursor:pointer">+</span></td>
+                                </tr>
+                                <tr contextmenu="false" style="display:none">
+                                    <td colspan="3" style="padding:0;">
+                                        @{var t = item.Value.GetType().BaseType.Name == "Array";}
+                                        @if (t)
+                                        {
+                                            foreach (var k in item.Value as 权限[])
+                                            {
+                                                <div class="emunlist">
+                                                    <input style="width:auto;height:auto" type="checkbox" id="@k" name="selectlist" value="@k" /><label for="@k">@k</label>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            foreach (var k in (Dictionary<权限, 权限[]>)item.Value)
+                                            {
+                                                <table width="100%" style="margin:0;border:none" cellpadding="0" cellspacing="0">
+                                                    <tr>
+                                                        <td width="220px;" style="text-indent:2em" onclick="showQx(this)">@k.Key<span style="float:right;font-size:18px; cursor:pointer">+</span></td>
+                                                    </tr>
+                                                    <tr style="display:none" contextmenu="false">
+                                                        <td style="padding:0;">
+                                                            @foreach (var m in k.Value as 权限[])
+                                                            {
+                                                                <div class="emunlist">
+                                                                    <input type="checkbox" id="@m" name="selectlist" value="@m" /><label for="@m"></label>
+                                                                </div>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+            <input type="hidden" id="permissionstr" name="permissionstr" />
+            <div style=" text-align:center;">
+                <input id="addbutton" name="addbutton" type="submit" @*onclick="return checkcontent();"*@ style="margin-top:20px;" class="front_login_rightbox_button" value="确          定" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //展开/收缩权限列表
+    function showQx(ev) {
+        var isShow = $(ev).parent().next().attr("contextmenu"); //判断子分类权限是展开还是收缩
+        if (isShow == "true") {
+            $(ev).parent().next().fadeOut(200);
+            $(ev).parent().next().attr({ "contextmenu": "false" });
+            $(ev).find("span").html("+").css({ "font-size": "18px" });
+        }
+        else {
+            $(ev).parent().next().fadeIn(200);
+            $(ev).parent().next().attr({ "contextmenu": "true" });
+            $(ev).find("span").html("-").css({ "font-size": "30px" });
+        }
+    };
+
+    $("#addbutton").click(function () {
+        var selectcontent = "";
+
+        var selectlist = document.getElementsByName("selectlist");
+        for (var i = 0; i < selectlist.length; i++) {
+            if (selectlist[i].checked)
+                selectcontent += selectlist[i].value + ",";
+        }
+        document.getElementById("permissionstr").value = selectcontent;
+
+        var usergroup_name = $("#usergroupname").val();
+        var permission = $("#permissionstr").val();
+        $.ajax({
+            url: '/运营团队后台/UsergroupAdd',
+            type: 'post',
+            data: { name: usergroup_name, per: permission },
+            success: function () {
+                window.location.href = "/运营团队后台/Usergroup_Mannage";
+            },
+        });
+    });
+    $(function () {
+        $("#添加用户组").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#添加用户组").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+

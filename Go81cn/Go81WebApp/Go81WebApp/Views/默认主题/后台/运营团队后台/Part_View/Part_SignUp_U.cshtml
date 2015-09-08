@@ -1,0 +1,221 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+<style type="text/css">
+    input {
+        line-height: 25px;
+        width: 90%;
+        height: 25px;
+    }
+</style>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">供应商U盾信息</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+
+                @if (Model != null)
+                {
+                    @Html.HiddenFor(model => model.Id);
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">供应商名称：</div>
+                        <div style="width:500px; height:30px; line-height:30px; color:red;">
+                            @Model.企业基本信息.企业名称
+                        </div>
+                    </div>
+                    <b>U盾申请信息</b>
+                    <table width="100%" cellpadding="0" cellspacing="0" id="gys_signup_information" style="margin-bottom:20px;">
+                        <tr id="tablehead">
+                            <th width="60%">名称</th>
+                            <th width="40%">内容</th>
+                        </tr>
+                        <tr>
+                            <td>身份认证申请表</td>
+                            @if (!string.IsNullOrWhiteSpace(Model.供应商用户信息.U盾信息.身份认证申请表))
+                            {
+                                <td><a href="@Model.供应商用户信息.U盾信息.身份认证申请表" target="_blank">点击查看</a></td>
+                            }
+                            else
+                            {
+                                <td style="color:red;">未上传</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>办理人授权书（若为企业法人则不用提供）</td>
+                            @if (!string.IsNullOrWhiteSpace(Model.供应商用户信息.U盾信息.办理人授权书))
+                            {
+                                <td><a href="@Model.供应商用户信息.U盾信息.办理人授权书" target="_blank">点击查看</a></td>
+                            }
+                            else
+                            {
+                                <td style="color:red;">未上传</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>办理人身份证照片（若为企业法人则不用提供）</td>
+                            @if (!string.IsNullOrWhiteSpace(Model.供应商用户信息.U盾信息.办理人身份证照片))
+                            {
+                                <td><a href="@Model.供应商用户信息.U盾信息.办理人身份证照片" target="_blank">点击查看</a></td>
+                            }
+                            else
+                            {
+                                <td style="color:red;">未上传</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>U盾操作人授权书（若为企业法人则不用提供）</td>
+                            @if (!string.IsNullOrWhiteSpace(Model.供应商用户信息.U盾信息.U盾操作人授权书))
+                            {
+                                <td><a href="@Model.供应商用户信息.U盾信息.U盾操作人授权书" target="_blank">点击查看</a></td>
+                            }
+                            else
+                            {
+                                <td style="color:red;">未上传</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>U盾操作人身份证照片（若为企业法人则不用提供）</td>
+                            @if (!string.IsNullOrWhiteSpace(Model.供应商用户信息.U盾信息.U盾操作人身份证照片))
+                            {
+                                <td><a href="@Model.供应商用户信息.U盾信息.U盾操作人身份证照片" target="_blank">点击查看</a></td>
+                            }
+                            else
+                            {
+                                <td style="color:red;">未上传</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>办公场地照片</td>
+                            @if (!string.IsNullOrWhiteSpace(Model.供应商用户信息.U盾信息.办公场地照片))
+                            {
+                                <td><a href="@Model.供应商用户信息.U盾信息.办公场地照片" target="_blank">点击查看</a></td>
+                            }
+                            else
+                            {
+                                <td style="color:red;">未上传</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td>安全认证年度审核申请表</td>
+                            <td>
+                                @if (Model.供应商用户信息.U盾信息.安全认证年度审核申请表.Count > 0)
+                                {
+                                    foreach (var item in Model.供应商用户信息.U盾信息.安全认证年度审核申请表)
+                                    {
+                                        if (!string.IsNullOrWhiteSpace(item))
+                                        {
+                                            <a href="@Model.供应商用户信息.U盾信息.办公场地照片" target="_blank">点击查看</a><br />
+                                        }
+                                        else
+                                        {
+                                            <span style="color:red;">未上传</span>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <span style="color:red;">未上传</span>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+                    <b>U盾内容信息</b>
+                    <table width="100%" cellpadding="0" cellspacing="0" id="gys_signup_information">
+                        <tr id="tablehead">
+                            <th width="30%">名称</th>
+                            <th width="70%">内容</th>
+                        </tr>
+                        <tr>
+                            <td>序列号</td>
+                            <td><input id="seriesnumber" name="seriesnumber" type="text" value="@Model.供应商用户信息.U盾信息.序列号" /> @*@Html.EditorFor(model => model.供应商用户信息.U盾信息.序列号)*@</td>
+                        </tr>
+                        <tr>
+                            <td>加密参数</td>
+                            <td><input id="codeparam" name="codeparam" type="text" value="@Model.供应商用户信息.U盾信息.加密参数" />@*@Html.EditorFor(model => model.供应商用户信息.U盾信息.加密参数)*@</td>
+                        </tr>
+                        <tr>
+                            <td>开始时间</td>
+                            <td><input id="codeparam" name="starttime" type="text" value="@Model.供应商用户信息.U盾信息.年检开始时间" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd HH:mm:ss' })" />@*@Html.EditorFor(model => model.供应商用户信息.U盾信息.加密参数)*@</td>
+                        </tr>
+                        <tr>
+                            <td>截止时间</td>
+                            <td><input id="codeparam" name="endtime" type="text" value="@Model.供应商用户信息.U盾信息.年检结束时间" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd HH:mm:ss' })" />@*@Html.EditorFor(model => model.供应商用户信息.U盾信息.加密参数)*@</td>
+                        </tr>
+                    </table>
+
+                    <div id="" class="" style="text-align:center;">
+                        @if (Model.供应商用户信息.U盾信息.审核数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核通过)
+                        {
+                            <div style="padding-top:20px;">
+                                <input type="radio" name="auditstatus" value="1" style="width:15px; height:15px;" checked="checked" />审核通过
+                                <input type="radio" name="auditstatus" value="0" style="width:15px; height:15px;" />未审核
+                                <input type="radio" name="auditstatus" value="2" style="width:15px; height:15px;" />审核不通过
+                            </div>
+                        }
+                        else if (Model.供应商用户信息.U盾信息.审核数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核未通过)
+                        {
+                            <div style="padding-top:20px;">
+                                <input type="radio" name="auditstatus" value="1" style="width:15px; height:15px;" />审核通过
+                                <input type="radio" name="auditstatus" value="0" style="width:15px; height:15px;" />未审核
+                                <input type="radio" name="auditstatus" value="2" style="width:15px; height:15px;" checked="checked" />审核不通过
+                            </div>
+                        }
+                        else
+                        {
+                            <div style="padding-top:20px;">
+                                <input type="radio" name="auditstatus" value="1" style="width:15px; height:15px;" />审核通过
+                                <input type="radio" name="auditstatus" value="0" style="width:15px; height:15px;" checked="checked" />未审核
+                                <input type="radio" name="auditstatus" value="2" style="width:15px; height:15px;" />审核不通过
+                            </div>
+                        }
+                        <input type="hidden" name="reason" id="reason" />
+                        <input id="modiibutton" name="submitcontent" type="submit" style="margin-top:20px;" onclick="return setisbuybs();" class="front_login_rightbox_button" value="确定">
+                    </div>
+                }
+                else
+                {
+                    <div style="text-align:center;">
+                        无此信息
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+}
+<script type="text/javascript">
+    function setisbuybs() {
+        if (!confirm("确定提交本次数据？")) {
+            return false;
+        }
+        else {
+            var statu = $("input[name='auditstatus']:checked").val();
+            if (statu == "2") {
+                var reason = prompt("请输入审核不通过原因", "");
+                if (reason == null || reason == "" || $.trim(reason) == "") {
+                    alert("原因必须填写！");
+                    return false;
+                } else {
+                    $("#reason").val(reason);
+                }
+            }
+            return true;
+        }
+    }
+    $(function () {
+        $("#供应商列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#供应商列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+

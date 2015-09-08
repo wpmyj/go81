@@ -1,0 +1,67 @@
+﻿
+@using Go81WebApp.Models.数据模型
+<div class="gys_znxx_box">
+    <div class="gys_znxx_topbox">
+        <div class="gys_znxx_topbg">
+            <div class="index_bottom_zb_top_title">历史抽选评审专家列表</div>
+        </div>
+    </div>
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <div class="front_login_rightbox_title" style="color:red; padding-bottom:20px;"> @TempData["AdTempDate"]</div>
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="12%">项目编号</th>
+                    <th width="12%">项目名称</th>
+                    <th width="10%">操作人</th>
+                    <th width="10%">确认人</th>
+                    <th width="12%">预定抽选评审专家数</th>
+                    <th width="10%">评审专家抽选次数</th>
+                    <th width="13%">评标时间</th>
+                    <th width="12%">操作</th>
+                </tr>
+                @{
+                    IEnumerable<专家抽选记录> hisrecord = ViewData["历史抽选专家列表"] as IEnumerable<专家抽选记录>;
+                    if (hisrecord != null && hisrecord.Any())
+                    { 
+                        foreach(var i in hisrecord)
+                        { 
+                            <tr>
+                                <td>@i.项目编号</td>
+                                <td>@i.项目名称</td>
+                                <td>@i.操作人.用户数据.登录信息.登录名</td>
+                                <td>@i.确认人.用户数据.登录信息.登录名</td>
+                                <td>@i.总计预定抽选专家数</td>
+                                <td>@i.专家抽选轮次.Count</td>
+                                <td>@i.评标时间.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    @Html.ActionLink("查看抽选结果", "", new { id = i.Id }, new { @target="_blank"})
+                                </td>
+                                @*<td class="gys_znxx_content_tabletime">
+                                    @Html.ActionLink("修改", "Expert_Edit", new { })|@Html.ActionLink("删除", "Procure_AdDelete", new { })|
+                                    @if (false)
+                                    {
+                                        @Html.ActionLink("禁用", "Procure_AdForbid", new { })
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("解除禁用", "Procure_AdForbid", new { })
+                                    }
+                                </td>*@
+                            </tr>
+                        }
+                    }
+                    else { 
+                        <tr>
+                            <td>暂无历史抽选评审专家</td><td></td><td></td><td></td><td></td>
+                        </tr>
+                    }
+                }
+                
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                    @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+﻿<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">最新下载</div>
+    </div>
+</div>
+<div class="front_newslist_rightdiv" style="margin-top:-5px;">
+    <div class="index_content_zcfg_content" style=" width:238px; height:auto; overflow:hidden;" id="tabcontent_zcfg">
+        <ul>
+            @{ int i = 0;}
+            @foreach (var item in (IEnumerable<Go81WebApp.Models.数据模型.内容数据模型.下载>)ViewData["下载"])
+            {
+                if (i % 2 == 0)
+                {
+                    <li>
+                        <a href="/登录/Login?ReturnUrl=@Url.Encode("/下载/Download_Detail")?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="oddlinecolor_exp">
+                        <a href="/登录/Login?ReturnUrl=@Url.Encode("/下载/Download_Detail")?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                    </li>
+                }
+                i++;
+            }
+        </ul>
+
+    </div>
+</div>

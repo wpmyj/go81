@@ -1,0 +1,12 @@
+﻿@model Go81WebApp.Models.数据模型.消息数据模型.投诉
+           <div id="table" style="width:700px; font-size:14px; word-break:break-all; height:auto; margin-left:30px; font-size:14px;">
+    <table>
+        @foreach (var item in Model.对话消息)
+        {
+            <tr><td align="left" valign="top">标题：@item.消息主体.标题</td></tr>
+            <tr><td align="left" valign="top">内容：@Html.Raw(item.消息主体.内容)</td></tr>
+            break;
+        }
+        <tr><td><a href="/单位用户后台/Procure_ComplainList" style="width:50px; height:30px;background-color:lightgreen; display:block; border-radius:3px; text-align:center; line-height:30px; color:black;">返回</a></td></tr>
+    </table>
+</div>

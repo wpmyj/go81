@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "军采通";
+    Layout = "~/Views/默认主题/_Shared/_Layout.cshtml";
+}
+<style>
+    .jcpage {
+        background-image: url(/Images/jc.png);
+        text-align: center;
+        line-height: 30px;
+        height: 99px;
+        width: 114px;
+        font-size: 14px;
+        color: white;
+        position: absolute;
+    }
+
+        .jcpage a {
+            color: white;
+            display: block;
+            width: 114px;
+            height: 60px;
+            margin: 0px auto;
+        }
+
+            .jcpage a:hover {
+                text-decoration: underline;
+            }
+
+    .bgimg {
+        width: 36px;
+        margin: 0px auto;
+        margin-top: 5px;
+        height: 40px;
+        background-size: 36px 40px;
+    }
+
+    .jctheader {
+        font-size: 24px;
+        font-weight: bolder;
+        text-align: center;
+        text-shadow:0px 1px 1px gray;
+    }
+
+    #pic {
+        width: 575px;
+        height: 420px;
+        margin: 0px auto;
+        background-image: url(/Images/vipintroduce.png);
+    }
+
+    .txt {
+        text-indent: 2em;
+        font-size: 16px;
+        color: #6D6A6A;
+        width: 85%;
+        margin: 20px auto;
+    }
+
+    .outbox {
+        width: 80%;
+        border: 1px solid green;
+        margin: 0px auto;
+    }
+</style>
+<div class="bg_outdiv" style="width:85%; margin:0px auto; box-shadow:0px 10px 15px #C3C3C3;-webkit-box-shadow:0px 10px 15px #C3C3C3;-moz-box-shadow:0px 10px 15px #C3C3C3;filter:progid:DXImageTransform.Microsoft.Shadow(color=#C3C3C3,direction=135,strength=5);">
+    <table id="fgpg" style="width:900px; height:auto; margin-left:auto; margin-right:auto;" cellspacing="30">
+        <tr><td colspan="3"><div><a href="/jct/Applyvip?sure=true" class="scan" style="width:180px; text-align:center;background-color:#E78E8E;display: block; margin-left:auto; vertical-align:middle; height:35px; color:white; line-height:35px;float:right; border:1px solid red;">申请加入军采通会员</a></div></td></tr>
+    </table>
+    <div class="jctheader">军采通会员服务介绍</div>
+    <p class="txt">1.“军采通会员”是指成功注册西南物资采购网，并缴纳会员服务费的入网供应商。</p>
+    <div id="pic"></div>
+    <p class="txt">2.“军采通会员服务”是指西南物资采购网针对军采通会员提供的各类增值服务项目。</p>
+    <p class="txt">3.军采通会员十二大增值服务项目：独家采购信息无限量查看服务、信息推送服务、商务小助手服务、项目管理服务、网站特有的军队物资供应商信用评级服务、企业建站服务、网上采购服务、企业推广服务、安全认证服务、金融服务、个人频道会员服务、数据中心服务。</p>
+    <div style="width:465px; height:250px; margin:0px auto;">
+        <div class="jcpage"><div class="bgimg" style=" background-image:url(/Images/messages2.png)"></div><a target="_blank" href="/jct/pushmsg">信息推送</a></div>
+        <div class="jcpage" style="margin-left:87px; margin-top:50px;"><div class="bgimg" style=" background-image: url(/Images/buildweb.png);"></div><a title="即将上线，敬请期待......" href="###">数据中心</a></div>@*/jct/PublicDdc*@
+
+        <div class="jcpage" style="margin-left:174px;"><div class="bgimg" style=" background-image: url(/Images/tuiguang.png);"></div><a href="/jct/PublicPurBusiness" target="_blank" class="scan">企业推广</a></div>
+        <div class="jcpage" style="margin-left:261px; margin-top:50px;"><div class="bgimg" style=" background-image: url(/Images/creditcard.png);"></div><a target="_blank" href="/jct/Credit_Service">信用服务</a></div>
+        <div class="jcpage" style="margin-left:348px;"><div class="bgimg" style=" background-image: url(/Images/finance.png);"></div><a href="###" title="即将上线，敬请期待...">金融服务</a></div>@*/jct/Finance_Service*@
+        <div class="jcpage" style="margin-left:174px; margin-top:100px;"><div class="bgimg" style=" background-image: url(/Images/enquiry.png);"></div><a class="scan" href="/jct/Security"  target="_blank" title="即将上线，敬请期待...">安全认证</a></div>
+        <div class="jcpage" style="margin-left:261px; margin-top:150px;"><div class="bgimg" style=" background-image: url(/Images/buy.png);"></div><a title="即将上线，敬请期待..." href="###" class="scan">网上采购</a></div>@*/jct/PurchaseOnline*@
+        <div class="jcpage" style="margin-left:87px; margin-top:150px;"><div class="bgimg" style=" background-image: url(/Images/default-avatar.png);"></div><a target="_blank" href="/jct/vipservice" class="scan">个人频道</a></div>
+        <div class="jcpage" style="margin-left:348px; margin-top:100px;"><div class="bgimg" style=" background-image: url(/Images/purchaseInfo.png);"></div><a href="/jct/purchaseinfo" target="_blank">独家采购信息</a></div>@*/jct/purchaseInfo*@
+        <div class="jcpage" style="margin-left:435px; margin-top:50px;"><div class="bgimg" style=" background-image: url(/Images/project.png);"></div><a target="_blank" href="/jct/Project_Management">项目管理</a></div>
+        <div class="jcpage" style="margin-left:435px; margin-top:150px;"><div class="bgimg" style=" background-image: url(/Images/assistance.png);"></div><a target="_blank" title="即将上线，敬请期待..." href="/jct/Assistance" class="scan">商务小助手</a></div>
+        <div class="jcpage" style="margin-left:522px;"><div class="bgimg" style="background-image:url(/Images/website.png); width:50px; height:50px;background-size:50px 50px;"></div><a target="_blank" title="企业建站" href="/jct/buildWebsite">企业建站</a></div>
+    </div>
+    <p class="txt">4.军采通会员可自愿选择对应的增值服务项目，并缴纳相应增值服务费。</p>
+</div>
+<script type="text/javascript" language="javascript">
+    $(".action_link").each(function () {
+        if ($(this).text() == "军采通") {
+            $(this).parent("div").addClass("on");
+        }
+    });
+</script>

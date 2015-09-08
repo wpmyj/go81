@@ -1,0 +1,849 @@
+﻿@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+@model Go81WebApp.Models.数据模型.商品数据模型.商品
+<script type="text/javascript" src="~/JS/Get_productClass.js"></script>
+<link rel="stylesheet" href="~/css/index.css" type="text/css">
+
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+@*<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery-1.4.2.min.js" charset="gb2312"></script>*@
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#uploadify").uploadify({
+            'uploader': '../../JS/jquery.uploadify-v2.1.4/uploadify.swf',
+            'script': '/运营团队后台/UploadImages',
+            'cancelImg': '../../JS/jquery.uploadify-v2.1.4/cancel.png',
+            'folder': 'App_Uploads',
+            'sizeLimit': 1024 * 1024 * 5,
+            'queueSizeLimit': 50,
+            'fileDesc': '只允许上传bmp,gif,jpg,jpeg图片',
+            'fileExt': '*.bmp;*.gif;*.jpg;*.jpeg',
+            'method': 'Post',
+            'queueID': 'ShowImage',
+            'buttonImg': '../../JS/jquery.uploadify-v2.1.4/btn.png',
+            'wmode': 'transparent',
+            'auto': false,
+            'multi': true,
+            'onComplete': function (e, q, f, data, d) {
+                attchtextstring = document.getElementById("attachtext").value + data + "|";
+                document.getElementById("attachtext").value = attchtextstring;
+                var Image = "<img width='120px' height='70px' src='" + data + "'/>";
+                var Preview = "<a href='" + data + "' target=\"_blank\">预览</a>&nbsp;&nbsp;";
+                var Original = "<a href=\"" + data + "\" target=\"_blank\">原图</a>&nbsp;&nbsp;";
+                var Delete = "<a href=\"javascript:DeleteImage('" + q + "','" + data + "')\">删除</a>";
+                var Div = "<div style='margin-top:5px;text-align:center'>" + Preview + Original + Delete + "</div>";
+                $("#uploadify" + q).html(Image + Div);
+            }
+        });
+        $("#btnBegin").click(function () { $("#uploadify").uploadifyUpload(); return false; });
+    });
+    function DeleteImage(q, n) {
+        $.ajax({
+            type: "POST",
+            url: "/供应商后台/DeleteImages?q=" + q + "&n=" + n,
+            success: function (msg) {
+                if (msg != "0") {
+                    document.getElementById("attachtext").value = document.getElementById("attachtext").value.replace(n + "|", "");
+                    jQuery("#uploadify").uploadifyCancel(msg);
+                }
+            }
+        });
+    }
+</script>
+
+<script>
+    var editor1;
+    KindEditor.ready(function (K) {
+        editor1 = K.create('#content1', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true
+        });
+    });
+
+    //售后服务的编辑器
+    var editor2;
+    KindEditor.ready(function (K) {
+        editor2 = K.create('#content2', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true
+        });
+
+    });
+</script>
+
+@if (Model.中标商品)
+{
+    <div id="pro_numdiv" style="display: none;">
+        <div class="product_add_textarabox">
+            <div class="product_add_toptitle" style="width:80px;">项目编号：</div>
+            <input type="text" value="" id="pronum___a" name="pronum___a" style="width: 100px;" />
+            <span style="float: left;">*</span>
+            <div class="product_add_toptitle" style="width:80px;">中标数量：</div>
+            <input type="text" value="" id="procount___a" name="procount___a" style="width: 100px;" />
+            <span style="float: left;">*</span>
+            <div class="product_add_toptitle" style="width:80px;">中标金额：</div>
+            <input type="text" value="" id="proprice___a" name="proprice___a" style="width: 100px;" />
+            <span style="float: left;">*</span>
+            <div class="product_add_toptitle" style="width:80px;">公告ID：</div>
+            <input type="text" style="width: 100px;" id="ggid___a" name="ggid___a" />
+            <span style="float: left;">*</span>
+            <input type="button" style="width: 80px; float: left; height: 35px;" value="删除项目" id="deleteprobtn___a" onclick="deletepro(this)" />
+            <span id="p_number___a" style="display: none; float: left;">必填</span>
+        </div>
+    </div>
+    <script>
+        var procount = @Model.中标信息.Count;
+        function deletepro(obj) {
+            var id = $(obj).attr("id").replace("deleteprobtn___", "");
+            $(obj).parent().remove();
+            $("#proliststr").val($("#proliststr").val().replace(id + "|", ""));
+        }
+        function addpro(obj) {
+            var html = $("#pro_numdiv").html().replace(/___a/g, "___" + procount);
+            $("#proneedproname").before(html);
+            $("#proliststr").val($("#proliststr").val() + procount + "|");
+            procount++;
+        }
+    </script>
+}
+
+
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="product_add_tabmenu_box">
+        <div class="title-base-out">
+            @*<div class="index_bottom_zb_top_left_or_right"> <img src="~/images/index_content_left.jpg" /> </div>*@
+            <div class="title-base-middle">
+                <div class="title-base-inner" style="float:left">商品信息</div>
+                <div class="product_tabmenu_tabmenu">
+                    <ul>
+                        <li onclick="change_tbl(this)" class="cli">商品描述</li>
+                        <li onclick="change_tbl(this)">商品图片</li>
+                        <li onclick="change_tbl(this)">商品属性</li>
+                        <li onclick="change_tbl(this)">售后服务</li>
+                    </ul>
+                </div>
+            </div>
+            @*<div class="index_bottom_zb_top_left_or_right"> <img src="~/images/index_content_right.jpg" /> </div>*@
+        </div>
+        <div class="product_tabmenu_content_box" id="product_tabmenu_content">
+            <ul class="fdiv">
+                <li>
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">所属分类</div>
+
+                        @if (Model.商品信息.所属商品分类.商品分类.分类性质 == 商品分类性质.专用物资)
+                        {
+                            <span style="color:black;font-size:13px;">
+                                : @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.分类名
+                            </span>
+                        }
+                        else
+                        {
+                            <span style="color:black;font-size:13px;">
+                                : @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.分类名
+                            </span>
+                        }
+
+                    </div>
+                    
+                    @if (Model.中标商品)
+                    {
+                        var numstr = "";
+                        <div class="product_add_textarabox">
+                            <div class="product_add_toptitle">商品类型：</div>
+                            <span style="color:red;font-size:13px;"> 中标商品</span>
+                        </div>
+                        for (var index = 0; index < Model.中标信息.Count; index++)
+                        {
+                            numstr += index + "|";
+                            if (index == 0)
+                            {
+                                <div class="product_add_textarabox">
+                                    <div class="product_add_toptitle" style="width:80px;">项目编号：</div>
+                                    <input type="text" value="@Model.中标信息[index].中标项目编号" id="pronum___@(index)" name="pronum___@(index)" style="width: 100px;" />
+                                    <span style="float: left;">*</span>
+                                    <div class="product_add_toptitle" style="width:80px;">中标数量：</div>
+                                    <input type="text" style="width: 100px;" value="@Model.中标信息[index].中标数量" id="procount___@(index)" name="procount___@(index)" />
+                                    <span style="float: left;">*</span>
+                                    <div class="product_add_toptitle" style="width:80px;">中标金额：</div>
+                                    <input type="text" style="width: 100px;" value="@Model.中标信息[index].中标金额" id="proprice___@(index)" name="proprice___@(index)" />
+                                    <span style="float: left;">*</span>
+                                    <div class="product_add_toptitle" style="width:80px;">公告ID：</div>
+                                    <input type="text" style="width: 100px;" id="ggid___@(index)" name="ggid___@(index)" />
+                                    <span style="float: left;">*</span>
+                                    <input type="button" style="width: 80px; float: left; height: 35px;" value="新增项目" id="deleteprobtn___@(index)" onclick="addpro(this)" />
+                                    <span id="p_number___@(index)" style="display: none; float: left;">必填</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="product_add_textarabox">
+                                    <div class="product_add_toptitle" style="width:80px;">项目编号：</div>
+                                    <input type="text" value="@Model.中标信息[index].中标项目编号" id="pronum___@(index)" name="pronum___@(index)" style="width: 100px;" />
+                                    <span style="float: left;">*</span>
+                                    <div class="product_add_toptitle" style="width:80px;">中标数量：</div>
+                                    <input type="text" value="@Model.中标信息[index].中标数量" id="procount___@(index)" name="procount___@(index)" style="width: 100px;" />
+                                    <span style="float: left;">*</span>
+                                    <div class="product_add_toptitle" style="width:80px;">中标金额：</div>
+                                    <input type="text" value="@Model.中标信息[index].中标金额" id="proprice___@(index)" name="proprice___@(index)" style="width: 100px;" />
+                                    <span style="float: left;">*</span>
+                                    <div class="product_add_toptitle" style="width:80px;">公告ID：</div>
+                                    <input type="text" style="width: 100px;" id="ggid___@(index)" name="ggid___@(index)" />
+                                    <span style="float: left;">*</span>
+                                    <input type="button" style="width: 80px; float: left; height: 35px;" value="删除项目" id="deleteprobtn___@(index)" onclick="deletepro(this)" />
+                                    <span id="p_number___@(index)" style="display: none; float: left;">必填</span>
+                                </div>
+                            }
+                        }
+                        <input type="hidden" id="proliststr" name="proliststr" value="@numstr" />
+                    }
+
+                    <div class="product_add_textarabox" id="proneedproname">
+                        <div class="product_add_toptitle">商品名称：</div>
+                        @Html.EditorFor(model => model.商品信息.商品名)<span>*</span>              
+                        @Html.ValidationMessageFor(model => model.商品信息.商品名)
+                    </div>
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">商品品牌：</div>
+                        @Html.EditorFor(model => model.商品信息.品牌)
+                    </div>
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">商品型号：</div>
+                        @Html.EditorFor(model => model.商品信息.型号)<span>*</span>
+                    </div>
+
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">计量单位：</div>
+                        @Html.EditorFor(model => model.商品信息.计量单位)<span>*</span>
+                    </div>
+
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">军采价格：</div>
+                        @Html.EditorFor(model => model.销售信息.价格)<span style="padding-right: 20px;">*</span>
+                        @Html.ValidationMessageFor(model => model.销售信息.价格)
+                    </div>
+
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">商品简介：</div>
+                        @Html.TextAreaFor(model => model.商品数据.商品简介)<span>*</span>
+                        @Html.ValidationMessageFor(model => model.商品数据.商品简介)
+                        @*<div class="product_add_textarabox_tipbox">500字(还剩499字)<a href="#" class="product_add_textarabox_tip">参考格式</a></div>*@
+                    </div>
+
+                    <div class="product_add_detailbox" style="margin-bottom: 10px;">
+                        <div class="product_add_toptitle">商品详情：</div>
+                        @Html.TextAreaFor(model => model.商品数据.商品详情, new { style = "width: 698px; height: 400px; visibility: hidden; padding-left: 110px;", id = "content1" })
+
+                        @*<a href="#" class="product_add_textarabox_tip">参考格式</a>*@
+                    </div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div class="gys_ztbsearch_contentbox">
+                        <div class="product_add_toptitle" style="width: 800px; text-align: left;">
+                            图片列表
+                        </div>
+                        @if (Model.商品信息.商品图片 != null && Model.商品信息.商品图片.Count > 0)
+                        {
+
+                            <div style="padding:5px;">
+                                @foreach (var list in Model.商品信息.商品图片)
+                                {
+                                    <div id="uploadifyIHPVEG" class="uploadifyQueueItem completed" style="text-align: center; margin-bottom: 10px;">
+                                        <img width="120" height="70" src="@list">
+                                        <div style="margin-top:5px;text-align:center">
+                                            <a href="@list" target="_blank">预览</a>
+                                            &nbsp;&nbsp;<a href="@list" target="_blank">原图</a>
+                                            &nbsp;&nbsp;<a id="@list" style="cursor:pointer;" onclick="deleteattach(this)">删除</a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <script type="text/javascript">
+                        function deleteattach(a) {
+                            document.getElementById("attachtext").value = document.getElementById("attachtext").value.replace(a.getAttribute("id") + "|", "");
+                            document.getElementById("deletattachtext").value += a.getAttribute("id") + "|";
+                            a.parentNode.parentNode.style.display = "none";
+                        }
+                    </script>
+                    <div class="gys_ztbsearch_contentbox">
+                        <div class="gyspage_list_content_exp">
+                            <div class="product_add_toptitle">图片</div>
+                            <div style="text-align:center">
+                                <div></div>
+                                <div id="ShowImage" class="product_add_upimagesbox"></div>
+                                <div class="product_add_upimagesbox_image"></div>
+                                <div style="padding-top:5px">
+                                    <input type="file" name="uploadify" id="uploadify" />&nbsp;&nbsp;
+                                    <a id="btnBegin" href="javascript:return false"><img alt="开始上传" src="~/js/jquery.uploadify-v2.1.4/btnstart.png" width="120" height="30" style="border:0px" /></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul style="padding:10px 0;">
+                <li>
+                    <span style="color:red; padding-left: 20px;" id="priceerrormessage"></span>
+                    @if (Model.销售信息.价格属性组合.属性列表.Count > 0)
+                    {
+                        <div id="tablecontent" style="width: 900px; height: auto; margin: 0 auto; overflow: hidden; margin-bottom: 20px;"><table class='product_att_table' cellpadding='0' cellspacing=' 0'><tr name='tr_th'>@foreach (var item in Model.销售信息.价格属性组合.属性列表)
+                        {
+                        <th class="product_att_table_th">@item</th>}
+                        <th class="product_att_table_th">价格匹配</th></tr>@foreach (var item in Model.销售信息.价格属性组合.组合列表)
+                        {
+                        <tr name='table_tr'>@foreach (var ite in item.属性值表)
+                        {
+                        <td class="product_att_table_td">@ite</td>}
+                        <td class="product_att_table_td"><input style='border:none; width:100%; height:100%;' type='text' value="@item.价格" /></td></tr>}</table></div>
+                    }
+                    else
+                    {
+                        <div id="tablecontent" style="width: 900px; height: auto; margin: 0 auto; overflow: hidden; display: none; margin-bottom: 20px;"></div>
+                    }
+                    <input name="pricesttrsrr" id="pricesttrsrr" type="hidden" />
+                    <input name="sttrsrr" id="sttrsrr" type="hidden" />
+                    <input name="classsttrsrr" id="classsttrsrr" type="hidden" value="@ViewData["classid"]" />
+                    <input name="idsttrsrr" id="idsttrsrr" value="@ViewData["pro_id"]" type="hidden" />
+                    <div class="product_add_attributebox" id="gys_product_class" style="margin: 0 auto;">
+                        @foreach (var arr in (Dictionary<string, Dictionary<string, 商品属性数据>>)ViewData["商品属性模板"])
+                        {
+                            <div style=" width:898px; height:auto; overflow:hidden; margin:0 auto;" name="attrbox">
+                                <div class="product_add_toptitle" style=" width:898px; float:left; background-color:#ccd2b0; text-align: left;">@arr.Key</div>
+                                <table class="product_att_table" cellpadding="0" cellspacing="0" id="@arr.Key">
+                                    @foreach (var item in arr.Value)
+                                    {
+                                        <tr id="@item.Key" name="@arr.Key">
+                                            <td class="product_att_table_td_exp">
+                                                @if (item.Value.属性类型 == 属性类型.复选 && item.Value.销售属性)
+                                                {
+                                                    if (Model.销售信息.价格属性组合.属性列表.Contains(item.Key))
+                                                    {
+                                                        <input type="checkbox" name="pricecheckbox" checked="checked" value="@item.Key" onclick=" gettablehead(this) " />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" name="pricecheckbox" value="@item.Key" onclick=" gettablehead(this) " />
+                                                    }
+                                                    <span>价格属性</span>
+                                                }
+                                                else
+                                                {
+                                                    <input disabled="disabled" type="checkbox" value="@item.Key" onclick=" gettablehead(this) " /><span style="color:#cccccc">价格属性</span>
+                                                }
+                                            </td>
+                                            <td class="product_att_table_td_exp1">
+                                                @item.Key
+                                            </td>
+                                            <td width="100%" class="product_att_table_td">
+                                                @try
+                                                {
+                                                    var vals = Model.商品数据.商品属性[arr.Key][item.Key];
+                                                    if (item.Value.属性类型 == 属性类型.复选)
+                                                    {
+                                                        if (item.Value.销售属性)
+                                                        {
+                                                            foreach (var listitem in item.Value.值)
+                                                            {
+                                                                if (vals.Contains(listitem))
+                                                                {
+                                                                    <span class="product_att_table_span"><input type="checkbox" checked="checked" id="@listitem" name="@item.Key" value="@listitem" onclick=" gettablehead(this) " />@listitem</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="product_att_table_span"><input type="checkbox" id="@listitem" name="@item.Key" value="@listitem" onclick=" gettablehead(this) " />@listitem</span>
+                                                                }
+                                                            } //先遍历属性模板的值
+
+                                                            if (Model.审核数据.审核状态 != 审核状态.审核通过)
+                                                            {
+                                                                foreach (var selfitem in vals)
+                                                                {
+                                                                    if (!item.Value.值.Contains(selfitem))
+                                                                    {
+                                                                        <span class="product_att_table_span"><a onclick=' $(this).parent().find("input:first").prop("checked", false);gettablehead(this); $(this).parent().remove(); ' class='proadd_deleteattr'></a><input type="checkbox" checked="checked" id="@selfitem" name="@item.Key" value="@selfitem" onclick=" gettablehead(this) " />@selfitem</span>
+                                                                    }
+                                                                } //再遍历属性自定义属性值---针对未通过或未审核的商品
+                                                            }
+                                                            <a onclick=" addattribute(this) " key="@item.Key" issale="1" class="proadd_addattr"></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            foreach (var listitem in item.Value.值)
+                                                            {
+                                                                if (vals.Contains(listitem))
+                                                                {
+                                                                    <span class="product_att_table_span"><input type="checkbox" checked="checked" id="@listitem" name="@item.Key" value="@listitem" />@listitem</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span class="product_att_table_span"><input type="checkbox" id="@listitem" name="@item.Key" value="@listitem" />@listitem</span>
+                                                                }
+                                                            } //先遍历属性模板的值
+
+                                                            if (Model.审核数据.审核状态 != 审核状态.审核通过)
+                                                            {
+                                                                foreach (var selfitem in vals)
+                                                                {
+                                                                    if (!item.Value.值.Contains(selfitem))
+                                                                    {
+                                                                        <span class="product_att_table_span"><a onclick=' $(this).parent().find("input:first").prop("checked", false); gettablehead(this); $(this).parent().remove(); ' class='proadd_deleteattr'></a><input type="checkbox" checked="checked" id="@selfitem" name="@item.Key" value="@selfitem" onclick=" gettablehead(this) " />@selfitem</span>
+                                                                    }
+                                                                } //再遍历属性自定义属性值---针对未通过或未审核的商品
+                                                            }
+                                                            <a onclick=" addattribute(this) " key="@item.Key" issale="0" class="proadd_addattr"></a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <input style="border: none; width: 100%; height: 100%;" type="text" value="@vals[0]" name="@item.Key" />
+                                                    }
+                                                }
+                                                catch
+                                                {
+                                                    if (item.Value.属性类型 == 属性类型.复选)
+                                                    {
+                                                        if (item.Value.销售属性)
+                                                        {
+                                                            foreach (var listitem in item.Value.值)
+                                                            {
+
+                                                                <span class="product_att_table_span"><input type="checkbox" id="@listitem" name="@item.Key" value="@listitem" onclick=" gettablehead(this) " />@listitem</span>
+                                                            } //只遍历属性模板的值
+                                                            <a onclick=" addattribute(this) " key="@item.Key" issale="1" class="proadd_addattr"></a>
+                                                        }
+                                                        else
+                                                        {
+                                                            foreach (var listitem in item.Value.值)
+                                                            {
+                                                                <span class="product_att_table_span"><input type="checkbox" id="@listitem" name="@item.Key" value="@listitem" />@listitem</span>
+                                                            } //只遍历属性模板的值
+                                                            <a onclick=" addattribute(this) " key="@item.Key" issale="0" class="proadd_addattr"></a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <input style="border: none; width: 100%; height: 100%;" type="text" value="" name="@item.Key" />
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        }
+                        <script type="text/javascript">
+                            function addattribute(a) {
+                                var flag = true;
+
+                                var str = prompt("请输入值", "");
+                                if (null != str && "" != str) {
+
+                                    //判断合法性
+                                    if (str.indexOf("||||") > -1 || str.indexOf("^^^^") > -1 || str.indexOf("####") > -1 || str.indexOf("****") > -1 || str.indexOf("$$$$") > -1) {
+                                        alert("不能包含非法字符！");
+                                        return;
+                                    }
+
+                                    //判断是否存在该值
+                                    var td = $(a).parent();
+                                    td.find("input").each(function () {
+                                        //alert($(this).val());
+                                        if ($(this).val() == str) {
+                                            alert("已经存在该值，不能重复添加！");
+                                            flag = false;
+                                            return false;
+                                        }
+                                    });
+
+                                    if (flag) {
+                                        var key = a.getAttribute("key");
+                                        var issale = a.getAttribute("issale");
+                                        if (issale == "1") {
+                                            $(a).before("<span class='product_att_table_span'><a onclick='$(this).parent().find(\"input:first\").prop(\"checked\",false);gettablehead(this);$(this).parent().remove();' class='proadd_deleteattr'></a><input type='checkbox' id='" + str + "' name='" + key + "' value='" + str + "' onclick='gettablehead(this)' />" + str + "</span>");
+                                        }
+                                        if (issale == "0") {
+                                            $(a).before("<span class='product_att_table_span'><a onclick='$(this).parent().remove();' class='proadd_deleteattr'></a><input type='checkbox' id='" + str + "' name='" + key + "' value='" + str + "' />" + str + "</span>");
+                                        }
+                                    }
+                                    //alert(str);
+                                }
+                            }
+                        </script>
+                        <script type="text/javascript">
+                            function gettablehead(a) {
+
+                                //防止每次选择复选框价格清零
+                                if ($(a).attr("name") != "pricecheckbox") {
+                                    if (!$(a).parent().parent().parent().find("input:first").is(":checked")) {
+                                        return false;
+                                    }
+                                }
+
+                                document.getElementById("tablecontent").innerHTML = "";
+
+                                var ischeck = false;
+                                var count = 0;
+                                var arrtd = new Array();
+                                var tableheadstr = "<tr name='tr_th'>";
+                                var outbox = document.getElementsByName("pricecheckbox");
+                                for (var i = 0; i < outbox.length && count <= 2; i++) {
+                                    if (outbox[i].type == "checkbox" && outbox[i].checked) {
+                                        ischeck = true;
+                                        tableheadstr += "<th class='product_att_table_th'>" + outbox[i].value + "</th>";
+                                        arrtd[count] = outbox[i].value;
+                                        count++;
+                                    }
+                                }
+                                //只允许3种价格匹配<=2
+                                if (ischeck) {
+
+                                    tableheadstr += "<th class='product_att_table_th'>价格匹配</th></tr>";
+
+                                    var tdcountent = "";
+                                    if (arrtd.length == 1) {
+                                        outbox = document.getElementsByName(arrtd[0]);
+
+                                        for (var j = 0; j < outbox.length ; j++) {
+                                            if (outbox[j].type == "checkbox" && outbox[j].checked) {
+                                                tdcountent += "<tr name='table_tr'><td class='product_att_table_td'>" + outbox[j].value + "</td><td class='product_att_table_td'><input style='border:none; width:100%; height:100%;' type='text' /></td><tr>";
+                                            }
+                                        }
+                                        //tdcountent += "<td><input type='text' /></td>";
+                                    }
+                                    if (arrtd.length == 2) {
+                                        var test = document.getElementsByName(arrtd[0])
+                                        for (i = 0; i < test.length ; i++) {
+                                            if (test[i].type == "checkbox" && test[i].checked) {
+                                                var testsize = document.getElementsByName(arrtd[1]);
+                                                for (j = 0; j < testsize.length ; j++) {
+                                                    if (testsize[j].type == "checkbox" && testsize[j].checked) {
+
+                                                        tdcountent += "<tr name='table_tr'><td class='product_att_table_td'>" + test[i].value + "</td><td  class='product_att_table_td'>" + testsize[j].value + "</td><td class='product_att_table_td'><input style='border:none; width:100%; height:100%;' type='text' /></td></tr>"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //tdcountent += "<td><input type='text' /></td>";
+                                    }
+                                    if (arrtd.length == 3) {
+                                        var test = document.getElementsByName(arrtd[0]);
+                                        for (i = 0; i < test.length ; i++) {
+                                            if (test[i].type == "checkbox" && test[i].checked) {
+                                                var testsize = document.getElementsByName(arrtd[1]);
+                                                for (var j = 0; j < testsize.length ; j++) {
+                                                    if (testsize[j].type == "checkbox" && testsize[j].checked) {
+
+                                                        var testsize3 = document.getElementsByName(arrtd[2]);
+                                                        for (var k = 0; k < testsize3.length ; k++) {
+                                                            if (testsize3[k].type == "checkbox" && testsize3[k].checked) {
+
+                                                                tdcountent += "<tr name='table_tr'><td class='product_att_table_td'>" + test[i].value + "</td><td class='product_att_table_td'>" + testsize[j].value + "</td><td  class='product_att_table_td'>" + testsize3[k].value + "</td><td class='product_att_table_td'><input style='border:none; width:100%; height:100%;' type='text' /></td></tr>";
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //tdcountent += "<td><input type='text' /></td>";
+                                    }
+
+                                    var tablestr = "<table class='product_att_table' cellpadding='0' cellspacing=' 0'>" + tableheadstr + tdcountent + "</table>";
+                                    if (tdcountent == "") {
+                                        $("#tablecontent").hide();
+                                    } else {
+                                        $("#tablecontent").show();
+                                        document.getElementById("tablecontent").innerHTML = tablestr;
+                                    }
+                                } else {
+                                    $("#tablecontent").hide();
+                                }
+                            }
+                            function checkform() {
+                                //var pricerg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
+                                editor1.sync("content1");
+
+                                //验证项目编号
+                                if ($("#proliststr").length >= 1) {
+                                    var pronamelist = $("#proliststr").val().substring(0, $("#proliststr").val().length - 1).split('|');
+                                    for (var proindex = 0; proindex < pronamelist.length; proindex++) {
+                                        if ($.trim($("#pronum___" + pronamelist[proindex]).val()) == ""||$.trim($("#ggid___" + pronamelist[proindex]).val()) == "") {
+                                            $("#contenerror").html("商品描述-->项目名称和公告ID必须填写");
+                                            return false;
+                                        }
+                                    }
+                                }
+
+                                if (document.getElementById("content1").value.replace(/(^\s*)|(\s*$)/g, "") == "") {
+                                    $("#contenerror").html("商品详情必须填写");
+                                    document.getElementById("content1").focus();
+                                    return false;
+                                }
+                                else {
+                                    $("#contenerror").html("");
+                                    return true;
+                                }
+                            }
+
+                            function getatt(flag_pass) {
+                                if (flag_pass == "0") {
+                                    var reason = prompt("请输入审核不通过原因", "");
+                                    if (reason == null || reason == "" || $.trim(reason) == "") {
+                                        $("#contenerror").html("审核不通过原因必须填写");
+                                        return false;
+                                    } else {
+                                        $("#notpassreadon").val(reason);
+                                    }
+                                }
+
+                                if (flag_pass == "1") {
+                                    if ($("#model_str").val() == "" || $.trim($("#model_str").val()) == "") {
+                                        $("#contenerror").html("商品精确型号必须填写");
+                                        return false;
+                                    }
+                                }
+
+                                var pricerg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
+
+                                if (!checkform()) {
+                                    return false;
+                                }
+
+                                var retstr = "";
+
+                                var att_table = document.getElementById("gys_product_class").getElementsByTagName("table");
+                                for (var i = 0; i < att_table.length; i++) {
+                                    retstr += att_table[i].getAttribute("id") + "||||";
+
+                                    var att_tr = att_table[i].getElementsByTagName("tr");
+                                    for (var j = 0; j < att_tr.length; j++) {
+                                        retstr += att_tr[j].getAttribute("id") + "^^^^";
+
+                                        var att_td = att_tr[j].getElementsByTagName("td")[2];
+                                        var att_input = att_td.getElementsByTagName("input");
+
+                                        for (var k = 0 ; k < att_input.length; k++) {
+                                            if (att_input[k].type == "checkbox" && att_input[k].checked) {
+                                                retstr += att_input[k].value + "####";
+                                            }
+                                            if (att_input[k].type == "text") {
+
+                                                if (att_input[k].value.indexOf("||||") > -1 || att_input[k].value.indexOf("^^^^") > -1 || att_input[k].value.indexOf("####") > -1 || att_input[k].value.indexOf("****") > -1 || att_input[k].value.indexOf("$$$$") > -1) {
+                                                    alert("不能包含非法字符！");
+                                                    att_input[k].focus();
+                                                    return false;
+                                                }
+                                                retstr += att_input[k].value + "####";
+                                            }
+                                        }
+                                        retstr += "****";
+
+                                    }
+                                    retstr += "$$$$";
+                                }
+                                document.getElementById("sttrsrr").value = retstr;
+
+
+                                var pricestr = "";
+                                var tr_thcontent = document.getElementsByName("tr_th");//价格匹配表头
+                                var trcontent = document.getElementsByName("table_tr");//价格匹配表格内容td
+                                if (trcontent.length > 0) {
+                                    var tdcont = trcontent[0].childNodes.length;
+
+                                    //一个条件作为价格组合--2列
+                                    if (tdcont == 2) {
+                                        pricestr += tr_thcontent[0].childNodes[0].innerHTML + "^^^^";
+                                    }
+
+                                    //两个条件作为价格组合--3列
+                                    if (tdcont == 3) {
+                                        pricestr += tr_thcontent[0].childNodes[0].innerHTML + "||||" + tr_thcontent[0].childNodes[1].innerHTML + "^^^^";
+                                    }
+
+                                    //三个条件作为价格组合--4列
+                                    if (tdcont == 4) {
+                                        pricestr += tr_thcontent[0].childNodes[0].innerHTML + "||||" + tr_thcontent[0].childNodes[1].innerHTML + "||||" + tr_thcontent[0].childNodes[2].innerHTML + "^^^^";
+                                    }
+
+                                    //trcontent.length==>价格匹配总行数
+                                    for (i = 0; i < trcontent.length; i++) {
+                                        var tdcontent = trcontent[i].childNodes;
+
+                                        //一个条件作为价格组合--2列
+                                        if (tdcont == 2) {
+                                            if (!((tdcontent[1].getElementsByTagName("input")[0].value).match(pricerg)) || tdcontent[1].getElementsByTagName("input")[0].value == 0) {
+                                                $("#priceerrormessage").html("价格填写有误!");
+                                                $("#contenerror").html("价格匹配填写有误");
+                                                tdcontent[1].getElementsByTagName("input")[0].focus();
+                                                return false;
+                                            }
+                                            else {
+                                                $("#priceerrormessage").html("");
+                                            }
+
+                                            pricestr += tdcontent[1].getElementsByTagName("input")[0].value + "####" + tdcontent[0].innerHTML + "&&&&";
+                                        }
+
+                                        //两个条件作为价格组合--3列
+                                        if (tdcont == 3) {
+
+                                            if (!((tdcontent[2].getElementsByTagName("input")[0].value).match(pricerg)) || tdcontent[2].getElementsByTagName("input")[0].value == 0) {
+                                                $("#priceerrormessage").html("价格填写有误!");
+                                                $("#contenerror").html("价格匹配填写有误");
+                                                tdcontent[2].getElementsByTagName("input")[0].focus();
+                                                return false;
+                                            }
+                                            else {
+                                                $("#priceerrormessage").html("");
+                                            }
+
+                                            pricestr += tdcontent[2].getElementsByTagName("input")[0].value + "####" + tdcontent[0].innerHTML + "||||" + tdcontent[1].innerHTML + "&&&&";
+                                        }
+
+                                        //两个条件作为价格组合--3列
+                                        if (tdcont == 4) {
+
+                                            if (!((tdcontent[3].getElementsByTagName("input")[0].value).match(pricerg)) || tdcontent[3].getElementsByTagName("input")[0].value == 0) {
+                                                $("#priceerrormessage").html("价格填写有误!");
+                                                $("#contenerror").html("价格匹配填写有误");
+                                                tdcontent[3].getElementsByTagName("input")[0].focus();
+                                                return false;
+                                            }
+                                            else {
+                                                $("#priceerrormessage").html("");
+                                            }
+
+                                            pricestr += tdcontent[3].getElementsByTagName("input")[0].value + "####" + tdcontent[0].innerHTML + "||||" + tdcontent[1].innerHTML + "||||" + tdcontent[2].innerHTML + "&&&&";
+                                        }
+                                    }
+                                    //alert(pricestr);
+                                    document.getElementById("pricesttrsrr").value = pricestr;
+                                }
+                            }
+
+                        </script>
+                    </div>
+            </ul>
+            <ul>
+                <li>
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">售后服务：</div>
+                        @Html.TextAreaFor(model => model.商品数据.售后服务, new { style = "width: 698px; height: 400px; visibility: hidden; padding-left: 110px;", id = "content2" })
+                        @*@Html.TextAreaFor(model => model.商品数据.售后服务)*@
+                    </div>
+                    <div class="product_add_textarabox_emptybox"></div>
+                    @*<div class="product_add_textarabox_tipbox">500字(还剩499字)<a href="#" class="product_add_textarabox_tip">参考格式</a></div>*@
+                </li>
+            </ul>
+        </div>
+        <textarea id="deletattachtext" name="deletattachtext" style=" width:500px; height:200px; display:none;"></textarea>
+        <textarea id="attachtext" name="pro_imgstr" style="width:500px; height:100px; display:none">@if (Model.商品信息.商品图片 != null && Model.商品信息.商品图片.Count > 0)
+        {
+            foreach (var item in Model.商品信息.商品图片)
+            {@(item + "|")}
+        }</textarea>
+        @*@Html.TextAreaFor(model => model.商品信息.商品图片, new { style = "width:500px; height:100px; display:none", id = "attachtext" })
+            @Html.TextAreaFor(model => model.商品数据.商品属性, new { style = "width:500px; height:100px; display:none", id = "propertytext" })*@
+        <div style="width: 917px; border: 1px solid #5EA42E; border-top:none; height: auto; overflow: hidden; padding:10px;">
+            <div style="width: 900px; padding-bottom: 10px; height: auto; overflow: hidden; margin: 0 auto; border-bottom: 1px solid #5EA42E;">
+                @{ var model_parm = (Dictionary<string, List<string>>)ViewData["精确型号"];}
+                本分类下已有精确型号：@model_parm.Count 个<br />
+                @foreach (var item in model_parm)
+                {
+                    <div style="width: 880px; float: left; padding-top: 10px;"><div style="float: left;display: inline-block; width: 820px; word-break: keep-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight:bold">@item.Key</div></div>
+                    foreach (var it in item.Value)
+                    {
+                        <div style="width: 440px; float: left; padding-top: 10px;"><input type="radio" name="model_radio" title="@item" value="@it" onclick='$("#model_str").val("@it")' style="float: left; width: 15px; height: 15px;" /><div style="float: left;display: inline-block; width: 410px; word-break: keep-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="@it">@it</div></div>
+                    }
+                }
+            </div>
+            <p />
+            请填写精确型号：<input type="text" id="model_str" name="model_str" value="@Model.商品信息.精确型号" style="width: 250px; height: 25px; line-height: 25px; margin-left: 10px;" /><p />
+            <p />是否参与协议采购 @Html.RadioButtonFor(m => m.采购信息.参与协议采购, true)是 @Html.RadioButtonFor(m => m.采购信息.参与协议采购, false)否
+            <p />是否参与应急采购 @Html.RadioButtonFor(m => m.采购信息.参与应急采购, true)是 @Html.RadioButtonFor(m => m.采购信息.参与应急采购, false)否
+            <p />
+            <input type="hidden" id="notpassreadon" name="notpassreadon" />
+            <input type="submit" name="submitcontent" class="gys_ztbsearch_search_botton" value="审核通过" style="margin-top:10px;" onclick="return getatt('1');" @*onclick="getpropertystr();"*@ />
+            <input type="submit" name="submitcontent" class="gys_ztbsearch_search_botton" value="审核不通过" style="margin-top:10px;" onclick="return getatt('0');" @*onclick="getpropertystr();"*@ />
+            <span id="contenerror" style=" padding-left:20px; color:red; font-weight:normal; width: 200px;"></span>
+        </div>
+        <!--  招标公告内容结束-->
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("#商品列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#商品列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+        function setTableInnerHTML(table, html) {
+            if (navigator && navigator.userAgent.match(/msie/i)) {
+                var temp = table.ownerDocument.createElement('div');
+                temp.innerHTML = '<table><tbody>' + html + '</tbody></table>';
+                if (table.tBodies.length == 0) {
+                    var tbody = document.createElement("tbody");
+                    table.appendChild(tbody);
+                }
+                table.replaceChild(temp.firstChild.firstChild, table.tBodies[0]);
+            } else {
+                table.innerHTML = html;
+            }
+        }
+        function GetPriceList() {
+            var retstr = "<tr><th width='200'>颜色</th><th width='300'>尺码</th><th width='298'>价格</th></tr>";
+            var test = document.getElementsByName("color");
+            for (i = 0; i < test.length ; i++) {
+                if (test[i].type == "checkbox" && test[i].checked) {
+                    var testsize = document.getElementsByName("size");
+                    for (j = 0; j < testsize.length ; j++) {
+                        if (testsize[j].type == "checkbox" && testsize[j].checked) {
+                            document.getElementById("pricelist").style.display = 'block';
+                            retstr += "<tr><td>" + test[i].value + "</td><td>" + testsize[j].value + "</td><td><input type=text /></td></tr>"
+                        }
+                    }
+                }
+            }
+            var tablecontent = document.getElementById("pricelist");
+            setTableInnerHTML(tablecontent, retstr);
+        }
+
+        function change_tbl(obj) {
+            var tabs = obj.parentNode.getElementsByTagName("li");
+            //var tabs = document.getElementById("tab").getElementsByTagName("li");
+            var divs = document.getElementById("product_tabmenu_content").getElementsByTagName("ul");
+            for (var i = 0; i < tabs.length; i++) {
+                if (tabs[i] == obj) {
+                    tabs[i].className = "cli";
+                    divs[i].className = "fdiv";
+                }
+                else {
+                    tabs[i].className = "";
+                    divs[i].className = "";
+                }
+            }
+        }
+    </script>
+}
+
+
+

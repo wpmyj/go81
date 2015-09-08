@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.竞标数据模型.网上竞标>
+@{
+    ViewBag.Title = "可参与网上竞价项目列表";
+    Layout = "_BackLayout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="gys_znxx_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">可参与网上竞价项目列表</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div class="gys_znxx_contentbox">
+                <div class="gys_znxx_content">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            @*<th width="5%">序号</th>
+                            <th width="30%">项目全称</th>
+                            <th width="12%">项目编号</th>
+                            <th width="10%">联系电话</th>
+                            <th width="7%">省份</th>
+                            <th width="10%">公告时间</th>
+                            <th width="10%">截止时间</th>*@
+                            <th width="5%">序号</th>
+                            <th width="10%">项目编号</th>
+                            <th width="15%">项目名称</th>
+                            <th width="20%">商品名称</th>
+                            <th width="15%">商品型号</th>
+                            <th width="10%">结束时间</th>
+                            <th width="5%">操作</th>
+                        </tr>
+                        @{  
+                            var m = 0;
+                            if (Model.Any() && Model.Count() > 0)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    m++;
+                                    <tr>
+                                        <td style="text-align:center">@m</td>
+                                        <td style="text-align:center">@item.项目编号</td>
+                                        <td style="text-align:left">@item.项目名称</td>
+                                        <td>@*<a href="/供应商后台/OnlineBiddingProjectDetail?id=@item.Id">@item.商品名称</a>*@ @item.商品名称</td>
+                                        <td>@item.商品型号</td>
+                                        <td style="text-align:center">@item.报价结束时间</td>
+                                        <td><a href="/供应商后台/OnlineBiddingProjectDetail?a=@item.Id">报价</a></td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="7">暂时可报价项目</td>
+                                </tr>
+                            }
+}
+                        @*<tr>
+                            <td>四川省军区某室音视频会议系统公开招标</td>
+                            <td>2015-CDSCSJQ-1019</td>
+                            <td align="center"><a href="">查看详情</a> | <a href="">下载电子合同</a></td>
+                        </tr>
+                        <tr>
+                            <td>78300部队招待所电气设备公开招标采购</td>
+                            <td>2015-CD78300-1007</td>
+                            <td align="center"><a href="">查看详情</a> | <a href="">下载电子合同</a></td>
+                        </tr>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#可参与的网上竞价项目").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#可参与的网上竞价项目").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

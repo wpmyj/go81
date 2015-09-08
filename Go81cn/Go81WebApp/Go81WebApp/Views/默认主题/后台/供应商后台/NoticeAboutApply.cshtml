@@ -1,0 +1,223 @@
+﻿@{
+    ViewBag.Title = "供应商须知";
+}
+<style>
+    ul, ol {
+        list-style-type: none;
+    }
+
+        ol li {
+            text-align: left;
+        }
+
+        ul li {
+            text-align: left;
+            line-height: 50px;
+        }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="float:left; width:930px; margin-left:28px;">
+        <div style=" padding:20px;height:632px; margin-top:20px;">
+            <a target="_blank" href="/App_Uploads/下载/附件/2015/8/31/7e246d73-7e77-4816-9d0d-f24aad6a8dd1供应商打印须知.doc" style="position:absolute; display:block;width:100px; box-shadow:0px 1px 1px black; -webkit-box-shadow:0px 1px 1px black; -moz-box-shadow:0px 1px 1px black;height:30px; text-align:center; line-height:30px; background-color:#FF8888; color:white; text-align:center;">点击下载</a>
+            <div>
+                <div style="width:900px;height:632px; font-size:18px; text-align:center; line-height:30px;">
+                    <div style="overflow:scroll; overflow-x:hidden;width:900px; border:1px solid black; height:100%; background-color:white;">
+                        <div id="f1" style="margin-top:70px;">
+                            <div style="width:80%;margin-left: auto;margin-right: auto;">
+                                <div><h3>入库材料格式规定</h3></div>
+                                <div style="text-align:left;">一、《成都军区物资供应商入库申请表》的相关要求：</div>
+                                <ul>
+                                    <li>①、申请表请双面打印，一式三份</li>
+                                    <li>②、法人签名处：<span style="color:red;">法人签名</span></li>
+                                    <li>③、盖章处：企业公章</li>
+                                    <li>④、用订书机，<span style="color:red;">左侧上下两钉装订。</span></li>
+                                </ul>
+                                <div style="text-align:left;">二、企业入库申请资料的相关要求：</div>
+                                <p style="text-align:left;text-indent:2em;">（一）供应商需要携带的原件有：</p>
+                                <ul>
+                                    <li style="color:#ff0000;">①、营业执照</li>
+                                    <li style="color:#ff0000;">②、法定代表人身份证</li>
+                                    <li style="color:#ff0000;">③、组织机构代码证</li>
+                                    <li style="color:#ff0000;">④、税务登记证</li>
+                                    <li style="color:#ff0000;">⑤、各类认证证书</li>
+                                    <li style="color:#ff0000;">⑥、产品代理销售授权书</li>
+                                    <li style="color:#ff0000;">⑦、会计师事务所审计报告（包括资产负债表、损益表）</li>
+                                    <li>以上材料现场审验后退回</li>
+                                </ul>
+                                <p style="text-align:left;text-indent:2em;">（二）供应商需要提交的原件有：</p>
+                                <ul>
+                                    <li>①、税务部门出具的最近三年完税证明</li>
+                                    <li>②、社会保障机构出具的最近三年缴纳社会保障资金证明（非生产型企业可提供近一年证明文件）</li>
+                                    <li>③、开户银行出具的基本账户资信证明</li>
+                                    <li>④、检察院开具的行贿犯罪档案查询结果告知函</li>
+                                </ul>
+                                <p style="text-align:left;text-indent:2em;">（三）所有复印件必须装订成册，审计报告<span style="color:#ff0000;">复印件</span>和其他所有证明材料<span style="color:#ff0000;">复印件</span>均需要盖企业公章，其它印章无效。</p>
+                                <p style="text-align:left;text-indent:2em;">（四）入库申请表三份，申请材料三份。（三份材料中一份正本，两份副本)</p>
+                                <ul>
+                                    <li>①、正本中的法人委托书，资信证明，完税证明，缴纳社保证明，行贿犯罪档案查询结果告知函为原件，副本都为复印件）。</li>
+                                    <li>②、营业执照，组织机构代码证，税务登记证，法人身份证四个文件，务必为彩色打印件。</li>
+                                </ul>
+                                <p style="text-align:left;text-indent:2em;color:#ff0000;">*注：</p>
+                                <ul>
+                                    <li>1.资料以标书的形式硬壳胶装，<span style="color:#ff0000;">白色封面</span></li>
+                                    <li>2.每页材料<span style="color:#ff0000;">必须加盖企业公章</span></li>
+                                    <li>3.封面按标准格式定制</li>
+                                    <li>4.第一页为申请入库资料目录</li>
+                                    <li>5.目录顺序应为：
+                                    <ul>
+                                        <li>①、法人委托书原件</li>
+                                        <li>②、营业执照</li>
+                                        <li>③、组织机构代码证</li>
+                                        <li>④、税务登记证</li>
+                                        <li>⑤、法人身份证</li>
+                                        <li>⑥、资信证明</li>
+                                        <li>⑦、行贿犯罪档案查询结果告知函</li>
+                                        <li>⑧、完税证明</li>
+                                        <li>⑨、缴纳社保证明</li>
+                                        <li>⑩、会计师事务所审计报告</li>
+                                        <li>⑪、各类资质证书</li>
+                                        <li>⑫、产品代理销售授权书等</li>
+                                    </ul>
+                                    </li>
+                                    <li>6.根据目录顺序，准备好各个材料。<span style="color:#ff0000;">按顺序排列装订</span>。</li>
+                                    <li>7.装订完毕后，务必<span style="color:#ff0000;">加盖骑缝章</span>。</li>
+                                </ul>
+                                <p style="text-align:left;">
+                                    具体格式如下：
+                                </p>
+                                <div>
+                                    申请表实物参照图片：
+                                    <div>
+                                        <img src="~/Images/applytable.jpg" style="width:80%;" />
+                                    </div>
+                                </div>
+                                <div>
+                                    企业材料实物照片：
+                                    <div>
+                                        <img src="~/Images/applytable1.jpg" style="width:80%;" />
+                                    </div>
+                                </div>
+                                <ol>
+                                    <li>
+                                        <h3>组织机构代码证</h3>
+                                        <ul>
+                                            <li><img src="~/Images/organization.jpg" /></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <h3>营业执照副本</h3>
+                                        <ul>
+                                            <li><img src="~/Images/license.jpg" /></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <h3>法定代表人身份证</h3>
+                                        <ul>
+                                            <li><img src="~/Images/idcard_sample.jpg" /></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <h3>银行资信证明</h3>
+                                        <ul>
+                                            <li>建设银行</li>
+                                            <li>
+                                                <img src="~/Images/bank_sample.jpg" style="width:80%;" />
+                                            </li>
+                                            <li>工商银行</li>
+                                            <li>
+                                                <img src="~/Images/bcic.jpg" />
+                                            </li>
+                                            <li>中国银行</li>
+                                            <li>
+                                                <img src="~/Images/bc.jpg" />
+                                            </li>
+                                            <li>招商银行</li>
+                                            <li>
+                                                <img src="~/Images/cmbc.jpg" style="width:80%;" />
+                                            </li>
+                                            <li>成都银行</li>
+                                            <li>
+                                                <img src="~/Images/cdbank.jpg" />
+                                            </li>
+                                            <li>华夏银行</li>
+                                            <li>
+                                                <img src="~/Images/huaxia.png" />
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <h3>近3年缴纳社会保证金证明</h3>
+                                        <ul>
+                                            <li><img src="~/Images/Social security.png" /></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <h3>近3年完税证明</h3>
+                                        <ul>
+                                            <li><img src="~/Images/tax.jpg" /></li>
+                                            <li><img src="~/Images/statetax.jpg" /></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <h3>无犯罪证明</h3>
+                                        <ul>
+                                            <li><img src="~/Images/Criminal record.jpg" /></li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                            <div style="border:1px solid black; width:80%; margin:0px auto; padding-bottom:150px;">
+                                <div style="width:100%;text-align: center;margin-top:100px;"><h2 style="font-size:35px;">成都军区物资供应商<br /><br />申请入库资料<br /><br />（胶装封面参考格式）</h2></div>
+                                <div style="width:80%; margin-top:370px;margin-left: auto;margin-right: auto;">
+                                    <table style="border: none;width:450px; margin:0px auto;font-size:20px;">
+                                        <tr>
+                                            <td align="right" valign="bottom" style="border: none; font-size:20px;"><div>供<span style="display:inline-block; width:13px;"></span>应<span style="display:inline-block; width:13px;"></span>商<span style="display:inline-block; width:12px;"></span>名<span style="display:inline-block; width:12px;"></span>称<span style="display:inline-block; width:0px;"></span>（盖章）：</div></td>
+                                            <td style="border: none;"><div style="display: inline-block; font-size:20px; width:300px; height:35px; line-height:45px;"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="bottom" align="right" style="border: none;"><div style="display: inline-block; font-size:21px; height:40px; line-height:48px; width:300px;">地<span style="display:inline-block; width:187px;"></span>址：</div></td>
+                                            <td style="border: none;"><div style="display: inline-block; font-size:20px; height:35px; line-height:48px; width:300px;"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="bottom" align="right" style="border: none; font-size:20px;">法定代表人（签字/盖章）：</td>
+                                            <td style="border: none;"><div style="display: inline-block; font-size:21px;width:300px; height:35px; line-height:48px;"></div></td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="bottom" align="right" style="border: none; height:40px; font-size:21px;">申<span style="display:inline-block; width:48px;"></span>报<span style="display:inline-block; width:48px;"></span>日<span style="display:inline-block; width:48px;"></span>期：</td>
+                                            <td valign="bottom" style="border: none;font-size:21px;"><div style=" height:35px; line-height:48px;"><span style="display:inline-block; width:54px;"></span>年<span style="display:inline-block; width:34px;"></span>月<span style="display:inline-block; width:34px;"></span>日</div></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div style="width:80%; margin-top:70px; border:1px solid black; padding-bottom:150px; margin-left:auto;margin-right:auto; margin-bottom:10px;">
+                                <div style="width:100%;margin:0px auto; margin-top:100px; margin-bottom:60px; text-align: center"><h2 style="font-size:32px;">成都军区物资供应商入库申请目录<br /><br />（目录页参考格式）</h2></div>
+                                <ul>
+                                    <li>第一页..............................................法人委托书</li>
+                                    <li>第二页..............................................营业执照副本</li>
+                                    <li>第三页..............................................组织机构代码证副本</li>
+                                    <li>第四页..............................................税务登记证正本</li>
+                                    <li>第五页..............................................法人身份证</li>
+                                    <li>第六页..............................................银行资信证明</li>
+                                    <li>第七页..............................................企业近三年无违法记录</li>
+                                    <li>第八页..............................................完税证明</li>
+                                    <li>第九页..............................................缴纳社保证明</li>
+                                    <li>第十页..........................................近三年会计师事务所审计报告</li>
+                                    <li>第X页（自行填写页码）..................各类资质证书，产品代理销售授权书等</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(function () {
+        $("#打印须知").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#打印须知").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

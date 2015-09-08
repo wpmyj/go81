@@ -1,0 +1,168 @@
+.t {
+        width: 50px;
+        height: 30px;
+        background-color: green;
+        color: white;
+        border-width: 0px;
+        border-radius: 5px;
+        font-size: 12px;
+    }
+#close_box {
+    display:inline-block;
+     width:50px;
+     height:30px;
+      background-color:indigo;
+       margin-right:0px; 
+       text-align:center; 
+       line-height:30px;  
+       color:white; 
+       float:right;
+}
+#close_box:hover {
+    cursor:pointer;
+    background-color:red;
+    color:white;
+}
+        .t:hover {
+            cursor: pointer;
+            background-color: lightgreen;
+            color: black;
+        }
+
+    #sp span {
+        text-align: center;
+        display: inline-block;
+        margin-right: 5px;
+        line-height: 30px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        width: 100px;
+        height: 30px;
+        background-color: orange;
+        color: white;
+    }
+    span:hover {
+        cursor: pointer;
+    }
+
+.input {
+        width:50px; 
+        margin-top:20px; 
+        height:30px; 
+        line-height:30px;
+        text-align:center;
+        background-color:orange; 
+        border-width:0px;
+        border-radius:5px;
+        margin-top:10px;
+    }
+        .input:hover {
+            cursor:pointer;
+            color:white;
+            background-color:red;
+        }
+   #tb table tr td {
+        text-align:left;
+        width:300px;
+        height:auto;
+        max-width:800px;
+        border-bottom-style:dashed;
+        border-bottom-width:1px;
+        border-bottom-color:lightgreen;
+    }
+   #tb table tr:hover td {
+        background-color:lightgreen;
+        color:black;
+    }
+    #tbox { 
+        margin-bottom:50px;
+        max-height:300px;
+        overflow:hidden;
+    }
+#tb {
+    background-color:rgb(242, 248, 245);
+}
+    th {
+        text-align: left;
+    }
+
+    h4 {
+        display: inline-block;
+    }
+
+ #tb1 table tr td {
+        text-align: left;
+        width: 300px;
+        height: 30px;
+        background-color:white;
+        font-size:12px;
+    }
+    #tb1 table tr td a:hover {
+    text-decoration:underline;  }
+.Tab {
+        width:843px;
+    }
+ .Tab a
+{
+     
+}
+.tb2, .tb3, .tb4, .tb5, .tb6, .tb7, .tb8, .tb9 {
+    font-size:12px; 
+     position:relative;
+     width:842px;
+     min-height:500px;
+     height:auto;
+     display:none;
+     background-color:white;
+}
+.tb2 table, 
+.tb3 table, 
+.tb4 table, 
+.tb5 table, 
+.tb6 table, 
+.tb7 table, 
+.tb8 table, 
+.tb9 table
+    {
+    background-color:rgb(219, 219, 219);
+    border-collapse:separate;
+}
+ .tb2 table tr td, 
+ .tb3 table tr td, 
+ .tb4 table tr td, 
+ .tb5 table tr td, 
+ .tb6 table tr td, 
+ .tb7 table tr td, 
+ .tb8 table tr td, 
+ .tb9 table tr td{
+    height: 30px;
+    background-color:rgb(250, 248, 248);
+}
+ .tb2 table tr:hover td, 
+ .tb3 table tr:hover td, 
+ .tb4 table tr:hover td, 
+ .tb5 table tr:hover td, 
+ .tb6 table tr:hover td, 
+ .tb7 table tr:hover td, 
+ .tb8 table tr:hover td, 
+ .tb9 table tr:hover td{
+    background-color:white;
+}
+#tb1 table tr td .con{
+    line-height:30px;
+    text-align:center;
+    width:150px;
+    height:30px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+#tbox {
+    margin-bottom: 50px;
+    max-height: 300px;
+    overflow: hidden;
+}
+table tr th {
+    background-color:#f3f3f3;
+}

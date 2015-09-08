@@ -1,0 +1,49 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "图片";
+}
+@{
+    string[] path = ViewData["path"].ToString().Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+    
+        <div id="filepath">
+            <table>
+                @foreach (var item in path)
+                {
+                    <tr>
+                        <td>
+                            <a href="@item" target="_blank" title="下载查看">@item</a>
+                            <a style="color:red; cursor:pointer;" onclick="delAttach(this)" lang="@item">删除</a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+}
+<script src="~/Scripts/jquery-1.11.1.min.js"></script>
+<input type="hidden" value="@ViewData["path"].ToString()" id="pics" />
+<script type="text/javascript" language="javascript">
+    $(document).ready(
+            function () {
+                var path = document.getElementById("pics").value;
+                if (path.split('|')[0] != "出错") {
+                    window.parent.document.getElementById("addattstr").value += path;
+                    window.parent.document.getElementById("f1").style.display = "none";
+                    window.parent.document.getElementById("framediv").style.display = "block";
+                }
+            }
+            );
+    function delAttach(th) {
+        var path = $(th).attr("lang");
+        $.get('/单位用户后台/DeleteImages_Att', { uri: path },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().parent().remove();
+                    var addstr = window.parent.document.getElementById("addattstr").value;
+                    window.parent.document.getElementById("addattstr").value = addstr.replace(path + "|", "");
+                }
+            });
+    }
+</script>
+
+

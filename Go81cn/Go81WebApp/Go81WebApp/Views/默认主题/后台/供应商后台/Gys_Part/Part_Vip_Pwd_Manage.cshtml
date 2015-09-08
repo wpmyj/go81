@@ -1,0 +1,128 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<style>
+    table tr td span, table tr td a {
+        font-size: 12px;
+        color: red;
+    }
+</style>
+<div id="f1" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>正在上传，请稍等...</span>
+    </div>
+</div>
+<div id="title_div" class="gys_xttz_topbg">
+    <div class="index_bottom_zb_top_title">修改密码</div>
+</div>
+<div class="gys_znxx_box">
+    <div>
+        @using (Html.BeginForm("Vip_Pwd_Manage", "供应商后台", FormMethod.Post, new { name = "personPhoto" }))
+        {
+            <input type="hidden" value="" name="pic" id="pic" />
+            <table width="50%" style="float:left; margin-left:100px;">
+                <tr>
+                    <td rowspan="4" align="right">
+                        @if (System.IO.File.Exists(Server.MapPath(@Model.登录信息.头像)))
+                        {
+                            <div style="border:1px solid black; width:100px; height:100px;">
+                                <img style="position:absolute; display:block; z-index:1;" src="@Model.登录信息.头像" width="100" height="100" />
+                                <a id="p" style="cursor:pointer; display:block; width:100px; height:15px; opacity:0.8; -moz-opacity:0.8; filter:alpha(opacity=80); text-align:center; margin-top:85px; text-decoration:underline; background-color:lightgray; position:absolute; z-index:3;" onclick="showUpload(this)">修改</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <span>还没有个人头像，<a href="###" style="color:red;" onclick="showUpload(this)">点击这里</a>添加头像</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%" align="right">登录名：</td>
+                    <td width="75%">
+                        @Html.DisplayFor(m => m.登录信息.登录名)
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">新密码：</td>
+                    <td>
+                        <input type="password" id="pwd0" name="p" value="" />
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请填写新密码,<span style="color:red;">请记住修改后的密码</span></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">确认密码：</td>
+                    <td>
+                        <input onmouseout="checkpwd()" id="pwd1" type="password" name="p1" value="" />
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请再次输入新密码,<span style="color:red;">请记住修改后的密码</span></div>
+                        </div>
+                        <span style="color:red;" id="tip"></span>
+                    </td>
+                </tr>
+            </table>
+        }
+        <div style="clear:both;">
+            <div id="Uppicture" style="display:none;">
+                <form action="/供应商后台/SavePicture" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                    <input type="hidden" value="photo" name="pic1" />
+                    <table width="100%" style="font-size:14px;margin-left: 167px;">
+                        <tr>
+                            <td width="25%" align="right">请选择图片展示图片：</td>
+                            <td width="75%">
+                                <input type="file" onchange="fileChange()" accept="image/jpeg" name="file1" size="40"/>
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box"><em style="color:red;">注：请上传2M以下的jpg格式的彩色图片</em></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+                <div id="framebox" style="margin-left:auto;width:80%; height:auto; margin-right: auto;">
+                    <iframe name="showPic" id="showPic" frameborder="0" height="150" width="100%"></iframe>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center; width:70%; margin-bottom:10px;">
+        <input id="submit_btn" type="button" onclick="Postdata()" value="保  存" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+
+        $("#修改登录密码").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#修改登录密码").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function checkpwd() {
+        if ($("#pwd1").val() != $("#pwd0").val()) {
+            $("span#tip").text("两次密码不匹配！");
+        }
+        else {
+            $("span#tip").text("");
+        }
+    }
+    function Postdata()
+    {
+        document.forms["personPhoto"].submit();
+        //$("form[name='']").submit();
+    }
+    function showUpload(th) {
+        $("#Uppicture").css("display", "inline-block");
+        $(th).hide();
+    }
+    function fileChange() {
+        document.forms["upload"].submit();
+        //$("form[name='']").submit();
+        $("#f1").show();
+        $("#framebox").css({"display":"inline-block"});
+    }
+</script>

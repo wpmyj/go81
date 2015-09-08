@@ -1,0 +1,224 @@
+﻿@model Go81WebApp.Models.数据模型.酒店
+@{
+    ViewBag.Title = "供应商后台";
+    Layout = "_BackLayout.cshtml";
+}
+
+<link href="~/css/hotelandticket.css" rel="stylesheet" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="gys_znxx_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">酒店详情</div>
+            </div>
+        </div>
+        <div class="layout" style="width:900px;">
+            <div class="title_name" style="width:900px;padding:0">
+                <span class="name" style="width:530px;">
+                    <strong>@Model.酒店基本信息.酒店名</strong>
+                    @if (Model.酒店基本信息.Wifi)
+                    {
+                        <label class="wifi" title="该酒店提供免费Wifi"></label>
+                    }
+                    <span class="addr">@Model.酒店基本信息.地址</span>
+                </span>
+                <span class="tel" style="width:360px;">联系电话： @Model.酒店基本信息.联系电话</span>
+            </div>
+
+            <div class="pic_skan" style="width:880px;height:110px;">
+                <div id="pic_room" class="picture">
+                    <div class="pic_small" style="width:605px;">
+                        @if (Model.酒店基本信息.照片 != null)
+                        { 
+                            var m=0;
+                            foreach (var k in Model.酒店基本信息.照片)
+                            {
+                                m++;
+                                <img style="width:149px;" src="@k" />
+                                if(m>3)
+                                { break; }
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="hotel_info" style="width:265px;">
+                    <div class="tra_info" style="height:121px;">
+                        <h3>交通信息</h3>
+                        <div class="tra_info_d info_d" style="width:245px;">@Model.酒店基本信息.交通信息</div>
+                    </div>
+                </div>
+            </div>
+            <div class="map_other" style="width:900px;">
+                <div id="HotelLoc" class="map" style="height:370px;width:875px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript">
+    var attchtextstring = "";
+    $(document).ready(function () {
+        $("#uploadify").uploadify({
+            'uploader': '../../JS/jquery.uploadify-v2.1.4/uploadify.swf',
+            'script': 'UploadPhoto',
+            'cancelImg': '../../JS/jquery.uploadify-v2.1.4/cancel.png',
+            'folder': 'UploadFile',
+            'sizeLimit': 1024 * 1024 * 100,
+            'queueSizeLimit': 50,
+            //'fileDesc': '只允许上传bmp,gif,jpg,jpeg图片',
+            //'fileExt': '*.bmp;*.gif;*.jpg;*.jpeg',
+            'method': 'Post',
+            'queueID': 'ShowImage',
+            'buttonImg': '../../JS/jquery.uploadify-v2.1.4/btn.jpg',
+            'wmode': 'transparent',
+            'auto': false,
+            'multi': true,
+            'onComplete': function (e, q, f, data, d) {
+                attchtextstring = document.getElementById("attachtext").value + data + "|";
+                document.getElementById("attachtext").value = attchtextstring;
+                var filename = data;
+                var Image = "<img style='width:120px;height:70px;' src='" + data + "'/>";
+                var Preview = "<a href='" + data + "' target=\"_blank\">预览</a>&nbsp;&nbsp;";
+                var Original = "<a href=\"" + data + "\" target=\"_blank\">原图</a>&nbsp;&nbsp;";
+                var Delete = "<a href=\"javascript:DeleteAttachment('" + q + "','" + data + "')\" style='color:red; padding-left:20px;'>删除</a>";
+                var Div = "<div style='margin-top:5px;text-align:center'>" + Preview + Original + Delete + "</div>";
+                $("#uploadify" + q).html(Image + Div);
+            }
+        });
+        $("#btnBegin").click(function () { $("#uploadify").uploadifyUpload(); return false; });
+    });
+    function DeleteAttachment(q, n) {
+        $.ajax({
+            type: "POST",
+            url: "DeleteAttachment?q=" + q + "&n=" + n,
+            success: function (msg) {
+                if (msg != "0") {
+                    //document.getElementById("attachtext").value = document.getElementById("attachtext").value.replace(n + "|", "");
+                    jQuery("#uploadify").uploadifyCancel(msg);
+                }
+            }
+        });
+    }
+
+    @{
+        if (Model.酒店基本信息.地理位置 == null)
+        {
+            Model.酒店基本信息.地理位置 = new double[] {104.067923, 30.679943};
+        }
+    }
+    //创建和初始化地图函数：
+    function initMap() {
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addMarker();//向地图中添加marker
+    }
+    //创建地图函数：
+    function createMap() {
+        var map = new BMap.Map("HotelLoc");//在百度地图容器中创建一个地图
+        map.addControl(new BMap.MapTypeControl());
+        var point = new BMap.Point(@Model.酒店基本信息.地理位置[0], @Model.酒店基本信息.地理位置[1]);//定义一个中心点坐标
+        map.centerAndZoom(point, 17);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+
+    //地图事件设置函数：
+    function setMapEvent() {
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+    //地图控件添加函数：
+    function addMapControl() {
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1 });
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+        map.addControl(ctrl_sca);
+    }
+
+    //标注点数组
+    var markerArr = [{
+        title: "@Model.酒店基本信息.酒店名",
+        content: "", //@*(地址：@Model.所属地域.地域)*@
+        point:"@Model.酒店基本信息.地理位置[0]|@Model.酒店基本信息.地理位置[1]",
+        isOpen: 0,
+        icon: { w: 21, h: 21, l: 0, t: 0, x: 6, lb: 5 }
+    }];
+    //创建marker
+    function addMarker() {
+        for (var i = 0; i < markerArr.length; i++) {
+            var json = markerArr[i];
+            var p0 = json.point.split("|")[0];
+            var p1 = json.point.split("|")[1];
+            var point = new BMap.Point(p0, p1);
+            //var iconImg = createIcon(json.icon);
+            var iconImg=new BMap.Icon("../Images/marker.png", new BMap.Size(50, 50));
+            var marker = new BMap.Marker(point, { icon: iconImg });
+            var iw = createInfoWindow(i);
+            var label = new BMap.Label(json.title, { "offset": new BMap.Size(json.icon.lb - json.icon.x + 10, -20) });
+            marker.setLabel(label);
+            map.addOverlay(marker);
+            label.setStyle({
+                borderColor: "#808080",
+                color: "#333",
+                cursor: "pointer"
+            });
+
+            (function() {
+                var index = i;
+                var _iw = createInfoWindow(i);
+                var _marker = marker;
+                _marker.addEventListener("click", function() {
+                    this.openInfoWindow(_iw);
+                });
+                _iw.addEventListener("open", function() {
+                    _marker.getLabel().hide();
+                });
+                _iw.addEventListener("close", function() {
+                    _marker.getLabel().show();
+                });
+                label.addEventListener("click", function() {
+                    _marker.openInfoWindow(_iw);
+                });
+                if (!!json.isOpen) {
+                    label.hide();
+                    _marker.openInfoWindow(_iw);
+                }
+            })();
+        }
+    }
+    //创建InfoWindow
+    function createInfoWindow(i) {
+        var json = markerArr[i];
+        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>" + json.content + "</div>");
+        return iw;
+    }
+    //创建一个Icon
+    function createIcon(json) {
+        var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w, json.h), { imageOffset: new BMap.Size(-json.l, -json.t), infoWindowOffset: new BMap.Size(json.lb + 5, 1), offset: new BMap.Size(json.x, json.h) })
+        return icon;
+    }
+
+    initMap();//创建和初始化地图
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("#酒店列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#酒店列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

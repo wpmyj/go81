@@ -1,0 +1,84 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">评审专家列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="10%">姓名</th>
+                    <th width="10%">评审专家类型</th>
+                    <th width="12%">专业技术职称</th>
+                    <th width="15%">从事专业</th>
+                    <th width="15%">所属地区</th>
+                    <th width="15%">操作</th>
+                </tr>
+                @{
+                    IEnumerable<专家> basedata = ViewData["专家列表"] as IEnumerable<专家>;
+                    if (basedata != null && basedata.Any())
+                    {
+                        foreach (var i in basedata)
+                        {
+                            <tr>
+                                @if (string.IsNullOrWhiteSpace(i.身份信息.姓名))
+                                {
+                                    <td>@Html.ActionLink("匿名用户", "Expert_History_Detail", new { id = i.Id }, new { target = "_blank" })</td>
+                                }
+                                else
+                                {
+                                    <td>@Html.ActionLink(i.身份信息.姓名, "Expert_History_Detail", new { id = i.Id }, new { target = "_blank" })</td>
+                                }
+                                <td>@i.身份信息.专家类型</td>
+                                <td>@i.学历信息.专业技术职称</td>
+                                <td>@i.工作经历信息.从事专业</td>
+                                <td>@i.所属地域.地域</td>
+                                <td class="gys_znxx_content_tabletime">
+                                    <a target="_blank" href="/单位用户后台/Print?id=@i.Id">打印</a><a target="_blank" href="/专家抽选/Expert_Edit?id=@i.Id">修改</a>|<a target="_blank" href="/专家抽选/DeleteExpert?id=@i.Id">删除</a>
+                                    @*@if (false)
+                                        {
+                                            @Html.ActionLink("禁用", "Procure_AdForbid", new { })
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink("解除禁用", "Procure_AdForbid", new { })
+                                        }*@
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6">暂无相关评审专家</td>
+                        </tr>
+                    }
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@(int.Parse(ViewData["maxpagesize"].ToString()));
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border","1px solid #ff0000");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#评审专家列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#评审专家列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

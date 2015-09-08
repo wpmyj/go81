@@ -1,0 +1,379 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+
+@{
+    ViewBag.Title = "验收单统计";
+    Layout = "_BackLayout.cshtml";
+}
+<link href="~/css/css.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style type="text/css">
+.statis_month_title{margin-top:20px; font-size:18px;text-indent:20px;}
+.statis_month_title label{font-size:12px;}
+.p_statis_month_total{
+    text-indent:2em;
+    MARGIN: 0;
+    line-height: 38px;
+    color: #F5E9F0;
+    background: #08A86B;
+    font-size:18px;
+    width:937px;
+}
+.gys_statistic{ width:100%}
+    .gys_statistic tr td{
+        height:30px;
+        line-height:30px;
+        font-size:13px;
+        text-align:center;
+    }
+    .gys_statistic tr:nth-child(2n+1){
+        background: #EEF8F0;
+    }
+
+    .month_statistic{
+        float: left;
+        border-right: 1px solid #0BAD82;
+        border-bottom: 1px solid #0BAD82;
+        width: 936px;
+    }
+    .month_num{
+        width: 233px;
+        border-left: 1px solid #0BAD82;
+        border-top: 1px solid #0BAD82;
+        height: 100px;
+        float: left;
+    }
+    .month{
+        font-size: 2em;
+        text-align: center;
+        color: #B4B4B4;
+    }
+    .ysd-statistic{
+        padding: 0;
+        font-size: 12px;
+        margin: 2px;
+        margin-left:0;
+        margin-right:0;
+        text-align: center;
+    }
+
+    .gys_statistic{ width:100%}
+    .gys_statistic tr td{
+        height:30px;
+        line-height:30px;
+        font-size:13px;
+        text-align:center;
+    }
+    .gys_statistic tr:nth-child(2n+1){
+        background: #EEF8F0;
+    }
+      .static-info {
+       border: 1px solid #ccc;
+        background: #EEE;
+        width: 99%;
+        margin: 10px auto;
+    }
+    .static-info p {
+        margin:8px;
+        display: inline-block;
+        width: 303px;
+        text-align: center;
+    }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">统计详情</div>
+                @*<a style="position:absolute;top:8px;right:20px;" class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>*@
+            </div>
+        </div>
+
+        <div>
+            <div class="static-info">
+                <p style="color: #228b22"><strong>验收单总数为：<span> @ViewData["所有验收单数量"] 张</span></strong></p>
+                @*<p style="color: #E99518">已存在商品库商品个数:<span>@已存在商品.Count</span></p>
+                <p style="color: red">商品与图片不一致商品个数:<span>@图片不正确商品列表.Count</span></p>*@
+            </div>
+            @*@{
+                var g_num = ViewData["各个供应商验收单数量"] as IEnumerable<Tuple<string, int,int,int>>;
+            }*@
+            <!--验收单数量最多Top10统计-->
+            @*<table class="gys_statistic" cellpadding="0" cellspacing="0" style="border: 1px solid #08A86B;">
+                <tr><th colspan="2" style="line-height: 38px;background: #08A86B;color:#F5E9F0">拥有验收单数量最多的供应商Top10</th></tr>
+                @foreach (var k in g_num)
+                {
+                    <tr>
+                        <td width="30%">@k.Item1</td>
+                        <td>@k.Item2 张(已作废 @k.Item3 张/未作废 @k.Item4 张)</td>
+                    </tr>
+                }
+            </table>*@
+
+
+            <!--新增统计与供应商成交金额-->
+            <div style="padding-left:20px;padding-right:20px;padding-top:10px;">
+                <label style="font-size:13px;">请选择年份：</label><input id="year" value="@DateTime.Now.Year" onchange="getData(this)" onfocus="WdatePicker({ dateFmt: 'yyyy' })" />
+                <label style="font-size:13px;">输入供应商名称查询供应商某一年验收单成交金额情况</label>
+                <input id="gys_name" type="text" />
+                <button id="search_gys_account">查询</button>
+            </div>
+              
+            @{
+                var ysd_year = ViewData["年度统计"] as List<Tuple<string,int,string>>;
+            }
+            <div id="waitfor" style="position:absolute; z-index:100; width:940px; height:200px; text-align:center; line-height:320px; display:none;">
+                <img src="~/Images/ajax-loader.gif" width="30px" height="30px" />
+            </div>
+            <div id="month_statistic">
+                <p class="p_statis_month_total">本年共新增验收单 @ViewData["本年新增数量"] 张</p>
+                <div class="month_statistic">
+
+                    @foreach (var mm in ysd_year)
+                    {
+                        <div class="month_num">
+                            <div class="month">@mm.Item1 月</div>
+                            <p class="ysd-statistic">本月新增 <span style="font-size:17px;color:#ff0000">@mm.Item2</span> 张验收单</p>
+                            <p class="ysd-statistic">占全年比重：<span style="font-size:17px;color:#ff0000">@mm.Item3</span> %</p>
+                        </div>
+                    }
+                </div>
+            </div>
+           
+            <!--单位用户成交金额统计-->
+            <div style="padding-left:20px;padding-right:20px;padding-top:10px;clear:both">
+                <label style="font-size:13px;">请选择年份：</label><input id="year1" onchange="getDataUnit(this)" onfocus="WdatePicker({ dateFmt: 'yyyy' })" />
+            </div>
+            <div id="unit_statistic">
+            </div>
+
+
+            <!--各个供应商历史打印验收单数量-->
+            <div id="gys_num_statistic"></div>
+        </div>
+
+
+        @*<div class="statis_month_title">时间段内公告统计数据：</div>
+        @{
+            var start = DateTime.Now.Year.ToString() + "/" + (DateTime.Now.Month != 1 ? DateTime.Now.Month - 1 : DateTime.Now.Month).ToString() + "/1";
+            var end = DateTime.Now.Year.ToString() + "/" + (DateTime.Now.Month != 1 ? DateTime.Now.Month - 1 : DateTime.Now.Month).ToString() + "/" + DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month != 1 ? DateTime.Now.Month - 1 : DateTime.Now.Month);
+        }
+        <div style="padding-left:20px;padding-right:20px;padding-top:10px;"><label style="font-size:13px;">请选择时间范围：</label><input id="startdate" value="@start" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd' })" /> - <input id="enddate" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd' })" value="@end" /><button id="btn_date_search">查询</button></div>
+        <div id="printContent">
+            <div id="adstatislist">
+                <table style="width:500px;">
+                    <tr>
+                        <td rowspan="6" style="width:378px;"><p class="p_statis_month_total" style="font-size: 13px;" id="ad_statistic_total">@ViewData["startTime"]起—@ViewData["endTime"]止共发布公告：@ViewData["区间查询数"]条</p></td>
+                        <td>预公告：@ViewData["预公告"] 条</td>
+                    </tr>
+                    <tr>
+                        <td>技术公告：@ViewData["技术公告"] 条</td>
+                    </tr>
+                    <tr>
+                        <td>发标公告：@ViewData["发标公告"] 条</td>
+                    </tr>
+                    <tr>
+                        <td>中标公告：@ViewData["中标公告"] 条</td>
+                    </tr>
+                    <tr>
+                        <td>废标公告：@ViewData["废标公告"] 条</td>
+                    </tr>
+                    <tr>
+                        <td>流标公告：@ViewData["流标公告"] 条</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="gys_ztbsearch_contentbox">
+                            <table cellpadding="0" cellspacing="0" id="adlist">
+                                <tr>
+                                    <th width="20%">标题</th>
+                                    <th width="8%">公告性质</th>
+                                    <th width="10%">公告类别</th>
+                                    <th width="6%">公告状态</th>
+                                    <th width="10%">发布时间</th>
+                                </tr>
+                                @{
+                                    IEnumerable<公告> gd = ViewData["本月所发公告"] as IEnumerable<公告>;
+                                    if (gd != null && gd.Any())
+                                    {
+                                        foreach (var k in gd)
+                                        {
+                                            <tr>
+                                                <td class="name"><a href="/运营团队后台/AdListDetail?id=@k.Id">@k.内容主体.标题</a></td>
+                                                <td>@k.公告信息.公告性质</td>
+                                                <td>@k.公告信息.公告类别</td>
+                                                <td>@k.审核数据.审核状态</td>
+                                                <td>@k.内容主体.发布时间</td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                @if (ViewData["currentpage"] != null)
+            {
+            <div class="gys_znxx_content_detailbox">
+                @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+                    {
+                    <a>首页</a>
+                    }
+                    else
+                    {
+                    <a id="1" class="page">首页</a>
+                    }
+                @for (int i = 0; i <= 10; i++)
+                    {                       //一共最多显示10个页码，前面5个，后面5个
+                        if ((int.Parse(ViewData["currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                        {
+                            if (5 == i)
+                            {                               //当前页处理
+                    <a>@int.Parse(ViewData["currentPage"].ToString())</a>
+                            }
+                            else
+                            {                               //一般页处理
+                    <a class="page" id="@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)">@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)</a>
+
+                            }
+                        }
+                    }
+                @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+                    {
+                    <a>末页</a>
+                    }
+                    else
+                    {
+                    <a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+                    }
+
+            </div>
+            }
+            </div>
+        </div>*@
+    </div>
+</div>
+<script type="text/javascript">
+    function getData(e) {
+        var year = $(e).val();
+        $.ajax({
+            url: '/运营团队后台/Part_AcceptanceStatistic',
+            data: { year: year },
+            beforeSend: function () {
+                $("#month_statistic").empty();
+                $("#waitfor").show();
+            },
+            success: function (data) {
+                $("#waitfor").hide();
+                $("#month_statistic").html(data);
+            },
+            erroe: function () {
+                alert("服务器错误！");
+            },
+        });
+    }
+
+    $("#search_gys_account").click(function () {
+        var year = $("#year").val();
+        var gys = $("#gys_name").val();
+        $.ajax({
+            url: '/运营团队后台/Part_AcceptanceStatistic',
+            data: { year: year,gys:gys },
+            beforeSend: function () {
+                $("#month_statistic").empty();
+                $("#waitfor").show();
+            },
+            success: function (data) {
+                $("#waitfor").hide();
+                $("#month_statistic").html(data);
+            },
+            erroe: function () {
+                alert("服务器错误！");
+            },
+        });
+    });
+
+    function getDataUnit(e) {
+        var year = $(e).val();
+        $.ajax({
+            url: '/运营团队后台/Part_AcceptanceStatisticUnit',
+            data: { year: year },
+            beforeSend: function () {
+                $("#unit_statistic").html("<div style='z-index:100; width:940px; height:200px; text-align:center; line-height:200px;'><img src='../Images/ajax-loader.gif' width='30px' height='30px' /></div>");
+            },
+            success: function (data) {
+                $("#unit_statistic").html(data);
+            },
+            error: function () {
+                alert("服务器错误！");
+            },
+        });
+    };
+    $(function () {
+        var isExist = false;
+        var se = document.documentElement.clientHeight;
+       
+        var existprint = false;
+        window.onscroll = function () {
+            var oGys = document.getElementById("gys_num_statistic");
+            gysTop = oGys.getBoundingClientRect().top;
+            if (gysTop <= se) {
+                if (!existprint) {
+                    existprint = true;
+                    $.ajax({
+                        url: '/运营团队后台/GysPrintNumber',
+                        dataType: 'json',
+                        beforeSend: function () {
+                            $("#gys_num_statistic").html("<div style='z-index:100; width:940px; height:200px; text-align:center; line-height:200px;'><img src='../Images/ajax-loader.gif' width='30px' height='30px' /></div>");
+                        },
+                        success: function (data) {
+                            var strr = "<table class='gys_statistic' cellpadding='0' cellspacing='0' style='border: 1px solid #08A86B;'><tr><th colspan='3' style='line-height: 38px;background: #08A86B;color:#F5E9F0'>供应商历年打印验收单数量</th></tr>";
+                            $.each(data, function (i, dom) {
+                                strr += "<tr><td>" + (i + 1) + "</td><td width='30%'>" + this.GysName + "</td><td>" + this.PrintNumber + "张</td></tr>";
+                            });
+                            strr += "</table>";
+                            $("#gys_num_statistic").html(strr);
+                            existprint = true;
+                        },
+                        error: function () {
+                            $("#gys_num_statistic").html("获取超时！");
+                        },
+                    });
+                }
+            }
+
+
+            var oDiv = document.getElementById("unit_statistic");
+            var top = oDiv.getBoundingClientRect().top;
+            if (top <= se) {
+                if (!isExist) {
+                    isExist = true;
+                    $.ajax({
+                        url: '/运营团队后台/Part_AcceptanceStatisticUnit',
+                        beforeSend: function () {
+                            $("#unit_statistic").html("<div style='z-index:100; width:940px; height:200px; text-align:center; line-height:200px;'><img src='../Images/ajax-loader.gif' width='30px' height='30px' /></div>");
+                        },
+                        success: function (data) {
+                            $("#unit_statistic").html(data);
+                            isExist = true;
+                        },
+                        error: function () {
+                            $("#unit_statistic").html("获取超时！");
+                        },
+                    });
+                }
+            }
+
+
+
+
+
+            
+        };
+        $("#验收单统计").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#验收单统计").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

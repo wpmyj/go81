@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "信息推送";
+    Layout = "~/Views/默认主题/_Shared/_Layout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">     
+        @Html.Action("Part_PublicPuRNav", "jct")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div>
+            <div style="color:#bb0202; float:left; width:200px; font-size:24px;">信息推送服务</div>
+            <div style="clear:both; padding-top:1px; color:#606060;line-height:25px; font-size:16px;">
+                <h4 style="color:orange">服务内容</h4>
+                <p style="text-indent:2em;">军采通会员将可获得更多由网站主动推送的各类招标采购信息，还可通过自主订阅的方式获得更加精准、全面的标讯信息。</p>
+                <p style="text-indent:2em;">自主订阅的标讯信息会根据会员对标讯的品类、类型、时间等个性化要求精准推送到会员指定的终端上。</p>
+                <p style="text-indent:2em;">多样的信息推送载体（站内消息、短信、邮件、微信）让会员随时随地查阅信息。一个账号在任何地点，皆可获取所需采购信息。</p>
+
+            </div>
+            <div style="text-align:center; width:830px; height:92px; background-size:cover; margin-top:30px; margin-left:auto; margin-right:auto; background-image:url(/Images/pushmsg.png)">
+            </div>
+            <div style="clear:both; padding-top:20px; color:#606060;line-height:25px; font-size:16px;">
+                <h4 style="color:orange">价值体现</h4>
+                <p style="text-indent:2em;">军采通会员可以用最少的资源成本和人力成本，在最短时间内，高速、快捷的得到采购机构发布的采购信息，一个账号在任何地点皆可或得采购信息，更可根据行业、标讯类型进行精准的定制，按照方便接收的时间和媒介，随时掌握采购动态。</p>
+            </div>
+            <div><a href="/jct/Applyvip?sure=true" style="display:block; width:150px ;height:30px; text-align:center; line-height:30px; border:1px solid red; background-color:#E78E8E; color:white; margin:0px auto;">申请加入军采通会员</a></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(".action_link").each(function () {
+        if ($(this).text() == "军采通") {
+            $(this).parent("div").addClass("on");
+        }
+    });
+</script>

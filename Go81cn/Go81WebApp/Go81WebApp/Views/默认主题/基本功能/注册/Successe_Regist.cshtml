@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "注册成功";
+}
+<style type="text/css">
+    .successed_register {
+        height: 300px;
+        width: 655px;
+        margin: 30PX auto;
+    }
+
+        .successed_register img {
+            margin-top: 100px;
+            float: left;
+        }
+
+        .successed_register .success_content {
+            float: left;
+            margin-top: 25px;
+            margin-left: 20px;
+        }
+</style>
+<div class="successed_register">
+    <img src="~/Images/succeed.png" />
+    <div class="success_content">
+        @if (ViewData["账号申请类型"] != null && ViewData["账号申请类型"].ToString() == "1")
+        {
+            <p style="font-size:20px; color:red;">恭喜您注册成功！请等待管理单位的审核！！</p>
+            <p>审核通过后，请登录后台及时修改联系人等信息！</p>
+        }
+        else
+        {
+            <p style="font-size:20px; color:red;">恭喜您注册成功！请及时登录后台修改账户信息及企业信息！</p>
+            <p>相关注册信息需提报成都军区物资采购管理部门审核！</p>
+        }
+        <p id="urlredirect">秒后跳转到登录页面</p><a style="font-size:12px; color:red; text-decoration:underline;" href="/登录/Login">直接登录》</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var i = 15;
+        var timer;
+        $("#urlredirect").html(i + "秒后跳转到登录页面！");
+        timer=setInterval(function () {
+            i--;
+            $("#urlredirect").html(i + "秒后跳转到登录页面！");
+            if (i < 1) {
+                setTimeout(function () {
+                    window.location.href = "/登录/Login";
+                }, 500);
+                clearInterval(timer);
+            }
+        }, 1000);
+    });
+</script>

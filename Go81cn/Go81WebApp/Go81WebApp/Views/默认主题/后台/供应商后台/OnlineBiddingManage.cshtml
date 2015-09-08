@@ -1,0 +1,129 @@
+﻿@model List<Go81WebApp.Models.数据模型.竞标数据模型.网上竞标>
+@{
+    ViewBag.Title = "中标通知";
+    Layout = "_BackLayout.cshtml";
+}
+<style type="text/css">
+    .tabmenu_zb li {
+        margin-left:5px;
+        background:#4AC58D;
+        padding-bottom:1px;
+    }
+    .tabmenu_zb .onhover {
+        background-color: #ffffff;
+        cursor: pointer;
+        padding-bottom: 5px;
+        border: 1px solid #C7C7C7;
+        border-bottom: none;
+    }
+    .account-total {
+        display:none;
+    }
+    .account-total table{
+        width:100%;
+        padding:0 20px;
+        font-size:14px;
+    }
+    .account-total table tr {
+        line-height:30px;
+    }
+    .account-total table tr:nth-child(2n) {
+        background:#F7F7F7;
+    }
+
+    .account-total table tr td.decimal-cost{
+        text-align:center;
+    }
+
+     .account-total span.expire{
+        letter-spacing: 2px;
+        cursor: pointer;
+        color: #FFF;
+        background: none repeat scroll 0% 0% #8C8C8C;
+        text-align: center;
+        padding: 0px 10px;
+        margin: 0px 5px;
+        height: 25px;
+        display: inline-block;
+        line-height: 25px;
+    }
+
+    .modal_content_charge {
+        width: 500px;
+        height: 270px;
+        margin: 6% auto;
+        background: #fff;
+        border: 1px solid #A6C2A7;
+        text-indent: 3em;
+        position: relative;
+    }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="gys_znxx_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">中标通知</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div class="gys_znxx_contentbox">
+                <div class="gys_znxx_content">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th width="4%">序号</th>
+                            <th width="10%">项目编号</th>
+                            <th width="15%">项目名称</th>
+                            <th width="20%">商品名称</th>
+                            <th width="20%">商品型号</th>
+                            <th width="12%">操作</th>
+                        </tr>
+                        @if (Model.Any() && Model.Count() > 0)
+                        {
+                            var num = 0;
+                            foreach (var item in Model)
+                            {
+                                num++;
+                                <tr>
+                                    <td style="text-align:center">@num</td>
+                                    <td style="text-align:center">@item.项目编号</td>
+                                    <td style="text-align:left">@item.项目名称</td>
+                                    <td>@item.商品名称</td>
+                                    <td>@item.商品型号</td>
+                                    <td align="center"><a href="/供应商后台/OnlineBiddingDetail?id=@item.Id">查看详情</a> | <a href="">下载电子合同</a></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6">暂时无中标通知</td>
+                            </tr>
+                        }
+
+
+                        @*<tr>
+                            <td>四川省军区某室音视频会议系统公开招标</td>
+                            <td>2015-CDSCSJQ-1019</td>
+                            <td align="center"><a href="">查看详情</a> | <a href="">下载电子合同</a></td>
+                        </tr>
+                        <tr>
+                            <td>78300部队招待所电气设备公开招标采购</td>
+                            <td>2015-CD78300-1007</td>
+                            <td align="center"><a href="">查看详情</a> | <a href="">下载电子合同</a></td>
+                        </tr>*@
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#中标结果查看").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#中标结果查看").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

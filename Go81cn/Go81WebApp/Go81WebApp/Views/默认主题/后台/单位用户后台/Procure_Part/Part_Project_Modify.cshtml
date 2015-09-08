@@ -1,0 +1,96 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.需求申请
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<script>
+    var editor
+    KindEditor.ready(function (K) {
+        editor = K.create('#content', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true
+        });
+        $("#modiibutton").click(function () {
+            if (editor.html() == null || editor.html() == "") {
+                $("#tips").css("display", "block");
+                $("#tips img").remove();
+                $("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+                $("#tips div#tips1").text('请填写内容！');
+                return false;
+            }
+        });
+
+    });
+    function shutdown() {
+        $("#tips").fadeOut(500);
+    }
+</script>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_topbox">
+            <div class="gys_znxx_topbg">
+                <div class="index_bottom_zb_top_title">修改项目需求申请</div>
+            </div>
+        </div>
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">标题：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.标题)
+                        <span class="tipmessage">@Html.ValidationMessageFor(model => model.标题)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">
+                        正文：
+                        @*<span class="tipmessage" id="contenerror"></span>*@
+                    </div>
+                    <div style="float:left;">
+
+                    </div>
+                </div>
+                @*<textarea id="content" style="width: 880px; height: 550px; visibility: hidden;"></textarea>*@
+                <div style="position:relative">
+                    @Html.TextAreaFor(model => model.正文, new { style = "width:840px; height: 550px; visibility: hidden;", id = "content" })
+                    <div style="text-align:center;color:red; position:absolute; background-color:#EFF0E7; margin-top:-355px; margin-left:310px; display:none; width:250px; height:100px; border-radius:3px; font-size:12px;" id="tips">
+                        <div style="width:auto"><a href="###" onclick="shutdown()" style="float:right;margin-top:10px; margin-right:10px">关闭</a></div>
+                        <div style="clear:both; width:200px;height:30px;margin-left:35px;margin-top:40px;">
+                            <div id="tips1" style="color:red; font-size:14px; float:left;margin-left:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style=" text-align:center;"><input id="modiibutton" name="submitcontent" type="submit" @*onclick="return checkcontent();"*@ style="margin-top:20px;" class="front_login_rightbox_button" value="确定"></div>
+                <script type="text/javascript">
+                    function checkcontent() {
+                        editor.sync("content");
+                        if (document.getElementById("content").value.replace(/(^\s*)|(\s*$)/g, "") == "") {
+                            $("#contenerror").html("内容必须填写");
+                            return false;
+                        }
+                        else {
+                            $("#contenerror").html("");
+                            return true;
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#我的需求列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#我的需求列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

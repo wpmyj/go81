@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "供应商注册-采购机构选择";
+}
+<script src="~/JS/provinceandcity_all.js"></script>
+<style type="text/css">
+    .organization {
+        text-align: center;
+        font-size: 20px;
+        color: red;
+        margin-top: 20px;
+    }
+
+    #enable_select {
+        width: 800px;
+        border-top: 1px solid #aaa;
+        border-left: 1px solid #aaa;
+    }
+
+        #enable_select tr td {
+            border-right: 1px solid #aaa;
+            border-bottom: 1px solid #aaa;
+            height: 25px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        #enable_select tr th {
+            border-right: 1px solid #aaa;
+            border-bottom: 1px solid #aaa;
+            height: 30px;
+            background: rgba(194, 204, 200, 0.5);
+        }
+
+    p.pp {
+        color: #008080;
+        font-size: 18px;
+    }
+</style>
+<div class="organization">请选择受理申请的采购机构</div>
+@*<div>
+        <label>请选择您所在的省市:</label>
+        <select id="deliverprovince" name="deliverprovince"></select>
+        <select id="delivercity" name="delivercity"></select>
+        <script>
+            window.onload = function () { new PCAS("deliverprovince", "delivercity"); }
+        </script>
+    </div>*@
+<p class="pp">可选择的采购机构</p>
+<div>
+    <table id="enable_select" cellpadding="0" cellspacing="0">
+        <tr>
+            <th width="10%">选择</th>
+            <th width="10%">序号</th>
+            <th width="50%">采购机构名称</th>
+            <th width="20%">所在地区</th>
+        </tr>
+        <tr>
+            <td><input name="organ" type="radio" value="成都军区物资采购机构（成都）" checked="checked" /></td>
+            <td>1</td>
+            <td>成都军区物资采购机构（成都）</td>
+            <td>成都</td>
+        </tr>
+        <tr>
+            <td><input name="organ" type="radio" value="成都军区物资采购机构（昆明）" /></td>
+            <td>2</td>
+            <td>成都军区物资采购机构（昆明）</td>
+            <td>云南</td>
+        </tr>
+        <tr>
+            <td><input name="organ" type="radio" value="成都军区物资采购机构（贵阳）" /></td>
+            <td>3</td>
+            <td>成都军区物资采购机构（贵阳）</td>
+            <td>贵州</td>
+        </tr>
+        <tr>
+            <td><input name="organ" type="radio" value="成都军区物资采购机构（重庆）" /></td>
+            <td>4</td>
+            <td>成都军区物资采购机构（重庆）</td>
+            <td>重庆</td>
+        </tr>
+        <tr>
+            <td><input name="organ" type="radio" value="西藏军区物资采购中心" /></td>
+            <td>5</td>
+            <td>西藏军区物资采购中心</td>
+            <td>西藏</td>
+        </tr>
+    </table>
+</div>
+<div style="text-align: center;margin-top:20px;">
+    <input class="front_login_rightbox_button_less" type="button" value="下一步" />
+</div>
+<script type="text/javascript">
+    $("input[type=button]").click(function () {
+        var radio = $("input[type=radio]:checked").val();
+        if (radio != "" && radio != null) {
+            window.location.href = "/注册/Expert_Apply?p=" + radio;
+        }
+        else {
+            alert("请选择申请的采购机构！");
+        }
+    });
+</script>

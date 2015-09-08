@@ -1,0 +1,313 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.推送数据模型
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <style type="text/css">
+        /*.gys_ztbsearch_contentbox {
+            width: 918px;
+        }
+        .pushmessagetitle {
+            width: 918px;
+        }*/
+    </style>
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">信息推送</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox" style=" padding-bottom:10px;">
+            <div class="gys_ztbsearch_contentbox" style="margin-bottom:10px;">
+                <div class="pushmessagetitle">公告列表</div>
+                <div class="gys_znxx_content" id="AdListTable">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="51%">标题</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="10%">公告性质</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="12%">公告类别</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="12%">时间</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="15%">操作</th>
+                        </tr>
+                        @foreach (var item in (IEnumerable<公告>)ViewData["后台公告列表"])
+                        {
+                            <tr>
+                                <td><a href="~/运营团队后台/PushMessageDetail?id=@item.Id" target="_blank">@item.内容主体.标题</a></td>
+                                <td>@item.公告信息.公告性质</td>
+                                <td>@item.公告信息.公告类别</td>
+                                <td>@item.基本数据.修改时间.ToString("yyyy.MM.dd")</td>
+                                <td class="gys_znxx_content_tabletime">
+                                    @Html.ActionLink("编辑推送信息", "PushMessageDetail", new { id = item.Id })
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    <div class="gys_znxx_content_detailbox">
+                        @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+                        {
+                            <a>首页</a>
+                        }
+                        else
+                        {
+                            <a id="1" onclick="changeAdpage(this)">首页</a>
+                        }
+                        @for (int i = 0; i <= 10; i++)
+                        {                       //一共最多显示10个页码，前面5个，后面5个
+                            if ((int.Parse(ViewData["currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                            {
+                                if (5 == i)
+                                {                               //当前页处理
+                                    <a>@int.Parse(ViewData["currentPage"].ToString())</a>
+                                }
+                                else
+                                {                               //一般页处理
+                                    <a id="@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)" onclick="changeAdpage(this)">@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)</a>
+
+                                }
+                            }
+                        }
+                        @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+                        {
+                            <a>末页</a>
+                        }
+                        else
+                        {
+                            <a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeAdpage(this)">末页</a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                function changeAdpage(a) {
+                    //alert(a.getAttribute("id"))公告翻页ajax
+                    $.get("/运营团队后台/Part_SendAdList?page=" + encodeURI(a.getAttribute("id")), function (response) {
+
+                        $("#AdListTable").html(response)
+                    });
+                }
+            </script>
+
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    var old = null; //用来保存原来的对象  
+                    $("input[name='PushMessageType_Ad']").each(function () {//循环绑定事件  
+                        if (this.checked) {
+                            old = this; //如果当前对象选中，保存该对象  
+                        }
+                        this.onclick = function () {
+                            if (this == old) {//如果点击的对象原来是选中的，取消选中  
+                                //
+                            } else {
+                                old = this;
+                                $.get("/运营团队后台/Part_SendPushListTypeChange?type=" + encodeURI($('input[name="PushMessageType_Ad"]:checked').val()), function (response) {
+
+                                    $("#PushListTable").html(response)
+                                });
+                            }
+                            
+                        }
+                    });
+                });
+
+                $(document).ready(function () {
+                    var oldus = null; //用来保存原来的对象  
+                    $("input[name='PushMessageType_Us']").each(function () {//循环绑定事件  
+                        if (this.checked) {
+                            oldus = this; //如果当前对象选中，保存该对象  
+                        }
+                        this.onclick = function () {
+                            if (this == oldus) {//如果点击的对象原来是选中的，取消选中  
+                                //
+                            } else {
+                                oldus = this;
+                                $.get("/运营团队后台/Part_SendPushListTypeChange_Us?type=" + encodeURI($('input[name="PushMessageType_Us"]:checked').val()), function (response) {
+
+                                    $("#PushListTable_Us").html(response)
+                                });
+
+                            }
+
+                        }
+                    });
+                });
+            </script>
+
+
+            <div class="gys_ztbsearch_contentbox" style="margin-top:10px;">
+                <div class="pushmessagetitle">公告推送消息列表</div>
+
+                <div style="width:500px; float:right; height:auto; padding-right:20px; padding-top:20px; font-size:14px;">
+                    <input value="0" type="radio" name="PushMessageType_Ad" style="margin-left:20px;" checked="checked" />未提交
+                    <input value="1" type="radio" name="PushMessageType_Ad" style="margin-left:20px;" />未审核
+                    <input value="2" type="radio" name="PushMessageType_Ad" style="margin-left:20px;" />审核通过
+                    <input value="3" type="radio" name="PushMessageType_Ad" style="margin-left:20px;" />审核未通过
+                    <input value="-1" type="radio" name="PushMessageType_Ad" style="margin-left:20px;" />全部
+                </div>
+                <div class="gys_znxx_content" id="PushListTable" style="padding-top:5px;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="7%">信息编号</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="35%">关联公告标题</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="10%">公告性质</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="10%">公告类别</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="10%">信息状态</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="10%">时间</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="18%">操作</th>
+                        </tr>
+                        @foreach (var item in (IEnumerable<公告推送>)ViewData["公告推送列表"])
+                        {
+                            <tr>
+                                <td><a href="~/运营团队后台/PushMessageModify?id=@item.Id" target="_blank">@item.Id</a></td>
+                                <td><a href="~/运营团队后台/PushMessageModify?id=@item.Id" target="_blank">@item.关联公告.公告.内容主体.标题</a></td>
+                                <td>@item.关联公告.公告.公告信息.公告性质</td>
+                                <td>@item.关联公告.公告.公告信息.公告类别</td>
+                                <td>@item.审核数据.推送信息状态</td>
+                                <td>@item.基本数据.修改时间.ToString("yyyy.MM.dd")</td>
+                                <td class="gys_znxx_content_tabletime">
+                                    <a href="~/运营团队后台/PushMessageModify?id=@item.Id" target="_blank">查看</a>
+                                    <a href="~/运营团队后台/PushMessageModify?id=@item.Id" target="_blank">编辑</a>
+                                    @Html.ActionLink("删除", "PushAdMessageDelete", new { id = item.Id })
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    <div class="gys_znxx_content_detailbox">
+                        @if (int.Parse(ViewData["adpushcurrentpage"].ToString()) == 1)
+                        {
+                            <a>首页</a>
+                        }
+                        else
+                        {
+                            <a id="1" onclick="changeMesspage(this)">首页</a>
+                        }
+                        @for (int i = 0; i <= 10; i++)
+                        {                       //一共最多显示10个页码，前面5个，后面5个
+                            if ((int.Parse(ViewData["adpushcurrentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["adpushcurrentpage"].ToString()) + i - 5) <= int.Parse(ViewData["adpushpagecount"].ToString()))
+                            {
+                                if (5 == i)
+                                {                               //当前页处理
+                                    <a>@int.Parse(ViewData["adpushcurrentpage"].ToString())</a>
+                                }
+                                else
+                                {                               //一般页处理
+                                    <a id="@(int.Parse(ViewData["adpushcurrentpage"].ToString()) + i - 5)" onclick="changeMesspage(this)">@(int.Parse(ViewData["adpushcurrentpage"].ToString()) + i - 5)</a>
+
+                                }
+                            }
+                        }
+                        @if (int.Parse(ViewData["adpushcurrentpage"].ToString()) == int.Parse(ViewData["adpushpagecount"].ToString()))
+                        {
+                            <a>末页</a>
+                        }
+                        else
+                        {
+                            <a id="@int.Parse(ViewData["adpushpagecount"].ToString())" onclick="changeMesspage(this)">末页</a>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+            <script type="text/javascript">
+                function changeMesspage(a) {
+                $.get("/运营团队后台/Part_SendPushList?page=" + encodeURI(a.getAttribute("id")) + "&type=" + encodeURI($('input[name="PushMessageType_Ad"]:checked').val()), function (response) {
+
+                        $("#PushListTable").html(response)
+                    });
+                }
+            </script>
+            <div class="gys_ztbsearch_contentbox" style="margin-top:10px;">
+                <div class="pushmessagetitle">一般推送消息列表<a href="PushMessageDetail" style=" float:right; padding-right:10px;">添加一般推送信息</a></div>
+
+                <div style="width:500px; float:right; height:auto; padding-right:20px; padding-top:20px; font-size:14px;">
+                    <input value="0" type="radio" name="PushMessageType_Us" style="margin-left:20px;" checked="checked" />未提交
+                    <input value="1" type="radio" name="PushMessageType_Us" style="margin-left:20px;" />未审核
+                    <input value="2" type="radio" name="PushMessageType_Us" style="margin-left:20px;" />审核通过
+                    <input value="3" type="radio" name="PushMessageType_Us" style="margin-left:20px;" />审核未通过
+                    <input value="-1" type="radio" name="PushMessageType_Us" style="margin-left:20px;" />全部
+                </div>
+                <div class="gys_znxx_content" id="PushListTable_Us" style="padding-top:5px;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="20%">信息编号</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="20%">信息状态</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="30%">时间</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="30%">操作</th>
+                        </tr>
+                        @foreach (var item in (IEnumerable<一般推送>)ViewData["一般推送列表"])
+                        {
+                            <tr>
+                                <td><a href="~/运营团队后台/PushMessageUsModify?id=@item.Id" target="_blank">@item.Id</a></td>
+                                <td>@item.审核数据.推送信息状态</td>
+                                <td>@item.基本数据.修改时间.ToString("yyyy.MM.dd")</td>
+                                <td class="gys_znxx_content_tabletime">
+                                    <a href="~/运营团队后台/PushMessageUsModify?id=@item.Id" target="_blank">查看</a>
+                                    <a href="~/运营团队后台/PushMessageUsModify?id=@item.Id" target="_blank">编辑</a>
+                                    @Html.ActionLink("删除", "PushUsMessageDelete", new { id = item.Id })
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    <div class="gys_znxx_content_detailbox">
+                        @if (int.Parse(ViewData["uspushcurrentpage"].ToString()) == 1)
+                        {
+                            <a>首页</a>
+                        }
+                        else
+                        {
+                            <a id="1" onclick="changeMesspage_us(this)">首页</a>
+                        }
+                        @for (int i = 0; i <= 10; i++)
+                        {                       //一共最多显示10个页码，前面5个，后面5个
+                            if ((int.Parse(ViewData["uspushcurrentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["uspushcurrentpage"].ToString()) + i - 5) <= int.Parse(ViewData["uspushpagecount"].ToString()))
+                            {
+                                if (5 == i)
+                                {                               //当前页处理
+                                    <a>@int.Parse(ViewData["uspushcurrentpage"].ToString())</a>
+                                }
+                                else
+                                {                               //一般页处理
+                                    <a id="@(int.Parse(ViewData["uspushcurrentpage"].ToString()) + i - 5)" onclick="changeMesspage_us(this)">@(int.Parse(ViewData["uspushcurrentpage"].ToString()) + i - 5)</a>
+
+                                }
+                            }
+                        }
+                        @if (int.Parse(ViewData["uspushcurrentpage"].ToString()) == int.Parse(ViewData["uspushpagecount"].ToString()))
+                        {
+                            <a>末页</a>
+                        }
+                        else
+                        {
+                            <a id="@int.Parse(ViewData["uspushpagecount"].ToString())" onclick="changeMesspage_us(this)">末页</a>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+            <script type="text/javascript">
+                function changeMesspage_us(a) {
+                    $.get("/运营团队后台/Part_SendPushList_Us?page=" + encodeURI(a.getAttribute("id")) + "&type=" + encodeURI($('input[name="PushMessageType_Us"]:checked').val()), function (response) {
+
+                        $("#PushListTable_Us").html(response)
+                    });
+                }
+
+            </script>
+        </div>
+
+    </div>
+}
+<script type="text/javascript" language="javascript">
+    var i=@(int.Parse(ViewData["currentPage"].ToString()));
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == i) {
+                $(this).addClass("currentPage");
+            }
+        });
+        $("#推送信息管理").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#推送信息管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

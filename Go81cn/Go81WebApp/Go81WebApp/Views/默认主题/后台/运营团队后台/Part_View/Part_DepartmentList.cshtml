@@ -1,0 +1,195 @@
+﻿@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+<link href="~/css/index.css" rel="stylesheet" />
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">单位用户列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <table width="90%" style="margin-left:20px; margin-top:10px;">
+            <tr>
+                <td style="font-size:14px;">单位编号：</td>
+                <td><input type="text" id="number" style="width:200px;" /></td>
+                <td style="font-size:14px;">用户名称：</td>
+                <td><input type="text" id="name" style="width:200px;" /></td>
+                <td rowspan="2" valign="middle">
+                <input type="button" style="width:80px; height:40px;" value="查询" /></td>
+            </tr>
+            <tr>
+                <td style="font-size:14px;">单位级别：</td>
+                <td>
+                    <select style="width:204px;">
+                        <option value="@((int)单位用户.单位级别.未设置)">未设置</option>
+                        <option value="@((int)单位用户.单位级别.正军级)">正军级</option>
+                        <option value="@((int)单位用户.单位级别.正师级)">正师级</option>
+                        <option value="@((int)单位用户.单位级别.正团级)">正团级</option>
+                        <option value="@((int)单位用户.单位级别.正营级)">正营级</option>
+                        <option value="@((int)单位用户.单位级别.副军级)">副军级</option>
+
+                        <option value="@((int)单位用户.单位级别.副师级)">副师级</option>
+                        <option value="@((int)单位用户.单位级别.副团级)">副团级</option>
+                        <option value="@((int)单位用户.单位级别.副营级)">副营级</option>
+                        <option value="@((int)单位用户.单位级别.营级以下)">营级以下</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <div class="gys_znxx_content">
+            <table width="100%" id="con" cellpadding="0" cellspacing="0">
+                <tr><td colspan="8" style="text-align:right;"><a href="###" onclick="outPutExcel(this)">导出EXCEL表格</a></td></tr>
+                <tr><th align="center">用户ID</th><th align="center">登录名</th><th align="center">所属单位</th><th align="center">单位名称</th><th>联系人</th><th>审核状态</th><th>操作</th><th>EXCEL<input id="allCheck" name="parent" type="checkbox" value="" onclick="selectAll()" /></th></tr>
+                @foreach (var item in ViewData["user"] as IEnumerable<用户基本数据>)
+                {
+                    var m = item as 单位用户;
+                    <tr>
+                        <td>@m.Id</td>
+                        <td><a href="/运营团队后台/Department_Detail?id=@item.Id">@item.登录信息.登录名</a></td>
+                        <td>
+                            @try
+                            {
+                                <span>@(m.管理单位.用户数据.单位信息.单位代号 != "" ? m.管理单位.用户数据.单位信息.单位代号 : m.管理单位.用户数据.单位信息.单位名称)</span>
+                            }
+                            catch
+                            {
+                                <span>未填写</span>
+                            }
+                        </td>
+                        <td>@m.单位信息.单位名称</td>
+                        <td>@m.联系方式.联系人</td>
+                        @if (m.审核数据.审核状态 == 审核状态.审核通过)
+                        {
+                            <td>@m.审核数据.审核状态</td>
+                        }
+                        else if (m.审核数据.审核状态 == 审核状态.审核未通过)
+                        {
+                            <td style="color: red;">@m.审核数据.审核状态</td>
+                        }
+                        else
+                        {
+                            <td style="color: #3333ff;">@m.审核数据.审核状态</td>
+                        }
+                        <td><a href="/运营团队后台/DepartmentModify?id=@m.Id">修改</a>|<a onclick="del(@item.Id)">删除</a></td>
+                        <td><input name="item" type="checkbox" value="@m.Id" onclick="selectThis()" /></td>
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString()))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(":button").click(function () {
+        var str=0;
+        $(":checked").each(function () {
+            if ($(this).prop("checked"))
+            {
+                str += parseInt($(this).val());
+            }
+        });
+        $.ajax({
+            url: '/运营团队后台/Search_Department',
+            data: { name: $(":text#name").val(), num: $(":text#number").val(), pro: str, catorgray: $("select").val() },
+            dataType: 'json',
+            success: function (data) {
+                var result = "<table width='100%' cellspacing='0' cellpadding='0'><tr><th align='center'>用户ID</th><th align='center'>登录名</th><th align='center'>所属单位</th><th align='center'>单位名称</th><th>联系人</th><th>审核状态</th><th>操作</th></tr>";
+                $.each(data.Data, function (index, item) {
+                    result += "<tr><td>" + item.Id + "</td><td><a href='/运营团队后台/Department_Detail?id=" + item.Id + "'>" + item.loginame + "</a></td><td>" + item.ssdw + "</td><td>"+item.unitname+"</td><td>"+item.contactuser+"</td><td>"+item.status+"</td><td><a href='/运营团队后台/Del_Department?id=" + item.Id + "'>删除</a></td></tr>";
+                });
+                result += "</table>";
+                $("table#con").html(result);
+                $(".gys_znxx_content_detailbox").hide();
+            },
+            error:function() {
+                $("table#con").html("根据条件未找到任何结果！");
+            },
+        });
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border","1px solid #ff0000");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#单位列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#单位列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此用户！确定删除吗？"))
+        {
+            window.location="/运营团队后台/Del_Department?id="+num;
+        }
+    }
+    var s="";
+    function selectAll() {
+        s = "";
+        var th = document.getElementsByName('parent').item(0);
+        var items = document.getElementsByName('item');
+        if (th.checked) {
+            for (var i = 0; i < items.length; i++) {
+                items.item(i).checked = true;
+                s += items.item(i).value + ",";
+            }
+        }
+        else {
+            for (var i = 0; i < items.length; i++) {
+                items.item(i).checked = false;
+            }
+            s = "";
+        }
+    }
+    function selectThis() {
+        s = "";
+        var noallSelected=false;
+        var items = document.getElementsByName('item');
+        for (var i = 0; i < items.length; i++) {
+            if (!items.item(i).checked) {
+                noallSelected = true;
+                break;
+            }
+        }
+        for (var i = 0; i < items.length; i++) {
+            if (items.item(i).checked) {
+                s += items.item(i).value + ",";
+            }
+        }
+        if(noallSelected)
+        {
+            document.getElementsByName('parent').item(0).checked=false;
+        }
+        else
+        {
+            document.getElementsByName('parent').item(0).checked=true;
+        }
+    }
+    function outPutExcel(str) {
+        if (s == "") {
+            alert("请选择要导出的数据！");
+        }
+        else {
+                window.location = "/运营团队后台/putOutExcel?id=" + s+"&type=unit";
+            
+        }
+    }
+</script>

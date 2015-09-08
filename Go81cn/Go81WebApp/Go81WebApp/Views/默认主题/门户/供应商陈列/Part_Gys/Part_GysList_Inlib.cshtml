@@ -1,0 +1,185 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+<link href="~/css/css.css" rel="stylesheet" />
+<script src="~/JS/provinceandcity_all.js"></script>
+<style>
+    #userContent {
+        width: 1049px;
+        padding-top: 10px;
+        margin-top: 10px;
+        border: 1px solid #3366cc;
+    }
+
+        #userContent div {
+            margin-left: 10px;
+            margin-bottom: 10px;
+            width: 95%;
+            line-height: 25px;
+            border-bottom: 1px dashed #808080;
+        }
+</style>
+<div class="gys_xttz_box">
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">入库供应商列表</div>
+        </div>
+    </div>
+    <table width="100%" style="margin-top:20px;" class="gyslisttable">
+        @if (WebApiApplication.IsIntranet)
+        {
+            <tr>
+                <td rowspan="4"><i style="display:inline-block;width:100px;height:115px;background:url('../Images/searchico.png') no-repeat top center"></i></td>
+            </tr>
+        }
+
+        <tr style="line-height:30px;">
+            <td width="10%" align="right">所属地区：</td>
+            <td width="90%">
+                <select id="deliverprovince" name="deliverprovince"></select>
+                <select id="delivercity" name="delivercity"></select>
+                <select id="deliverarea" name="deliverarea"></select>
+                <script>
+                    window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                </script>
+            </td>
+        </tr>
+        <tr style="line-height:30px;">
+            <td align="right">所属行业：</td>
+            <td class="">
+                @{
+                    IEnumerable<商品分类>
+                        goodclass = ViewData["行业列表"] as IEnumerable<商品分类>
+                            ;
+                    if (goodclass != null && goodclass.Any())
+                    {
+                        <select id="yjfn" class="yjfn" style="width:154px;">
+                            <option value="">请选择行业</option>
+                            @foreach (var i in goodclass)
+                            {
+                                <option value="@i.分类名">@i.分类名</option>
+                            }
+                        </select>
+                    }
+                }
+            </td>
+        </tr>
+        <tr style="line-height:30px;">
+            <td align="right">企业名称：</td>
+            <td>
+                <input id="search_text" type="text" class="gys_ztbsearch_search_text" />
+                <input id="ss_btn" type="button" onclick="GysList(1)" class="gys_ztbsearch_search_botton" value="查询" />
+            </td>
+        </tr>
+    </table>
+    @if (WebApiApplication.IsIntranet)
+    {
+        <div id="userContent">
+        </div>
+    }
+    else
+    {
+        <div id="userContent" style="width:99%;border:1px solid #459C1F;">
+        </div>
+    }
+    <div id="pager">
+
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function setPage(pgCount, currentPage) {
+        if (pgCount <= 6) {
+            var str = '';
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='GysList(" + i + ")'>" + i + "</a>";
+            }
+            if (pgCount != 0) {
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (currentPage < 6) {
+                if (currentPage != 1) {
+                    var str = "<a onclick='GysList(" + (currentPage - 1) + ")'>上一页</a>";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a onclick='GysList(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a  onclick='GysList(" + pgCount + ")'>" + pgCount + "</a><a onclick='GysList(" + (currentPage + 1) + ")'>下一页</a>";
+                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    $("div#pager").html(str);
+                }
+                else {
+                    var str = "";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a  onclick='GysList(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='GysList(" + pgCount + ")'>" + pgCount + "</a><a onclick='GysList(" + (currentPage + 1) + ")'>下一页</a>";
+                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    $("div#pager").html(str);
+                }
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                var str = "<a onclick='GysList(" + (currentPage - 1) + ")'>上一页</a><a onclick='GysList(" + (1) + ")'>1</a>...";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='GysList(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='GysList(" + pgCount + ")'>" + pgCount + "</a><a onclick='GysList(" + (currentPage + 1) + ")'>下一页</a>";
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+            else if (currentPage >= pgCount - 3) {
+                var str = "<a onclick='GysList(" + (currentPage - 1) + ")'>上一页</a><a onclick='GysList(" + 1 + ")'>1</a>...";
+                for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
+                    str += "<a onclick='GysList(" + i + ")'>" + i + "</a>";
+                }
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    function GysList(cpage) {
+        var str = "";
+        $.get("/供应商陈列/SearchGys", {
+            province: $("#deliverprovince").val(),
+            city: $("#delivercity").val(),
+            area: $("#deliverarea").val(),
+            factory: $("#yjfn").val(),
+            name: $("#search_text").val(),
+            skip: cpage
+        }, function (data) {
+            if (data.Data.u.length != 0) {
+                for (var i = 0; i < data.Data.u.length; i++) {
+                    str += "<div onmouseover='setColor(this)' onmouseout='setOrigin(this)'>" + (i + 1) + "、<a href='/供应商陈列/Supplier_Destination?id=" + data.Data.u[i].Id + "'>" + data.Data.u[i].Name + "</div>";
+                }
+                $("#userContent").html(str);
+                setPage(data.Data.p, cpage);
+            }
+            else {
+                str += "<div style='font-size:18px; text-align:center;border:none;'>暂时没有入库供应商！</div>";
+                $("#userContent").html(str);
+                setPage(0, cpage);
+            }
+        }
+        );
+    }
+    $(document).ready(function () {
+        $(".action_link").each(function () {
+            if ($(this).text() == "供应商库") {
+                $(this).parent("div").addClass("on");
+            }
+        });
+        GysList(1);
+    });
+    function setColor(th) {
+        $(th).css({ "background-color": "#E4EFFF" });
+    }
+    function setOrigin(th) {
+        $(th).css({ "background-color": "#fff" });
+    }
+</script>

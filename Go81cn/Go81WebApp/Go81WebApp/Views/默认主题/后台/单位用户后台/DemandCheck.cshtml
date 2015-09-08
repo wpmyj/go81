@@ -1,0 +1,1450 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.需求计划模型.需求计划>
+@using Go81WebApp.Models.数据模型
+@{
+    ViewBag.Title = "需求计划审核";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<style>
+    .out_box {
+        display: none;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 3%;
+    }
+
+    .out_box_insecond_child {
+        width: 600px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+        border: 1px solid red;
+    }
+
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
+
+    li {
+        line-height: 30px;
+    }
+
+    td ul {
+        display: none;
+    }
+
+    .container ul li {
+        background-color: #FCF6D4;
+    }
+
+    .name {
+        cursor: pointer;
+        text-decoration: underline;
+        vertical-align:top;
+    }
+
+        .name:hover {
+            cursor: pointer;
+        }
+
+    .icon {
+        display: inline-block;
+        width: 25px;
+        height: 28px;
+        background: url(/Images/right-bottom.png) 0 0;
+    }
+
+    li input {
+        margin-left: 30px;
+    }
+
+    .addbt {
+        display: inline-block;
+        width: 60px;
+        height: 25px;
+        background-color: #B6B6B6;
+        text-align: center;
+        line-height: 25px;
+        border: none;
+        font-size: 14px;
+    }
+
+    .nopass {
+        background-color: #808080;
+    }
+
+    .notice {
+        display: none;
+        position: absolute;
+        z-index: 20;
+        width: 160px;
+        height: auto;
+        padding: 5px;
+        border: 1px solid red;
+        background-color: white;
+        opacity: 0.95;
+        filter: alpha(opacity=90);
+        color: black;
+        right: 125px;
+        text-indent: 2em;
+        font-size: 13px;
+        text-align: left;
+        line-height: 20px;
+        word-break: break-all;
+    }
+
+    #backoff {
+    }
+
+    table tr td img {
+        cursor: pointer;
+    }
+
+    table {
+        border: 1px solid #C2C2C2;
+        border-top: none;
+        border-left: none;
+    }
+
+    th {
+        border: 1px solid #C2C2C2;
+        border-bottom: none;
+        border-right: none;
+        line-height: 30px;
+    }
+
+    td {
+        border: 1px solid #C2C2C2;
+        border-bottom: none;
+        border-right: none;
+        line-height: 30px;
+    }
+
+    .sbt {
+        background-color: #BCBCBC;
+        color: #ffffff;
+    }
+
+    .trodd {
+        background-color: #ffffff;
+    }
+
+    .treven {
+        background-color: #EBEBEB;
+    }
+
+    .progressBt {
+        height: 40px;
+        margin-bottom: 5px;
+        background-color: #FF4B4B;
+        color: #fff;
+        border: none;
+        float: right;
+        margin-right: 10px;
+        text-decoration: none;
+        width: 150px;
+        margin-top: 5px;
+    }
+
+    .distribute {
+        height: 40px;
+        margin-bottom: 5px;
+        background-color: #FF4B4B;
+        color: #fff;
+        border: none;
+        float: right;
+        margin-right: 10px;
+        text-decoration: none;
+        width: 150px;
+        margin-top: 5px;
+    }
+
+    .listdetailtable {
+        margin-top: 5px;
+        border-top: 1px solid #999a96;
+        border-left: 1px solid #999a96;
+    }
+
+        .listdetailtable tr:hover td {
+            background: #ecf0d7;
+        }
+
+
+        .listdetailtable th {
+            background-color: #c9cfad;
+            font-size: 15px;
+            height: 35px;
+        }
+
+        .listdetailtable td {
+            padding: 5px;
+            letter-spacing: 0;
+        }
+
+    .wenxintishi {
+        text-indent: 2.0em;
+    }
+
+    .modal {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        position: fixed;
+        display: none;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: 700px;
+        margin: 15% auto;
+    }
+
+    .modal-content {
+        position: relative;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, .2);
+        border-radius: 6px;
+        outline: 0;
+        -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    }
+
+    .close {
+        margin-top: -2px;
+        float: right;
+        font-size: 21px;
+        font-weight: bold;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        filter: alpha(opacity=20);
+        opacity: .2;
+        -webkit-appearance: none;
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+    }
+
+    h4 {
+        font-size: 18px;
+    }
+
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .modal-header {
+        min-height: 16.42857143px;
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .modal-title {
+        margin: 0;
+        line-height: 1.42857143;
+    }
+
+    .modal-body {
+        position: relative;
+        padding: 15px;
+    }
+
+    .modal-footer {
+        padding: 15px;
+        text-align: right;
+        border-top: 1px solid #e5e5e5;
+    }
+
+    #auditoutdiv input, #auditoutdiv select {
+        height: 25px;
+        line-height: 25px;
+    }
+</style>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+
+<form id="auditSubmitForm" action="/单位用户后台/auditSubmitJh" name="auditSubmitForm" method="POST">
+    <input type="hidden" name="summaryidlist" id="summaryidlist" value="" />
+    <input type="hidden" name="auditunitlist" id="auditunitlist" value="0|1|p|" />
+
+    @{    var userlist = ViewData["user"] as IEnumerable<Go81WebApp.Models.数据模型.用户数据模型.单位用户>;}
+    <div id="Summarymodal2" class="modal fade" style="display: none;">
+        <div class="modal-dialog" style="margin: 1% auto; width: 700px;">
+            <div class="modal-content" style="height: 620px; width: 740px;">
+                <div class="modal-header" style="padding-bottom: 20px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick=' $("#Summarymodal2").hide(); '>×</button>
+                    <div style="margin: 0;  float: left; font-size: 16px; font-weight: bold; line-height: 23px;">选择审核单位</div>
+                    <div style="margin-left: 50px; width: 400px; float: left; font-size: 16px; font-weight: bold; line-height: 23px;">
+                        <input type="button" value="新增审核单位" class="front_login_rightbox_button" style="width:150px; height: 30px; margin: 0; float: left;" onclick="addnewaudit() " />
+                        <input type="button" value="新增上级助理员" class="front_login_rightbox_button" style="width:150px; height: 30px; margin: 0; margin-left:20px;" onclick="addnewaudit_p() " />
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div style="height: 480px; overflow-y: scroll;" id="auditoutdiv">
+                        <div id="auditexample" style="display: none;">
+                            <div id="auditdiv__a" style="width: 100%; height: 30px; padding: 10px 0 10px 0;">
+                                <div style="float: left;">&#12288;&#12288;审核单位：</div>
+                                <div style="float: left;">
+                                    <select id="审核单位__a" name="审核单位__a"  style="width:350px;">
+                                        @foreach (var item in userlist)
+                                        {
+                                            <option value="@item.Id">
+                                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                        {
+                                            <text>@item.单位信息.单位代号</text>
+                                        }
+                                        else
+                                        {
+                                            <text>@item.单位信息.单位名称</text>
+                                        }：
+                                        @item.联系方式.联系人</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div style="float: left; margin-left: 20px;">
+                                    <input type="button" id="deletebtn__a" value="删除该单位" onclick=" deleteAuditdiv(this) " />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 0 0 5px 0;">
+                            <div style="float: left;">需求计划标题：</div>
+                            <div style="float: left;"><input type="text" id="需求计划标题" name="需求计划标题" /><span style="color:red;">*</span></div>
+                        </div>
+
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;秘密等级：</div>
+                            <div style="float: left;">
+                                <select id="秘密等级" name="秘密等级" style="width: 150px;">
+                                    @foreach (var md in ViewData["秘密等级"] as Dictionary<string, int>)
+                                    {
+                                        <option value="@md.Value">@md.Key</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;编制单位：</div>
+                            <div style="float: left;"><input type="text" id="编制单位" name="编制单位" /><span style="color:red;">*</span></div>
+                        </div>
+
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;承办部门：</div>
+                            <div style="float: left;"><input type="text" id="承办部门" name="承办部门" /><span style="color:red;">*</span></div>
+                        </div>
+
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;采购年度：</div>
+                            <div style="float: left;"><input type="text" id="采购年度" name="采购年度" onfocus=" WdatePicker({ dateFmt: 'yyyy' }) " /><span style="color:red;">*</span></div>
+                        </div>
+
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">建议完成时间：</div>
+                            <div style="float: left;"><input type="text" id="建议完成时间" name="建议完成时间" onfocus=" WdatePicker({ dateFmt: 'yyyy/MM/dd' }) " /><span style="color:red;">*</span></div>
+                        </div>
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;&#12288;联系人：</div>
+                            <div style="float: left;"><input type="text" id="联系人" name="联系人" value="@ViewData["联系人"].ToString()" /><span style="color:red;">*</span></div>
+                        </div>
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;联系电话：</div>
+                            <div style="float: left;"><input type="text" id="联系电话" name="联系电话" /><span style="color:red;">*</span></div>
+                        </div>
+
+                        <div id="auditdiv__0" style="width: 100%; height: 30px; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;审核单位：</div>
+                            <div style="float: left;">
+                                <select id="审核单位__0" name="审核单位__0" style="width:350px;">
+                                    @foreach (var item in userlist)
+                                    {
+                                        <option value="@item.Id">
+                                            @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                            {
+                                                <text>@item.单位信息.单位代号</text>
+                                            }
+                                            else
+                                            {
+                                                <text>@item.单位信息.单位名称</text>
+                                            }：@item.联系方式.联系人
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            <div style="float: left; margin-left: 20px;">
+                                <input type="button" id="deletebtn__0" value="删除该单位" onclick=" deleteAuditdiv(this) " />
+                            </div>
+                        </div>
+                        <div id="auditdiv__1" style="width: 100%; height: 30px; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;审核单位：</div>
+                            <div style="float: left;">
+                                <select id="审核单位__1" name="审核单位__1" style="width:350px;">
+                                    @foreach (var item in userlist)
+                                    {
+                                        <option value="@item.Id">
+                                            @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                            {
+                                                <text>@item.单位信息.单位代号</text>
+                                            }
+                                            else
+                                            {
+                                                <text>@item.单位信息.单位名称</text>
+                                            }：@item.联系方式.联系人
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            <div style="float: left; margin-left: 20px;">
+                                <input type="button" id="deletebtn__1" value="删除该单位" onclick=" deleteAuditdiv(this) " />
+                            </div>
+                        </div>
+
+                        <div id="auditdiv__p" style="width: 100%; height: 30px; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;上级助理员：</div>
+                            <div style="float: left;">
+                                <select id="审核单位__p" name="审核单位__p" style="width:350px;">
+                                    @foreach (var item in userlist)
+                                    {
+                                        <option value="@item.Id">@if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                        {
+                                            <text>@item.单位信息.单位代号</text>
+                                        }
+                                        else
+                                        {
+                                            <text>@item.单位信息.单位名称</text>
+                                        }：@item.联系方式.联系人</option>
+                                    }
+                                </select>
+                            </div>
+                            <div style="float: left; margin-left: 20px;">
+                                <input type="button" id="deletebtn__p" value="删除该单位" onclick="deleteAuditdiv_p(this) " />
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="submit" class="index_online_btn" value="确定" onclick="return  sendSummaryData();" /></div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="pdf0" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="hidebox(this,'#pdf0')">×</a></div>
+            <div style="width:600px; height:200px;overflow:hidden;">
+                <div>
+                    <div>
+                        <div><div style="text-align:center; line-height:30px;">请填写不通过原因</div></div>
+                        <table style="border:none;" id="container" width="99%">
+                            <tr>
+                                <td style="border:none;" align="right" valign="top">不通过原因：</td>
+                                <td style="border:none;"><textarea id="reason" style="resize:none;width:400px; height:100px;"></textarea> </td>
+                            </tr>
+                        </table>
+                        <div style="text-align:center; margin:0px auto;">
+                            <input class="addbt" value="保存" id="save" alt="0" type="button" onclick="saveInfo(this)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pdf1" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="hidebox1('#pdf1')">×</a></div>
+            <div style="width:600px; height:auto;overflow:hidden;">
+                <div>
+                    <div>
+                        <div><div style="text-align:center; line-height:30px;">当前需求处理单位如下：</div></div>
+                        <div id="progress">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pdf4" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child" style="width:90%; height:500px; overflow-y:scroll;">
+            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="hidebox1('#pdf4')">×</a></div>
+            <div style="width:100%; height:auto;overflow:hidden;">
+                <div>
+                    <div>
+                        <div id="distribution">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pdf2" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child" style="width:90%; height:500px; overflow-y:scroll;">
+            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="hidebox(this,'#pdf2')">×</a></div>
+            <div style="width:100%; height:auto;overflow:hidden;">
+                <div>
+                    <div>
+                        <div><div style="text-align:center; line-height:30px;">请勾选你要发回的物资：</div></div>
+                        <div id="items">
+
+                        </div>
+                        <div style="text-align:center;"><input style="margin-top:20px; color:white; background-color:gray;" id="sbt3" type="button" value="保存" class="addbt" onclick="$('#pdf2').hide()" /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pdf3" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="hidebox1('#pdf3')">×</a></div>
+            <div style="width:600px; height:200px;overflow:hidden;">
+                <div>
+                    <div>
+                        <div><div style="text-align:center; line-height:30px;">请填写不通过原因</div></div>
+                        <table style="border:none;" id="container" width="99%">
+                            <tr>
+                                <td style="border:none;" align="right" valign="top">不通过原因：</td>
+                                <td style="border:none;"><textarea id="reason1" style="resize:none;width:400px; height:100px;"></textarea> </td>
+                            </tr>
+                        </table>
+                        <div style="text-align:center; margin:0px auto;">
+                            <input class="addbt" value="保存" id="save" alt="0" type="button" onclick="saveReason(this)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bg_outdiv" style="margin-top:10px;min-height:400px;">
+    @*<div class="bg_outdiv_left">
+            @Html.Action("LeftMenu", "布局")
+        </div>*@
+    <div style="width:100%;margin-bottom:50px;">
+        <div class="title-base-out" style="width:100%">
+            <div class="title-base-middle" style="width:100%">
+                <div class="title-base-inner">审核需求计划</div>
+            </div>
+        </div>
+        @{
+            int i = 0;
+            int j = 1;
+        }
+        <div class="gys_znxx_box" style="border:none;width:100%;">
+            <div>
+                <table class="outtable" width="100%" cellpadding="0" cellspacing="0">
+                    <tr><th width="4%" style="background-color:#DFD2D2;"></th><th style="background-color:#DFD2D2;" width="20%">需求计划标题</th><th style="background-color:#DFD2D2;" width="15%">编制单位</th><th style="background-color:#DFD2D2;" width="15%">承办部门</th><th style="background-color:#DFD2D2;" width="15%">采购年度</th><th width="10%" style="background-color:#DFD2D2;">联系人</th><th width="10%" style="background-color:#DFD2D2;">联系电话</th><th style="background-color:#DFD2D2;width:140px;">审批</th></tr>
+                    @foreach (var item in Model)
+                    {
+                        if (i % 2 == 0)
+                        {
+                            <tr class="trodd">
+                                <td style="border-top:2px solid #8F8E8E;" align="center"><input type="checkbox" style="width:20px; vertical-align:middle; height:20px;" disabled="disabled" class="check@(i)" id="check__@(item.Id)" name="check" value="@item.Id" /></td>
+                                <td style="border-top:2px solid #8F8E8E;">
+                                    @if (item.物资列表.Count > 20)
+                                    {
+                                        <a href="/单位用户后台/Material?id=@item.Id&page=1"></a>
+                                    }
+                                    else
+                                    {
+                                        <span class="icon"></span><a class="name" lang="0">@item.需求计划标题</a>
+                                    }
+                                </td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center">@item.需求发起单位链接.用户数据.单位信息.单位名称</td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center">@item.承办部门</td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center">@item.采购年度.ToString("yyyy年")</td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center">@item.联系人</td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center">@item.联系电话</td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center"><input type="button" alt="@(i)" name="allpass" lang="@item.Id" value="通过" style="color:white;text-decoration:none;" class="addbt" /><input type="button" alt="@(i)" id="@item.Id" name="noallpass" value="不通过" class="addbt sbt" /></td>
+                            </tr>
+                            <tr>
+                                <td align="left" style="display:none;" colspan="9">
+                                    <table key="1" id="table__@(item.Id)" class="trodd" style="border-right:none; border-bottom:none;" width="100%" cellpadding="0" cellspacing="0">
+                                        <tr tablehead="1">
+                                            <th style="width:46px; border-left:none;">序号</th>
+                                            <th>物资名称</th>
+                                            <th width="10%">规格型号</th>
+                                            <th width="4%">计量单位</th>
+                                            <th>数量</th>
+                                            <th width="4%">单价（元）</th>
+                                            <th width="8%">预算金额（元）</th>
+                                            <th width="6%">质量技术标准</th>
+                                            <th width="6%">交货期限</th>
+                                            <th width="6%">采购方式建议</th>
+                                            <th style="width:45px;">备注</th>
+                                            <th style="width:140px;"></th>
+                                        </tr>
+                                        @foreach (var m in item.物资列表)
+                                        {
+                                            if (m.需求计划物资数据 != null)
+                                            {
+                                                <tr>
+                                                    <td style="text-align:center; border-left:none;">@j</td>
+                                                    <td align="center" style="padding-left:5px;">@m.需求计划物资数据.物资名称</td>
+                                                    <td align="center">@m.需求计划物资数据.规格型号</td>
+                                                    <td align="center">@m.需求计划物资数据.计量单位</td>
+                                                    <td align="center">@m.需求计划物资数据.数量</td>
+                                                    <td align="center">@m.需求计划物资数据.单价</td>
+                                                    <td align="center">@m.需求计划物资数据.预算金额</td>
+                                                    <td align="center">@m.需求计划物资数据.技术指标</td>
+                                                    <td align="center">@m.需求计划物资数据.交货期限.ToString("yyyy/MM/dd")</td>
+                                                    <td align="center">@m.需求计划物资数据.建议采购方式</td>
+                                                    <td style="text-align:center;">
+                                                        @if (!string.IsNullOrWhiteSpace(m.需求计划物资数据.备注))
+                                                        {
+                                                            <img onmouseover="showNotice(this)" onmouseout="hideNotice(this)" style="width:20px; vertical-align:middle;" src="~/Images/notice.png" />
+                                                            <div class="notice">
+                                                                @m.需求计划物资数据.备注
+                                                            </div>
+                                                        }
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        @if (m.需求计划物资数据.来源合并项.Count != 0)
+                                                        {
+                                                            <input type="button" id="@m.需求计划物资数据.Id" name="pass" alt="@(i)" lang="@item.Id" value="通过" style="color:white;text-decoration:none;" class="addbt" /><input type="button" name="nopass" alt="@(i)" lang="@item.Id" ms_item="1" id="@m.需求计划物资数据.Id" value="不通过" class="addbt sbt" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="button" id="@m.需求计划物资数据.Id" name="pass" alt="@(i)" lang="@item.Id" value="通过" style="color:white;text-decoration:none;" class="addbt" /><input type="button" name="nopass" alt="@(i)" lang="@item.Id" ms_item="0" id="@m.需求计划物资数据.Id" value="不通过" class="addbt sbt" />
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                            j++;
+                                        }
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr class="trodd" style="display:none;"><td colspan="9" style="height:80px;"><div id="backoff@(i)"><form action="/单位用户后台/BackOff" method="post"><input type="submit" disabled="disabled" style='height:40px; margin-bottom:5px; background-color:#C9C9C9; color:#fff; border:none; float:right; margin-right:10px; text-decoration:none; width:150px; margin-top:5px;' value="发回需求提报单位" /><input type="hidden" value="@item.Id" name="id" id="id@(i)" alt="@(i)" /><input type="hidden" name="main" value="" alt="@(i)" /><input type="hidden" class="r" value="" name="back" alt="@(i)" /></form><input type="button" class="progressBt" alt="@item.Id" value="查看审核进度" /><input type="button" class="distribute" alt="@item.Id" value="查看分发" /></div></td></tr>
+                                        i++;
+                                        j = 1;
+                        }
+                        else if (i % 2 == 1)
+                        {
+                            <tr class="treven">
+                                <td style="border-top:2px solid #8F8E8E;" align="center"><input type="checkbox" style="width:20px; height:20px; vertical-align:middle;" disabled="disabled" class="check@(i)" id="check__@(item.Id)" name="check" value="@item.Id" /></td>
+                                <td style="border-top:2px solid #8F8E8E;">
+                                    @if (item.物资列表.Count > 20)
+                                    {
+                                        <a href="/单位用户后台/Material?id=@item.Id&page=1"></a>
+                                    }
+                                    else
+                                    {
+                                        <span class="icon"></span><a class="name" lang="0">@item.需求计划标题</a>
+                                    }
+                                </td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center">@item.需求发起单位链接.用户数据.单位信息.单位名称</td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center">@item.承办部门</td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center">@item.采购年度.ToString("yyyy年")</td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center">@item.联系人</td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center">@item.联系电话</td>
+                                <td style="border-top:2px solid #8F8E8E;" align="center"><input type="button" alt="@(i)" name="allpass" lang="@item.Id" value="通过" style="color:white;text-decoration:none;" class="addbt" /><input type="button" name="noallpass" alt="@(i)" lang="@item.Id" id="@item.Id" value="不通过" class="addbt sbt" /></td>
+                            </tr>
+                            <tr>
+                                <td align="left" style="display:none;" colspan="9">
+                                    <table key="1" id="table__@(item.Id)" class="treven" style="border-right:none; border-bottom:none;" width="100%" cellpadding="0" cellspacing="0">
+                                        <tr tablehead="1">
+                                            <th style="width:46px; border-left:none;">序号</th>
+                                            <th>物资名称</th>
+                                            <th width="10%">规格型号</th>
+                                            <th width="4%">计量单位</th>
+                                            <th>数量</th>
+                                            <th width="4%">单价（元）</th>
+                                            <th width="8%">预算金额（元）</th>
+                                            <th width="6%">质量技术标准</th>
+                                            <th width="6%">交货期限</th>
+                                            <th width="6%">建议采购方式</th>
+                                            <th style="width:45px;">备注</th>
+                                            <th style="width:140px;"></th>
+                                        </tr>
+                                        @foreach (var m in item.物资列表)
+                                        {
+                                            if (m.需求计划物资数据 != null)
+                                            {
+                                                <tr>
+                                                    <td style="text-align:center; border-left:none;">@j</td>
+                                                    <td align="center" style="padding-left:5px;">@m.需求计划物资数据.物资名称</td>
+                                                    <td align="center">@m.需求计划物资数据.规格型号</td>
+                                                    <td align="center">@m.需求计划物资数据.计量单位</td>
+                                                    <td align="center">@m.需求计划物资数据.数量</td>
+                                                    <td align="center">@m.需求计划物资数据.单价</td>
+                                                    <td align="center">@m.需求计划物资数据.预算金额</td>
+                                                    <td align="center">@m.需求计划物资数据.技术指标</td>
+                                                    <td align="center">@m.需求计划物资数据.交货期限.ToString("yyyy/MM/dd")</td>
+                                                    <td align="center">@m.需求计划物资数据.建议采购方式</td>
+                                                    <td style="text-align:center;">
+                                                        @if (!string.IsNullOrWhiteSpace(m.需求计划物资数据.备注))
+                                                        {
+                                                            <img onmouseover="showNotice(this)" onmouseout="hideNotice(this)" style="width:20px; vertical-align:middle;" src="~/Images/notice.png" />
+                                                            <div class="notice">
+                                                                @m.需求计划物资数据.备注
+                                                            </div>
+                                                        }
+                                                    </td>
+                                                    <td style="text-align:center;">
+                                                        @if (m.需求计划物资数据.来源合并项.Count != 0)
+                                                        {
+                                                            <input type="button" id="@m.需求计划物资数据.Id" name="pass" alt="@(i)" lang="@item.Id" value="通过" style="color:white;text-decoration:none;" class="addbt" /><input type="button" name="nopass" id="@m.需求计划物资数据.Id" alt="@(i)" lang="@item.Id" ms_item="1" id="@m.需求计划物资数据.Id" value="不通过" class="addbt sbt" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <input type="button" id="@m.需求计划物资数据.Id" name="pass" alt="@(i)" lang="@item.Id" value="通过" style="color:white;text-decoration:none;" class="addbt" /><input type="button" name="nopass" id="@m.需求计划物资数据.Id" alt="@(i)" lang="@item.Id" ms_item="0" id="@m.需求计划物资数据.Id" value="不通过" class="addbt sbt" />
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                            j++;
+                                        }
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr class="treven" style="display:none;"><td colspan="9" style="height:80px;"><div id="backoff@(i)"><form action="/单位用户后台/BackOff" method="post"><input type="submit" disabled="disabled" style='height:40px; margin-bottom:5px; background-color:#C9C9C9; color:#fff; border:none; float:right; margin-right:10px; text-decoration:none; width:150px; margin-top:5px;' value="发回需求提报单位" /><input type="hidden" value="@item.Id" name="id" id="id@(i)" alt="@(i)" /><input type="hidden" name="main" value="" alt="@(i)" /><input type="hidden" class="r" value="" name="back" alt="@(i)" /></form><input type="button" class="progressBt" alt="@item.Id" value="查看审核进度" /><input type="button" class="distribute" alt="@item.Id" value="查看分发" /></div></td></tr>
+                                        i++;
+                                        j = 1;
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+        <div class="gys_znxx_content_detailbox">
+            @{
+                int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                if (Pagecount <= 6)
+                {
+                    for (int k = 1; k <= Pagecount; k++)
+                    {
+                        if (CurrentPage == k)
+                        {
+                            <a style="border:1px solid red;" href='/单位用户后台/DemandCheck?page=@k'>@k</a>
+                        }
+                        else
+                        {
+                            <a href='/单位用户后台/DemandCheck?page=@k'>@k</a>
+                        }
+                    }
+                    if (Pagecount != 0)
+                    {
+                        <span>@(CurrentPage)/@(Pagecount) 页</span>
+                    }
+                }
+                else
+                {
+                    if (CurrentPage < 6)
+                    {
+                        if (CurrentPage != 1)
+                        {
+                            <a href="/单位用户后台/DemandCheck?page=@(CurrentPage-1)">上一页</a>
+                            for (int k = 1; k < 7; k++)
+                            {
+                                if (CurrentPage == k)
+                                {
+                                    <a style="border:1px solid red;" href='/单位用户后台/DemandCheck?page=@k'>@k</a>
+                                }
+                                else
+                                {
+                                    <a href='/单位用户后台/DemandCheck?page=@k'>@k</a>
+                                }
+                            }
+                            <span>...</span><a href="/单位用户后台/DemandCheck?page=@(Pagecount)">@Pagecount</a><a href="/单位用户后台/DemandCheck?page=@(CurrentPage+1)">下一页</a>
+                            <span>@(CurrentPage)/@(Pagecount) 页</span>
+                        }
+                        else
+                        {
+                            for (int k = 1; k < 7; k++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/单位用户后台/DemandCheck?page=@k'>@k</a>
+                                }
+                                else
+                                {
+                                    <a href='/单位用户后台/DemandCheck?page=@k'>@k</a>
+                                }
+                            }
+                            <span>...</span><a href="/单位用户后台/DemandCheck?page=@(Pagecount)">@Pagecount</a><a href="/单位用户后台/DemandCheck?page=@(CurrentPage+1)">下一页</a>
+                            <span>@(CurrentPage)/@(Pagecount) 页</span>
+                        }
+                    }
+                    else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                    {
+                        <a href="/单位用户后台/DemandCheck?page=@(CurrentPage-1)">上一页</a><a href="/单位用户后台/DemandCheck?page=1">1</a><span>...</span>
+                        for (int k = (CurrentPage - 4 + 1); k <= CurrentPage + 1; k++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/单位用户后台/DemandCheck?page=@k'>@k</a>
+                            }
+                            else
+                            {
+                                <a href='/单位用户后台/DemandCheck?page=@k'>@k</a>
+                            }
+                        }
+                        <span>...</span><a href="/单位用户后台/DemandCheck?page=@(Pagecount)">@Pagecount</a><a href="/单位用户后台/DemandCheck?page=@(CurrentPage+1)">下一页</a>
+                        <span>@(CurrentPage)/@(Pagecount) 页</span>
+                    }
+                    else if (CurrentPage >= Pagecount - 3)
+                    {
+                        <a href="/单位用户后台/DemandCheck?page=@(CurrentPage-1)">上一页</a><a href="/单位用户后台/DemandCheck?page=1">1</a><span>...</span>
+                        for (int k = Pagecount - 6 + 1; k <= Pagecount; k++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/单位用户后台/DemandCheck?page=@k'>@k</a>
+                            }
+                            else
+                            {
+                                <a href='/单位用户后台/DemandCheck?page=@i'>@i</a>
+                            }
+                        }
+                        <span>@(CurrentPage)/@(Pagecount) 页</span>
+                    }
+                }
+            }
+        </div>
+        @if (ViewData["MergePermissions"] != null && ViewData["MergePermissions"].ToString() == "1")
+        {
+            <div style="margin: 20px auto; width:650px;">
+                @if (Model.Count() != 0)
+                {
+                    <input onclick="SummaryExp()" id="btn" type="button" style="float:left; width:200px;" class="front_login_rightbox_button" value="提交审核">
+                <input onclick="Summary()" id="btn" type="button" style="float:left; width:200px; margin-left:20px;" class="front_login_rightbox_button" value="汇总需求">
+                <input onclick="SummaryRW()" id="btn" type="button" style="float:left; width:200px; margin-left:20px;" class="front_login_rightbox_button" value="编制任务">
+                }
+            </div>
+        }
+
+    </div>
+</div>
+<script type="text/javascript">
+    function Summary() {
+        var idstr = "";
+        $("input:checkbox[name='check']:checked").each(function () {
+            idstr += $(this).attr("id").replace("check__", "") + "|";
+        });
+        if (idstr == "") {
+            alert("请至少选择一项需求计划进行汇总");
+            return;
+        }
+        window.location.href = "/单位用户后台/SummaryDemand?id=" + idstr;
+    }
+    function SummaryExp() {
+        var idstr = "";
+        $("input:checkbox[name='check']:checked").each(function () {
+            idstr += $(this).attr("id").replace("check__", "") + "|";
+        });
+        if (idstr == "") {
+            alert("请至少选择一项需求计划进行提交");
+            return;
+        }
+        $("#summaryidlist").val(idstr);
+        $("#Summarymodal2").show();
+    }
+    function SummaryRW() {
+        var idstr = "";
+        $("input:checkbox[name='check']:checked").each(function () {
+            idstr += $(this).attr("id").replace("check__", "") + "|";
+        });
+        if (idstr == "") {
+            alert("请至少选择一项需求计划编制任务");
+            return;
+        }
+        $.ajax({
+            cache: false,
+            async: false,   // 太关键了，同步和异步的参数
+            //dataType: 'json', type: 'post',
+            type: 'POST',
+            //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
+            url: "/单位用户后台/RedirectToRw",
+            data: "idstr=" + idstr,
+            success: function (data) {
+                if (data == "1") {
+                    window.location = '/单位用户后台/AssignmentTaskList';
+                }
+            }
+        });
+    }
+
+
+    $(".name").click(function () {
+        $(this).parent("td").parent("tr").next("tr").children("td").toggle();
+        $(this).parent("td").parent("tr").next("tr").next("tr").toggle();
+        var num = $(this).attr("lang");
+        if (num == "0") {
+            $(this).prev("span").css("background", "url(/Images/right-bottom.png) 27px 1px");
+            $(this).attr("lang", "1");
+        }
+        else {
+            $(this).prev("span").css("background", "url(/Images/right-bottom.png) 0px 0px");
+            $(this).attr("lang", "0");
+        }
+    });
+    var e1 = null;
+    var e2 = null;
+    var temId = "";
+    var number = -1;//表示第几项需求
+    var reason = "";//不通过原因
+    function saveInfo(th) {
+        var id = $(e2).attr("id");//物资Id
+        reason += id + "," + $("#reason").val();
+        var temp = "";
+        var str = "";
+        if ($("#reason").val() != "") {
+            if ($(th).attr("alt") == "1") {//保存原因，alt判断原因类别：1、计划原因，2、物资原因
+                var str = $("#reason").val();
+                var elem = document.getElementsByName("main");
+                elem.item(number).value = reason;
+            }
+            else if ($(th).attr("alt") == "2") {
+                var elem = document.getElementsByName("back");
+                var str = elem.item(number).value.split('|');
+                for (var n = 0; n < str.length - 1; n++) {
+                    if (str[n].split(',')[0] != reason.split(',')[0]) {
+                        temp += str[n] + "|";
+                    }
+                }
+                temp += reason + "|";
+                elem.item(number).value = temp;
+            }
+            $("#pdf0").hide();
+        }
+        else {
+            alert("请填写原因！");
+        }
+    }//#00D027：绿色;
+    $("[name='allpass']").click(function () {
+        var tr = $(this).parent("td").parent("tr");
+        var tr1 = $(this).parent("td").parent("tr").next("tr");
+        var tr2 = $(this).parent("td").parent("tr").next("tr").next("tr");
+        var index = $(this).attr("alt");
+        var exist = false;//判断是否还有未通过的物资和计划
+        var num = 0;
+        var strId = "";
+        var elem0 = document.getElementsByName("back");
+        var elem = document.getElementsByName("main");
+        var element = document.getElementsByName("nopass");
+        if (elem0.item(parseInt(index)).value != "") {
+            strId = elem0.item(parseInt(index)).value;
+            exist = true;
+        }
+        if (exist) {
+            $(".check" + index).attr("disabled", "disabled");
+            $(".check" + index).attr("checked", false);
+            $.get("/单位用户后台/getMaterial", { str: strId }, function (data) {
+                alert(data);
+                $(this).css("background-color", "#B6B6B6");
+            });
+        }
+        else {
+            elem.item(parseInt(index)).value = "";
+            $(".check" + index).removeAttr("disabled");
+            $(".check" + index).attr("checked", false);
+            $(this).css({ "background-color": "#31D835" });
+            $(this).next(":input").css({ "background-color": "#BCBCBC" });
+            var v = $(this).attr("lang");
+            $.get('/单位用户后台/PassDemand', { id: v }, function (data) {
+                if (data == "-1") {
+                    //alert("成功通过审核,您可以合并此项需求！");
+                }
+                else if (data == "1") {
+                    //alert("成功通过审核");
+                    $(tr).remove();
+                    $(tr1).remove();
+                    $(tr2).remove();
+                    if ($("table.outtable tr").length == 1) {
+                        window.location = '/单位用户后台/DemandCheck?page=1';
+                    }
+                }
+                else {
+                    alert("审核失败！");
+                }
+            });
+            $("#backoff" + index).find("[type='submit']").attr("disabled", "disabled").css("background-color", "#C9C9C9");
+        }
+    });
+    $("[name='noallpass']").click(function () {//alt索引;
+        var index = $(this).attr("alt");
+        number = parseInt(index);
+        e1 = $(this).prev(":input");
+        e2 = $(this);
+        $(this).css("background-color", "red");
+        $("#pdf0").show();
+        $("#backoff" + index).find("[type='submit']").removeAttr("disabled").css("background-color", "#FF4B4B");
+        $("#save").attr("alt", "1");
+        $(this).prev(":input").css({ "background-color": "#BCBCBC" });
+        reason = "";
+        $(".check" + index).attr("disabled", "disabled");
+        $(".check" + index).attr("checked", false);
+    });
+    $("[name='noallpass']").mouseover(function () {
+        var reason1 = "";
+        var str = "";
+        var index = $(this).attr("alt");
+        var elem0 = document.getElementsByName("main");
+        var elem1 = document.getElementsByName("back");
+        for (var i = 0; i < elem0.length; i++) {
+            if (elem0.item(i).alt == index) {
+                if (elem0.item(i).value != "") {
+                    reason1 += elem0.item(i).value.split(',')[1] + ",";
+                }
+            }
+        }
+        for (var n = 0; n < elem1.length; n++) {
+            if (elem1.item(n).alt == index) {
+                str = elem1.item(n).value;
+            }
+        }
+        for (var m = 0; m < str.split('|').length - 1; m++) {
+            reason1 += str.split('|')[m].split(',')[1] + ",";
+        }
+        if (reason1 != "") {
+            $(this).parent("td").append("<div style='position: absolute;word-break:break-all;z-index: 20;width: 160px;height: auto;padding: 5px;border: 1px solid red;background-color: white;opacity: 0.9;filter: alpha(opacity=90);color: black;right:80px;text-indent: 2em;font-size: 13px;text-align: left;line-height: 20px;'>" + reason1 + "</div>");
+        }
+    });
+    $("[name='noallpass']").mouseout(function () {
+        $(this).parent("td").children("div").remove();
+    });
+    $("[name='nopass']").mouseover(function () {
+        var index = $(this).attr("alt");
+        var id = $(this).attr("id");
+        var str = "";
+        var elem = document.getElementsByName("back");
+        for (var i = 0; i < elem.length; i++) {
+            if (elem.item(i).alt == index) {
+                str = elem.item(i).value;
+            }
+        }
+        for (var n = 0; n < str.split('|').length - 1; n++) {
+            var str1 = str.split('|')[n].split(',');
+            if (id == str1[0]) {
+                if (str1[1] != "") {
+                    $(this).parent("td").append("<div style='position: absolute;word-break:break-all;z-index: 20;width: 160px;height: auto;padding: 5px;border: 1px solid red;background-color: white;opacity: 0.9;filter: alpha(opacity=90);color: black;right:80px;text-indent: 2em;font-size: 13px;text-align: left;line-height: 20px;'>" + str1[1] + "</div>");
+                }
+            }
+        }
+    });
+    $("[name='nopass']").mouseout(function () {
+        $(this).parent("td").children("div").remove();
+    });
+
+    $("[name='nopass']").click(function () {//alt索引;
+        var sum = 0;
+        var flag = $(this).attr("ms_item");
+        var id = $(this).attr("id");//当前物资Id
+        reason = "";
+        var tempValue = "";
+        var index = $(this).attr("alt");
+        number = parseInt(index);
+        temId = $(this).attr("lang");//需求计划Id
+        $("#id" + index).val(temId);
+        if (flag == "1") {//flag为1表示该物资是合并后的物资，否则是未合并的物资
+            getdetail(id);
+        }
+        else {
+            $("#pdf0").show();
+        }
+        e1 = $(this).prev(":input");
+        e2 = $(this);
+        $(this).css("background-color", "red");
+        var elem = document.getElementsByName("noallpass");
+        var element = document.getElementsByName("allpass");
+        for (var i = 0; i < elem.length; i++) {
+            if (parseInt(elem.item(i).alt) == parseInt(index)) {
+                elem.item(i).style.backgroundColor = "red";
+            }
+        }
+        for (var j = 0; j < element.length; j++) {
+            if (parseInt(element.item(j).alt) == parseInt(index)) {
+                element.item(j).style.backgroundColor = "#BCBCBC";
+            }
+        }
+        $("#backoff" + index).find("[type='submit']").removeAttr("disabled").css("background-color", "#FF4B4B");
+        //填写原因
+        var num = $(this).attr("lang");//序号
+        $("#reason").val("");
+        $("#save").attr("alt", "2");
+        $(this).prev(":input").css({ "background-color": "#BCBCBC" });
+        $(".check" + index).attr("disabled", "disabled");
+        $(".check" + index).attr("checked", false);
+    });
+    $("[name='pass']").click(function () {
+        reason = "";
+        var index = $(this).attr("alt");//索引
+        var id = $(this).attr("id");//物资ID
+        var tempStr = '';
+        var count = 0;//记录不通过的数目
+        $(this).css({ "background-color": "#00D027" });
+        $(this).next(":input").css({ "background-color": "#BCBCBC" });
+        var num = $(this).attr("lang");//需求ID
+        var elem = document.getElementsByName("back");
+        var elem1 = document.getElementsByName("main");
+        var elem2 = document.getElementsByName("noallpass");
+        var elem3 = document.getElementsByName("allpass");
+        tempStr = elem.item(parseInt(index)).value;
+        for (var i = 0; i < tempStr.split('|').length - 1; i++) {
+            var str = tempStr.split('|')[i];
+            if (str.split(',')[0] != id) {
+                reason += str + "|";
+            }
+        }
+        elem.item(parseInt(index)).value = reason;
+        if (elem.item(parseInt(index)).value == "" && elem1.item(parseInt(index)).value == "") {
+            elem2.item(parseInt(index)).style.backgroundColor = "#BCBCBC";
+            elem3.item(parseInt(index)).style.backgroundColor = "#B6B6B6";
+            $("#backoff" + index).find("[type='submit']").attr("disabled", "disabled").css("background-color", "#C9C9C9");
+        }
+    });
+    $("table tr:last").css({ "border-bottom": "1px solid gray" });
+    function showNotice(th) {
+        $(th).next("div.notice").show();
+    }
+    function hideNotice(th) {
+        $(th).next("div.notice").hide();
+    }
+    function showBox(th, fm) {
+        var id = $(th).attr("lang");
+        $("#nid").val(id);
+        $(fm).show();
+    }
+    function hidebox(th, fm) {//alt:索引
+        var index = $(e1).attr("alt");
+        var id = $(e2).attr("id");
+        $(e1).css("background-color", "#B6B6B6");
+        var elem0 = document.getElementsByName("back");
+        var tempStr = "";
+        tempStr = elem0.item(number).value;
+        var exist = false;
+        for (var j = 0; j < tempStr.split('|').length - 1; j++) {
+            if (tempStr.split('|')[j].split(',')[0] == id) {
+                exist = true;
+                break;
+            }
+        }
+        if (!exist) {
+            $(e2).css("background-color", "#BCBCBC");
+        }
+        var elem = document.getElementsByName("noallpass");
+        var elem1 = document.getElementsByName("nopass");
+        var elem2 = document.getElementsByName("allpass");
+        var count = 0;
+        for (var i = 0; i < elem1.length; i++) {
+            if (elem1.item(i).alt == index && elem1.item(i).style.backgroundColor == "red") {
+                count++;
+            }
+        }
+        if (count == 0) {
+            for (var i = 0; i < elem.length; i++) {
+                if (elem.item(i).alt == index && elem.item(i).style.backgroundColor == "red") {
+                    elem.item(i).style.backgroundColor = "#BCBCBC";
+                    break;
+                }
+            }
+            for (var i = 0; i < elem2.length; i++) {
+                if (elem2.item(i).alt == index) {
+                    elem2.item(i).style.backgroundColor = "#B6B6B6";
+                    break;
+                }
+            }
+            $("#backoff" + index).find("[type='submit']").attr("disabled", "disabled").css("background-color", "#C9C9C9");
+        }
+        $("#reason").val("");
+        $(fm).hide();
+    }
+    var checkbox = null;
+    function hidebox1(fm) {
+        $(checkbox).attr("checked", false);
+        reason = "";
+        $(fm).hide();
+    }
+    function checkExist() {
+        var elem = document.getElementsByName("back");
+        var elem1 = document.getElementsByName("checkbox");
+        var str = elem.item(number).value;
+        for (var i = 0; i < str.split('|').length - 1; i++) {
+            for (var j = 0; j < elem1.length; j++) {
+                if (elem1.item(j).value == str.split('|')[i].split(',')[0]) {
+                    elem1.item(j).checked = true;
+                }
+            }
+        }
+    }
+    $(".progressBt").click(function () {
+        $("#pdf1").show();
+        var d = $(this).attr("alt");
+        $.get('/单位用户后台/History', { id: d }, function (data) {
+            if (data.Data.length != 0) {
+                var str = "<table width='90%' style='margin:20px auto;' cellpadding='0' cellspacing='0'><tr><th>审核单位</th><th>审核时间</th><th>审核结果</th></tr>";
+                for (var i = 0; i < data.Data.length; i++) {
+                    str += "<tr><td>" + data.Data[i].user + "</td><td>" + data.Data[i].time + "</td><td>" + data.Data[i].status + "</td></tr>";
+                }
+                str += "</table>";
+                $("#progress").html(str);
+            }
+            else {
+                $("#progress").html("<h3 style='color:red; text-align:center;'>暂时没有任何审核数据！</h3>");
+            }
+        });
+    });
+    $(".distribute").click(function () {
+        var d = $(this).attr("alt");
+        var str = "<table width='90%' cellspacing='0' cellpadding='0' style='margin:0px auto;'><tr><th width='4%'>序号</th><th>物资名称</th><th>规格型号</th><th>计量单位</th><th>收货单位名称</th><th>分配数量</th><th>提货方式</th><th>运输方式</th><th>到站</th><th>备注</th></tr>";
+        $.get("/单位用户后台/disItems", { id: d }, function (data) {
+            if (data.Data.length != 0) {
+                for (var i = 0; i < data.Data.length; i++) {
+                    str += "<tr><td align='center'>" + (i + 1) + "</td><td>" + data.Data[i].material + "</td><td>" + data.Data[i].cator + "</td><td>" + data.Data[i].percent + "</td><td>" + data.Data[i].reciever + "</td><td>" + data.Data[i].discount + "</td><td>" + data.Data[i].getway + "</td><td>" + data.Data[i].transway + "</td><td>" + data.Data[i].destination + "</td><td align='center'><img onmouseover='showNotice(this)' onmouseout='hideNotice(this)' style='width:20px; vertical-align:middle;' src='/Images/notice.png' /><div class='notice' style='right:55px;'>" + data.Data[i].note + "</div></td></tr>";
+                }
+                str += "</table>";
+            }
+            else {
+                str += "<tr><td colspan='10' style='color:red; padding-left:10px;'>没有任何分发！</td></tr></table>";
+            }
+            $("#pdf4").show();
+            $("#distribution").html(str);
+        });
+    });
+    function getdetail(idstr) {
+        $.ajax({
+            cache: false,
+            async: false, // 太关键了，同步和异步的参数
+            //dataType: 'json', type: 'post',
+            type: 'POST',
+            //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
+            url: "/单位用户后台/DemandDetail",
+            data: "id=" + idstr,
+            success: function (data) {
+                $("#items").html(data);
+                $("#pdf2").show();
+                checkExist();
+            }
+        });
+    }
+    function changeshow(obj) {
+        var id = $(obj).attr("value");
+        //alert(id);
+        var flag = $(obj).attr("flag");
+        if (flag == "0") {
+            $(obj).attr("class", "tre_level1");
+            $("#smdetail_" + id).next("tr").remove();
+            $(obj).attr("flag", "1");
+        } else {
+            $(obj).attr("class", "tre_level2");
+            $(obj).attr("flag", "0");
+            $.ajax({
+                cache: false,
+                async: false,
+                type: 'POST',
+                url: "/单位用户后台/DemanCheck",
+                data: "id=" + id,
+                success: function (data) {
+                    if (data != "0") {
+                        var tablecontent = "<tr><td colspan='12'>" + data + "</td></tr>";
+                        $("#smdetail_" + id).after(tablecontent);
+                    }
+                    checkExist();
+                }
+            });
+        }
+    }
+    function saveReason(th) {
+        if ($("#reason1").val() != "") {
+            var temp = "";//保存临时的value值
+            var str = "";
+            var exist = false;
+            reason += $("#reason1").val() + "|";
+            $("#sbt3").removeAttr("disabled").css({ "background-color": "#00D027" });
+            $("#pdf3").hide();
+            var elem = document.getElementsByName("back");
+            temp = elem.item(number).value;
+            for (var j = 0; j < reason.split('|').length - 1; j++) {
+                for (var i = 0; i < temp.split('|').length - 1; i++) {
+                    if (reason.split('|')[j].split(',')[0] == temp.split('|')[i].split(',')[0]) {
+                        exist = true;
+                        break;
+                    }
+                }
+                if (!exist) {
+                    str += reason.split('|')[j] + "|";
+                }
+            }
+            elem.item(number).value += str;
+            reason = "";
+        }
+        else {
+            alert("请填写原因");
+        }
+    }
+    function checkthis(th) {
+        checkbox = th;
+        if (th.checked) {
+            reason += $(th).val() + ",";
+            $("#pdf3").show();
+        }
+        else {
+            var elem = document.getElementsByName("back");
+            var str = elem.item(number).value;
+            var temp = "";//保存临时值
+            for (var i = 0; i < str.split('|').length - 1; i++) {
+                if (str.split('|')[i].split(',')[0] != th.value) {
+                    temp += str.split('|')[i] + "|";
+                }
+            }
+            elem.item(number).value = temp;
+        }
+    }
+    var auditcount = 2;
+    //增加审核单位
+    function addnewaudit() {
+        var html = $("#auditexample").html().replace(/__a/g, "__" + auditcount);
+        $("#auditdiv__p").before(html);
+        $("#auditunitlist").val($("#auditunitlist").val() + auditcount + "|");
+        auditcount++;
+    }
+    //增加上级助理员，只能有一个上级助理员
+    function addnewaudit_p() {
+        if ($("#auditunitlist").val().indexOf("p") > -1) {
+            alert("只能选一个上级助理员");
+            return;
+        }
+        $('#auditdiv__p').show();
+        $("#auditunitlist").val($("#auditunitlist").val() + "p|");
+    }
+
+    function deleteAuditdiv(obj) {
+        var id = $(obj).attr("id").replace("deletebtn__", "");
+        var auditdivid = "auditdiv__" + id;
+        $("#" + auditdivid).remove();
+        $("#auditunitlist").val($("#auditunitlist").val().replace(id + "|", ""));
+    }
+    //删除上级助理员
+    function deleteAuditdiv_p(obj) {
+        $('#auditdiv__p').hide();
+        $("#auditunitlist").val($("#auditunitlist").val().replace("p|", ""));
+    }
+
+    function sendSummaryData() {
+        if ($("#需求计划标题").val() == "") {
+            alert("需求计划标题必须填写！");
+            $("#需求计划标题").focus();
+            return false;
+        }
+        if ($("#编制单位").val() == "") {
+            alert("编制单位必须填写！");
+            $("#编制单位").focus();
+            return false;
+        }
+        if ($("#承办部门").val() == "") {
+            alert("承办部门必须填写！");
+            $("#承办部门").focus();
+            return false;
+        }
+        if ($("#采购年度").val() == "") {
+            alert("采购年度必须填写！");
+            $("#采购年度").focus();
+            return false;
+        }
+        if ($("#建议完成时间").val() == "") {
+            alert("建议完成时间必须填写！");
+            $("#建议完成时间").focus();
+            return false;
+        }
+        if ($("#联系人").val() == "") {
+            alert("联系人必须填写！");
+            $("#联系人").focus();
+            return false;
+        }
+        if ($("#联系电话").val() == "") {
+            alert("联系电话必须填写！");
+            $("#联系电话").focus();
+            return false;
+        }
+        if ($("#auditunitlist").val() == "") {
+            alert("至少应有一个审核单位，请点击上方新增审核单位按钮或新增上级助理员按钮进行添加！");
+            return false;
+        }
+    }
+</script>

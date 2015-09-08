@@ -1,0 +1,51 @@
+﻿@using Go81WebApp.Models.数据模型.需求计划模型
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">审核采购任务</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            @{var ing_AssignmentTaskList = ViewData["AssignmentTaskList"] as IEnumerable<需求采购任务>;}
+            <b>待审核采购任务列表：</b>
+            <div id="ing_table">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th>管理部门</th>
+                        <th style="width: 50px;">包含物资项</th>
+                        <th style="width: 50px;">包含分发项</th>
+                        <th>采购机构</th>
+                        <th>采购方式</th>
+                        <th>下达时间</th>
+                        <th>完成时间</th>
+                        <th>操作</th>
+                    </tr>
+                    @foreach (var item in ing_AssignmentTaskList)
+                    {
+                        <tr>
+                            <td>@item.需求发起单位链接.用户数据.单位信息.单位名称</td>
+                            <td>@item.物资列表.Count</td>
+                            <td>@item.分发列表.Count</td>
+                            <td>@item.当前处理单位链接.用户数据.单位信息.单位名称</td>
+                            <td>@item.采购方式</td>
+                            <td>@item.基本数据.添加时间.ToString("yyyy/MM/dd")</td>
+                            <td>@item.建议完成时间.ToString("yyyy/MM/dd")</td>
+                            <td class="gys_znxx_content_tabletime">
+                                @Html.ActionLink("审核", "AssignmentTaskAudit", new { id = item.Id })
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <div class="gys_znxx_content_detailbox">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#审核采购任务").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#审核采购任务").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

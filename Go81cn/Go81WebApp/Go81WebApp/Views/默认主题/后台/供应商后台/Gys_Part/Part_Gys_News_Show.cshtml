@@ -1,0 +1,19 @@
+﻿<link rel="stylesheet" href="~/css/index.css" type="text/css">
+<div class="gys_xttz_topbox">
+    <div class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">系统通知</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_xttz_contentbox">
+        <div class="gys_xttz_contentbox_news_title">@Model.内容主体.标题</div>
+        <div class="gys_xttz_contentbox_news_from">@Model.基本数据.添加时间</div>
+        <div class="gys_xttz_contentbox_news_text">@Html.Raw(Model.内容主体.内容)</div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#系统通知").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#系统通知").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

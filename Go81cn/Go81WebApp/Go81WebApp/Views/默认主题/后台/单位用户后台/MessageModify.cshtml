@@ -1,0 +1,155 @@
+﻿@{
+    ViewBag.Title = "修改联系人信息";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<script src="~/JS/provinceandcity_all.js"></script>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        @model Go81WebApp.Models.数据模型.用户数据模型.单位用户
+        @using (Html.BeginForm())
+        {
+            @Html.ValidationSummary(true)
+            <div class="title-base-out">
+                <div class="title-base-middle">
+                    <div class="title-base-inner">修改联系人信息</div>
+                </div>
+            </div>
+            <div class="gys_znxx_box">
+                <div class="gys_znxx_contentbox">
+                    <div class="gys_znxx_content">
+
+                        <div style=" width: 898px; height:auto; overflow:hidden; margin-top:20px;">
+                            <div style=" width: 800px; margin: 20px auto; padding:10px;">
+
+
+                                <div style="width:800px; height:30px; padding:10px;">
+                                    <div style=" width:155px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位名称：</div>
+                                    <div class="procure_selectlistdiv">
+                                        @Html.EditorFor(model => model.单位信息.单位名称, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">*@Html.ValidationMessageFor(model => model.单位信息.单位名称)</span>
+                                    </div>
+                                </div>
+
+
+                                <div style="width:800px; height:30px; padding:10px;">
+                                    <div style=" width:155px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位代号：</div>
+                                    <div class="procure_selectlistdiv">
+                                        @Html.EditorFor(model => model.单位信息.单位代号, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">@Html.ValidationMessageFor(model => model.单位信息.单位代号)</span>
+                                    </div>
+                                </div>
+
+                                <div style="width:800px; height:30px; padding:10px;">
+                                    <div style=" width:155px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">所属单位：</div>
+                                    <div class="procure_selectlistdiv">
+                                        @Html.EditorFor(model => model.单位信息.所属单位, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">*@Html.ValidationMessageFor(model => model.单位信息.所属单位)</span>
+                                    </div>
+                                </div>
+
+
+                                <div style="width:800px; height:30px; padding:10px;">
+                                    <div style=" width:155px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">联系人：</div>
+                                    <div class="procure_selectlistdiv">
+                                        @Html.EditorFor(model => model.联系方式.联系人, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">*@Html.ValidationMessageFor(model => model.联系方式.联系人)</span>
+                                    </div>
+                                </div>
+
+
+                                <div style="width:800px; height:30px; padding:10px;">
+                                    <div style=" width:155px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">联系人职务：</div>
+                                    <div class="procure_selectlistdiv">
+                                        @Html.EditorFor(model => model.联系人职务, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">@Html.ValidationMessageFor(model => model.联系人职务)</span>
+                                    </div>
+                                </div>
+
+                                <div style="width:800px; height:30px; padding:10px;">
+                                    <div style=" width:155px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">固定电话：</div>
+                                    <div class="procure_selectlistdiv">
+                                        @Html.HiddenFor(model => model.联系方式.固定电话, new { id = "modelPhone", style = "width: 300px; height: 30px; line-height: 25px;" })
+                                        <input type="text" id="phone_area" placeholder="区号" style="width:70px;" />
+                                        -
+                                        <input type="text" id="phone_num" placeholder="电话号码" style="width:210px;" />
+                                        <span style="color:red;">* @Html.ValidationMessageFor(model => model.联系方式.固定电话)</span>
+                                        <span id="moelphone_error" style="color:red; display:none">请填写固定电话！</span>
+                                    </div>
+                                </div>
+                                <div style="width:800px; height:30px; padding:10px;">
+                                    <div style=" width:155px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">手机：</div>
+                                    <div class="procure_selectlistdiv">
+                                        @Html.EditorFor(model => model.联系方式.手机, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">*@Html.ValidationMessageFor(model => model.联系方式.手机)</span>
+                                    </div>
+                                </div>
+
+
+
+                                <div style="width:800px; height:30px; padding:10px;">
+                                    <div style=" width:155px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">所在地域：</div>
+                                    <div class="procure_selectlistdiv">
+                                        <select id="deliverprovince" name="deliverprovince" style="width: 98px; height: 30px;"></select>
+                                        <select id="delivercity" name="delivercity" style="width:98px; height: 30px;"></select>
+                                        <select id="deliverarea" name="deliverarea" style="width: 98px; height: 30px;"></select>
+                                        <script>
+                                            window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea", "@Model.所属地域.省份", "@Model.所属地域.城市", "@Model.所属地域.区县"); }
+                                        </script>
+
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+
+                                <div style="text-align:center"><input id="modiibutton" type="submit" style="margin-top:20px; width: 307px;margin-left:-33px;" class="front_login_rightbox_button" value="确          定"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+</div>
+<script type="text/javascript">
+    $("#modiibutton").click(function () {
+        var v = $("#phone_area").val() + "-" + $("#phone_num").val();
+        $("#modelPhone").val(v);
+        var f = $("#modelPhone").val().replace("-", "");
+
+
+        if ($("#phone_num").val() == "" || $("#phone_num").val() == null) {
+            $("#moelphone_error").show().html("请填写电话号码");
+            return false;
+        };
+        if ($("#phone_area").val() == "" || $("#phone_area").val() == null) {
+            $("#moelphone_error").show().html("请填写区号");
+            return false;
+        };
+        if (f == null || f == "") {
+            $("#moelphone_error").show();
+        };
+
+
+        if (confirm('提示：修改联系人信息后本账号将置为未审核状态，审核通过后才能使用网站功能！确定修改？')) {
+            return true;
+        }
+        else {
+            return false;
+        };
+
+    });
+    $(function () {
+        var phone = "@Model.联系方式.固定电话";
+        var p = phone.split("-");
+        $("#phone_area").val(p[0]);
+        $("#phone_num").val(p[1]);
+        $("#修改联系人信息").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#修改联系人信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

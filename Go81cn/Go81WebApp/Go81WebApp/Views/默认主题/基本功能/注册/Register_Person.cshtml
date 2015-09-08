@@ -1,0 +1,178 @@
+﻿@{
+    ViewBag.Title = "个人用户注册";
+}
+@model Go81WebApp.Controllers.基本功能.注册Controller.RegInfo_Person
+
+<script src="~/JS/jquery-1.6.min.js"></script>
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="index_bottom_spdtbox">
+        <!--供应商库 模块-->
+        <div class="index_bottom_spdt_topbox">
+            <div class="tabbox_gysk">
+                <div class="index_bottom_zb_top_title">用户注册</div>
+                <div class="tabmenu_gysk">
+                    <ul>
+                        <li style="margin-left: 10px;">@Html.ActionLink("评审专家申请", "Register_Expert_Agree", "注册")</li>
+                        <li class="cli">个人用户</li>
+                        <li style="margin-left: 10px;">@Html.ActionLink("供应商", "Register_Gys_Agree", "注册")</li>
+                        <li style="margin-right: 10px;">@Html.ActionLink("单位用户", "Register_Unit", "注册")</li>
+                        <li class="front_register_loginlink">已有账号，现在就 @Html.ActionLink("登录", "Login", "登录")</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="front_login_box">
+
+            <table class="front_login_rightbox">
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">账户名：</td>
+                    <td class="front_login_rightbox_inputdiv">
+                        @Html.TextBoxFor(model => model.loginName, new { autocomplete = "off" })
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">6-30字符,以字母开头(可用字母、数字或下划线),不能包括汉字</div>
+                        </div><span style="color:red;">*</span>
+                        @Html.ValidationMessageFor(model => model.loginName)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">请设置密码：</td>
+                    <td class="front_login_rightbox_inputdiv">
+                        @Html.PasswordFor(model => model.Pwd, new { autocomplete = "off" })
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">6-30字符,不建议使用纯字母、数字</div>
+                        </div><span style="color:red;">*</span>
+                        @Html.ValidationMessageFor(model => model.Pwd)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">请确认密码：</td>
+                    <td class="front_login_rightbox_inputdiv">
+                        @Html.PasswordFor(model => model.PwdConfirm)
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请再次输入的密码</div>
+                        </div><span style="color:red;">*</span>
+                        @Html.ValidationMessageFor(model => model.PwdConfirm)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">姓名：</td>
+                    <td class="front_login_rightbox_inputdiv">
+                        @Html.EditorFor(model => model.Name)
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请输入您的真实姓名</div>
+                        </div><span style="color:red;">*</span>
+                        @Html.ValidationMessageFor(model => model.PwdConfirm)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">身份证：</td>
+                    <td class="front_login_rightbox_inputdiv">
+                        @Html.EditorFor(model => model.IdCard)
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请输入您的身份证号</div>
+                        </div><span style="color:red;">*</span>
+                        @Html.ValidationMessageFor(model => model.PwdConfirm)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">手机：</td>
+                    <td class="front_login_rightbox_inputdiv">
+                        @Html.EditorFor(model => model.Phone)
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请输入您的手机号码</div>
+                        </div><span style="color:red;">*</span>
+                        @Html.ValidationMessageFor(model => model.PwdConfirm)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">邮箱：</td>
+                    <td class="front_login_rightbox_inputdiv">
+                        @Html.EditorFor(model => model.Emial)
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请输入您的电子邮箱</div>
+                        </div><span style="color:red;">*</span>
+                        @Html.ValidationMessageFor(model => model.PwdConfirm)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">验证码：</td>
+                    <td id="Veryfy_Code" class="front_login_rightbox_inputdiv">
+                        @Html.TextBoxFor(m => m.verifyCode)
+                        <div class="out_box">
+                            <div class="arrow" style="margin-left: 90px;"></div>
+                            <div class="con_box" style="margin-left: 110px;">请输入验证码，进行最后的验证</div>
+                        </div>
+                        <span></span>
+                        <img src=@Url.Action("NewVCodeImage", "登录") style="cursor:pointer;vertical-align:middle;margin-left:5px;" title="看不清，换一张" alt="看不清，换一张" onclick='$(this).attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());' />
+                        <span>@ViewBag.VCodeError</span>
+                        
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_checkboxdiv" colspan="2">
+                        <input type="checkbox" checked="checked" class="front_login_rightbox_checkbox" />
+                        <span>我已阅读同意<a id="agreement" href="#" target="_blank">《西南物资采购网注册协议》</a>，相关注册信息需提报成都军区物资采购管理部门审核</span><span id="error_agree" style="color:red;font-size:12px; display:none; margin-left:10px;">请阅读并同意《西南物资采购网注册协议》！</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="front_login_rightbox_checkboxdiv" colspan="2">
+                        <input type="submit" class="front_login_rightbox_button" value="注册" />
+                    </td>
+                </tr>
+            </table>
+            @*<div class="front_login_leftbox"> </div>*@
+        </div>
+
+    </div>
+}
+<div id="modal_agree" class="modal_style modal_p">
+    <span id="modal_clo">×</span>
+    <div class="modal_agree">@Html.Action("Part_Agree_Regist", "注册")</div>
+</div>
+<script type="text/javascript">
+    $("#agreement").click(function() {
+        //document.body.style.overflow="hidden";
+        $("#modal_agree").fadeIn();
+        return false;
+    });
+    $("#modal_clo").click(function() {
+        //document.body.style.overflow="scroll"; 
+        $("#modal_agree").fadeOut();
+    });
+    $("input[type=submit]").click(function(){
+        if ($("input[type=checkbox]").prop("checked") != true) {
+            $("#error_agree").show();
+            return false;
+        }
+        else {
+            $.ajax({
+                url: '/注册/Register_Person',
+                type: 'post'
+            });
+        }
+    });
+    $("input").focus(function () {
+        if ($(this).attr("type") != "checkbox") {
+            $(this).parent().children(".tips").show();
+            $(this).parent().children().eq(1).hide();
+        }
+    }).blur(function () {
+        $(this).parent().children(".tips").hide();
+        $(this).parent().children().eq(1).show();
+    });
+    $(document).ready(function () {
+        $("table tr td :input").focus(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").blur(function () { $(this).next("div").hide(); });
+    });
+</script>

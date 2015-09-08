@@ -1,0 +1,189 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.单位用户
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.权限数据模型
+@using Go81WebApp.Models.管理器
+<script src="~/JS/provinceandcity_all.js"></script>
+
+<style type="text/css">
+    .gys_znxx_content table {
+        border-right: none;
+        margin-top: 5px;
+    }
+
+    .gys_znxx_content td, th {
+        border-right: 1px solid #aaa;
+        padding: 5px;
+        letter-spacing: 0px;
+    }
+
+    .gys_znxx_content td {
+        color: #333333;
+    }
+
+        .gys_znxx_content td a {
+            padding: 2px 5px 2px 5px;
+            cursor: pointer;
+            color: #666666;
+        }
+
+            .gys_znxx_content td a:hover {
+                color: #b36e08;
+            }
+
+    .partmentlist_inputrightbox {
+        width: 580px;
+        float: left;
+    }
+</style>
+@*@{单位用户 user = ViewData["user"] as Go81WebApp.Models.数据模型.用户数据模型.单位用户;}*@
+    <div class="gys_znxx_topbox">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">单位编辑</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+                
+                <div style=" width: 898px; height:auto; overflow:hidden; margin-top:20px;">
+                    <div style=" width: 800px; margin: 20px auto; padding:10px;position:relative">
+                        <div id="msg_tips" style="width:200px;height:60px;position:absolute;top:60px; left:290px; color:red; text-align:center;line-height:60px; display:none;background:#fff"></div>
+                        <div style="width:800px; height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">登录名：</div>
+                            <div class="procure_selectlistdiv">
+                                <span>@Model.登录信息.登录名</span>
+                            </div>
+                        </div>
+                        <div style="width:800px; height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">密码：</div>
+                            <div class="procure_selectlistdiv">
+                                <input id="pwd_ipt" type="password" />
+                                @*@Html.PasswordFor(model=>model.登录信息.密码)*@
+                                <span style="color:red; font-size:14px;">不填写则表示不修改密码</span>
+                            </div>
+                        </div>
+
+                        <div style="width:800px; height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位代号：</div>
+                            <div class="procure_selectlistdiv">
+                                <input id="brief_unit" type="text" value="@Model.单位信息.单位代号" />
+                                @*@Html.EditorFor(model => model.单位信息.单位代号, new { style = "width: 300px; height: 30px; line-height: 25px;" })*@
+                                <span style="color:red;">@Html.ValidationMessageFor(model => model.单位信息.单位代号)</span>
+                            </div>
+                        </div>
+
+                        <div style="width:800px; height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位级别：</div>
+                            <div class="procure_selectlistdiv">
+                                @Html.DropDownListFor(model => model.单位信息.单位级别, new[] { new SelectListItem() { Text = "未设置", Value = "0" }, new SelectListItem() { Text = "正军级", Value = "1" }, new SelectListItem() { Text = "副军级", Value = "2" }, new SelectListItem() { Text = "正师级", Value = "3" }, new SelectListItem() { Text = "副师级", Value = "4" }, new SelectListItem() { Text = "正团级", Value = "4" }, new SelectListItem() { Text = "副团级", Value = "5" }, new SelectListItem() { Text = "正营级", Value = "6" }, new SelectListItem() { Text = "副营级", Value = "7" }, new SelectListItem() { Text = "营级以下", Value = "99" } }, new { @id = "unit_jb", @class = "procure_radioinput" })
+                            </div>
+                        </div>
+                            @{ var dw = ViewData["user"] as 单位用户;}
+                        @if (ViewData["id"].ToString()!="10")
+                        { 
+                            <div style="width:800px; height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位所属用户组：</div>
+                            <div class="procure_selectlistdiv">
+                                @{
+                                if (ViewBag.isActor)
+                                {
+                                    foreach (var j in (IEnumerable<用户组>)ViewData["所管理用户组"])
+                                    {
+                                        <input class="groupname" style="width:auto;height:auto;line-height:normal;" type="checkbox" value="@j.用户组名" />@j.用户组名  <br />
+                                    }
+                                }
+                                else
+                                {
+                                    var userlist = ViewData["用户组列表"] as IEnumerable<用户组>;
+                                    foreach (var k in userlist)
+                                    {
+                                        //if (k.用户组名 == "超级管理员" || k.用户组名 == "两库管理专员" || k.用户组名 == "一级管理员账号" || k.用户组名 == "采购处管理员账号" || k.用户组名 == "数据交换账号")
+                                        //{
+                                        //    continue;
+                                        //}
+                                        if (k.用户组名 == "二级管理员账号" || k.用户组名 == "操作员账号A" || k.用户组名 == "验收单管理专员")
+                                        {
+                                            if (Model.用户组.Contains(k.用户组名))
+                                            {
+                                                <input class="groupname" style="width:auto;height:auto;line-height:normal;" checked="checked" type="checkbox" value="@k.用户组名" />@k.用户组名  <br />
+                                            }
+                                            else
+                                            {
+                                                <input class="groupname" style="width:auto;height:auto;line-height:normal;" type="checkbox" value="@k.用户组名" />@k.用户组名  <br />
+                                            }
+                                        }
+                                    }
+                                    foreach (var j in (IEnumerable<用户组>)ViewData["所管理用户组"])
+                                    {
+                                        if (j.用户组名.Contains("二级管理员账号") || j.用户组名.Contains("操作员账号A") || j.用户组名.Contains("验收单管理专员"))
+                                        {
+                                            continue; 
+                                        }
+                                        else
+                                        { 
+                                            if (Model.用户组.Contains(j.用户组名))
+                                            {
+                                                <input class="groupname" style="width:auto;height:auto;line-height:normal;" type="checkbox" checked="checked" value="@j.用户组名" />@j.用户组名  <br />
+                                            }
+                                            else
+                                            {
+                                            <input class="groupname" style="width:auto;height:auto;line-height:normal;" type="checkbox" value="@j.用户组名" />@j.用户组名  <br />
+                                            }
+                                        }  
+                                    }
+                                }
+
+}
+                                <input name="usergroup" id="usergroup" type="hidden" />
+                            </div>
+                        </div>
+                        }
+                        <div style="text-align:center"><input id="modifybutton" type="submit" style="margin-top:20px; margin-left:-30px;" class="front_login_rightbox_button" value="确        定"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () { 
+        $("select option").each(function () { if ($(this).text() == '') { $(this).remove(); } }); 
+        $("#单位用户列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#单位用户列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    //$(document).ready(function () { $.get('/单位用户后台/CheckCode', {}, function (data,status) { $("#hide").text(data);}); });
+    $("#modifybutton").click(function () {
+        var d = $(".groupname");
+        var t="";
+        $.each(d, function (index,domEle) {
+            if ($(domEle).is(":checked"))
+            {
+                t += $(domEle).val()+",";
+            }
+        });
+        var dd=@Model.Id;
+        $("#usergroup").val(t);
+        var ee=$("#usergroup").val();
+        if(ee!="" || dd==10){
+            $.ajax({
+                url: '/单位用户后台/DepartmentEdit',
+                data: {a:@Model.Id,b:$("#pwd_ipt").val(),c:$("#brief_unit").val(),d:$("#unit_jb").find("option:selected").val(),e:ee},
+                success:function(){
+                    $("#msg_tips").show().html("修改成功！");
+                    window.location.href="/单位用户后台/DepartmentList";
+                },
+                error:function(){
+                    $("#msg_tips").show().html("修改失败！");
+                    setTimeout(function(){
+                        $("#msg_tips").fadeOut(200); 
+                    },2000);
+                },
+            });
+        }
+        else{
+            alert("请勾选用户组！");
+        }
+        
+    });
+</script>
+
+

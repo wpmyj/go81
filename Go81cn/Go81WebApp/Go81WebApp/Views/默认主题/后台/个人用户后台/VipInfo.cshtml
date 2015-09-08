@@ -1,0 +1,61 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.个人用户
+@{
+    ViewBag.Title = "我的基本信息";
+}
+<script src="~/JS/provinceandcity_all.js"></script>
+<link href="~/css/css.css" type="text/css" rel="stylesheet" />
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right" style="padding-left:17px;">
+        @using (Html.BeginForm())
+        {
+            Html.AntiForgeryToken();
+            <div class="gys_znxx_topbox">
+                <div class="gys_xttz_topbg">
+                    <div class="index_bottom_zb_top_title">我的会员信息</div>
+                </div>
+            </div>
+            <div class="expert">
+                <div class="expert_no">
+                    <!--身份信息-->
+                    <p class="title">会员信息</p>
+                    <div class="expert_identity">
+                        <table>
+                            <tr>
+                                <td class="lab" valign="top">会员编号：</td>
+                                <td valign="top">
+                                    @Model.会员信息.会员编号
+                                </td>
+
+                                <td class="lab" valign="top">会员等级：</td>
+                                <td valign="top">
+                                    @Model.会员信息.会员等级
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td class="lab" valign="top">会员积分：</td>
+                                <td valign="top">
+                                    @Model.会员信息.会员积分
+                                </td>
+                                <td class="lab" valign="top">我的钱包：</td>
+                                <td valign="top">
+                                    ￥@Model.会员信息.虚拟电子币
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#会员信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#会员信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

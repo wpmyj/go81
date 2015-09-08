@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "下载专区";
+}
+<div class="front_outdiv">
+    @if (WebApiApplication.IsIntranet)
+    {
+        <div class="front_outdiv_right">
+            @Html.Action("Part_Download_OtherList", "下载")
+        </div>
+        <div class="front_outdiv_left">
+            @Html.Action("Part_Download_List", "下载")
+        </div>
+    }
+    else
+    {
+        <div class="front_outdiv_left">
+            @Html.Action("Part_Download_List", "下载")
+        </div>
+        <div class="front_outdiv_right">
+            @Html.Action("Part_Download_OtherList", "下载")
+        </div>
+    }
+</div>
+

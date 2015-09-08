@@ -1,0 +1,76 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型;
+@using (Html.BeginForm("NoticeListSearch", "通知"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="gys_xttz_box">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">曝光台</div>
+            </div>
+        </div>
+        <div class="gys_xttz_contentbox" id="pagecontent">
+            <ul class="showout" style="margin-left:10px; margin-top:5px;">
+                <li style="background-image:none; padding:0px; border-bottom:none; text-indent:2em; height:20px; line-height:20px; display:inline-block; text-align:left;">
+                    参加军队物资采购的供应商应本着诚信的原则，对自身企业信息、资质信息、商品信息、服务信息等进行如实描述，其信用记录将与供应商等级挂勾，并直接影响评标结果。如有违法违纪的供应商，一经查实，其信用评级将作降级处理。如有重大违法违纪情况，或将直接取消其军队供应商的资格。所有结果将通过本曝光台进行公示。
+                </li>
+            </ul>
+            <ul>
+                @{ var j = 0;}
+                @foreach (var item in (IEnumerable<通知>)ViewData["曝光台列表"])
+                {
+                    TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                    if (j % 2 == 0)
+                    {
+                        <li>
+                            @if (ts.TotalHours < 48)
+                            {
+                                <img src="~/Images/newico.gif"/>
+                                <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" class="new" href="~/通知/ExposureDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                            }
+                            else
+                            {
+                                <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" href="~/通知/ExposureDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                            }
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="oddlinecolor">
+                            @if (ts.TotalHours < 48)
+                            {
+                                <img src="~/Images/newico.gif"/>
+                                <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" class="new" href="~/通知/ExposureDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                            }
+                            else
+                            {
+                                <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" href="~/通知/ExposureDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                            }
+                        </li>
+                    }
+                    j++;
+                }
+            </ul>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript" language="javascript">
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@(int.Parse(ViewData["maxpage"].ToString()));
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).addClass("currentPage");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+    });
+</script>

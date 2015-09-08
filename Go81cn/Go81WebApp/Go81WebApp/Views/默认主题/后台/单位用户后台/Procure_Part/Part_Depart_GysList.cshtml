@@ -1,0 +1,231 @@
+﻿<script src="~/JS/provinceandcity_all.js"></script>
+<script src="~/JS/jquery-1.6.min.js"></script>
+
+<style type="text/css">
+    .gys_znxx_content table {
+        border-right: none;
+        margin-top: 5px;
+    }
+
+    .gys_znxx_content td, th {
+        border-right: 1px solid #aaa;
+        padding: 5px;
+        letter-spacing: 0px;
+    }
+
+    .gys_znxx_content td {
+        color: #333333;
+    }
+
+        .gys_znxx_content td a {
+            padding: 2px 5px 2px 5px;
+            cursor: pointer;
+            color: #666666;
+        }
+
+            .gys_znxx_content td a:hover {
+                color: #b36e08;
+            }
+
+    .partmentlist_inputrightbox {
+        width: 580px;
+        float: left;
+    }
+</style>
+
+<script language="javascript">
+    function showgysdetail(id) {
+
+        $.get("ModifiDepartment?id=" + encodeURI(id), function (response) {
+
+
+            document.getElementById("username").value = response;
+            document.getElementById("password").value = response;
+
+            document.getElementById("user_del").checked = true;
+            document.getElementById("departmentlist_hidden").style.display = 'block';
+        });
+
+
+    }
+
+</script>
+
+
+
+
+<div class="gys_znxx_box">
+    <div class="gys_znxx_topbox">
+        <div class="gys_znxx_topbg">
+            <div class="index_bottom_zb_top_title">单位管理</div>
+        </div>
+    </div>
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="20%">用户名</th>
+                    <th width="15%">级别</th>
+                    <th width="20%">地区</th>
+                    <th width="20%">类别</th>
+                    <th width="25%">操作</th>
+                </tr>
+                <tr>
+                    <td>loginnae</td>
+                    <td>级别级别级别</td>
+                    <td>地区地区地区</td>
+                    <td>类别类别类别</td>
+                    <td class="gys_znxx_content_tabletime"><a onclick="showgysdetail('11111')">查看</a><a onclick="    alert('编辑')">删除</a><a onclick="    alert('编辑')">禁用</a></td>
+                </tr>
+                <tr>
+                    <td>loginnae</td>
+                    <td>级别级别级别</td>
+                    <td>地区地区地区</td>
+                    <td>类别类别类别</td>
+                    <td class="gys_znxx_content_tabletime"><a onclick="showgysdetail('11111')">查看</a><a onclick="alert('编辑')">删除</a><a onclick="alert('编辑')">禁用</a></td>
+                </tr>
+                <tr>
+                    <td>loginnae</td>
+                    <td>级别级别级别</td>
+                    <td>地区地区地区</td>
+                    <td>类别类别类别</td>
+                    <td class="gys_znxx_content_tabletime"><a onclick="showgysdetail('11111')">查看</a><a onclick="alert('编辑')">删除</a><a onclick="alert('编辑')">禁用</a></td>
+                </tr>
+                <tr>
+                    <td>loginnae</td>
+                    <td>级别级别级别</td>
+                    <td>地区地区地区</td>
+                    <td>类别类别类别</td>
+                    <td class="gys_znxx_content_tabletime"><a onclick="showgysdetail('11111')">查看</a><a onclick="alert('编辑')">删除</a><a onclick="alert('编辑')">禁用</a></td>
+                </tr>
+                <tr>
+                    <td>loginnae</td>
+                    <td>级别级别级别</td>
+                    <td>地区地区地区</td>
+                    <td>类别类别类别</td>
+                    <td class="gys_znxx_content_tabletime"><a onclick="showgysdetail('11111')">查看</a><a onclick="alert('编辑')">删除</a><a onclick="alert('编辑')">禁用</a></td>
+                </tr>
+                <tr>
+                    <td>loginnae</td>
+                    <td>级别级别级别</td>
+                    <td>地区地区地区</td>
+                    <td>类别类别类别</td>
+                    <td class="gys_znxx_content_tabletime"><a onclick="showgysdetail('11111')">查看</a><a onclick="alert('编辑')">删除</a><a onclick="alert('编辑')">禁用</a></td>
+                </tr>
+                <tr>
+                    <td>loginnae</td>
+                    <td>级别级别级别</td>
+                    <td>地区地区地区</td>
+                    <td>类别类别类别</td>
+                    <td class="gys_znxx_content_tabletime"><a onclick="showgysdetail('11111')">查看</a><a onclick="alert('编辑')">删除</a><a onclick="alert('编辑')">禁用</a></td>
+                </tr>
+                <tr>
+                    <td>loginnae</td>
+                    <td>级别级别级别</td>
+                    <td>地区地区地区</td>
+                    <td>类别类别类别</td>
+                    <td class="gys_znxx_content_tabletime"><a onclick="showgysdetail('11111')">查看</a><a onclick="alert('编辑')">删除</a><a onclick="alert('编辑')">禁用</a></td>
+                </tr>
+                <tr>
+                    <td>loginnae</td>
+                    <td>级别级别级别</td>
+                    <td>地区地区地区</td>
+                    <td>类别类别类别</td>
+                    <td class="gys_znxx_content_tabletime"><a onclick="showgysdetail('11111')">查看</a><a onclick="alert('编辑')">删除</a><a onclick="alert('编辑')">禁用</a></td>
+                </tr>
+                <tr>
+                    <td>loginnae</td>
+                    <td>级别级别级别</td>
+                    <td>地区地区地区</td>
+                    <td>类别类别类别</td>
+                    <td class="gys_znxx_content_tabletime"><a onclick="showgysdetail('11111')">查看</a><a onclick="alert('编辑')">删除</a><a onclick="alert('编辑')">禁用</a></td>
+                </tr>
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                分页控件
+            </div>
+
+
+
+            <div id="departmentlist_hidden" style=" width: 898px; border: 1px solid #CCD2B0; height:auto; overflow:hidden; margin-top:20px; display:none;">
+                <div style=" width: 800px; margin: 20px auto; padding:10px;">
+
+                    <div style="width:800px; height:30px; padding:10px;">
+                        <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">用户名：</div>
+                        <div style=" width:580px; float:left;"><input name="username" id="username" type="text" style="width: 300px; height: 30px; line-height: 25px;" value="111111111111" /></div>
+                    </div>
+
+                    <div style="width:800px; height:30px; padding:10px;">
+                        <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">初始密码：</div>
+                        <div style=" width:580px; float:left;"><input name="password" id="password" type="password" style="width: 300px; height: 30px; line-height: 25px;" value="222222222222" /></div>
+                    </div>
+
+                    <div style="width:800px; height:30px; padding:10px;">
+                        <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">地区：</div>
+                        <div style=" width:580px; float:left;">
+                            <select id="deliverprovince" name="deliverprovince" style="width: 150px; height: 30px; line-height: 25px;"></select>
+                            <select id="delivercity" name="delivercity" style="width: 150px; height: 30px; line-height: 25px; margin-left: 20px;"></select>
+                            <select id="deliverarea" name="deliverarea" style="width: 150px; height: 30px; line-height: 25px; margin-left: 20px;"></select>
+                            <script>
+                                window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                            </script>
+                        </div>
+                    </div>
+
+                    <div style="width:800px; height:30px; padding:10px;">
+                        <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">级别：</div>
+                        <div style=" width:580px; float:left;">
+                            <select id="partment_class" name="partment_class" style="width: 300px; height: 30px; line-height: 25px;">
+                                <option value="0-49人">最高级</option>
+                                <option value="50-99人">军级</option>
+                                <option value="100-499人">师级</option>
+                                <option value="500-999人">团级</option>
+                                <option value="1000人以上">营级</option>
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div style="width:800px; height:auto; overflow:hidden; padding:10px;">
+                        <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">权限：</div>
+                        <div style=" width:580px; float:left;">
+                            <table style="width:570px; text-align:center;" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <th width="200">功能</th>
+                                    <th>增加</th>
+                                    <th>删除</th>
+                                    <th>编辑</th>
+                                    <th>禁用</th>
+                                </tr>
+                                <tr>
+                                    <td>公告</td>
+                                    <td><input type="checkbox" name="ad_add" id="ad_add" /></td>
+                                    <td><input type="checkbox" name="ad_del" id="ad_del" /></td>
+                                    <td><input type="checkbox" name="ad_mod" id="ad_mod" /></td>
+                                    <td><input type="checkbox" name="ad_out" id="ad_out" /></td>
+                                </tr>
+                                <tr>
+                                    <td>用户</td>
+                                    <td><input type="checkbox" name="user_add" id="user_add" /></td>
+                                    <td><input type="checkbox" name="user_del" id="user_del" /></td>
+                                    <td><input type="checkbox" name="user_mod" id="user_mod" /></td>
+                                    <td><input type="checkbox" name="user_out" id="user_out" /></td>
+                                </tr>
+                                <tr>
+                                    <td>供应商</td>
+                                    <td><input type="checkbox" name="gys_add" id="gys_add" /></td>
+                                    <td><input type="checkbox" name="gys_del" id="gys_del" /></td>
+                                    <td><input type="checkbox" name="gys_mod" id="gys_mod" /></td>
+                                    <td><input type="checkbox" name="gys_out" id="gys_out" /></td>
+                                </tr>
+                            </table>
+                            <input id="modiibutton" type="button" style="margin-top:20px;" class="front_login_rightbox_button" value="关闭" onclick="document.getElementById('departmentlist_hidden').style.display = 'none';">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

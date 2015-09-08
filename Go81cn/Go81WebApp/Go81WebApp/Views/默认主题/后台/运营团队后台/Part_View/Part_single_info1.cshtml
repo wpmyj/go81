@@ -1,0 +1,82 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+<div class="content4">
+    <table width="90%" style=" margin-left:auto; margin-right:auto;" cellspacing="0" >
+        <tr><th>用户ID</th><th>登录名</th><th>用户名</th><th>登录IP</th><th>最近登录</th><th>操作</th></tr>
+        @foreach (var item in ViewData["single"] as IEnumerable<个人用户>)
+        {
+            <tr>
+                <td style="text-align:center;" width="15%">@item.Id</td>
+                <td style="text-align:center;" width="20%">@item.登录信息.登录名</td>
+                <td style="text-align:center;" width="25%"><a href="/运营团队后台/User_Info_Detail?id=@item.Id">@item.个人信息.姓名</a></td>
+                <td style="text-align:center;" width="20%">@item.基本数据.添加时间</td>
+                <td style="text-align:center;" width="20%">
+                    <span>
+                        <a onclick="del(@item.Id)">删除</a>
+                        <a href="/运营团队后台/User_PermissionEdit?id=@item.Id&type=single">编辑权限</a>
+                    </span>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<div class="gys_znxx_content_detailbox">
+    @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+    {
+        <a>首页</a>
+    }
+    else
+    {
+        <a id="1" onclick="single(this)">首页</a>
+    }
+    @for (int i = 0; i <= 10; i++)
+    {                       //一共最多显示10个页码，前面5个，后面5个
+        if ((int.Parse(ViewData["currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+        {
+            if (5 == i)
+            {                               //当前页处理
+                <a>@int.Parse(ViewData["currentPage"].ToString())</a>
+            }
+            else
+            {                               //一般页处理
+                <a id="@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)" onclick="single(this)">@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)</a>
+
+            }
+        }
+    }
+    @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+    {
+        <a>末页</a>
+    }
+    else
+    {
+        <a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="single(this)">末页</a>
+    }
+
+</div>
+@*<script type="text/javascript">
+    function single(a) {
+        //alert(a.getAttribute("id"))公告翻页ajax
+        $.get("/运营团队后台/Part_single_info?page=" + encodeURI(a.getAttribute("id")), function (response) {
+
+            $(".content4").html(response)
+        });
+    }
+</script>*@
+<script type="text/javascript" language="javascript">
+    var i=@(int.Parse(ViewData["currentPage"].ToString()));
+    var j=@(int.Parse(ViewData["pagecount"].ToString()))
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == i) {
+                $(this).addClass("currentPage");
+            }
+        });
+    });
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此用户！确定删除吗？"))
+        {
+            window.location="/运营团队后台/Delete_User/"+num;
+        }
+    }
+</script>

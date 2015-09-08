@@ -1,0 +1,930 @@
+﻿@model Go81WebApp.Models.数据模型.商品数据模型.商品
+@using Go81WebApp.Models.数据模型.商品数据模型
+<script type="text/javascript" src="~/JS/Get_productClass.js"></script>
+<link rel="stylesheet" href="~/css/index.css" type="text/css">
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<script>
+    //商品详情的编辑器
+    var editor1;
+    KindEditor.ready(function (K) {
+        editor1 = K.create('#content1', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true,
+            resizeType:0
+        });
+
+    });
+
+    //售后服务的编辑器
+    var editor2;
+    KindEditor.ready(function (K) {
+        editor2 = K.create('#content2', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true,
+            resizeType:0
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    function nextStep(num) {
+        //价格验证正则表达式
+        var pricerg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
+        if (num == 1 || num == 2) {
+            $("div#Uppicture").css({ "display": "none" });
+            $("div#product_tabmenu_content").css({ "height": "auto" });
+        }
+        if (num == 0) {
+            //验证项目编号
+            if ($("#proliststr").length >= 1) {
+                var pronamelist = $("#proliststr").val().substring(0, $("#proliststr").val().length - 1).split('|');
+                for (var proindex = 0; proindex < pronamelist.length; proindex++) {
+                    if ($.trim($("#pronum___" + pronamelist[proindex]).val()) == "") {
+                        $("#pronum___" + pronamelist[proindex]).focus();
+                        //$("#p_number___" + pronamelist[proindex]).show();
+                        alert("请填写项目编号");
+                        return false;
+                    }
+                    if ($.trim($("#procount___" + pronamelist[proindex]).val()) == "") {
+                        $("#procount___" + pronamelist[proindex]).focus();
+                        //$("#p_number___" + pronamelist[proindex]).show();
+                        alert("请填写中标数量");
+                        return false;
+                    }
+                    if ($.trim($("#proprice___" + pronamelist[proindex]).val()) == "") {
+                        $("#proprice___" + pronamelist[proindex]).focus();
+                        //$("#p_number___" + pronamelist[proindex]).show();
+                        alert("请填写中标金额");
+                        return false;
+                    }
+                }
+            }
+            
+
+
+
+            //验证商品名称
+            var stepcheckparm = $('input[name="商品信息.商品名"]');
+            if ($.trim(stepcheckparm.val()) == "") {
+                $("#p_name").show();
+                $(stepcheckparm).focus();
+                return false;
+            }
+            else {
+                //$("#Uppicture").css({ "display": "inline", "height": "20px" });
+                //$("#product_tabmenu_content").css({ "height": "250px" });
+                $("#p_name").hide();
+
+            }
+
+            ////验证中标数量
+            //stepcheckparm = $('input[name="中标商品数量"]');
+            //if ($.trim(stepcheckparm.val()) == "") {
+            //    $("#p_bidnumber").show();
+            //    $(stepcheckparm).focus();
+            //    return false;
+            //}
+            //else {
+            //    $("#p_bidnumber").hide();
+            //}
+            ////验证中标金额
+            //stepcheckparm = $('input[name="中标金额"]');
+            //if ($.trim(stepcheckparm.val()) == "") {
+            //    $("#p_bidaccount").show();
+            //    $(stepcheckparm).focus();
+            //    return false;
+            //}
+            //else {
+            //    $("#p_bidaccount").hide();
+            //}
+
+            //验证商品型号
+            stepcheckparm = $('input[name="商品信息.型号"]');
+            if ($.trim(stepcheckparm.val()) == "") {
+                $("#p_xinghao").show();
+                $(stepcheckparm).focus();
+                return false;
+            }
+            else {
+                $("#p_xinghao").hide();
+            }
+
+            //验证商品计量单位
+            stepcheckparm = $('input[name="商品信息.计量单位"]');
+            if ($.trim(stepcheckparm.val()) == "") {
+                $("#p_jldw").show();
+                $(stepcheckparm).focus();
+                return false;
+            }
+            else {
+                $("#p_jldw").hide();
+            }
+
+            //验证商品价格
+            stepcheckparm = $('input[name="销售信息.价格"]');
+            if ($.trim(stepcheckparm.val()) == "" || !(stepcheckparm.val().match(pricerg)) || stepcheckparm.val() == 0) {
+                $("#p_price").show();
+                $(stepcheckparm).focus();
+                return false;
+            }
+            else {
+                //$("#Uppicture").css({ "display": "inline", "height": "20px" });
+                //$("#product_tabmenu_content").css({ "height": "250px" });
+                $("#p_price").hide();
+            }
+
+            //验证商品简介
+            stepcheckparm = $('textarea[name="商品数据.商品简介"]');
+            if ($.trim(stepcheckparm.val()) == "") {
+                $("#p_des").show();
+                $(stepcheckparm).focus();
+                return false;
+            } else {
+                //$("#Uppicture").css({ "display": "inline", "height": "20px" });
+                //$("#product_tabmenu_content").css({ "height": "250px" });
+                $("#p_des").hide();
+            }
+
+            //验证商品详情
+            editor1.sync("content1");
+            stepcheckparm = $("#content1");
+            if ($.trim(stepcheckparm.val()) == "") {
+                $("#p_detaildes").show();
+                $(stepcheckparm).focus();
+                return false;
+            }
+            else {
+                //$("#Uppicture").css({ "display": "inline", "height": "20px" });
+                //$("#product_tabmenu_content").css({ "height": "250px" });
+                $("#p_detaildes").hide();
+            }
+            $("#Uppicture").css({ "display": "inline", "height": "20px" });
+            $("#product_tabmenu_content").css({ "height": "250px" });
+        }
+
+        //验证价格组合处的价格格式
+        if (num == 2) {
+            var trcontent = document.getElementsByName("table_tr");//价格匹配表格内容td
+            if (trcontent.length > 0) {
+                var tdcont = trcontent[0].childNodes.length;
+
+                //trcontent.length==>价格匹配总行数
+                for (var i = 0; i < trcontent.length; i++) {
+                    var tdcontent = trcontent[i].childNodes;
+
+                    if (!((tdcontent[tdcont - 1].getElementsByTagName("input")[0].value).match(pricerg)) || tdcontent[tdcont - 1].getElementsByTagName("input")[0].value == 0) {
+                        $("#priceerrormessage").html("价格填写有误!");
+                        tdcontent[tdcont - 1].getElementsByTagName("input")[0].focus();
+                        return false;
+                    }
+                    else {
+                        $("#priceerrormessage").html("");
+                    }
+                }
+            }
+        }
+
+
+        $("#listdiv").find("li").eq(num).removeClass("cli");
+        $("#listdiv").find("li").eq(num + 1).attr("class", "cli");
+
+        $("#product_tabmenu_content").find("ul").eq(num).removeClass("fdiv");
+        $("#product_tabmenu_content").find("ul").eq(num + 1).attr("class", "fdiv");
+    }
+
+    function preStep(num) {
+        if (num == 2) {
+            $("#Uppicture").css({ "display": "inline", "height": "20px" });
+            $("#product_tabmenu_content").css({ "height": "250px" });
+        }
+        else {
+            $("#Uppicture").css({ "display": "none", "height": "auto" });
+            $("#product_tabmenu_content").css({ "height": "auto" });
+        }
+        $("#listdiv").find("li").eq(num).removeClass("cli");
+        $("#listdiv").find("li").eq(num - 1).attr("class", "cli");
+
+        $("#product_tabmenu_content").find("ul").eq(num).removeClass("fdiv");
+        $("#product_tabmenu_content").find("ul").eq(num - 1).attr("class", "fdiv");
+    }
+</script>
+<div id="f1" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>正在上传，请稍等...</span>
+    </div>
+</div>
+<div id="Uppicture" style="display:none; position:absolute; width:50%; margin-top:50px;">
+    <form action="/供应商后台/UploadImages" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+        <input type="hidden" value="showPic" name="pic1" />
+        <table width="100%" style="font-size:14px; margin-left:20px;">
+            <tr>
+                <td>请选择商品图片<em style="color:red;">（注：请上传5M以下的jpg格式图片）</em></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="file" accept="image/jpeg" onchange="filechange()" style="width:70px;" multiple="multiple" name="file1" />
+                    @*<input type="submit" onclick="fileChange()" value="上传图片" />*@
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div id="framebox" style="margin-left:20px; visibility:hidden; margin-top:10px;width:700px; height:auto;  margin-right: auto;">
+        <iframe name="showPic" scrolling="no" id="showPic" frameborder="0" style="height:auto; width:100%;"></iframe>
+    </div>
+</div>
+@if (ViewData["是否中标商品"].ToString() == "1")
+{
+<div id="pro_numdiv" style="display: none;">
+    <div class="product_add_textarabox">
+        <div style="float:left;padding-right:5px;">
+            <div class="product_add_toptitle">项目编号：</div>
+            <input type="text" id="pronum___a" name="pronum___a" style="width: 130px;" />
+            <span style="float: left;">*</span>
+            <span id="p_number___a" style="display: none; float: left;">请输入项目编号</span>
+        </div>
+        <div style="float:left;padding-right:5px;">
+            <div class="product_add_toptitle">中标数量：</div>
+            <input type="text" id="procount___a" name="procount___a" style="width: 130px;" />
+            <span style="float: left;">*</span>
+            <span id="p_count___a" style="display: none;">请输入中标商品数量</span>
+        </div>
+        <div style="float:left;padding-right:5px;">
+            <div class="product_add_toptitle">中标金额：</div>
+            <input type="text" id="proprice___a" name="proprice___a" style="width: 130px;" />
+            <span style="float: left;">*</span>
+            <span id="p_price___a" style="display: none;">请输入中标金额</span>
+            <input type="button" style="width: 100px; float: left; height: 35px;" value="删除该项目" id="deleteprobtn___a" onclick="deletepro(this)" />
+        </div>
+    </div>
+</div>
+<script>
+    var procount = 1;
+    function deletepro(obj) {
+        var id = $(obj).attr("id").replace("deleteprobtn___", "");
+        $(obj).parent().parent().remove();
+        $("#proliststr").val($("#proliststr").val().replace(id+"|",""));
+    }
+    function addpro(obj) {
+        var html = $("#pro_numdiv").html().replace(/___a/g, "___" + procount);
+        $("#proneedproname").before(html);
+        $("#proliststr").val($("#proliststr").val() + procount + "|");
+        procount++;
+    }
+</script>
+}
+
+@using (Html.BeginForm("Gys_Product_Add", "供应商后台"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="product_add_tabmenu_box">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner" style="float:left">商品信息</div>
+                <div class="product_tabmenu_tabmenu" id="listdiv">
+                    <ul>
+                        <li onclick="change_tbl(this)" class="cli">商品描述</li>
+                        <li onclick="change_tbl(this)" id="1">商品图片</li>
+                        <li onclick="change_tbl(this)">商品属性</li>
+                        <li onclick="change_tbl(this)">售后服务</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="product_tabmenu_content_box gys_znxx_box" id="product_tabmenu_content" style="height:auto;">
+            <ul class="fdiv">
+                <li>
+                    @if (ViewData["是否中标商品"].ToString() == "1")
+                    {
+                        <input type="hidden" id="proliststr" name="proliststr" value="0|" />
+                        <div class="product_add_textarabox">
+                            <div style="float:left;padding-right:5px;">
+                                <div class="product_add_toptitle">项目编号：</div>
+                                <input type="text" id="pronum___0" name="pronum___0" style="width: 130px;" /><span style="float: left;">*</span><span id="p_number___0" style="display: none; float: left;">请输入项目编号</span>
+                            </div>
+                            <div style="float:left;padding-right:5px;">
+                                <div class="product_add_toptitle">中标数量：</div>
+                                <input type="text" id="procount___0" name="procount___0" style="width: 130px;" /><span style="float: left;">*</span><span id="p_count___0" style="display: none;float: left;">请输入中标商品数量</span>
+                            </div>
+                            <div style="float:left;padding-right:5px;">
+                                <div class="product_add_toptitle">中标金额：</div>
+                                <input type="text" id="proprice___0" name="proprice___0" style="width: 130px;" /><span style="float: left;">*</span><span id="p_price___0" style="display: none;float: left;">请输入中标金额</span>
+                                <input type="button" style="width: 100px; float: left; height: 35px;" value="新增项目" onclick="addpro(this)" />
+                            </div>
+                        </div>
+                    }
+
+                    <div class="product_add_textarabox" style="margin-top:20px;" id="proneedproname">
+                        <div class="product_add_toptitle">商品名称：</div>
+                        @Html.EditorFor(model => model.商品信息.商品名)<span>*</span><span id="p_name" style="display: none;">请输入商品名称</span>
+                        @*@Html.ValidationMessageFor(model => model.商品信息.商品名)*@
+                    </div>
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">商品品牌：</div>
+                        @Html.EditorFor(model => model.商品信息.品牌)
+                    </div>
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">商品型号：</div>
+                        @Html.EditorFor(model => model.商品信息.型号)<span>*</span><span id="p_xinghao" style="display: none;">请输入商品型号</span>
+                        @*@Html.ValidationMessageFor(model => model.商品信息.商品名)*@
+                    </div>
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">计量单位：</div>
+                        @Html.EditorFor(model => model.商品信息.计量单位)<span>*（如：台、辆等）</span><span id="p_jldw" style="display: none;">请输入计量单位</span>
+                        @*@Html.ValidationMessageFor(model => model.商品信息.商品名)*@
+                    </div>
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">军采价格：</div>
+                        @Html.EditorFor(model => model.销售信息.价格)
+                        @*@Html.ValidationMessageFor(model => model.销售信息.价格)*@<span style="padding-right: 20px;">*</span><span id="p_price" style="display: none;">请输入正确的价格(只能为数字或小数)</span>
+                    </div>
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">商品简介：</div>
+                        @Html.TextAreaFor(model => model.商品数据.商品简介)
+                        @*@Html.ValidationMessageFor(model => model.商品数据.商品简介)*@<span>*</span><span id="p_des" style="display: none;">请输入商品简介</span>
+                        @*<div class="product_add_textarabox_tipbox">500字(还剩499字)<a href="#" class="product_add_textarabox_tip">参考格式</a></div>*@
+                    </div>
+
+                    <div class="product_add_detailbox" style="margin-bottom: 10px;">
+                        <div class="product_add_toptitle">商品详情：</div>
+                        @Html.TextAreaFor(model => model.商品数据.商品详情, new { style = "width:690px; height: 400px; margin-left: 110px;", id = "content1" })
+                        <div class="product_add_toptitle"></div><span id="p_detaildes" style="color: red; display: none;">请输入商品详情</span>
+                        @*<a href="#" class="product_add_textarabox_tip">参考格式</a>*@
+                    </div>
+
+                    <div style="width: 300px; float: right;padding:20px 0 20px 0;">
+                        <input type="button" value="下一步" class="index_online_btn" onclick='nextStep(0)'>
+                    </div>
+                </li>
+
+
+
+            </ul>
+            <ul>
+                <li>
+                    <div id="pBox" style="width:80%; height:auto; margin-right:auto; margin-left:auto; margin-top:50px;">
+
+                    </div>
+                    <div style="width: 300px; float: right;padding:20px 0 20px 0;">
+                        <input type="button" value="上一步" class="index_online_btn" onclick="preStep(1)">
+                        <input type="button" value="下一步" class="index_online_btn" onclick="return nextStep(1)">
+                    </div>
+                </li>
+
+            </ul>
+            <ul style="padding:10px 0;">
+                <li>
+                    <span style="color:red; padding-left: 20px;" id="priceerrormessage"></span>
+
+                    <div id="tablecontent" style="width:900px; height:auto; margin:0 auto; overflow:hidden; display: none; margin-bottom: 20px;"></div>
+                    <input name="pricesttrsrr" id="pricesttrsrr" type="hidden" />
+                    <input name="sttrsrr" id="sttrsrr" type="hidden" />
+                    <input name="idsttrsrr" id="idsttrsrr" value="@ViewData["ID"]" type="hidden" />
+                    <div class="product_add_attributebox" id="gys_product_class" style="margin: 0 auto;">
+                        @foreach (var arr in (Dictionary<string, Dictionary<string, 商品属性数据>>)ViewData["商品属性模板"])
+                        {
+                            <div style=" width:898px; height:auto; overflow:hidden; margin:0 auto;" name="attrbox">
+                                <div class="product_add_toptitle" style=" width:898px; float:left; background-color:#ccd2b0; text-align: left;">@arr.Key</div>
+                                <table class="product_att_table" cellpadding="0" cellspacing="0" id="@arr.Key">
+                                    @foreach (var item in arr.Value)
+                                    {
+                                        <tr id="@item.Key" name="@arr.Key">
+                                            <td class="product_att_table_td_exp">
+                                                @if (item.Value.属性类型 == 属性类型.复选 && item.Value.销售属性)
+                                                {
+                                                    <input type="checkbox" name="pricecheckbox" value="@item.Key" onclick="gettablehead(this);" /><span title="点选价格属性,系统会根据您选择的值进行组合,不同的组合可以设置不同的价格!">价格属性</span>
+                                                }
+                                                else
+                                                {
+                                                    <input disabled="disabled" type="checkbox" value="@item.Key" onclick=" gettablehead(this) " /><span style="color:#cccccc">价格属性</span>
+                                                }
+                                            </td>
+                                            <td class="product_att_table_td_exp1">@item.Key</td>
+                                            <td width="100%" class="product_att_table_td">
+                                                @if (item.Value.属性类型 == 属性类型.复选)
+                                                {
+                                                    if (item.Value.销售属性)
+                                                    {
+                                                        foreach (var listitem in item.Value.值)
+                                                        {
+                                                            <span class="product_att_table_span"><input type="checkbox" id="@listitem" name="@item.Key" value="@listitem" onclick="gettablehead(this)" />@listitem</span>
+                                                        }
+                                                        <a onclick="addattribute(this)" key="@item.Key" issale="1" class="proadd_addattr"></a>
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var listitem in item.Value.值)
+                                                        {
+                                                            <span class="product_att_table_span"><input type="checkbox" id="@listitem" name="@item.Key" value="@listitem" />@listitem</span>
+                                                        }
+                                                        <a onclick="addattribute(this)" key="@item.Key" issale="0" class="proadd_addattr"></a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <input style="border:none; width:100%; height:100%; color:#aaa;" type="text" name="@item.Key" value='在这里输入...' onblur="if ($(this).val() == '') { value = '在这里输入...'; $(this).css('color', '#aaa'); }" onfocus="if ($(this).val() == '在这里输入...') { value = ''; $(this).css('color', '#000'); }" />
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+
+                            </div>
+                        }
+                        <script type="text/javascript">
+                            function addattribute(a) {
+                                var flag = true;
+
+                                var str = prompt("请输入值", "");
+                                if (null != str && "" != str) {
+
+                                    //判断合法性
+                                    if (str.indexOf("||||") > -1 || str.indexOf("^^^^") > -1 || str.indexOf("####") > -1 || str.indexOf("****") > -1 || str.indexOf("$$$$") > -1) {
+                                        alert("不能包含非法字符！");
+                                        return;
+                                    }
+
+                                    //判断是否存在该值
+                                    var td = $(a).parent();
+                                    td.find("input").each(function () {
+                                        //alert($(this).val());
+                                        if ($(this).val() == str) {
+                                            alert("已经存在该值，不能重复添加！");
+                                            flag = false;
+                                            return false;
+                                        }
+                                    });
+
+                                    if (flag) {
+                                        var key = a.getAttribute("key");
+                                        var issale = a.getAttribute("issale");
+                                        if (issale == "1") {
+                                            $(a).before("<span class='product_att_table_span'><a onclick='$(this).parent().find(\"input:first\").prop(\"checked\",false);gettablehead(this);$(this).parent().remove();' class='proadd_deleteattr'></a><input type='checkbox' id='" + str + "' name='" + key + "' value='" + str + "' onclick='gettablehead(this)' />" + str + "</span>");
+                                        }
+                                        if (issale == "0") {
+                                            $(a).before("<span class='product_att_table_span'><a onclick='$(this).parent().remove();' class='proadd_deleteattr'></a><input type='checkbox' id='" + str + "' name='" + key + "' value='" + str + "' />" + str + "</span>");
+                                        }
+                                    }
+                                    //alert(str);
+                                }
+                            }
+                        </script>
+                        <script type="text/javascript">
+                            function gettablehead(a) {
+
+                                //防止每次选择复选框价格清零
+                                if ($(a).attr("name") != "pricecheckbox") {
+                                    if (!$(a).parent().parent().parent().find("input:first").is(":checked")) {
+                                        return false;
+                                    }
+                                }
+
+
+                                document.getElementById("tablecontent").innerHTML = "";
+
+                                var ischeck = false;
+                                var count = 0;
+                                var arrtd = new Array();
+                                var tableheadstr = "<tr name='tr_th'>";
+                                var outbox = document.getElementsByName("pricecheckbox");
+                                for (var i = 0; i < outbox.length && count <= 2; i++) {
+                                    if (outbox[i].type == "checkbox" && outbox[i].checked) {
+                                        ischeck = true;
+                                        tableheadstr += "<th class='product_att_table_th'>" + outbox[i].value + "</th>";
+                                        arrtd[count] = outbox[i].value;
+                                        count++;
+                                    }
+                                }
+                                //只允许3种价格匹配<=2
+                                if (ischeck) {
+
+                                    tableheadstr += "<th class='product_att_table_th'>价格匹配</th></tr>";
+
+                                    var tdcountent = "";
+                                    if (arrtd.length == 1) {
+                                        outbox = document.getElementsByName(arrtd[0]);
+
+                                        for (var j = 0; j < outbox.length; j++) {
+                                            if (outbox[j].type == "checkbox" && outbox[j].checked) {
+                                                tdcountent += "<tr name='table_tr'><td class='product_att_table_td'>" + outbox[j].value + "</td><td class='product_att_table_td'><input style='border:none; width:100%; height:100%; color:#aaa;' type='text' value='在这里输入价格'  onblur=\"if ($(this).val() ==''){value='在这里输入价格';$(this).css('color','#aaa');}\" onfocus=\"if ($(this).val() =='在这里输入价格'){value ='';$(this).css('color','#000');}\" /></td><tr>";
+                                            }
+                                        }
+                                        //tdcountent += "<td><input type='text' /></td>";
+                                    }
+                                    if (arrtd.length == 2) {
+                                        var test = document.getElementsByName(arrtd[0])
+                                        for (i = 0; i < test.length; i++) {
+                                            if (test[i].type == "checkbox" && test[i].checked) {
+                                                var testsize = document.getElementsByName(arrtd[1]);
+                                                for (j = 0; j < testsize.length; j++) {
+                                                    if (testsize[j].type == "checkbox" && testsize[j].checked) {
+
+                                                        tdcountent += "<tr name='table_tr'><td class='product_att_table_td'>" + test[i].value + "</td><td class='product_att_table_td'>" + testsize[j].value + "</td><td class='product_att_table_td'><input style='border:none; width:100%; height:100%; color:#aaa;'type='text' value='在这里输入价格' onblur=\"if ($(this).val() ==''){value='在这里输入价格';$(this).css('color','#aaa');}\" onfocus=\"if ($(this).val() =='在这里输入价格'){value ='';$(this).css('color','#000');}\" /></td></tr>"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //tdcountent += "<td><input type='text' /></td>";
+                                    }
+                                    if (arrtd.length == 3) {
+                                        var test = document.getElementsByName(arrtd[0]);
+                                        for (i = 0; i < test.length; i++) {
+                                            if (test[i].type == "checkbox" && test[i].checked) {
+                                                var testsize = document.getElementsByName(arrtd[1]);
+                                                for (var j = 0; j < testsize.length; j++) {
+                                                    if (testsize[j].type == "checkbox" && testsize[j].checked) {
+
+                                                        var testsize3 = document.getElementsByName(arrtd[2]);
+                                                        for (var k = 0; k < testsize3.length; k++) {
+                                                            if (testsize3[k].type == "checkbox" && testsize3[k].checked) {
+
+                                                                tdcountent += "<tr name='table_tr'><td class='product_att_table_td'>" + test[i].value + "</td><td class='product_att_table_td'>" + testsize[j].value + "</td><td class='product_att_table_td'>" + testsize3[k].value + "</td><td class='product_att_table_td'><input style='border:none; width:100%; height:100%; color:#aaa;' type='text' value='在这里输入价格' onblur=\"if ($(this).val() ==''){value='在这里输入价格';$(this).css('color','#aaa');}\" onfocus=\"if ($(this).val() =='在这里输入价格'){value ='';$(this).css('color','#000');}\" /></td></tr>";
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //tdcountent += "<td><input type='text' /></td>";
+                                    }
+
+                                    var tablestr = "<table class='product_att_table' cellpadding='0' cellspacing='0'>" + tableheadstr + tdcountent + "</table>";
+                                    if (tdcountent == "") {
+                                        $("#tablecontent").hide();
+                                    } else {
+                                        $("#tablecontent").show();
+                                        document.getElementById("tablecontent").innerHTML = tablestr;
+                                    }
+                                    //alert(tablestr);
+                                } else {
+                                    $("#tablecontent").hide();
+                                }
+                            }
+                            function checkform() {
+                                var pricerg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
+
+                                //验证项目编号
+                                if ($("#proliststr").length >= 1) {
+                                    var pronamelist = $("#proliststr").val().substring(0, $("#proliststr").val().length - 1).split('|');
+                                    for (var proindex = 0; proindex < pronamelist.length; proindex++) {
+                                        if ($.trim($("#pronum___" + pronamelist[proindex]).val()) == "") {
+                                            $("#contenerror").html("商品描述-->项目名称必须填写");
+                                            return false;
+                                        }
+                                    }
+                                }
+                                //验证商品名称
+                                var stepcheckparm = $('input[name="商品信息.商品名"]');
+                                if ($.trim(stepcheckparm.val()) == "") {
+                                    $("#contenerror").html("商品描述-->商品名称必须填写");
+                                    return false;
+                                }
+
+                                //验证商品型号
+                                stepcheckparm = $('input[name="商品信息.型号"]');
+                                if ($.trim(stepcheckparm.val()) == "") {
+                                    $("#contenerror").html("商品描述-->商品型号必须填写");
+                                    return false;
+                                }
+
+                                //验证商品计量单位
+                                stepcheckparm = $('input[name="商品信息.计量单位"]');
+                                if ($.trim(stepcheckparm.val()) == "") {
+                                    $("#contenerror").html("商品描述-->计量单位必须填写");
+                                    return false;
+                                }
+
+                                //验证商品价格
+                                stepcheckparm = $('input[name="销售信息.价格"]');
+                                if ($.trim(stepcheckparm.val()) == "" || !(stepcheckparm.val().match(pricerg)) || stepcheckparm.val() == 0) {
+                                    $("#contenerror").html("商品描述-->军采价格填写有误");
+                                    return false;
+                                }
+
+                                //验证商品简介
+                                stepcheckparm = $('textarea[name="商品数据.商品简介"]');
+                                if ($.trim(stepcheckparm.val()) == "") {
+                                    $("#contenerror").html("商品描述-->商品简介必须填写");
+                                    return false;
+                                }
+
+                                //var pricerg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
+                                editor1.sync("content1");
+                                if ($.trim($("#content1").val()) == "") {
+                                    $("#contenerror").html("商品描述-->商品详情必须填写");
+                                    return false;
+                                }
+
+
+
+
+                                $("#contenerror").html("");
+                                return true;
+                            }
+
+                            function getatt() {
+                                var pricerg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
+
+                                if (!checkform()) {
+                                    return false;
+                                }
+
+                                var retstr = "";
+
+                                var att_table = document.getElementById("gys_product_class").getElementsByTagName("table");
+                                for (var i = 0; i < att_table.length; i++) {
+                                    retstr += att_table[i].getAttribute("id") + "||||";
+
+                                    var att_tr = att_table[i].getElementsByTagName("tr");
+                                    for (var j = 0; j < att_tr.length; j++) {
+                                        retstr += att_tr[j].getAttribute("id") + "^^^^";
+
+                                        var att_td = att_tr[j].getElementsByTagName("td")[2];
+                                        var att_input = att_td.getElementsByTagName("input");
+
+                                        for (var k = 0 ; k < att_input.length; k++) {
+                                            if (att_input[k].type == "checkbox" && att_input[k].checked) {
+                                                retstr += att_input[k].value + "####";
+                                            }
+                                            if (att_input[k].type == "text") {
+
+                                                if (att_input[k].value.indexOf("||||") > -1 || att_input[k].value.indexOf("^^^^") > -1 || att_input[k].value.indexOf("####") > -1 || att_input[k].value.indexOf("****") > -1 || att_input[k].value.indexOf("$$$$") > -1) {
+                                                    alert("不能包含非法字符！");
+                                                    att_input[k].focus();
+                                                    return false;
+                                                }
+                                                if (att_input[k].value != "在这里输入...") {
+                                                    retstr += att_input[k].value + "####";
+                                                } else {
+                                                    retstr += "" + "####";
+                                                }
+                                            }
+                                        }
+                                        retstr += "****";
+
+                                    }
+                                    retstr += "$$$$";
+                                }
+                                document.getElementById("sttrsrr").value = retstr;
+
+
+                                var pricestr = "";
+                                var tr_thcontent = document.getElementsByName("tr_th");//价格匹配表头
+                                var trcontent = document.getElementsByName("table_tr");//价格匹配表格内容td
+                                if (trcontent.length > 0) {
+                                    var tdcont = trcontent[0].childNodes.length;
+
+                                    //一个条件作为价格组合--2列
+                                    if (tdcont == 2) {
+                                        pricestr += tr_thcontent[0].childNodes[0].innerHTML + "^^^^";
+                                    }
+
+                                    //两个条件作为价格组合--3列
+                                    if (tdcont == 3) {
+                                        pricestr += tr_thcontent[0].childNodes[0].innerHTML + "||||" + tr_thcontent[0].childNodes[1].innerHTML + "^^^^";
+                                    }
+
+                                    //三个条件作为价格组合--4列
+                                    if (tdcont == 4) {
+                                        pricestr += tr_thcontent[0].childNodes[0].innerHTML + "||||" + tr_thcontent[0].childNodes[1].innerHTML + "||||" + tr_thcontent[0].childNodes[2].innerHTML + "^^^^";
+                                    }
+
+                                    //trcontent.length==>价格匹配总行数
+                                    for (i = 0; i < trcontent.length; i++) {
+                                        var tdcontent = trcontent[i].childNodes;
+
+                                        //一个条件作为价格组合--2列
+                                        if (tdcont == 2) {
+                                            if (!((tdcontent[1].getElementsByTagName("input")[0].value).match(pricerg)) || tdcontent[1].getElementsByTagName("input")[0].value == 0) {
+                                                $("#priceerrormessage").html("价格填写有误!");
+                                                $("#contenerror").html("商品属性-->价格匹配填写有误");
+                                                tdcontent[1].getElementsByTagName("input")[0].focus();
+                                                return false;
+                                            }
+                                            else {
+                                                $("#priceerrormessage").html("");
+                                            }
+
+                                            pricestr += tdcontent[1].getElementsByTagName("input")[0].value + "####" + tdcontent[0].innerHTML + "&&&&";
+                                        }
+
+                                        //两个条件作为价格组合--3列
+                                        if (tdcont == 3) {
+
+                                            if (!((tdcontent[2].getElementsByTagName("input")[0].value).match(pricerg)) || tdcontent[2].getElementsByTagName("input")[0].value == 0) {
+                                                $("#priceerrormessage").html("价格填写有误!");
+                                                $("#contenerror").html("商品属性-->价格匹配填写有误");
+                                                tdcontent[2].getElementsByTagName("input")[0].focus();
+                                                return false;
+                                            }
+                                            else {
+                                                $("#priceerrormessage").html("");
+                                            }
+
+                                            pricestr += tdcontent[2].getElementsByTagName("input")[0].value + "####" + tdcontent[0].innerHTML + "||||" + tdcontent[1].innerHTML + "&&&&";
+                                        }
+
+                                        //两个条件作为价格组合--3列
+                                        if (tdcont == 4) {
+
+                                            if (!((tdcontent[3].getElementsByTagName("input")[0].value).match(pricerg)) || tdcontent[3].getElementsByTagName("input")[0].value == 0) {
+                                                $("#priceerrormessage").html("价格填写有误!");
+                                                $("#contenerror").html("商品属性-->价格匹配填写有误");
+                                                tdcontent[3].getElementsByTagName("input")[0].focus();
+                                                return false;
+                                            }
+                                            else {
+                                                $("#priceerrormessage").html("");
+                                            }
+
+                                            pricestr += tdcontent[3].getElementsByTagName("input")[0].value + "####" + tdcontent[0].innerHTML + "||||" + tdcontent[1].innerHTML + "||||" + tdcontent[2].innerHTML + "&&&&";
+                                        }
+                                    }
+                                    //alert(pricestr);
+                                    document.getElementById("pricesttrsrr").value = pricestr;
+                                }
+                            }
+
+                        </script>
+                    </div>
+                    <div style="width: 300px; float: right;padding:20px 0 20px 0;">
+                        <input type="button" value="上一步" class="index_online_btn" onclick="preStep(2)">
+                        <input type="button" value="下一步" class="index_online_btn" onclick="nextStep(2)">
+                    </div>
+                </li>
+
+            </ul>
+            <ul>
+                <li>
+                    <div class="product_add_textarabox">
+                        <div class="product_add_toptitle">售后服务：</div>
+                        @Html.TextAreaFor(model => model.商品数据.售后服务, new { style = "width: 698px; height: 400px; visibility: hidden; padding-left: 110px;", id = "content2" })
+                    </div>
+                    <div style="width: 700px; float: right;padding:20px 0 20px 0; margin: 0 auto;">
+                        <div style="width: 400px; float: left">
+                            <span id="contenerror" style=" padding-left:20px; color:red; font-weight:normal; width: 200px;"></span>
+                        </div>
+
+                        <div style="width: 300px; float: left">
+                            <input type="button" value="上一步" class="index_online_btn" onclick="preStep(3)">
+                            <input type="submit" name="submitcontent" class="index_online_btn" value="完成" onclick="return getatt();" @*onclick="getpropertystr();"*@ />
+                            @*<input type="button" value="完成" class="index_online_btn" onclick="">*@
+                            <br />
+                            <span id="contenerror" style="color:red; font-weight:normal; width: 200px;"></span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <input id="picture" type="hidden" name="pro_imgstr" value="" style="width:500px; height:100px;" />
+    </div>
+    <script type="text/javascript">
+        function filechange() {
+            document.forms["upload"].submit();
+            $("#product_tabmenu_content").css({ "height": "auto" });
+            $("#f").show();
+            $("#f1").show();
+        }
+        function setTableInnerHTML(table, html) {
+            if (navigator && navigator.userAgent.match(/msie/i)) {
+                var temp = table.ownerDocument.createElement('div');
+                temp.innerHTML = '<table><tbody>' + html + '</tbody></table>';
+                if (table.tBodies.length == 0) {
+                    var tbody = document.createElement("tbody");
+                    table.appendChild(tbody);
+                }
+                table.replaceChild(temp.firstChild.firstChild, table.tBodies[0]);
+            } else {
+                table.innerHTML = html;
+            }
+        }
+        function GetPriceList() {
+            var retstr = "<tr><th width='200'>颜色</th><th width='300'>尺码</th><th width='298'>价格</th></tr>";
+            var test = document.getElementsByName("color");
+            for (i = 0; i < test.length ; i++) {
+                if (test[i].type == "checkbox" && test[i].checked) {
+                    var testsize = document.getElementsByName("size");
+                    for (j = 0; j < testsize.length ; j++) {
+                        if (testsize[j].type == "checkbox" && testsize[j].checked) {
+                            document.getElementById("pricelist").style.display = 'block';
+                            retstr += "<tr><td>" + test[i].value + "</td><td>" + testsize[j].value + "</td><td><input type=text /></td></tr>"
+                        }
+                    }
+                }
+            }
+            var tablecontent = document.getElementById("pricelist");
+            setTableInnerHTML(tablecontent, retstr);
+        }
+        function change_tbl(obj) {
+            var tabs = obj.parentNode.getElementsByTagName("li");
+            //var tabs = document.getElementById("tab").getElementsByTagName("li");
+            var divs = document.getElementById("product_tabmenu_content").getElementsByTagName("ul");
+            for (var i = 0; i < tabs.length; i++) {
+                if (tabs[i] == obj) {
+                    tabs[i].className = "cli";
+                    divs[i].className = "fdiv";
+                }
+                else {
+                    tabs[i].className = "";
+                    divs[i].className = "";
+                }
+            }
+            if (obj.id == "1") {
+                $("#Uppicture").css({ "display": "inline", "height": "20px" });
+                $("#product_tabmenu_content").css({ "height": "250px" });
+            }
+            else {
+                $("#Uppicture").css({ "display": "none", "height": "20px" });
+                $("#product_tabmenu_content").css({ "height": "auto" });
+            }
+        }
+        $(function () {
+            $('input[name="销售信息.价格"]').blur(function () {
+                var pricerg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
+                var stepcheckparm = $('input[name="销售信息.价格"]');
+                if ($.trim(stepcheckparm.val()) == "" || !(stepcheckparm.val().match(pricerg)) || stepcheckparm.val() == 0) {
+                    $("#p_price").show();
+                    $(stepcheckparm).focus();
+                }
+                else {
+                    $("#p_price").hide();
+                }
+            });
+
+            $("#新增商品信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#新增商品信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+        $(document).ready(function () {
+            $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+            $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+        });
+        //function fileChange() {
+        //    //$("form[name='upload']").submit();
+        //}
+        function setPic(th) {
+            var str = "<table>";
+            var path = $(th).val();
+            var path1 = path.split('|');
+            var row = parseInt((path1.length - 1) / 4);
+            var maintain = parseInt((path1.length - 1) % 4);
+            var count = 0;
+            if (row > 0) {
+                for (var i = 0; i < row; i++) {
+                    str += "<tr>";
+                    for (var j = 0; j < 4; j++) {
+                        str += "<td><a href='###' title='删除' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; background-color:red; width:15px; height:15px; line-height:15px; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />" +
+                            "</td>"
+                        count++;
+                    }
+                    str += "</tr>";
+                }
+            }
+            if (maintain > 0) {
+                str += "<tr>";
+                for (var m = 0; m < maintain; m++) {
+                    str += "<td><a href='###' title='删除' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />"
+                        + "</td>";
+                    count++;
+                }
+                str += "</tr>";
+            }
+            str += "</table>";
+            document.getElementById("pBox").innerHTML = str;
+            $("#f").hide();
+            $("#f1").hide();
+        }
+        function delPic(th) {
+            var path = $(th).attr("lang");
+            $.get('/供应商后台/DeleteImages', { n: path },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            var newpath = document.getElementById("picture").value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
+                }
+            }
+            document.getElementById("picture").value = str;
+            setPic("#picture");
+        }
+        function hidebox() {
+            $("div#f").hide(500);
+        }
+    </script>
+}

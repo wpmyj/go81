@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "申请军采通会员";
+    Layout = "~/Views/默认主题/_Shared/_Layout.cshtml";
+}
+<div style="padding: 80px 244px;"> 
+    @if ((int)ViewData["Trade_Status"] == 1) //后台返回充值成功状态
+    {
+        <div style="width: 250px;margin:0 auto">
+            <div style="width:80px;height: 69px;float:left; background: url(../Images/alert-comfirm.png) 0 -75px no-repeat "></div>
+            <div style="margin-left: 15px;color: #4D921F;line-height: 70px;font-size: 30px;float: left;">充值成功！</div>
+        </div>
+        <div style="padding-left: 235px;margin: 80px auto;font-size: 13px;text-align: left;clear: both;">
+            您已经在西南物资采购网上成功充值<span style="font-size: 20px;color: red">@ViewData["result"]</span>元。<a href="/供应商后台/AccountInfoManage" style="text-decoration: underline;color: #165AB1">查看我的余额>></a>
+        </div>
+    }
+    else    // 后台返回充值未成功状态
+    {
+        <div style="width: 250px;margin:0 auto">
+            <div style="width:80px;height: 69px;float:left; background: url(../Images/alert-comfirm.png) 15px -5px no-repeat "></div>
+            <div style="margin-left: 15px;color:#484947;line-height: 70px;font-size: 30px;float: left;">充值失败！</div>
+        </div>
+        @*<div style="width: 435px;margin: 80px auto;font-size: 13px;text-align: right;clear: both;">
+            请联系网站客服<span style="font-size: 20px;color: red">@ViewData["result"]</span>元。<a href="/供应商后台/AccountInfoManage" style="text-decoration: underline;color: #165AB1">查看我的余额>></a>
+        </div>*@
+    } 
+      
+
+    @*@ViewData["result"].ToString()*@   
+
+</div>

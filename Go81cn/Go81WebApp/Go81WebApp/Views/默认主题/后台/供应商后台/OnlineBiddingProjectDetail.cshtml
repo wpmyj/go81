@@ -1,0 +1,341 @@
+﻿@model Go81WebApp.Models.数据模型.竞标数据模型.网上竞标
+@{
+    ViewBag.Title = "网上竞价项目详情";
+    Layout = "_BackLayout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="gys_znxx_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">商品竞价</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div class="gys_znxx_contentbox">
+                <div class="gys_znxx_content">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="15%" style="text-align:right">项目编号：</td>
+                            <td>@Model.项目编号</td>
+                            <td width="15%" style="text-align:right">项目名称：</td>
+                            <td>@Model.项目名称</td>
+                            @*<td rowspan="5" style="text-align:center;"><img width="180px" height="150px" src="@Model.商品图片" alt="@Model.商品名称" /></td>*@
+                        </tr>
+                        <tr>
+                            <td width="15%" style="text-align:right">商品名称：</td>
+                            <td>@Model.商品名称 </td>
+                            <td width="15%" style="text-align:right">参考品牌：</td>
+                            <td>@Model.参考品牌</td>
+                        </tr>
+                        <tr>
+                            <td width="15%" valign="top" style="text-align:right;line-height:30px">商品描述：</td>
+                            <td colspan="3">@Model.商品描述</td>
+                        </tr>
+                        <tr>
+                            <td width="15%" style="text-align:right">商品型号：</td>
+                            <td>@Model.商品型号</td>
+                            <td width="15%" style="text-align:right">商品需求数量：</td>
+                            <td>@Model.商品需求数量</td>
+                        </tr>
+                        <tr>
+                            <td width="15%" style="text-align:right">计量单位：</td>
+                            <td>@Model.计量单位</td>
+                            <td width="15%" style="text-align:right">预算金额：</td>
+                            <td>@Model.起始价格</td>
+                        </tr>
+                        <tr>
+                            <td width="15%" style="text-align:right">报价结束时间：</td>
+                            <td>
+                                @Model.报价结束时间
+                                @{
+                                    string dateDiff = null;
+                                    TimeSpan ts1 = new TimeSpan(Model.报价结束时间.Ticks);
+                                    TimeSpan ts2 = new TimeSpan(DateTime.Now.Ticks);
+                                    TimeSpan ts = ts2.Subtract(ts1).Duration();
+                                    if (ts.Days > 0)
+                                    {
+                                        dateDiff = ts.Days.ToString() + "天" + (ts.Hours < 10 ? "0" + ts.Hours.ToString() : ts.Hours.ToString()) + "时" + (ts.Minutes < 10 ? "0" + ts.Minutes.ToString() : ts.Minutes.ToString()) + "分" + (ts.Seconds < 10 ? "0" + ts.Seconds.ToString() : ts.Seconds.ToString()) + "秒";
+                                    }
+                                    else
+                                    {
+                                        dateDiff = (ts.Hours < 10 ? "0" + ts.Hours.ToString() : ts.Hours.ToString()) + "时" + (ts.Minutes < 10 ? "0" + ts.Minutes.ToString() : ts.Minutes.ToString()) + "分" + (ts.Seconds < 10 ? "0" + ts.Seconds.ToString() : ts.Seconds.ToString()) + "秒";
+                                    }
+                                }
+                                <span style="padding-left:50px;color:red" id="countTime">离报价结束还有 @dateDiff</span>
+                            </td>
+                            <td width="15%" style="text-align:right">售后服务要求：</td>
+                            <td>@Model.售后服务要求</td>
+                        </tr>
+                        <tr>
+                            <td width="15%" style="text-align:right">联系人：</td>
+                            <td>@Model.联系方式.联系人</td>
+                            <td width="15%" style="text-align:right">联系电话：</td>
+                            <td>@Model.联系方式.手机</td>
+                        </tr>
+                        <tr>
+                            <td width="15%" style="text-align:right">送货地址：</td>
+                            <td>@Model.送货地址</td>
+                            <td width="15%" style="text-align:right">交货时间：</td>
+                            <td>@Model.交货时间</td>
+                        </tr>
+                        <tr>
+                            <td width="15%" style="text-align:right">维保质保要求：</td>
+                            <td>@Model.维保质保要求</td>
+                            <td width="15%" style="text-align:right">备注：</td>
+                            <td>@Model.备注</td>
+                        </tr>
+                        <tr>
+                            <td width="15%" style="text-align:right">我的报价：</td>
+                            @{
+                                var g = Model.报价供应商列表.Find(o => o.报价供应商.用户ID == long.Parse(ViewData["供应商ID"].ToString()));
+                                if (g != null)
+                                {
+                                    <td colspan="3" style="color:red" id="quote">￥@g.报价  &nbsp;&nbsp;(价税费总计：￥@(g.报价*Model.商品需求数量*g.税率+g.报价*Model.商品需求数量+g.运杂费+g.其他费用))</td>
+                                }
+                                else
+                                {
+                                    <td colspan="3" style="color:red;" id="quote">尚未报价</td>
+                                }
+                            }
+                        </tr>
+                       
+                    </table>
+                    <div style="text-align:center;line-height:50px;">
+                        @if (g != null)
+                        {
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="text-indent:4em">报价：<input id="bj-price" placeholder="必填" onkeyup="ComputeTotal(this)" style="height:25px;text-indent: 5px;" type="text" value="@g.报价" /></td>
+                                    <td style="text-indent:4em" colspan="2">税率：<input id="bj-tax" placeholder="可选" onkeyup="ComputeTax(this)" style="height:25px;text-indent: 5px;" type="text" value="@g.税率" /><strong style="color:red;text-indent:5px;">注：请输入数字或小数(不要输入百分比如3%)</strong></td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td style="text-indent:4em">金额：<input id="totalprice" placeholder="必填" style="height:25px;text-indent: 5px;" type="text" value="@(g.报价*Model.商品需求数量)" /></td>
+                                    <td style="text-indent:4em">税额：<input id="taxprice" placeholder="可选" style="height:25px;text-indent: 5px;" onkeyup="Forbiden(this)" type="text" value="@(g.税率*g.报价*Model.商品需求数量)" /></td>
+                                    <td style="text-indent:2em">价税合计：<input id="bj-total" onkeyup="NoPrice(this)" placeholder="必填" style="height:25px;text-indent: 5px;" type="text" value="@((1+g.税率)*g.报价*Model.商品需求数量)" /></td>                                                            
+                                </tr>
+                                <tr>
+                                    <td style="text-indent:3em">运杂费：<input id="bj-frei" placeholder="可选" style="height:25px;text-indent: 5px;" type="text" value="@g.运杂费" /></td>
+                                    <td style="text-indent:2em">其他费用：<input id="bj-other" placeholder="可选" style="height:25px;text-indent: 5px;" type="text" value="@g.其他费用" /></td>
+                                    <td style="text-indent:2em">发货地点：<input id="sendaddress" placeholder="可选" style="height:25px;text-indent: 5px;" type="text" value="@g.发货地点" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-indent:2em;" valign="top" colspan="3">报价说明：<textarea id="bj-note" placeholder="可选" style="width:780px;height:145px; max-width:795px;max-height:145px; vertical-align:top">@g.备注</textarea></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-indent:2em;" valign="top" colspan="3">售后服务：<textarea id="bj-shfw" placeholder="可选" style="width:780px;height:145px; max-width:795px;max-height:145px; vertical-align:top">@g.售后服务</textarea></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="3" style="text-align:center;padding:5px;"><input type="button" style="height: 33px; width: 150 px;" class="btn-base" id="bj-btn" value="报    价" /></td>
+                                </tr>
+                            </table>
+                        }
+                        else
+                        {
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="text-indent:4em">单价：<input id="bj-price" onkeyup="ComputeTotal(this)" placeholder="必填" style="height:25px;text-indent: 5px;" type="text" /></td>
+                                    <td style="text-indent:4em" colspan="2">税率：<input id="bj-tax" onkeyup="ComputeTax(this)" placeholder="可选" style="height:25px;text-indent: 5px;" type="text" /><strong style="color:red;text-indent:5px;">注：请输入数字或小数(不要输入百分比如3%)</strong></td>
+                                    
+                                    
+                                 </tr>
+                                <tr>
+                                    <td style="text-indent:4em">金额：<input id="totalprice" placeholder="必填" style="height:25px;text-indent: 5px;" type="text" /></td>
+                                    <td style="text-indent:4em">税额：<input id="taxprice" onkeyup="Forbiden(this)" placeholder="可选" style="height:25px;text-indent: 5px;" type="text" /></td>
+                                    <td style="text-indent:2em">价税合计：<input id="bj-total" onkeyup="NoPrice(this)" placeholder="必填" style="height:25px;text-indent: 5px;" type="text" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-indent:3em">运杂费：<input id="bj-frei" placeholder="可选" style="height:25px;text-indent: 5px;" type="text" /></td>
+                                    <td style="text-indent:2em">其他费用：<input id="bj-other" placeholder="可选" style="height:25px;text-indent: 5px;" type="text" /></td>
+                                    <td style="text-indent:2em">发货地点：<input id="sendaddress" placeholder="可选" style="height:25px;text-indent: 5px;" type="text" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-indent:2em;" valign="top" colspan="3">报价说明：<textarea id="bj-note" placeholder="可选" style="width:780px;height:145px; max-width:795px;max-height:145px; vertical-align:top"></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-indent:2em;" valign="top" colspan="3">售后服务：<textarea id="bj-shfw" placeholder="可选" style="width:780px;height:145px; max-width:795px;max-height:145px; vertical-align:top"></textarea></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="3" style="text-align:center;padding:5px;"><input type="button" style="height: 33px; width: 150px;" class="btn-base" id="bj-btn" value="报    价" /></td>
+                                </tr>
+                            </table>
+                        }
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+
+    //计算金额
+    function ComputeTotal(e){
+        var account=$(e).val(),    //单价
+            count=@Model.商品需求数量;
+        totalPrice=parseFloat(account!=""?account:0)* count;
+
+           
+        if(isNaN(totalPrice)){
+            alert("请输入正确的价格！");
+            $(e).val("");
+            $("#totalprice").val("");
+            return false;
+        }
+        var taxprice=$("#taxprice").val();//税额
+        var jss=parseFloat(totalPrice)+parseFloat(taxprice!=""?taxprice:0);
+        $("#totalprice").val(totalPrice);
+        $("#bj-total").val(jss);
+    }
+
+    //计算税额
+    function ComputeTax(e){
+        var account=$("#bj-price").val();//单价
+            count=@Model.商品需求数量;
+        if(account!=""){
+            var taxpercent= $(e).val();        //税率
+            taxper=account*count*taxpercent;
+            if(isNaN(taxper)){
+                alert("请输入正确的税率！");
+                $(e).val("");
+                $("#taxprice").val("");
+                return false;
+            }
+            $("#taxprice").val(taxper);
+            $("#bj-total").val(parseFloat($("#totalprice").val())+parseFloat(taxper));
+        }
+        else{
+            alert("请先输入单价！");
+            $(e).val("");
+        }
+    }
+    //防止未输入税率而只输入了税额
+    function Forbiden(e){
+        var tax=$("#bj-tax").val();
+        if(tax=="" || tax ==null){
+            alert("请输入税率！");
+            $(e).val("");
+        }
+    }
+
+
+    //防止未输入税率和单价而输入价税合计
+    function NoPrice(e){
+        var price=$("#bj-price").val();
+        var tax=$("#bj-tax").val();
+        if(price=="" || price==null ){
+            alert("请输入报价！");
+            $(e).val("");
+            return false;  
+        }
+        if(tax=="" || tax==null){
+            alert("请输入税率！");
+            $(e).val("");
+            return false;
+        }
+    }
+
+    //报价操作
+    $("#bj-btn").click(function () {
+        if(confirm("对于本次报价，请您确保已有现货，否则承担相关一切法律责任，同意请继续！")){
+            var $this =$(this);
+            var price = $("#bj-price").val(); //报价
+            var notes= $("#bj-note").val();    //报价说明
+            var tax= $("#bj-tax").val();    //税率
+            var frei= $("#bj-frei").val();    //运杂费
+            var shfu=$("#bj-shfw").val();//售后服务
+            var other=$("#bj-other").val();//其他费用
+            var sadress=$("#sendaddress").val();//发货地点
+
+            var jshj=$("#bj-total").val();//价税合计
+            var jsfhj=parseFloat(jshj)+(frei!=""?parseFloat(frei):0)+(other!=""?parseFloat(other):0);//价税费总计
+            if (price != null && price != "") {
+                $.ajax({
+                    url: '/供应商后台/GysQuote',
+                    data:{id:@Model.Id,price:price,notes:notes,tax:tax,frei:frei,shfu:shfu,other:other,sadress:sadress},
+                    success:function(data){
+                        if(data.indexOf("成功")>=0){
+                            $("#quote").html("￥"+price +"              (价税费总计：￥"+jsfhj+")");
+                            //$this.parents("table").find("input[type='text']").each(function(){
+                            //    $(this).val("");
+                            //});
+                            //$("#bj-note").val("");
+                            //$("#bj-shfw").val("");
+                            alert("报价成功！");
+                        }
+                        else{
+                            $("#bj-price").val("");
+                            $("#bj-note").val("");
+                            alert(data);
+                        }
+                    },
+                });
+            }
+            else{
+                alert("请输入您的报价！");
+                return false;
+            }
+        }
+    });
+
+    function countDown(year, month, day, hour, minute, second, isnum) {
+        var now = new Date();
+        var endDate = new Date(year, month - 1, day, hour, minute, second);
+        var leftTime = endDate.getTime() - now.getTime();//时间差的毫秒数
+        var leftsecond = parseInt(leftTime / 1000);
+        //var day1=parseInt(leftsecond/(24*60*60*6));
+        var day1 = Math.floor(leftsecond / (60 * 60 * 24));//计算出相差天数
+        var hour = Math.floor((leftsecond - day1 * 24 * 60 * 60) / 3600);//计算相差小时数
+        hour = zeroOccupy(hour);
+        var minute = Math.floor((leftsecond - day1 * 24 * 60 * 60 - hour * 3600) / 60);//计算相差分钟数
+        minute = zeroOccupy(minute);
+        var second = Math.floor(leftsecond - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);//计算相差秒数
+        second = zeroOccupy(second);
+        var time = "";
+        if (day1 > 0) {
+            time = isnum ? hour + ":" + minute + ":" + second : day1 + "天" + hour + "时" + minute + "分" + second + "秒";
+        }
+        else {
+            time = isnum ? hour + ":" + minute + ":" + second : hour + "时" + minute + "分" + second + "秒";
+        }
+        return time;
+    }
+    function zeroOccupy(num) {
+        var number;
+        if (num < 10) {
+            number = "0" + num;
+        }
+        else {
+            number = num;
+        }
+        return number;
+    }
+    function cSplit(splittime) {
+        var date = splittime.split(" ")[0];
+        var year = date.split("-")[0];
+        var month = date.split("-")[1];
+        var day = date.split("-")[2];
+        var time = splittime.split(" ")[1];
+        var hours = time.split(":")[0];
+        var minute = time.split(":")[1];
+        var second = time.split(":")[2];
+        var arr = new Array(year, month, day, hours, minute, second);
+        return arr;
+    }
+
+    $(function () {
+        var endTime = cSplit("@Model.报价结束时间.ToString("yyyy-MM-dd HH:mm:ss")");
+        setInterval(function () {
+            dateTime = countDown(endTime[0], endTime[1], endTime[2], endTime[3], endTime[4], endTime[5], false); //报价结束时间倒计时
+            $("#countTime").html("离报价结束还有 "+dateTime);
+        },1000);
+        $("#参与竞价项目").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#参与竞价项目").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

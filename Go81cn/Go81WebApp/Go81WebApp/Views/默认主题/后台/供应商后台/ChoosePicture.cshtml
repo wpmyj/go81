@@ -1,0 +1,399 @@
+﻿@{
+    ViewBag.Title = "选择展示商品";
+    Layout = "_BackLayout.cshtml";
+}
+@using Go81WebApp.Models.数据模型.商品数据模型;
+@using Go81WebApp.Models.数据模型.用户数据模型;
+<style>
+    #pager {
+        text-align: center;
+    }
+
+        #pager a {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+            line-height: 25px;
+            font-size: 12px;
+            height: 25px;
+            border: 1px solid rgb(204, 204, 204);
+            margin-top: 10px;
+            margin-left: 5px;
+            margin-right: auto;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+            #pager a:hover {
+                background-color: rgb(243, 243, 243);
+            }
+
+    #picBox {
+        position: fixed;
+        bottom: 0px;
+        height: auto;
+        width: auto;
+        border: 1px solid #BABABA;
+        left: 10px;
+        right: auto;
+    }
+</style>
+<div id="f">
+    <div style="position:fixed; z-index:5; top:0px; left:0px; text-align:center; right:0; bottom:0px; background-color:black; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50); height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="position:fixed; left:0px; top:20%; width:100%;z-index:20;">
+        <div style="width:500px; position:relative; z-index:30; border:1px solid red; margin:0px auto; height:200px; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox()">×</a></div>
+            <div style="float:right; width:100%; height:100px; text-align:center; line-height:100px;"><em style="color:red;">服务结束前，您可以更换广告商品</em></div>
+        </div>
+    </div>
+</div>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div id="title_div" class="gys_xttz_topbg">
+
+            <div class="index_bottom_zb_top_title">
+                选择展示商品
+                @if (ViewData["name"].ToString() == "商务会员")
+                {
+                    <span style="color:red;">【您最多可以选择6个展示商品】</span>
+                }
+                else if (ViewData["name"].ToString() == "标准会员")
+                {
+                    <span style="color:red;">【您最多可以选择3个展示商品】</span>
+                }
+                else if (ViewData["name"].ToString() == "企业推广服务B1-2位置")
+                {
+                    <span style="color:red;">【您最多可以选择6个展示商品】</span>
+                }
+                else if (ViewData["name"].ToString() == "企业推广服务B1-1位置")
+                {
+                    <span style="color:red;">【您最多可以选择3个展示商品】</span>
+                }
+                else
+                {
+                    <span></span>
+                }
+            </div>
+        </div>
+        <div id="good">
+        </div>
+        <div id="pager">
+        </div>
+        @{
+            string ids = "";
+            if (ViewData["pics"] != "")
+            {
+                List<供应商._供应商用户信息._广告商品> pic = ViewData["pics"] as List<供应商._供应商用户信息._广告商品>;
+                if (pic != null && pic.Count != 0)
+                {
+                    foreach (var item in pic)
+                    {
+                        ids += item.商品.商品ID + ",";
+                    }
+                }
+            }
+        }
+        <input type="hidden" id="UserId" name="id" value="@ViewData["id"]" />
+        <input type="hidden" id="picture" name="pics" value="@ids" />
+        <input type="hidden" id="info" name="info" value="@ViewData["type"]" />
+        <input type="hidden" id="name" name="name" value="@ViewData["name"]" />
+    </div>
+</div>
+<div id="picBox" style="background-color:white;">
+    @if (ViewData["pics"] != "")
+    {
+        List<供应商._供应商用户信息._广告商品> pic = ViewData["pics"] as List<供应商._供应商用户信息._广告商品>;
+        if (pic != null && pic.Count != 0)
+        {
+            foreach (var item in pic)
+            {
+                <span style="display:inline-block; background-color:white; width:auto; height:auto;">
+                    <span style="text-align:center; margin-top:5px; display:block;" class="imgbox">
+                        <a href="/商品陈列/Product_Detail?id=@item.商品.商品ID">
+                            @if (item.商品.商品.商品信息.商品图片 != null && item.商品.商品.商品信息.商品图片.Count != 0)
+                            {
+                                <img src="@item.商品.商品.商品信息.商品图片.ElementAt(0)" height="170" width="150" style="width: 80px; height: 100px;">
+                            }
+                            else
+                            {
+                                <img src="~/Images/noimage.jpg" height="170" width="150" style="width: 80px; height: 100px;">
+                            }
+                        </a>
+                    </span><span style="color:red;font-size:14px; padding-left:15px;  font-weight:bold; height:25px; display:block; line-height:25px;">￥@item.商品.商品.销售信息.价格</span><span style="display:block; padding-left:15px; font-size:13px; width:150px; height:25px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">@item.商品.商品.商品信息.商品名</span><span style="display:block; padding-left:15px; font-size:13px; width:150px; height:25px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">展示商品</span><a lang="1936" onclick="delId(this,@item.商品.商品ID)" style="color:red; float:right;padding-right:10px;  font-size:14px; cursor:pointer;">删除</a>
+                </span>
+            }
+        }
+    }
+</div>
+<script type="text/javascript" language="javascript">
+    var strId =$("#picture").val();
+    function initial() {
+        var checks = document.getElementsByName("cid");
+        var strID = strId.split(',');
+        for (var i = 0; i < strID.length - 1; i++) {
+            for (var j = 0; j < checks.length; j++) {
+                if (checks[j].value == strID[i]) {
+                    checks[j].checked = true;
+                    checks[j].disabled = true;
+                }
+            }
+        }
+    }
+    function setPage(pgCount, currentPage) {
+        if (pgCount <= 6) {
+            str = '';
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (currentPage < 6) {
+                if (currentPage != 1) {
+                    var str = "<a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a>";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a  onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
+                    $("div#pager").html(str);
+                }
+                else {
+                    var str = "";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a  onclick='getGoods(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
+                    $("div#pager").html(str);
+                }
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                var str = "<a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a><a onclick='getGoods(" + (1) + ")'>1</a>...";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
+                $("div#pager").html(str);
+            }
+            else if (currentPage >= pgCount - 3) {
+                str = "<a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a><a onclick='getGoods(" + 1 + ")'>1</a>...";
+                for (var i = pgCount - 5 + 1; i < pgCount; i++) {
+                    str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                }
+                str += "<a onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    var userId = $("#UserId").val();
+    var type=$("#info").val();
+    var name=$("#name").val();
+    function getGoods(page) {
+        $.get('/供应商后台/GoodList', { p: page, id: userId }, function (data) {
+            setPage(data.Data.Pcount, data.Data.Cpage);
+            var row = parseInt(data.Data.Newgood.length / 4);
+            var left = parseInt(data.Data.Newgood.length % 4);
+            var number = 0;
+            var str = "<table style='margin-left:40px;' cellspacing='20'>";
+            if (row > 0) {
+                for (var i = 0; i < row; i++) {
+                    str += "<tr>";
+                    for (var j = 0; j < 4; j++) {
+                        str += "<td style='width:202px; height:auto; border-style:solid; border-width:1px; border-color:#CCC;'>"
+                            + "<span style='text-align:center; margin-top:5px; display:block;' class='imgbox'>"
+                                + "<a href='/商品陈列/Product_Detail?id=" + data.Data.Newgood[number].Id + "'>"
+                        if (data.Data.Newgood[number].Picture != "") {
+                            str += "<img src='" + data.Data.Newgood[number].Picture + "' height='170' width='150' />";
+                        }
+                        else {
+                            str += "<img src='~/Images/noimage.jpg' height='170' width='150' />";
+                        }
+                        str += "</a></span><span style='color:red;font-size:14px; padding-left:15px;  font-weight:bold; height:25px; display:block; line-height:25px;'>￥" + data.Data.Newgood[number].Price + "</span><span style='display:block; padding-left:15px; font-size:13px; width:150px; height:25px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;'>" + data.Data.Newgood[number].name + "</span>";
+                        str += "<span style='display:block; padding-left:15px; font-size:13px; width:150px; height:25px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;'><input type='checkbox' onclick='selectId(this)' name='cid' value='" + data.Data.Newgood[number].Id + "'/>设置展示</span>";
+                        str += "</td>";
+                        number++;
+                    }
+                    str += "</tr>";
+                }
+            }
+            if (left > 0) {
+                str += "<tr>";
+                for (var k = 0; k < left; k++) {
+                    str += "<td style='width:202px; height:auto; border-style:solid; border-width:1px; border-color:#CCC;'>";
+                    if (data.Data.Newgood[number].Picture != "") {
+                        str += "<span style='text-align:center; margin-top:5px; display:block;' class='imgbox'><a href='/商品陈列/Product_Detail?id=" + data.Data.Newgood[number].Id + "'><img src='" + data.Data.Newgood[number].Picture + "' height='170' width='150' /></a></span>";
+                    }
+                    else {
+                        str += "<span style='text-align:center; margin-top:5px; display:block;' class='imgbox'><a href='/商品陈列/Product_Detail?id=" + data.Data.Newgood[number].Id + "'><img src='###' height='170' width='150' /></a></span>";
+                    }
+                    str += "<span style='color:red;font-size:14px; padding-left:15px;  font-weight:bold; height:25px; display:block; line-height:25px;'>￥" + data.Data.Newgood[number].Price + "</span><span style='display:block; padding-left:15px; font-size:13px; width:150px; height:25px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;'>" + data.Data.Newgood[number].name + "</span>";
+                    str += "<span style='display:block; padding-left:15px; font-size:13px; width:150px; height:25px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;'><input type='checkbox' name='cid' onclick='selectId(this)' value='" + data.Data.Newgood[number].Id + "'/>设置展示</span>";
+                    str += "</td>";
+                    number++;
+                }
+                str += "</tr>";
+            }
+            $("#good").html(str);
+            initial();
+        });
+    }
+    function selectId(th) {
+            if(type=="stardard"||type=="static")
+            {
+                if((strId.split(',').length-1)<3)
+                {
+                    strId += th.value + ",";
+                    $("#picBox").css("background-color", "white");
+                    $("#picBox").append("<span style='display:inline-block; background-color:white; width:auto; height:auto;'>" + $(th).parent().parent().html() + "<a lang='" + th.value + "' onclick='delId(this," + th.value + ")' style='color:red; float:right;padding-right:10px;  font-size:14px; cursor:pointer;'>删除</a></span>");
+                    if ($("#picBox").children("span").children("span").children("a").children("img") != undefined) {
+                        $("#picBox").children("span").children("span").children("a").children("img").css({ "width": "80px", "height": "100px" });
+                    }
+                    if ($("#picBox").children("span").children("span").children(":input") != undefined) {
+                        $("#picBox").children("span").children("span").children(":input").remove();
+                    }
+                    th.disabled = true;
+                    if ((strId.split(',').length - 1)<=3||(strId.split(',').length - 1)>=1)
+                    {
+                        $("#pbt").each(function () {
+                            $(this).remove();
+                        });
+                        $("#picBox").append("<a id='pbt' style='display:inline-block; margin-top:10px; width:150px; height:30px; text-align:center; cursor:pointer; vertical-align:top; line-height:30px; border:1px solid gray; color:red; margin-right:10px;' onclick='setShowPic()'>点击设置展示商品</a>");
+                        $("#picBox").show();
+                    }
+                    else
+                    {
+                        $("#picBox").remove();
+                    }
+                }
+                else
+                {
+                    alert('展示商品不能多于3个！');
+                    th.checked = false;
+                }
+            }
+            else if(type=="business"||type=="dynamic")
+            {
+                if((strId.split(',').length-1)<6)
+                {
+                    strId += th.value + ",";
+                    $("#picBox").css("background-color", "white");
+                    $("#picBox").append("<span style='display:inline-block; background-color:white; width:auto; height:auto;'>" + $(th).parent().parent().html() + "<a lang='" + th.value + "' onclick='delId(this," + th.value + ")' style='color:red; float:right;padding-right:10px;  font-size:14px; cursor:pointer;'>删除</a></span>");
+                    if ($("#picBox").children("span").children("span").children("a").children("img") != undefined) {
+                        $("#picBox").children("span").children("span").children("a").children("img").css({ "width": "80px", "height": "100px" });
+                    }
+                    if ($("#picBox").children("span").children("span").children(":input") != undefined) {
+                        $("#picBox").children("span").children("span").children(":input").remove();
+                    }
+                    th.disabled = true;
+                    if ((strId.split(',').length - 1)<=6||(strId.split(',').length - 1)>=1)
+                    {
+                        $("#pbt").each(function () {
+                            $(this).remove();
+                        });
+                        $("#picBox").append("<a id='pbt' style='display:inline-block; margin-top:10px; width:150px; height:30px; text-align:center; cursor:pointer; vertical-align:top; line-height:30px; border:1px solid gray; color:red; margin-right:10px;' onclick='setShowPic()'>点击设置展示商品</a>");
+                        $("#picBox").show();
+                    }
+                    else
+                    {
+                        $("#picBox").remove();
+                    }
+                }
+                else
+                {
+                    alert('展示商品不能多于6个！');
+                    th.checked = false;
+                }
+            }
+    }
+    function delId(th,num)
+    {
+        var checks = document.getElementsByName("cid");
+        for (var i = 0; i < checks.length;i++)
+        {
+            if(checks[i].value==num)
+            {
+                checks[i].checked = false;
+                checks[i].disabled = false;
+            }
+        }
+        $(th).parent().remove();
+        var str = strId.split(',');
+        strId = "";
+        for (var j = 0; j < str.length - 1;j++)
+        {
+            if(str[j]==num)
+            {
+                str[j] = "";
+            }
+        }
+        for (var k = 0; k < str.length;k++)
+        {
+            if(str[k]!="")
+            {
+                strId += str[k]+ ",";
+            }
+        }
+        if($("#pbt")!=undefined)
+        {
+            $("#pbt").remove();
+        }
+        $("#picBox").css("background-color","white");
+        $("#picBox").append("<a id='pbt' style='display:inline-block; margin-top:10px; width:150px; height:30px; text-align:center; cursor:pointer; vertical-align:top; line-height:30px; border:1px solid gray; color:red; margin-right:10px;' onclick='setShowPic()'>点击设置展示商品</a>");
+        if(strId=="")
+        {
+            $("#picBox").hide();
+        }
+        else
+        {
+            $("#picBox").show();
+        }
+    }
+    function setShowPic()
+    {
+        $.get("/供应商后台/setShowPicture", { num: strId,n:name}, function (data) {
+            if(data==1)
+            {
+                alert("成功设置展示商品！");
+                location.reload();
+            }
+            else
+            {
+                alert("设置展示商品失败！");
+            }
+        });
+    }
+   
+    function hidebox() {
+        $("div#f").hide(200);
+    }
+</script>
+@if (ViewData["name"].ToString() == "商务会员" ||ViewData["name"].ToString() == "标准会员"||ViewData["name"].ToString() == "企业推广服务B1-2位置" ||ViewData["name"].ToString() == "企业推广服务B1-1位置")
+{ 
+   <script>
+     $(document).ready(function () {
+        getGoods(1);
+        $("#我订购的服务").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#我订购的服务").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+     });
+   </script>
+}
+else
+{
+    <script>
+        $(document).ready(function () {
+            getGoods(1);
+            $("#商品列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#商品列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+    </script>
+}

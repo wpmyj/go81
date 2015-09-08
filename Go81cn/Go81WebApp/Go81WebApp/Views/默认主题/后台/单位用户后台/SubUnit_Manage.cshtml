@@ -1,0 +1,359 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.培训资料
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.项目数据模型
+@{
+    ViewBag.Title = "附属账号公告、验收单查询";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<style>
+    select {
+        width: 100px;
+    }
+
+    .header {
+        background-color: #207AD6;
+    }
+
+        .header a {
+            display: inline-block;
+            width: 120px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+    .libox ol li {
+        border-bottom: 1px dashed #d0cfcf;
+    }
+
+    li a:hover {
+        color: #207AD6;
+    }
+
+    .selectbox {
+        margin-top: 10px;
+        padding-left: 20px;
+        margin-bottom: 10px;
+    }
+
+    select {
+        height: 30px;
+    }
+
+    #pager, #pager1 {
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+        #pager a, #pager1 a {
+            display: inline-block;
+            width: 100px;
+            text-align: center;
+            line-height: 25px;
+            font-size: 12px;
+            height: 25px;
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: #6CBEFF;
+            color: #fff;
+            opacity: 0.8;
+            margin-left: 5px;
+            text-decoration: none;
+        }
+
+            #pager a:hover, #pager1 a:hover {
+                background-color: #6CBEF0;
+                color: #000;
+                opacity: 0.9;
+            }
+
+    ul {
+        list-style: none;
+        padding: 0px;
+    }
+
+    li span, #ol2 span {
+        display: inline-block;
+        width: 80px;
+        height: 20px;
+        line-height: 25px;
+        text-align: left;
+        padding-right: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    ol {
+        margin-top: 0px;
+    }
+
+    #firstunit {
+        border: 1px solid #ff0000;
+    }
+
+    .gname {
+        display: inline-block;
+        width: 70%;
+    }
+
+    .gtime {
+        display: inline-block;
+        width: 20%;
+        text-align:center;
+    }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="width:78%;margin-bottom:50px;" class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">全部附属账号的采购公告、验收单信息</div>
+            </div>
+        </div>
+        <div style="border:1px solid #999; margin-top:8px;">
+            @{
+                IEnumerable<单位用户> user = ViewData["user"] as IEnumerable<单位用户>;
+            }
+            <input type="hidden" value="" id="selfId" />
+            <div class="selectbox">内容类型：<input type="checkbox" onclick="changeTab()" value="1" alt="#ol1" checked="checked" />采购公告<input type="checkbox" onclick="changeTab()" alt="#ol2" value="2" checked="checked" />验收单</div>
+            <div class="selectbox">
+                下级单位：
+                @if (user.Count() != 0)
+                {
+                    <select id="firstunit" onchange="searchBegin(this)">
+                        <option selected="selected" value="-1">全部</option>
+                        @foreach (var item in user)
+                        {
+                            if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                            {
+                                <option value="@item.Id">@item.单位信息.单位代号</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.单位信息.单位名称</option>
+                            }
+                        }
+                    </select>
+                }
+                else
+                {
+                    <span style="color:#ff0000;">没有下级单位</span>
+                }
+                <input type="button" onclick="searchContent(1)" class="btn-pri" style="display:inline-block;width:80px; height:30px; color:#fff; border:none; cursor:pointer;" value="查询" />
+            </div>
+            <div class="libox">
+                <div class="header"><a onclick="showbox('#ol1')" style="background-color:#D67C24;">采购公告列表</a><a onclick="showbox('#ol2')">验收单列表</a></div>
+                <div class="ol" id="ol1">
+                    <span class="gname" style="text-align:center;font-weight:bold;">采购公告名称</span><span class="gtime" style="font-weight:bold;">发布日期</span>
+                    <ol id="g"></ol>
+                    <div id="pager"></div>
+                </div>
+                <div class="ol" id="ol2" style="display:none;">
+                    <span style="padding-left:40px;font-weight:bold;">生成日期</span><span style="width:180px;font-weight:bold;">供货单位</span><span style="width:180px;font-weight:bold;">收货单位</span><span style="width:180px;font-weight:bold;">审核单位</span><span style="font-weight:bold;">总金额</span><span style="font-weight:bold;">审核状态</span><span style="font-weight:bold;">操作</span>
+                    <ol id="y"></ol>
+                    <div id="pager1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function showbox(th) {
+        $(".ol").hide();
+        $(th).show();
+    }
+    function setPage(pgCount, currentPage, type) {
+        if (pgCount > 0 && pgCount != 1) {
+            if (currentPage > 1) {
+                if (pgCount > currentPage) {
+                    if (type == "2") {
+                        $("#pager1").html("<a href='###' onclick='searchYsd(" + (currentPage - 1) + ")'>上一页</a><a href='###' onclick='searchYsd(" + (currentPage + 1) + ")'>下一页</a><span>" + currentPage + "/" + pgCount + "页</span>");
+                    }
+                    else {
+                        $("#pager").html("<a href='###' onclick='searchAnnounce(" + (currentPage - 1) + ")'>上一页</a><a href='###' onclick='searchAnnounce(" + (currentPage + 1) + ")'>下一页</a><span>" + currentPage + "/" + pgCount + "页</span>");
+                    }
+                }
+                else {
+                    if (type == "2") {
+                        $("#pager1").html("<a href='###' onclick='searchYsd(" + (currentPage - 1) + ")'>上一页</a><a href='###'>下一页</a><span>" + currentPage + "/" + pgCount + "页</span>");
+                    }
+                    else {
+                        $("#pager").html("<a href='###' onclick='searchAnnounce(" + (currentPage - 1) + ")'>上一页</a><a href='###'>下一页</a><span>" + currentPage + "/" + pgCount + "页</span>");
+                    }
+                }
+            }
+            else {
+                if (type == "2") {
+                    $("#pager1").html("<a href='###'>上一页</a><a href='###' onclick='searchYsd(" + (currentPage + 1) + ")'>下一页</a><span>" + currentPage + "/" + pgCount + "页</span>");
+                }
+                else {
+                    $("#pager").html("<a href='###'>上一页</a><a href='###' onclick='searchAnnounce(" + (currentPage + 1) + ")'>下一页</a><span>" + currentPage + "/" + pgCount + "页</span>");
+                }
+            }
+        }
+        else {
+            if (type == "2") {
+                $("#pager1").html("");
+            }
+            else {
+                $("#pager").html("");
+            }
+        }
+    }
+    var select = null;
+    var uid = "";
+    var type = ""
+    function searchYsd(cpage) {
+        var str = "";
+        uid = $("#selfId").val();
+        $.get('/单位用户后台/SearchYsd', { id: uid, skip: cpage }, function (data) {
+            if (type.split(',')[0] == "2" || type.split(',')[1] == "2") {
+                for (var i = 0; i < data.Data.info.length; i++) {
+                    str += "<li><span>" + data.Data.info[i].time + "</span><span style='width:180px;' title='" + data.Data.info[i].supplier + "'>" + data.Data.info[i].supplier + "</span><span style='width:180px;' title='" + data.Data.info[i].reciever + "'>" + data.Data.info[i].reciever + "</span><span style='width:180px;' title='" + data.Data.info[i].checker + "'>" + data.Data.info[i].checker + "</span><span>￥" + data.Data.info[i].money + "</span><span>" + data.Data.info[i].status + "</span><a href='/单位用户后台/AcceptancedDetail?id=" + data.Data.info[i].id + "&comes=验收单' target='_blank'>查看详情</a></li>";
+                }
+                $("#y").html(str);
+                setPage(data.Data.p, cpage, "2");
+            }
+        });
+    }
+    function searchAnnounce(cpage) {
+        var str = "";
+        uid = $("#selfId").val();
+        $.get('/单位用户后台/SearchAnnounce', { id: uid, skip: cpage }, function (data) {
+            for (var i = 0; i < data.Data.info.length; i++) {
+                str += "<li><a class='gname' href='/公告/AnnounceDetail?id=" + data.Data.info[i].id + "'>" + data.Data.info[i].name + "</a><span class='gtime'>" + data.Data.info[i].time + "</span></li>";
+            }
+            $("#g").html(str);
+            setPage(data.Data.p, cpage, "1");
+        });
+    }
+    function searchContent(cpage) {
+        var str = "";
+        type = "";
+        $(":input[type='checkbox']").each(function () {
+            if (this.checked) {
+                type += $(this).val() + ",";
+            }
+        });
+        uid = $("#selfId").val();
+        if (type == "") {
+            alert("请选择要显示的内容类型，如公告或验收单");
+            window.location = "/单位用户后台/SubUnit_Manage";
+        }
+        else {
+            $.get('/单位用户后台/SearchContent', { t: type, id: uid, skip: cpage }, function (data) {
+                if (type.split(',')[0] == "2" && type.split(',')[1] == "") {
+                    for (var i = 0; i < data.Data.info.length; i++) {
+                        str += "<li><span>" + data.Data.info[i].time + "</span><span style='width:180px;' title='" + data.Data.info[i].supplier + "'>" + data.Data.info[i].supplier + "</span><span style='width:180px;' title='" + data.Data.info[i].reciever + "'>" + data.Data.info[i].reciever + "</span><span style='width:180px;' title='" + data.Data.info[i].checker + "'>" + data.Data.info[i].checker + "</span><span>￥" + data.Data.info[i].money + "</span><span>" + data.Data.info[i].status + "</span><a href='/单位用户后台/AcceptancedDetail?id=" + data.Data.info[i].id + "&comes=验收单' target='_blank'>查看详情</a></li>";
+                    }
+                    $("#y").html(str);
+                    setPage(data.Data.p, cpage, "2");
+                }
+                else if (type.split(',')[0] == "1" && type.split(',')[1] == "") {
+                    for (var i = 0; i < data.Data.info.length; i++) {
+                        str += "<li><a  class='gname' href='/公告/AnnounceDetail?id=" + data.Data.info[i].id + "'>" + data.Data.info[i].name + "</a><span class='gtime'>" + data.Data.info[i].time + "</span></li>";
+                    }
+                    $("#g").html(str);
+                    setPage(data.Data.p, cpage, "1");
+                }
+                else {
+                        for (var i = 0; i < data.Data.ysd.length; i++) {
+                            str += "<li><span>" + data.Data.ysd[i].time + "</span><span style='width:180px;' title='" + data.Data.ysd[i].supplier + "'>" + data.Data.ysd[i].supplier + "</span><span style='width:180px;' title='" + data.Data.ysd[i].reciever + "'>" + data.Data.ysd[i].reciever + "</span><span style='width:180px;' title='" + data.Data.ysd[i].checker + "'>" + data.Data.ysd[i].checker + "</span><span>￥" + data.Data.ysd[i].money + "</span><span>" + data.Data.ysd[i].status + "</span><a href='/单位用户后台/AcceptancedDetail?id=" + data.Data.ysd[i].id + "&comes=验收单' target='_blank'>查看详情</a></li>";
+                        }
+                        $("#y").html(str);
+                        setPage(data.Data.yp, cpage, "2");
+
+                    str = "";
+                        for (var i = 0; i < data.Data.g.length; i++) {
+                            str += "<li><a  class='gname' href='/公告/AnnounceDetail?id=" + data.Data.g[i].id + "'>" + data.Data.g[i].name + "</a><span class='gtime'>" + data.Data.g[i].time + "</span></li>";
+                        }
+                        $("#g").html(str);
+                        setPage(data.Data.gp, cpage, "1");
+                }
+            });
+        }
+    }
+    function searchBegin(th) {
+        uid = "";
+        var str = "";
+        select = th;
+        $(th).nextAll().remove();
+        if ($(th).val() != "-1" && $(th).val() != "0") {
+            $.get("/单位用户后台/SearchUnit", { id: $(th).val() }, function (data) {
+                if (data.Data.uid.length != 0) {
+                    str = "<span style='color:red;'>>></span><select  onchange='searchBegin(this)' style='margin-right:5px;'><option value='0'>请选择单位</option><option value='-1'>全部</option>";
+                    for (var j = 0; j < data.Data.uid.length; j++) {
+                        str += "<option value='" + data.Data.uid[j].id + "'>" + data.Data.uid[j].name + "</option>";
+                    }
+                }
+                str += "<input type='button' onclick='searchContent(1)' style='display:inline-block;width:80px; height:30px;background-color: #207AD6; color:#fff; border:none; cursor:pointer;' value='查询' />";
+                $(select).parent("div").append(str);
+            });
+            uid = $(th).val();
+        }
+        else {
+            if ($(th).val() == "-1") {
+                $(th).children("option").each(function () {
+                    if ($(this).val() != "-1" && $(this).val() != "0") {
+                        uid += $(this).val() + ",";
+                    }
+                });
+                str += "<input type='button' onclick='searchContent(1)' style='display:inline-block;width:80px; height:30px;background-color: #207AD6; color:#fff; border:none; cursor:pointer;' value='查询' />";
+                $(select).parent("div").append(str);
+            }
+        }
+        $("#selfId").val(uid);
+        $("select").css("border", "1px solid #C3BCBC");
+        $(th).css("border", "1px solid #ff0000");
+    }
+    $(document).ready(function () {
+        $("#@ViewData["comes"]").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#@ViewData["comes"]").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+
+
+        if ($("select").length > 0) {
+            $("#firstunit").children("option").each(function () {
+                if ($(this).val() != "-1" && $(this).val() != "0") {
+                    uid += $(this).val() + ",";
+                }
+            });
+            $("#selfId").val(uid);
+            searchContent(1);
+        }
+    });
+    $(".header a").click(function () {
+        $(".header a").each(function () {
+            $(this).css({ "background-color": "transparent" });
+        });
+        $(this).css({ "background-color": "#D67C24" });
+    });
+    function changeTab() {
+        type = "";
+        $(".header a").each(function () {
+            $(this).css({ "background-color": "transparent" });
+        });
+        $(":input[type='checkbox']").each(function () {
+            if (this.checked) {
+                type += $(this).val() + ",";
+            }
+        });
+        if (type.split(',')[0] == "2") {
+            $(".header a:eq(1)").css({ "background-color": "#D67C24" });
+            showbox("#ol2");
+            $("#g").html("");
+            $("#pager").html("");
+        }
+        else {
+            $(".header a:eq(0)").css({ "background-color": "#D67C24" });
+            showbox("#ol1");
+            $("#y").html("");
+            $("#pager1").html("");
+        }
+    }
+</script>

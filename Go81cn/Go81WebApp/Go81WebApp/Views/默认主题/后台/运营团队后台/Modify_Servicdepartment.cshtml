@@ -1,0 +1,116 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@{
+    ViewBag.Title = "修改服务机构信息";
+    Layout = "_BackLayout.cshtml";
+}
+<style>
+    table tr td span {
+        font-size: 11px;
+        color: red;
+    }
+</style>
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+@{
+    int index = int.Parse(ViewData["index"].ToString());
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div id="title_div" class="title-base-middle">
+                <div class="title-base-inner">修改售后服务机构</div>
+            </div>
+        </div>
+        <div style="border:1px solid green; margin-top:8px;">
+            <form action="/运营团队后台/Modify_servicdepartment" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="hidden" value="@index" name="index" />
+                <table width="100%" style="margin-left:60px;">
+                    <tr>
+                        <td width="15%" height="30" align="right">服务机构名称：</td>
+                        <td height="30" width="25%">
+                            <input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="售后服务机构列表[0].售后服务机构名称" value="@Model.售后服务机构列表[index].售后服务机构名称"/>
+                        </td>
+                        <td height="30" width="15%" align="right">
+                            服务机构类别：
+                        </td>
+                        <td height="30" width="45%">
+                            <select onmouseover="show_tip(this)" onmouseout="hide_tip(this)" style="width:154px; margin-left:2px;" type="text" onblur="setCatorgray(this)" name="售后服务机构列表[0].售后服务机构类别">
+                                @if (Model.售后服务机构列表[index].售后服务机构类别 == Go81WebApp.Models.数据模型.用户数据模型.供应商.售后服务机构类别.未指定)
+                                {
+                                    <option value="0" selected>未指定</option>
+                                    <option value="1">服务机构</option>
+                                }
+                                else
+                                {
+                                  <option value="0">未指定</option>
+                                  <option value="1" selected>服务机构</option>   
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="30" align="right">
+                            省份：
+                        </td>
+                        <td height="30">
+                            <input type="text" value="@Model.售后服务机构列表[index].所在地.省份" name="售后服务机构列表[0].所在地.省份" value="" onmouseover="show_tip(this)" onmouseout="hide_tip(this)" />
+                        </td>
+                        <td height="30" align="right">城市：</td>
+                        <td height="30">
+                            <input type="text" value="@Model.售后服务机构列表[index].所在地.城市" name="售后服务机构列表[0].所在地.城市" onmouseover="show_tip(this)" onmouseout="hide_tip(this)" />
+                        </td>
+                    <tr>
+                        <td height="30" align="right">
+                            区县：
+                        </td>
+                        <td height="30">
+                            <input type="text" value="@Model.售后服务机构列表[index].所在地.区县" name="售后服务机构列表[0].所在地.区县" onmouseover="show_tip(this)" onmouseout="hide_tip(this)" />
+                        </td>
+                        <td height="30" align="right">联系人：</td>
+                        <td height="30">
+                            <input onmouseover="show_tip(this)" value="@Model.售后服务机构列表[index].负责人联系方式.联系人" onmouseout="hide_tip(this)" type="text" name="售后服务机构列表[0].负责人联系方式.联系人" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="30" align="right">联系手机：</td>
+                        <td height="30">
+                            <input onmouseover="show_tip(this)" value="@Model.售后服务机构列表[index].负责人联系方式.手机" onmouseout="hide_tip(this)" type="text" name="售后服务机构列表[0].负责人联系方式.手机" /><div class="out_box"><div class="arrow"></div><div class="con_box">请填写联系人手机号码，如13214789654</div></div>
+                        </td>
+                    </tr>
+                </table>
+                <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("a.modify").click(function () { $(".company_msg :text,.company_msg :checkbox,.company_msg :file,.company_msg :submit").each(function () { $(this).removeAttr("disabled"); $(".company_msg a.add").show(); }); $(".company_msg :submit").css("background-color", "#2c5735"); });
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+        $("#供应商列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#供应商列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function show_tip(t) {
+        $(t).next("div").show();
+        $(t).next("div").css("display", "inline-block");
+    }
+    function hide_tip(t) {
+        $(t).next("div").hide();
+    }
+    function showdiv(th) {
+        $(th).parent().children("div").show();
+        $(th).parent().children("div").css("display", "inline-block");
+    }
+    function hidediv(th) {
+        $(th).parent().children("div").hide();
+    }
+</script>
+

@@ -1,0 +1,76 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.公告
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">公告详情</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_xttz_contentbox" id="gys_xttz_contentbox">
+        @if (Model != null)
+        {
+            <div class="gys_xttz_contentbox_news_title">@Model.内容主体.标题</div>
+            <div class="gys_xttz_contentbox_news_from">
+                @if (Model.公告来源 != null)
+                {
+                    if (!string.IsNullOrEmpty(Model.公告来源.来源名称))
+                    {
+                        <span style="padding:0 10px 0 10px;">来源:<a target="_blank" title="@Model.公告来源.来源链接" href="@Model.公告来源.来源链接" style="text-decoration:underline;">@Model.公告来源.来源名称</a></span>
+                    }
+                    if (!string.IsNullOrEmpty(Model.公告信息.一级分类))
+                    {
+                        <span style="padding:0 10px 0 10px;">相关行业:@Model.公告信息.一级分类</span>
+                    }
+                }
+                <span style="padding:0 10px 0 10px;">时间:@Model.内容主体.发布时间.ToString("yyyy-MM-dd")</span>
+                <a class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>
+            </div>
+            <div class="gys_xttz_contentbox_news_text">
+                @Html.Raw(Model.内容主体.内容)
+            </div>
+            @*if (Model.内容主体.图片 != null && Model.内容主体.图片.Count > 0)
+            {
+                <div class="showattachment" style="width: 800px;">扫描件列表:</div>
+                foreach (var item in Model.内容主体.图片)
+                {
+                    <div class="showattachment_list" style="width: 140px; height: 100px; padding: 13px; float: left; background-color: #eee; margin: 10px;">
+                        <a target="_blank" href="@item">
+                            <img style="width: 140px; height: 100px; border: none" src="@item" />
+                        </a>
+                    </div>
+                }
+            }*@
+
+
+            if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
+            {
+                <div class="showattachment" style="width: 800px;">附件列表:</div>
+                for (int i = 0; i < Model.内容主体.附件.Count; i++)
+                {
+                    <div class="showattachment_list">
+                        <a target="_blank" href="@Model.内容主体.附件[i]">附件@(i + 1)</a>
+                    </div>
+                }
+            }
+            if (ViewData["开启预报名"] != null && ViewData["开启预报名"] == "1")
+            {
+                <a style="color:red; padding:20px; text-decoration:underline;" title="点击查看" href="/单位用户后台/SignUp_List" target="_blank">已开启预报名</a>
+            }
+        }
+        else
+        {
+            <div class="gys_xttz_contentbox_news_title">暂无此类信息</div>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    function printpage() {
+        $(".printspan").hide();
+        document.body.innerHTML = document.getElementById('gys_xttz_contentbox').innerHTML;
+        window.print();
+    }
+    $(function () {
+        $("#全部采购公告列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#全部采购公告列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+
+</script>

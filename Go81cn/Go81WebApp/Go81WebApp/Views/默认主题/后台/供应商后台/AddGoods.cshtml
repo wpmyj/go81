@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "添加商品";
+    Layout = "_BackLayout.cshtml";
+}
+<style type="text/css">
+    .yjcg {
+        background: #327229;
+        font-size: 24px;
+        width: 300px;
+        line-height: 80px;
+        margin: 30px auto;
+        text-align: center;
+    }
+
+        .yjcg a {
+            color: #fff;
+        }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div style="height:auto; overflow:hidden; margin-bottom:5px; ">
+            <div class="yjcg"><a href="/供应商后台//Gys_Product_AddStep1?id=0">添加商品</a></div>
+            <div class="yjcg"><a href="/供应商后台//Gys_Product_AddStep1?id=1">添加中标商品</a></div>
+            @if (ViewData["批量上传"] != null && ViewData["批量上传"].ToString() == "1")
+            {
+                <div class="yjcg"><a href="/供应商后台/AddListGood">批量上传商品</a></div>
+            }
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $("#新增商品信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#新增商品信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

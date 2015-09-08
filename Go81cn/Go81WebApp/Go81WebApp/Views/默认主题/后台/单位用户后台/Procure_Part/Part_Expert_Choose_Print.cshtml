@@ -1,0 +1,340 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@model Go81WebApp.Models.数据模型.专家抽选记录
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">打印有效抽取名单</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box" id="tempcontenttable">
+        <link href="~/css/css.css" type="text/css" rel="stylesheet">
+        <style type="text/css">
+            label {
+                margin-bottom: 0;
+                font-weight: normal;
+            }
+
+
+            .expert_condition {
+                width: 898px;
+                border: solid 1px #000;
+                height: auto;
+                overflow: hidden;
+                padding: 10px 0 20px 0;
+            }
+
+            .expert_condition {
+                width: 898px;
+                border: solid 1px #000;
+                height: auto;
+                overflow: hidden;
+            }
+
+            .expert_condition_inner {
+                width: 900px;
+                margin: 0 auto;
+                height: auto;
+                overflow: hidden;
+                margin-top: 10px;
+                border: solid 1px #000;
+                padding: 5px;
+            }
+
+            .expert_condition_innerleft {
+                width: 150px;
+                float: left;
+                height: auto;
+                overflow: hidden;
+                font-size: 14px;
+                /*color: rgb(51, 51, 51);*/
+                color: #000;
+                padding-bottom: 10px;
+                font-weight: bold;
+                line-height: 30px;
+            }
+
+            .expert_condition_innerright {
+                width: 750px;
+                float: left;
+                font-size: 14px;
+                /*color: rgb(51, 51, 51);*/
+                color: #000;
+                padding-bottom: 10px;
+            }
+
+            .expert_condition_innerrightlist {
+                width: 350px;
+                float: left;
+            }
+
+            .expert_condition_innerrightlist_title {
+                width: 120px;
+                text-align: right;
+                float: left;
+                line-height: 30px;
+                padding-right: 5px;
+            }
+
+            .expert_condition_input {
+                height: 30px;
+                width: 200px;
+                float: left;
+                line-height: 30px;
+                /*margin-right: 60px;*/
+            }
+
+            .gys_znxx_content table {
+                border: 1px solid #000;
+            }
+
+            .gys_znxx_content table {
+                margin-top: 5px;
+                border-right-width: 0;
+            }
+
+                .gys_znxx_content table tr:hover td {
+                    background: #fff;
+                }
+
+                .gys_znxx_content table tr:nth-child(2n+1) {
+                    background: #fff;
+                }
+
+                .gys_znxx_content table tr:nth-child(2n) {
+                    background: #fff;
+                }
+
+            .gys_znxx_content td {
+                border-right: 1px solid #000;
+                border-top: 1px solid #000;
+                padding: 5px;
+                letter-spacing: 0;
+                height: 35px;
+                font-size: 14px;
+                text-align: left;
+            }
+
+            .gys_znxx_content td {
+                color: #000;
+            }
+
+                .gys_znxx_content td a {
+                    padding: 2px 5px 2px 5px;
+                    cursor: pointer;
+                    color: #000;
+                    text-decoration: underline;
+                }
+
+            .gys_znxx_content table tr td {
+                border-top: #000 solid 1px;
+            }
+        </style>
+
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content" style="width: 920px; padding-top:0;">
+
+                <div class="expert_condition_inner">
+                    <div class="expert_condition_innerleft">项目信息</div>
+                    <div class="expert_condition_innerright">
+                        <div style="height:auto; overflow:hidden;">
+                            <div class="expert_condition_innerrightlist">
+                                <div class="expert_condition_innerrightlist_title">项目名称：</div><label class="expert_condition_input" style="height:auto; overflow:hidden;">@Model.项目名称</label>
+                            </div>
+                            <div class="expert_condition_innerrightlist">
+                                <div class="expert_condition_innerrightlist_title">
+                                    项目编号：
+                                </div><label class="expert_condition_input" style="height:auto; overflow:hidden;">@Model.项目编号</label>
+                            </div>
+                            </div>
+                            <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                                <div class="expert_condition_innerrightlist_title">
+                                    评标时间：
+                                </div><label class="expert_condition_input">@Model.评标时间.ToString()</label>
+                            </div>
+                            <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                                <div class="expert_condition_innerrightlist_title">
+                                    预定抽选总数：
+                                </div><label class="expert_condition_input">@Model.总计预定抽选专家数</label>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="expert_condition_inner" id="temp_content">
+                    <div class="expert_condition_innerleft">抽取评审专家详情</div>
+
+
+
+                    <div class="expert_condition_innerright" style="width: 750px;">
+
+                        @*<div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                                <div class="expert_condition_innerrightlist_title">
+                                    预定抽选总数：
+                                </div><label class="expert_condition_input">@Model.总计预定抽选专家数</label>
+                            </div>*@
+                        <div style="height:auto; overflow:hidden;">
+                            <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                                <div class="expert_condition_innerrightlist_title">
+                                    经办人：
+                                </div>
+                                @if (Model.经办人.用户ID != -1 && Model.经办人.用户数据 != null && Model.经办人.用户数据.联系方式 != null && !string.IsNullOrWhiteSpace(Model.经办人.用户数据.联系方式.联系人))
+                                {
+                                    <label class="expert_condition_input" style="height:auto; overflow:hidden;">@Model.经办人.用户数据.联系方式.联系人</label>
+                                }
+                                else
+                                {
+                                    <label class="expert_condition_input">未填写</label>
+                                }
+
+                            </div>
+                            <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                                <div class="expert_condition_innerrightlist_title">
+                                    申请时间：
+                                </div><label class="expert_condition_input">@Model.申请时间.ToString()</label>
+                            </div>
+                        </div>
+
+                        <div style="height:auto; overflow:hidden;">
+                            <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                                <div class="expert_condition_innerrightlist_title">
+                                    批准人：
+                                </div>
+                                @if (Model.批准人.用户ID != -1 && Model.批准人.用户数据 != null && Model.批准人.用户数据.联系方式 != null && !string.IsNullOrWhiteSpace(Model.批准人.用户数据.联系方式.联系人))
+                                {
+                                    <label class="expert_condition_input" style="height:auto; overflow:hidden;">@Model.批准人.用户数据.联系方式.联系人</label>
+                                }
+                                else
+                                {
+                                    <label class="expert_condition_input">未填写</label>
+                                }
+                            </div>
+                            <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                                <div class="expert_condition_innerrightlist_title">
+                                    批准时间：
+                                </div><label class="expert_condition_input">@Model.批准时间.ToString()</label>
+                            </div>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            <div class="expert_condition_innerrightlist_title">
+                                操作人姓名：
+                            </div><label class="expert_condition_input">@Model.操作人姓名</label>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            <div class="expert_condition_innerrightlist_title">
+                                操作人电话：
+                            </div><label class="expert_condition_input">@Model.操作人电话</label>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            <div class="expert_condition_innerrightlist_title">
+                                操作时间：
+                            </div><label class="expert_condition_input">@Model.操作时间.ToString()</label>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            <div class="expert_condition_innerrightlist_title">
+                                确认时间：
+                            </div><label class="expert_condition_input">@Model.确认时间.ToString()</label>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="expert_condition_innerright" style="width:900px;">
+                        <table cellpadding="0" cellspacing="0" width="100%" style="border-top: none;">
+                            @foreach (var zj in Model.抽选专家列表)
+                            {
+                                if (zj.预定出席)
+                                {
+                                    if (zj.专家.用户数据 != null)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="/专家抽选/Expert_History_Detail/@zj.专家.用户ID" target="_blank" style="color: #000; text-decoration: none; font-weight: bold; font-size: 18px;">@zj.专家.用户数据.身份信息.姓名</a>
+                                                @if (zj.专家.用户数据.身份信息.性别 != 性别.未填写)
+                                                {
+                                                    <span>(@zj.专家.用户数据.身份信息.性别)</span>
+                                                }
+                                                @if (zj.专家.用户数据.学历信息.专业技术职称 != 专业技术职称.未填写)
+                                                {
+                                                    <span style="padding-right: 5px; font-weight: bold; font-size: 16px;"> / @zj.专家.用户数据.学历信息.专业技术职称</span>
+                                                }
+                                            </td>
+                                            <td colspan="2">
+                                                <div style="padding: 2px 0 2px 2px;">
+                                                    专家评标水平评分：
+                                                    <input type="checkbox" name="专家水平评分__@(zj.专家.用户ID)" id="5" value="5" />优
+                                                    <input type="checkbox" name="专家水平评分__@(zj.专家.用户ID)" id="3" value="3" />良
+                                                    <input type="checkbox" name="专家水平评分__@(zj.专家.用户ID)" id="1" value="1" />中
+                                                    <input type="checkbox" name="专家水平评分__@(zj.专家.用户ID)" id="-2" value="-2" />差
+                                                </div>
+                                                <div style="padding: 0 0 2px 2px;">
+                                                    专家评标态度评分：
+                                                    <input type="checkbox" name="专家评标态度评分__@(zj.专家.用户ID)" id="5" value="5" />非常好
+                                                    <input type="checkbox" name="专家评标态度评分__@(zj.专家.用户ID)" id="3" value="3" />好
+                                                    <input type="checkbox" name="专家评标态度评分__@(zj.专家.用户ID)" id="1" value="1" />一般
+                                                    <input type="checkbox" name="专家评标态度评分__@(zj.专家.用户ID)" id="-1" value="-1" />不好
+                                                    <input type="checkbox" name="专家评标态度评分__@(zj.专家.用户ID)" id="-5" value="-5" />非常不好
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            @*<td>证件类型：@zj.专家.用户数据.身份信息.证件类型</td>*@
+                                            <td colspan="2">身份证号：@zj.专家.用户数据.身份信息.证件号</td>
+                                        </tr>
+                                        <tr>
+                                            <td>联系方式：@zj.专家.用户数据.联系方式.固定电话，@zj.专家.用户数据.联系方式.手机</td>
+                                            <td colspan="2">工作单位：@zj.专家.用户数据.工作经历信息.工作单位</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="border-bottom: 1px solid #000;">
+                                                可评标专业：@string.Join(",", zj.专家.用户数据.可参评物资类别列表.Select(o => o.一级分类))
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="3" style="border-bottom: 1px solid #000;">
+                                                该评审专家已删除
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </table>
+                        <div style="width: 100px; margin: 10px auto; text-align: center;">
+                            <input type="button" value="打印名单" onclick="printlist();" class="index_online_btn printspan" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    function printlist() {
+        $.ajax({
+            cache: false,
+            async: false,   // 太关键了，同步和异步的参数
+            //dataType: 'json', type: 'post',
+            type: 'POST',
+            //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
+            url: "/专家抽选/Expert_Choose_PrintStatus",
+            data: "id=@Model.Id",
+            success: function (data) {
+            }
+        });
+
+        $(".printspan").hide();
+        document.body.innerHTML = document.getElementById('tempcontenttable').innerHTML;
+        window.print();
+    }
+    $(function () {
+        $("#@ViewData["come"]").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#@ViewData["come"]").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

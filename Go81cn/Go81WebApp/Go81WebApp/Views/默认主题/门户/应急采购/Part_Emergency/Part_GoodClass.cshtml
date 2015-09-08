@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.商品数据模型.商品分类>
+
+<link href="~/css/css.css" rel="stylesheet" />
+
+<div style="width:947px;">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var i in Model)
+        {
+            <div class="goodclass_yjfn">
+                <div class="yjfn_name">@i.分类名</div>
+            </div>
+            foreach (var f in i.子分类)
+            {
+                <div class="goodclass_ejfn">
+                    <table cellspacing="0">
+                        <tr>
+                            <td class="ejfn_name" valign="top">@f.分类名</td>
+                            <td class="sjfn_name">
+                                @foreach (var g in f.子分类)
+                                {
+                                    <a href="/商品陈列/ProductList/@g.Id?parId=@i.Id">@g.分类名</a>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            }
+        }
+    }
+</div>

@@ -1,0 +1,894 @@
+﻿@model Go81WebApp.Models.数据模型.商品数据模型.商品分类
+@using Go81WebApp.Models.数据模型.商品数据模型
+<link href="~/css/css.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/bootstrap.js" type="text/javascript"></script>
+
+<style type="text/css">
+    .modal_copy{width:100%;height:100%; background: rgba(0, 0, 0, 0.45); z-index: 9999;left: 0;top: 0;position: fixed;display: none;}
+    .modal_class{width:800px;height:540px;margin: 2% auto;background:#fff; overflow-y:scroll;padding: 10px;border-radius: 5px; border:5px solid #ccc}
+    .modal_class_left{width:200px;height:600px;float:left;border:1px solid #35732B}
+    .modal_class_left ul{padding-left:0;}
+    .modal_class_left ul li{line-height:30px; cursor:pointer; text-indent:10px;}
+    .modal_class_left ul li.hover{border-bottom:1px solid #848484;border-top:1px solid #848484;background:#35732B;}
+    .modal_class_right{width:580px;height:600px;float:left}
+    .modal_class_right table{padding:10px;}
+    .modal_class_right table tr td.ejfn_name{font-size:14px;color:#1B5922}
+    .modal_class_right table tr td.sjfn_name{font-size:12px;}
+    .modal_class_right table tr td.sjfn_name span{line-height:15px;position:relative}
+    .modal_class_right table tr td.sjfn_name a{padding:2px 10px 2px 2px;display:inline-block;cursor:pointer}
+    .modal_class_right table tr td.sjfn_name a.select{border:1px solid #1B5119;border-radius:2px;padding-right:10px;}
+    .modal-backdrop{height:0 !important;}
+    .modal_class_right table tr td.sjfn_name small{display:none;width:27px;height:19px; border:1px solid #1B5119;background:#1B5119;border-radius:2px;text-align:center;font-weight:100;cursor:pointer;position:absolute;right:-25px;top:-2px;color:#fff;line-height:19px;z-index:999;}
+    .close_modal{color:#fff; font-size:30px; position:absolute; right:20px; top:10px; cursor:pointer;}
+</style>
+<div class="index_top">
+    <div class="index_top_middle">
+        <div class="index_top_title">商品管理-属性管理</div>
+        <div id="code"></div> 
+    </div>
+</div>
+<div class="modal_copy">
+     <div class="modal_class">
+         <div class="modal_class_left">
+             <ul>
+                 @{IEnumerable<商品分类> good = ViewData["商品分类"] as IEnumerable<商品分类>; }
+                 @if (good != null && good.Any())
+                 {
+                     foreach (var a in good)
+                     {
+                         if (a.分类性质 == 商品分类性质.通用物资)
+                         {
+                            <li id="@a.Id">@a.分类名</li>
+                         }
+                     }
+                 }
+                 <li id="ZY">专用物资</li>
+             </ul>
+         </div>
+         <div class="modal_class_right">
+             <table width="100%" cellspacing="0" id="class_same">
+                 @*<tr>
+                     <td class="ejfn_name">扫描、复印、打印、传真设备</td>
+                 </tr>
+                 <tr>
+                     <td class="sjfn_name" style="padding-left:15px;">
+                         <span><a>扫描仪</a><small>复制</small></span>
+                         <span><a>喷墨打印机</a><small>复制</small></span>
+                         <span><a>静电复印机</a><small>复制</small></span>
+                         <span><a>针式打印机</a><small>复制</small></span>
+                     </td>
+                 </tr>*@
+             </table>
+         </div>
+     </div>
+    <div class="close_modal">×</div>
+</div>
+
+@*<div class="index_emptydiv"></div>*@
+<div class="content_div">
+    <div class="til"><span>@ViewBag.Name</span>属性管理<span id="tips" style="margin-left:20px;"></span><input id="copy" type="button" value="复制模板" /></div>
+    <input type="hidden" id="hiddenval" value="@ViewBag.Xid" />
+    <div class="manage">
+        <div class="attr_manage">
+            <div>
+                <input class="attr_btn" type="button" data-toggle="modal" data-target="#myModal_add_attra" value="添加属性分类" />
+                <input class="attr_btn" id="del_sxfn_btn" type="button" value="删除属性分类" />
+                <input class="attr_btn" id="edit_sxfn_btn" type="button" value="编辑属性分类" />
+            </div>
+            <select id="sxfn_select" size="15">
+                
+            </select>
+        </div>
+        <div class="attr_manage">
+            <div>
+                <input class="attr_btn" id="modal_add" type="button" value="添加属性" />
+                <input class="attr_btn" id="del_sx_btn" type="button" value="删除属性" />
+                <input class="attr_btn" id="edti_sx_btn" type="button" value="修改属性" />
+            </div>
+            <select id="select_sx" size="15">
+               
+            </select>
+        </div>
+        <div class="attr_manage">
+            <div>
+                <input class="attr_btn" id="modal_addval" type="button" value="添加属性值" />
+                <input class="attr_btn" id="del_sxz_btn" type="button" value="删除属性值" />
+                <input class="attr_btn" id="edit_sxz_btn" type="button" value="修改属性值" />
+            </div>
+            <select id="sxz_select" size="15">
+                
+            </select>
+        </div>
+    </div>
+</div>
+<!--删除属性分类确认对话框-->
+<div class="modal fade" id="myModal_sxfn_del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+            </div>
+            <div class="modal-body">
+                <span style="color:red;">确认删除该分类吗？</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="comfirm_del_sxfn" data-dismiss="modal">取消</button>
+                <button id="btn_del_sxfn" type="button" class="btn btn-primary">确认删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除属性确认对话框-->
+<div class="modal fade" id="myModal_sx_del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+            </div>
+            <div class="modal-body">
+                <span style="color:red;">确认删除该属性吗？</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="comfirm_del_sx" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="btn_del_sx" type="button" class="btn btn-primary">确认删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--删除属性值确认对话框-->
+<div class="modal fade" id="myModal_sxz_del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+            </div>
+            <div class="modal-body">
+                <span style="color:red;">确认删除该属性值吗？</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="comfirm_del_sxz" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="btn_del_sxz" type="button" class="btn btn-primary">确认删除</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    //查询属性分类
+    function getAttrClass() {
+        $.ajax({
+            url: '/运营团队后台/GetAttrClass?xid=' + $("#hiddenval").val(),
+            dataType: 'json',
+            success: function (data) {
+                var str = "";
+                $.each(data.Data, function(index, item) {
+                    str += "<option>" + item + "</option>";
+                });
+                $("#sxfn_select").empty().append(str);
+            },
+            error: function () {
+                alert("请求出错！");
+            },
+        });
+    };
+
+    //查询属性
+    function selectAttr() {
+        $.ajax({
+            url: '/运营团队后台/SelectAttr',
+            data: "id=" + $("#hiddenval").val() + "&sxclass=" + encodeURI($("#sxfn_select").find("option:selected").text()),
+            dataType: 'json',
+            success: function (data) {
+                $("#select_sx").empty();
+                var str = "";
+                $.each(data.Data,function(index,item) {
+                    str += "<option value=" + item.AttrType + " name=" + item.SalesAttr + ">" + item.AttrName + "</option>";
+                });
+                $("#select_sx").append(str);
+            },
+            error: function () { alert("请求出错！"); },
+        });
+    };
+
+    //查询属性值
+    function selectAttrValue() {
+        $.ajax({
+            url: '/运营团队后台/SelectAttrValue',
+            data: "id=" + $("#hiddenval").val() + "&sxname=" + encodeURI($("#select_sx option:selected").text()) + "&sxfnname=" + encodeURI($("#sxfn_select option:selected").text()),
+            dataType: 'json',
+            success: function (data) {
+                $("#sxz_select").empty();
+                var str = "";
+                $.each(data.Data,function(index,item) {
+                    str += "<option>" + item + "</option>";
+                });
+                $("#sxz_select").append(str);
+            },
+            error: function () { alert("请求出错！"); },
+        });
+    };
+
+    function seTimeoutHide() {
+        setTimeout(function () {
+            $("#tips").html("");
+        }, 2000);
+    };
+
+    $(function () {
+        //页面加载完毕后加载属性分类
+        getAttrClass();
+
+        //属性分类选项改变时显示其属性
+        $("#sxfn_select").change(function () {
+            selectAttr();
+            $("#sxz_select").empty();
+        });
+
+        //属性选项改变时显示其属性值
+        $("#select_sx").change(function () {;
+            selectAttrValue();
+        });
+
+        //确认删除属性分类
+        $("#btn_del_sxfn").click(function () {
+            var sxfnname = $("#sxfn_select option:selected").text();
+            var g = $("#sxfn_select").find("option:selected");
+            if (g.length > 0) {
+                $.ajax({
+                    type: 'post',
+                    url: '/运营团队后台/DeleteAttr',
+                    data: "id=" + $("#hiddenval").val() + "&sxfnname=" + sxfnname + "&del=del_sxfn",
+                    success: function() {
+                        $("#comfirm_del_sxfn").click();
+                        $("#tips").html("删除成功！").css({ "color": "red" });
+                        seTimeoutHide();
+                        $("#select_sx").empty();
+                        $("#sxz_select").empty();
+                        getAttrClass();
+                    },
+                    error: function() {
+                        $("#tips").html("删除失败！").css({ "color": "red" });
+                        seTimeoutHide();
+                    },
+                });
+            }
+            else {
+                $("#tips").html("请选择需要删除的属性分类！").css({ "color": "red" }); 
+                seTimeoutHide();
+            }
+        });
+
+        //弹出删除属性分类确认对话框
+        $("#del_sxfn_btn").click(function () {
+            var g = $("#sxfn_select").find("option:selected");
+            if (g.length > 0) {
+                $("#myModal_sxfn_del").modal("show");
+            }
+            else {
+                $("#tips").html("请选择需要删除的属性分类！").css({ "color": "red" }); 
+                seTimeoutHide();
+            }
+        });
+
+        //确认删除属性值
+        $("#btn_del_sxz").click(function () {
+            var sxfnname = $("#sxfn_select option:selected").text();
+            var sxname = $("#select_sx option:selected").text();
+            var sxzname = $("#sxz_select option:selected").text();
+            if (sxzname != null && sxzname != "") {
+                $.ajax({
+                    type: 'post',
+                    url: '/运营团队后台/DeleteAttr',
+                    data: "id=" + $("#hiddenval").val() + "&sxfnname=" + sxfnname + "&sxname=" + sxname + "&sxzname=" + sxzname + "&del=del_sxz",
+                    success: function() {
+                        $("#comfirm_del_sxz").click();
+                        $("#tips").html("删除成功！").css({ "color": "red" });
+                        seTimeoutHide();
+                        selectAttrValue();
+                    },
+                    error: function() {
+                        $("#tips").html("删除失败！").css({ "color": "red" });
+                        seTimeoutHide();
+                    },
+                });
+            }
+            else {
+                $("#tips").html("请选择需要删除的属性值！").css({ "color": "red" });
+                seTimeoutHide();
+            }
+        });
+
+        //弹出删除属性值确认对话框
+        $("#del_sxz_btn").click(function () {
+            var g = $("#sxz_select").find("option:selected");
+            if (g.length > 0) {
+                $("#myModal_sxz_del").modal("show");
+            }
+            else {
+                $("#tips").html("请选择需要删除的属性值！").css({ "color": "red" });
+                seTimeoutHide();
+            }
+        });
+
+        //确认删除属性
+        $("#btn_del_sx").click(function () {
+            var sxfnname = $("#sxfn_select option:selected").text();
+            var sxname = $("#select_sx option:selected").text();
+            if (sxname != null && sxname != "") {
+                $.ajax({
+                    type: 'post',
+                    url: '/运营团队后台/DeleteAttr',
+                    data: "id=" + $("#hiddenval").val() + "&sxfnname=" + sxfnname + "&sxname=" + sxname + "&del=del_sx",
+                    success: function() {
+                        $("#comfirm_del_sx").click();
+                        $("#tips").html("删除成功！").css({ "color": "red" });
+                        seTimeoutHide();
+                        $("#sxz_select").empty();
+                        selectAttr();
+                    },
+                    error: function() {
+                        $("#tips").html("删除失败！").css({ "color": "red" });
+                        seTimeoutHide();
+                    },
+                });
+            }
+            else {
+                $("#tips").html("请选择需要删除的属性！").css({ "color": "red" }); 
+                seTimeoutHide();
+            }
+        });
+
+        //弹出删除属性确认对话框
+        $("#del_sx_btn").click(function () {
+            var g = $("#select_sx").find("option:selected");
+            if (g.length > 0) {
+                $("#myModal_sx_del").modal("show");
+            }
+            else {
+                $("#tips").html("请选择需要删除的属性！").css({ "color": "red" }); 
+                seTimeoutHide();
+            }
+        });
+    });
+
+    //编辑属性分类时 提示选择待编辑项
+    $("#edit_sxfn_btn").click(function () {
+        var g = $("#sxfn_select").find("option:selected");
+        if (g.length > 0) {
+            $("#myModal_edit_attra").modal("show");
+        }
+        else {
+            $("#tips").html("请选择需要编辑的属性分类！").css({ "color": "red" });
+            seTimeoutHide();
+        }
+    });
+
+    //编辑属性时提示选择待编辑项
+    $("#edti_sx_btn").click(function () {
+        var g = $("#select_sx").find("option:selected");
+        if (g.length > 0) {
+            $("#myModal_attr_edit").modal("show");
+        }
+        else {
+            $("#tips").html("请选择需要编辑的属性！").css({ "color": "red" });
+            seTimeoutHide();
+        }
+    });
+
+
+    //编辑属性值时 提示选择待编辑项
+    $("#edit_sxz_btn").click(function () {
+        var g = $("#sxz_select").find("option:selected");
+        if (g.length > 0) {
+            $("#myModal_attr_edita").modal("show");
+        }
+        else {
+            $("#tips").html("请选择需要编辑的属性值！").css({ "color": "red" }); 
+            seTimeoutHide();
+        }
+    });
+
+
+    //添加属性时提示选择属性分类
+    $("#modal_add").click(function () {
+        var a = $("#sxfn_select").find("option:selected");
+        if (a.length <= 0) {
+            $("#tips").html("请先选择属性分类！").css({ "color": "red" });
+            seTimeoutHide();
+        }
+        else {
+            $("#tips").html(" ");
+            $("#myModal_attr_add").modal("show");
+        }
+    });
+
+    //添加属性值时提示选择属性
+    $("#modal_addval").click(function () {
+        var a = $("#select_sx").find("option:selected");
+        if (a.length <= 0) {
+            $("#tips").html("请先选择商品属性！").css({ "color": "red" });
+            seTimeoutHide();
+        }
+        else {
+            $("#tips").html(" ");
+            $("#myModal_attr_adda").modal("show");
+        }
+    });
+
+    //编辑时将原有数据填充到编辑框
+    $("#edit_sxfn_btn").click(function () {
+        $("#newname").val($("#sxfn_select").find("option:selected").text());
+    });
+    $("#edti_sx_btn").click(function () {
+        $("#newsxname").val($("#select_sx").find("option:selected").text());
+
+        if ($("#select_sx option:selected").val() == "复选") {
+            var k = $("#attr_types").find("option[value=0]").text();
+            $("#attr_types").val(0);//设置value为0的项选中
+        }
+        if ($("#select_sx option:selected").val() == "输入") {
+            $("#attr_types").val(1);//设置value为1的项选中
+        }
+        if ($("#select_sx option:selected").attr("name")=="true") {
+            $("#issales").prop("checked", true);
+            $("#attr_types").val(0).attr({ "disabled": "disabled" });
+        }
+        else {
+            $("#issales").prop("checked",false);
+        }
+    });
+    $("#edit_sxz_btn").click(function () {
+        $("#newsxzname").val($("#sxz_select option:selected").text());
+    });
+</script>
+
+
+
+@*添加商品属性*@
+@using (Html.BeginForm("", ""))
+{
+    <div class="modal fade" id="myModal_attr_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                    <h4 class="modal-title" id="myModalLabel">添加商品属性</h4>
+                </div>
+                <div class="modal-body">
+                    <label>是否为销售属性：</label>
+                    <input id="issale" type="checkbox" />销售属性<br />
+                    <label style="margin-left:47px">属性类型：</label>
+                    <select id="attr_type">
+                        <option value="@((int)属性类型.复选)">@属性类型.复选</option>
+                        <option value="@((int)属性类型.输入)">@属性类型.输入</option>
+                    </select><br/>
+                    <label style="margin-left:15px">商品属性名称：</label>
+                    <input id="sxname" name="Name" type="text" /><span id="add_sf_tip"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button id="btn_save_sx" type="button" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $("#issale").click(function () {
+        var a = $(this).is(":checked");
+        if (a) {
+            $("#attr_type").val(0).attr({"disabled":"disabled"});
+        }
+        else {
+            $("#attr_type").removeAttr("disabled");
+        }
+    });
+    function stripsReg(s) {
+        var myregex = new RegExp("[{}':\"\"',\\[\\]<>]");   // 创建正则表达式
+        if (myregex.test(s)) {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    $("#btn_save_sx").click(function () {
+        var isSale;
+
+        isSale = $("#issale").is(":checked");
+
+        
+        if ($("#sxname").val().trim() != "" && $("#sxname").val().trim() != null) {
+            if (stripsReg($("#sxname").val())) {
+                $.ajax({
+                    type: 'post',
+                    url: "/运营团队后台/CreateAttr",
+                    data: "id=" + $("#hiddenval").val() + "&isSale=" + isSale + "&sxname=" + $("#sxname").val().trim() + "&sxfnname=" + $("#sxfn_select option:selected").text() + "&create=create_sx&attr_type=" + $("#attr_type").find("option:selected").val(),
+                    success: function () {
+                        $("#sxname").val(" ");
+                        $("#add_sf_tip").html("添加成功！").css({ "color": "red" });
+                        setTimeout(function () {
+                            $("#add_sf_tip").html(" ");
+                        }, 1000);
+                        selectAttr();
+                    }
+                });
+            }
+            else
+            {
+                alert("请不要输入特殊字符（包括：{}[]<>,:\"\"''）");
+                return false;
+            }
+        } else {
+            $("#add_sf_tip").html("属性名称不能为空！").css({ "color": "red" }); 
+            setTimeout(function () {
+                $("#add_sf_tip").html(" ");
+            }, 1000);
+        }
+    });
+</script>
+
+@*修改商品属性*@
+<div class="modal fade" id="myModal_attr_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                <h4 class="modal-title" id="myModalLabel">修改商品属性</h4>
+            </div>
+            <div class="modal-body">
+                <label>是否为销售属性：</label>
+                <input id="issales" type="checkbox" />销售属性<br />
+                <label style="margin-left:47px">属性类型：</label>
+                <select id="attr_types">
+                    <option value="@((int)属性类型.复选)">@属性类型.复选</option>
+                    <option value="@((int)属性类型.输入)">@属性类型.输入</option>
+                </select><br />
+                <label style="margin-left:15px">商品属性名称：</label>
+                <input id="newsxname" name="Name" type="text" /> <span id="modal_sx_edit"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button"id="edit_sx_close" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="edit_sx_save" type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#issales").click(function () {
+        var a = $(this).is(":checked");
+        if (a) {
+            $("#attr_types").val(0).attr({ "disabled": "disabled" });
+        }
+        else {
+            $("#attr_types").removeAttr("disabled");
+        }
+    });
+    $("#edit_sx_save").click(function () {
+        var isSale;
+        isSale = $("#issales").is(":checked");
+        if ($("#select_sx option:selected").text() != null && $("#select_sx option:selected").text() != "") {
+            if ($("#newsxname").val().trim() != null && $("#newsxname").val().trim() != "") {
+                if (stripsReg($("#newsxname").val()))
+                {
+                    var str = "id=" + $("#hiddenval").val();
+                    str += "&newname=" + $("#newsxname").val().trim();
+                    str += "&oldname=" + $("#select_sx option:selected").text();
+                    str += "&sxfnname=" + $("#sxfn_select option:selected").text();
+                    str += "&edit=edit_sx";
+                    str += "&attrtypes=" + $("#attr_types").find("option:selected").val();
+                    str += "&issales="+isSale;
+                    $.ajax({
+                        type: 'post',
+                        url: "/运营团队后台/EditAttr",
+                        data: str,
+                        success: function() {
+                            $("#edit_sx_close").click();
+                            selectAttr();
+                        },
+                        error: function() {
+                            $("#add_sf_tip").html("修改失败！").css({ "color": "red" });
+                            setTimeout(function () {
+                                $("#add_sf_tip").html(" ");
+                            }, 1000);
+                        },
+                    });
+                }
+                else
+                {
+                    alert("请不要输入特殊字符（包括：{}[]<>,:\"\"''）");
+                    return false;
+                }
+            } else {
+                $("#modal_sx_edit").html("属性名称不能为空！").css({ "color": "red" });
+                setTimeout(function () {
+                    $("#modal_sx_edit").html(" ");
+                }, 1000);
+            }
+        }
+        else { alert("请选择需要修改的属性！"); }
+    });
+</script>
+
+
+@*添加商品属性分类*@
+<form>
+    <div class="modal fade" id="myModal_add_attra" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                    <h4 class="modal-title" id="myModalLabel">添加商品属性分类</h4>
+                </div>
+                <div class="modal-body">
+                    <label>商品属性分类名称：</label>
+                    <input id="name" name="Name" type="text" /><span id="add_sxfn_tip">  </span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" id="btn_save_sxfn" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $("#btn_save_sxfn").click(function () {
+        if ($("#name").val().trim() != null && $("#name").val().trim() != "") {
+            if (stripsReg($("#name").val())) {
+                $.ajax({
+                    type: 'post',
+                    url: "/运营团队后台/CreateAttr",
+                    data: "id=" + $("#hiddenval").val() + "&sxfnname=" + $("#name").val().trim() + "&create=create_sxfn",
+                    success: function () {
+                        $("#add_sxfn_tip").html("添加成功！").css({ "color": "red" });
+                        $("#name").val(" ");
+                        setTimeout(function () {
+                            $("#add_sxfn_tip").html(" ");
+                        }, 1000);
+                        getAttrClass();
+                    }
+                });
+            }
+            else
+            {
+                alert("请不要输入特殊字符（包括：{}[]<>,:\"\"''）");
+                return false;
+            }
+        } else {
+            $("#add_sxfn_tip").html("属性分类名不能为空！").css({ "color": "red" }); 
+            setTimeout(function () {
+                $("#add_sxfn_tip").html(" ");
+            }, 1000);
+        }
+    });
+</script>
+
+@*修改商品属性分类*@
+<div class="modal fade" id="myModal_edit_attra" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                <h4 class="modal-title" id="myModalLabel">修改商品属性分类</h4>
+            </div>
+            <div class="modal-body">
+                <label>商品属性分类名称：</label>
+                <input id="newname" name="Name" type="text" /><span id="modal_sxfn_edit"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="edit_sxfn_close" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="edit_sxfn_save" type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#edit_sxfn_save").click(function () {
+        var oldname = $("#sxfn_select option:selected").text();
+        if (oldname != null && oldname != "") {
+            if ($("#newname").val().trim() != null && $("#newname").val().trim() != "") {
+                if (stripsReg($("#newname").val())) {
+                    $.ajax({
+                        type: 'post',
+                        url: "/运营团队后台/EditAttr",
+                        data: "id=" + $("#hiddenval").val() + "&newname=" + $("#newname").val().trim() + "&oldname=" + oldname + "&edit=edit_sxfn",
+                        success: function () {
+                            $("#edit_sxfn_close").click();
+                            getAttrClass();
+                        },
+                        error: function () {
+                            $("#modal_sxfn_edit").html("修改失败！").css({ "color": "red" });
+                            setTimeout(function () {
+                                $("#modal_sxfn_edit").html(" ");
+                            }, 1000);
+                        },
+                    });
+                }
+                else
+                {
+                    alert("请不要输入特殊字符（包括：{}[]<>,:\"\"''）");
+                    return false;
+                }
+            } else {
+                $("#modal_sxfn_edit").html("属性分类名不能为空！").css({ "color": "red" });
+                setTimeout(function () {
+                    $("#modal_sxfn_edit").html(" ");
+                }, 1000);
+            }
+        }
+        else { alert("请选择需要修改的属性分类！"); }
+    });
+</script>
+
+
+
+@*添加商品属性值*@
+<div class="modal fade" id="myModal_attr_adda" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                <h4 class="modal-title" id="myModalLabel">添加商品属性值</h4>
+            </div>
+            <div class="modal-body">
+                <label>商品属性值：</label>
+                <input id="sxzname" name="Name" type="text" /><span id="modal_sxz_add"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="btn_save_sxz" type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#btn_save_sxz").click(function () {
+        if ($("#sxzname").val().trim() != null && $("#sxzname").val().trim() != "") {
+            if (stripsReg($("#sxzname").val())) {
+                $.ajax({
+                    type: 'post',
+                    url: "/运营团队后台/CreateAttr",
+                    data: "id=" + $("#hiddenval").val() + "&sxzname=" + $("#sxzname").val().trim() + "&sxname=" + $("#select_sx  option:selected").text() + "&sxfnname=" + $("#sxfn_select option:selected").text() + "&create=create_sxz",
+                    success: function () {
+                        $("#modal_sxz_add").html("添加成功！").css({ "color": "red" });
+                        $("#sxzname").val(" ");
+                        setTimeout(function () {
+                            $("#modal_sxz_add").html(" ");
+                        }, 1000);
+                        selectAttrValue();
+
+                    }
+                });
+            }
+            else
+            {
+                alert("请不要输入特殊字符（包括：{}[]<>,:\"\"''）");
+                return false;
+            }
+        } else {
+            $("#modal_sxz_add").html("属性值不能为空！").css({ "color": "red" });
+            setTimeout(function () {
+                $("#modal_sxz_add").html(" ");
+            }, 1000);
+        }
+    });
+</script>
+
+
+@*修改商品属性值*@
+<div class="modal fade" id="myModal_attr_edita" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"></span></button>
+                <h4 class="modal-title" id="myModalLabel">添加商品属性值</h4>
+            </div>
+            <div class="modal-body">
+                <label>新商品属性值：</label>
+                <input id="newsxzname" name="Name" type="text" /><span id="modal_sxz_edit"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="edit_sxz_close" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button id="edit_sxz_save" type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#edit_sxz_save").click(function () {
+        if ($("#sxz_select option:selected").text() != null && $("#sxz_select option:selected").text() != "") {
+            if ($("#newsxzname").val().trim() != null && $("#newsxzname").val().trim() != "") {
+                if (stripsReg($("#sxzname").val())) {
+                    $.ajax({
+                        type: 'post',
+                        url: "/运营团队后台/EditAttr",
+                        data: "id=" + $("#hiddenval").val() + "&newname=" + $("#newsxzname").val().trim() + "&oldname=" + $("#sxz_select option:selected").text() + "&sxfnname=" + $("#sxfn_select option:selected").text() + "&sxname=" + $("#select_sx option:selected").text() + "&edit=edit_sxz",
+                        success: function () {
+                            $("#edit_sxz_close").click();
+                            selectAttrValue();
+                        },
+                        error: function () {
+                            $("#modal_sxz_edit").html("修改失败！").css({ "color": "red" });
+                            setTimeout(function () {
+                                $("#modal_sxz_edit").html(" ");
+                            }, 1000);
+                        },
+                    });
+                }
+                else
+                {
+                    alert("请不要输入特殊字符（包括：{}[]<>,:\"\"''）");
+                    return false;
+                }
+            } else {
+                $("#modal_sxz_edit").html("属性值不能为空！").css({ "color": "red" });
+                setTimeout(function () {
+                    $("#modal_sxz_edit").html(" ");
+                }, 1000);
+            }
+        }
+        else { alert("请选择需要修改的属性值！"); }
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#商品目录管理").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#商品目录管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+<script type="text/javascript">
+    $(".modal_class_left ul li").click(function () {
+        $(this).addClass("hover").siblings().removeClass("hover");
+        var id = $(this).attr("id");
+        var str = "";
+        $.ajax({
+            url: '/运营团队后台/GetSonClass',
+            data: { id: id },
+            dataType: 'json',
+            success: function (data) {
+                $.each(data.Data, function (index, item) {
+
+                    str += "<tr><td class='ejfn_name'>" + index + "</td>";
+                    str += "</tr><tr>";
+                    str += "<td class='sjfn_name' style='padding-left:15px;'>";
+                    $.each(item, function (index, item) {
+                        str += "<span><a onclick='Copy(this)' id='" + item.Id + "'>" + item.Name + "</a><small onclick='CopyTo(this)'>复制</small></span>";
+                    });
+                    str += "</td></tr>";
+                });
+                $("#class_same").empty().append(str);
+            },
+        });
+    });
+    function Copy(a) {
+        $(a).parent().parent().parent().siblings().find("a").removeClass("select");
+        $(a).parent().siblings().find("a").removeClass("select");
+        $(a).addClass("select");
+        $(a).parent().parent().parent().siblings().find("small").hide();
+        $(a).parent().siblings().find("small").hide();
+        $(a).next().show()
+    };
+    function CopyTo(a) {
+        var id = $(a).prev().attr("id");
+        var toid = $("#hiddenval").val();
+        $.ajax({
+            url: '/运营团队后台/CopyAttr',
+            data: { id: id, toid: toid },
+            success: function () {
+                if (confirm("亲，复制成功了哦，记得点赞哟！")) {
+                    window.location.reload();
+                }
+            },
+        });
+    };
+    $("#copy").click(function () {
+        $(".modal_copy").fadeIn();
+    });
+    $(".close_modal").click(function () {
+        $(".modal_copy").fadeOut();
+    });
+</script>
+

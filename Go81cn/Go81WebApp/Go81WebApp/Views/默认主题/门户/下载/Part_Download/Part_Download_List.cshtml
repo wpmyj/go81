@@ -1,0 +1,171 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型;
+<style>
+    #pager{
+        text-align:center;
+    }
+    #pager a {
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        line-height: 25px;
+        font-size: 12px;
+        height: 25px;
+        border: 1px solid rgb(204, 204, 204);
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-right: auto;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+        #pager a:hover {
+            background-color: rgb(243, 243, 243);
+        }
+        #pager span{
+            font-size:14px;
+            padding-left:10px;
+        }
+        #content ul li a:hover{
+            text-decoration:underline;
+        }
+        #catorgray{
+            width:120px;
+        }
+    .gys_xttz_contentbox_front ul li {
+        padding-top: 6px;
+        padding-bottom: 6px;
+        white-space: normal;
+        word-break: break-all;
+        font-size: 12px;
+        height: 16px;
+        background-image: url('../images/index_ullibg.jpg');
+        background-position: 11px 2px;
+        background-repeat: no-repeat;
+        padding-left: 22px;
+        border-bottom: 1px solid #EFEFEF;
+    }
+</style>
+@using (Html.BeginForm("ZcfgListSearch", "政策法规"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="gys_xttz_box">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">下载列表</div>
+            </div>
+        </div>
+        <div style="margin-top:15px; padding-left:10px; color:red;">
+            当前文件类型：<select id="catorgray" onchange="reStart()">
+                <option value="0">普通文件</option>
+                <option value="1">标书</option>
+                <option value="2">工具软件</option>
+            </select>
+        </div>
+        <div class="gys_xttz_contentbox" style="min-height:initial;">
+            <div id="content">
+                <ul>
+                    @foreach (var item in (IEnumerable<下载>)ViewData["普通文件"])
+                    {
+                        <li>
+                            <span>累计下载 @item.下载次数 次</span><a href="~/下载/Download_Detail?id=@item.Id" title="@item.内容主体.标题" target="_blank">@item.内容主体.标题</a>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+        <div id="pager">
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+    function setPage(pgCount, currentPage) {
+        if (pgCount <= 6) {
+            var str = '';
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='getValues(" + i + ")'>" + i + "</a>";
+            }
+            if (pgCount!=0)
+            {
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (currentPage < 6) {
+                if (currentPage != 1) {
+                    var str = "<a onclick='getValues(" + (currentPage - 1) + ")'>上一页</a>";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a onclick='getValues(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a  onclick='getValues(" + pgCount + ")'>" + pgCount + "</a><a onclick='getValues(" + (currentPage + 1) + ")'>下一页</a>";
+                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    $("div#pager").html(str);
+                }
+                else {
+                    var str = "";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a  onclick='getValues(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='getValues(" + pgCount + ")'>" + pgCount + "</a><a onclick='getValues(" + (currentPage + 1) + ")'>下一页</a>";
+                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    $("div#pager").html(str);
+                }
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                var str = "<a onclick='getValues(" + (currentPage - 1) + ")'>上一页</a><a onclick='getValues(" + (1) + ")'>1</a>...";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='getValues(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='getValues(" + pgCount + ")'>" + pgCount + "</a><a onclick='getValues(" + (currentPage + 1) + ")'>下一页</a>";
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+            else if (currentPage >= pgCount - 3) {
+                str = "<a onclick='getValues(" + (currentPage - 1) + ")'>上一页</a><a onclick='getValues(" + 1 + ")'>1</a>...";
+                for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
+                    str += "<a onclick='getValues(" + i + ")'>" + i + "</a>";
+                }
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    function getValues(page) {
+        $.get('/下载/GetValue', { p: page, type: $("#catorgray").val() }, function (data) {
+            setPage(data.Data.Pcount, data.Data.Cpage);
+            var str = "<ul>";
+            if (data.Data.datas.length==0)
+            {
+                str = "<h3>暂时没有此类下载内容</h3>";
+            }
+            else
+            {
+                for (var i = 0; i < data.Data.datas.length; i++) {
+                    str += "<li><span>累计下载" + data.Data.datas[i].Clicks + "次</span><a href='" + encodeURI("/登录/Login?ReturnUrl=/下载/Download_Detail?id=" + data.Data.datas[i].Id) + "' title='" + data.Data.datas[i].Title + "' target='_blank'>" + data.Data.datas[i].Title + "</a></li>"
+                }
+            }
+            $("#content").html(str);
+        });
+    }
+    function reStart() {
+        getValues(1);
+    }
+    $(document).ready(function () {
+        getValues(1);
+    });
+    </script>
+}
+    <script type="text/javascript" language="javascript">
+        $(".action_link").each(function () {
+            if ($(this).text() == "下载专区") {
+                $(this).parent("div").addClass("on");
+            }
+        });
+    </script>

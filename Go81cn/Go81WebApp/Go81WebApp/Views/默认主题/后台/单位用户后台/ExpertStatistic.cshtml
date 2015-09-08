@@ -1,0 +1,211 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@{
+    ViewBag.Title = "专家统计";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<link href="~/css/css.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style type="text/css">
+    .statis_month_title {
+        margin-top: 20px;
+        font-size: 18px;
+        text-indent: 20px;
+    }
+
+        .statis_month_title label {
+            font-size: 12px;
+        }
+
+    .p_statis_month_total {
+        text-indent: 2em;
+        font-size: 14px;
+        color: red;
+    }
+
+    div#pager a, .gys_znxx_content_detailbox a {
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        line-height: 25px;
+        font-size: 12px;
+        height: 25px;
+        border: 1px solid rgb(204, 204, 204);
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+        div#pager a:hover {
+            background-color:red;
+        }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">统计详情</div>
+                @*<a style="position:absolute;top:8px;right:20px;" class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>*@
+            </div>
+        </div>
+        <div class="statis_month_title">目前专家总数为： @ViewData["专家总数"] 位</div>
+        @{
+            Dictionary<string, long> ulist = ViewData["三月数据"] as Dictionary<string, long>;
+            DateTime start = new DateTime(DateTime.Now.Year, DateTime.Now.Month-1, DateTime.Now.Day);
+            DateTime end = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+        }
+        <div style="padding-left:20px;padding-right:20px;padding-top:10px;"><input id="startdate" value="@start" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd' })" /> - <input id="enddate" value="@end" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd' })" /><button id="btn_date_search">查询</button></div>
+        <div id="printContent">
+            <div class="gys_ztbsearch_contentbox" id="gysstatislist"><p class="p_statis_month_total" id="ad_statistic_total">@start.ToString("yyyy/MM/dd")起—@end.ToString("yyyy/MM/dd")止新增专家：@ViewData["区间查询数"] 位</p>
+            <table>
+                <tr><td colspan="2"><span style="font-size:18px; font-weight:bold;">近三月新增专家情况</span></td></tr>
+                <tr><th>期间</th><th>新增人数(位)</th></tr>
+                @foreach(var item in ulist)
+                {
+                    <tr><td>@item.Key</td><td>@item.Value</td></tr>
+                }
+            </table>   
+             @*<table cellpadding="0" cellspacing="0" id="adlist">
+                    <tr>
+                        <th width="20%">商品名称</th>
+                        <th width="10%">添加时间</th>
+                    </tr>
+                    @{
+                        IEnumerable<商品> gd = ViewData["所有商品"] as IEnumerable<商品>;
+                        if (gd != null && gd.Any())
+                        {
+                            foreach (var k in gd)
+                            {
+                                <tr>
+                                    <td class="name"><a href="/商品陈列/Product_Detail?id=@k.Id">@k.商品信息.商品名</a></td>
+                                    <td>@k.基本数据.添加时间</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </table>
+                <div class="gys_znxx_content_detailbox">
+                    @{
+                        int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                        int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                        if (Pagecount <= 6)
+                        {
+                            for (int i = 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/运营团队后台/GoodStatistic?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/运营团队后台/GoodStatistic?page=@i'>@i</a>
+                                }
+                            }
+                            if (Pagecount != 0)
+                            {
+                                <span>@(CurrentPage)/@(Pagecount) 页</span>
+                            }
+                        }
+                        else
+                        {
+                            if (CurrentPage < 6)
+                            {
+                                if (CurrentPage != 1)
+                                {
+                                    <a href="/运营团队后台/GoodStatistic?page=@(CurrentPage-1)">上一页</a>
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/运营团队后台/GoodStatistic?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/运营团队后台/GoodStatistic?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/运营团队后台/GoodStatistic?page=@(Pagecount)">@Pagecount</a><a href="/运营团队后台/GoodStatistic?page=@(CurrentPage+1)">下一页</a>
+                                    <span>@(CurrentPage)/@(Pagecount) 页</span>
+                                }
+                                else
+                                {
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/运营团队后台/GoodStatistic?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/运营团队后台/GoodStatistic?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/运营团队后台/GoodStatistic?page=@(Pagecount)">@Pagecount</a><a href="/运营团队后台/GoodStatistic?page=@(CurrentPage+1)">下一页</a>
+                                    <span>@(CurrentPage)/@(Pagecount) 页</span>
+                                }
+                            }
+                            else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                            {
+                                <a href="/运营团队后台/GoodStatistic?page=@(CurrentPage-1)">上一页</a><a href="/运营团队后台/GoodStatistic?page=1">1</a><span>...</span>
+                                for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/运营团队后台/GoodStatistic?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/运营团队后台/GoodStatistic?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/运营团队后台/GoodStatistic?page=@(Pagecount)">@Pagecount</a><a href="/运营团队后台/GoodStatistic?page=@(CurrentPage+1)">下一页</a>
+                                <span>@(CurrentPage)/@(Pagecount) 页</span>
+                            }
+                            else if (CurrentPage >= Pagecount - 3)
+                            {
+                                <a href="/运营团队后台/GoodStatistic?page=@(CurrentPage-1)">上一页</a><a href="/运营团队后台/GoodStatistic?page=1">1</a><span>...</span>
+                                for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/运营团队后台/GoodStatistic?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/运营团队后台/GoodStatistic?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>@(CurrentPage)/@(Pagecount) 页</span>
+                            }
+                        }
+                    }
+                </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#btn_date_search").click(function () {
+        var a = $("#startdate").val();
+        var b = $("#enddate").val();
+        $.ajax({
+            url: '/单位用户后台/ExpertStatisticNum',
+            data: { startdate: a, enddate: b },
+            success: function (data) {
+                $("#ad_statistic_total").html(a + "起—" + b + "止新增专家：" + data + "位");
+            },
+            error: function () {
+                alert("请求失败！");
+            },
+        });
+    });
+    $(function () {
+        $("#专家人数统计").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#专家人数统计").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

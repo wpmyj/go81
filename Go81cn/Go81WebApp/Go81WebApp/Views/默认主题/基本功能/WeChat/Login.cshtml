@@ -1,0 +1,38 @@
+﻿@using Go81WebApp.Models.数据模型.项目数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <script type="text/javascript" language="javascript" src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/JS/provinceandcity_all.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>西南物资采购网</title>
+    <link href="~/css/WeChat.css" rel="stylesheet" />
+</head>
+<body class="linearcolor">
+    <div class="outbox" style="margin-top:15%;background-color:transparent;">
+        <form action="/WeChat/LoginIn" method="post">
+            <table cellpadding="0" cellspacing="0" width="100%;">
+                <tr>
+                <td width="25%" align="right">登录名：</td>
+                <td>
+                    <input type="text" name="umane" value="" placeholder="请在这里输入登录名" />
+                </td>
+                </tr>
+                <tr>
+                <td align="right">密码：</td>
+                <td>
+                    <input type="password" name="pwd" value="" placeholder="请输入登录密码" />
+                </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><input type="submit" value="登录" /></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+﻿@using Go81WebApp.Models.数据模型.消息数据模型
+
+@using Go81WebApp.Models.管理器
+<style>
+    .gys_znxx_content table tr:hover td {
+        background-color: #f6f1f1;
+    }
+</style>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">站内消息</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="10%">重要程度</th>
+                    <th width="35%">标题</th>
+                    <th width="10%">发信人</th>
+                    <th width="28%">添加日期/修改日期</th>
+                    <th width="10%">是否已读</th>
+                    <th width="7%">操作</th>
+                </tr>
+                @{
+                    IEnumerable<站内消息> znxxlist = ViewData["站内消息列表"] as IEnumerable<站内消息>;
+                    if (znxxlist.Count() != 0)
+                    {
+                        foreach (var items in znxxlist)
+                        {
+                            if (items.发起者.用户数据 != null)
+                            {
+                                if (items.基本数据.添加时间 > items.收信人.上次阅读时间)
+                                {
+                                    foreach (var m in items.对话消息)
+                                    {
+                                        <tr>
+                                            <td style="text-align: center;">@items.重要程度</td>
+                                            <td style="text-align: center;"><a href="/运营团队后台/Msg_Detail?id=@items.Id">@m.消息主体.标题</a></td>
+                                            <td style="text-align: center;">@items.发起者.用户数据.登录信息.登录名</td>
+                                            <td style="font-size:12px;">@items.基本数据.添加时间.ToString("yyyy-MM-dd HH:mm") / @items.基本数据.修改时间.ToString("yyyy-MM-dd HH:mm")</td>
+                                            <td style="color:red; text-align: center;">未读</td>
+                                            <td style="text-align: center;"><a onclick="del(@items.Id)">删除</a></td>
+                                        </tr>
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    foreach (var m in items.对话消息)
+                                    {
+                                        <tr>
+                                            <td style="text-align: center;">@items.重要程度</td>
+                                            <td style="text-align: center;"><a href="/运营团队后台/Msg_Detail?id=@items.Id">@m.消息主体.标题</a></td>
+                                            <td style="text-align: center;">@items.发起者.用户数据.登录信息.登录名</td>
+                                            <td style="font-size:12px;">@items.基本数据.添加时间.ToString("yyyy-MM-dd HH:mm") / @items.基本数据.修改时间.ToString("yyyy-MM-dd HH:mm")</td>
+                                            <td style="text-align: center;">已读</td>
+                                            <td style="text-align: center;"><a onclick="del(@items.Id)">删除</a></td>
+                                        </tr>
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6">暂无相关数据！</td></tr>
+                    }
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString()))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).addClass("currentPage");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#已收消息").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#已收消息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此消息！确定删除吗？"))
+        {
+            window.location="/运营团队后台/Gys_Del_Msg?id="+num;
+        }
+    }
+</script>

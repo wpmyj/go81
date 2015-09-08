@@ -1,0 +1,87 @@
+﻿@using Go81WebApp.Models.数据模型.项目数据模型;
+<div class="gys_znxx_topbox">
+    <div class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">招标采购预报名列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="30%">项目名称</th>
+                    <th width="20%">项目编号</th>
+                    <th width="7%">报名数</th>
+                    <th width="7%">状态</th>
+                    <th width="7%">标书</th>
+                    <th width="12%">时间</th>
+                    <th width="17%">操作</th>
+                </tr>
+                @foreach (var item in (IEnumerable<招标采购预报名>)ViewData["预报名列表"])
+                {
+                    <tr>
+                        <td><a href="~/单位用户后台/SignUp_Detail?id=@item.Id" target="_blank">@item.所属公告链接.公告.项目信息.项目名称</a></td>
+                        <td><a href="~/单位用户后台/SignUp_Detail?id=@item.Id" target="_blank">@item.所属公告链接.公告.项目信息.项目编号</a></td>
+                        <td><a href="~/单位用户后台/SignUp_Detail?id=@item.Id" target="_blank">@item.预报名供应商列表.Count</a></td>
+                        @if (item.预报名已关闭)
+                        {
+                            <td>已关闭</td>
+                        }
+                        else
+                        {
+                            <td style="color:red;">进行中</td>
+                        }
+                        @if (item.标书信息 != null &&  item.标书信息.内容.Any())
+                        {
+                            <td style="color:red;">已上传</td>
+                        }
+                        else
+                        {
+                            <td>未上传</td>
+                        }
+                        
+                        <td>@item.基本数据.添加时间.ToString("yyyy.MM.dd")</td>
+                        <td>@*<a href="~/单位用户后台/SignUp_Information?id=@item.Id" target="_blank">所需资料管理</a>*@<a href="~/单位用户后台/SignUp_BiaoShu?id=@item.Id" target="_blank">标书管理</a><a href="~/单位用户后台/SignUp_Detail?id=@item.Id" target="_blank">详情</a><a onclick="del(@item.Id)">删除</a></td>
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border","1px solid #ff0000");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#招标采购预报名列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#招标采购预报名列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此预报名！确定删除吗？"))
+        {
+            window.location="/单位用户后台/SignUp_Delete?id="+num;
+        }
+    }
+</script>
+

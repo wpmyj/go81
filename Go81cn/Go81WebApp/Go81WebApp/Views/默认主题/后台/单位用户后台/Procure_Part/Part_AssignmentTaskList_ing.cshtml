@@ -1,0 +1,63 @@
+﻿@using Go81WebApp.Models.数据模型.需求计划模型
+@{var ing_AssignmentTaskList = ViewData["ing_AssignmentTaskList"] as IEnumerable<需求采购任务>;}
+<table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <th>管理部门</th>
+        <th style="width: 50px;">包含物资项</th>
+        <th style="width: 50px;">包含分发项</th>
+        <th>采购机构</th>
+        <th>采购方式</th>
+        <th>下达时间</th>
+        <th>完成时间</th>
+        <th>操作</th>
+    </tr>
+    @foreach (var item in ing_AssignmentTaskList)
+    {
+        <tr>
+            <td>@item.需求发起单位链接.用户数据.单位信息.单位名称</td>
+            <td>@item.物资列表.Count</td>
+            <td>@item.分发列表.Count</td>
+            <td>@item.当前处理单位链接.用户数据.单位信息.单位名称</td>
+            <td>@item.采购方式</td>
+            <td>@item.基本数据.添加时间.ToString("yyyy/MM/dd")</td>
+            <td>@item.建议完成时间.ToString("yyyy/MM/dd")</td>
+            <td class="gys_znxx_content_tabletime">
+                @Html.ActionLink("查看详情", "AssignmentTaskDetail", new { id = item.Id }, new { target = "_blank" })
+            </td>
+        </tr>
+    }
+</table>
+<div class="gys_znxx_content_detailbox">
+    @if (int.Parse(ViewData["ing_currentPage"].ToString()) == 1)
+    {
+        <a class="currentPage">首页</a>
+    }
+    else
+    {
+        <a id="1" onclick="changepre_ing(this)">首页</a>
+    }
+    @for (int i = 0; i <= 10; i++)
+    {                       //一共最多显示10个页码，前面5个，后面5个
+        if ((int.Parse(ViewData["ing_currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["ing_currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["ing_pagecount"].ToString()))
+        {
+            if (5 == i)
+            {                               //当前页处理
+                <a style="border:1px solid #ff0000;">@int.Parse(ViewData["ing_currentPage"].ToString())</a>
+            }
+            else
+            {                               //一般页处理
+                <a id="@(int.Parse(ViewData["ing_currentPage"].ToString()) + i - 5)" onclick="changepre_ing(this)">@(int.Parse(ViewData["ing_currentPage"].ToString()) + i - 5)</a>
+            }
+        }
+    }
+    @if (int.Parse(ViewData["ing_currentPage"].ToString()) == int.Parse(ViewData["ing_pagecount"].ToString()))
+    {
+        <a class="currentPage">末页</a>
+    }
+    else
+    {
+        <a id="@int.Parse(ViewData["ing_pagecount"].ToString())" onclick="changepre_ing(this)">末页</a>
+    }
+</div>
+
+

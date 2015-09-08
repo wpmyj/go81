@@ -1,0 +1,233 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.办事指南
+@{
+    ViewBag.Title = "修改办事指南";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<script>
+    var editor;
+    KindEditor.ready(function (K) {
+        editor = K.create('#content', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true
+        });
+
+    });
+</script>
+<style type="text/css">
+    .uploadifyQueueItem {
+        font: 11px Verdana, Geneva, sans-serif;
+        margin-top: 5px;
+        padding: 5px;
+        width: 650px;
+        height: 30px;
+        margin-right: 5px;
+        float: left;
+        text-align: left;
+    }
+
+    .procure_selectlistdiv input {
+        width: 13px;
+        height: 13px;
+        line-height: 25px;
+        margin-left: 0;
+    }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">添加办事指南</div>
+            </div>
+        </div>
+        <div style="border:1px solid #999; margin-top:8px;">
+            <div onkeypress="BindEnter(event, 'modiibutton')">
+                @using (Html.BeginForm("ModifyGuide", "单位用户后台", FormMethod.Post, new { enctype = "multipart/form-data", name = "formdata" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @Html.HiddenFor(m => m.Id)
+                    <input type="hidden" name="path" value="" id="path" />
+                    <div>
+                        <div class="gys_znxx_contentbox">
+                            <div class="gys_znxx_content">
+                                <div class="procureinputdiv">
+                                    <div class="procureinputdiv_title">指南标题：</div>
+                                    <div class="procure_formlistdiv">
+                                        @Html.TextBoxFor(model => model.内容主体.标题, new { style = "width:450px;", id = "container1" })
+                                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.内容主体.标题)</span>
+                                    </div>
+                                </div>
+                                <div class="procureinputdiv">
+                                    <div class="procureinputdiv_title">来源名称：</div>
+                                    <div class="procure_formlistdiv">
+                                        @Html.TextBoxFor(model => model.信息来源.来源名称, new { style = "width:450px;" })
+                                    </div>
+                                </div>
+                                <div class="procureinputdiv">
+                                    <div class="procureinputdiv_title">来源链接：</div>
+                                    <div class="procure_formlistdiv">
+                                        @Html.TextBoxFor(model => model.信息来源.来源链接, new { style = "width:450px;" })
+                                        <span style="color:red;">@Html.ValidationMessageFor(model => model.信息来源.来源链接)</span>
+                                    </div>
+                                </div>
+                                <div class="procureinputdiv">
+                                    <div class="procureinputdiv_title">发布时间：</div>
+                                    <div class="procure_formlistdiv">
+                                        @Html.TextBoxFor(m => m.内容主体.发布时间, new { onfocus = "WdatePicker({ dateFmt: 'yyyy/MM/dd HH:mm:ss' })", id = "datetime", style = "width:450px;" })
+                                        <span style="font-size: 12px;color:red; padding-left: 10px;">转载的内容，请选择原时间，该时间将显示在页面上(可不填)</span>
+                                    </div>
+                                </div>
+                                <div class="procureinputdiv">
+                                    <div class="procureinputdiv_title">
+                                        <table style="border:none;">
+                                            <tr>
+                                                <td style="border:none; background-color:white; width:80px; font-size:16px;" valign="top">内&nbsp;&nbsp;&nbsp;容：</td>
+                                                <td style="border:none; background-color:white;">
+                                                    @Html.TextBoxFor(m => m.内容主体.内容, new { id = "content", style = "width:690px; height: 400px;" })
+                                                    <div style="text-align:center;color:red; position:absolute; background-color:#EFF0E7; margin-top:-355px; margin-left:310px; display:none; width:250px; height:100px; border-radius:3px; font-size:12px;" id="tips">
+                                                        <div style="width:auto"><a href="###" onclick="shutdown()" style="float:right;margin-top:10px; margin-right:10px">关闭</a></div>
+                                                        <div style="clear:both; width:200px;height:30px;margin-left:35px;margin-top:40px;">
+                                                            <div id="tips1" style="color:red; font-size:14px; float:left;margin-left:10px;"></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <table width="100%" style="margin-left:20px;" cellspacing="0" cellpadding="0">
+                    @if (Model.内容主体.附件 != null && Model.内容主体.附件.Count() != 0)
+                    {
+                        <tr><td><h3>附件：</h3></td></tr>
+                        foreach (var item in Model.内容主体.附件)
+                        {
+                            if (System.IO.File.Exists(Server.MapPath(@item)))
+                            {
+                                <tr>
+                                    <td><a href="@item">@item.Split('/')[item.Split('/').Length - 1]</a><a lang="@item" title="gd" rel="@Model.Id" style="color:red; font-size:12px; margin-left:20px; text-decoration:underline;" onclick="delpic1(this)" href="###">删除</a></td>
+                                </tr>
+                            }
+                        }
+                    }
+                </table>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title" style="margin-left:20px;">是否添加附件：</div>
+                    <div style="padding-top:5px; width:300px;">
+                        <input type="radio" value="1" name="isattach" onclick="showattach(this)" />是
+                        <input type="radio" value="0" name="isattach" onclick="showattach(this)" checked="checked" />否
+                    </div>
+                </div>
+                <div id="attachdiv" class="attachdiv" style="margin-left:20px;">
+                    <div class="attachtitle">添加附件</div>
+                    <br />上传说明：
+                    <font color="red">请上传WORD,PPT,EXCEL,附件大小不超过100M</font><br />
+                    <div style="text-align:center">
+                        <div></div>
+                        <div id="ShowImage" class="product_add_upimagesbox"></div>
+                        <div class="product_add_upimagesbox_image"></div>
+                    </div>
+                    <div id="Uppicture">
+                        <form action="/运营团队后台/UploadImagesGT" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                            <input type="hidden" value="guide" name="guide" />
+                            <table width="100%" style="font-size:14px;margin-left: 167px;">
+                                <tr>
+                                    <td width="25%" align="right">请选择附件：</td>
+                                    <td width="75%">
+                                        <input type="file" id="file" onchange="filechange()" accept="application/msword" multiple="multiple" name="file1" style="width:72px;" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <div id="framebox" style="display:none;margin-left:180px;width:700px;  margin-right: auto;">
+                            <iframe name="showPic" id="showPic" frameborder="0" height="150" width="100%"></iframe>
+                        </div>
+                    </div>
+                    <div id="pBox" style="width:80%; margin-left:auto; margin-right:auto; height:auto;"></div>
+                </div>
+                <div style="clear:both;"></div>
+                <div style=" text-align:center;"><input id="modiibutton" onclick="submitForm()" type="button" style="margin-top:20px;" class="front_login_rightbox_button" value="保          存"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function filechange() {
+        document.forms["upload"].submit();
+    }
+    function delAttach(th) {
+        var path = $(th).attr("lang");
+        $.get('/单位用户后台/DeleteImages', { uri: path },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+        var newpath = document.getElementById("path").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("path").value = str;
+    }
+    function checkcontent() {
+        editor.sync("content");
+        if (document.getElementById("content").value.replace(/(^\s*)|(\s*$)/g, "") == "") {
+            $("#contenerror").html("内容必须填写");
+            return false;
+        }
+        else {
+            $("#contenerror").html("");
+            return true;
+        }
+    }
+    function showattach(a) {
+        if (a.value == "1")
+            document.getElementById("attachdiv").style.display = "block";
+        else {
+            document.getElementById("attachdiv").style.display = "none";
+        }
+    }
+    function submitForm() {
+        editor.sync("content");
+        if (document.getElementById("container1").value.replace(/(^\s*)|(\s*$)/g, "") == "") {
+            alert("标题必须填写！");
+            return false;
+        }
+        if (document.getElementById("content").value.replace(/(^\s*)|(\s*$)/g, "") == "") {
+            alert("内容必须填写！");
+            return false;
+        }
+        $("form[name='formdata']").submit();
+    }
+    function delpic1(th) {
+        $.get('/单位用户后台/DelPic', { name: $(th).attr("title"), path: $(th).attr("lang"), id: $(th).attr("rel") }, function (data) {
+            if (data == 1) {
+                $(th).parent().remove();
+                alert("删除成功!");
+            }
+        });
+    }
+    $(function () {
+        $("#办事指南列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#办事指南列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

@@ -1,0 +1,350 @@
+﻿@using Go81WebApp.Models.数据模型.权限数据模型
+@using Go81WebApp.Models.管理器
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">用户组列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0" id="qx_table">
+                <tr>
+                    <th width="220" style="text-align:left"></th>
+                    @{var num = 0;}
+                    @if (ViewBag.isActor)
+                    {
+                        foreach (var item in (IEnumerable<用户组>)ViewData["所管理用户组"])
+                        {
+                            <th>
+                                <input style=" width: 100px;" type="text" name="@item.用户组名" value="@item.用户组名">
+                                <input type="checkbox" disabled="disabled" id="@item.用户组名" name="@item.用户组名" class="select_all" />全选
+                            </th>
+                        }
+                    }
+                    else
+                    {
+                        num = ((IEnumerable<用户组>)ViewData["用户组列表"]).Count();
+                        foreach (var item in (IEnumerable<用户组>)ViewData["用户组列表"])
+                        {
+                            if (item.用户组名 == "数据交换账号" || item.用户组名 == "超级管理员" || item.用户组名 == "采购处管理员账号" || item.用户组名 == "验收单管理专员" || item.用户组名 == "两库管理专员" || item.用户组名 == "二级管理员账号" || item.用户组名 == "一级管理员账号" || item.用户组名 == "操作员账号A" || item.用户组名 == "纪检管理员账号")
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                <th>
+                                    <input style=" width: 100px;" type="text" name="@item.用户组名" value="@item.用户组名">
+                                    <input type="checkbox" disabled="disabled" id="@item.用户组名" name="@item.用户组名" class="select_all" />全选
+                                </th>
+                            }
+                        }
+                    }
+                </tr>
+
+                @if(ViewBag.isActor)
+                { 
+                    foreach(var j in (IEnumerable<string>)ViewData["当前用户权限"])
+                    {
+                        <tr>
+                            <td>@j</td>
+                            @foreach (var ml in (IEnumerable<用户组>)ViewData["所管理用户组"])
+                            {
+                                if (ml.权限列表 != null && ml.权限列表.Count > 0 && ml.权限列表.Contains(j.ToString()))
+                                {
+                                    <td style="text-align:center"><input type="checkbox" onclick="checkboxclick(this)" id="@ml.Id" name="@ml.用户组名" value="@j" disabled="disabled" checked="checked" /></td>
+                                }
+                                else
+                                {
+                                    <td style="text-align:center"><input type="checkbox" onclick="checkboxclick(this)" id="@ml.Id" name="@ml.用户组名" value="@j" disabled="disabled" /></td>
+                                }
+                            }
+                        </tr>
+                    }
+                }
+                else
+                { 
+                    foreach (var item in (Dictionary<权限, object>)ViewData["权限集合"])
+                    {
+                        <tr>
+                            <td colspan="@(num+1)" onclick="showQx(this)">@item.Key<span style="float:right;font-size:18px; cursor:pointer">+</span></td>
+                        </tr>
+                        <tr contextmenu="false" style="display:none">
+                            <td colspan="@(num+1)" style="padding:0;">
+                                <table width="100%" style="margin:0;border:none" cellpadding="0" cellspacing="0">
+                                    @{var t = item.Value.GetType().BaseType.Name == "Array";}
+                                    @if (t)
+                                    {
+                                        foreach (var k in item.Value as 权限[])
+                                        {
+                                            <tr>
+                                                <td width="220px;" style="text-indent:2em">@k</td>
+                                                @foreach (var it in (IEnumerable<用户组>)ViewData["用户组列表"])
+                                                {
+                                                    if (it.用户组名 == "数据交换账号" || it.用户组名 == "超级管理员" || it.用户组名 == "采购处管理员账号" || it.用户组名 == "验收单管理专员" || it.用户组名 == "两库管理专员" || it.用户组名 == "二级管理员账号" || it.用户组名 == "一级管理员账号" || it.用户组名 == "操作员账号A" || it.用户组名 == "纪检管理员账号")
+                                                    { 
+                                                        continue;
+                                                    }
+                                                    else
+                                                    { 
+                                                        if (it.权限列表 != null && it.权限列表.Count > 0 && it.权限列表.Contains(k.ToString()))
+                                                        {
+                                                            <td style="text-align:center"><input type="checkbox" onclick="checkboxclick(this)" id="@it.Id" name="@it.用户组名" value="@k" disabled="disabled" checked="checked" /></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td style="text-align:center"><input type="checkbox" onclick="checkboxclick(this)" id="@it.Id" name="@it.用户组名" value="@k" disabled="disabled" /></td>
+                                                        }
+                                                    }
+                                                }
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (var k in (Dictionary<权限, 权限[]>)item.Value)
+                                        {
+                                            <tr>
+                                                <td width="220px;" style="text-indent:2em" onclick="showQx(this)">@k.Key <span style="float:right;font-size:18px; cursor:pointer">+</span></td>
+                                            </tr>
+                                            <tr style="display:none" contextmenu="false">
+                                                <td style="padding:0;">
+                                                    <table width="100%" style="margin:0;border:none" cellpadding="0" cellspacing="0">
+                                                        @foreach (var m in k.Value as 权限[])
+                                                        {
+                                                            <tr>
+                                                                <td width="220px;" style="text-indent:4em">@m</td>
+                                                                @foreach (var it in (IEnumerable<用户组>)ViewData["用户组列表"])
+                                                                {
+                                                                    if (it.用户组名 == "数据交换账号" || it.用户组名 == "超级管理员" || it.用户组名 == "采购处管理员账号" || it.用户组名 == "验收单管理专员" || it.用户组名 == "两库管理专员" || it.用户组名 == "二级管理员账号" || it.用户组名 == "一级管理员账号" || it.用户组名 == "操作员账号A" || it.用户组名 == "纪检管理员账号")
+                                                                    {
+                                                                        continue; 
+                                                                    }
+                                                                    else
+                                                                    { 
+                                                                        if (it.权限列表 != null && it.权限列表.Count > 0 && it.权限列表.Contains(m.ToString()))
+                                                                        {
+                                                                            <td style="text-align:center"><input type="checkbox" onclick="checkboxclick(this)" id="@it.Id" name="@it.用户组名" value="@m" disabled="disabled" checked="checked" /></td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td style="text-align:center"><input type="checkbox" onclick="checkboxclick(this)" id="@it.Id" name="@it.用户组名" value="@m" disabled="disabled" /></td>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </table>
+                            </td>
+
+                        </tr>
+                    }
+                }
+                <tr>
+                    <td><b>编辑</b></td>
+                    @if (ViewBag.isActor)
+                    {
+                        foreach (var it in (IEnumerable<用户组>)ViewData["所管理用户组"])
+                        {
+                            <td><a id="@it.Id" class="modifiusergroup" name="@it.用户组名" onclick="modifiusergroup(this);">修改</a><a id="@it.Id" name="@it.用户组名" onclick="deleteusergroup(this);">删除</a></td>
+                        }
+                    }
+                    else
+                    {
+                        foreach (var it in (IEnumerable<用户组>)ViewData["用户组列表"])
+                        {
+                            if (it.用户组名 == "数据交换账号" || it.用户组名 == "超级管理员" || it.用户组名 == "采购处管理员账号" || it.用户组名 == "验收单管理专员" || it.用户组名 == "两库管理专员" || it.用户组名 == "二级管理员账号" || it.用户组名 == "一级管理员账号" || it.用户组名 == "操作员账号A" || it.用户组名 == "纪检管理员账号")
+                            {
+                                continue;
+                            }
+                            else
+                            { 
+                            <td><a id="@it.Id" class="modifiusergroup" name="@it.用户组名" onclick="modifiusergroup(this);">修改</a><a id="@it.Id" name="@it.用户组名" onclick="deleteusergroup(this);">删除</a></td>
+                            }    
+                        }
+                    }
+                </tr>
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+            <script language="javascript">
+                //展开/收缩权限列表
+                function showQx(ev) {
+                    var isShow = $(ev).parent().next().attr("contextmenu"); //判断子分类权限是展开还是收缩
+                    if (isShow=="true") {
+                        $(ev).parent().next().fadeOut(200);
+                        $(ev).parent().next().attr({ "contextmenu": "false" });
+                        $(ev).find("span").html("+").css({ "font-size": "18px" });
+                    }
+                    else {
+                        $(ev).parent().next().fadeIn(200);
+                        $(ev).parent().next().attr({ "contextmenu": "true" });
+                        $(ev).find("span").html("-").css({ "font-size": "30px" });
+                    }
+                };
+                //修改用户组权限
+                function modifiusergroup(ev) {
+                    var type_func = $(ev).html();
+                    var objname = ev.getAttribute("name");
+                    var obj = document.getElementsByName(objname);
+                    if (type_func == "修改") {
+                        $.each(obj, function (index, domEle) {
+                            $(domEle).removeAttr("disabled");
+                        });
+                        $(ev).html("保存");
+                    };
+                    if (type_func == "保存") {
+                        var id = ev.getAttribute("id");
+                        var name = "";
+                        var liststr = "";
+                        for (var i = 0; i < obj.length; i++) {
+                            if (obj[i].type == "checkbox" && obj[i].checked) {
+                                if(obj[i].value !="on"){
+                                    liststr += obj[i].value + ",";
+                                }
+                            }
+                            else {
+
+                            }
+                            if (obj[i].type == "text") {
+                                name = obj[i].value;
+                                if (name == "" || name == null) {
+                                    alert("用户组名不能为空！");
+                                    obj[i].focus();
+                                    return;
+                                }
+                            }
+                        }
+                        $.ajax({
+                            url: '/单位用户后台/Usergroup_Modify',
+                            type: 'post',
+                            data: { ID: id, permissionstr: liststr, Name: name },
+                            success: function () {
+                                alert("修改成功！");
+                                var objname = ev.getAttribute("name");
+                                var obj = document.getElementsByName(objname);
+                                for (var i = 0; i < obj.length; i++) {
+                                    obj[i].disabled="true";
+                                };
+                                $(ev).html("修改");
+                                //window.top.location = "/单位用户后台/Usergroup_Mannage";
+                            },
+                            error: function () {
+                                alert("修改失败！");
+                            },
+                        });
+                    };
+                }
+                function checkboxclick(ev) {
+                    var isall = false;
+                    var objname = ev.getAttribute("name");
+                    var obj = document.getElementsByName(objname);
+                    for (var i = 0; i < obj.length; i++) {
+                        if (obj[i].type == "checkbox" && obj[i].checked) {
+                            isall = true;
+                        }
+                        if (obj[i].type == "checkbox" && !obj[i].checked) {
+                            isall = false;
+                            break;
+                        };
+                    };
+                    if (isall) {
+                        $("input[id='" + objname + "']").prop("checked", true);
+                    }
+                    else {
+                        $("input[id='" + objname + "']").prop("checked", false);
+                    };
+                };
+                function deleteusergroup(ev) {
+                    if (confirm("确定要删除该用户组吗？")) {
+                        var id = ev.getAttribute("id");
+                        $.get("/单位用户后台/Usergroup_Delete?id=" + encodeURI(id), function (response) {
+                            if (response == "success") {
+                                alert("删除成功！");
+                                window.top.location = "/单位用户后台/Usergroup_Mannage";
+                            }
+                            else {
+                                alert(response);
+                            }
+                        });
+                    };
+                }
+
+                $(".select_all").click(function () {
+                    t=$(this);
+                    var a = $("#qx_table").children().children();
+                    var check_box = a.find("input[type='checkbox']");
+                    var f=$(this).prev().val();
+                    $.each(check_box, function (index, domEle) {
+                        var g = $(domEle).attr("name");
+                        if ($(domEle).attr("name") == f) {
+                            
+                            if(t.is(":checked")){
+                                $(domEle).prop("checked", true);
+                            }
+                            else{
+                                $(domEle).prop("checked", false);
+                            }
+                        }
+                    });
+                });
+                var num =@(int.Parse(ViewData["currentpage"].ToString()));
+                var j=@(int.Parse(ViewData["pagecount"].ToString()));
+                $(function () {
+                    var a = $("#qx_table").children().children().eq(0).children().find("input[type='text']"); //获取所有权限组
+                    $.each(a, function (index, dom) {  //遍历权限组
+                        var d = $("#qx_table").children().children();
+                        var check_box = d.find("input[type='checkbox']");
+                        var f = $(dom).val();     //取出当前权限组的名称
+                        var isSelectall = false;  //判断当前权限组下的权限是否全选
+                        $.each(check_box, function (index, domEle) {  //遍历所有权限
+                            var dom_ele = $(domEle);
+                            var s = f;
+                            if ($(domEle).hasClass("select_all")) {
+
+                            }
+                            else {
+                                var g = dom_ele.attr("name");  //取出当前权限的属性name的值
+                                if (g == s && dom_ele.is(":checked")) {     //如果name等于当前权限组的名称，则该权限组拥有该权限
+                                    //alert("true");
+                                    isSelectall = true;
+                                }
+                                if (g == s && !dom_ele.is(":checked")) {
+                                    // alert("fasle");
+                                    isSelectall = false;
+                                    return false;     //如果当前权限组中有某一个权限不是选中状态则结束循环同时设置没全选为false
+                                }
+                            }
+                        });
+                        if (isSelectall) {
+                            $(dom).next().prop("checked", true);
+                        }
+                        else {
+                            $(dom).next().prop("checked", false);
+                        }
+                    });
+                    
+                    $(".gys_znxx_content_detailbox a").each(function () {
+                        if ($(this).text() == num) {
+                            $(this).addClass("currentPage");
+                        }
+                        if (num == j) {
+                            $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+                        }
+                        if (num == 1) {
+                            $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+                        }
+                    });
+                    $("#用户组管理").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+                    $("#用户组管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+                });
+            </script>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.培训资料
+           <style>
+                .links:hover{ text-decoration:underline;}
+           </style>
+<div class="gys_xttz_box">
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">业务培训详情</div>
+        </div>
+    </div>
+
+    <div class="gys_xttz_contentbox">
+        @if (Model != null)
+        {
+            <div class="gys_xttz_contentbox_news_title" style="border-bottom:none;">@Model.内容主体.标题</div>
+    <div class="gys_xttz_contentbox_news_from" style="border-bottom:1px solid #CCC; height:30px; width:950px;">
+        @if (Model.信息来源 != null)
+        {
+            if (!string.IsNullOrEmpty(Model.信息来源.来源名称))
+            {
+                <span style="padding:0 10px 0 10px;">来源:<a class="links" href="@Model.信息来源.来源链接" target="_blank">@Model.信息来源.来源名称</a></span>
+            }
+            @*if (!string.IsNullOrEmpty(Model.通知来源.来源链接))
+            {
+                <span style="padding:0 10px 0 10px;">
+                    来源地址:
+                    @if (Model.通知来源.来源链接.Length > 20)
+                    {
+                        <a target="_blank" title="@Model.通知来源.来源链接" href="@Model.通知来源.来源链接">@Model.通知来源.来源链接.Substring(0, 20)</a>
+                    }
+                    else
+                    {
+                        <a target="_blank" title="@Model.通知来源.来源链接" href="@Model.通知来源.来源链接">@Model.通知来源.来源链接</a>
+                    }
+                </span>
+            }*@
+        }
+        <span style="padding:0 10px 0 10px;">时间:@Model.内容主体.发布时间.ToString("yyyy-MM-dd")</span>
+    </div>
+            <div class="gys_xttz_contentbox_news_text">
+                @Html.Raw(Model.内容主体.内容)
+            </div>
+            if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
+            {
+                <div class="showattachment">附件列表:</div>
+                for (int i = 0; i < Model.内容主体.附件.Count; i++)
+                {
+                    <div class="showattachment_list">
+                        <a target="_blank" href="@Model.内容主体.附件[i]">附件@(i + 1)</a>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <div class="gys_xttz_contentbox_news_title">暂无此类信息</div>
+        }
+    </div>
+
+</div>
+@if (WebApiApplication.IsIntranet)
+{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () { $("div.Page6").addClass("on"); });
+    </script>
+
+}
+else
+{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () { $("div.Page6").addClass("on"); });
+    </script>
+
+}

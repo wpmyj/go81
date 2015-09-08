@@ -1,0 +1,1002 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.用户数据模型.用户基本数据>
+@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.管理器
+@using Go81WebApp.Models.数据模型.推广业务数据模型
+@using Go81WebApp.Models.管理器.推广业务管理
+@using MongoDB.Driver.Builders
+<link href="~/css/css.css" rel="stylesheet" />
+<link href="~/css/hotelandticket.css" rel="stylesheet" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+<script src="~/JS/provinceandcity_all.js"></script>
+<script src="~/JS/marquee.js" type="text/javascript"></script>
+<script src="~/JS/clickStatistics.js" type="text/javascript"></script>
+<style type="text/css">
+    .marker_la {
+        position: absolute;
+        font-size: 12px;
+        font-family: 宋体;
+        font-weight: normal;
+        display: inline-block;
+        height: 17px;
+        width: 170px;
+        left: 45px;
+        top: 0;
+        padding: 2px;
+        max-width: none;
+        border: 1px solid #B0B0B0;
+    }
+
+    .marker_tig {
+        position: absolute;
+        height: 0;
+        width: 0;
+        border-bottom: 5px solid transparent;
+        border-right: 11px solid #B0B0B0;
+        border-top: 5px solid transparent;
+        left: 34px;
+        top: 6px;
+    }
+
+        .marker_tig::after {
+            content: "";
+            position: absolute;
+            height: 0;
+            width: 0;
+            border-bottom: 5px solid transparent;
+            border-right: 11px solid #fff;
+            border-top: 5px solid transparent;
+            top: -5px;
+            left: 3px;
+        }
+</style>
+<div class="gys_xttz_box yjcg">
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">供应商查询</div>
+        </div>
+    </div>
+    <table class="gys_ztbsearch_contentbox" style="margin-top:0">
+        <tr class="gys_ztbsearch_classbox">
+            <td class="gys_ztbsearch_class" style="margin-left:0;">所属地区：</td>
+            <td>
+                <select id="deliverprovince" name="deliverprovince"></select>
+                <select id="delivercity" name="delivercity"></select>
+                <select id="deliverarea" name="deliverarea"></select>
+                <script>
+                    window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                </script>
+            </td>
+        </tr>
+        <tr class="gys_ztbsearch_classbox">
+            <td class="gys_ztbsearch_class" style="margin-left:0;">地理位置：</td>
+            <td style="position:relative" class="direction">
+                <input type="hidden" id="hidloc_h" />
+                <span style="font-size:12px;color:black">距离：</span><input style="width:60px; text-align:center" id="range_h" type="text" /><span style="font-size:12px;color:black;padding-left:5px;">公里</span>&nbsp;&nbsp;
+                <span style="display:inline-block;width:28px;height:22px;position:relative;">
+                    <input id="loc_gys" class="marker" type="button" />
+                    <label class="marker_la" style="">请点击此按钮在地图上选择地址</label>
+                    <span class="marker_tig"></span>
+                </span>
+                <a style="margin-left:0px;display:none; cursor:pointer; float:none;font-size:12px;border:1px solid #CCC" id="showloc"></a>
+                <div class="loc_div_out">
+                    <div class="close_div">×</div>
+                    <div class="modal_m">
+                        <div class="loc_ing" id="loc_ing"></div>
+                        <div id="MapGys" class="loc_div"></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr class="gys_ztbsearch_search">
+            <td class="gys_ztbsearch_class" style="margin-left:0;">所属行业：</td>
+            <td class="">
+                @{
+                    IEnumerable<商品分类> goodclass = ViewData["行业列表"] as IEnumerable<商品分类>;
+                    if (goodclass != null && goodclass.Any())
+                    {
+                        <select id="yjfn" class="yjfn">
+                            <option>请选择行业</option>
+                            @foreach (var i in goodclass)
+                            {
+                                <option id="@i.Id">@i.分类名</option>
+                            }
+                        </select>
+                    }
+                    @*<select class="ejfn">
+                            <option>不限</option>
+                        </select>
+                        <select class="sjfn">
+                            <option>不限</option>
+                        </select>*@
+                }
+            </td>
+        </tr>
+        @*<tr class="gys_ztbsearch_search">
+                <td class="gys_ztbsearch_class">行业名称：</td>
+                <td>
+                    <input id="search_text_industry" type="text" class="gys_ztbsearch_search_text" />
+
+                </td>
+            </tr>*@
+        <tr class="gys_ztbsearch_search">
+            <td class="gys_ztbsearch_class" style="margin-left:0;">企业名称：</td>
+            <td>
+                <input id="search_text" type="text" class="gys_ztbsearch_search_text" />
+                <input id="ss_btn" type="button" class="gys_ztbsearch_search_botton" value="查询" />
+            </td>
+        </tr>
+    </table>
+    <div class="gys_ztbsearch_contentbox" id="userlist" style="margin-bottom: 10px;">
+        @{
+            IEnumerable<用户基本数据> gsylist = ViewData["供应商列表"] as IEnumerable<用户基本数据>;
+            if (gsylist != null && gsylist.Any())
+            {
+                foreach (var k in gsylist)
+                {
+                    if (k != null)
+                    {
+                       供应商 gys = k as 供应商;
+
+            var 服务记录 = 供应商服务记录管理.查询供应商服务记录(0, 0, Query<供应商服务记录>.Where(o => o.所属供应商.用户ID == k.Id));
+            var flageleft = 服务记录.Any() && 服务记录.First().已开通的服务.Any() && 服务记录.First().已开通的服务.Where(o => (o.所申请项目名.Contains("基础会员") && o.结束时间 > DateTime.Now) || (o.所申请项目名.Contains("标准会员") && o.结束时间 > DateTime.Now) || (o.所申请项目名.Contains("商务会员") && o.结束时间 > DateTime.Now)).Any();
+            if (flageleft)
+            {
+                <div class="pay_gys_info">
+                    @if (服务记录.First().已开通的服务.Where(o => (o.所申请项目名.Contains("基础会员") && o.结束时间 > DateTime.Now)).Any())
+                    {
+                        <div class="lefts" style="width:100%;">
+                        <a class="gys_title" href="/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">@Html.Raw(gys.企业基本信息.企业名称)</a>
+                        @if (gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通商务会员 || gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通基础会员 || gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通标准会员)
+                        {
+                            <span style=" display:inline-block; width:40px; height:20px;background-image:url(/Images/jctico.png);"></span>
+                            <span title="军采通会员" style=" display:inline-block; width:23px; height:23px;background:url(/Images/jcthy.png);"></span>
+                        }
+                        else if (gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通基础会员)
+                        {
+                            <span style=" display:inline-block; width:40px; height:20px;background-image:url(/Images/jctico.png);"></span>
+                        }
+                        else if (gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通商务会员)
+                        {
+                            <span style=" display:inline-block; width:40px; height:20px;background-image:url(/Images/jctico.png);"></span>
+                        }
+                        <div class="icon_bar">
+                            @*@if (d >= 4)
+                                {*@ <a class="rzgys_y" href="#" title="@gys.供应商用户信息.认证级别"></a>@*}*@
+
+                                @if (gys.供应商用户信息.年检列表.ContainsKey(DateTime.Now.Year.ToString()))
+                                {
+                                    <a class="njgys_y" href="#" title="已年检"></a>
+                                }
+
+                                @if (gys.供应商用户信息.应急供应商)
+                                { <a class="yjgys_y" href="#" title="应急供应商"></a>}
+
+                                @if (gys.供应商用户信息.协议供应商)
+                                { <a class="xygys_y" href="#" title="协议供应商"></a>}
+
+                                @if ((int)gys.供应商用户信息.入库级别 >= 2)
+                                { <a class="rkgys_y" href="#" title="@gys.供应商用户信息.入库级别"></a>}
+                            </div>
+                            <table width="100%" cellspacing="3">
+
+                                <tr>
+                                    <td class="notes swidth">所属行业:</td>
+                                    <td class="notes_con mwidth" title="@gys.企业基本信息.所属行业">
+                                        @if (gys.企业基本信息 != null && !string.IsNullOrEmpty(gys.企业基本信息.所属行业))
+                                        {
+                                            <span class="gyslist_zhuying">@gys.企业基本信息.所属行业</span>
+                                        }
+                                        else
+                                        {
+                                            <span>未填写</span>
+                                        }
+                                    </td>
+                                    <td class="notes lwidth">经营类型:</td>
+                                    <td class="notes_con" title="@gys.企业基本信息.经营类型 / @gys.企业基本信息.经营子类型">@gys.企业基本信息.经营类型 / @gys.企业基本信息.经营子类型</td>
+                                    <td class="notes swidth">主营产品:</td>
+                                    @{
+                                        var m = "";
+                                        foreach (var h in gys.可提供产品类别列表)
+                                        {
+                                            foreach (var h_s in h.二级分类)
+                                            {
+                                                m += h_s + ";";
+                                            }
+                                        }
+                                    }
+                                    <td class="notes_con mwidth" title="@m">
+                                        <span class="gyslist_zhuying">@m</span>
+                                    </td>
+                                    <td class="notes">历史参标记录:</td>
+                                    <td class="notes_con">@gys.历史参标记录.Count() 次</td>
+                                </tr>
+                                <tr>
+                                    <td class="notes swidth">所在地域:</td>
+                                    <td class="notes_con mwidth">
+                                        @if (gys.所属地域.地域.Length > 14)
+                                        {
+                                            <span>@gys.所属地域.地域.Substring(0, 14) ...</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@gys.所属地域.地域</span>
+                                        }
+                                    </td>
+                                    <td class="notes lwidth">发布商品:</td>
+                                    <td class="notes_con">@商品管理.查询供应商商品(gys.Id, 0, 0, Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), includeDisabled: false).Count() 个</td>
+
+
+                                    @*<td class="notes lwidth">信用评级:</td>
+
+                                        @if (服务记录.First().已开通的服务.Where(o => (o.所申请项目名.Contains("商务会员") && o.结束时间 > DateTime.Now)).Any())
+                                        {
+                                            <td class="notes_con">商务会员</td>
+                                        }
+                                        else if (服务记录.First().已开通的服务.Where(o => (o.所申请项目名.Contains("标准会员") && o.结束时间 > DateTime.Now)).Any())
+                                        {
+                                            <td class="notes_con">标准会员</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="notes_con">基础会员</td>
+                                        }*@
+                                    <td class="notes swidth">员工人数:</td>
+                                    <td class="notes_con mwidth">@gys.企业基本信息.员工人数</td>
+                                    <td class="notes lwidth">联系方式:</td>
+                                    <td class="notes_con">@gys.企业联系人信息.联系人固定电话</td>
+                                </tr>
+                                <tr>
+                                    <td class="notes" valign="top" colspan="2" style="text-align:left">
+                                        @if (gys.资质证书列表.Any() && gys.资质证书列表[0].资质证书电子扫描件.Any() && !string.IsNullOrEmpty(gys.资质证书列表[0].资质证书电子扫描件[0].路径))
+                                        {
+                                            <a href="@gys.资质证书列表[0].资质证书电子扫描件[0].路径" target="_blank">资质证书></a>
+                                        }
+                                        else
+                                        {
+                                            <a>资质证书></a>
+                                        }
+                                        @if (gys.供应商用户信息.供应商图片.Any())
+                                        {
+                                            <a href="@gys.供应商用户信息.供应商图片.Last()" target="_blank">厂房设备图></a>
+                                        }
+                                        else
+                                        {
+                                            <a>厂房设备图></a>
+                                        }
+                                        @if (gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通商务会员)
+                                        {
+                                            <a href="/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">更多企业信息></a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/登录/Login?ReturnUrl=/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">更多企业信息></a>
+                                        }
+                                    </td>
+                                    <td class="notes" valign="top"></td>
+                                    <td class="notes_con"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="lefts">
+                        <a class="gys_title" href="/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">@Html.Raw(gys.企业基本信息.企业名称)</a>
+                        @if (gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通商务会员 || gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通基础会员 || gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通标准会员)
+                        {
+                            <span style=" display:inline-block; width:40px; height:20px;background-image:url(/Images/jctico.png);"></span>
+                            <span title="军采通会员" style=" display:inline-block; width:23px; height:23px;background:url(/Images/jcthy.png);"></span>
+                        }
+                        else if (gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通基础会员)
+                        {
+                            <span style=" display:inline-block; width:40px; height:20px;background-image:url(/Images/jctico.png);"></span>
+                        }
+                        else if (gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通商务会员)
+                        {
+                            <span style=" display:inline-block; width:40px; height:20px;background-image:url(/Images/jctico.png);"></span>
+                        }
+                        <div class="icon_bar">
+                            @*@if (d >= 4)
+                                {*@ <a class="rzgys_y" href="#" title="@gys.供应商用户信息.认证级别"></a>@*}*@
+
+                                @if (gys.供应商用户信息.年检列表.ContainsKey(DateTime.Now.Year.ToString()))
+                                {
+                                    <a class="njgys_y" href="#" title="已年检"></a>
+                                }
+
+                                @if (gys.供应商用户信息.应急供应商)
+                                { <a class="yjgys_y" href="#" title="应急供应商"></a>}
+
+                                @if (gys.供应商用户信息.协议供应商)
+                                { <a class="xygys_y" href="#" title="协议供应商"></a>}
+
+                                @if ((int)gys.供应商用户信息.入库级别 >= 2)
+                                { <a class="rkgys_y" href="#" title="@gys.供应商用户信息.入库级别"></a>}
+                            </div>
+                            <table width="auto">
+
+                                <tr>
+                                    <td class="notes swidth">所属行业:</td>
+                                    <td class="notes_con mwidth" title="@gys.企业基本信息.所属行业">
+                                        @if (gys.企业基本信息 != null && !string.IsNullOrEmpty(gys.企业基本信息.所属行业))
+                                        {
+                                            <span class="gyslist_zhuying">@gys.企业基本信息.所属行业</span>
+                                        }
+                                        else
+                                        {
+                                            <span>未填写</span>
+                                        }
+                                    </td>
+                                    <td class="notes lwidth">经营类型:</td>
+                                    <td class="notes_con" title="@gys.企业基本信息.经营类型 / @gys.企业基本信息.经营子类型">@gys.企业基本信息.经营类型 / @gys.企业基本信息.经营子类型</td>
+                                </tr>
+                                <tr>
+                                    <td class="notes swidth">主营产品:</td>
+                                    @{
+                                        var m = "";
+                                        foreach (var h in gys.可提供产品类别列表)
+                                        {
+                                            foreach (var h_s in h.二级分类)
+                                            {
+                                                m += h_s + ";";
+                                            }
+                                        }
+                                    }
+                                    <td class="notes_con mwidth" title="@m">
+                                        <span class="gyslist_zhuying">@m</span>
+                                    </td>
+                                    <td class="notes">历史参标记录:</td>
+                                    <td class="notes_con">@gys.历史参标记录.Count() 次</td>
+
+
+
+                                </tr>
+                                <tr>
+                                    <td class="notes swidth">所在地域:</td>
+                                    <td class="notes_con mwidth">
+                                        @if (gys.所属地域.地域.Length > 14)
+                                        {
+                                            <span>@gys.所属地域.地域.Substring(0, 14) ...</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@gys.所属地域.地域</span>
+                                        }
+                                    </td>
+                                    <td class="notes lwidth">发布商品:</td>
+                                    <td class="notes_con">@商品管理.查询供应商商品(gys.Id, 0, 0, Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), includeDisabled: false).Count() 个</td>
+
+
+                                    @*<td class="notes lwidth">信用评级:</td>
+
+                                        @if (服务记录.First().已开通的服务.Where(o => (o.所申请项目名.Contains("商务会员") && o.结束时间 > DateTime.Now)).Any())
+                                        {
+                                            <td class="notes_con">商务会员</td>
+                                        }
+                                        else if (服务记录.First().已开通的服务.Where(o => (o.所申请项目名.Contains("标准会员") && o.结束时间 > DateTime.Now)).Any())
+                                        {
+                                            <td class="notes_con">标准会员</td>
+                                        }
+                                        else
+                                        {
+                                            <td class="notes_con">基础会员</td>
+                                        }*@
+
+                                </tr>
+                                <tr>
+                                    <td class="notes swidth">员工人数:</td>
+                                    <td class="notes_con mwidth">@gys.企业基本信息.员工人数</td>
+                                    <td class="notes lwidth">联系方式:</td>
+                                    <td class="notes_con">@gys.企业联系人信息.联系人固定电话</td>
+                                </tr>
+                                <tr>
+                                    <td class="notes" valign="top" colspan="2" style="text-align:left">
+                                        @if (gys.资质证书列表.Any() && gys.资质证书列表[0].资质证书电子扫描件.Any() && !string.IsNullOrEmpty(gys.资质证书列表[0].资质证书电子扫描件[0].路径))
+                                        {
+                                            <a href="@gys.资质证书列表[0].资质证书电子扫描件[0].路径" target="_blank">资质证书></a>
+                                        }
+                                        else
+                                        {
+                                            <a>资质证书></a>
+                                        }
+                                        @if (gys.供应商用户信息.供应商图片.Any())
+                                        {
+                                            <a href="@gys.供应商用户信息.供应商图片.Last()" target="_blank">厂房设备图></a>
+                                        }
+                                        else
+                                        {
+                                            <a>厂房设备图></a>
+                                        }
+                                        @if (gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通商务会员)
+                                        {
+                                            <a href="/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">更多企业信息></a>
+                                        }
+                                        else
+                                        {
+                                            <a href="/登录/Login?ReturnUrl=/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">更多企业信息></a>
+                                        }
+                                    </td>
+                                    <td class="notes" valign="top"></td>
+                                    <td class="notes_con"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="rights">
+                            @{
+                                        //判断是否是会员或订购B1-1，B1-2
+                                        var flageright = 服务记录.Any() && 服务记录.First().已开通的服务.Any() && 服务记录.First().已开通的服务.Where(o => (o.所申请项目名.Contains("标准会员") && o.结束时间 > DateTime.Now) || (o.所申请项目名.Contains("商务会员") && o.结束时间 > DateTime.Now) || (o.所申请项目名.Contains("企业推广服务B1-1位置") && o.结束时间 > DateTime.Now) || (o.所申请项目名.Contains("企业推广服务B1-2位置") && o.结束时间 > DateTime.Now)).Any();
+                            }
+                            @if (flageright)
+                            {
+                                //计算展示商品个数
+                                var 已开通的服务 = 服务记录.First().已开通的服务;
+                                var 广告商品B1_1 = 已开通的服务.Where(o => o.所申请项目名.Contains("企业推广服务B1-1位置") && o.结束时间 > DateTime.Now);
+                                var 广告商品B1_2 = 已开通的服务.Where(o => o.所申请项目名.Contains("企业推广服务B1-2位置") && o.结束时间 > DateTime.Now);
+                                var 商务会员 = 已开通的服务.Where(o => o.所申请项目名.Contains("商务会员") && o.结束时间 > DateTime.Now);
+                                var 标准会员 = 已开通的服务.Where(o => o.所申请项目名.Contains("标准会员") && o.结束时间 > DateTime.Now);
+                                var 广告商品数 = (广告商品B1_2.Any() || 商务会员.Any()) ? 6 : (广告商品B1_1.Any() || 标准会员.Any()) ? 3 : 0;
+                                if (广告商品数 <= 3)
+                                {
+                                    <div class="rights_more"><a href="/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">查看更多商品>></a></div>
+                                    var showpropic = new List<商品链接>();
+
+                                    if (gys.供应商用户信息.广告商品.ContainsKey("标准会员") || gys.供应商用户信息.广告商品.ContainsKey("企业推广服务B1-1位置"))
+                                    {
+                                        if (广告商品数 == 3)
+                                        {
+                                            if (gys.供应商用户信息.广告商品.ContainsKey("企业推广服务B1-1位置"))
+                                            {
+                                                showpropic = gys.供应商用户信息.广告商品["企业推广服务B1-1位置"].Select(o => o.商品).ToList();
+                                            }
+                                            else if (gys.供应商用户信息.广告商品.ContainsKey("标准会员"))
+                                            {
+                                                showpropic = gys.供应商用户信息.广告商品["标准会员"].Select(o => o.商品).ToList();
+                                            }
+                                        }
+                                    }
+                                    if (showpropic.Any())
+                                    {
+                                        foreach (var g in showpropic)
+                                        {
+                                            if (g.商品 != null)
+                                            {
+                                                if (广告商品数 == 3)
+                                                {
+                                                    <div class="gd">
+                                                        <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count>0? g.商品.商品信息.商品图片[0]:"") " /></a>
+                                                        <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" class="rights_productname" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'>@g.商品.商品信息.商品名</a>
+                                                        <p class="price">￥@g.商品.销售信息.价格</p>
+                                                        @*<p class="lg">销量：@kk.销售信息.销量</p>*@
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                    }
+                                    //未选择商品，则从供应商商品库选X个
+                                    if (广告商品数 > 0 && showpropic.Count < 广告商品数)
+                                    {
+                                        var sp = 商品管理.查询供应商商品(gys.Id, 0, 广告商品数 - showpropic.Count, Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), includeDisabled: false);
+                                        foreach (var g in sp)
+                                        {
+                                            if (g != null)
+                                            {
+                                                <div class="gd">
+                                                    <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-1","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count>0? g.商品信息.商品图片[0]:"") " /></a>
+                                                    <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" class="rights_productname" onclick='clickStatistics("B1-1","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'>@g.商品信息.商品名</a>
+                                                    <p class="price">￥@g.销售信息.价格</p>
+                                                    @*<p class="lg">销量：@kk.销售信息.销量</p>*@
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="rights_more"><a href="/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">查看更多商品>></a></div>
+                                    <div class="wrap" id="wrap">
+                                        <div class="ul">
+                                            @{
+                                    var showpropic = new List<商品链接>();
+
+                                    if (gys.供应商用户信息.广告商品.ContainsKey("商务会员") || gys.供应商用户信息.广告商品.ContainsKey("企业推广服务B1-2位置"))
+                                    {
+                                        if (广告商品数 == 6)
+                                        {
+                                            if (gys.供应商用户信息.广告商品.ContainsKey("企业推广服务B1-2位置"))
+                                            {
+                                                showpropic = gys.供应商用户信息.广告商品["企业推广服务B1-2位置"].Select(o => o.商品).ToList();
+                                            }
+                                            else if (gys.供应商用户信息.广告商品.ContainsKey("商务会员"))
+                                            {
+                                                showpropic = gys.供应商用户信息.广告商品["商务会员"].Select(o => o.商品).ToList();
+                                            }
+                                        }
+                                    }
+                                    if (showpropic.Any())
+                                    {
+                                        foreach (var g in showpropic)
+                                        {
+                                            if (g.商品 != null)
+                                            {
+                                                <div class="gd li">
+                                                    <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-2","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count>0? g.商品.商品信息.商品图片[0]:"") " /></a>
+                                                    <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" class="rights_productname" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'>@g.商品.商品信息.商品名</a>
+                                                    <p class="price">￥@g.商品.销售信息.价格</p>
+                                                    @*<p class="lg">销量：@kk.销售信息.销量</p>*@
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                    //未选择商品，则从供应商商品库选X个
+                                    if (广告商品数 > 0 && showpropic.Count < 广告商品数)
+                                    {
+                                        var sp = 商品管理.查询供应商商品(gys.Id, 0, 广告商品数 - showpropic.Count, Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), includeDisabled: false);
+                                        foreach (var g in sp)
+                                        {
+                                            if (g != null)
+                                            {
+                                                <div class="gd li">
+                                                    <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-2","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count>0? g.商品信息.商品图片[0]:"") " /></a>
+                                                    <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" class="rights_productname" onclick='clickStatistics("B1-2","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'>@g.商品信息.商品名</a>
+                                                    <p class="price">￥@g.销售信息.价格</p>
+                                                    @*<p class="lg">销量：@kk.销售信息.销量</p>*@
+                                                </div>
+                                            }
+                                        }
+                                    }
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                    
+                    </div>
+            }
+            else
+            {
+                <div class="pay_gys_info">
+                    <div class="lefts" style="width:100%;">
+                        <a class="gys_title" href="/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">@Html.Raw(gys.企业基本信息.企业名称)</a>
+                        <div class="icon_bar">
+                            @if ((int)gys.供应商用户信息.认证级别 >= 4)
+                            { <a class="rzgys_y" href="#" title="@gys.供应商用户信息.认证级别"></a>}
+
+                            @if (gys.供应商用户信息.年检列表.ContainsKey(DateTime.Now.Year.ToString()))
+                            { <a class="njgys_y" href="#" title="已年检"></a>}
+
+                            @if (gys.供应商用户信息.应急供应商)
+                            { <a class="yjgys_y" href="#" title="应急供应商"></a>}
+
+                            @if (gys.供应商用户信息.协议供应商)
+                            { <a class="xygys_y" href="#" title="协议供应商"></a>}
+
+                            @if ((int)gys.供应商用户信息.入库级别 >= 2)
+                            { <a class="rkgys_y" href="#" title="@gys.供应商用户信息.入库级别"></a>}
+                        </div>
+                        <table width="100%" cellspacing="5">
+                            <tr>
+                                <td class="notes">所属行业:</td>
+                                <td class="notes_con" title="@gys.企业基本信息.所属行业">
+                                    @if (gys.企业基本信息 != null && !string.IsNullOrEmpty(gys.企业基本信息.所属行业))
+                                    {
+                                        <span class="gyslist_zhuying">@gys.企业基本信息.所属行业</span>
+                                    }
+                                    else
+                                    {
+                                        <span>未填写</span>
+                                    }
+                                </td>
+                                <td class="notes">所在地域:</td>
+                                <td class="notes_con">
+                                    @if (gys.所属地域.地域.Length > 14)
+                                    {
+                                        <span>@gys.所属地域.地域.Substring(0, 14) ...</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@gys.所属地域.地域</span>
+                                    }
+                                </td>
+                                <td class="notes lwidth">经营类型:</td>
+                                <td class="notes_con" title="@gys.企业基本信息.经营类型 / @gys.企业基本信息.经营子类型">@gys.企业基本信息.经营类型 / @gys.企业基本信息.经营子类型</td>
+                                <td class="notes swidth">主营产品:</td>
+                                @{
+                                    var m = "";
+                                    foreach (var h in gys.可提供产品类别列表)
+                                    {
+                                        foreach (var h_s in h.二级分类)
+                                        {
+                                            m += h_s + ";";
+                                        }
+                                    }
+                                }
+                                <td class="notes_con mwidth" title="@m">
+                                    <span class="gyslist_zhuying">@m</span>
+                                </td>
+                                </tr>
+                            <tr>
+                                <td class="notes" colspan="2">
+                                    @if (gys.资质证书列表.Any() && gys.资质证书列表[0].资质证书电子扫描件.Any() && !string.IsNullOrEmpty(gys.资质证书列表[0].资质证书电子扫描件[0].路径))
+                                    {
+                                        <a href="@gys.资质证书列表[0].资质证书电子扫描件[0].路径" target="_blank">资质证书></a>
+                                    }
+                                    else
+                                    {
+                                        <a>资质证书></a>
+                                    }
+                                    @if (gys.供应商用户信息.供应商图片.Any())
+                                    {
+                                        <a href="@gys.供应商用户信息.供应商图片.Last()" target="_blank">厂房设备图></a>
+                                    }
+                                    else
+                                    {
+                                        <a>厂房设备图></a>
+                                    }
+                                    @if (gys.供应商用户信息.认证级别 == 供应商.认证级别.军采通商务会员)
+                                    {
+                                        <a href="/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">更多企业信息></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/登录/Login?ReturnUrl=/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">更多企业信息></a>
+                                    }
+                                @*<a href="/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">更多企业信息></a>*@
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="rights">
+                        @{
+                                    //判断是否是会员或订购B1-1，B1-2
+                                    var flageright = 服务记录.Any() && 服务记录.First().已开通的服务.Any() && 服务记录.First().已开通的服务.Where(o => (o.所申请项目名.Contains("企业推广服务B1-1位置") && o.结束时间 > DateTime.Now) || (o.所申请项目名.Contains("企业推广服务B1-2位置") && o.结束时间 > DateTime.Now)).Any();
+                        }
+                        @if (flageright)
+                        {
+                            //计算展示商品个数
+                            var 已开通的服务 = 服务记录.First().已开通的服务;
+                            var 广告商品B1_1 = 已开通的服务.Where(o => o.所申请项目名.Contains("企业推广服务B1-1位置") && o.结束时间 > DateTime.Now);
+                            var 广告商品B1_2 = 已开通的服务.Where(o => o.所申请项目名.Contains("企业推广服务B1-2位置") && o.结束时间 > DateTime.Now);
+                            var 广告商品数 = 广告商品B1_2.Any() ? 6 : 广告商品B1_1.Any() ? 3 : 0;
+                            if (广告商品数 <= 3)
+                            {
+                                <div class="rights_more"><a href="/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">查看更多商品>></a></div>
+                                var showpropic = new List<商品链接>();
+
+                                if (gys.供应商用户信息.广告商品.ContainsKey("企业推广服务B1-1位置") || gys.供应商用户信息.广告商品.ContainsKey("企业推广服务B1-2位置"))
+                                {
+                                    if (广告商品数 == 3)
+                                    {
+                                        if (gys.供应商用户信息.广告商品.ContainsKey("企业推广服务B1-1位置"))
+                                        {
+                                            showpropic = gys.供应商用户信息.广告商品["企业推广服务B1-1位置"].Select(o => o.商品).ToList();
+                                        }
+                                    }
+                                }
+                                if (showpropic.Any())
+                                {
+                                    foreach (var g in showpropic)
+                                    {
+                                        if (g.商品 != null)
+                                        {
+                                            <div class="gd">
+                                                <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count>0? g.商品.商品信息.商品图片[0]:"") " /></a>
+                                                <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" class="rights_productname" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'>@g.商品.商品信息.商品名</a>
+                                                <p class="price">￥@g.商品.销售信息.价格</p>
+                                                @*<p class="lg">销量：@kk.销售信息.销量</p>*@
+                                            </div>
+                                        }
+                                    }
+                                }
+                                //未选择商品，则从供应商商品库选X个
+                                if (广告商品数 > 0 && showpropic.Count < 广告商品数)
+                                {
+                                    var sp = 商品管理.查询供应商商品(gys.Id, 0, 广告商品数 - showpropic.Count, Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), includeDisabled: false);
+                                    foreach (var g in sp)
+                                    {
+                                        if (g != null)
+                                        {
+                                            <div class="gd">
+                                                <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-1","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count>0? g.商品信息.商品图片[0]:"") " /></a>
+                                                <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" class="rights_productname" onclick='clickStatistics("B1-1","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'>@g.商品信息.商品名</a>
+                                                <p class="price">￥@g.销售信息.价格</p>
+                                                @*<p class="lg">销量：@kk.销售信息.销量</p>*@
+                                            </div>
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <div class="rights_more"><a href="/供应商陈列/Supplier_Destination?id=@gys.Id" target="_blank">查看更多商品>></a></div>
+                                <div class="wrap" id="wrap">
+                                    <div class="ul">
+                                        @{
+                                var showpropic = new List<商品链接>();
+
+                                if (gys.供应商用户信息.广告商品.ContainsKey("企业推广服务B1-1位置") || gys.供应商用户信息.广告商品.ContainsKey("企业推广服务B1-2位置"))
+                                {
+                                    if (广告商品数 == 6)
+                                    {
+                                        if (gys.供应商用户信息.广告商品.ContainsKey("企业推广服务B1-2位置"))
+                                        {
+                                            showpropic = gys.供应商用户信息.广告商品["企业推广服务B1-2位置"].Select(o => o.商品).ToList();
+                                        }
+                                    }
+                                }
+                                if (showpropic.Any())
+                                {
+                                    foreach (var g in showpropic)
+                                    {
+                                        if (g.商品 != null)
+                                        {
+                                            <div class="gd li">
+                                                <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-2","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count>0? g.商品.商品信息.商品图片[0]:"") " /></a>
+                                                <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" class="rights_productname" onclick='clickStatistics("B1-2","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'>@g.商品.商品信息.商品名</a>
+                                                <p class="price">￥@g.商品.销售信息.价格</p>
+                                                @*<p class="lg">销量：@kk.销售信息.销量</p>*@
+                                            </div>
+                                        }
+                                    }
+                                }
+                                //未选择商品，则从供应商商品库选X个
+                                if (广告商品数 > 0 && showpropic.Count < 广告商品数)
+                                {
+                                    var sp = 商品管理.查询供应商商品(gys.Id, 0, 广告商品数 - showpropic.Count, Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), includeDisabled: false);
+                                    foreach (var g in sp)
+                                    {
+                                        if (g != null)
+                                        {
+                                            <div class="gd li">
+                                                <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-2","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count>0? g.商品信息.商品图片[0]:"") " /></a>
+                                                <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" class="rights_productname" onclick='clickStatistics("B1-2","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'>@g.商品信息.商品名</a>
+                                                <p class="price">￥@g.销售信息.价格</p>
+                                                @*<p class="lg">销量：@kk.销售信息.销量</p>*@
+                                            </div>
+                                        }
+                                    }
+                                }
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+                    }
+                }
+            }
+            else
+            {
+                <div>暂无相关数据！</div>
+            }
+        }
+
+        <div class="gys_znxx_content_detailbox">
+            @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+            {
+                <a>首页</a>
+            }
+            else
+            {
+                <a onclick="changeMesspage(this)" id="1" class="page">首页</a>
+            }
+            @for (int i = 0; i <= 10; i++)
+            {                       //一共最多显示10个页码，前面5个，后面5个
+                if ((int.Parse(ViewData["currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                {
+                    if (5 == i)
+                    {                               //当前页处理
+                        <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentPage"].ToString())</a>
+                    }
+                    else
+                    {                               //一般页处理
+                        <a onclick="changeMesspage(this)" class="page" id="@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)">@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)</a>
+
+                    }
+                }
+            }
+            @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+            {
+                <a>末页</a>
+            }
+            else
+            {
+                <a onclick="changeMesspage(this)" id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+            }
+        </div>
+
+    </div>
+</div>
+@{
+    string position = "104.071893,30.663434";
+}
+<script type="text/javascript" src="~/JS/baiduMap.js"></script>
+<script type="text/javascript">
+    function changeMesspage(a) {
+        $.get("/应急采购/Part_SearchByPage?page=" + encodeURI(a.getAttribute("id")), function (response) {
+
+            $("#userlist").html(response);
+        });
+    }
+
+    $(function () {
+        $('.wrap').marquee({
+            auto: true,
+            interval: 3000,
+            speed: 500,
+            showNum: 3,
+            stepLen: 3
+        });
+
+        var str = "";
+
+        //$("#delivercity").change(function () {
+        //    str += "area="+$("#delivercity option:selected").text();
+        //});
+        //$(".yjfn").change(function () {
+        //    str += "&industry="+$(".yjfn option:selected").text();
+        //});
+
+        $("#ss_btn").click(function () {
+            str = "";
+            var city = $("#delivercity").find("option:selected").text();
+            var industry = $("#yjfn").find("option:selected").text();
+            var provence = $("#deliverprovince").find("option:selected").text();
+            var area = $("#deliverarea").find("option:selected").text();
+            //var definename = $("#search_text_industry").val();
+
+            str += "provence=" + provence;//省
+            str += "&city=" + city;//市
+            str += "&area=" + area;//县
+            str += "&industry=" + industry;//一级行业
+            str += "&comname=" + $("#search_text").val();//企业关键字
+            //str += "&definename=" + definename;
+            $.ajax({
+                url: '/应急采购/Part_GysSelect',
+                data: str,
+                dataType: 'text',
+                success: function (data) {
+                    if (data == null || data == "") {
+                        $("#userlist").empty().append('根据条件未找到相关信息');
+                    }
+                    else if (data == "0") {
+                        window.location.href = "/应急采购/GysList";
+                    }
+                    else {
+                        $("#userlist").empty().append(data);
+                    }
+                },
+                error: function () {
+                    $("#userlist").empty().append('根据条件未找到相关信息');
+                },
+            });
+        });
+
+        function delHtmlTag(str) {
+            return str.replace(/<[^>]+>/g, "");//去掉所有的html标记
+        }
+        //$(".yjfn").change(function () {
+        //    var parID = $(".yjfn option:selected").attr("id");
+        //    if (parID != null && parID != "undefined" && parID != "") {
+        //        $.ajax({
+        //            url: '/供应商陈列/查找行业分类',
+        //            data: "parID=" + parID,
+        //            dataType: 'json',
+        //            success: function (data) {
+        //                //var d = delHtmlTag(data);
+        //                //var f = d.replace("不限", "");
+        //                if (data != "" && data != null) {
+        //                    $(".ejfn").empty();
+        //                    var str = "<option>不限</option>";
+        //                    $.each(data.Data, function(index,item) {
+        //                        str += "<option id=" + item.Id + ">" + item.Name + "</option>";
+        //                    });
+        //                    $(".ejfn").append(str);
+        //                    var ejID = $(".ejfn").find("option:selected").attr("id");
+        //                    if (ejID != null && ejID != ""&& ejID!="undefined") {
+        //                        getSan();
+        //                    }
+        //                    else
+        //                    {
+        //                        $(".sjfn").empty().append("<option>不限</option>");
+        //                    }
+        //                }
+        //                else {
+        //                    $(".ejfn").empty().append("<option>不限</option>");
+        //                    $(".sjfn").empty().append("<option>不限</option>");
+        //                }
+
+        //            },
+        //            error: function () { $(".sjfn").empty().append("<option>不限</option>"); },
+        //        });
+        //    }
+        //    else {
+        //        $(".ejfn").empty().append("<option>不限</option>");
+        //        $(".sjfn").empty().append("<option>不限</option>");
+        //    }
+        //});
+        //$(".ejfn").change(function () {
+        //    getSan();
+        //});
+
+        //function getSan() {
+        //    var ejID = $(".ejfn").find("option:selected").attr("id");
+        //    $.ajax({
+        //        url: '/供应商陈列/查找行业分类',
+        //        data: "ejID=" + ejID + "&parID=" + $(".yjfn option:selected").attr("id"),
+        //        dataType: 'json',
+        //        success: function (data) {
+        //            $(".sjfn").empty();
+        //            var str = "<option>不限</option>";
+        //            $.each(data.Data, function(index,item) {
+        //                str += "<option id=" + item.Id + ">" + item.Name + "</option>";
+        //            });
+        //            $(".sjfn").append(str);
+        //        },
+        //        error: function () { $(".sjfn").empty().append("<option>不限</option>"); },
+        //    });
+        //}
+        $("#loc_gys").click(function(){
+            $(this).parents().siblings(".loc_div_out").fadeIn();
+            $(".marker_la").hide();
+            $(".marker_tig").hide();
+        })
+        $(".close_div").click(function(){
+            $(this).parents(".loc_div_out").fadeOut();
+        });
+        function initMap(idName,xPos,yPos) {
+            var mapName = new BMap.Map(idName, { defaultCursor: 'default' });//在百度地图容器中创建一个地图
+            var point = new BMap.Point(xPos,yPos);//定义一个中心点坐标
+            mapName.centerAndZoom(point, 17);//设定地图的中心点和坐标并将地图显示在地图容器中
+            mapName.panBy(500,250);
+            window.mapName = mapName;//将map变量存储在全局
+            setMapEvent(mapName);//设置地图事件
+            addMapControl(mapName);//向地图添加控件
+            addMarker(mapName,xPos,yPos);//向地图中添加marker
+        }
+
+        initMap("MapGys",@position.Split(',')[0],@position.Split(',')[1]);//创建和初始化地图
+        mapName.addEventListener('click', function (e) {
+            mapName.clearOverlays(marker);
+            var info = new BMap.InfoWindow('', { width: 260 });
+            var mark=new BMap.Icon("../Images/marker.png", new BMap.Size(50, 50),{
+                anchor: new BMap.Size(16,22),
+                infoWindowAnchor: new BMap.Size(10, 0)
+            });
+            var projection = this.getMapType().getProjection();
+            var lngLat = e.point;
+            var marker = new BMap.Marker(lngLat, { icon: mark });
+            var lngLatStr;
+            var geoc = new BMap.Geocoder();
+            geoc.getLocation(lngLat, function(rs){
+                var addComp = rs.addressComponents;
+                lngLatStr=addComp.province + "" + addComp.city + "" + addComp.district + "" + addComp.street + "" + addComp.streetNumber;
+                lngLatConfirm =lngLatStr+"<a id='loc_refo' style='display:block; border-radius:3px; float:right; width:50px; height:20px;margin-top:10px; text-align:center;color:white; background-color:#5e6f00;' onclick='closeInfo()'>确定</a>";
+                $("#showloc").html(lngLatStr).show();
+                info.setContent(lngLatConfirm);
+                mapName.openInfoWindow(info, lngLat);
+                mapName.addOverlay(marker);
+            });
+            $("#hidloc_t").val(lngLat.lng+","+lngLat.lat);
+        });
+        mapName.addEventListener("dragend", function (e) {
+            $("#loc_ing").html("当前位置：" + e.point.lng + ", " + e.point.lat);
+        });
+    });
+    function closeInfo(){
+        $(".loc_div_out").fadeOut();
+    };
+</script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {$(".action_link").each(function () {
+        if ($(this).text() == "应急采购") {
+            $(this).parent("div").addClass("on");
+        }
+    });
+    });
+</script>

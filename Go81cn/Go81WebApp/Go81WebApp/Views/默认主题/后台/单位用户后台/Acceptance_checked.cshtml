@@ -1,0 +1,420 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.验收单
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.项目数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型
+@{
+    ViewBag.Title = "验收单列表";
+    //Layout = "_Back_IntranetLayout.cshtml";
+}
+
+<link href="~/css/css.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style type="text/css">
+     .accept {
+         width: 1200px;
+         padding: 20px;
+         margin: 30px auto;
+         background: #fff;
+     }
+
+         .accept td {
+             line-height: 30px;
+         }
+
+         .accept .align {
+             text-align: right;
+             width: 150px;
+             font-size: 16px;
+         }
+
+         .accept span {
+             color: red;
+             font-size: 12px;
+         }
+
+         .accept .lis {
+             text-align: right;
+             font-size: 14px;
+             color: #575757;
+         }
+
+     .gys_ztbsearch_contentbox a {
+         margin-left: 5px;
+     }
+
+     .select_unit {
+         display: none;
+     }
+
+     .del_good_list {
+         font-size: 12px;
+         cursor: pointer;
+     }
+    .adaddtip{
+         font-weight:normal; font-size:14px; padding-left:10px; text-decoration:underline; color:red; padding-top:5px;
+     }
+</style>
+
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div id="title_div" class="title-base-middle">
+                <div class="title-base-inner">
+                    验收单管理
+                    <select id="ysd_status">
+                        <option selected="selected">全部</option>
+                        <option>已完成</option>
+                        <option>未验收</option>
+                        <option>未打印</option>
+                    </select>
+                    <a href="/通知/NoticeDetail?id=32" target="_blank" class="adaddtip">如何使用验收单?</a>
+                    <i style="color:red">验收单回传附件请点击“已验收”字样查看</i>
+                </div>
+            </div>
+        </div>
+        <div class="gys_ztbsearch_contentbox" id="acceptlist">
+            <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="12%">生成时间</th>
+                    <th width="12%">供货单位</th>
+                    <th width="17%">收货单位</th>
+                    <th width="5%">总金额</th>
+                    <th width="8%">审核状态</th>
+                    <th width="6%">打印状态</th>
+                    <th width="6%">验收状态</th>
+                    <th width="6%">操作</th>
+                </tr>
+                @{
+                    IEnumerable<验收单> gd = ViewData["验收单列表"] as IEnumerable<验收单>;
+                    if (gd != null && gd.Any())
+                    {
+                        foreach (var k in gd)
+                        {
+                            var vl = new List<Tuple<string, string, string, string, int, decimal, decimal>>();
+                            if (k.物资服务列表.Count > 5)
+                            {
+                                decimal price_total = k.物资服务列表.Sum(o => o.总价);
+                                vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1, price_total, price_total));
+                            }
+                            else if (k.物资服务列表.Count == 0 && k.验收单附件.Count > 0)
+                            {
+                                decimal price_total = k.验收单附件.Sum(o => o.价格);
+                                vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1, price_total, price_total));
+                            }
+                            else
+                            {
+                                foreach (var plnk in k.物资服务列表)
+                                {
+                                    if (plnk.商品链接.商品 != null)
+                                    {
+                                        vl.Add(Tuple.Create(plnk.商品链接.商品.商品信息.商品名, plnk.规格型号, plnk.采购合同号, plnk.计量单位, plnk.数量, plnk.单价, plnk.总价));
+                                    }
+                                }
+                            }
+                            if (k.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0, k.运费, k.运费)); }
+                            if (k.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0, k.服务费, k.服务费)); }
+                            if (k.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0, k.维修费, k.维修费)); }
+                            foreach (var hj in k.其他费用) { vl.Add(Tuple.Create(hj.费用名称, string.Empty, string.Empty, string.Empty, 0, hj.金额, hj.金额)); }
+
+                            var vl_all = new List<Tuple<string, string, string, string, int, decimal, decimal>[]>();
+                            for (var n_all = 0; n_all < vl.Count; n_all += 5) { vl_all.Add(vl.Skip(n_all).Take(5).ToArray()); }
+                <tr>
+                    <td>@k.基本数据.添加时间</td>
+                    @if(k.供应商链接.用户数据.企业基本信息.企业名称.Length>9)
+                                {
+                                <td class="name" title="@k.供应商链接.用户数据.企业基本信息.企业名称">
+                                    @k.供应商链接.用户数据.企业基本信息.企业名称.Substring(0,9) ...
+                                    @for (var yn = 1; yn <= vl_all.Count; ++yn)
+                                        {
+                                <p style="padding: 0; margin: 0; font-size: 12px; color: #ff5e00; line-height: 17px;">@k.验收单号 - @yn</p>
+                                        }
+                                </td>
+                                }
+                                else
+                                {
+                                <td class="name" title="@k.供应商链接.用户数据.企业基本信息.企业名称">
+                                    @k.供应商链接.用户数据.企业基本信息.企业名称
+                                    @for (var yn = 1; yn <= vl_all.Count; ++yn)
+                                        {
+                                <p style="padding: 0; margin: 0; font-size: 12px; color: #ff5e00; line-height: 17px;">@k.验收单号 - @yn</p>
+                                        }
+                                </td>
+                                }
+                    @if(k.收货单位.Length>10)
+                                {
+                                <td title="@k.收货单位">@k.收货单位.Substring(0,10) ...</td>
+                                }
+                                else
+                                {
+                                <td title="@k.收货单位">@k.收货单位</td>
+                                }
+
+                    <td>￥@(string.Format("{0:0.00}", k.总金额))</td>
+                    @if (k.审核数据.审核状态 == 审核状态.未审核)
+                                {
+                                <td style="color:red">@k.审核数据.审核状态</td>
+                                }
+                    @if (k.审核数据.审核状态 == 审核状态.审核通过)
+                                {
+                                <td style="color:#1f9434">@k.审核数据.审核状态</td>
+                                }
+                    @if (k.审核数据.审核状态 == 审核状态.审核未通过)
+                                {
+                                <td style="color:#ff5e00">@k.审核数据.审核状态</td>
+                                }
+                    @if (k.是否已经打印)
+                                {
+                                <td style="color:#1f9434">
+                                    已打印
+                                    <p style="padding:0;margin:0;font-size:12px;color:#ff5e00;line-height:17px;">
+                                        @if (k.打印信息.Count > 0)
+                                            {
+                                            <span>@k.打印信息[k.打印信息.Count - 1].打印时间</span>
+                                            }
+                                    </p>
+                                </td>
+                                }
+                                else
+                                {
+                                <td style="color:red" title="请等待供应商打印">未打印</td>
+                                }
+                    @if (k.验收单扫描件.Count > 0)
+                                {
+                                    var ss = "";
+                                    foreach (var item in k.验收单扫描件)
+                                    {
+                                        ss += item.回传单路径 + "|" + item.审核数据.审核状态 +","+ item.审核数据.审核不通过原因  + ";";
+                                    }
+                                    <td onclick="ShowYsd(this)" id="@ss" name="@k.Id" style="color:#1f9434;cursor:pointer">已验收<br />
+                                        @if (k.扫描件审核状态 == "审核通过")
+                                        {
+                                            <i style="color:#1f9434;font-size:13px;">审核通过</i>
+                                }
+                                        else if (k.扫描件审核状态 == "审核未通过")
+                                        {
+                                            <i style="color:red;font-size:13px;">审核未通过</i>
+                                        }
+                                else
+                                {
+                                            <i style="color:red;font-size:13px;">未审核</i>
+                                        }
+                                    </td>
+                                }
+                                else
+                                {
+                                <td style="color:red">未验收</td>
+                                }
+                    <td>
+                        <a href="/单位用户后台/AcceptancedDetail?id=@k.Id&comes=已审核">查看详情</a><br />
+                        <a style="cursor:pointer" id="@k.Id" onclick="ConfirmCancel(this)">撤销审核</a>
+                        @if (k.是否作废)
+                                    {
+                                    <span style="color: red;">已作废</span>
+                                    }
+                    </td>
+                </tr>
+                    
+                        }
+                    }
+                }
+            </table>
+            
+            @if (ViewData["currentpage"] != null)
+            {
+            <div class="gys_znxx_content_detailbox">
+                @if (int.Parse(ViewData["currentpage"].ToString()) == 1)
+                    {
+                    <a>首页</a>
+                    }
+                    else
+                    {
+                    <a id="1" class="page">首页</a><a id="@(int.Parse(ViewData["currentpage"].ToString())-1)" class="page">上一页</a>
+                    }
+                @for (int i = 0; i <= 10; i++)
+                    {                       //一共最多显示10个页码，前面5个，后面5个
+                        if ((int.Parse(ViewData["currentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentpage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                        {
+                            if (5 == i)
+                            {                               //当前页处理
+                    <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentpage"].ToString())</a>
+                            }
+                            else
+                            {                               //一般页处理
+                    <a class="page" id="@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)">@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)</a>
+
+                            }
+                        }
+                    }
+                @if (int.Parse(ViewData["currentpage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+                    {
+                    <a>末页</a>
+                    }
+                    else
+                    {
+                    <a id="@(int.Parse(ViewData["currentpage"].ToString()) + 1)" class="page">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+                    }
+
+            </div>
+            }
+        </div>
+
+
+    </div>
+</div>
+<div id="f1" class="modal_out">
+    <div class="modal_in" style="background: #000000"></div>
+    <span id='fsan' onclick='closeBtn()' style='position: absolute;top: 30px;right: 30px;font-size: 32px;cursor: pointer;background: #fff;border-radius: 50%;height: 30px;width: 30px;text-align: center;line-height: 24px;'>×</span>
+    <div id="showysd" name="" style="background:#fff;margin:2% auto;position: relative;width:900px;height:90%;overflow-y:scroll;border:5px solid #B3B3B3;">
+        @*<div style="float:left;clear:both;border-bottom:2px solid #ccc">
+            <div style="width:85%;float:left;"><a target='_blank' href=""><img src="../Images/service1.jpg" style='margin:5px auto;width:100%;height:350px;' /></a></div>
+            <div style="width:15%;float:left;text-align:center;line-height:60px;">
+                <i style="display:inline-block; margin-top:90px;color:red">审核状态</i>
+                <span style="display:inline-block;width:100PX;word-break:break-word;"></span>
+                <input class="btn-base" style="color:white;" type="button" name="" value="审核通过" />
+                <input class="btn-base" style="color:white;" type="button" name="" value="审核不通过" />
+            </div>
+        </div>*@
+
+        <div style='text-align:center;background:#fff;line-height:85px;'><input type='button' onclick='closeBtn()' style='text-align:center' class='btn-base' value='关    闭' /></div>
+        @*<a href=""><img src="" width="600px" height="100%" /></a>*@
+    </div>
+</div>
+
+<script type="text/javascript">
+    function ConfirmCancel(e){
+        var id=$(e).attr("id");
+        if(confirm("您确认要撤销对该验收单的审核吗？")){
+            $.ajax({
+                url:'/单位用户后台/CancelExamine',
+                data:{id:id},
+                success:function(){
+                    window.location.reload();
+                },
+            });
+        }
+        else{
+            return false;
+        }
+    }
+
+    $("#ysd_status").change(function(){
+        var sl=$(this).find("option:selected").html();
+        $.ajax({
+            url:'/单位用户后台/Part_AcceptanceChecked',
+            data:{status:sl},
+            success:function(data){
+                $("#acceptlist").html(data);
+            },
+            error:function(){
+                alert("查找失败！");
+            } ,
+        });
+    });
+
+    function ShowYsd(ev) {
+        var path = $(ev).attr("id");
+        var id = $(ev).attr("name");
+        var str="";
+        var patharr=path.split(";");
+        patharr.pop();
+        $.each(patharr,function(){
+            var picarr=this.split("|");  
+            var picvpp=picarr[1].split(",");
+            str+="<div style='clear:both;border-bottom:2px solid #ccc'>";
+            str+="<div style='width:85%;float:left;'><a target='_blank' href='"+picarr[0]+"'><img src='"+picarr[0]+"' style='margin:5px auto;width:100%;height:350px;' /></a></div>";
+            str+=" <div style='width:15%;float:left;text-align:center;line-height:45px;'>";
+            if(picvpp[0]=="未审核"){str+=" <i style='display:inline-block; width:120px; margin-top:90px;color:red'>未审核</i>";}
+            if(picvpp[0]=="审核通过"){str+=" <i style='display:inline-block; width:120px;margin-top:90px;color:#1f9434'>审核通过</i>";} 
+            if(picvpp[0]=="审核未通过"){
+                str+=" <i style='display:inline-block;width:120px; margin-top:40px;color:#ff5e00;line-height:30px;'>审核未通过：</i>";
+                str+="<span style='display:inline-block;width:100PX;word-break:break-word;line-height:normal; '>"+picvpp[1]+"</span>";
+            } 
+                       
+            str+=" <input class='btn-base' style='color:white;width:100px;cursor:pointer;font-size:13px' onclick='examinePic(this)' type='button' name='"+picarr[0]+"' value='审核通过' /><BR/>";
+            str+=" <input class='btn-base' style='color:white;width:100px;cursor:pointer;font-size:13px' onclick='examinePic(this)' type='button' name='"+picarr[0]+"' value='审核不通过' /></div></div>";
+        });
+        str+="<div style='text-align:center;background:#fff;line-height:85px;clear:both'><input type='button' onclick='closeBtn()' style='text-align:center;' class='btn-base' value='关    闭'/></div>";
+        $("#showysd").html(str).attr({"name":id});
+        $("#f1").show();
+    }
+    function closeBtn(){
+        $("#f1").hide();
+    }
+
+    function examinePic(e){
+        var type=$(e).val();
+        var id=$("#showysd").attr("name");
+        var uri=$(e).attr("name");
+        var flag="";
+        if(type=="审核不通过"){
+            flag=prompt("请输入未通过理由", "");
+            if(null == flag || "" == flag){
+                alert("请输入理由!");
+                return false;
+            }
+        }
+        $.ajax({
+            url:"/单位用户后台/ExaminePic",
+            data:{id:id,type:type,uri:uri,rp:flag},
+            dataType:'text',
+            success:function(data){
+                if(data=="1"){
+                    $(e).parent().find("i").html("审核通过").css({"color":"#1f9434"});
+                    $("#acceptlist").find("td[name='"+id+"']").find("i").html("审核通过").css({"color":"#1f9434"});
+                    alert("审核成功！");
+                }
+                else if(data=="0"){
+                    $(e).parent().find("i").html("审核未通过").css({"color":"#ff5e00"});
+                    $("#acceptlist").find("td[name='"+id+"']").find("i").html("审核未通过").css({"color":"#ff5e00"});
+                    alert("审核成功！");
+                }
+                else{alert("审核出错！");}
+            },
+            error:function(){
+                alert("审核失败！");
+            }
+        });
+    }
+    $("a.page").click(function () {
+        var sl=$("#ysd_status").find("option:selected").html();
+        $.ajax({
+            type: "POST",
+            url: "/单位用户后台/Part_AcceptanceChecked",
+            data: { page: $(this).attr("id"),status:sl},
+            success: function (data) {
+                $("#acceptlist").html(data);
+            }
+        });
+    });
+    $("#btn_sub").click(function(){
+        var list=$(".g_name");
+        $(list).each(function(index,domEle){
+            $(domEle).prev().val($(domEle).find("option:selected").attr("id"));
+        });
+    });
+
+    var i = @int.Parse(ViewData["currentpage"].ToString());
+    var j=@(int.Parse(ViewData["pagecount"].ToString()));
+    $(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == i) {
+                $(this).addClass("currentPage");
+            }
+            if (i== j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (i == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#我的已审核验收单").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#我的已审核验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>
+

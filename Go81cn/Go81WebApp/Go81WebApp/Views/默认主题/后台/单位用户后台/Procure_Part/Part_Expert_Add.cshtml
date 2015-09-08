@@ -1,0 +1,784 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.专家
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+<script src="~/JS/provinceandcity_all.js"></script>
+<link href="~/css/css.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style>
+    span.bx {
+        display: inline-block;
+        width: 100px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+        font-size: 12px;
+        background-color: gray;
+        border: 1px solid rgb(179, 179, 179);
+        cursor: pointer;
+    }
+
+    .box_header {
+        background-color: rgb(207, 207, 207);
+        text-align: left;
+    }
+
+        .box_header a {
+            display: inline-block;
+            width: 80px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            background-color: gray;
+            color: white;
+            border: 1px solid white;
+        }
+
+    table tr td {
+        font-size: 15px;
+    }
+</style>
+<div style="position:fixed; z-index:10; width:100%; display:none; height:100%; left:0px; top:0px; background-color:black;" id="f">
+    <div>
+        <div style=" background-color:white; text-align:left; width:800px; height:600px; overflow:scroll; margin-left:auto; margin-right:auto;">
+            <a style="display:inline-block; width:30px; cursor:pointer; height:30px; float:right; background-color:red; text-align:center; line-height:30px; color:white;" onclick="hideOutbox()">×</a>
+            <span class="bx">按军队采购目录</span><span class="bx" style="border-left:none; border-right:none;">按地方政府专家库</span><span class="bx">手动输入</span>
+            <div id="has_selected" style="font-size:12px;display:none; padding:5px;border:1px solid #2F9894"></div>
+            <br />
+            <br />
+            <div id="txt" style="display:none; margin-left:10px;"><input type="text" placeholder="请输入可参评的物资类别" style="width:250px;" id="fst" value="" /><input style="width:50px;" type="button" onclick="addFirst()" value="确定" /></div>
+            <div class="checkbox_class" style="margin-left:10px;">
+                <span id="first" style="color:black;font-size:14px;">一级分类名：</span>
+                <select id="firstClass" onchange="searchtype(this)">
+                    <option index="-1" value="-1">请选择一级分类</option>
+                    @{var h = 0;}
+                    @foreach (var item in ViewData["goodType"] as IEnumerable<商品分类>)
+                    {
+                        h++;
+                        <option index="@h" value="@item.分类名">@item.分类名</option>
+                    }
+                </select>
+                <div class="secondtype">
+                    <span style="color:black;font-size:14px;">二级分类名：</span>
+                    @foreach (var item in ViewData["goodType"] as IEnumerable<商品分类>)
+                    {
+                        <table width="100%" class="thirdType" style="font-size:14px;">
+                            @{ List<string> list = new List<string>();
+                             foreach (var k in item.子分类)
+                             {
+                                 list.Add(k.分类名);
+                             }
+                             double s = list.Count / 4;
+                             int d = (int)Math.Ceiling(Convert.ToDouble(s.ToString()));
+                             for (int i = 0; i <= d; i++)
+                             {
+                                <tr>
+                                    @if (i < d)
+                                    {
+                                        for (int j = (4 * ((1 / 4) + i)) + 1; j <= 4 * (i + 1); j++)
+                                        {
+                                            <td><input type='checkbox' onclick="addData(this)" value="@list[j-1]">@list[j - 1]</td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (int j = 4 * i + 1; j <= list.Count; j++)
+                                        {
+                                            <td><input type='checkbox' onclick="addData(this)" value="@list[j-1]">@list[j - 1]</td>
+                                        }
+                                    }
+
+                                </tr>
+                             }
+                            }
+                        </table>
+                    }
+                    <table width="100%" class="thirdType" style="font-size:14px;">
+                        @{ List<string> list1 = new List<string>();
+                         foreach (var k in 专家可评标专业.非商品分类评审专业)
+                         {
+                             list1.Add(k);
+                         }
+                         double s1 = list1.Count / 4;
+                         int d1 = (int)Math.Ceiling(Convert.ToDouble(s1.ToString()));
+                         for (int i = 0; i <= d1; i++)
+                         {
+                            <tr>
+                                @if (i < d1)
+                                {
+                                    for (int j = (4 * ((1 / 4) + i)) + 1; j <= 4 * (i + 1); j++)
+                                    {
+                                        <td><input onclick="addData(this)" type='checkbox' value="@list1[j - 1]">@list1[j - 1]</td>
+                                    }
+                                }
+                                else
+                                {
+                                    for (int j = 4 * i + 1; j <= list1.Count; j++)
+                                    {
+                                        <td><input onclick="addData(this)" type='checkbox' value="@list1[j - 1]">@list1[j - 1]</td>
+                                    }
+                                }
+
+                            </tr>
+                         }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+        @*<div><a style="display:block; width:100px; height:30px; text-align:center; line-height:30px; background-color:red; margin-left:auto; margin-right:auto;">
+            确定
+            </a></div>*@
+    </div>
+</div>
+@using (Html.BeginForm("EditExpert", "专家抽选", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.AntiForgeryToken();
+    <div class="gys_znxx_topbox">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">编辑评审专家信息</div>
+        </div>
+    </div>
+    <div class="expert">
+        <div class="expert_no">
+            <div class="box_header">
+                <a href="###" onclick="showContent(0, this)" style="background-color:rgb(233, 249, 212); color:black;">身份信息</a><a style="border-left:none; border-right:none;" href="###" onclick="showContent(1, this)">学历信息</a><a href="###" onclick="showContent(2, this)">工作经历</a>
+            </div>
+            <div id="outbox">
+                <div class="expert_identity">
+                    <table>
+                        <tr>
+                            @Html.HiddenFor(model => model.Id)
+
+                            <td class="lab">姓名：</td>
+                            <td>
+                                @Html.EditorFor(model => model.身份信息.姓名)
+                                @Html.ValidationMessageFor(model => model.身份信息.姓名)
+                            </td>
+
+                            <td class="lab">性别：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.身份信息.性别, Model.身份信息.性别)
+                                @Html.ValidationMessageFor(model => model.身份信息.性别)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lab">民族：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.身份信息.民族, Model.身份信息.民族)
+                                @Html.ValidationMessageFor(model => model.身份信息.民族)
+                            </td>
+                            <td class="lab">出生年月：</td>
+                            <td>
+                                @Html.TextBoxFor(model => model.身份信息.出生年月, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })
+                                @Html.ValidationMessageFor(model => model.身份信息.出生年月)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lab">政治面貌：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.身份信息.政治面貌, Model.身份信息.政治面貌)
+                                @Html.ValidationMessageFor(model => model.身份信息.政治面貌)
+                            </td>
+                            <td class="lab">评审专家类型：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.身份信息.专家类型, Model.身份信息.专家类型)
+                                @Html.ValidationMessageFor(model => model.身份信息.专家类型)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lab">证件类型：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.身份信息.证件类型, Model.身份信息.证件类型)
+                                @Html.ValidationMessageFor(model => model.身份信息.证件类型)
+                            </td>
+                            <td class="lab">证件号：</td>
+                            <td>
+                                @Html.EditorFor(model => model.身份信息.证件号)
+                                @Html.ValidationMessageFor(model => model.身份信息.证件号)
+                            </td>
+                            
+                        </tr>
+                        <tr>
+                            <td class="lab">专家证号</td>
+                            <td>
+                                @Html.EditorFor(model=>model.身份信息.专家证号)
+                                @Html.ValidationMessageFor(model=>model.身份信息.专家证号)
+                            </td>
+                        </tr>
+                        <tr>
+                            
+                            <td class="lab">评审专家类别：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.身份信息.专家类别, Model.身份信息.专家类别)
+                                @Html.ValidationMessageFor(model => model.身份信息.专家类别)
+                            </td>
+                            <td class="lab" valign="top">专家级别：</td>
+                            <td valign="top">@Html.EnumDropDownListFor(m => m.身份信息.专家级别)</td>
+                        </tr>
+                        <tr>
+                            <td class="lab">所在地区：</td>
+                            <td>
+                                @Html.HiddenFor(m => m.所属地域.省份, new { id = "provence" })
+                                @Html.HiddenFor(m => m.所属地域.城市, new { id = "city" })
+                                @Html.HiddenFor(m => m.所属地域.区县, new { id = "area" })
+                                <select id="deliverprovince" name="deliverprovince" style="width:95px;"></select>
+                                <select id="delivercity" name="delivercity" style="width:95px;"></select>
+                                <select id="deliverarea" name="deliverarea" style="width:95px;"></select>
+                                <script>
+                                    window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea", "@Model.所属地域.省份", "@Model.所属地域.城市", "@Model.所属地域.区县"); }
+                                </script>
+                            </td>
+                            <td class="lab">初审单位：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(m => m.所属管理单位)
+                                @Html.ValidationMessageFor(m => m.所属管理单位)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lab" valign="top">证件电子扫描件：</td>
+                            <td colspan="3">
+                                @if (System.IO.File.Exists(Server.MapPath(@Model.身份信息.证件电子扫描件)))
+                                {
+                                    <img style="width:50px; height:30px;" src="@Model.身份信息.证件电子扫描件" alt="@Model.身份信息.证件电子扫描件" />
+                                    <a style="color:red; font-size:12px;" target="_blank" href="@Model.身份信息.证件电子扫描件">点击查看</a><a href="###" style="color:red; font-size:12px; margin-left:20px;" onclick="showBt(this)">修改</a>
+                                    <input type="file" style="display:none;" title="请上传jpg,png,bmp或者gif格式的图片文件" name="file2" />
+                                }
+                                else
+                                {
+                                    <a href="###" onclick="showBt(this)" style="color:red; font-size:12px;">还没有证件扫描件，点击添加</a>
+                                    <input type="file" style="display:none;" title="请上传jpg,png,bmp或者gif格式的图片文件" name="file2" />
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lab" valign="top">本人照片电子扫描件：</td>
+                            <td colspan="3">
+                                @if (System.IO.File.Exists(Server.MapPath(@Model.身份信息.本人照片电子扫描件)))
+                                {
+                                    <img style="width:50px; height:30px;" src="@Model.身份信息.本人照片电子扫描件" alt="@Model.身份信息.本人照片电子扫描件" />
+                                    <a style="color:red; font-size:12px;" target="_blank" href="@Model.身份信息.本人照片电子扫描件">点击查看</a><a href="###" style="color:red; font-size:12px; margin-left:20px;" onclick="showBt(this)">修改</a>
+                                    <input type="file" style="display:none;" title="请上传jpg,png,bmp或者gif格式的图片文件" name="file" />
+                                }
+                                else
+                                {
+                                    <a href="###" onclick="showBt(this)" style="color:red; font-size:12px;">还没有本人照片，点击添加</a>
+                                    <input type="file" style="display:none;" title="请上传jpg,png,bmp或者gif格式的图片文件" name="file" />
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lab" valign="top">专家证电子扫描件：</td>
+                            <td colspan="3">
+                                @if (System.IO.File.Exists(Server.MapPath(@Model.身份信息.专家证电子扫描件)))
+                                {
+                                    <img style="width:50px; height:30px;" src="@Model.身份信息.专家证电子扫描件" alt="@Model.身份信息.专家证电子扫描件" />
+                                    <a style="color:red; font-size:12px;" target="_blank" href="@Model.身份信息.专家证电子扫描件">点击查看</a><a href="###" style="color:red; font-size:12px; margin-left:20px;" onclick="showBt(this)">修改</a>
+                                    <input type="file" style="display:none;" title="请上传jpg,png,bmp或者gif格式的图片文件" name="file3" />
+                                }
+                                else
+                                {
+                                    <a href="###" onclick="showBt(this)" style="color:red; font-size:12px;">还没有本人照片，点击添加</a>
+                                    <input type="file" style="display:none;" title="请上传jpg,png,bmp或者gif格式的图片文件" name="file3" />
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!--学历信息-->
+
+                <div class="expert_identity" style="display:none;">
+                    <table>
+                        <tr>
+                            <td class="lab">毕业院校：</td>
+                            <td>
+                                @Html.EditorFor(model => model.学历信息.毕业院校)
+                                @Html.ValidationMessageFor(model => model.学历信息.毕业院校)
+                            </td>
+                            <td class="lab">专业技术职称：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.学历信息.专业技术职称, Model.学历信息.专业技术职称)
+                                @Html.ValidationMessageFor(model => model.学历信息.专业技术职称)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lab">最高学历：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.学历信息.最高学历, Model.学历信息.最高学历)
+                                @Html.ValidationMessageFor(model => model.学历信息.最高学历)
+                            </td>
+                            <td class="lab">最高学位：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.学历信息.最高学位, Model.学历信息.最高学位)
+                                @Html.ValidationMessageFor(model => model.学历信息.最高学位)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lab" valign="top">取得现技术职称时间：</td>
+                            <td valign="top" colspan="3">
+                                @Html.TextBoxFor(model => model.学历信息.取得现技术职称时间, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })
+                                @Html.ValidationMessageFor(model => model.学历信息.取得现技术职称时间)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lab" valign="top">职称证书电子扫描件：</td>
+                            <td colspan="3">
+                                @if (System.IO.File.Exists(Server.MapPath(@Model.学历信息.职称证书电子扫描件)))
+                                {
+                                    <img style="width:50px; height:30px;" src="@Model.学历信息.职称证书电子扫描件" alt="@Model.学历信息.职称证书电子扫描件" />
+                                    <a style="color:red; font-size:12px;" target="_blank" href="@Model.学历信息.职称证书电子扫描件">点击查看</a><a href="###" style="color:red; font-size:12px; margin-left:20px;" onclick="showBt(this)">修改</a>
+                                    <input type="file" style="display:none;" title="请上传jpg,png,bmp或者gif格式的图片文件" name="file1" />
+                                }
+                                else
+                                {
+                                    <a href="###" style="color:red; font-size:12px;" onclick="showBt(this)">还没有扫描件，点击添加</a>
+                                    <input type="file" style="display:none;" title="请上传jpg,png,bmp或者gif格式的图片文件" name="file1" />
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!--工作经历-->
+
+                <div class="expert_identity" style="display:none;">
+                    <table>
+                        <tr>
+                            <td align="right">参加工作时间：</td>
+                            <td>
+                                @Html.TextBoxFor(model => model.工作经历信息.参加工作时间, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })
+                                @Html.ValidationMessageFor(model => model.工作经历信息.参加工作时间)
+                            </td>
+                            <td align="right">从事专业：</td>
+                            <td>
+                                @Html.EditorFor(model => model.工作经历信息.从事专业)
+                                @Html.ValidationMessageFor(model => model.工作经历信息.从事专业)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">从事专业起始年度：</td>
+                            <td>
+                                @Html.EditorFor(model => model.工作经历信息.从事专业起始年度)
+                                @Html.ValidationMessageFor(model => model.工作经历信息.从事专业起始年度)
+                            </td>
+                            <td align="right">工作单位：</td>
+                            <td>
+                                @Html.EditorFor(model => model.工作经历信息.工作单位)
+                                @Html.ValidationMessageFor(model => model.工作经历信息.工作单位)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">健康状况：</td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.工作经历信息.健康状况, Model.工作经历信息.健康状况)
+                                @Html.ValidationMessageFor(model => model.工作经历信息.健康状况)
+                            </td>
+                            <td align="right">现任职务：</td>
+                            <td>
+                                @Html.EditorFor(model => model.工作经历信息.现任职务)
+                                @Html.ValidationMessageFor(model => model.工作经历信息.现任职务)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" align="center"><h4>单位地址</h4></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <table class="tabletable" style="border:1px solid gray; margin-left:auto; margin-right:auto;">
+                                    <tr>
+                                        <td class="lac">地址类型：</td>
+                                        <td class="lad">
+                                            @if (Model.工作经历信息.单位地址 != null)
+                                            {
+                                                @Html.EnumDropDownListFor(model => model.工作经历信息.单位地址.地址类型, Model.工作经历信息.单位地址.地址类型)
+                                            }
+                                        </td>
+                                        <td class="lac">联系人：</td>
+                                        <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.联系人)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="lac">手机：</td>
+                                        <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.手机)</td>
+                                        <td class="lac">固定电话：</td>
+                                        <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.固定电话)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="lac">传真电话：</td>
+                                        <td class="lad">@Html.TextBoxFor(m => m.工作经历信息.单位地址.传真电话)</td>
+                                        <td class="lac">电子邮件：</td>
+                                        <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.电子邮件)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="lac">省份：</td>
+                                        <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.省份)</td>
+                                        <td class="lac">城市：</td>
+                                        <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.城市)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="lac">区县：</td>
+                                        <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.区县)</td>
+                                        <td class="lac">街道：</td>
+                                        <td class="lad">@Html.EditorFor(model => model.工作经历信息.单位地址.街道)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="lac">邮政编码：</td>
+                                        <td class="lad" colspan="3">@Html.EditorFor(model => model.工作经历信息.单位地址.邮政编码)</td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="lab" valign="top">可参评的物资类别：</td>
+                            <td valign="top" colspan="3">
+                                <a href="###" style="color:red;" onclick="showOutbox()">【修改】</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <table id="exist" cellspacing="1" width="80%" style="background-color:gray; margin-left:90px;">
+                                    @if (Model.可参评物资类别列表 != null && Model.可参评物资类别列表.Count() != 0)
+                                    {
+                                        for (int p = 0; p < Model.可参评物资类别列表.Count; p++)
+                                        {
+                                            <tr>
+                                                <td width="90%" style="background-color:white; width:120px;">@Html.DisplayFor(model => model.可参评物资类别列表[p].一级分类, new { @id = p })</td>
+                                                @if (Model.可参评物资类别列表[p].二级分类 != null && Model.可参评物资类别列表[p].二级分类.Count() != 0)
+                                                {
+                                                    <td style="background-color:white;">
+                                                        @for (int y = 0; y < Model.可参评物资类别列表[p].二级分类.Count; y++)
+                                                        {
+                                                            if (Model.可参评物资类别列表[p].二级分类[y]!="-1")
+                                                            {
+                                                                <em>@Model.可参评物资类别列表[p].二级分类[y]</em><em>，</em>
+                                                            }
+                                                        }
+                                                    </td>
+                                                }
+                                                <td width="10%" style="background-color:white; width:50px; text-align:center;"><a style="font-size:14px; color:red;" onclick="delgt(@p,@Model.Id,this)" href="###">删除</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </table>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <table id="showtable" width="80%" style="background-color:gray; margin-left:auto; margin-right:auto;" cellspacing="1" width="100%"></table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="lab" valign="top">社会兼聘职情况：</td>
+                            <td colspan="3">@Html.TextAreaFor(model => model.工作经历信息.社会兼聘职情况)</td>
+                        </tr>
+                        <tr>
+                            <td class="lab" valign="top">本人参加过何种项目招标及评标：</td>
+                            <td colspan="3">@Html.TextAreaFor(model => model.工作经历信息.本人参加过何种项目招标及评标)</td>
+                        </tr>
+                        <tr>
+                            <td class="lab" valign="top">本人专业领域研究及成果：</td>
+                            <td colspan="3">@Html.TextAreaFor(model => model.工作经历信息.本人专业领域研究及成果)</td>
+                        </tr>
+                        <tr>
+                            <td class="lab" valign="top">主要工作经历：</td>
+                            <td colspan="3">@Html.TextAreaFor(model => model.工作经历信息.主要工作经历)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <button class="front_login_rightbox_button" id="btn_sub" style="margin-left:auto; margin-right:auto; display:block;" type="submit">提&nbsp;&nbsp;&nbsp; 交</button>
+    </div>
+    <table id="enbale_class_list"></table>
+
+}
+
+<script type="text/javascript">
+    var s = '';
+    var count = 0;
+    var str = "";
+    var strname2 = "按军队采购目录";
+    function addData(th) {
+        if (strname2 != "按地方政府专家库") {
+            if (th.checked) {
+                var isHave = false;
+                var secName = $(th).val();
+                var v = $("#firstClass").val();
+                var tr = 0;
+                var td = 0;
+                var trCount = 0;
+                trCount = $("table#enbale_class_list tr").length;
+                if (v == -1) {
+                    alert("您还没有选择一级分类");
+                    return;
+        }
+                else {
+                    if (trCount == 0) {
+                        $("table#showtable").append("<tr><td style='background-color:white;'>" + v + "</td><td style='background-color:white;' colspan='3'><span style='display:inline-block; margin-left:10px;'>" + secName + "</span></td></tr>");
+                        $("table#enbale_class_list").append("<tr><td><input id='" + trCount + "' name='可参评物资类别列表[" + trCount + "].一级分类' value='" + v + "' type='hidden'></td><td><input type='hidden' name='可参评物资类别列表[" + 0 + "].二级分类[" + 0 + "]' value='" + secName + "'/></td></td><td></td></tr>");
+                    }
+                    else {
+                        var isHave = false;
+                        var isHaveOne = false;
+                        for (var i = 0; i < trCount; i++) {
+                            var name = $("table#enbale_class_list tr:eq(" + i + ") td:first").children(":input:first").val();
+                            if (name == v) {
+                                isHaveOne = true;
+                                tr = i;
+                                break;
+                            }
+                        }
+                        if (isHaveOne == false) {
+                            $("table#showtable").append("<tr><td style='background-color:white;'>" + v + "</td><td style='background-color:white;'><span style='display:inline-block; margin-left:10px;'>" + secName + "</span></td></tr>");
+                            $("table#enbale_class_list").append("<tr><td><input id='" + trCount + "' name='可参评物资类别列表[" + trCount + "].一级分类' value='" + v + "' type='hidden'></td><td><input type='hidden' name='可参评物资类别列表[" + trCount + "].二级分类[" + 0 + "]' value='" + secName + "'/></td></td><td></td></tr>");
+                        }
+                        else {
+                            var td = $("table#enbale_class_list tr:eq(" + tr + ") td:eq(1)").children(":input").length;
+                            for (var j = 0; j < td; j++) {
+                                if ($("table#enbale_class_list tr:eq(" + tr + ") td:eq(1)").children(":input:eq(" + j + ")").val() == secName) {
+                                    isHave = true;
+                                    break;
+                                }
+                            }
+                            if (isHave == true) {
+                                alert("您已经添加过这个二级分类");
+                            }
+                            else {
+
+                                var last = $("table#enbale_class_list tr:eq(" + tr + ") td:eq(1)").children(":input").length;
+                                $("table#showtable tr:eq(" + tr + ") td:eq(1)").append("<span style='display:inline-block; margin-left:10px;'>" + secName + "</span>");
+                                $("table#enbale_class_list tr:eq(" + tr + ") td:eq(1)").append("<input type='hidden' name='可参评物资类别列表[" + tr + "].二级分类[" + last + "]' value='" + secName + "'/>");
+                            }
+                        }
+}
+    }
+            }
+            else {
+                var trcount1 = $("table#showtable tr").length;
+                for (var m = 0; m < trcount1; m++) {
+                    $("table#showtable tr:eq(" + m + ") td:eq(1) span").each(function () {
+                        if ($(this).text() == th.value) {
+                            $(this).remove();
+            }
+        });
+        }
+                var trcount2 = $("table#enbale_class_list tr").length;
+                for (var n = 0; n < trcount2; n++) {
+                    $("table#enbale_class_list tr:eq(" + n + ") td:eq(1) :input").each(function () {
+                        if ($(this).val() == th.value) {
+                            $(this).val("");
+                }
+            });
+                }
+            }
+        }
+        else {
+            if (th.checked) {
+                var have = false;
+                if ($("table#showtable tr").length > 0) {
+                    for (var i = 0; i < $("table#showtable tr:first td:first span").length; i++) {
+                        if ($("table#showtable tr:first td:first span:eq(" + i + ")").text() == $(th).val()) {
+                            have = true;
+                            break;
+                        }
+                    }
+                    if (have) {
+                        alert("您已经添加过了");
+                    }
+                    else {
+                        $("table#showtable tr:first td:first").append("<span style='display:inline-block; margin-left:10px;'>" + $(th).val() + "</span>");
+                    }
+                }
+                else {
+                    $("table#showtable").append("<tr><td style='background-color:white;'><span>" + $(th).val() + "</span></td></tr>");
+                }
+                if ($("table#enbale_class_list tr").length == 0) {
+                    $("table#enbale_class_list").append("<tr><td><input type='hidden' name='可参评物资类别列表[0].一级分类' value='" + $(th).val() + "'/></td><td><input type='hidden' name='可参评物资类别列表[" + 0 + "].二级分类[" + 0 + "]' value='-1'/></td></tr>");
+                }
+                else {
+                    if (have == false) {
+                        var val = "";
+                        val += $("table#enbale_class_list tr:first td:first :input:first").val() + ",";
+                        val += $(th).val();
+                        $("table#enbale_class_list tr:first td:first :input:first").val(val);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < $("table#showtable tr:first td:first span").length; i++) {
+                    if ($("table#showtable tr:first td:first span:eq(" + i + ")").text() == $(th).val()) {
+                        $("table#showtable tr:first td:first span:eq(" + i + ")").remove();
+                    }
+                }
+                var strname = $("table#enbale_class_list tr:first td:first :input:first").val().split(',');
+                var strname1 = "";
+                for (var k = 0; k < strname.length - 1; k++) {
+                    if ($(th).val() != strname[k]) {
+                        strname1 += strname[k] + ",";
+                    }
+                }
+                $("table#enbale_class_list tr:first td:first :input:first").val(strname1);
+            }
+        }
+                        }
+    $("span.bx").click(function () {
+        $("span.bx").each(function () {
+            $(this).css({ "background-color": "gray", "color": "white" });
+                    });
+        $(this).css({ "background-color": "white", "color": "red" });
+        if ($(this).text() == "按地方政府专家库") {
+            $(".secondtype").children().hide().last().show();
+            strname2 = "按地方政府专家库";
+            $("#first").hide();
+            $("#firstClass").hide();
+            $(".secondtype").show();
+            $("#txt").hide();
+            for (var i = 0; i < $("#firstClass option").length; i++) {
+                $("#firstClass option:eq(" + i + ")").remove();
+            }
+            $("#firstClass").html("<option index='-1' value='-1'>请选择一级分类</option><option index='22' value='非商品分类评审专业'>非商品分类评审专业</option>");
+        }
+        if ($(this).text() == "按军队采购目录") {
+            $(".secondtype").children().hide();
+            strname2 = "按军队采购目录";
+            $("#first").show();
+            $("#firstClass").show();
+            $(".secondtype").show();
+            $("#txt").hide();
+            $("#firstClass").html(str);
+                    }
+        if ($(this).text() == "手动输入") {
+            $(".secondtype").children().hide();
+            strname2 = "手动输入";
+            $("#first").hide();
+            $("#firstClass").hide();
+            $(".secondtype").hide();
+            $("#txt").show();
+                        }
+        $("#enbale_class_list").html("");
+        $("#showtable").html("");
+        $(":input[type='checkbox']").each(function () {
+            this.checked = false;
+        });
+                    });
+    function searchtype(th) {
+        var index = $(th).find("option:selected").attr("index");
+        $(".secondtype").children().hide().eq(index).show();
+        $(".secondtype").children().eq(0).show();
+                }
+    function showContent(index, th) {
+        $("div.box_header a").each(function () {
+            $(this).css({ "background-color": "gray", "color": "white" });
+        });
+        $(th).css({ "background-color": "rgb(233, 249, 212)", "color": "black" });
+        $("div#outbox").children("div.expert_identity").each(function () {
+            $(this).hide();
+            });
+        $("div#outbox").children("div.expert_identity:eq(" + index + ")").show();
+    }
+    function addFirst() {
+        var have = false;
+        if ($("table#showtable tr").length > 0) {
+            for (var i = 0; i < $("table#showtable tr:first td:first span").length; i++) {
+                if ($("table#showtable tr:first td:first span:eq(" + i + ")").text() == $("#fst").val()) {
+                    have = true;
+                    break;
+                }
+            }
+            if (have) {
+                alert("您已经添加过了");
+                $("#fst").val("");
+            }
+            else {
+                $("table#showtable tr:first td:first").append("<span style='display:inline-block; margin-left:10px;'>" + $("#fst").val() + "</span>");
+                alert("添加成功！");
+                $("#fst").val("");
+            }
+        }
+        else {
+            $("table#showtable").append("<tr><td style='background-color:white;'><span>" + $("#fst").val() + "</span></td></tr>");
+            alert("添加成功！");
+            $("#fst").val("");
+        }
+        if ($("table#enbale_class_list tr").length == 0) {
+            $("table#enbale_class_list").append("<tr><td><input type='hidden' name='可参评物资类别列表[0].一级分类' value='" + $("#fst").val() + "'/></td><td><input type='hidden' name='可参评物资类别列表[" + 0 + "].二级分类[" + 0 + "]' value='-1'/></td></tr>");
+        }
+        else {
+            if (have == false) {
+                var val = "";
+                val += $("table#enbale_class_list tr:first td:first :input:first").val() + ",";
+                val += $("#fst").val();
+                $("table#enbale_class_list tr:first td:first :input:first").val(val);
+            }
+        }
+        }
+    $(document).ready(function () {
+        var provence = $("#deliverprovince").change(function(){
+            $("#provence").val($(this).val());
+
+        });
+        $("#delivercity").change(function(){
+            $("#city").val($(this).val());
+        });
+        $("#deliverarea").change(function(){
+            $("#area").val($(this).val());
+        });
+    });
+    $(function () {
+        var province=$("#provence").val();
+         var city=$("#city").val();
+         var area=$("#area").val();
+         $("#deliverprovince option").each(function(){
+             if($(this).val()==province)
+             {
+                 alert($(this).val());
+                 $(this).attr("selected",selected);
+             }
+         });
+        $(".secondtype").children().hide()
+        str = $("#firstClass").html();
+        $("span.bx:first").css({ "background-color": "white", "color": "red" });
+        $("#评审专家列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#评审专家列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function showOutbox() {
+        if($("table#exist tr").length>0)
+        {
+            if(confirm("如果要修改，当前数据有了能被修改，确定修改吗？"))
+            {
+                $("#f").show(500);
+            }
+        }
+        else
+        {
+            $("#f").show(500);
+        }
+    }
+    function hideOutbox() {
+        $("#f").hide(500);
+    }
+    function showBt(th) {
+        $(th).next("input[type='file']").css("display", "inline");
+        $(th).remove();
+    }
+    function delgt(number,num,th)
+    {
+        $.get('/单位用户后台/delgt', { index: number, id: num }, function (data) {
+            if(data==1)
+            {
+                alert("删除成功！");
+                $(th).parent().parent().remove();
+            }
+            else
+            {
+                alert("出错！");
+            }
+        });
+    }
+</script> 

@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "需要登陆";
+}
+
+<style type="text/css">
+    .successed_register {
+        height: 300px;
+        width: 200px;
+        margin: 30PX auto;
+    }
+
+        .successed_register img {
+            margin-top: 100px;
+            float: left;
+        }
+
+        .successed_register .success_content {
+            float: left;
+            margin: 20px auto;
+        }
+</style>
+<div class="successed_register">
+
+    <div class="success_content">
+        <p style="font-size:20px; color:red;">查看该信息需要登录！</p>
+        <p id="urlredirect">秒后跳转到登录页面</p><a style="font-size:12px; color:red; text-decoration:underline;" href="/登录/Login?ReturnUrl=/@ViewData["type"]?id=@ViewData["id"]">直接登录》</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var i = 15;
+        var timer;
+        $("#urlredirect").html(i + "秒后跳转到登录页面！");
+        timer=setInterval(function () {
+            i--;
+            $("#urlredirect").html(i + "秒后跳转到登录页面！");
+            if (i < 1) {
+                setTimeout(function () {
+                    window.location.href = "/登录/Login?ReturnUrl=/@ViewData["type"]?id=@ViewData["id"]";
+                }, 500);
+                clearInterval(timer);
+            }
+        }, 1000);
+    });
+</script>
+

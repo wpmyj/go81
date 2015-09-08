@@ -1,0 +1,112 @@
+﻿@using Go81WebApp.Models.数据模型.项目数据模型
+@using Go81WebApp.Models.数据模型
+@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+<div class="gys_znxx_topbox">
+    <div class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">待办事项</div>
+    </div>
+</div>
+@if (ViewBag.BaseInfo == false || ViewBag.VipInfo == false || ViewBag.SalesInfo == false || ViewBag.Busniss == false || ViewBag.TaxInfo == false || ViewBag.LawPerson == false || ViewBag.Financial == false || ViewBag.Investor == false || ViewBag.goodType == 0)
+{
+    <div style="width:938px; text-indent:20px; border:1px dashed black; margin-top:10px;">
+@if (ViewData["U_message"] != null)
+{
+    <div style="color:red; padding-top:20px;">@Html.Raw(ViewData["U_message"])</div>
+}
+        
+        <table width="100%">
+            <tr>
+                <th align="left">
+                    <h2>以下是您还没有完善的信息：</h2>
+                </th>
+            </tr>
+            @if (ViewBag.VipInfo == false)
+            {
+                <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Vip_Manage">您的联系人信息还不完善，请从这里去完善>></a></td></tr>
+            }
+            @if (ViewBag.BaseInfo == false)
+            {
+                <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Manage">您的企业基本信息还未完善，请从这里去完善>></a></td></tr>
+            }
+            @if (ViewBag.LawPerson == false)
+            {
+                <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Law_Person">您的法定代表人的信息还不完善，请从这里去完善>></a></td></tr>
+            }
+            @if (ViewBag.SalesInfo == false || ViewBag.Busniss == false)
+            {
+                <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Sales_Manage">您的营业信息还不完善，请从这里去完善>></a></td></tr>
+            }
+            @if (ViewBag.Investor == false)
+            {
+                <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Investor_Management">您的出资人或股东信息还不完善，请从这里去完善>></a></td></tr>
+            }
+            @if (ViewBag.Financial == false)
+            {
+                <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Financial_Manage">您的财务信息还不完善，请从这里去完善>></a></td></tr>
+            }
+            @if (ViewBag.qualify == false)
+            {
+                <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Qualify_Management">资质证书信息还不完善，请从这里去完善>></a></td></tr>
+            }
+            @if (ViewBag.TaxInfo == false)
+            {
+                <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Tax_Management">您的税务信息还不完善，请从这里去完善>></a></td></tr>
+            }
+            @if (ViewBag.goodType == 0)
+            {
+                <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Product_Type">您的可提供产品类别还不完善，请从这里去完善>></a></td></tr>
+            }
+            @if (Model.供应商用户信息.供应商类型.ToString() == "物资供应商")
+            {
+                if (ViewBag.goodType == 0)
+                {
+                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Product_Type">可供商品类别信息还不完善，请从这里去完善>></a></td></tr>
+                }
+            }
+            @if (Model.供应商用户信息.供应商类型.ToString() == "物资供应商")
+            {
+                if (ViewBag.GoodCount < 5)
+                {
+                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Product_AddStep1">商品少于5个，您可以从这里去添加商品>></a></td></tr>
+                }
+            }
+            @if (ViewBag.ysd != null)
+            {
+                bool IsExist=false;
+                foreach (var k in ViewBag.ysd as IEnumerable<验收单>)
+                {
+                    if (k.验收单扫描件.Count<=0 && k.是否已经打印)
+                    {
+                        <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/AddAcceptanceForm">您有未上传的验收单，请从这里去上传（验收单验收状态为未验收,则说明验收单未上传）>></a></td></tr>
+                    }
+                    if (k.是否已经打印 == false && k.审核数据.审核状态 == 审核状态.审核通过)
+                    {
+                        if(!IsExist)
+                        {
+                           <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/AddAcceptanceForm">您有未打印的验收单，请从这里去打印>></a></td></tr> 
+                            IsExist = true;
+                        }
+                    }
+                    if (k.审核数据.审核状态 == 审核状态.审核未通过)
+                    {
+                        <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/AddAcceptanceForm">您有未通过审核的验收单，请从这里去修改>></a></td></tr>
+                    }
+                }
+            }
+        </table>
+    </div>
+}
+else
+{
+    <div style="width:938px; text-indent:20px; border:1px dashed black; margin-top:10px;">
+        <table width="100%">
+            <tr><td><span>企业信息已完善，如需修改，请联系网站管理员。</span></td></tr>
+        </table>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $("#待办事项").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#待办事项").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

@@ -1,0 +1,100 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型;
+<style type="text/css">
+    .gys_xttz_topbg a {
+        margin-top: 0;
+    }
+
+    .adaddtip {
+        font-weight: normal;
+        font-size: 14px;
+        padding-left: 10px;
+        text-decoration: underline;
+        color: red;
+        padding-top: 5px;
+    }
+</style>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">我的通知列表<a href="/单位用户后台/Procure_TzAdd" class="adaddtip">【+发布新通知】</a></div>
+    </div>
+</div>
+<div class="gys_znxx_box" style="width:1042px;">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="55%">标题</th>
+                    <th width="10%">通知所属</th>
+                    <th width="10%">状态</th>
+                    <th width="15%">时间</th>
+                    <th width="10%">操作</th>
+                </tr>
+                @foreach (var item in (IEnumerable<通知>)ViewData["后台通知列表"])
+                {
+                    <tr>
+                        <td><a href="~/单位用户后台/Procure_TzDetail?id=@item.Id&come=s" target="_blank">@item.内容主体.标题</a></td>
+                        @if (item.通知信息 != null)
+                        {
+                            <td>@item.通知信息.通知所属</td>
+                        }
+                        else
+                        {
+                            <td>未设置</td>
+                        }
+                        @if (item.审核数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核通过)
+                        {
+                            <td>@item.审核数据.审核状态</td>
+                        }
+                        else if (item.审核数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核未通过)
+                        {
+                            <td style="color:red;">@item.审核数据.审核状态 : @item.审核数据.未通过理由</td>
+                        }
+                        else
+                        {
+                            <td style="color:blue;">@item.审核数据.审核状态</td>
+                        }
+                        <td>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</td>
+                        <td class="gys_znxx_content_tabletime"><a href="/单位用户后台/Procure_TzModify?id=@item.Id" target="_blank">修改</a>|<a onclick="del(@item.Id)">删除</a></td>
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border","1px solid #ff0000");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#我的通知列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#我的通知列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此消息！确定删除吗？"))
+        {
+            window.location="/单位用户后台/Procure_TzDelete?id="+num+"&come=s";
+        }
+    }
+</script>
+

@@ -1,0 +1,282 @@
+﻿<div id="CheckUdiv">
+    @using Go81WebApp.Models.数据模型.用户数据模型
+    @{
+        ViewBag.Title = "验证安全性";
+        Layout = "_BackLayout.cshtml";
+    }
+    <script type="text/javascript" src="~/JS/NTClientJavascript.js"></script>
+    <style type="text/css">
+        .accept {
+            width: 1150px;
+            padding: 20px;
+            margin: 30px auto;
+            background: #fff;
+        }
+
+            .accept th {
+                background: none repeat scroll 0 0 #DEDEDE;
+                border-right: 1px solid #ccc;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .accept td {
+                line-height: 30px;
+                border: 1px solid #ccc;
+                border-bottom: none;
+                border-right: none;
+            }
+
+                .accept td.left_none {
+                    border-left: none;
+                }
+
+            .accept .align {
+                text-align: right;
+                width: 150px;
+                font-size: 16px;
+            }
+
+            .accept span {
+                color: red;
+                font-size: 12px;
+            }
+
+            .accept .lis {
+                text-align: right;
+                font-size: 14px;
+                color: #575757;
+            }
+
+        .gys_ztbsearch_contentbox a {
+            margin-left: 5px;
+        }
+
+        #good_list td {
+            border: none;
+        }
+
+        .select_unit {
+            display: none;
+        }
+
+        .del_good_list {
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .wenxintishi {
+            text-indent: 2.0em;
+        }
+
+        .modal {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            position: fixed;
+            display: none;
+        }
+
+        .modal-dialog {
+            position: relative;
+            width: 600px;
+            margin: 15% auto;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: #fff;
+            -webkit-background-clip: padding-box;
+            background-clip: padding-box;
+            border: 1px solid #999;
+            border: 1px solid rgba(0, 0, 0, .2);
+            border-radius: 6px;
+            outline: 0;
+            -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        }
+
+        .close {
+            margin-top: -2px;
+            float: right;
+            font-size: 21px;
+            font-weight: bold;
+            line-height: 1;
+            color: #000;
+            text-shadow: 0 1px 0 #fff;
+            filter: alpha(opacity=20);
+            opacity: .2;
+            -webkit-appearance: none;
+            padding: 0;
+            cursor: pointer;
+            background: transparent;
+            border: 0;
+        }
+
+        h4 {
+            font-size: 18px;
+        }
+
+        label {
+            display: inline-block;
+            max-width: 100%;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .modal-header {
+            min-height: 16.42857143px;
+            padding: 15px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .modal-title {
+            margin: 0;
+            line-height: 1.42857143;
+        }
+
+        .modal-body {
+            position: relative;
+            padding: 15px;
+        }
+
+        .modal-footer {
+            padding: 15px;
+            text-align: right;
+            border-top: 1px solid #e5e5e5;
+        }
+    </style>
+
+    <div id="indexpagemodal1" class="modal fade" style="display:none;">
+        <input type="hidden" id="ssid" name="ssid" value="@ViewData["Message"]" style="width:300px;" />
+        <input type="hidden" id="HidIAID" name="HidIAID" style="width:300px;" />
+        <input type="hidden" id="HidDigest" name="HidDigest" style="width:300px;" />
+        <div class="modal-dialog" style="margin: 10% auto;">
+            <div class="modal-content" style="height:230px;">
+                <div class="modal-header" style="padding-bottom: 20px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal1').hide();">×</button>
+                    <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px;">请输入安全证书密码</div>
+                </div>
+                <div class="modal-body" style=" height:auto; overflow:hidden;">
+                    <div id="outlistdiv" style="height: 100px; text-align:center; line-height:25px;">
+                        <input type="password" id="password" name="password" style=" height:25px; width:250px; line-height:25px; " /><br />
+                        <span style="color:red;" id="errortips"></span>
+                    </div>
+                    <div style="width: 100%; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" id="submitpassword" class="gys_ztbsearch_search_botton" style="margin-left:0;" value="确  定" onclick="return OnLogon();" /></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (ViewData["是否持有U盾"] != null && ViewData["是否持有U盾"] == "1")
+    {
+
+    }
+    else
+    {
+        <h4 style="color:gray;text-align:center;">您还未持有安全证书或安全证书已过期，为保证数据的安全性，暂时无法使用验收单功能，如有疑问，请联系客服。</h4>
+    }
+
+    @if (ViewData["是否持有U盾"] == "1")
+    {
+        <script type="text/javascript">
+            $(function () {
+                if (!getcheck()) {
+                    $("#indexpagemodal1").hide();
+                }
+                else {
+                    $("#indexpagemodal1").show();
+                }
+            });
+
+            function getcheck() {
+                var flage = true;
+
+                var browser = DetectBrowser();
+                if (browser == "Unknown") {
+                    alert("不支持该浏览器， 如果您在使用傲游或类似浏览器，请切换到IE模式，建议使用Google浏览器！");
+                    flage = false;
+                }
+                createElementNT199();
+                var create = DetectNT199Plugin();
+                if (create == false) {
+                    alert("插件未安装,,请直接安装CD区的插件!");
+                    flage = false;
+                }
+
+                var Rtn = NT199_Find();
+                if (Rtn < 1) {
+                    alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                    flage = false;
+                }
+
+                if (flage) {
+                    $("#indexpagemodal1").show();
+                    $("#password").focus();
+                }
+                return flage;
+            }
+            function OnLogon() {
+                var Rtn = NT199_Find();
+                if (Rtn < 1) {
+                    alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                    return false;
+                }
+                var pwd = document.getElementById("password").value;
+                if (pwd == "") {
+                    alert("用户密码不能为空");
+                    return false;
+                }
+                var retVal = NT199_CheckPassword(pwd);
+                if (retVal != 0) {
+                    if (retVal == 1) {
+                        alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                    }
+                    else {
+                        alert("ErrorCode:" + NT199_GetLastError() + "   密码不正确");
+                    }
+                    return false;
+                }
+                var IAID = NT199_GetHardwareId();
+
+                var randomMessageFromServer = "@ViewData["Message"]";
+                var hashVal = NT199_Sha1WithSeed(randomMessageFromServer);
+
+                document.getElementById("HidDigest").value = hashVal;
+                document.getElementById("HidIAID").value = IAID;
+
+                var tempparm = "HidDigest=" + hashVal + "&HidIAID=" + IAID + "&ssid=" + $("#ssid").val() + "&type=" + "@ViewData["type"]";
+
+                $("#indexpagemodal1").hide();
+                $("#errortips").html("");
+                $.ajax({
+                    cache: false,
+                    async: false,
+                    //dataType: 'json', type: 'post',
+                    type: 'POST',
+                    url: "/供应商后台/CheckUOfYsdx",
+                    data: tempparm,
+                    success: function (data) {
+                        if (data != "U盾信息不匹配！" && data != "登陆失败" && data != "此账号不存在" && data != "参数错误,请不要修改url") {
+                            $("#CheckUdiv").html(data);
+
+                            return true;
+                        }
+                        else {
+                            $("#indexpagemodal1").show();
+                            $("#errortips").html(data);
+                        }
+                    }
+                });
+                return false;
+            }
+        </script>
+    }
+</div>

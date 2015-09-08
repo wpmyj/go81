@@ -1,0 +1,247 @@
+﻿<script src="~/JS/provinceandcity_all.js"></script>
+<style type="text/css">
+    .expert_condition {
+        width: 898px;
+        border: solid 1px #ccd2b0;
+        height: auto;
+        overflow: hidden;
+        padding: 10px 0 20px 0;
+    }
+
+    .expert_condition {
+        width: 898px;
+        border: solid 1px #ccd2b0;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .expert_condition_inner {
+        width: 800px;
+        margin: 0 auto;
+        height: auto;
+        overflow: hidden;
+        margin-top: 10px;
+        border: solid 1px #ccd2b0;
+        padding: 10px;
+    }
+
+    .expert_condition_innerleft {
+        width: 150px;
+        float: left;
+        height: auto;
+        overflow: hidden;
+        font-size: 14px;
+        color: rgb(51, 51, 51);
+    }
+
+    .expert_condition_innerright {
+        width: 650px;
+        float: left;
+        font-size: 14px;
+        color: rgb(51, 51, 51);
+    }
+
+    .expert_condition_innerrightlist {
+        width: 300px;
+        float: left;
+    }
+
+    .expert_condition_input {
+        height: 30px;
+        width: 150px;
+        float: right;
+        margin-right: 60px;
+    }
+    .expert_condition_button1 {
+        border: 1px solid #f00; color: #f00;
+    }
+    .expert_condition_reason {
+        width:120px; height:28px; margin:2px; display:none;
+    }
+    .expert_condition_button2 {
+        border: 1px solid #ccf;
+        color: #ccf;
+        float: left;
+        margin-top: 2px;
+    }
+</style>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_topbox">
+        <div class="gys_znxx_topbg">
+            <div class="index_bottom_zb_top_title">筛选评审专家</div>
+        </div>
+    </div>
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <div class="expert_condition">
+
+
+
+
+                <div class="expert_condition_inner">
+                    <div class="expert_condition_innerleft">项目信息</div>
+                    <div class="expert_condition_innerright">
+                        <div class="expert_condition_innerrightlist">
+                            项目名称<input type="text" name="pro_name" id="pro_name" class="expert_condition_input" />
+                        </div>
+                        <div class="expert_condition_innerrightlist">
+                            项目编号<input type="text" name="pro_num" id="pro_num" class="expert_condition_input" />
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            评标时间<input type="text" name="pro_time" id="pro_time" class="expert_condition_input" />
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="expert_condition_inner">
+                    <div class="expert_condition_innerleft">学历信息</div>
+                    <div class="expert_condition_innerright">
+                        <div class="expert_condition_innerrightlist">
+                            专业技术职称
+                            <select name="专业技术职称" id="专业技术职称" class="expert_condition_input">
+                                @foreach (var a in (Dictionary<string, int>)ViewData["专家技术职称"])
+                                {
+                                    <option name="专业技术职称" id="@a.Value">@a.Key</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="expert_condition_innerrightlist">
+                            最高学位
+                            <select name="最高学位" id="最高学位" class="expert_condition_input">
+                                @foreach (var a in (Dictionary<string, int>)ViewData["最高学位"])
+                                {
+                                    <option name="最高学位" id="@a.Value">@a.Key</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="expert_condition_inner">
+                    <div class="expert_condition_innerleft">工作经历信息</div>
+                    <div class="expert_condition_innerright">
+                        <div class="expert_condition_innerrightlist">
+                            从事专业<input type="text" name="从事专业" id="从事专业" class="expert_condition_input" />
+                        </div>
+                    </div>
+                </div>
+                <div class="expert_condition_inner">
+                    <div class="expert_condition_innerleft">身份信息</div>
+                    <div class="expert_condition_innerright">
+                        <div class="expert_condition_innerrightlist">
+                            评审专家类型
+                            <select name="专家类型" id="专家类型" class="expert_condition_input">
+                                @foreach (var a in (Dictionary<string, int>)ViewData["专家类型"])
+                                {
+                                    <option name="专家类型" id="@a.Value">@a.Key</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="expert_condition_innerrightlist">
+                            评审专家类别
+                            <select name="专家类别" id="专家类别" class="expert_condition_input">
+                                @foreach (var a in (Dictionary<string, int>)ViewData["专家类别"])
+                                {
+                                    <option name="专家类别" id="@a.Value">@a.Key</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style=" width:570px; margin-top:10px;">
+                            所在地域
+                            <select id="deliverprovince" name="deliverprovince" style=" height:30px; width:150px; margin-left:30px;"></select>
+                            <select id="delivercity" name="delivercity" style=" height: 30px; width: 142px;"></select>
+                            <select id="deliverarea" name="deliverarea" style=" height: 30px; width: 150px;"></select>
+                            <script>
+                                window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <div class="expert_condition_inner" style="border:none; font-size:14px;">回避列表
+                        <input type="text" name="回避列表" id="回避列表" style=" width:600px; height:30px;" /><span style="color:red; font-size:12px;">多个请以逗号，分隔</span>
+                </div>
+                <div class="expert_condition_inner" style="border:none; font-size:14px;">
+                    抽取个数
+                    <input type="text" name="抽取个数" id="抽取个数" style=" width:400px; height:30px;" value="5" />
+                    <input type="button" value="进行抽取" style="width:100px; height:30px; float:right;" onclick="getsearch();" />
+                </div>
+                <script type="text/javascript">
+                    function getsearch() {
+                        document.getElementById("抽取个数").disabled = "disabled";
+
+                        var a = document.getElementById("专业技术职称").selectedIndex;
+                        var b = document.getElementById("最高学位").selectedIndex;
+                        var c = document.getElementById("从事专业").value;
+                        var d = document.getElementById("专家类型").selectedIndex;
+                        var e = document.getElementById("deliverprovince").value + "|" + document.getElementById("delivercity").value + "|" + document.getElementById("deliverarea").value;
+                        var f = document.getElementById("专家类别").selectedIndex;
+                        var g = document.getElementById("抽取个数").value;
+                        var h = document.getElementById("回避列表").value; 
+                        var i = document.getElementById("selectnum").value;
+                        var j = document.getElementById("selectnumlist").value;
+                        var k = document.getElementById("n").value;
+                        var parms = "zc=" + a + "&xw=" + b + "&zy=" + c + "&type=" + d + "&palce=" + e + "&class=" + f + "&num=" + g + "&outlist=" + h + "&count=" + i + "&selectlist=" + j + "&n=" + k;
+
+                        $.get("/专家/SearchByCondition?" + encodeURI(parms), function (response) {
+                            document.getElementById("n").value = (parseInt(document.getElementById("n").value) + 1);
+                            $("#selecttable").append(response);
+                            //document.getElementById("selecttable").style.display = "block";
+                            document.getElementById("selectnum").value = $("input.rescount:last").val();
+
+                            var oldlist = "";
+                            var trlist = document.getElementById("selecttable").getElementsByTagName("tr");
+                            for (var i = 0; i < trlist.length; i++) {
+                                if (trlist[i].getAttribute("name") != null) {
+                                    oldlist+=trlist[i].getAttribute("id") + "|";
+                                }
+                            }
+                            document.getElementById("selectnumlist").value = oldlist;
+
+                            //$("input.rescount:last").val()
+                            //var str = response.split('%');
+                            //document.getElementById("selecttable").innerHTML += str[0];
+                            //document.getElementById("selectnum").value = (parseInt(str[1]) + parseInt(document.getElementById("selectnum").value)).toString();
+                            //document.getElementById("selecttable").style.display = "block";
+
+                            //var trlist = document.getElementById("selecttable").getElementsByTagName("tr");
+                            //for (var i = 0; i < trlist.length; i++) {
+                            //    if (trlist[i].getAttribute("id") != "head") {
+                            //        document.getElementById("selectnumlist").value = trlist[i].getAttribute("id") + "|";
+                            //    }
+                            //}
+
+                        });
+
+                    }
+
+                </script>
+            </div>
+            <input type="hidden" id="selectnum" value="0"/>
+            <input type="hidden" id="selectnumlist" value="" />
+            <input type="hidden" id="n" value="1" />
+            <table width="898" cellpadding="0" cellspacing="0" id="selecttable" style="border-right:solid 1px #ccd2b0;">
+                <tr id="head">
+                    <th width="10%">姓名</th>
+                    <th width="15%">专业技术职称</th>
+                    <th width="10%">从事专业</th>
+                    <th width="10%">评审专家类型</th>
+                    <th width="10%">评审专家类别</th>
+                    <th width="15%">联系方式</th>
+                    <th width="30%">操作</th>
+                </tr>
+            </table>
+
+            <div class="expert_condition_inner" style="border:none; font-size:14px;">
+                <input type="button" value="确认抽取结果" style="width:100px; height:30px; float:right;" />
+            </div>
+            <script type="text/javascript">
+                function deleteline(a) {
+                    a.style.backgroundColor = '#f00'; a.style.color = '#fff';
+                    var b = a.parentNode.parentNode.getElementsByTagName("input")[2];
+                    b.style.display = "block";
+                    document.getElementById("selectnum").value = (parseInt(document.getElementById("selectnum").value)-1).toString();
+                }
+            </script>
+        </div>
+    </div>
+</div>

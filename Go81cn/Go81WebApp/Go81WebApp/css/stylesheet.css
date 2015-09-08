@@ -1,0 +1,269 @@
+﻿@charset "utf-8";
+/* CSS Document */
+/*全局样式*/
+/*按钮样式开始*/
+.btn-base{
+     cursor: pointer;
+     color: #fff;
+     /*background: #139451;*/
+     width: 200px;
+     height: 35px;
+     /*border: 3px solid #19791D;*/
+     font-size: 20px;
+}
+.btn-pri{
+    width: 70px;
+	height: 30px;
+	outline: none;
+	border:none;
+	cursor: pointer;
+	/*background: #C50101;*/
+	border-radius: 3px;
+	color: #fff;
+    font-size:14px;
+}
+/*按钮样式结束*/
+/*表格样式开始*/
+.table-post{      /*编辑型(表格嵌套)表格样式*/
+   width:100%;
+}
+.table-post label{
+    font-size:13px;
+    color:#636363;
+}
+.table-post .align-right{
+    text-align:right;
+}
+.table-post table{
+    border:1px solid #E2E2E2;
+    border-top: 3px solid #207AD6;
+}
+.table-post .padding{
+    padding:10px 0;
+}
+.table-post select{
+    width:155px;
+}
+
+
+
+.table-list {     /*列表型表格样式*/
+
+}
+/*表格样式结束*/
+
+
+/*系统通知板块css开始-----------------*/
+.gys_register_top_left_or_right {
+    width: 10px;
+    height: 36px;
+    float: left;
+}
+
+.gys_register_top_title {
+    font-size: 16px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-weight: bold;
+    letter-spacing: 0px;
+    color: #333;
+    float: left;
+}
+.gys_register_box {
+    width: 1200px;
+    height: auto;
+}
+
+.gys_register_topbox {
+    width: 1200px;
+    height: 36px;
+}
+
+.gys_register_topbg {
+    background-image: url("../images/index_content_bg.jpg");
+    float: left;
+    height: 36px;
+    width: 1180px;
+}
+
+.gys_register_contentbox {
+    width: 1198px;
+    height: auto;
+    overflow: hidden;
+    border: 1px solid #CCD2B0;
+    margin-top: -6px;
+    letter-spacing: 0px;
+	padding:10px 0 10px 0;
+}
+.gys_register_contentbox table
+{width:1180px; margin:0 auto; border: 1px solid #aaa; border-top:none; border-right:none; font-size:12px; line-height:25px; vertical-align:middle; font-family: Microsoft yahei;}
+.gys_register_contentbox table tr td{border-top: #aaa solid 1px; border-right: #aaa solid 1px; height:30px; width:590px; padding:3px;}
+.gys_register_contentbox table tr td input,select{width:290px; height:25px;}
+.gys_register_contentbox_btndiv{width:200px; margin:0 auto; margin-top:20px;}
+.gys_register_contentbox_btnclass{
+width:200px; background-color:#06C; height:30px; border:none; color:#fff; font-size:14px; font-weight:bold; letter-spacing:2px;
+}
+.gys_register_contentbox_btndiv a{
+width:200px; background-color:#06C; height:30px; border:none; color:#fff; font-size:14px; font-weight:bold; letter-spacing:2px;
+}
+.gys_register_contentbox_news_title {
+    font-size: 22px;
+    font-weight: bold;
+    text-align: center;
+    padding: 20px;
+}
+
+.gys_register_contentbox_news_from {
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.gys_register_contentbox_news_text {
+    font-size: 14px;
+    padding: 20px;
+}
+/*系统通知板块css结束-----------------*/
+/*运营团队统计页面css开始*/
+
+.statis_month_title{margin-top:20px; font-size:18px;text-indent:20px;}
+.statis_month_title label{font-size:12px;}
+
+.static-info {
+    border: 1px solid #ccc;
+    background: #EEE;
+    width: 99%;
+    margin: 10px auto;
+}
+.static-info p {
+  margin: 8px;
+  display: inline-block;
+  width: 303px;
+  text-align: left;
+  text-indent:1em;
+}
+.adStatisticData table{
+    border-right:1px solid #ccc;
+    border-bottom:1px solid #ccc;
+}
+.adStatisticData table th {
+    border-left:1px solid #ccc;
+    line-height:35px;
+    background: #EDEDED;
+    color: #515151;
+}
+.adStatisticData table td{
+    text-align:center;
+    line-height:30px;
+    border-left:1px solid #ccc;
+    border-top:1px solid #ccc;
+    color: #626262;
+    font-size:13px;
+}
+#isInClient h3{
+    border-radius: 15px 0px;
+    line-height: 40px;
+    text-align: center;
+    width: 120px;
+    margin: 0;
+    color:#fff;
+    text-indent: 27px;
+    letter-spacing: 25px;
+}
+.statistic_title{
+    border: 1px solid #ccc;
+    width: 99%;
+    margin: 10px auto 0;
+    border-radius: 5px;
+    height: 40px;
+    background: #EDEDED;
+    cursor:pointer;
+}
+.statistic_title .color_dot{
+    display:inline-block;
+    float:left;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    box-shadow: 0 0 6px #454545;
+    background: #DF7E2D;
+    margin: 15px 0 15px 30px;
+}
+.statistic_title .statistic_title_type{
+    display:inline-block;
+    font-weight: bold;
+    margin: 10px 0 10px 20px;
+    color: #515151;
+    letter-spacing:5px;
+}
+.statistic_title .statistic_title_derect{
+    display:inline-block;
+    float: right;
+    width: 20px;
+    height: 20px;
+    margin: 10px 20px 10px 0;
+    background:url('/Images/rg.png') center no-repeat;
+}
+
+.statistic_content{
+    width: 99%;
+    border: 1px solid #ccc;
+    height: auto;
+    margin: -3px auto;
+    border-top: none;
+    padding-bottom :20px;
+}
+.statistic_content .statistic_content_container p{
+    text-align:center;
+    font-size:12px;
+    color:#949191;
+    margin:0;
+    clear:both;
+    letter-spacing:3px;
+}
+.statistic_content .statistic_content_container ul{margin:0;}
+.statistic_content .statistic_content_container li{
+    line-height: 130px;
+    margin: 15px 19px;
+    width: 130px;
+    height: 130px;
+    float: left;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    text-align: center;
+    color: #616060;
+}
+.statistic_content .statistic_content_container li span{
+    font-size: 30px;
+    font-family: 'FZLTXHK';
+}
+.statistic_content .statistic_content_container li p{
+    line-height: normal;
+    margin-top: -48px;
+    color: #CD1A57;
+}
+.hidden_content{
+    display:none;
+    width:99%;
+    border: 1px solid #ccc;
+    border-top:none;
+    margin:-3px auto;
+}
+.hidden_content input {
+    height: 25px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-indent: 10px;
+}
+#btn_date_search{
+    cursor: pointer;
+    margin-left: 20px;
+    width: 60px;
+    height: 31px;
+    border: 4px solid #21744B;
+    background: #21993E;
+    color: #fff;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+/*运营团队统计页面css结束*/

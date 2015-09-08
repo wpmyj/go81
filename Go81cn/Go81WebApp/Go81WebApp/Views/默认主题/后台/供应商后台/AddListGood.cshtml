@@ -1,0 +1,135 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.管理器
+@{
+    ViewBag.Title = "批量添加商品";
+    Layout = "_BackLayout.cshtml";
+    
+}
+<script type="text/javascript" src="~/JS/Get_productClass.js"></script>
+<style type="text/css">
+   .step {
+       text-indent: 2em;
+       clear: left;
+       color: #F38652;
+   }
+   .container-temp {
+       padding-left: 60px;
+   }
+   #classresult font {
+        display: inline-block;
+        border: 1px solid #ccc;
+        padding: 5px;
+       margin-left: 5px;
+       margin-top: 5px;
+       cursor: pointer;
+   }
+   #classresult font s {
+       background: url('/Images/delete.png') no-repeat;
+   }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="gys_xttz_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">批量添加商品</div>
+            </div>
+        </div>
+        @*@using (Html.BeginForm("UploadExcelGood", "供应商后台"))
+        {
+             @Html.AntiForgeryToken()
+             @Html.ValidationSummary(true)*@
+        <form action="/供应商后台/UploadExcelGood" method="POST" enctype="multipart/form-data">
+            <div class="gys_xttz_contentbox gys_znxx_box">
+                <p class="step"><strong>第一步：选择要上传的商品的类别</strong></p>
+                <div class="product_add_classlistbox" id="firstclass" name="true">
+                    @if (((List<供应商._产品类别>)Model).Count > 0)
+                    {
+                        <ul>
+                            @foreach (var item in ((List<供应商._产品类别>)Model))
+                            {
+                                <li id="@商品分类管理.查找分类(item.一级分类).Id" lang="first" onclick="GetSonClass(this); ">@(item.一级分类)</li>
+                            }
+                        </ul>
+                        if (((List<供应商._产品类别>)Model)[0].一级分类 == "医疗设备" || ((List<供应商._产品类别>)Model)[0].一级分类 == "油料设备器材" || ((List<供应商._产品类别>)Model)[0].一级分类 == "给养器材" || ((List<供应商._产品类别>)Model)[0].一级分类 == "军用食品" || ((List<供应商._产品类别>)Model)[0].一级分类 == "被装材料" || ((List<供应商._产品类别>)Model)[0].一级分类 == "后勤装备" || ((List<供应商._产品类别>)Model)[0].一级分类 == "药品" || ((List<供应商._产品类别>)Model)[0].一级分类 == "被装" || ((List<供应商._产品类别>)Model)[0].一级分类 == "医用耗材" || ((List<供应商._产品类别>)Model)[0].一级分类 == "军事交通器材" || ((List<供应商._产品类别>)Model)[0].一级分类 == "基建营房工程器材")
+                        {
+                            <input type="hidden" value="special" name="special" id="special" />
+                        }
+                        else
+                        {
+                            <input type="hidden" value="" name="special" id="special" />
+                        }
+                    }
+                    else
+                    {
+                        <span style="color: red; font-size: 12px;">请先到企业信息管理-->可提供商品类别栏目进行添加</span>
+                    }
+                </div>
+                <div class="product_add_classlistbox" id="secondclass">
+                    @if (((List<供应商._产品类别>)Model).Count > 0 && ((List<供应商._产品类别>)Model)[0].二级分类.Count > 0)
+                    {
+                        var defaultsecondclass = 商品分类管理.查找子分类(商品分类管理.查找分类(((List<供应商._产品类别>)Model)[0].一级分类).Id);
+                        <ul>
+                            @foreach (var it in defaultsecondclass)
+                            {
+                                if (((List<供应商._产品类别>)Model)[0].二级分类.Contains(it.分类名))
+                                {
+                                    <li id="@it.Id" lang="second" name="true" onclick="GetSonClass(this);">@it.分类名</li>
+                                }
+                            }
+                        </ul>
+                    }
+                </div>
+               
+
+                <div class="product_add_classlistbox" id="thirdclass" style="height:300px; display:none;">
+                </div>
+                <input type="hidden" id="classidbox" value="" />
+                <div style="width:800px; margin-left:20px; display:none; clear:both;padding-top:20px;" id="classresult">
+                    <span style=' color: #006400; padding: 10px 0 10px 0; font-size: 14px; font-weight: bold;'>
+                        已选择的商品类别:
+                    </span>
+                </div>                                                                                                                                  
+                <p class="step" style="padding-top: 10px;"><strong>第二步：下载模板</strong></p>
+                <div class="container-temp">
+                    <a href="###" onclick="gettemplate('#classidbox')" style="text-decoration:underline">下载模板</a>
+                </div>
+                <p style="color:red;text-indent: 32px;">如果已下载模板,并且已完善了商品信息于模板中,可以跳过本步骤直接进行模板上传、图片压缩包上传、数据导入</p>
+                <div style="text-align:center">
+                    <input type="button" onclick="nextStep()" id="subbt" class="front_login_rightbox_button" style="display:inline-block;line-height:40px" value="进入下一步骤" />
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<script type="text/javascript">
+    function gettemplate(th)
+    {
+        if($(th).val()!="")
+        {
+            window.location = '/供应商后台/SealTemp?id=' + $(th).val();
+        }
+        else
+        {
+            alert('请选择商品分类');
+        }
+    }
+    function nextStep()
+    {
+         window.location = '/供应商后台/AddListGood1';
+    }
+    function Delme(e) {
+        var id = $(e).attr("id");
+        $("#classidbox").val($("#classidbox").val().replace(id+"|", ""));
+        $(e).remove();
+    }
+    $(function () {
+        
+        $("#新增商品信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#新增商品信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+

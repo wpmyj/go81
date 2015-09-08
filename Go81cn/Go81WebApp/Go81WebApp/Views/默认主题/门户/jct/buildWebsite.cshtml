@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "企业建站";
+    Layout = "~/Views/默认主题/_Shared/_Layout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("Part_PublicPuRNav", "jct")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div>
+            <div style="color:#bb0202; float:left; width:200px; font-size:24px;">企业建站服务</div>
+            <div style="clear:both; padding-top:1px; color:#606060;line-height:25px; font-size:16px;">
+                <h4 style="color:orange">服务内容</h4>
+                <p style="text-indent:2em;">传统的网页制作需要花巨大的精力进行美工设计、服务器租用、并请专人设计制作才能完成最基本的建设……不仅时间长、价格高，以后还需要请人更新维护网站，非常麻烦。本网站为企业提供方便的建站入口，让你轻轻松松建设自己的网站。</p>
+
+            </div>
+            @*<div style="text-align:center; width:570px; height:300px; margin:0px auto; background-size:cover; margin-top:30px; margin-left:auto; margin-right:auto; background-image:url(/Images/buildwebsite.png)">
+            </div>
+            <div style="text-align:center; font-weight:bold; font-size:16px;">企业建站轻松搞定</div>*@
+            <div style="clear:both; padding-top:20px; color:#606060;line-height:25px; font-size:16px;">
+                <h4 style="color:orange">体现价值</h4>
+                <p style="text-indent:2em;">企业建站系统，让不会建设网站的人通过一些非常简单的操作就能轻松建立自己的网站。为自己品牌做更好的宣传，加速实现企业的梦想。</p>
+            </div>
+            <div><a href="/jct/Applyvip?sure=true" style="display:block; width:150px ;height:30px; text-align:center; line-height:30px; border:1px solid red; background-color:#E78E8E; color:white; margin:0px auto;">申请加入军采通会员</a></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(".action_link").each(function () {
+        if ($(this).text() == "军采通") {
+            $(this).parent("div").addClass("on");
+        }
+    });
+</script>

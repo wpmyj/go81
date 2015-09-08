@@ -1,0 +1,172 @@
+﻿<div class="nav">
+    <div class="nav_classify_total">
+        <a>商品服务分类</a>
+    </div>
+    <div class="PgBox">
+        @{
+            var menuList = new List<string>();
+            if (WebApiApplication.IsIntranet)
+            {
+                menuList.Add("首页/首页/Index/index");
+                menuList.Add("供应商库/供应商陈列/GysList");
+                menuList.Add("评审专家/专家库/Index");
+                menuList.Add("采购商城/商品陈列/Index");
+                menuList.Add("办公物资/协议采购/Index");
+                menuList.Add("应急采购/应急采购/Index");
+                if (!WebApiApplication.IsIntranet)
+                {
+                    // menuList.Add("网上采购/错误页面/UnderConstruction");
+                    //menuList.Add("网上采购/网上竞标/Index");
+                }
+                menuList.Add("军彩生活/错误页面/UnderConstruction");
+                if (WebApiApplication.IsIntranet)
+                {
+                    menuList.Add("业务培训/业务培训/TrainingList");
+                }
+                //menuList.Add("军彩生活/机票酒店/HotelandTicket");
+                menuList.Add("下载专区/下载/Download_List");
+
+
+                if (!WebApiApplication.IsIntranet)
+                {
+                    menuList.Add("军采通/jct/Index");
+                    //menuList.Add("军采通/错误页面/UnderConstruction");
+                }
+            }
+            else
+            {
+
+                menuList.Add("首页/首页/Index/index");
+                menuList.Add("供应商库/供应商陈列/GysList");
+                menuList.Add("评审专家/专家库/Index");
+                menuList.Add("采购商城/商品陈列/Index");
+                menuList.Add("办公物资/协议采购/Index");
+                menuList.Add("应急采购/应急采购/Home");
+                menuList.Add("军采通/jct/Index");
+                //menuList.Add("军采通/错误页面/UnderConstruction");
+                menuList.Add("军彩生活/错误页面/UnderConstruction");
+                //menuList.Add("军彩生活/机票酒店/HotelandTicket");
+                menuList.Add("下载专区/下载/Download_List");
+            }
+
+            foreach (var item in menuList)
+            {
+                string[] mcas = item.Split('/');
+                if (mcas[0] != "军彩生活")
+                {
+                    if (mcas[0] == "下载专区")
+                    {
+                        <div class="page_layout" onclick="clickthismenu(this)">
+                            @Html.ActionLink(mcas[0], mcas[2], mcas[1], null, new
+                            {
+                                @class = "action_link"
+                            })
+                            @*@if (WebApiApplication.IsIntranet)
+                                {
+                                    <img src="~/Images/here.gif" />
+                                }*@
+                        </div>
+                    }
+                    else if (mcas[0] == "视频教学")
+                    {
+                        <div class="page_layout" onclick=" clickthismenu(this)">
+                            @Html.ActionLink(mcas[0], mcas[2], mcas[1], null, new
+                            {
+                                @class = "action_link"
+                            })
+                            @if (WebApiApplication.IsIntranet)
+                            {
+                                <img style="width:30px;height:30px;margin-left:-17px;margin-bottom:3px;" src="~/Images/play.png" />
+                            }
+                        </div>
+                    }
+                    else if (mcas[0] == "军采通")
+                    {
+                        <div class="page_layout" onclick="clickthismenu(this)">
+                            @Html.ActionLink(mcas[0], mcas[2], mcas[1], null, new
+                            {
+                                @class = "action_link"
+                            })
+                            <span style="position:absolute;display:block; margin-top:-19px; margin-left:70px;">
+                                <img src="~/Images/newfunc1.gif" style="position:absolute; vertical-align:middle; right:0px; bottom:10px;" />
+                            </span>
+                            @if (WebApiApplication.IsIntranet)
+                            {
+                                <img style="width:30px;height:30px;margin-left:-17px;margin-bottom:3px;" src="~/Images/play.png" />
+                            }
+                        </div>
+                    }
+                    else if (mcas[0] == "供应商库")
+                    {
+                        <div class="page_layout_a" onclick=" clickthismenu(this)">
+                            @Html.ActionLink(mcas[0], mcas[2], mcas[1], null, new
+                            {
+                                @class = "action_link"
+                            })
+                            @*@if (WebApiApplication.IsIntranet)
+                            {
+                                <div class="drop_menu" style="background-color:#207AD6;">
+                                    <a href="/供应商陈列/GysList_Inlib" class="drop_menu_bt" style="color:#fff;">入库供应商</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="drop_menu" style="background-color:#758C0E;border:none;">
+                                    <a href="/供应商陈列/GysList_Inlib" class="drop_menu_bt" style="color:#fff;">入库供应商</a>
+                                </div>
+                            }*@
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="page_layout_a" onclick="clickthismenu(this)">
+                            @Html.ActionLink(mcas[0], mcas[2], mcas[1], null, new
+                            {
+                                @class = "action_link"
+                            })
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="Pages page_layout_a" onclick=" clickthismenu(this)">
+                        @Html.ActionLink(mcas[0], mcas[2], mcas[1], null, new
+                        {
+                            @class = "action_link"
+                        })
+                    </div>
+                }
+            }
+        }
+        @if (!WebApiApplication.IsIntranet)
+        {
+            <a href="/登录/Login">
+                <div id="loginbox" style="width:90px;height:40px;float:left; background:url(../Images/login-main1.png) center center; background-size:cover; cursor: pointer" onclick=" $('#login-box').fadeIn(200);"></div>
+            </a>
+        }
+        <script type="text/javascript">
+            function searchProduct() {
+                var searchtext = document.getElementById("produserchtext").value;
+                if (searchtext == "" || searchtext == "在这里输入商品名称" || searchtext == "在这里输入供应商名称") {
+                    return false;
+                }
+                var searchultype = $(".serchbar_li_selecte_y").html();
+                if (searchultype == "商品") {
+                    location.href = "/商品陈列/ProductSearch?name=" + searchtext;
+                } else {
+                    location.href = "/供应商陈列/GysList?name=" + searchtext;
+                }
+            }
+            $(".page_layout_a").mouseover(function () {
+                if ($(this).children("a:eq(0)").text() == "供应商库") {
+                    $(this).children("div").show();
+                }
+            });
+            $(".page_layout_a").mouseout(function () {
+                if ($(this).children("a:eq(0)").text() == "供应商库") {
+                    $(this).children("div").hide();
+                }
+            });
+        </script>
+    </div>
+</div>

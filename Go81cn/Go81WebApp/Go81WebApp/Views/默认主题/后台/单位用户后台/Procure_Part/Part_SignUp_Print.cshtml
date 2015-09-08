@@ -1,0 +1,197 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.招标采购预报名
+<style type="text/css">
+    .procure_formlistdiv {
+        width: 510px;
+    }
+
+        .procure_formlistdiv input {
+            width: 500px;
+        }
+
+    .procureinputdiv_title {
+        width: 200px;
+        text-align: right;
+    }
+
+    .procureinputdiv_title {
+        line-height: 30px;
+    }
+
+    .procure_formlistdiv {
+        line-height: 30px;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="gys_znxx_topbox">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">招标采购预报名详情</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox" id="print_content">
+            <div class="gys_znxx_content">
+                <div style="text-align:center;display:none;" id="head_name">
+                    <h2 style="margin:0 auto;">招投标预报名供应商名单</h2>
+                </div>
+                @if (Model != null)
+                {
+                    <input type="hidden" id="Model_id" value="@Model.Id" />
+                    <div style="height:auto; overflow:hidden; width:100%">
+
+                        <div style="height:auto; overflow:hidden; width:100%">
+                            <div style="width: 450px;height: auto; overflow:hidden; padding: 10px 0 10px 0; float:left;">
+                                <div style="width: 200px;text-align: right;font-size: 16px;font-weight: bold;color: #666666;letter-spacing: 0;float: left;line-height: 30px;padding-right: 20px;">项目名称：</div>
+                                <div style="width: 230px;float: left; line-height:30px;  height:auto;overflow:hidden;">
+                                    @Model.所属公告链接.公告.项目信息.项目名称
+                                </div>
+                            </div>
+                            <div style="width: 450px;height: auto; overflow:hidden;padding: 10px 0 10px 0; float:left;">
+                                <div style="width: 200px;text-align: right;font-size: 16px;font-weight: bold;color: #666666;letter-spacing: 0;float: left;line-height: 30px;padding-right: 20px;">项目编号：</div>
+                                <div style="width: 230px;float: left; line-height:30px;  height:auto;overflow:hidden;">
+                                    @Model.所属公告链接.公告.项目信息.项目编号
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="height:auto; overflow:hidden; width:100%">
+                            <div style="width: 450px;height:auto; overflow:hidden; padding: 10px 0 10px 0; float:left;">
+                                <div style="width: 200px;text-align: right;font-size: 16px;font-weight: bold;color: #666666;letter-spacing: 0;float: left;line-height: 30px;padding-right: 20px;">报名状态：</div>
+                                <div style="width: 230px;float: left;position: relative;">
+                                    @if (Model.预报名已关闭)
+                                    {
+                                        <span>已关闭</span>
+                                    }
+                                    else
+                                    {
+                                        <span>进行中</span>
+                                    }
+                                </div>
+                            </div>
+                            <div style="width: 450px;height:auto; overflow:hidden; padding: 10px 0 10px 0; float:left;">
+                                <div style="width: 200px;text-align: right;font-size: 16px;font-weight: bold;color: #666666;letter-spacing: 0;float: left;line-height: 30px;padding-right: 20px;">公告名称：</div>
+                                <div style="width: 230px;float: left; line-height:30px;  height:auto;overflow:hidden;">
+                                    <a style="text-decoration: underline;" target="_blank" href="/公告/AnnounceDetail?id=@Model.所属公告链接.公告.Id">@Model.所属公告链接.公告.内容主体.标题</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div style="width: auto;height: 30px;padding: 10px 0 10px 0;height:auto; overflow:hidden;" class="printhide">
+                        <div style="width: 200px;text-align: right;font-size: 16px;font-weight: bold;color: #666666;letter-spacing: 0;float: left;line-height: 30px;padding-right: 20px; float:left">已报名供应商列表：</div>
+                        <div style="float: left;">
+                            <select id="select_cx">
+                                <option>全部</option>
+                                <option>审核通过</option>
+                                <option>未审核</option>
+                                <option>审核未通过</option>
+                            </select>
+                        </div>
+                    </div>*@
+
+                    <div id="sinuppagecontent">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th class="printhide"><input type="checkbox" id="select_all" onclick="selectAll(this)" all="false" />全选</th>
+                                <th>供应商名称</th>
+                                <th>报名时间</th>
+                                @*<th>状态</th>*@
+                            </tr>
+                            @foreach (var item in (IEnumerable<Go81WebApp.Models.数据模型.项目数据模型.招标采购预报名._供应商预报名信息>)ViewData["预报名供应商列表"])
+                            {
+                                <tr>
+                                    <td class="printhide"><input type="checkbox" /></td>
+                                    <td>
+                                        <a style="text-decoration: underline;" target="_blank" href="/供应商陈列/Supplier_Destination?id=@item.供应商链接.用户ID">@item.供应商链接.用户数据.企业基本信息.企业名称</a>
+                                    </td>
+                                    <td>
+                                        @item.报名时间.ToString("yyyy-MM-dd HH:mm:ss")
+                                    </td>
+                                    @*@if (item.审核数据.审核状态 != Go81WebApp.Models.数据模型.审核状态.审核未通过)
+                                    {
+                                        <td>
+                                            @item.审核数据.审核状态
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @item.审核数据.审核状态<span style="color:red">(@item.审核数据.未通过理由)</span>
+                                        </td>
+                                    }*@
+
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                    <div id="" class="" style="text-align:center;">
+                        <input id="printbutton" style="margin-top:20px;" class="front_login_rightbox_button" value="打         印" />
+                    </div>
+                }
+                else
+                {
+                    <div style="text-align:center;">
+                        无此信息
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+}
+<script type="text/javascript">
+    //下拉列表选项该变时事件
+    $("#select_cx").change(function () {
+        var type = $(this).find("option:selected").text();
+        var id = $("#Model_id").val();
+        $.ajax({
+            url: "/单位用户后台/Part_SignUp_PrintSearch",
+            data: { type: type, id: id },
+            success: function (data) {
+                $("#sinuppagecontent").html(data);
+            },
+            error: function () {
+                alert("获取失败!");
+            },
+        });
+    });
+
+    //全选按钮事件
+    function selectAll(e) {
+        var $this = $(e);
+        var isAll = $this.attr("all");//判断是否处于全选
+        var checkboxlist = $("#sinuppagecontent").find("input:checkbox");
+        if (isAll == "false") {
+            $.each(checkboxlist, function (index, domEle) {
+                $(domEle).prop("checked", true);
+                $this.attr({ "all": "true" });
+            });
+        } else {
+            $.each(checkboxlist, function (index, domEle) {
+                $(domEle).prop("checked", false);
+                $this.attr({ "all": "false" });
+            });
+        }
+    };
+
+    //打印按钮事件
+    $("#printbutton").click(function () {
+        var uncheckboxlist = $("#sinuppagecontent").find("input:not(:checked)");
+        $.each(uncheckboxlist, function (index, domEle) {
+            if ($(domEle).attr("id") != "select_all") {
+                $(domEle).parent().parent().remove();
+            };
+        });
+        $(this).remove();
+        $("#head_name").show();
+        $(".printhide").hide();
+        document.body.innerHTML = document.getElementById('print_content').innerHTML;
+        window.print();
+        window.location.reload();
+    });
+    $(function () {
+        $("#招标采购预报名列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#招标采购预报名列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

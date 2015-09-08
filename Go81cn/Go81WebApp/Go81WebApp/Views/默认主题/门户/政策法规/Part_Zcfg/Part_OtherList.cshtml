@@ -1,0 +1,46 @@
+﻿<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">最近政策</div>
+    </div>
+</div>
+<div class="front_newslist_rightdiv" style="margin-top:-5px;">
+    <div class="index_content_zcfg_content" style=" width:238px; height:auto; overflow:hidden;" id="tabcontent_zcfg">
+        <ul>
+            @{ int i = 0;}
+            @foreach (var item in (IEnumerable<Go81WebApp.Models.数据模型.内容数据模型.政策法规>)ViewData["政策法规"])
+            {
+                TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                if (i % 2 == 0)
+                {
+                    <li>
+                        @if (ts.TotalHours < 360)
+                        {
+                            <img style="position: relative; float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                            <a target="_blank" class="new" style="width: 198px;" href="~/政策法规/ZcfgDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                        }
+                        else
+                        {
+                            <a target="_blank" href="~/政策法规/ZcfgDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                        }
+                    </li>
+                }
+                else
+                {
+                    <li class="oddlinecolor_exp">
+                        @if (ts.TotalHours < 360)
+                        {
+                            <img style="position: relative; float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                            <a target="_blank" class="new" style="width: 198px;" href="~/政策法规/ZcfgDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                        }
+                        else
+                        {
+                            <a target="_blank" href="~/政策法规/ZcfgDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                        }
+                    </li>
+                }
+                i++;
+            }
+        </ul>
+
+    </div>
+</div>

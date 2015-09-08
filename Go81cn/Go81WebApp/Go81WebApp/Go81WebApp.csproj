@@ -1,0 +1,2225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D9FCD400-8B2E-4312-B228-B38A9048E613}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Go81WebApp</RootNamespace>
+    <AssemblyName>Go81WebApp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Gma.QrCodeNet.Encoding">
+      <HintPath>..\packages\QrCode.Net.0.4.0.0\lib\net45\Gma.QrCodeNet.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\packages\DotNetZip.1.9.3\lib\net20\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="Ivony.Core, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ivony.Core.1.1.1\lib\Ivony.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ivony.Html, Version=3.0.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jumony.Core.3.0.15\lib\Ivony.Html.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ivony.Html.Parser, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jumony.Core.3.0.15\lib\Ivony.Html.Parser.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ivony.Html.Parser.Regulars, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jumony.Core.3.0.15\lib\Ivony.Html.Parser.Regulars.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LitJSON, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>JS\kindeditor-4.1.10\asp.net\bin\LitJSON.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net, Version=2.9.2.2, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lucene.Net\lib\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MongoDB.Bson, Version=1.10.0.62, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\mongocsharpdriver.1.10.0\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.10.0.62, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\mongocsharpdriver.1.10.0\lib\net35\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MyXls.SL2">
+      <HintPath>..\packages\MyXls.SL2.1.0.0\lib\MyXls.SL2.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenHtmlToPdf">
+      <HintPath>..\packages\OpenHtmlToPdf.1.12.0.0\lib\net45\OpenHtmlToPdf.dll</HintPath>
+    </Reference>
+    <Reference Include="PanGu, Version=2.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lucene.Net\lib\PanGu.dll</HintPath>
+    </Reference>
+    <Reference Include="PanGu.HighLight, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lucene.Net\lib\PanGu.HighLight.dll</HintPath>
+    </Reference>
+    <Reference Include="PanGu.Lucene.Analyzer, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lucene.Net\lib\PanGu.Lucene.Analyzer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.2\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.2\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="_Code\ApiControllers\ExpertController.cs" />
+    <Compile Include="_Code\App_Start\BundleConfig.cs" />
+    <Compile Include="_Code\App_Start\FilterConfig.cs" />
+    <Compile Include="_Code\App_Start\RouteConfig.cs" />
+    <Compile Include="_Code\App_Start\ThemedViewEngine.cs" />
+    <Compile Include="_Code\App_Start\WebApiConfig.cs" />
+    <Compile Include="_Code\Controllers\后台\专家后台Controller.cs" />
+    <Compile Include="_Code\Controllers\后台\个人用户后台Controller.cs" />
+    <Compile Include="_Code\Controllers\后台\供应商后台Controller.cs" />
+    <Compile Include="_Code\Controllers\后台\单位用户后台Controller.cs" />
+    <Compile Include="_Code\Controllers\后台\运营团队后台Controller.cs" />
+    <Compile Include="_Code\Controllers\基本功能\WeChatController.cs" />
+    <Compile Include="_Code\Controllers\基本功能\布局Controller.cs" />
+    <Compile Include="_Code\Controllers\基本功能\注册Controller.cs" />
+    <Compile Include="_Code\Controllers\基本功能\登录Controller.cs" />
+    <Compile Include="_Code\Controllers\基本功能\错误页面Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\业务培训Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\办事指南Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\专家库Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\下载Controller.cs" />
+    <Compile Include="_Code\Controllers\后台\专家抽选Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\供应商陈列Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\公告Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\jctController.cs" />
+    <Compile Include="_Code\Controllers\门户\协议采购Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\应急采购Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\机票酒店Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\网上竞标Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\首页Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\商品陈列Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\通知Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\新闻Controller.cs" />
+    <Compile Include="_Code\Controllers\门户\政策法规Controller.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="_Code\Models\FileHelper\StrHelp.cs" />
+    <Compile Include="_Code\Models\FileHelper\UploadPic.cs" />
+    <Compile Include="_Code\Models\Alipay\app_code\AlipayConfig.cs" />
+    <Compile Include="_Code\Models\Alipay\app_code\AlipayCore.cs" />
+    <Compile Include="_Code\Models\Alipay\app_code\AlipayNotify.cs" />
+    <Compile Include="_Code\Models\Alipay\app_code\AlipaySubmit.cs" />
+    <Compile Include="_Code\Models\Alipay\app_code\MD5.cs" />
+    <Compile Include="_Code\Models\Helpers\DataSynchroHelper.cs" />
+    <Compile Include="_Code\Models\Helpers\EXCEL.cs" />
+    <Compile Include="_Code\Models\Helpers\GetAccessToken.cs" />
+    <Compile Include="_Code\Models\Helpers\GZipResponse.cs" />
+    <Compile Include="_Code\Models\Helpers\Hash.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="_Code\Models\Helpers\HelperConsole.cs" />
+    <Compile Include="_Code\Models\Helpers\ImageResult.cs" />
+    <Compile Include="_Code\Models\Helpers\MailApiPost.cs" />
+    <Compile Include="_Code\Models\Helpers\Mongo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="_Code\Models\Helpers\MvcHtmlHelper.cs" />
+    <Compile Include="_Code\Models\Helpers\RandomString.cs" />
+    <Compile Include="_Code\Models\Helpers\StaticPageInfo.cs" />
+    <Compile Include="_Code\Models\Helpers\TemplateExcel.cs" />
+    <Compile Include="_Code\Models\Helpers\ThemeInfo.cs" />
+    <Compile Include="_Code\Models\Helpers\TimedCache.cs" />
+    <Compile Include="_Code\Models\Helpers\Tree.cs" />
+    <Compile Include="_Code\Models\Helpers\UniqueValuesDictionary.cs" />
+    <Compile Include="_Code\Models\Helpers\圆形公章.cs" />
+    <Compile Include="_Code\Models\Helpers\Pager.cs" />
+    <Compile Include="_Code\Models\Helpers\省市区县代码表.cs" />
+    <Compile Include="_Code\Models\Helpers\静态化.cs" />
+    <Compile Include="_Code\Models\Helpers\验证码.cs" />
+    <Compile Include="_Code\Models\数据模型2-军采生活\机票代售点.cs" />
+    <Compile Include="_Code\Models\数据模型2-军采生活\租车公司.cs" />
+    <Compile Include="_Code\Models\数据模型2-军采生活\酒店.cs" />
+    <Compile Include="_Code\Models\数据模型\下载数据模型\下载.cs" />
+    <Compile Include="_Code\Models\数据模型\内容数据模型\办事指南.cs" />
+    <Compile Include="_Code\Models\数据模型\内容数据模型\培训资料.cs" />
+    <Compile Include="_Code\Models\数据模型\商品数据模型\商品.cs" />
+    <Compile Include="_Code\Models\数据模型\商品数据模型\商品分类.cs" />
+    <Compile Include="_Code\Models\数据模型\商品数据模型\购物车.cs" />
+    <Compile Include="_Code\Models\数据模型\审核数据结构\审核数据.cs" />
+    <Compile Include="_Code\Models\数据模型\微信数据模型\入库申请用户.cs" />
+    <Compile Include="_Code\Models\数据模型\微信数据模型\微信Token.cs" />
+    <Compile Include="_Code\Models\数据模型\微信数据模型\微信消息.cs" />
+    <Compile Include="_Code\Models\数据模型\微信数据模型\微信用户.cs" />
+    <Compile Include="_Code\Models\数据模型\推广业务数据模型\供应商推广.cs" />
+    <Compile Include="_Code\Models\数据模型\推广业务数据模型\供应商计费服务.cs" />
+    <Compile Include="_Code\Models\数据模型\推广业务数据模型\商品推广.cs" />
+    <Compile Include="_Code\Models\数据模型\推荐数据模型\推荐信息.cs" />
+    <Compile Include="_Code\Models\数据模型\用户数据模型\专家.cs" />
+    <Compile Include="_Code\Models\数据模型\抽选数据模型\专家抽选记录.cs" />
+    <Compile Include="_Code\Models\数据模型\内容数据模型\公告.cs" />
+    <Compile Include="_Code\Models\数据模型\商品数据模型\商品历史价格.cs" />
+    <Compile Include="_Code\Models\数据模型\推送数据模型\公告推送.cs" />
+    <Compile Include="_Code\Models\数据模型\推送数据模型\一般推送.cs" />
+    <Compile Include="_Code\Models\数据模型\推送数据模型\推送模板.cs" />
+    <Compile Include="_Code\Models\数据模型\消息数据模型\咨询.cs" />
+    <Compile Include="_Code\Models\数据模型\消息数据模型\对话基本数据.cs" />
+    <Compile Include="_Code\Models\数据模型\消息数据模型\建议.cs" />
+    <Compile Include="_Code\Models\数据模型\消息数据模型\投诉.cs" />
+    <Compile Include="_Code\Models\数据模型\消息数据模型\站内消息.cs" />
+    <Compile Include="_Code\Models\数据模型\消息数据模型\评论.cs" />
+    <Compile Include="_Code\Models\数据模型\抽选数据模型\供应商抽选记录.cs" />
+    <Compile Include="_Code\Models\数据模型\用户数据模型\游客.cs" />
+    <Compile Include="_Code\Models\数据模型\用户数据模型\用户基本数据.cs" />
+    <Compile Include="_Code\Models\数据模型\权限数据模型\用户组.cs" />
+    <Compile Include="_Code\Models\数据模型\权限数据模型\角色.cs" />
+    <Compile Include="_Code\Models\数据模型\用户数据模型\登录记录.cs" />
+    <Compile Include="_Code\Models\数据模型\竞标数据模型\网上竞标.cs" />
+    <Compile Include="_Code\Models\数据模型\统计数据模型\广告点击统计.cs" />
+    <Compile Include="_Code\Models\数据模型\统计数据模型\登录统计.cs" />
+    <Compile Include="_Code\Models\数据模型\需求计划模型\需求计划.cs" />
+    <Compile Include="_Code\Models\数据模型\项目数据模型\招标采购项目.cs" />
+    <Compile Include="_Code\Models\数据模型\项目数据模型\招标采购预报名.cs" />
+    <Compile Include="_Code\Models\数据模型\项目数据模型\需求申请.cs" />
+    <Compile Include="_Code\Models\数据模型\项目数据模型\机票验收单.cs" />
+    <Compile Include="_Code\Models\数据模型\项目数据模型\验收单.cs" />
+    <Compile Include="_Code\Models\管理器2-军采生活\机票代售点管理.cs" />
+    <Compile Include="_Code\Models\管理器2-军采生活\租车公司管理.cs" />
+    <Compile Include="_Code\Models\管理器2-军采生活\酒店管理.cs" />
+    <Compile Include="_Code\Models\管理器\下载管理\上传管理.cs" />
+    <Compile Include="_Code\Models\管理器\下载管理\下载管理.cs" />
+    <Compile Include="_Code\Models\管理器\内容管理\公告管理.cs" />
+    <Compile Include="_Code\Models\管理器\内容管理\办事指南管理.cs" />
+    <Compile Include="_Code\Models\管理器\内容管理\培训资料管理.cs" />
+    <Compile Include="_Code\Models\管理器\内容管理\政策法规管理.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="_Code\Models\管理器\内容管理\新闻管理.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="_Code\Models\管理器\内容管理\通知管理.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="_Code\Models\管理器\商品管理\商品分类管理.cs" />
+    <Compile Include="_Code\Models\管理器\微信管理\入库申请用户管理.cs" />
+    <Compile Include="_Code\Models\管理器\用户管理\Api登录管理.cs" />
+    <Compile Include="_Code\Models\管理器\统计管理\广告点击统计管理.cs" />
+    <Compile Include="_Code\Models\管理器\统计管理\登录统计管理.cs" />
+    <Compile Include="_Code\Models\管理器\微信管理\微信管理.cs" />
+    <Compile Include="_Code\Models\管理器\抽选管理\供应商抽选管理.cs" />
+    <Compile Include="_Code\Models\管理器\推广业务管理\供应商充值余额管理.cs" />
+    <Compile Include="_Code\Models\管理器\推广业务管理\订购合同上传记录管理.cs" />
+    <Compile Include="_Code\Models\管理器\推广业务管理\供应商服务记录管理.cs" />
+    <Compile Include="_Code\Models\管理器\推广业务管理\供应商增值服务申请记录管理.cs" />
+    <Compile Include="_Code\Models\管理器\推广业务管理\供应商充值记录管理.cs" />
+    <Compile Include="_Code\Models\管理器\推广业务管理\供应商推广管理.cs" />
+    <Compile Include="_Code\Models\管理器\推广业务管理\供应商计费项目扣费记录管理.cs" />
+    <Compile Include="_Code\Models\管理器\推广业务管理\商品推广管理.cs" />
+    <Compile Include="_Code\Models\管理器\推荐管理\推荐管理.cs" />
+    <Compile Include="_Code\Models\管理器\推送管理\公告推送管理.cs" />
+    <Compile Include="_Code\Models\管理器\推送管理\一般推送管理.cs" />
+    <Compile Include="_Code\Models\管理器\推送管理\推送模板管理.cs" />
+    <Compile Include="_Code\Models\管理器\权限管理\角色管理.cs" />
+    <Compile Include="_Code\Models\管理器\消息管理\咨询管理.cs" />
+    <Compile Include="_Code\Models\管理器\消息管理\对话消息管理.cs" />
+    <Compile Include="_Code\Models\管理器\消息管理\建议管理.cs" />
+    <Compile Include="_Code\Models\管理器\消息管理\投诉管理.cs" />
+    <Compile Include="_Code\Models\管理器\消息管理\站内消息管理.cs" />
+    <Compile Include="_Code\Models\管理器\消息管理\评论管理.cs" />
+    <Compile Include="_Code\Models\管理器\抽选管理\专家抽选管理.cs" />
+    <Compile Include="_Code\Models\管理器\用户管理\头像管理.cs" />
+    <Compile Include="_Code\Models\管理器\权限管理\权限管理.cs" />
+    <Compile Include="_Code\Models\管理器\用户管理\用户管理.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="_Code\Models\管理器\用户管理\登录管理.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="_Code\Models\管理器\商品管理\商品管理.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="_Code\Models\数据模型\内容数据模型\内容基本数据.cs" />
+    <Compile Include="_Code\Models\数据模型\内容数据模型\政策法规.cs" />
+    <Compile Include="_Code\Models\数据模型\内容数据模型\新闻.cs" />
+    <Compile Include="_Code\Models\数据模型\内容数据模型\通知.cs" />
+    <Compile Include="_Code\Models\数据模型\基本数据模型.cs" />
+    <Compile Include="_Code\Models\数据模型\用户数据模型\个人用户.cs" />
+    <Compile Include="_Code\Models\数据模型\用户数据模型\供应商.cs" />
+    <Compile Include="_Code\Models\数据模型\用户数据模型\单位用户.cs" />
+    <Compile Include="_Code\Models\数据模型\用户数据模型\运营团队.cs" />
+    <Compile Include="_Code\Models\管理器\权限管理\用户组管理.cs" />
+    <Compile Include="_Code\Models\管理器\竞标管理\网上竞标管理.cs" />
+    <Compile Include="_Code\Models\管理器\商品管理\购物车管理.cs" />
+    <Compile Include="_Code\Models\管理器\管理器.cs" />
+    <Compile Include="_Code\Models\管理器\需求计划管理\需求计划分发管理.cs" />
+    <Compile Include="_Code\Models\管理器\需求计划管理\需求计划物资管理.cs" />
+    <Compile Include="_Code\Models\管理器\需求计划管理\需求计划管理.cs" />
+    <Compile Include="_Code\Models\管理器\需求计划管理\需求采购任务管理.cs" />
+    <Compile Include="_Code\Models\管理器\项目管理\招标采购项目管理.cs" />
+    <Compile Include="_Code\Models\管理器\项目管理\招标采购预报名管理.cs" />
+    <Compile Include="_Code\Models\管理器\项目管理\需求申请管理.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\默认主题\后台\供应商后台\UploadHandler.ashx.cs">
+      <DependentUpon>UploadHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="_Code\Models\数据模型\项目数据模型\项目服务记录.cs" />
+    <Compile Include="_Code\Models\管理器\项目管理\项目服务记录管理.cs" />
+    <Compile Include="_Code\Models\管理器\项目管理\机票验收单管理.cs" />
+    <Compile Include="_Code\Models\管理器\项目管理\验收单管理.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="css\css.css" />
+    <Content Include="css\Intranet_p.css" />
+    <Content Include="css\Intranetfg.css" />
+    <Content Include="css\WeChat.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Images\1.jpg" />
+    <Content Include="Images\applytable.jpg" />
+    <Content Include="Images\applytable1.jpg" />
+    <Content Include="Images\arrow_bottom.png" />
+    <Content Include="Images\backStar.png" />
+    <Content Include="Images\bank_sample.jpg" />
+    <Content Include="Images\bannernew.jpg" />
+    <Content Include="Images\banner_bg.jpg" />
+    <Content Include="Images\banner_bg_img.png" />
+    <Content Include="Images\banner_repeat.jpg" />
+    <Content Include="Images\bgwz.jpg" />
+    <Content Include="Images\bi.png" />
+    <Content Include="Images\bs_01.png" />
+    <Content Include="Images\calendar.png" />
+    <Content Include="Images\car1.png" />
+    <Content Include="Images\cglc.png" />
+    <Content Include="Images\contact_way.jpg" />
+    <Content Include="Images\cover1.jpg" />
+    <Content Include="Images\cover10.jpg" />
+    <Content Include="Images\cover2.jpg" />
+    <Content Include="Images\cover3.jpg" />
+    <Content Include="Images\cover4.jpg" />
+    <Content Include="Images\cover5.jpg" />
+    <Content Include="Images\cover6.jpg" />
+    <Content Include="Images\cover7.jpg" />
+    <Content Include="Images\cover8.jpg" />
+    <Content Include="Images\cover9.jpg" />
+    <Content Include="Images\dlbg.jpg" />
+    <Content Include="Images\dlbg.png" />
+    <Content Include="Images\dropbutton.png" />
+    <Content Include="Images\floorfive.jpg" />
+    <Content Include="Images\floorfour.jpg" />
+    <Content Include="Images\floorone.jpg" />
+    <Content Include="Images\floorsix.jpg" />
+    <Content Include="Images\floorthree.jpg" />
+    <Content Include="Images\floortwo.jpg" />
+    <Content Include="Images\goodtype.png" />
+    <Content Include="Images\gwjp.jpg" />
+    <Content Include="Images\hot.gif" />
+    <Content Include="Images\icon-1.png" />
+    <Content Include="Images\jct-phone-qrcode.png" />
+    <Content Include="Images\jctico.png" />
+    <Content Include="Images\lb.png" />
+    <Content Include="Images\left.jpg" />
+    <Content Include="Images\2.jpg" />
+    <Content Include="Images\AddDel20x20.png" />
+    <Content Include="Images\ajax-loader.gif" />
+    <Content Include="Images\alert-comfirm.png" />
+    <Content Include="Images\assistance.png" />
+    <Content Include="Images\avoid.png" />
+    <Content Include="Images\banner.jpg" />
+    <Content Include="Images\banner.png" />
+    <Content Include="Images\bannerrepeat.png" />
+    <Content Include="Images\bc.jpg" />
+    <Content Include="Images\bcic.jpg" />
+    <Content Include="Images\bg.png" />
+    <Content Include="Images\bgr.png" />
+    <Content Include="Images\bg_img.PNG" />
+    <Content Include="Images\bottom.jpg" />
+    <Content Include="Images\build.jpg" />
+    <Content Include="Images\build.png" />
+    <Content Include="Images\buildweb.png" />
+    <Content Include="Images\buildwebsite.png" />
+    <Content Include="Images\buy.png" />
+    <Content Include="Images\cdbank.jpg" />
+    <Content Include="Images\chapter.PNG" />
+    <Content Include="Images\charge_detail.png" />
+    <Content Include="Images\chose_file.gif" />
+    <Content Include="Images\closeBtnImg.gif" />
+    <Content Include="Images\cmbc.jpg" />
+    <Content Include="Images\companylog.png" />
+    <Content Include="Images\coporation.JPG" />
+    <Content Include="Images\copyright_logo.png" />
+    <Content Include="Images\cqzfcg.png" />
+    <Content Include="Images\creditcard.png" />
+    <Content Include="Images\Criminal record.jpg" />
+    <Content Include="Images\default-avatar.png" />
+    <Content Include="Images\defaultphoto.jpg" />
+    <Content Include="Images\delete.png" />
+    <Content Include="Images\digitpicture.png" />
+    <Content Include="Images\ditu.PNG" />
+    <Content Include="Images\down.png" />
+    <Content Include="Images\download.PNG" />
+    <Content Include="Images\enquiry.png" />
+    <Content Include="Images\error.png" />
+    <Content Include="Images\expreg.png" />
+    <Content Include="Images\face.png" />
+    <Content Include="Images\facility.png" />
+    <Content Include="Images\fbottom.png" />
+    <Content Include="Images\fcenter.png" />
+    <Content Include="Images\finance.png" />
+    <Content Include="Images\ftop.png" />
+    <Content Include="Images\ggzyjy.png" />
+    <Content Include="Images\gysreg.png" />
+    <Content Include="Images\gys_default_pic.jpg" />
+    <Content Include="Images\gys_firsttile_bg.jpg" />
+    <Content Include="Images\gys_menu_class_first.jpg" />
+    <Content Include="Images\gys_secondtile_bg.jpg" />
+    <Content Include="Images\gys_thirdtile_bg.jpg" />
+    <Content Include="Images\gys_tree_menu_bg.jpg" />
+    <Content Include="Images\gys_tree_menu_bg1.jpg" />
+    <Content Include="Images\gys_znxx_newtip.jpg" />
+    <Content Include="Images\gzzfcg.png" />
+    <Content Include="Images\here.gif" />
+    <Content Include="Images\huaxia.png" />
+    <Content Include="Images\Idcard.jpg" />
+    <Content Include="Images\idcard_sample.jpg" />
+    <Content Include="Images\index_content_bg.jpg" />
+    <Content Include="Images\index_content_left.jpg" />
+    <Content Include="Images\index_content_right.jpg" />
+    <Content Include="Images\index_gys_1.jpg" />
+    <Content Include="Images\index_link_left.jpg" />
+    <Content Include="Images\index_link_right.jpg" />
+    <Content Include="Images\index_login_bg.jpg" />
+    <Content Include="Images\index_login_danweibg.jpg" />
+    <Content Include="Images\index_login_gysbg.jpg" />
+    <Content Include="Images\index_login_left.jpg" />
+    <Content Include="Images\index_login_personbg.jpg" />
+    <Content Include="Images\index_login_right.jpg" />
+    <Content Include="Images\index_login_zhuanjia.jpg" />
+    <Content Include="Images\index_more.jpg" />
+    <Content Include="Images\index_topmenu_left.jpg" />
+    <Content Include="Images\index_topmenu_middle.jpg" />
+    <Content Include="Images\index_topmenu_right.jpg" />
+    <Content Include="Images\index_ullibg.jpg" />
+    <Content Include="Images\index_ullibg_exp.jpg" />
+    <Content Include="Images\index_zc_tab_bg.jpg" />
+    <Content Include="Images\jc.png" />
+    <Content Include="Images\jct.png" />
+    <Content Include="Images\jdwzcg.png" />
+    <Content Include="Images\jrgz.png" />
+    <Content Include="Images\left.gif" />
+    <Content Include="Images\leftMenuHaeder.png" />
+    <Content Include="Images\license.jpg" />
+    <Content Include="Images\link.jpg" />
+    <Content Include="Images\linkbt.png" />
+    <Content Include="Images\linkbt_delete.png" />
+    <Content Include="Images\little.jpg" />
+    <Content Include="Images\login-btn_bg.jpg" />
+    <Content Include="Images\login-btn_bg.png" />
+    <Content Include="Images\login-main1.png" />
+    <Content Include="Images\login-up-bg.png" />
+    <Content Include="Images\login_content_leftbg.jpg" />
+    <Content Include="Images\login_pwd.jpg" />
+    <Content Include="Images\login_user.jpg" />
+    <Content Include="Images\logo.gif" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\logo1.png" />
+    <Content Include="Images\logo_01.png" />
+    <Content Include="Images\logo_I.png" />
+    <Content Include="Images\logo_O.png" />
+    <Content Include="Images\mapctrls.png" />
+    <Content Include="Images\marker.png" />
+    <Content Include="Images\menu.jpg" />
+    <Content Include="Images\menu_hover.jpg" />
+    <Content Include="Images\menu_leftrad.jpg" />
+    <Content Include="Images\menu_rightrad.jpg" />
+    <Content Include="Images\menu_topbg.jpg" />
+    <Content Include="Images\messages2.png" />
+    <Content Include="Images\myreg.png" />
+    <Content Include="Images\newfunc.png" />
+    <Content Include="Images\newfunc1.gif" />
+    <Content Include="Images\newico.gif" />
+    <Content Include="Images\news-title.png" />
+    <Content Include="Images\NewVCodeImage.gif" />
+    <Content Include="Images\new_num.png" />
+    <Content Include="Images\noimage.jpg" />
+    <Content Include="Images\notebook.png" />
+    <Content Include="Images\notice.png" />
+    <Content Include="Images\np.jpg" />
+    <Content Include="Images\onlinesever.png" />
+    <Content Include="Images\openTrigger.jpg" />
+    <Content Include="Images\organization.jpg" />
+    <Content Include="Images\otherh1.jpg" />
+    <Content Include="Images\otherh2.jpg" />
+    <Content Include="Images\p2.JPG" />
+    <Content Include="Images\p3.JPG" />
+    <Content Include="Images\p4.jpg" />
+    <Content Include="Images\personService.JPG" />
+    <Content Include="Images\phoneonline.jpg" />
+    <Content Include="Images\play.png" />
+    <Content Include="Images\print.PNG" />
+    <Content Include="Images\productDb.JPG" />
+    <Content Include="Images\progress.png" />
+    <Content Include="Images\project.png" />
+    <Content Include="Images\purchaseCar.png" />
+    <Content Include="Images\purchaseInfo.png" />
+    <Content Include="Images\purchaseOnline.JPG" />
+    <Content Include="Images\pushmsg.png" />
+    <Content Include="Images\p_1.png" />
+    <Content Include="Images\p_2.png" />
+    <Content Include="Images\qrcode.png" />
+    <Content Include="Images\qualifies.png" />
+    <Content Include="Images\qyjz1.jpg" />
+    <Content Include="Images\qyjz2.jpg" />
+    <Content Include="Images\range_otherHotel.png" />
+    <Content Include="Images\renzheng.png" />
+    <Content Include="Images\rg.png" />
+    <Content Include="Images\right-bottom.png" />
+    <Content Include="Images\right.gif" />
+    <Content Include="Images\right.jpg" />
+    <Content Include="Images\ruku.png" />
+    <Content Include="Images\sczfcg.png" />
+    <Content Include="Images\seal\324医院签名.png" />
+    <Content Include="Images\seal\77100签名.png" />
+    <Content Include="Images\seal\77200签名.png" />
+    <Content Include="Images\seal\77206签名.png" />
+    <Content Include="Images\seal\77208签名.png" />
+    <Content Include="Images\seal\77211签名.png" />
+    <Content Include="Images\seal\77215签名.png" />
+    <Content Include="Images\seal\77216签名.png" />
+    <Content Include="Images\seal\77221签名.png" />
+    <Content Include="Images\seal\77223签名.png" />
+    <Content Include="Images\seal\77225签名.png" />
+    <Content Include="Images\seal\77226签名.png" />
+    <Content Include="Images\seal\77228签名.png" />
+    <Content Include="Images\seal\77229签名.png" />
+    <Content Include="Images\seal\77231签名.png" />
+    <Content Include="Images\seal\77235签名.png" />
+    <Content Include="Images\seal\77251签名.png" />
+    <Content Include="Images\seal\77256签名.png" />
+    <Content Include="Images\seal\77298签名.png" />
+    <Content Include="Images\seal\78006签名.png" />
+    <Content Include="Images\seal\gzzj.png" />
+    <Content Include="Images\seal\xz.png" />
+    <Content Include="Images\seal\zjrwb.png" />
+    <Content Include="Images\seal\云南省军区签名.png" />
+    <Content Include="Images\seal\后勤工程学院签名.png" />
+    <Content Include="Images\seal\四川省军区签名.png" />
+    <Content Include="Images\seal\成都军区总医院签名.png" />
+    <Content Include="Images\seal\昆明民族干部学院.png" />
+    <Content Include="Images\seal\昆明民族干部学院章.png" />
+    <Content Include="Images\seal\昆明民族干部学院签名.png" />
+    <Content Include="Images\seal\贵州省军区章.png" />
+    <Content Include="Images\seal\贵州省军区签名.png" />
+    <Content Include="Images\seal\贵州省贵阳警备区后勤部签名.png" />
+    <Content Include="Images\seal\采购处签名.png" />
+    <Content Include="Images\seal\采购处签名1.png" />
+    <Content Include="Images\seal\重庆警备区签名.png" />
+    <Content Include="Images\searchbt.png" />
+    <Content Include="Images\searchico.png" />
+    <Content Include="Images\secend_qytg_pic01.png" />
+    <Content Include="Images\secend_tittle01.png" />
+    <Content Include="Images\secend_zhsh_pic01.png" />
+    <Content Include="Images\security.jpg" />
+    <Content Include="Images\service1.jpg" />
+    <Content Include="Images\shopcar.jpg" />
+    <Content Include="Images\Social security.png" />
+    <Content Include="Images\SonlineTitleBg.gif" />
+    <Content Include="Images\southwest.jpg" />
+    <Content Include="Images\hot.png" />
+    <Content Include="Images\star.png" />
+    <Content Include="Images\statetax.jpg" />
+    <Content Include="Images\succeed.png" />
+    <Content Include="Images\success.png" />
+    <Content Include="Images\tabbg.jpg" />
+    <Content Include="Images\tabtitle.jpg" />
+    <Content Include="Images\tax.jpg" />
+    <Content Include="Images\tg.jpg" />
+    <Content Include="Images\ticket1.jpg" />
+    <Content Include="Images\ticket2.jpg" />
+    <Content Include="Images\ticket3.jpg" />
+    <Content Include="Images\ticket4.jpg" />
+    <Content Include="Images\ticket5.jpg" />
+    <Content Include="Images\tip.png" />
+    <Content Include="Images\titlebg.jpg" />
+    <Content Include="Images\tm.png" />
+    <Content Include="Images\top.jpg" />
+    <Content Include="Images\topbarbg.jpg" />
+    <Content Include="Images\topbg.png" />
+    <Content Include="Images\tree_icons.png" />
+    <Content Include="Images\tu.jpg" />
+    <Content Include="Images\tuiguang.png" />
+    <Content Include="Images\uhead.png" />
+    <Content Include="Images\undercons1.png" />
+    <Content Include="Images\undercons2.png" />
+    <Content Include="Images\unitreg.png" />
+    <Content Include="Images\unitregintranet.png" />
+    <Content Include="Images\up.png" />
+    <Content Include="Images\value.png" />
+    <Content Include="Images\vipintroduce.png" />
+    <Content Include="Images\warn.png" />
+    <Content Include="Images\website.png" />
+    <Content Include="Images\weixin.png" />
+    <Content Include="Images\wssc.jpg" />
+    <Content Include="Images\xieyi.png" />
+    <Content Include="Images\xzwz.png" />
+    <Content Include="Images\yct.png" />
+    <Content Include="Images\yingji.png" />
+    <Content Include="Images\yjwz.jpg" />
+    <Content Include="Images\ynszfcg.png" />
+    <Content Include="Images\ysd-example.jpg" />
+    <Content Include="Images\ywfw.jpg" />
+    <Content Include="Images\ywfw.png" />
+    <Content Include="Images\zfcgxx.jpg" />
+    <Content Include="Images\zgggcg.png" />
+    <Content Include="Images\zgwlcg.jpg" />
+    <Content Include="Images\zgzfcgxw.png" />
+    <Content Include="Images\zgzwxx.png" />
+    <Content Include="Images\zyzfcg.png" />
+    <Content Include="JS\clickStatistics.js" />
+    <Content Include="JS\common.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\template\html\4.html" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\template\html\5.html" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\template\html\6.html" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\template\html\7.html" />
+    <Content Include="JS\marquee.js" />
+    <Content Include="JS\myComfirm.js" />
+    <Content Include="css\area.css" />
+    <Content Include="css\Bk_Mangage.css" />
+    <Content Include="css\Extranet.css" />
+    <Content Include="css\hotelandticket.css" />
+    <Content Include="css\gys_treemenu.css" />
+    <Content Include="css\index.css" />
+    <Content Include="css\Intranet.css" />
+    <Content Include="css\jquery.autocomplete_e.css" />
+    <Content Include="css\jquery.autocomplete.css" />
+    <Content Include="css\Msg_Tips.css" />
+    <Content Include="css\pageStyle.css" />
+    <Content Include="css\Sonline.css" />
+    <Content Include="css\styles.css" />
+    <Content Include="css\stylesheet.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="JS\163css.js" />
+    <Content Include="JS\97zzw.js" />
+    <Content Include="JS\area.js" />
+    <Content Include="JS\base.js" />
+    <Content Include="JS\Bk_Tbs.js" />
+    <Content Include="JS\Get_ProductClass.js" />
+    <Content Include="JS\baiduMap.js" />
+    <Content Include="JS\jquery.autocomplete.js" />
+    <Content Include="JS\jquery-1.2.6.pack.js" />
+    <Content Include="JS\jquery-1.6.min.js" />
+    <Content Include="JS\jquery-2.0.3.min.js" />
+    <Content Include="JS\jquery.Sonline.js" />
+    <Content Include="JS\jquery.uploadify-v2.1.4\btn.jpg" />
+    <Content Include="JS\jquery.uploadify-v2.1.4\btn.png" />
+    <Content Include="JS\jquery.uploadify-v2.1.4\btn1.jpg" />
+    <Content Include="JS\jquery.uploadify-v2.1.4\btnstart.png" />
+    <Content Include="JS\jquery.uploadify-v2.1.4\cancel.png" />
+    <Content Include="JS\jquery.uploadify-v2.1.4\jquery-1.4.2.min.js" />
+    <Content Include="JS\jquery.uploadify-v2.1.4\jquery.uploadify.v2.1.4.js" />
+    <Content Include="JS\jquery.uploadify-v2.1.4\swfobject.js" />
+    <Content Include="JS\jquery.uploadify-v2.1.4\uploadify.css" />
+    <Content Include="JS\jquery.uploadify-v2.1.4\uploadify.swf" />
+    <Content Include="JS\kindeditor-4.1.10\asp.net\bin\LitJSON.dll" />
+    <Content Include="JS\kindeditor-4.1.10\asp.net\demo.aspx" />
+    <Content Include="JS\kindeditor-4.1.10\asp.net\README.txt" />
+    <Content Include="JS\kindeditor-4.1.10\examples\auto-height.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\colorpicker.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\custom-plugin.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\custom-theme.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\default.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\dialog.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\dynamic-load.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\file-dialog.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\file-manager.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\filter-mode.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\image-dialog.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\index.css" />
+    <Content Include="JS\kindeditor-4.1.10\examples\index.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-icons_222222_256x240.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-icons_454545_256x240.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-icons_888888_256x240.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\jquery-ui-1.9.2.custom.css" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\css\smoothness\jquery-ui-1.9.2.custom.min.css" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\js\jquery-ui-1.9.2.custom.js" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery-ui\js\jquery-ui-1.9.2.custom.min.js" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\jquery.js" />
+    <Content Include="JS\kindeditor-4.1.10\examples\multi-image-dialog.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\multi-language.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\newline.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\node.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\paste-type.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\qqstyle.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\readonly.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\simple.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\uploadbutton.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\url-type.html" />
+    <Content Include="JS\kindeditor-4.1.10\examples\word-count.html" />
+    <Content Include="JS\kindeditor-4.1.10\kindeditor-all-min.js" />
+    <Content Include="JS\kindeditor-4.1.10\kindeditor-all.js" />
+    <Content Include="JS\kindeditor-4.1.10\kindeditor-min.js" />
+    <Content Include="JS\kindeditor-4.1.10\kindeditor.js" />
+    <Content Include="JS\kindeditor-4.1.10\lang\ar.js" />
+    <Content Include="JS\kindeditor-4.1.10\lang\en.js" />
+    <Content Include="JS\kindeditor-4.1.10\lang\ko.js" />
+    <Content Include="JS\kindeditor-4.1.10\lang\zh_CN.js" />
+    <Content Include="JS\kindeditor-4.1.10\lang\zh_TW.js" />
+    <Content Include="JS\kindeditor-4.1.10\license.txt" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\anchor\anchor.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\autoheight\autoheight.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\baidumap\baidumap.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\baidumap\index.html" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\baidumap\map.html" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\clearhtml\clearhtml.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\code\code.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\code\prettify.css" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\code\prettify.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\emoticons.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\0.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\1.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\10.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\100.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\101.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\102.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\103.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\104.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\105.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\106.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\107.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\108.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\109.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\11.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\110.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\111.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\112.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\113.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\114.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\115.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\116.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\117.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\118.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\119.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\12.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\120.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\121.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\122.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\123.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\124.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\125.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\126.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\127.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\128.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\129.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\13.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\130.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\131.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\132.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\133.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\134.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\14.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\15.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\16.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\17.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\18.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\19.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\2.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\20.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\21.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\22.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\23.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\24.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\25.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\26.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\27.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\28.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\29.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\3.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\30.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\31.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\32.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\33.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\34.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\35.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\36.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\37.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\38.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\39.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\4.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\40.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\41.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\42.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\43.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\44.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\45.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\46.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\47.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\48.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\49.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\5.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\50.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\51.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\52.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\53.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\54.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\55.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\56.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\57.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\58.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\59.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\6.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\60.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\61.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\62.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\63.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\64.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\65.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\66.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\67.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\68.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\69.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\7.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\70.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\71.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\72.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\73.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\74.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\75.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\76.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\77.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\78.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\79.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\8.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\80.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\81.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\82.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\83.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\84.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\85.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\86.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\87.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\88.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\89.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\9.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\90.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\91.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\92.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\93.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\94.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\95.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\96.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\97.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\98.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\99.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\emoticons\images\static.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\filemanager\filemanager.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\filemanager\images\file-16.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\filemanager\images\file-64.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\filemanager\images\folder-16.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\filemanager\images\folder-64.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\filemanager\images\go-up.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\flash\flash.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\image\image.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\image\images\align_left.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\image\images\align_right.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\image\images\align_top.gif" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\image\images\refresh.png" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\insertfile\insertfile.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\lineheight\lineheight.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\link\link.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\map\map.html" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\map\map.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\media\media.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\multiimage\images\image.png" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\multiimage\images\select-files-en.png" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\multiimage\images\select-files-zh_CN.png" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\multiimage\images\swfupload.swf" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\multiimage\multiimage.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\pagebreak\pagebreak.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\plainpaste\plainpaste.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\preview\preview.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\quickformat\quickformat.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\table\table.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\template\html\1.html" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\template\html\2.html" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\template\html\3.html" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\template\template.js" />
+    <Content Include="JS\kindeditor-4.1.10\plugins\wordpaste\wordpaste.js" />
+    <Content Include="JS\kindeditor-4.1.10\themes\common\anchor.gif" />
+    <Content Include="JS\kindeditor-4.1.10\themes\common\blank.gif" />
+    <Content Include="JS\kindeditor-4.1.10\themes\common\flash.gif" />
+    <Content Include="JS\kindeditor-4.1.10\themes\common\loading.gif" />
+    <Content Include="JS\kindeditor-4.1.10\themes\common\media.gif" />
+    <Content Include="JS\kindeditor-4.1.10\themes\common\rm.gif" />
+    <Content Include="JS\kindeditor-4.1.10\themes\default\background.png" />
+    <Content Include="JS\kindeditor-4.1.10\themes\default\default.css" />
+    <Content Include="JS\kindeditor-4.1.10\themes\default\default.png" />
+    <Content Include="JS\kindeditor-4.1.10\themes\qq\editor.gif" />
+    <Content Include="JS\kindeditor-4.1.10\themes\qq\qq.css" />
+    <Content Include="JS\kindeditor-4.1.10\themes\simple\simple.css" />
+    <Content Include="JS\lib.js" />
+    <Content Include="JS\My97DatePicker\calendar.js" />
+    <Content Include="JS\My97DatePicker\config.js" />
+    <Content Include="JS\My97DatePicker\lang\en.js" />
+    <Content Include="JS\My97DatePicker\lang\zh-cn.js" />
+    <Content Include="JS\My97DatePicker\lang\zh-tw.js" />
+    <Content Include="JS\My97DatePicker\My97DatePicker.htm" />
+    <Content Include="JS\My97DatePicker\skin\datePicker.gif" />
+    <Content Include="JS\My97DatePicker\skin\default\datepicker.css" />
+    <Content Include="JS\My97DatePicker\skin\default\img.gif" />
+    <Content Include="JS\My97DatePicker\skin\WdatePicker.css" />
+    <Content Include="JS\My97DatePicker\skin\whyGreen\bg.jpg" />
+    <Content Include="JS\My97DatePicker\skin\whyGreen\datepicker.css" />
+    <Content Include="JS\My97DatePicker\skin\whyGreen\img.gif" />
+    <Content Include="JS\My97DatePicker\WdatePicker.js" />
+    <Content Include="JS\NTClientJavascript.js" />
+    <Content Include="JS\PriceHistory.js" />
+    <Content Include="JS\provinceandcity.js" />
+    <Content Include="JS\provinceandcity_all.js" />
+    <Content Include="JS\s3Slider.js" />
+    <Content Include="JS\SimpleTree.js" />
+    <Content Include="JS\kindeditor-4.1.10\asp.net\file_manager_json.ashx" />
+    <Content Include="JS\kindeditor-4.1.10\asp.net\upload_json.ashx" />
+    <Content Include="JS\good_ml.js" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="_Code\Models\Alipay\log\log.txt" />
+    <None Include="Scripts\jquery-1.11.1.intellisense.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\flot\excanvas.js" />
+    <Content Include="Scripts\flot\excanvas.min.js" />
+    <Content Include="Scripts\flot\jquery.colorhelpers.js" />
+    <Content Include="Scripts\flot\jquery.colorhelpers.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.canvas.js" />
+    <Content Include="Scripts\flot\jquery.flot.canvas.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.categories.js" />
+    <Content Include="Scripts\flot\jquery.flot.categories.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.crosshair.js" />
+    <Content Include="Scripts\flot\jquery.flot.crosshair.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.errorbars.js" />
+    <Content Include="Scripts\flot\jquery.flot.errorbars.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.fillbetween.js" />
+    <Content Include="Scripts\flot\jquery.flot.fillbetween.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.image.js" />
+    <Content Include="Scripts\flot\jquery.flot.image.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.js" />
+    <Content Include="Scripts\flot\jquery.flot.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.navigate.js" />
+    <Content Include="Scripts\flot\jquery.flot.navigate.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.pie.js" />
+    <Content Include="Scripts\flot\jquery.flot.pie.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.resize.js" />
+    <Content Include="Scripts\flot\jquery.flot.resize.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.selection.js" />
+    <Content Include="Scripts\flot\jquery.flot.selection.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.stack.js" />
+    <Content Include="Scripts\flot\jquery.flot.stack.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.symbol.js" />
+    <Content Include="Scripts\flot\jquery.flot.symbol.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.threshold.js" />
+    <Content Include="Scripts\flot\jquery.flot.threshold.min.js" />
+    <Content Include="Scripts\flot\jquery.flot.time.js" />
+    <Content Include="Scripts\flot\jquery.flot.time.min.js" />
+    <Content Include="Scripts\html5shiv-printshiv.js" />
+    <Content Include="Scripts\html5shiv-printshiv.min.js" />
+    <Content Include="Scripts\html5shiv.js" />
+    <Content Include="Scripts\html5shiv.min.js" />
+    <Content Include="Scripts\jquery-1.11.1.js" />
+    <Content Include="Scripts\jquery-1.11.1.min.js" />
+    <Content Include="Scripts\jquery-1.11.1.min.map" />
+    <Content Include="Scripts\jquery-1.8.3.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\npm.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.css" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\默认主题\门户\首页\Part_Index_Bottom.cshtml" />
+    <Content Include="Views\默认主题\门户\首页\Part_Index_Content.cshtml" />
+    <Content Include="Views\默认主题\门户\首页\Part_Index_LeftMenu.cshtml" />
+    <Content Include="Views\默认主题\门户\首页\Index.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Depart_GysList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_DepartmentAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_DepartmentList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_DepartmentModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_AdAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_AdDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_AdList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_AdModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_NewsAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_NewsDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_NewsList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_NewsModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_TreeMenu.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_Xttz.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_Znxx.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Zb_ReleaseInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Depart_GysList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\DepartmentAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\DepartmentList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\DepartmentModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_AdAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_AdDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_AdList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_AdModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_NewsAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_NewsDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_NewsList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_NewsModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Xttz.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Znxx.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Zb_ReleaseInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_ComplainAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_ComplainList.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_ComplainDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_ConsultAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_ConsultList.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_ConsultDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_GuideOne.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_GuideThr.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_GuideTwo.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_News_Show.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Product_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Product_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Product_List.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Product_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Spgl_Update.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_SuggestAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_SuggestList.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_SuggestDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_TreeMenu.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Xttz.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Znxx.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Ztb_Dygl.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Ztb_Search_Cg.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Ztb_Search_Zb.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_ComplainAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_ComplainList.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_ComplainDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_ConsultAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_ConsultList.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_ConsultDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_GuideOne.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_GuideThr.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_GuideTwo.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_News_Show.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Product_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Product_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Product_List.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Product_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Register.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Spgl_Update.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_SuggestAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_SuggestList.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_SuggestDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Xttz.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Znxx.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Ztb_Dygl.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Ztb_Search_Cg.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Ztb_Search_Zb.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\UploadHandler.ashx" />
+    <Content Include="Views\默认主题\基本功能\注册\Register_Gys.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\Register_Person.cshtml" />
+    <Content Include="Views\默认主题\基本功能\登录\Login.cshtml" />
+    <Content Include="Views\默认主题\门户\新闻\Part_News\Part_NewsList.cshtml" />
+    <Content Include="Views\默认主题\门户\新闻\Part_News\Part_OtherList.cshtml" />
+    <Content Include="Views\默认主题\门户\新闻\NewsList.cshtml" />
+    <Content Include="Views\默认主题\门户\政策法规\Part_Zcfg\Part_ZcfgList.cshtml" />
+    <Content Include="Views\默认主题\门户\政策法规\Part_Zcfg\Part_OtherList.cshtml" />
+    <Content Include="Views\默认主题\门户\政策法规\ZcfgList.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\Part_Notice\Part_NoticeList.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\Part_Notice\Part_OtherList.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\NoticeList.cshtml" />
+    <Content Include="Views\默认主题\门户\公告\Part_Announce\Part_AnnounceList.cshtml" />
+    <Content Include="Views\默认主题\门户\公告\Part_Announce\Part_OtherList.cshtml" />
+    <Content Include="Views\默认主题\门户\公告\AnnounceList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Ad_User_Info.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Left_List.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Requestion_Part_No_Replied.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Requestion_Replied_List.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Suggestion_Part_NoPss.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Suggestion_Pss_List.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Recommendgys.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Requestion_No_Replied.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Requestion_Replied.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Suggestion.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Suggestion_NoPss.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Supplier_PssInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Supplier_WaitInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\User_Info_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Expert_List.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Ad_User_Infos.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Supplier_Nopss_Reason.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Supplier_Pss_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodExaminePass.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodExaminePassDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodExamine.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodExamineDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodNotPass.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodNotPassFeedback.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodNotPassDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodClassify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\ZNXX.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SystemInfo_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SystemInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GoodExaminePass.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GoodExaminePassDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GoodExamine.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GoodExamineDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GoodNotPass.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GoodNotPassFeedback.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GoodNotPassDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GoodClassify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_ZNXX.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SystemInfo_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SystemInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_ZcfgAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_ZcfgList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_ZcfgModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_ZcfgDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_TzList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_TzDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_TzModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_TzAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_ZcfgList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_ZcfgDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_ZcfgModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_ZcfgAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_TzList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_TzDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_TzModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_TzAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Vip_Manage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Vip_Manage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Vip_Password_Manage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Vip_Pwd_Manage.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_ZnxxSend.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_ZnxxSend.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_ZnxxAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_ZnxxAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_AdAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_AdAudit.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\Part_Notice\Part_NoticeDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\NoticeDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\新闻\Part_News\Part_NewsDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\新闻\NewsDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\政策法规\ZcfgDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\政策法规\Part_Zcfg\Part_ZcfgDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\公告\Part_Announce\Part_AnnounceDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\公告\AnnounceDetail.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\默认主题\门户\供应商陈列\GysList.cshtml" />
+    <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_GysList.cshtml" />
+    <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_HotProduct.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\ProductList.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_ProductList.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_Recent.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_Recommend.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Product_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Sales_Manage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Manage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Manage.cshtml" />
+    <Content Include="Views\默认主题\_ViewStart.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Financial_Manage.cshtml" />
+    <Content Include="Views\默认主题\门户\公告\Part_Announce\Part_AnnounceSearch.cshtml" />
+    <Content Include="Views\默认主题\门户\公告\AnnounceSearch.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\Part_Notice\Part_NoticeSearch.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\NoticeSearch.cshtml" />
+    <Content Include="Views\默认主题\门户\新闻\Part_News\Part_NewsSearch.cshtml" />
+    <Content Include="Views\默认主题\门户\新闻\NewsSearch.cshtml" />
+    <Content Include="Views\默认主题\门户\政策法规\Part_Zcfg\Part_ZcfgSearch.cshtml" />
+    <Content Include="Views\默认主题\门户\政策法规\ZcfgSearch.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_ZnxxAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_ZnxxAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodAttrManage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Sales_Manage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Product_AddStep1.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Msg_Sent.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Msg_Sent.cshtml" />
+    <Content Include="Views\默认主题\后台\个人用户后台\Index.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Reply.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Product_Price.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Msg_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Product_AddStep1.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Product_Price.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Reply.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_ZNXX_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_ZNXX_Sended.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Msg_Detail.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_ProductSearch.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\ProductSearch.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Zb_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Zb_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Msg_Sent.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Msg_Sent.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\ZNXX_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\ZNXX_Sended.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Index.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_GoodClass.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_ComplainAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_ComplainList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Msg_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Xttz_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Znxx_Reply.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\ComplainAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Msg_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_ComplainList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Msg_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Msg_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Produre_Reply.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\默认主题\后台\单位用户后台\Xttz_Detail.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\默认主题\门户\供应商陈列\Supplier_Destination.cshtml" />
+    <Content Include="Views\默认主题\门户\协议采购\Agreement_Good.cshtml" />
+    <Content Include="Views\默认主题\门户\协议采购\Agreement_Good_Details.cshtml" />
+    <Content Include="Views\默认主题\门户\协议采购\Index.cshtml" />
+    <Content Include="Views\默认主题\门户\协议采购\Part_Agreement\Part_Agreement_Good.cshtml" />
+    <Content Include="Views\默认主题\门户\协议采购\Part_Agreement\Part_Agreement_Good_Details.cshtml" />
+    <Content Include="Views\默认主题\门户\协议采购\Part_Agreement\Part_GoodClass.cshtml" />
+    <Content Include="Views\默认主题\门户\协议采购\Part_Agreement\Part_Recommend.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\ProductContrast.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Suggestiont_Reply_Page.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Suggestion_ReplyPg.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Requst_Reply.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Requst_Reply.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Request_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Request_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\PartGys_Financial_Manage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Index.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_ZnxxDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_ZnxxDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AdListDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AdListDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Index.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Index.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Home.cshtml" />
+    <Content Include="Views\默认主题\基本功能\布局\Banner.cshtml" />
+    <Content Include="Views\默认主题\基本功能\布局\Footer.cshtml" />
+    <Content Include="Views\默认主题\基本功能\布局\NavigateMenu.cshtml" />
+    <Content Include="Views\默认主题\基本功能\布局\NavigateMenuWithProductCategory.cshtml" />
+    <Content Include="Views\默认主题\基本功能\布局\SearchBar.cshtml" />
+    <Content Include="Views\默认主题\基本功能\布局\TopBar.cshtml" />
+    <Content Include="Views\默认主题\基本功能\错误页面\Error.cshtml" />
+    <Content Include="Views\默认主题\基本功能\错误页面\UnderConstruction.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Suggest_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Suggest_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Requstion_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Expert_list.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Part_Experts\Part_Expert_list.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Part_Experts\Part_Expert_TreeMenu.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Part_Experts\Part_Expert_Edit.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Expert_Edit.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Expert_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Expert_History.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Expert_Select.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Part_Experts\Part_Expert_History.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Part_Experts\Part_Expert_Select.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Expert_History_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Part_Experts\Part_Expert_History_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Part_Experts\Part_Expert_Entry.cshtml" />
+    <Content Include="Views\默认主题\后台\专家抽选\Part_Experts\Part_Expert_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SendMessageList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SendMessageList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SendPushList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SendAdList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\PushMessageDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Msg_TemplateManage.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_MsgTemplate.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_gys_info.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_depart_info.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_single_info.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_manage_info.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_manage_info1.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_single_info1.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_depart_info1.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_gys_info1.cshtml" />
+    <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_GysSelect.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Edit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Entry.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_History.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_History_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_list.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Select.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_Edit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_History.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_History_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_list.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_Select.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_HistoryDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_HistoryDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_PushMessageDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_PushDetailGysList.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Book_Msg.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Book_Msg.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SendPushList_Us.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_PushMessageUsModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\PushMessageUsModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SendMessageAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SendMessageAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SendMessageAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SendMessageAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SendPushAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SendPushAuditList_Us.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_PushMessageModify.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\默认主题\后台\运营团队后台\PushMessageModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GoodAttrManage.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Applay.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_Applay.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_ApplayAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_ApplayAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_ApplayAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_ApplayAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Choose.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_Choose.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Add_Supplier_Info.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_AddSupplier_Info.cshtml" />
+    <Content Include="Views\默认主题\门户\首页\OnlineSever.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_OtherClass.cshtml" />
+    <Content Include="Views\默认主题\门户\首页\Part_OnlineSever.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\AdListDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\DepartmentAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\DepartmentList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\DepartmentModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Depart_GysList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_AdListDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_DepartmentAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_DepartmentList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_DepartmentModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Depart_GysList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_AdAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_AdAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_AdDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_AdList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_AdModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_NewsAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_NewsDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_NewsList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_NewsModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_TzAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_TzDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_TzList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_TzModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_ZcfgAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_ZcfgDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_ZcfgList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_ZcfgModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Zb_ReleaseInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_AdAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_AdAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_AdDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_AdList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_AdModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_NewsAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_NewsDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_NewsList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_NewsModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_TzAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_TzDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_TzList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_TzModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_ZcfgAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_ZcfgDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_ZcfgList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_ZcfgModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Zb_ReleaseInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Suggestion_Dealing.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Requestion_Dealing.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Suggestion_Dealing.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Requestion_Dealing.cshtml" />
+    <Content Include="Views\默认主题\门户\公告\Part_Announce\Part_SearchByCondition.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\Part_Notice\Part_SearchByCondition.cshtml" />
+    <Content Include="Views\默认主题\门户\政策法规\Part_Zcfg\Part_SearchByCondition.cshtml" />
+    <Content Include="Views\默认主题\门户\新闻\Part_News\Part_SearchByCondition.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_ProductKeyword.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_ProductCondition.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Ztb_SearchCondition.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\Successe_Regist.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Home.cshtml" />
+    <Content Include="Views\默认主题\门户\下载\Part_Download\Part_Download_List.cshtml" />
+    <Content Include="Views\默认主题\门户\下载\Download_List.cshtml" />
+    <Content Include="Views\默认主题\门户\下载\Part_Download\Part_Download_Detail.cshtml" />
+    <Content Include="Views\默认主题\门户\下载\Download_Detail.cshtml" />
+    <Content Include="Views\默认主题\门户\下载\Part_Download\Part_Download_OtherList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\DownloadAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\DownloadManage.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_DownloadManage.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_DownloadAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\DownloadDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\DownloadModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_DownloadModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_DownloadDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Znxx_Sended_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Znxx_Sended_Detail.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\Register_Unit.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\DepartmentAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_DepartmentAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\DepartmentAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_DepartmentAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Department_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Department_Detail.cshtml" />
+    <Content Include="Views\默认主题\门户\应急采购\Index.cshtml" />
+    <Content Include="Views\默认主题\门户\应急采购\Part_Emergency\Part_GoodClass.cshtml" />
+    <Content Include="Views\默认主题\门户\应急采购\Part_Emergency\Part_Recommend.cshtml" />
+    <Content Include="Views\默认主题\门户\应急采购\Part_Emergency\Part_GysList.cshtml" />
+    <Content Include="Views\默认主题\门户\协议采购\Part_Agreement\Part_Agreement_Gys.cshtml" />
+    <Content Include="Views\默认主题\门户\协议采购\Part_Agreement\Part_AgreementgysCondition.cshtml" />
+    <Content Include="Views\默认主题\门户\协议采购\Agreement_Gys.cshtml" />
+    <Content Include="Views\默认主题\门户\应急采购\GysList.cshtml" />
+    <Content Include="Views\默认主题\门户\应急采购\Part_Emergency\Part_GysSelect.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\Expert_Apply.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Print_Detail.cshtml" />
+    <Content Include="Views\默认主题\门户\政策法规\Part_Zcfg\Part_SearchByPage.cshtml" />
+    <Content Include="Views\默认主题\门户\公告\Part_Announce\Part_SearchByPage.cshtml" />
+    <Content Include="Views\默认主题\门户\新闻\Part_News\Part_SearchByPage.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\Part_Notice\Part_SearchByPage.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Print_Detail.cshtml" />
+    <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_SearchByPage.cshtml" />
+    <Content Include="Views\默认主题\门户\应急采购\Part_Emergency\Part_SearchByPage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Product_Type.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Product_Type.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\PushMessageResultStaticPage.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\Register_Gys_Agree.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\Part_Agree_Regist.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\Part_Register_Gys_Organization.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Usergroup_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Usergroup_Mannage.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Usergroup_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Usergroup_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Usergroup_Mannage.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Usergroup_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Role_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Role_Mannage.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Role_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Role_Mannage.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\User_PermissionEdit.cshtml" />
+    <Content Include="Views\默认主题\基本功能\布局\LeftMenu.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GysChoose_Applay.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GysChoose_ApplayAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GysChoose.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GysChoose_HistoryList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GysChoose_ApplayAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GysChoose_HistoryDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_Applay.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_ApplayAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_ApplayAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_HistoryDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_HistoryList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_ApplayAuditList_pre.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_ApplayAuditList_ing.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_ApplayAuditList_no.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_ApplayAuditList_pre.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_ApplayAuditList_ing.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_ApplayAuditList_no.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_Entry.cshtml" />
+    <Content Include="Views\默认主题\门户\下载\Part_Download\Part_SearchByPage.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Index.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Tax_Management.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_tax_Management.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Law_Person.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Law_Person.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Investor_Management.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Investor_Management.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Qualify_Management.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Qualify_Management.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Service_Management.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Service_Management.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_ProductNav.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Department_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Department_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\DepartmentAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\DepartmentAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_DepartmentAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_DepartmentAudit.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\Register_Unit_Intranet.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Project_Applay.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Project_List.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Project_AuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Project_HistoryList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Project_Applay.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Project_List.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Project_AuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Project_HistoryList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Project_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Project_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Project_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Project_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Project_AuditDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Project_AuditDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\机票酒店\HotelandTicket.cshtml" />
+    <Content Include="Views\默认主题\门户\机票酒店\HotelFilter.cshtml" />
+    <Content Include="Views\默认主题\门户\机票酒店\HotelDetial.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Qualify_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Qualify_Detail.cshtml" />
+    <Content Include="Views\默认主题\门户\机票酒店\TicketDetial.cshtml" />
+    <Content Include="Views\默认主题\门户\机票酒店\TicketFilter.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Service_Evaluate.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Service_Evaluate.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Gys_PreScoreList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Gys_SetScore.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Gys_AfScoreList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Gys_AfScoreList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Gys_ScoreDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Gys_ScoreDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Project_ViewProgress.cshtml" />
+    <Content Include="Views\默认主题\门户\网上竞标\Index.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Project_ZbList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Project_ZbList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Project_ZbModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Project_ZbModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\OnlineBidding_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\OnlineBidding_List.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\OnlineBidding_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_OnlineBidding_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_OnlineBidding_List.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_OnlineBidding_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Gys_PreScoreList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Gys_SetScore.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\OnlineBidding_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_OnlineBidding_Detail.cshtml" />
+    <Content Include="Views\默认主题\门户\网上竞标\BidDetial.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\ProjectService_List.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_ProjectService_List.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\ProjectService_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_ProjectService_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\ProjectService_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_ProjectService_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\ProjectService_List.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_ProjectService_List.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\OnlineBidding_List_Ed.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_OnlineBidding_List_Ed.cshtml" />
+    <Content Include="Views\默认主题\门户\网上竞标\Bidlist.cshtml" />
+    <Content Include="Views\默认主题\门户\网上竞标\Part_BidInter\Part_BidList.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\OutUnitRegisterTips.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\_PartialPage1.cshtml" />
+    <Content Include="Views\默认主题\后台\个人用户后台\MyBaseInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\个人用户后台\VipInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\AddAcceptanceForm.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Completing.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Completing.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\AcceptDetial.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_enroll.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_enroll.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\SignUp_List.cshtml">
+      <SubType>
+      </SubType>
+    </Content>
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SignUp_List.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\SignUp_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SignUp_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Project_ViewProgress.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SignUp_List.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SignUp_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SignUp_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SignUp_List.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Print_UserList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Print_UserList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Print_UserListTable.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Recommend_Gys.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Recommend_GysList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Recommend_Expert.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Recommend_ExpertList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Recommend_Gys.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Recommend_GysList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Recommend_Expert.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Recommend_ExpertList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Recommend_GysList_Ed.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Recommend_GysList_Pre.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Recommend_ExpertList_Ed.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Recommend_ExpertList_Pre.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Recommend_ExpertList_Ed.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Recommend_ExpertList_Pre.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Recommend_GysList_Pre.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Recommend_GysList_Ed.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Recommend_ExpertDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Recommend_GysDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Recommend_GysDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Recommend_ExpertDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\HotelAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Roomlist.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\TicketAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Ticketlist.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\HotelDetial.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\HotelEdit.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Hotellist.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_SearchByPage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Ticket_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Modify_Ticket.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\HotelExamine.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\TicketExamine.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\HotelDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\TicketDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\RoomDetial.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\HotelExamined.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\TicketExamined.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GoodExamine_Ed.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodExamine_Ed.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\AdStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GysStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\ExpertStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_AdStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Notice.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GysStatisticNum.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_ExpertStatisticNum.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\RoomEdit.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\EditForm.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_AcceptanceGood.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\Register_Expert_Agree.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\Part_Register_Expert_Organization.cshtml" />
+    <Content Include="Views\默认主题\后台\专家后台\Index.cshtml" />
+    <Content Include="Views\默认主题\后台\专家后台\Modify_Info.cshtml" />
+    <Content Include="Views\默认主题\后台\专家后台\Notice.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\ExList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\PartExList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Exlist.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodAttrStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\RegistrationCount.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_RegistrationCount.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_RegistrationCount_pre.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\RegistrationManange.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_RegistrationManange.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\RegistrationDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_RegistrationDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\CompanyWithCar.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Modify_Supplier_Info.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_ChangeProductClassByKeyword.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\Exposure.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\Part_Notice\Part_Exposure.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\ExposureDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\通知\Part_Notice\Part_ExposureDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SavePicture.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Gys_Product_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\SubmitAndCheck.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Gys_Product_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Modify_Finance.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Modify_Investor.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Modify_Servicdepartment.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Product_Modify_Price.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Product_Modify_Price.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_OtherGys.cshtml" />
+    <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_GysSelect_Page.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Toubiao.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Modify_Toubiao.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_AdSendList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_AdSendList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\ComplainList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\ComplainDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_ComplainDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_AdSendList_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_AdSendList_S.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Modify_Toubiao.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Modify_Investor.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AcceptanceDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AcceptanceList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Modify_Servicdepartment.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Modify_Finance.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\getSearchPro.cshtml" />
+    <Content Include="Views\默认主题\门户\首页\SearchAcceptance.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\TrainingAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\TrainingList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GuideAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GuideList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\UploadImages.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\guideDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\TrainDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\TrainingModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GuideModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Recommend_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Recommend_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\MessageKeyword.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\MessageModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_ApplayOutList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Roles_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Role_Mannage.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\User_group_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Usergroup_Mannage.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Usergroup_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Roles_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Role_Mannage.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_User_group_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Usergroup_Mannage.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Suggest_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Suggestion_ReplyPg.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Suggestiont_Reply_Page.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Recommend_GysList_Audit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Recommend_ExpertList_Audit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Recommend_ExpertList_Audit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Recommend_GysList_Audit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Print_Supplier.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Print_Expert.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Gys_ApplayOutList.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\UploadImages.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Acceptanced_List.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AcceptancedDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_Scoring.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Scoring.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_History_Page.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\UploadImage.cshtml" />
+    <Content Include="Views\默认主题\_Shared\_Layout.cshtml" />
+    <Content Include="Views\默认主题\_Shared\Error.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Choose_Print.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_Choose_Print.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Gys_Choose_Print.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Gys_Choose_Print.cshtml" />
+    <Content Include="Views\默认主题\门户\首页\Intranet.cshtml" />
+    <Content Include="Views\默认主题\门户\首页\Part_Index_Bottom_Intranet.cshtml" />
+    <Content Include="Views\默认主题\门户\首页\Part_Index_Content_Intranet.cshtml" />
+    <Content Include="Views\默认主题\门户\首页\Part_Index_LeftMenu_Intranet.cshtml" />
+    <Content Include="Views\默认主题\基本功能\注册\OutGysRegisterTips.cshtml" />
+    <Content Include="Views\默认主题\基本功能\布局\Footer_Intranet.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_Applay_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Applay_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Applay_S_pre.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Applay_S_ing.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Applay_S_no.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Applay_S_ed.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_ApplayCancel.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_ApplayCancel.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GysChoose_Applay_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_Applay_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_ApplayAuditList_pre_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_ApplayAuditList_ing_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_ApplayAuditList_no_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_GysChoose_ApplayAuditList_ed_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Gys_ApplayCancel.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Gys_ApplayCancel.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_DepartmentListSearch.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Print.cshtml" />
+    <Content Include="Views\默认主题\后台\专家后台\Print.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SearchByCondit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AcceptanceGood.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_Expert_Applay.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_Expert_ApplayCancel.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_Expert_Applay_S.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_Expert_Applay_S_ed.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_Expert_Applay_S_ing.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_Expert_Applay_S_no.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_Expert_Applay_S_pre.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_Expert_Choose.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_Expert_Choose_Print.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_Expert_HistoryDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_Expert_Scoring.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Part_Expert\Part_IndexIntranet.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Expert_Applay.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Expert_ApplayCancel.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Expert_Choose.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Expert_Choose_Print.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Expert_HistoryDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\Expert_Scoring.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\IndexIntranet.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SignUp_Detail_Page.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SignUp_Detail_Page.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\PurchaseOnline.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\Part_PublicPur\Part_PublicPurNav.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\Pushmsg.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\Credit_Service.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\Finance_Service.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\PublicPurBusiness.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\PublicDdc.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\Index.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\Index.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_AdList_Search.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\ApplyVip.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Acceptance_checked.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Qualify_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Qualify_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\SavePicture.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\ChoosePicture.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\Security.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\vipService.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\JcContract.cshtml" />
+    <Content Include="Views\默认主题\门户\协议采购\Part_Agreement\Part_Agreement_Good_Page.cshtml" />
+    <Content Include="Views\默认主题\后台\专家后台\Download.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_expert_info.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_expert_info1.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Usergroup_Mannage_My.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_TzList_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_TzList_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_TzList_Audit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_TzList_Audit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_TzList_AuditDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_TzList_AuditDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_NewsList_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_NewsList_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_NewsList_Audit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_NewsList_Audit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_NewsList_AuditDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_NewsList_AuditDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_ZcfgList_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_ZcfgList_S.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_ZcfgList_Audit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_ZcfgList_Audit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_ZcfgList_AuditDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_ZcfgList_AuditDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Usergroup_Mannage_My.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Acceptanced_List.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\AcceptancedDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SearchByCondit.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Supplier_Info_List.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\AddRecommendgys.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Recommendgys_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Edit_Recommendgys.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SkanExam.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Gys_Examine.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Gys_Examined.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Gys_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\AddRecommend_good.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\RecommendGood.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Recommendgood_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Edit_Recommendgood.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\purchaseInfo.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\Assistance.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\Project_Management.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\AddListGood.cshtml" />
+    <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_GysList_SearchBox.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\AddAcceptForm.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\UploadAttach_ysd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SignUp_Information.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SignUp_Information.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SignUp_BiaoShu.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SignUp_BiaoShu.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\UploadImage_BiaoShu.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\AddListGood1.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_UploadExcel.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\enrollMaterial.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SignUp_Detail_Gys.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SignUp_Detail_Gys.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Editenroll.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SignUp_Print.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SignUp_Print.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SignUp_PrintSearch.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SignUp_U.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SignUp_U.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\SignUp_BiaoShu.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\SignUp_Detail_Gys.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\SignUp_Information.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\SignUp_Print.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\UploadImage_BiaoShu.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SignUp_BiaoShu.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SignUp_Detail_Gys.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SignUp_Information.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SignUp_Print.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SignUp_PrintSearch.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\SignUp_BiaoShuDownload.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_SignUp_BiaoShuDownload.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\SignUp_GysDownloadBiaoShu.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\AccountInfoManage.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GoodStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\ExpertStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\AcceptanceStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_AcceptanceStatistic.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\buildWebsite.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\Ysd.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\WeChatBindUser.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\AccountInfoManage.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\GysYsdList.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\UnitYsdList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_AdStatistic_ByType.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\YsdDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\NoticeAboutApply.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AcceptanceList_Avoid.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AcceptanceVoid.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AcceptanceChecked.cshtml" />
+    <Content Include="Views\默认主题\门户\jct\Payment_Result.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\ValueAddedService.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\ValueAddedService.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Print_UserList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Print_UserList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Print_UserListTable.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Showproduct.cshtml" />
+    <Content Include="Views\默认主题\后台\专家后台\Modify_PWD.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_AccountInfoManage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\CheckSecurity.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Service_Evaluate.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\AddAcceptFormTicket.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_AcceptanceTicketList.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\AcceptanceTicketList.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\EditFormTicket.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\AcceptDetialTicket.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\TicketList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Uploadyzd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\UploadImages1.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_AcceptSkan.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\StatisticsLogin.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_StatisticsLogin.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_StatisticsLoginSearch.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\StatisticsClick.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_StatisticsClick.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_StatisticsClickSearch.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\ExpertBatchmodify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_ExpertBatchModify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\DbExport.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_DbExport.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\DbInport.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_DbInport.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\SynchroYsd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_SynchroYsd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\OperationInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_UnitOrAdStatics.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Procure_AdUpload.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Procure_AdUpload.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_GoodInTypes.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Demandlist.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\DemandCheck.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Add_Demand.cshtml" />
+    <Content Include="Views\默认主题\基本功能\布局\NeedLogin.cshtml" />
+    <Content Include="Views\默认主题\门户\网上竞标\Part_BidInter\Part_Bidetial.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\OnlineBiddingManage.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\OnlineBiddingDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\OnlineBiddingProject.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\OnlineBiddingProjectDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\OnlineBidding_List_Ed.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\OnlineBidding_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\OnlineBidding_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\OnlineBidding_List.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\OnlineBidding_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_OnlineBidding_Add.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_OnlineBidding_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_OnlineBidding_List.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_OnlineBidding_List_Ed.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_OnlineBidding_Modify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\SummaryDemand.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SummaryDemand.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SummaryDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_SummaryDetail_Recursive.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AssignmentTask.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AssignmentTask.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AssignmentTaskList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AssignmentTaskList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_AcceptanceStatisticUnit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AssignmentTaskList_pre.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AssignmentTaskList_ed.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AssignmentTaskList_ing.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AssignmentTaskDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AssignmentTaskDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\公告\AnnounceBidGood.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_DemandDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_DemanCheck.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\PlanDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\AccepatnceSmj.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Demand_Detail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AssignmentTaskList_p.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AssignmentTaskList_p.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AssignmentTaskAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AssignmentTaskAuditList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AssignmentTaskAudit.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AssignmentTaskAudit.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\IndexIntranet.cshtml" />
+    <Content Include="Views\默认主题\门户\应急采购\Home.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_BackHead.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Home.cshtml" />
+    <Content Include="Views\默认主题\门户\办事指南\ServiceDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\办事指南\ServiceGuideList.cshtml" />
+    <Content Include="Views\默认主题\门户\办事指南\ServiceListSearch.cshtml" />
+    <Content Include="Views\默认主题\门户\办事指南\Part_Service\Part_ServiceDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\办事指南\Part_Service\Part_ServiceGuideList.cshtml" />
+    <Content Include="Views\默认主题\门户\办事指南\Part_Service\Part_ServiceSearch.cshtml" />
+    <Content Include="Views\默认主题\门户\办事指南\Part_Service\Part_OtherList.cshtml" />
+    <Content Include="Views\默认主题\门户\办事指南\Part_Service\Part_SearchByCondition.cshtml" />
+    <Content Include="Views\默认主题\门户\办事指南\Part_Service\Part_SearchByPage.cshtml" />
+    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_OtherList.cshtml" />
+    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_SearchByCondition.cshtml" />
+    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_SearchByPage.cshtml" />
+    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_TrainingDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_TrainingList.cshtml" />
+    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_TrainingSearch.cshtml" />
+    <Content Include="Views\默认主题\门户\业务培训\TrainingDetail.cshtml" />
+    <Content Include="Views\默认主题\门户\业务培训\TrainingList.cshtml" />
+    <Content Include="Views\默认主题\门户\业务培训\TrainingSearch.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\UploadImagesGT.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GuideAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\guideDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GuideList.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\GuideModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Backlog.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\TrainingModify.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\TrainingAdd.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\TrainingList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\TrainDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\_Back_IntranetLayout.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Gys_Expert_Recomed.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Expert_Applay_ed.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Applay_ed.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\GysList.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\GoodlistWithType.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\Gooddetail.cshtml" />
+    <Content Include="Views\默认主题\后台\专家后台\ApplyOnline.cshtml" />
+    <Content Include="Views\默认主题\后台\专家后台\SavePicture.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\Gysdetail.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\Hot_Recommend.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\ExpertApply.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\GysApply.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_BackHead.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\_BackLayout.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Backlog.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\AddGoods.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Product_Listed.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Product_Listed.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Product_Shelved.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_Gys_Product_Shelved.cshtml" />
+    <Content Include="Views\默认主题\后台\专家后台\_BackLayout.cshtml" />
+    <Content Include="Views\默认主题\后台\专家后台\Part_Expert\Part_BackHead.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\Login.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\MyService.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\AboutUs.cshtml" />
+    <Content Include="Views\默认主题\基本功能\WeChat\Goodlist.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\SubUnit_Manage.cshtml" />
+    <Content Include="Views\默认主题\后台\专家后台\NoticeAboutApply.cshtml" />
+    <Content Include="Views\默认主题\门户\供应商陈列\GysList_Inlib.cshtml" />
+    <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_GysList_Inlib.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\_BackLayout.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_BackHead.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Intranet|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;INTRANET</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release Intranet|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;INTRANET</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>49918</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:49906/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

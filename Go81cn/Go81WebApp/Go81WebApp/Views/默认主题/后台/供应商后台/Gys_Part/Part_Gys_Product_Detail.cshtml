@@ -1,0 +1,314 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@*<script src="~/js/jquery-1.2.6.pack.js" type=text/javascript></script>*@
+<script src="~/js/base.js" type=text/javascript></script>
+@model Go81WebApp.Models.数据模型.商品数据模型.商品
+<script language="javascript" type="application/javascript" src="~/JS/tblmenu.js"></script>
+<link href="~/css/css.css" type="text/css" rel="stylesheet">
+@*<script src="~/js/jquery-1.2.6.pack.js" type=text/javascript></script>*@
+<script src="~/js/base.js" type=text/javascript></script>
+
+<!--[if lt IE 9]>@Scripts.Render("~/Scripts/flot/excanvas.min.js")<![endif]-->
+@Scripts.Render("~/Scripts/flot/jquery.flot.min.js", "~/Scripts/flot/jquery.flot.time.min.js")
+@Scripts.Render("~/JS/PriceHistory.js")
+<br />
+<div style="height:auto; overflow:hidden; background-color:#fff;">
+    @*<div class="prodtpage_positionbox"> 当前位置：<a href="#">XXXX</a>→<a href="#">XXXX</a>→<a href="#">XXXX</a>→<a href="#">XXXX</a> </div>*@
+    <div class="prodtpage_detail_topbox">
+        <div class="prodtpage_detail_topbox_left">
+            <div id=preview>
+                <div class="jqzoom" id="spec-n1">
+                    @if (Model.商品信息.商品图片.Count > 0)
+                    {
+                        <img id="bgimgbox" src="@Model.商品信息.商品图片[0].Replace("original/", "350X350/")" jqimg="@Model.商品信息.商品图片[0]" />
+                    }
+                    else
+                    {
+                        <img id="bgimgbox" src="~/images/noimage.jpg" jqimg="~/images/noimage.jpg" />
+                    }
+                </div>
+                <div id=spec-n5>
+                    <div id=spec-list>
+                        <ul class=list-h>
+                            @if (Model.商品信息.商品图片.Count > 0)
+                            {
+                                for (int i = 0; i < Model.商品信息.商品图片.Count && i < 4; i++)
+                                {
+                                    <li><img src="@Model.商品信息.商品图片[i].Replace("original/", "50X50/")" onmouseover='document.getElementById("bgimgbox").setAttribute("src", this.getAttribute("src").replace("50X50/", "350X350/")); document.getElementById("bgimgbox").setAttribute("jqimg", this.getAttribute("src").replace("50X50/", "original/")); this.style.border = "2px solid #ff6600"; this.style.padding = "1px"' onmouseout="    this.style.border = '1px solid #ccc'; this.style.padding = '2px'"> </li>
+                                }
+                            }
+                            else
+                            {
+                                <li><img src="~/images/noimage.jpg" onmouseover='document.getElementById("bgimgbox").setAttribute("src", this.getAttribute("src")); document.getElementById("bgimgbox").setAttribute("jqimg", this.getAttribute("src")); this.style.border = "2px solid #ff6600"; this.style.padding = "1px"' onmouseout="    this.style.border = '1px solid #ccc'; this.style.padding = '2px'"> </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <script type=text/javascript>
+                $(function () {
+                    var timer;
+                    $("li.changetab").hover(function () {
+                        var tab = $(this);
+                        timer = setTimeout(function () {
+                            var index = tab.attr("index");
+                            var divs = tab.parents(".outtab").next(".tabcontent");
+                            tab.addClass("cli").siblings().removeClass("cli");
+                            divs.children().hide().eq(index).show('fast');
+                        }, 200);
+                    }, function () {
+                        clearTimeout(timer);
+                    });
+
+                    $(".jqzoom").jqueryzoom({
+                        xzoom: 400,
+                        yzoom: 400,
+                        offset: 10,
+                        position: "right",
+                        preload: 1,
+                        lens: 1
+                    });
+                    $("#spec-list").jdMarquee({
+                        deriction: "left",
+                        width: 350,
+                        height: 56,
+                        step: 2,
+                        speed: 4,
+                        delay: 10,
+                        control: true,
+                        _front: "#spec-right",
+                        _back: "#spec-left"
+                    });
+                    $("#spec-list img").bind("mouseover", function () {
+                        var src = $(this).attr("src");
+                        $("#spec-n1 img").eq(0).attr({
+                            src: src.replace("\/n5\/", "\/n1\/").replace("50X50/", "350X350/"),
+                            jqimg: src.replace("\/n5\/", "\/n0\/").replace("50X50/", "original/")
+                        });
+                        $(this).css({
+                            "border": "2px solid #ff6600",
+                            "padding": "1px"
+                        });
+                    }).bind("mouseout", function () {
+                        $(this).css({
+                            "border": "1px solid #ccc",
+                            "padding": "2px"
+                        });
+                    });
+                })
+            </script>
+            <script src="~/js/lib.js" type=text/javascript></script>
+            <script src="~/js/163css.js" type=text/javascript></script>
+        </div>
+        <div class="prodtpage_detail_topbox_right">
+            <div class="prodtpage_detail_topbox_right_titlebox">
+                <h4>@Model.商品信息.商品名</h4>
+            </div>
+            <div class="prodtpage_detail_topbox_right_contentbox">
+                <div class="prodtpage_detail_topbox_right_contentlist">
+                    <div class="prodtpage_detail_topbox_right_contentleft">价　　格：</div>
+                    <div class="prodtpage_detail_topbox_right_contentright" id="product_price">
+                        ￥
+                        @try
+                        {
+                            @(string.Format("{0:0.00}", Model.销售信息.价格))
+                        }
+                        catch
+                        {
+                            <span>未填写</span>
+                        }
+                    </div>
+                </div>
+                <br />
+                <div class="prodtpage_detail_topbox_right_contentlist">
+                    <div class="prodtpage_detail_topbox_right_contentleft">商家地区：</div>
+                    <div class="prodtpage_detail_topbox_right_contentright">
+                        @try
+                        {
+                            @Model.商品信息.所属供应商.用户数据.所属地域.省份
+                        }
+                        catch
+                        {
+                            <span>未填写</span>
+                        }
+                    </div>
+                </div>
+                <br />
+                <div class="prodtpage_detail_topbox_right_contentlist">
+                    <div class="prodtpage_detail_topbox_right_contentleft">联系方式：</div>
+                    <div class="prodtpage_detail_topbox_right_contentright">
+                        @try
+                        {
+                            @Model.商品信息.所属供应商.用户数据.企业联系人信息.联系人地址
+                        }
+                        catch
+                        {
+                            <span>未知</span>
+                        }
+                    </div>
+                </div>
+                <br />
+                <div class="prodtpage_detail_topbox_right_contentlist">
+                    <div class="prodtpage_detail_topbox_right_contentleft">联系电话：</div>
+                    <div class="prodtpage_detail_topbox_right_contentright">
+                        @try
+                        {
+                            @Model.商品信息.所属供应商.用户数据.企业联系人信息.联系人固定电话
+                        }
+                        catch
+                        {
+                            <span>未填写</span>
+                        }
+                    </div>
+                </div>
+                <br />
+                <div class="prodtpage_detail_topbox_right_contentlist">
+                    <div class="prodtpage_detail_topbox_right_contentleft">商家信用评级：</div>
+                    <div class="prodtpage_detail_topbox_right_contentright">
+                        @try
+                        {
+                            if (ViewBag.data == 0 || ViewBag.data == 1)
+                            {
+                                <img src="../../Images/star.png" />
+                            }
+                        }
+                        catch
+                        {
+                            <span>未知</span>
+                        }
+                        <a style="display:inline-block; height:30px; color:black; margin-top:-10px;" href="###">查看积分</a>
+                    </div>
+                </div>
+                <br />
+                @if (Model.销售信息 != null && Model.销售信息.价格属性组合 != null && Model.销售信息.价格属性组合.组合列表 != null)
+                {
+                    <div class="prodtpage_detail_topbox_right_contentlist">
+                        <div class="prodtpage_detail_topbox_right_contentleft">可选配置：</div>
+                        <div class="prodtpage_detail_topbox_right_contentright">
+                            @foreach (var item in Model.销售信息.价格属性组合.组合列表)
+                            {
+                                <a style="margin-right: 10px; cursor: pointer; border: 1px solid #aaa; padding: 2px; margin-bottom: 10px; float: left; " id="@item.价格" onclick="changeprice(this)">
+                                    @foreach (var it in item.属性值表)
+                                    {
+                                        @it
+                                        if (it != item.属性值表[item.属性值表.Count - 1])
+                                        {<span>/</span>}
+                                    }
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="prodtpage_detail_leftbox" style="float:left;">
+
+        @Html.Action("Part_Recommend", "商品陈列")
+        @*@Html.Action("Part_Recent", "商品陈列")*@
+
+    </div>
+    <div class="prodtpage_detail_rightbox" style="float:left;">
+        <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////<!-->
+        <div class="product_tabmenu_box">
+            <div class="title-base-out outtab">
+
+                <div class="title-base-middle ">
+                    <div class="title-base-inner" style="float:left">商品信息</div>
+                    <div class="product_tabmenu_tabmenu">
+                        <ul>
+                            <li @*onmouseover="change_spdt(this)"*@ index="0" class="changetab cli">商品描述</li>
+                            <li @*onmouseover="change_spdt(this)"*@ index="1" class="changetab">商品图片</li>
+                            <li @*onmouseover="change_spdt(this)"*@ index="2" class="changetab">商品参数</li>
+                            <li @*onmouseover="change_spdt(this)"*@ index="3" class="changetab">售后服务</li>
+                            <li @*onmouseover="change_spdt(this)"*@ index="4" class="changetab">历史价格</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="product_tabmenu_content_box tabcontent" id="tabcontent_spdt">
+                <div class="divhide fdiv">
+                    <ul>
+                        <div style=" width: 900px; color:#666; font-size: 14px; font-weight: bold; margin-top: 20px;">
+                            商品名称:<span style="color:#808080; font-size:14px; font-weight:normal;"> @Model.商品信息.商品名</span>
+                        </div>
+                        <div style="width: 900px; color:#666; font-size: 14px; font-weight: bold; margin-top: 20px;">
+                            商品品牌:
+                            <span style="color:#808080; font-size:14px; font-weight:normal;">@Model.商品信息.品牌</span>
+                        </div>
+                        <div style="width: 900px; color:#666; font-size: 14px; font-weight: bold; margin-top: 20px;">商品简介:</div>
+                        <div style="width: 865px; color:#808080; font-size:14px; line-height:25px; font-weight:normal;">
+                            @Model.商品数据.商品简介
+                        </div>
+                        <div style="width: 900px; color:#666; font-size: 14px; font-weight: bold; margin-top: 20px;">
+                            商品详情：
+                        </div>
+                        <div class="goodpre" style="width: 865px; color:#808080; font-size:14px; line-height:25px; font-weight:normal;">
+                            @Html.Raw(Model.商品数据.商品详情)
+                        </div>
+                    </ul>
+                </div>
+                <div class="divhide">
+                    <ul>
+                        @foreach (var temppic in Model.商品信息.商品图片)
+                        {
+                            <div style="padding:10px; float:left;"><img src="@temppic.Replace("original/", "350X350/")" width="200" height="200"></div>
+                        }
+                    </ul>
+                </div>
+                <div class="divhide">
+                    <ul>
+                        <div class="product_detaildiv">
+                            @foreach (var arr in Model.商品数据.商品属性)
+                            {
+                                <table cellspacing="0" cellpadding="0" width="100%">
+                                    <tr>
+                                        <th style=" " colspan="2">@arr.Key</th>
+                                    </tr>
+                                    @foreach (var proname in arr.Value)
+                                    {
+                                        <tr>
+                                            <td width="20%" style="text-align:right;">@proname.Key:</td>
+                                            <td>
+                                                @foreach (var list in proname.Value)
+                                                {
+                                                    @list
+                                                    if (list != proname.Value[proname.Value.Count - 1])
+                                                    {<span>、</span>}
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            }
+                        </div>
+                    </ul>
+                </div>
+                <div class="divhide">
+                    <ul>
+                        @Html.Raw(Model.商品数据.售后服务)
+                    </ul>
+                </div>
+                <div class="divhide">
+                    <ul>
+                        <div id="historyPrices" style="padding:10px;" pdata="@ViewBag.L1"></div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function changeprice(a) {
+        var pricebox = a.parentNode;
+        var alist = pricebox.getElementsByTagName("a");
+        for (var i = 0; i < alist.length; i++) {
+            if (alist[i] !== a) {
+                alist[i].style.border = " 1px solid #aaa";
+            }
+        }
+
+        a.style.border = " 1px solid #f00";
+        document.getElementById("product_price").innerHTML = "￥ " + parseFloat(a.getAttribute("id")).toFixed(2);
+    }
+</script>

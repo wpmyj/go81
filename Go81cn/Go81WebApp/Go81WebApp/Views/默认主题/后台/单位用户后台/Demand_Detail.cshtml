@@ -1,0 +1,981 @@
+﻿@model 需求计划
+@using Go81WebApp.Models.数据模型.需求计划模型
+@{
+    ViewBag.Title = "需求计划详情";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+@using Go81WebApp.Models.数据模型
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<style>
+    .out_box {
+        display: none;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 3%;
+    }
+
+    .out_box_insecond_child {
+        width: 680px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+        border: 1px solid red;
+    }
+
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
+
+    .addbt {
+        display: inline-block;
+        width: 100px;
+        height: 30px;
+        color: white;
+        text-align: center;
+        line-height: 30px;
+        margin-left: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    #sbt {
+        background-color: #207AD6;
+        border: none;
+    }
+
+    .notice {
+        display: none;
+        position: absolute;
+        z-index: 20;
+        width: 160px;
+        height: auto;
+        padding: 5px;
+        border: 1px solid red;
+        background-color: white;
+        opacity: 0.9;
+        filter: alpha(opacity=90);
+        color: black;
+        right: 50px;
+        text-indent: 2em;
+        font-size: 13px;
+        text-align: left;
+        line-height: 20px;
+    }
+
+    .name {
+        cursor: pointer;
+    }
+
+    .icon {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background: url(/Images/tree_icons.png) 0px -5px;
+    }
+
+    li input {
+        margin-left: 30px;
+    }
+
+    div#tabHeader {
+        width: 100%;
+        margin-top: 10px;
+        background-color: #207AD6;
+    }
+
+        div#tabHeader a {
+            display: inline-block;
+            width: 270px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            font-size: 18px;
+            color: white;
+        }
+
+    #container table {
+        border: 1px solid black;
+        border-top: none;
+        border-left: none;
+    }
+
+        #container table tr td, #container table tr th {
+            line-height: 25px;
+            border: 1px solid #808080;
+            border-right: none;
+            border-bottom: none;
+        }
+
+            #container table tr td input {
+                border: none;
+                width: 90%;
+            }
+
+            #container table tr td span {
+                color: red;
+            }
+
+    .arrow {
+        width: 0px;
+        position: absolute;
+        z-index: 11;
+        margin-top: -15px;
+        margin-left: -10px;
+        border-color: transparent #000 transparent transparent;
+        display: inline-block;
+        height: 0px;
+        border-left: 10px solid transparent;
+        border-right: 10px solid #000;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        opacity: 0.7;
+        filter: alpha(opacity=70);
+    }
+
+    .outbox_tip {
+        width: 0px;
+        height: 0px;
+        margin-left: 135px;
+    }
+
+    .content_box {
+        padding: 5px;
+        background-color: #000;
+        z-index: 10;
+        font-size: 13px;
+        padding-left: 5px;
+        line-height: 15px;
+        position: absolute;
+        margin-top: -15px;
+        margin-left: 10px;
+        display: inline-block;
+        text-align: left;
+        word-spacing: 20px;
+        line-height: 20px;
+        max-width: 200px;
+        height: auto;
+        color: #fff;
+        opacity: 0.8;
+        filter: alpha(opacity=80);
+    }
+
+    .deleteBt {
+        display: inline-block;
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        color: white;
+        background-color: red;
+    }
+
+    input[type='text'] {
+        background-color: white;
+    }
+</style>
+@{
+    Dictionary<int, string> ways = ViewData["采购方式"] as Dictionary<int, string>;
+    Dictionary<int, string> trans = ViewData["运输方式"] as Dictionary<int, string>;
+    Dictionary<int, string> th = ViewData["提货方式"] as Dictionary<int, string>;
+    Dictionary<int, string> security = ViewData["秘密等级"] as Dictionary<int, string>;
+}
+<div id="pdf2" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="hidebox('#pdf2')">×</a></div>
+            <div style="width:700px; height:auto;overflow:hidden;">
+                <div>
+                    <div>
+                        <div><div id="topHeader" style="text-align:center; line-height:30px;"></div></div>
+                        <div id="remain_m">
+
+                        </div>
+                        <div style="text-align:center;"><input class="addbt" onclick="response(this)" value="确定" /><input class="addbt" value="取消" onclick="response(this)" /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bg_outdiv">
+    <div style="width:100%;margin-bottom:50px;">
+        <div id="tabHeader"><a href="#p_content" style="background-color:#D67C24;">第一步：修改需求计划</a><a href="#m_content">第二步：修改需求计划物资</a><a href="#d_content" onclick="resetVal()">第三步：修改需求计划分发</a></div>
+        <iframe name="dest" id="dest" style="display:none;"></iframe>
+        <table id="hidemodel" style="display:none;">
+            <tr>
+                <td style="text-align:center;"><span style="color:black">1</span></td>
+                <td><input type="text" id="" alt="" value="" readonly="readonly" name="物资名称0" placeholder="请填写物资名称" /></td>
+                <td><input type="text" value="" readonly="readonly" name="规格型号0" placeholder="请填写规格型号" /></td>
+                <td><input type="text" value="" readonly="readonly" name="计量单位0" placeholder="请填写计量单位" /></td>
+                <td><input type="text" name="收货单位名称0" value="" placeholder="请填写收货单位名称" /></td>
+                <td><input type="text" value="" title="" name="分配数量0" onkeyup="checkNumber(this)" onfocus="checkNumber(this)" onblur="hideTip(this)" placeholder="请填写分配数量" /></td>
+                <td>
+                    <select name="提货方式0">
+                        @foreach (var item in th)
+                        {
+                            <option value="@item.Key">@item.Value</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <select name="运输方式0">
+                        @foreach (var item in trans)
+                        {
+                            <option value="@item.Key">@item.Value</option>
+                        }
+                    </select>
+                </td>
+                <td><input name="到站0" placeholder="请填写到站" /></td>
+                <td>
+                    <input name="备注0" placeholder="请填写备注" style="width:100px;" />
+                    <a class="deleteBt" onclick="deltr(this, 'distribution')">×</a>
+                </td>
+            </tr>
+        </table>
+        <table id="hidemodel1" style="display:none;">
+            <tr>
+                <td style="text-align:center;"><span style="color:black">1</span></td>
+                <td><input type="text" onkeyup="checkSame(this)" class="0" alt="" value="" name="物资名称0" placeholder="请填写物资名称" /></td>
+                <td><input type="text" onkeyup="checkSame(this)" class="0" value="" name="规格型号0" placeholder="请填写规格型号" /></td>
+                <td><input type="text" class="0" value="" name="计量单位0" placeholder="请填写计量单位" /></td>
+                <td><input type="text" class="0" value="" name="数量0" placeholder="请填写数量" onblur="getSumPrice(this,1)" /></td>
+                <td><input type="text" class="0" value="" name="单价0" placeholder="请填写单价" onblur="getSumPrice(this,2)" /></td>
+                <td><input type="text" class="0" value="" readonly="readonly" name="预算金额0" placeholder="请填写预算金额" /></td>
+                <td><input type="text" class="0" value="" name="技术指标0" placeholder="请填写质量技术标准" /></td>
+                <td>
+                    <input class="0" value="" type="text" placeholder="请填写交货期限" name="交货期限0" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd' })" />
+                </td>
+                <td>
+                    <select class="0" name="建议采购方式0">
+                        @foreach (var item in ways)
+                        {
+                            <option value="@item.Value">@item.Value</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <input class="0" type="text" value="" name="备注0" placeholder="请填写备注" style="width:90px;" />
+                    <a class="deleteBt" onclick="deltr(this, 'material')">×</a>
+                </td>
+            </tr>
+        </table>
+
+        <div style="margin-top:8px;">
+            <div id="container">
+                <div class="outContentBox" id="p_content">
+                    <form action="/单位用户后台/Modify_Plan" name="demand" target="dest" method="post">
+                        @Html.HiddenFor(m => m.Id)
+                        <table class="plan" width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th colspan="8" align="center" style="line-height:50px; font-size:18px;">需求计划</th>
+                            </tr>
+                            <tr>
+                                <td align="center">需求计划标题</td>
+                                <td align="center">秘密等级</td>
+                                <td align="center">编制单位</td>
+                                <td align="center">承办部门</td>
+                                <td align="center">采购年度</td>
+                                <td align="center">建议完成时间</td>
+                                <td align="center">联系人</td>
+                                <td align="center">联系电话</td>
+                            </tr>
+                            <tr>
+                                <td><input name="需求计划标题" disabled="disabled" type="text" value="@Model.需求计划标题" aria-invalid="false" class="valid"><span>*</span></td>
+                                <td style="width:200px;">
+                                    <select data-val="true" disabled="disabled" data-val-required="秘密等级 字段是必需的。" name="秘密等级" style="width:90%; margin-left:2px;">
+                                        @foreach (var item in security)
+                                        {
+                                            if (item.Key == (int)Model.秘密等级)
+                                            {
+                                                <option selected="selected" value="@item.Key">@Model.秘密等级</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="0">@Model.秘密等级</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span>*</span>
+                                </td>
+                                <td><input disabled="disabled" name="编制单位" type="text" value="@Model.编制单位"><span>*</span></td>
+                                <td><input disabled="disabled" name="承办部门" type="text" value="@Model.承办部门"><span>*</span></td>
+                                <td><input disabled="disabled" data-val="true" data-val-date="字段 采购年度 必须是日期。" data-val-required="采购年度 字段是必需的。" name="采购年度" onchange="checkTime(this,1)" onfocus="    WdatePicker({ dateFmt: 'yyyy' })" type="text" value="@Model.采购年度.ToString("yyyy")" aria-required="true" aria-invalid="false" class="valid"><span>*</span></td>
+                                <td><input disabled="disabled" data-val="true" data-val-date="字段 建议完成时间 必须是日期。" data-val-required="建议完成时间 字段是必需的。" onchange="checkTime(this,2)" name="建议完成时间" onfocus="WdatePicker({dateFmt:'yyyy/MM/dd'})" type="text" value="@Model.建议完成时间.ToString()"><span>*</span></td>
+                                <td><input disabled="disabled" name="联系人" type="text" value="@Model.联系人"><span>*</span></td>
+                                <td><input disabled="disabled" name="联系电话" type="text" value="@Model.联系电话"><span>*</span></td>
+                            </tr>
+                            @if (Model.当前处理单位链接.用户ID == Model.需求发起单位链接.用户ID && (!Model.审核历史列表.Any() || Model.审核历史列表.Last().审核状态 == 审核状态.审核未通过))
+                            {
+                                <tr><td colspan="9" align="center"><input onclick="ModifyData(this, '#p_content','demand')" style="width:150px;height:30px; margin:5px auto;" class="addbt" id="sbt" value="修改" type="button" /></td></tr>
+                            }
+                        </table>
+                    </form>
+                </div>
+                <div class="outContentBox" id="m_content" style="display:none;">
+                    <form method="post" action="/单位用户后台/ModifyMaterial" name="material" target="dest">
+                        <input type="hidden" value="@Model.Id" name="id" />
+                        <table class="material" width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th colspan="11" align="center" style="line-height:50px; font-size:18px;">需求计划物资</th>
+                            </tr>
+                            <tr>
+                                <td align="center">序号</td>
+                                <td align="center">物资名称</td>
+                                <td align="center">规格型号</td>
+                                <td width="8%" align="center">计量单位</td>
+                                <td width="5%" align="center">数量</td>
+                                <td width="5%" align="center">单价(元)</td>
+                                <td align="center">预算金额(元)</td>
+                                <td align="center">质量技术标准</td>
+                                <td align="center">交货期限</td>
+                                <td align="center">采购方式建议</td>
+                                <td align="center">备注</td>
+                            </tr>
+                            @if (Model.物资列表.Any())
+                            {
+                                for (int i = 0; i < Model.物资列表.Count; i++)
+                                {
+                                    if (Model.物资列表[i].需求计划物资数据 != null)
+                                    {
+                                        <tr>
+                                            <td style="width:30px;text-align:center;color:black;"><span style="color:black;">@(i + 1)</span></td>
+                                            <td><input type="text" onkeyup="checkSame(this)" class="@i" disabled="disabled" alt="@Model.物资列表[i].需求计划物资数据.Id" value="@Model.物资列表[i].需求计划物资数据.物资名称" name="物资名称@(i)" placeholder="请填写物资名称" /></td>
+                                            <td><input type="text" onkeyup="checkSame(this)" class="@i" disabled="disabled" value="@Model.物资列表[i].需求计划物资数据.规格型号" name="规格型号@(i)" placeholder="请填写规格型号" /></td>
+                                            <td><input type="text" class="@i" disabled="disabled" value="@Model.物资列表[i].需求计划物资数据.计量单位" name="计量单位@(i)" placeholder="请填写计量单位" /></td>
+                                            <td><input type="text" class="@i" disabled="disabled" value="@Model.物资列表[i].需求计划物资数据.数量" onblur="getSumPrice(this,1)" id="number" name="数量@(i)" placeholder="请填写数量" /></td>
+                                            <td><input type="text" class="@i" disabled="disabled" value="@Model.物资列表[i].需求计划物资数据.单价" onblur="getSumPrice(this,2)" id="price" name="单价@(i)" placeholder="请填写单价" /></td>
+                                            <td><input type="text" class="@i" disabled="disabled" value="@Model.物资列表[i].需求计划物资数据.预算金额" id="sum" name="预算金额@(i)" placeholder="请填写预算金额" /></td>
+                                            <td><input type="text" class="@i" disabled="disabled" value="@Model.物资列表[i].需求计划物资数据.技术指标" name="技术指标@(i)" placeholder="请填写质量技术标准" /></td>
+                                            <td>
+                                                <input type="text" class="@i" disabled="disabled" value="@Model.物资列表[i].需求计划物资数据.交货期限" placeholder="请填写交货期限" name="交货期限@(i)" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd' })" />
+                                            </td>
+                                            <td>
+                                                <select class="@i" disabled="disabled" name="建议采购方式@(i)">
+                                                    @foreach (var item in ways)
+                                                    {
+                                                        if (Model.物资列表[i].需求计划物资数据.建议采购方式 == item.Value)
+                                                        {
+                                                            <option selected="selected" value="@item.Value">@item.Value</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Value">@item.Value</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input class="@i" type="text" disabled="disabled" value="@Model.物资列表[i].需求计划物资数据.备注" name="备注@(i)" style="width:100px;" placeholder="请填写备注" />
+                                                @if (Model.当前处理单位链接.用户ID == Model.需求发起单位链接.用户ID && !Model.审核历史列表.Any() && (!Model.审核历史列表.Any() || Model.审核历史列表.Last().审核状态 == 审核状态.审核未通过))
+                                                {
+                                                    <a name="@Model.物资列表[i].需求计划物资数据.Id" class="deleteBt" onclick="del_tr(this,'material')">×</a>
+
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+
+                                }
+                            }
+
+                        </table>
+                        @if (Model.当前处理单位链接.用户ID == Model.需求发起单位链接.用户ID && !Model.审核历史列表.Any() && (!Model.审核历史列表.Any() || Model.审核历史列表.Last().审核状态 == 审核状态.审核未通过))
+                        {
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr><td align="center" colspan="10" style="border-top:none;"><input class="addbt" id="sbt" onclick="addData('material')" value="新增物资" disabled="disabled" style="width:150px;height:30px;background-color:#808080;" type="button" /><input class="addbt" style="width:150px;height:30px;" id="sbt" onclick="ModifyData(this, '#m_content', 'material')" value="修改" type="button" /></td></tr>
+                            </table>
+                        }
+                    </form>
+                </div>
+                <div class="outContentBox" id="d_content" style="display:none;">
+                    <form action="/单位用户后台/ModifyDisitribution" target="dest" name="distribution" method="post">
+                        <input type="hidden" id="demandId1" name="id" value="@Model.Id" />
+                        <table class="distribution" width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th colspan="10" align="center" style="line-height:50px; font-size:18px;">需求计划分发</th>
+
+                            </tr>
+                            <tr>
+                                <td align="center">序号</td>
+                                <td align="center">物资名称</td>
+                                <td align="center">规格型号</td>
+                                <td align="center">计量单位</td>
+                                <td align="center">收货单位名称</td>
+                                <td align="center">分配数量</td>
+                                <td align="center">提货方式</td>
+                                <td align="center">运输方式</td>
+                                <td align="center">到站</td>
+                                <td align="center">备注</td>
+                            </tr>
+                            @if (Model.分发列表.Any())
+                            {
+                                for (int i = 0; i < Model.分发列表.Count; i++)
+                                {
+                                    string material = "";
+                                    foreach (var item in Model.物资列表)
+                                    {
+                                        if (item.需求计划物资数据 != null && item.需求计划物资数据.物资名称 == Model.分发列表[i].需求计划分发数据.物资名称 && item.需求计划物资数据.规格型号 == Model.分发列表[i].需求计划分发数据.规格型号 && item.需求计划物资数据.计量单位 == Model.分发列表[i].需求计划分发数据.计量单位)
+                                        {
+                                            material += item.需求计划物资数据.物资名称 + "," + item.需求计划物资数据.规格型号;
+                                        }
+                                    }
+                                    if (Model.分发列表[i].需求计划分发数据 != null)
+                                    {
+                                        <tr>
+                                            <td style="width:30px;text-align:center;">
+                                                <span style="color:black;">@(i + 1)</span>
+                                            </td>
+                                            <td><input type="text" id="" disabled="disabled" alt="@Model.分发列表[i].需求计划分发数据.Id" value="@Model.分发列表[i].需求计划分发数据.物资名称" name="物资名称@(i)" placeholder="请填写物资名称" /></td>
+                                            <td><input type="text" disabled="disabled" value="@Model.分发列表[i].需求计划分发数据.规格型号" name="规格型号@(i)" placeholder="请填写规格型号" /></td>
+                                            <td><input type="text" disabled="disabled" value="@Model.分发列表[i].需求计划分发数据.计量单位" name="计量单位@(i)" placeholder="请填写计量单位" /></td>
+                                            <td><input type="text" disabled="disabled" value="@Model.分发列表[i].需求计划分发数据.收货单位名称" name="收货单位名称@(i)" placeholder="请填写收货单位名称" /></td>
+                                            <td><input type="text" disabled="disabled" value="@Model.分发列表[i].需求计划分发数据.分配数量" id="number" name="分配数量@(i)" onkeyup="checkNumber(this)" onfocus="checkNumber(this)" onblur="hideTip(this)" title="@material" placeholder="请填写分配数量" /></td>
+                                            <td>
+                                                <select disabled="disabled" name="提货方式@(i)">
+                                                    @foreach (var item in th)
+                                                    {
+                                                        if (Model.分发列表[i].需求计划分发数据.提货方式.ToString() == item.Value)
+                                                        {
+                                                            <option selected="selected" value="@item.Key">@item.Value</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Key">@item.Value</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select disabled="disabled" name="运输方式@(i)">
+                                                    @foreach (var item in trans)
+                                                    {
+                                                        if (Model.分发列表[i].需求计划分发数据.运输方式.ToString() == item.Value)
+                                                        {
+                                                            <option selected="selected" value="@item.Key">@item.Value</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.Key">@item.Value</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td><input type="text" disabled="disabled" value="@Model.分发列表[i].需求计划分发数据.到站" name="到站@(i)" placeholder="请填写到站" /></td>
+                                            <td>
+                                                <input type="text" disabled="disabled" value="@Model.分发列表[i].需求计划分发数据.备注" name="备注@(i)" style="width:100px;" placeholder="请填写备注" />
+                                                @if (Model.当前处理单位链接.用户ID == Model.需求发起单位链接.用户ID && !Model.审核历史列表.Any() && (!Model.审核历史列表.Any() || Model.审核历史列表.Last().审核状态 == 审核状态.审核未通过))
+                                                {
+                                                    <a name="@Model.分发列表[i].需求计划分发数据.Id" class="deleteBt" onclick="del_tr(this, 'distribution')">×</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
+                            }
+                        </table>
+                        @if (Model.当前处理单位链接.用户ID == Model.需求发起单位链接.用户ID && !Model.审核历史列表.Any() && (!Model.审核历史列表.Any() || Model.审核历史列表.Last().审核状态 == 审核状态.审核未通过))
+                        {
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr><td align="center" style="border-top:none;"><input disabled="disabled" class="addbt" id="sbt" style="background-color:#808080;width:150px;" onclick="addData('distribute')" value="新增分发" style="width:150px;height:30px;" type="button" /><input class="addbt" id="sbt" onclick="ModifyData(this, '#d_content', 'distribution')" value="修改" style="width:150px;height:30px;" type="button" /></td></tr>
+                            </table>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var titles = "";//计算所有物资
+    var material = "";//物资模板
+    var distribute = "";//分发模板
+    function getSumPrice(obj, type) {//自动计算预算金额
+        var re = /^[0-9]*[1-9][0-9]*$/;
+        var id = "";
+        if (type == "1") {
+            var number1 = $(obj).val();
+            var number2 = $(obj).parent("td").next("td").children(":input").val();
+            if (number1 != "" && number2 != "" && re.test(parseFloat(number1)) && re.test(parseFloat(number2))) {
+                $(obj).parent("td").next("td").next("td").children(":input").val(parseFloat(number1) * parseFloat(number2));
+            }
+        }
+        else {
+            var number1 = $(obj).val();
+            var number2 = $(obj).parent("td").prev("td").children(":input").val();
+            if (number1 != "" && number2 != "" && re.test(parseFloat(number1)) && re.test(parseFloat(number2))) {
+                $(obj).parent("td").next("td").children(":input").val(parseFloat(number1) * parseFloat(number2));
+            }
+        }
+    }
+    $(document).ready(function () {
+        $("div.Page5").addClass("on");
+        material = $("table#hidemodel1 tr:eq(0)").html();
+        distribute = $("table#hidemodel tr:eq(0)").html();
+        resetVal();
+    });
+    function resetVal()//重新设置titles的值
+    {
+        var trCount = $("table.material tr").length;
+        titles = "";
+        for (var i = 0; i < trCount - 2; i++) {
+            titles += $("table.material :input[name='物资名称" + i + "']").val() + "," + $("table.material :input[name='规格型号" + i + "']").val() + "," + $("table.material :input[name='计量单位" + i + "']").val() + "," + $("table.material :input[name='数量" + i + "']").val() + "|";
+        }
+    }
+    function showBox(th) {
+        $(th).show();
+    }
+    var reg = /^\d{0,8}\.{0,1}\d{0,9}?$/;
+    function checkFormat(th) {
+        var str = $(th).val();
+        if (!reg.test(str)) {
+            alert("输入不正确！");
+            $(th).focus();
+        }
+    }
+    function ModifyData(th, str, fm) {
+        if ($(th).val() == "修改") {
+            $(str).find(":input").removeAttr("disabled");
+            $(th).prev(":input[type='button']").css("background-color", "#207AD6");
+            $(th).val("保存");
+        }
+        else {
+            if (fm == "distribution" || fm == "material") {
+                var trCount = $("table." + fm + " tr").length - 2;
+                for (var i = 0; i < trCount; i++) {
+                    $("table." + fm + " :input[name='物资名称" + i + "']").val($("table." + fm + " :input[name='物资名称" + i + "']").attr("alt") + "|" + $("table." + fm + " :input[name='物资名称" + i + "']").val());
+                }
+
+            }
+            document.forms[fm].submit();
+            if (fm == "distribution" || fm == "material") {
+                var trCount = $("table." + fm + " tr").length - 2;
+                for (var i = 0; i < trCount; i++) {
+                    $("table." + fm + " :input[name='物资名称" + i + "']").val($("table." + fm + " :input[name='物资名称" + i + "']").val().split('|')[1]);
+                }
+
+            }
+            $("outContentBox").find(":input").attr("disabled", "disabled");
+        }
+    }
+    function addDemand(a, str, form) {
+        if (form == "demand") {
+            var complete = true;
+            for (var i = 0; i < $("table.plan tr:eq(2) td").length; i++) {
+                if ($("table.plan tr:eq(2) td:eq(" + i + ") :input").val() == "") {
+                    complete = false;
+                    break;
+                }
+            }
+            if (!complete) {
+                alert("请将需求计划信息填写完整！");
+            }
+            else {
+                $("#tabHeader a").css("background-color", "#207AD6");
+                $("#tabHeader a:eq(" + a + ")").css("background-color", "#D67C24");
+                $("#container div.outContentbox").hide();
+                $(str).show();
+                document.forms[form].submit();
+            }
+        }
+        else if (form == "material") {
+            titles = "";
+            if ($("#demandId").val() == "") {
+                alert("请先添加需求计划！");
+            }
+            else {
+                var allComplete = true;
+                var trCount = $("table.material tr").length;//计算物资表格行数
+                var trCount1 = $("table.distribution tr").length;//计算分发表格行数
+                for (var i = 0; i < trCount - 2; i++) {
+                    if ($("table.material :input[name='物资名称" + i + "']").val() == "" || $("table.material :input[name='规格型号" + i + "']").val() == "" || $("table.material :input[name='计量单位" + i + "']").val() == "") {
+                        allComplete = false;
+                    }
+                }
+                if (!allComplete) {
+                    alert("您还有物资没有填写完整！");
+                }
+                else {
+                    $("#tabHeader a").css("background-color", "#207AD6");
+                    $("#tabHeader a:eq(" + a + ")").css("background-color", "#D67C24");
+                    $("#container div").hide();
+                    $(str).show();
+                    if (trCount1 > 3) {
+                        for (var j = trCount1 - 1; j >= 3; j--) {
+                            $("table.distribution tr:eq(" + j + ")").remove();
+                        }
+                    }
+                    $("#summary").html("(您已添加了" + (trCount - 2) + "项物资，请点击新增分发按钮按物资顺序添加分发！)");
+                    for (var j = 2; j < trCount; j++) {
+                        titles += $("table.material :input[name='物资名称" + (j - 2) + "']").val() + "," + $("table.material :input[name='规格型号" + (j - 2) + "']").val() + "," + $("table.material :input[name='计量单位" + (j - 2) + "']").val() + "," + $("table.material :input[name='数量" + (j - 2) + "']").val() + "|";
+                    }
+                    addData("distribute");
+                }
+            }
+        }
+        else if (form == "distribute") {
+            var m_remain = "<table id='remainM' width='95%' cellpadding='0' cellspacing='0' style='line-height:25px;margin:0px auto;'>";
+            if ($("#demandId1").val() == "") {
+                alert("请先添加需求计划！");
+            }
+            else {
+                if (titles != "") {
+                    var index = 1;
+                    var trCount = $("table.distribution tr").length;
+                    for (var i = 0; i < titles.split('|').length - 1; i++) {
+                        var name = titles.split('|')[i].split(',')[0];
+                        var type = titles.split('|')[i].split(',')[1];
+                        var unit = titles.split('|')[i].split(',')[2];
+                        var allcount = parseFloat(titles.split('|')[i].split(',')[3]);
+                        var sum = 0;
+                        for (var j = 0; j < trCount - 2; j++) {
+                            if ($("table.distribution :input[name='物资名称" + j + "']").val() == name && $("table.distribution :input[name='规格型号" + j + "']").val() == type && $("table.distribution :input[name='计量单位" + j + "']").val() == unit) {
+                                if ($("table.distribution :input[name='分配数量" + j + "']").val() == "") {
+                                    sum += 0;
+                                }
+                                else {
+                                    sum += parseFloat($("table.distribution :input[name='分配数量" + j + "']").val());
+                                }
+                            }
+                        }
+                        if (sum < allcount) {
+                            $("#topHeader").text("还有以下物资没有分发完：");
+                            m_remain += "<tr><td>" + index + "、</td><td>物资名称：" + titles.split('|')[i].split(',')[0] + "</td><td>规格型号：" + titles.split('|')[i].split(',')[1] + "</td><td>计量单位：" + titles.split('|')[i].split(',')[2] + "</td><td>剩余分配量：" + (allcount - sum) + "</td><tr/>";
+                            index++;
+                        }
+                        else {
+                            $("#topHeader").text("所有物资已分发完成！");
+                        }
+                    }
+                    m_remain += "<tr><td colspan='5' style='color:red;'>点击确定按钮提交本次需求，点击取消继续完成需求计划项目。</td></tr>";
+                    m_remain + "</table>";
+                }
+                $("#remain_m").html(m_remain);
+                if ($("#remainM tr").length != 0) {
+                    $("#pdf2").show();
+                }
+                else {
+                    document.forms["material"].submit();
+                }
+            }
+        }
+    }
+    function addDistribute() {
+        document.forms["distribute"].submit();
+    }
+    function addData(s) {
+        if (s == "material") {
+            $("table.material").append("<tr>" + material + "</tr>");
+            var counter = 0;
+            for (var i = 2; i < $("table.material tr").length; i++) {
+                for (var j = 0; j < $("table.material tr:eq(" + i + ") td").length; j++) {
+                    if (j == 0) {
+                        $("table.material tr:eq(" + i + ") td:eq(" + j + ") span").text((counter + 1));
+                    }
+                    else {
+                        var str = $("table.material tr:eq(" + i + ") td:eq(" + j + ") :input").attr("name");
+                        $("table.material tr:eq(" + i + ") td:eq(" + j + ") :input").attr("name", str.replace(/[0-9]{1,100}/g, counter));
+                    }
+                }
+                counter++;
+            }
+        }
+        else {
+            var lastSum = 0;
+            var isComplete = true;//分配数量是否填写完整
+            var index = -1;//titles中的索引
+            var remainName = "";//剩下的物资名称
+            var remainType = "";//剩下的物资规格型号
+            var remainUnit = "";//剩下的物资计量单位
+            var trCount = $("table.distribution tr").length;//分发列表的行数;
+            if ($("table.distribution :input[name='物资名称0']").val() == "") {
+                $("table.distribution :input[name='物资名称0']").val($("table.material :input[name='物资名称0']").val());
+                $("table.distribution :input[name='规格型号0']").val($("table.material :input[name='规格型号0']").val());
+                $("table.distribution :input[name='计量单位0']").val($("table.material :input[name='计量单位0']").val());
+                $("table.distribution :input[name='分配数量0']").attr("title", $("table.material :input[name='物资名称0']").val() + "," + $("table.material :input[name='规格型号0']").val());
+                if (titles == "") {
+                    alert("请先添加物资!");
+                }
+            }
+            else {
+                if (titles != "") {
+                    for (var i = 0; i < trCount - 2; i++) {
+                        if ($(".distribution :input[name='分配数量" + i + "']").val() == "" || !reg.test($(".distribution :input[name='分配数量" + i + "']").val())) {
+                            alert("请填写分配数量！");
+                            $(".distribution :input[name='分配数量" + i + "']").focus();
+                            isComplete = false;
+                            break;
+                        }
+                    }
+                    if (isComplete) {
+                        for (var i = 0; i < titles.split('|').length - 1; i++) {
+                            var name = titles.split('|')[i].split(',')[0];
+                            var type = titles.split('|')[i].split(',')[1];
+                            var unit = titles.split('|')[i].split(',')[2];
+                            var number = parseFloat(titles.split('|')[i].split(',')[3]);
+                            var sum = 0;
+                            for (var j = 2; j < trCount; j++) {
+                                var name1 = $("table.distribution :input[name='物资名称" + (j - 2) + "']").val();
+                                var type1 = $("table.distribution :input[name='规格型号" + (j - 2) + "']").val();
+                                if (name1 == name && type == type1) {
+                                    sum += parseFloat($("table.distribution :input[name='分配数量" + (j - 2) + "']").val());
+                                }
+                            }
+                            if (sum < number) {
+                                remainName = name;
+                                remainType = type;
+                                remainUnit = unit;
+                                index = i;
+                                break;
+                            }
+                            if (sum == number && index == -1) {
+                                lastSum = sum;
+                            }
+                        }
+                    }
+                }
+                if (index != -1) {
+                    if (isComplete) {
+                        $("table.distribution").append($("table#hidemodel").html());
+                        var newIndex = -1;//记录新插入行的索引
+                        var newCount = $("table.distribution tr").length;//添加并计算行数
+                        var counter = 0;
+                        for (var i = 2; i < newCount ; i++) {
+                            for (var j = 0; j < $("table.distribution tr:eq(" + i + ") td").length; j++) {
+                                if (j == 0) {
+                                    $("table.distribution tr:eq(" + i + ") td:eq(" + j + ") span").text((counter + 1));
+                                }
+                                else {
+                                    var str = $("table.distribution tr:eq(" + i + ") td:eq(" + j + ") :input").attr("name");
+                                    $("table.distribution tr:eq(" + i + ") td:eq(" + j + ") :input").attr("name", str.replace(/[0-9]{1,100}/g, counter));
+                                }
+                            }
+                            counter++;
+                        }
+                        $("table.distribution :input[name='物资名称" + (newCount - 3) + "']").val(remainName);
+                        $("table.distribution :input[name='规格型号" + (newCount - 3) + "']").val(remainType);
+                        $("table.distribution :input[name='计量单位" + (newCount - 3) + "']").val(remainUnit);
+                        $("table.distribution :input[name='分配数量" + (newCount - 3) + "']").attr("title", remainName + "," + remainType);
+                        for (var i = 2; i < newCount ; i++) {
+                            if (i != newCount - 1) {
+                                if ($("table.distribution :input[name='分配数量" + (newCount - 3) + "']").attr("title").split(',')[0] == $("table.distribution :input[name='分配数量" + (i - 2) + "']").attr("title").split(',')[0] && $("table.distribution :input[name='分配数量" + (newCount - 3) + "']").attr("title").split(',')[1] == $("table.distribution :input[name='分配数量" + (i - 2) + "']").attr("title").split(',')[1] && (($("table.distribution :input[name='分配数量" + (newCount - 3) + "']").attr("title").split(',')[0] == $("table.distribution :input[name='分配数量" + (i - 1) + "']").attr("title").split(',')[0] || $("table.distribution :input[name='分配数量" + (newCount - 3) + "']").attr("title").split(',')[0] != $("table.distribution :input[name='分配数量" + (i - 1) + "']").attr("title").split(',')[0]) && $("table.distribution :input[name='分配数量" + (newCount - 3) + "']").attr("title").split(',')[1] != $("table.distribution :input[name='分配数量" + (i - 1) + "']").attr("title").split(',')[1])) {
+                                    $("table.distribution tr:eq(" + (newCount - 1) + ")").insertAfter($("table.distribution tr:eq(" + i + ")"));
+                                    newIndex = i + 1;
+                                    break;
+                                }
+                            }
+                            else {
+                                newIndex = newCount - 1;
+                            }
+                        }
+                        var counter = 0;
+                        for (var i = 2; i < newCount ; i++) {
+                            for (var j = 0; j < $("table.distribution tr:eq(" + i + ") td").length; j++) {
+                                if (j == 0) {
+                                    $("table.distribution tr:eq(" + i + ") td:eq(" + j + ") span").text((counter + 1));
+                                }
+                                else {
+                                    var str = $("table.distribution tr:eq(" + i + ") td:eq(" + j + ") :input").attr("name");
+                                    $("table.distribution tr:eq(" + i + ") td:eq(" + j + ") :input").attr("name", str.replace(/[0-9]{1,100}/g, counter));
+                                }
+                            }
+                            counter++;
+                        }
+                        $("table.distribution :input[name='分配数量" + (newIndex - 2) + "']").focus();
+                    }
+                }
+                else if (index == -1 && lastSum != 0) {
+                    alert("所有物资都已分发完！");
+                }
+            }
+        }
+    }
+    function deltr(th, str) {
+        $(th).parent("td").parent("tr").remove();
+        if (str == "material") {
+            var counter = 0;
+            for (var i = 2; i < $("table.material tr").length; i++) {
+                for (var j = 0; j < $("table.material tr:eq(" + i + ") td").length; j++) {
+                    if (j == 0) {
+                        $("table.material tr:eq(" + i + ") td:eq(" + j + ") span").text((counter + 1));
+                    }
+                    else {
+                        var str = $("table.material tr:eq(" + i + ") td:eq(" + j + ") :input").attr("name");
+                        $("table.material tr:eq(" + i + ") td:eq(" + j + ") :input").attr("name", str.replace(/[0-9]{1,100}/g, counter));
+                    }
+                }
+                counter++;
+            }
+        }
+        else {
+            //重新排序索引
+            var counter = 0;
+            for (var i = 2; i < $("table.distribution tr").length ; i++) {
+                for (var j = 0; j < $("table.distribution tr:eq(" + i + ") td").length; j++) {
+                    if (j == 0) {
+                        $("table.distribution tr:eq(" + i + ") td:eq(" + j + ") span").text((counter + 1));
+                    }
+                    else {
+                        var str = $("table.distribution tr:eq(" + i + ") td:eq(" + j + ") :input").attr("name");
+                        $("table.distribution tr:eq(" + i + ") td:eq(" + j + ") :input").attr("name", str.replace(/[0-9]{1,100}/g, counter));
+                    }
+                }
+                counter++;
+            }
+        }
+    }
+    function checkNumber(th) {
+        if (titles != "") {
+            var sum = 0;
+            var name = $(th).attr("title").split(',')[0];
+            var type = $(th).attr("title").split(',')[1];
+            for (var i = 0; i < $("table.distribution tr").length - 2; i++) {
+                if ($("table.distribution :input[name='物资名称" + i + "']").val() == name && $("table.distribution :input[name='规格型号" + i + "']").val() == type) {
+                    if ($("table.distribution :input[name='分配数量" + i + "']").val() == "" || !reg.test($("table.distribution :input[name='分配数量" + i + "']").val())) {
+                        sum += 0;
+                    }
+                    else {
+                        sum += parseFloat($("table.distribution :input[name='分配数量" + i + "']").val());
+                    }
+                }
+            }
+            for (var i = 0; i < titles.split('|').length - 1; i++) {
+                if (titles.split('|')[i].split(',')[0] == name && titles.split('|')[i].split(',')[1] == type) {
+                    mSum = parseFloat(titles.split('|')[i].split(',')[3]);
+                    if (sum <= mSum) {
+                        if ($("div.outbox_tip").length == 0) {
+                            $(th).parent("td").append("<div class='outbox_tip'><div class='arrow'></div><div class='content_box'>物资名称：" + name + "<br/>规格型号：" + type + "<br/>物资总数：" + mSum + "<br/>剩余分发量：" + (mSum - sum) + "</div></div>");
+                        }
+                        else {
+                            $(th).parent("td").find("div.content_box").html("物资名称：" + name + "<br/>规格型号：" + type + "<br/>物资总数：" + mSum + "<br/>剩余分发量：" + (mSum - sum));
+                        }
+                    }
+                    else {
+                        if ($("div.outbox_tip").length == 0) {
+                            $(th).parent("td").append("<div class='outbox_tip'><div class='arrow'></div><div class='content_box'>分发量已超过物资总数！</div></div>");
+                        }
+                        else {
+                            $(th).parent("td").find("div.content_box").html("分发量已超过物资总数！");
+                        }
+                        $(th).val("0");
+                    }
+                }
+            }
+        }
+        else {
+            alert("请先添加物资！");
+        }
+    }
+    $("div#tabHeader a").click(function () {
+        var id = $(this).attr("href");
+        $("#tabHeader a").css("background-color", "#207AD6");
+        $(this).css("background-color", "#D67C24");
+        $("#container div").hide();
+        $(id).show();
+    });
+    function hidebox(th) {
+        $(th).hide();
+    }
+    function showNotice(th) {
+        $(th).next("div.notice").show();
+    }
+    function checkTime(th, str) {
+        if (str == 1) {
+            var date = new Date();
+            var cur_t = date.getFullYear();
+            var t = parseInt($(th).val());
+            if (t < cur_t) {
+                alert("采购时间不能在当前时间之前！");
+                $(th).val("");
+            }
+        }
+        else {
+            var p_year = parseInt($(":input[name='采购年度']").val());
+            var e_year = parseInt($(th).val().split('/')[0]);
+            if (e_year < p_year) {
+                alert("建议完成时间必须大于或等与采购年度！");
+                $(th).val("");
+            }
+        }
+    }
+    function del_tr(th, str) {
+        $.get("/单位用户后台/del_M_D", { id: $(th).attr("name"), s: str }, function (data) {
+            if (data == 1) {
+                deltr(th, str);
+            }
+            else {
+                alert("删除失败！请重新尝试删除。");
+            }
+        });
+    }
+    function hideNotice(th) {
+        $(th).next("div.notice").hide();
+    }
+    function hideTip(th) {
+        if ($("div.outbox_tip").length != 0) {
+            $("div.outbox_tip").remove();
+        }
+    }
+    function checkSame(th) {
+        var attr = parseInt($(th).attr("class"));
+        var name = $(":input[name='物资名称" + attr + "']").val();
+        var type = $(":input[name='规格型号" + attr + "']").val();
+        var trCount = $("table.material tr").length;
+        if (trCount > 3) {
+            if (name != "" && type != "") {
+                for (var i = 0; i < trCount - 2; i++) {
+                    var name1 = $("table.material :input[name='物资名称" + i + "']").val();
+                    var type1 = $("table.material :input[name='规格型号" + i + "']").val();
+                    if (attr != i) {
+                        if (name1 == name && type1 == type) {
+                            alert("请将物资名称相同以及规格型号相同的物资作为一项物资填写！");
+                            $(th).val("");
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>

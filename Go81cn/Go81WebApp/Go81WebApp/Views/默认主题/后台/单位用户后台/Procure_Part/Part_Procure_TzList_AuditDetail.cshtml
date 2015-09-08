@@ -1,0 +1,67 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.通知
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <link rel="stylesheet" href="~/css/index.css" type="text/css">
+
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">通知详情</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_xttz_contentbox">
+            <div class="gys_xttz_contentbox_news_title">@Html.DisplayFor(model => model.内容主体.标题)</div>
+
+            <div class="gys_xttz_contentbox_news_from">
+                @if (Model.通知来源 != null)
+                {
+                    if (!string.IsNullOrEmpty(Model.通知来源.来源名称))
+                    {
+                        <span style="padding:0 10px 0 10px;">来源:<a target="_blank" title="@Model.通知来源.来源链接" href="@Model.通知来源.来源链接">@Model.通知来源.来源名称</a></span>
+                    }
+                }
+                <span style="padding:0 10px 0 10px;">时间:@Model.内容主体.发布时间.ToString("yyyy-MM-dd")</span>
+            </div>
+            <div class="gys_xttz_contentbox_news_text">
+                @Html.Raw(Model.内容主体.内容)
+            </div>
+            @if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
+            {
+                <div class="showattachment">附件列表:</div>
+                <div class="showattachment_list">
+
+                    @foreach (var item in Model.内容主体.附件)
+                    {
+                        var a = "//";
+                        <a href="@item" target="_blank">@item.Substring(item.IndexOf(a) + 2)</a><br />
+                    }
+
+                </div>
+            }
+
+            <div class="procure_adaduditdiv">
+                <input type="hidden" name="reason" id="reason" />
+                <input type="submit" value="审核通过" name="action" class="front_login_rightbox_button" style="width:200px;">
+                <input type="submit" value="审核不通过" name="action" class="front_login_rightbox_button" style="width:200px;" onclick="return  getreason();">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("#审核通知").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#审核通知").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+
+        function getreason() {
+            var reason = prompt("请输入审核不通过原因", "");
+            if (reason == null || reason == "" || $.trim(reason) == "") {
+                alert("原因必须填写！");
+                return false;
+            } else {
+                $("#reason").val(reason);
+            }
+        }
+    </script>
+}

@@ -1,0 +1,29 @@
+﻿<link rel="stylesheet" href="~/css/index.css" type="text/css">
+
+<div class="gys_xttz_box">
+    <div class="gys_xttz_topbox">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">系统通知</div>
+        </div>
+    </div>
+    <div class="gys_xttz_contentbox">
+        <ul>
+            @foreach (var item in ViewData["通知管理"] as IEnumerable<Go81WebApp.Models.数据模型.内容数据模型.通知>)
+            {
+                <li><span>@item.基本数据.添加时间.ToString("yyyy.MM.dd")</span><a href="~/单位用户后台/Xttz_Detail?id=@item.Id">@item.内容主体.标题</a></li>
+            }
+        </ul>
+    </div>
+</div>
+@if (ViewData["listcount"].ToString() != "0")
+{
+    <div class="gys_znxx_content_detailbox">
+        @Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString()))
+    </div>
+}
+else
+{
+    <div class="gys_znxx_content_detailbox">
+        暂无信息
+    </div>
+}

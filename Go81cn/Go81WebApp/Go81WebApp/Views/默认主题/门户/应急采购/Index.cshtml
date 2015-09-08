@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "应急采购-首页";
+}
+<style type="text/css">
+.yjcg{
+    background: #207AD6;
+    font-size: 24px;
+    width: 300px;
+    line-height: 80px;
+    margin: 30px auto;
+    text-align: center;
+}
+.yjcg a{
+    color:#fff;
+}
+</style>
+<div style="height:auto; overflow:hidden; margin-bottom:5px; ">
+    <div class="yjcg"><a href="/应急采购/Home">应急供应商查询</a></div>
+    <div class="yjcg"><a href="/单位用户后台/demandlist">需求计划提报</a></div>
+    <div class="yjcg"><a href="/单位用户后台/Onlinebidding_add">网上竞价管理</a></div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".action_link").each(function () {
+            if ($(this).text() == "应急采购") {
+                $(this).parent("div").addClass("on");
+            }
+        });
+    });
+</script>

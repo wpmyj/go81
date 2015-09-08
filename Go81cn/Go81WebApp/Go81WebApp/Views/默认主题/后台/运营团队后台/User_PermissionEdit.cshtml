@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "权限编辑";
+    Layout = "_BackLayout.cshtml";
+}
+@using Go81WebApp.Models.数据模型.权限数据模型
+@model Go81WebApp.Models.数据模型.用户数据模型.用户基本数据
+<style type="text/css">
+    .emunlist {
+        width: 180px;
+        height: 30px;
+        float: left;
+        padding: 10px;
+    }
+
+        .emunlist input {
+            width: 15px;
+            height: 15px;
+        }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="bg_outdiv">
+        <div class="bg_outdiv_left">
+            @Html.Action("LeftMenu", "布局")
+        </div>
+        <div class="bg_outdiv_right">
+            <style>
+                table {
+                    background-color: rgb(206, 206, 206);
+                    border-collapse: separate;
+                }
+
+                table tr td {
+                    background-color: rgb(248, 248, 248);
+                }
+
+                table tr:hover td {
+                    background-color: white;
+                }
+            </style>
+            <div class="title-base-out">
+                <div class="title-base-middle">
+                    <div class="title-base-inner">用户权限编辑</div>
+                </div>
+            </div>
+            <div class="gys_znxx_box">
+                <div style="font-size: 14px;" id="tb1">
+                    <table width="99%" style="margin: 5px;" cellpadding="15" cellspacing="1">
+                        <tr>
+                            <td align="right" width="20%">用户编号：</td>
+                            <td width="80%">@Model.Id</td>
+                        </tr>
+                        <tr>
+                            <td align="right" width="20%">昵称：</td>
+                            <td width="80%">@Model.登录信息.登录名</td>
+                        </tr>
+                        <tr>
+                            <td align="right" width="20%">类别：</td>
+                            <td width="80%">@Model.用户类型</td>
+                        </tr>
+                        <tr>
+                            <td align="right" width="20%">权限：</td>
+                            <td width="80%">
+                                角色：
+                                <div style="padding-left: 50px; width: 600px; height: auto; overflow: hidden;">
+                                    @foreach (var item in (IEnumerable<角色>) ViewData["角色列表"])
+                                    {
+
+                                        var str = "用户组列表：";
+                                        if (item.包含用户组 != null)
+                                        {
+                                            foreach (var it in item.包含用户组)
+                                            {
+                                                str += it + ",";
+                                            }
+                                        }
+                                        <div class="emunlist">
+                                            @if (Model.角色.Contains(@item.角色名))
+                                            {
+                                                <input type="checkbox" checked="checked" title="@str" name="rolelist" value="@item.角色名" />
+                                                @item.角色名
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" title="@str" name="rolelist" value="@item.角色名" />
+                                                @item.角色名
+                                            }
+                                        </div>
+                                    }
+                                    <input type="hidden" id="roleparm" name="roleparm" />
+                                    <input type="hidden" id="usergroupparm" name="usergroupparm" />
+                                    <input type="hidden" id="userid" name="userid" value="@Model.Id" />
+                                </div>
+                                <br />
+                                用户组：
+                                <div style="padding-left: 50px; width: 600px; height: auto; overflow: hidden;">
+                                    @foreach (var item in (IEnumerable<用户组>) ViewData["用户组集合"])
+                                    {
+
+                                        var str = "权限列表：";
+                                        if (item.权限列表 != null)
+                                        {
+                                            foreach (var it in item.权限列表)
+                                            {
+                                                str += it + ",";
+                                            }
+                                        }
+                                        <div class="emunlist">
+                                            @if (Model.用户组.Contains(item.用户组名))
+                                            {
+                                                <input type="checkbox" checked="checked" id="@item.用户组名" title="@str" name="usergrouplist" value="@item.用户组名" />
+                                                @item.用户组名
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" id="@item.用户组名" title="@str" name="usergrouplist" value="@item.用户组名" />
+                                                @item.用户组名
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="text-align: center;"><input id="addbutton" name="addbutton" type="submit" @*onclick="return checkcontent();"*@ style="margin-top: 20px;" class="front_login_rightbox_button" value="确定"></div>
+                    <script type="text/javascript">
+                        $("#addbutton").click(function() {
+                            var rolestr = "";
+                            var usergroupstr = "";
+
+                            var rolediv = document.getElementsByName("rolelist");
+                            var usergroupdiv = document.getElementsByName("usergrouplist");
+                            for (var i = 0; i < rolediv.length; i++) {
+                                if (rolediv[i].type == "checkbox" && rolediv[i].checked) {
+                                    rolestr += rolediv[i].value + ",";
+                                }
+                            }
+                                     
+                            for (var j = 0; j < usergroupdiv.length; j++) {
+                                if (usergroupdiv[j].type == "checkbox" && usergroupdiv[j].checked) {
+                                    usergroupstr += usergroupdiv[j].value + ",";
+                                }
+                            }
+
+                            $("#roleparm").val(rolestr);
+                            $("#usergroupparm").val(usergroupstr);
+
+
+                            // document.getElementById("permissionstr").value = selectcontent;
+                        });
+                        $(document).ready(function () {
+                            $("#用户列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+                            $("#用户列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+}

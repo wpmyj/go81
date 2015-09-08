@@ -1,0 +1,409 @@
+﻿@model Go81WebApp.Models.数据模型.酒店
+@{
+    ViewBag.Title = "供应商后台";
+    Layout = "_BackLayout.cshtml";
+}
+<script src="~/JS/provinceandcity_all.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+<script type="text/javascript" src="~/JS/baiduMap.js"></script>
+<script type="text/javascript" src="~/JS/jquery-2.0.3.min.js"></script>
+<link href="~/css/hotelandticket.css" rel="stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<style type="text/css">
+.add_hotel table{ margin-top:30px;}
+.add_hotel table tr td.align{text-align:right;width:150px;font-size:14px;}
+.add_hotel table tr{ line-height:30px;}
+.add_hotel table tr td input[type="checkbox"]{ vertical-align:middle;}
+.add_hotel table tr td textarea{width:635px;height:80px;}
+.add_hotel table tr td.wid{width:305px;}
+.add_hotel table tr td.wid span{color:red;font-size:12px;}
+#piclist{ width:642px;margin:0;padding:0;}
+#piclist li{ float:left;position:relative;padding:5px;}
+#piclist li img{ width:118px; height:75px;}
+#piclist li span{ position:absolute; top:0px;right:5px;line-height:normal}
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="gys_znxx_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">酒店信息管理</div>
+            </div>
+        </div>
+        <div class="add_hotel">
+            @using (Html.BeginForm("EditHotel", "供应商后台", FormMethod.Post))
+            {
+                Html.AntiForgeryToken();
+                <input type="hidden" id="hidid" value="@Model.Id"/>
+                <table>
+                    <tr>
+                        @Html.HiddenFor(model => model.Id)
+                        <td class="align">酒店名称：</td>
+                        <td class="wid">
+                            @Html.EditorFor(model => model.酒店基本信息.酒店名)
+                            <div class="out_box">
+                                <div class="arrow"></div>
+                                <div class="con_box">请填写酒店名称</div>
+                            </div>
+                            <span style="color:red">*</span>
+                            @Html.ValidationMessageFor(model=>model.酒店基本信息.酒店名)
+                        </td>
+                        <td class="align">所在地址：</td>
+                        <td class="wid">
+                            @Html.EditorFor(model => model.酒店基本信息.地址)
+                            <div class="out_box">
+                                <div class="arrow"></div>
+                                <div class="con_box">请填写酒店所在地址，如成都市青羊区长顺街33号</div>
+                            </div>
+                            <span style="color:red">*</span>
+                            @Html.ValidationMessageFor(model => model.酒店基本信息.地址)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align">所属商圈：</td>
+                        <td class="wid">
+                            @Html.EditorFor(model => model.酒店基本信息.所属商圈)
+                            <div class="out_box">
+                                <div class="arrow"></div>
+                                <div class="con_box">请填写酒店所在商圈</div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.酒店基本信息.所属商圈)
+                        </td>
+                        <td class="align">联系电话：</td>
+                        <td class="wid">
+                            @Html.EditorFor(model => model.酒店基本信息.联系电话)
+                            <div class="out_box">
+                                <div class="arrow"></div>
+                                <div class="con_box">请填写酒店的联系电话</div>
+                            </div>
+                            <span style="color:red">*</span>
+                            @Html.ValidationMessageFor(model => model.酒店基本信息.联系电话)
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="align">所属地域：</td>
+                        <td class="wid">
+                            @Html.HiddenFor(model => model.酒店基本信息.所属地域.省份, new { id = "provence" })
+                            @Html.HiddenFor(model => model.酒店基本信息.所属地域.城市, new { id = "city" })
+                            @Html.HiddenFor(model => model.酒店基本信息.所属地域.区县, new { id = "area" })
+                            <select id="deliverprovince" name="deliverprovince" style="width:95px;"></select>
+                            <select id="delivercity" name="delivercity" style="width:95px;"></select>
+                            <select id="deliverarea" name="deliverarea" style="width:95px;"></select>
+                            <script>
+                                window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea", "@Model.酒店基本信息.所属地域.省份", "@Model.酒店基本信息.所属地域.城市", "@Model.酒店基本信息.所属地域.区县"); }
+                            </script>
+                        </td>
+                        <td class="align">地理位置：</td>
+                        <td class="wid">
+                            <input type="hidden" id="localtion" name="localtion" />
+                            <input id="loc_gys" class="marker" type="button" />
+                            <div class="out_box">
+                                <div class="arrow"></div>
+                                <div class="con_box">点击此按钮，在地图上标注您的酒店位置</div>
+                            </div>
+                            <a style="margin-left:0px;display:none;float:none;font-size:12px;border:1px solid #CCC" id="showloc"></a>
+                            <div class="loc_div_out">
+                                <div class="close_div">×</div>
+                                <div class="modal_m">
+                                    <div class="loc_ing" id="loc_ing"></div>
+                                    <div id="HotelLoc" class="loc_div"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align">免费Wifi：</td>
+                        <td>
+                            @Html.CheckBoxFor(model => model.酒店基本信息.Wifi)
+                            <label style="font-size:12px;color:#7A7A7A">注：如果提供免费Wifi，请勾选此项，否则不勾选</label>
+                        </td>
+                        <td class="align">免费停车场：</td>
+                        <td>
+                            @Html.CheckBoxFor(model => model.酒店基本信息.免费停车场)
+                            <label style="font-size:12px;color:#7A7A7A">注：如果提供免费停车场，请勾选此项，否则不勾选</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align" valign="top">入住和离店时间：</td>
+                        <td class="wid" colspan="3">
+                            @Html.EditorFor(model => model.酒店基本信息.入住和离店时间)
+                            <div class="out_box">
+                                <div class="arrow"></div>
+                                <div class="con_box">请填写酒店的入住和离店时间安排，如入住时间：14:00以后  离店时间：12:00以前</div>
+                            </div>
+                            <span style="color:red">*</span>
+                            @Html.ValidationMessageFor(model => model.酒店基本信息.入住和离店时间)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align" valign="top">酒店服务：</td>
+                        <td colspan="3" style="font-size:12px;">
+                            @Html.CheckBoxFor(model => model.酒店服务.行李寄存)行李寄存
+                            @Html.CheckBoxFor(model => model.酒店服务.叫醒服务)叫醒服务
+                            @Html.CheckBoxFor(model => model.酒店服务.接待外宾)接待外宾
+                            @Html.CheckBoxFor(model => model.酒店服务.接机服务)接机服务
+                            @Html.CheckBoxFor(model => model.酒店服务.接站服务)接站服务
+                            @Html.CheckBoxFor(model => model.酒店服务.洗衣服务)洗衣服务
+                            @Html.CheckBoxFor(model => model.酒店服务.携带宠物)携带宠物
+                            @Html.CheckBoxFor(model => model.酒店服务.租车)租车
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align" valign="top">酒店设施：</td>
+                        <td colspan="3" style="font-size:12px;">
+                            @Html.CheckBoxFor(model => model.酒店设施.SPA)SPA
+                            @Html.CheckBoxFor(model => model.酒店设施.残疾人设施)残疾人设施
+                            @Html.CheckBoxFor(model => model.酒店设施.会议室)会议室
+                            @Html.CheckBoxFor(model => model.酒店设施.健身房)健身房
+                            @Html.CheckBoxFor(model => model.酒店设施.棋牌)棋牌
+                            @Html.CheckBoxFor(model => model.酒店设施.桑拿)桑拿
+                            @Html.CheckBoxFor(model => model.酒店设施.商务中心)商务中心
+                            @Html.CheckBoxFor(model => model.酒店设施.室内游泳池)室内游泳池
+                            @Html.CheckBoxFor(model => model.酒店设施.室外游泳池)室外游泳池
+                            @Html.CheckBoxFor(model => model.酒店设施.温泉)温泉
+                            @Html.CheckBoxFor(model => model.酒店设施.无烟房)无烟房
+                            @Html.CheckBoxFor(model => model.酒店设施.西式餐厅)西式餐厅
+                            @Html.CheckBoxFor(model => model.酒店设施.中式餐厅)中式餐厅
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align" valign="top">交通信息：</td>
+                        <td class="wid" colspan="3">
+                            @Html.TextAreaFor(model => model.酒店基本信息.交通信息)
+                            <div class="out_box">
+                                <div class="arrow"></div>
+                                <div class="con_box">请填写酒店附近的交通情况</div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.酒店基本信息.交通信息)
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="align" valign="top">简介：</td>
+                        <td colspan="3">
+                            @Html.TextAreaFor(model => model.酒店基本信息.简介)
+                            <div class="out_box">
+                                <div class="arrow"></div>
+                                <div class="con_box">请填写一段话，简要介绍您的酒店</div>
+                            </div>
+                            @Html.ValidationMessageFor(model => model.酒店基本信息.简介)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align" valign="top">酒店图片：</td>
+                        <td colspan="3">
+                            <ul id="piclist">
+                                @if(Model.酒店基本信息.照片.Count>0)
+                                { 
+                                    for (int k=0;k<Model.酒店基本信息.照片.Count;k++)
+                                    {
+                                        <li><img src="@Model.酒店基本信息.照片[k]" /><span value="@k" style="font-weight:bold;font-size:22px; cursor:pointer;display:none;">×</span></li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li style="font-size:12px;color:#aaa">您的酒店还没有上传图片！</li>
+                                }
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align">新增酒店图片：</td>
+                        <td>
+                            @if(Model.酒店基本信息.照片.Count<=0)
+                            { 
+                            <label style="font-size:12px;">上传说明：</label>
+                            <font style="font-size:12px;" color="red">请至少上传4张图片</font>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <div id="attachdiv" class="photo_div">
+                                <input type="hidden" id="attachtext" name="attachtext" />
+                                <div style="text-align:center">
+                                    <div></div>
+                                    <div id="ShowImage" class="product_add_upimagesbox"></div>
+                                    <div class="product_add_upimagesbox_image"></div>
+                                    <div style="padding-top:5px">
+                                        <input type="file" name="uploadify" id="uploadify" />&nbsp;&nbsp;
+                                        <a id="btnBegin" href="javascript:return false"><img alt="开始上传" src="~/js/jquery.uploadify-v2.1.4/btn1.jpg" style="border:0px;width:120px;height:30px;" /></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align:center;">
+                            <button class="front_login_rightbox_button" id="btn_sub" type="submit">提交</button>
+                        </td>
+                    </tr>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+@{
+    if (Model.酒店基本信息.地理位置 == null)
+    {
+        Model.酒店基本信息.地理位置 = new double[] { 104.07082, 30.663181 };
+    }
+}
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript">
+    var attchtextstring = "";
+    $(document).ready(function () {
+        $("#uploadify").uploadify({
+            'uploader': '../../JS/jquery.uploadify-v2.1.4/uploadify.swf',
+            'script': 'UploadPhoto',
+            'cancelImg': '../../JS/jquery.uploadify-v2.1.4/cancel.png',
+            'folder': 'UploadFile',
+            'sizeLimit': 1024 * 1024 * 100,
+            'queueSizeLimit': 50,
+            //'fileDesc': '只允许上传bmp,gif,jpg,jpeg图片',
+            //'fileExt': '*.bmp;*.gif;*.jpg;*.jpeg',
+            'method': 'Post',
+            'queueID': 'ShowImage',
+            'buttonImg': '../../JS/jquery.uploadify-v2.1.4/btn.jpg',
+            'wmode': 'transparent',
+            'auto': false,
+            'multi': true,
+            'onComplete': function (e, q, f, data, d) {
+                attchtextstring = document.getElementById("attachtext").value + data + "|";
+                document.getElementById("attachtext").value = attchtextstring;
+                var filename = data;
+                var Image = "<img style='width:120px;height:70px;' src='" + data + "'/>";
+                var Preview = "<a href='" + data + "' target=\"_blank\">预览</a>&nbsp;&nbsp;";
+                var Original = "<a href=\"" + data + "\" target=\"_blank\">原图</a>&nbsp;&nbsp;";
+                var Delete = "<a href=\"javascript:DeleteAttachment('" + q + "','" + data + "')\" style='color:red; padding-left:20px;'>删除</a>";
+                var Div = "<div style='margin-top:5px;text-align:center'>" + Preview + Original + Delete + "</div>";
+                $("#uploadify" + q).html(Image + Div);
+            }
+        });
+        $("#btnBegin").click(function () { $("#uploadify").uploadifyUpload(); return false; });
+    });
+    function DeleteAttachment(q, n) {
+        $.ajax({
+            type: "POST",
+            url: "DeleteAttachment?q=" + q + "&n=" + n,
+            success: function (msg) {
+                if (msg != "0") {
+                    document.getElementById("attachtext").value = document.getElementById("attachtext").value.replace(n + "|", "");
+                    jQuery("#uploadify").uploadifyCancel(msg);
+                }
+            }
+        });
+    }
+
+    function initMap(idName,xPos,yPos) {
+        var mapName = new BMap.Map(idName, { defaultCursor: 'default' });//在百度地图容器中创建一个地图
+        var point = new BMap.Point(xPos,yPos);//定义一个中心点坐标
+        mapName.centerAndZoom(point, 17);//设定地图的中心点和坐标并将地图显示在地图容器中
+        mapName.panBy(500,250);
+        window.mapName = mapName;//将map变量存储在全局
+        setMapEvent(mapName);//设置地图事件
+        addMapControl(mapName);//向地图添加控件
+        addMarker(mapName,xPos,yPos);//向地图中添加marker
+    }
+    initMap("HotelLoc",@Model.酒店基本信息.地理位置[0],@Model.酒店基本信息.地理位置[1]);//创建和初始化地图
+    mapName.addEventListener('click', function (e) {
+        mapName.clearOverlays(marker);
+        var info = new BMap.InfoWindow('', { width: 260 });
+        var mark=new BMap.Icon("../Images/marker.png", new BMap.Size(50, 50),{
+            anchor: new BMap.Size(16,22),
+            infoWindowAnchor: new BMap.Size(10, 0)
+        });
+        var projection = this.getMapType().getProjection();
+        var lngLat = e.point;
+        var marker = new BMap.Marker(lngLat, { icon: mark });
+        var lngLatStr;
+        var geoc = new BMap.Geocoder();
+        geoc.getLocation(lngLat, function(rs){
+            var addComp = rs.addressComponents;
+            lngLatStr=addComp.province + "" + addComp.city + "" + addComp.district + "" + addComp.street + "" + addComp.streetNumber;
+            lngLatConfirm =lngLatStr+"<a id='loc_refo' style='display:block; border-radius:3px; float:right; width:50px; height:30px;margin-top:10px; text-align:center;color:white; background-color:#5e6f00;' onclick='closeInfo()'>确定</a>";
+            $("#showloc").html(lngLatStr).show();
+            info.setContent(lngLatConfirm);
+            mapName.openInfoWindow(info, lngLat);
+            mapName.addOverlay(marker);
+        });
+
+        $("#localtion").val(lngLat.lng+","+lngLat.lat);
+    });
+    mapName.addEventListener("dragend", function (e) {
+        $("#loc_ing").html("当前位置：" + e.point.lng + ", " + e.point.lat);
+    });
+    function closeInfo(){
+        $(".loc_div_out").fadeOut();
+    };
+</script>
+
+<script type="text/javascript">
+    function show_tip(t) {
+        $(t).next("div").show();
+        $(t).next("div").css("display", "inline-block");
+    }
+    function hide_tip(t) {
+        $(t).next("div").hide();
+    }
+    $("#loc_gys").click(function(){
+        $(this).siblings(".loc_div_out").fadeIn();
+    })
+    $(".close_div").click(function(){
+        $(this).parents(".loc_div_out").fadeOut();
+    });
+    
+    
+    $("#btn_sub").click(function () {
+        var provence = $("#deliverprovince").find("option:selected").text();
+        var city = $("#delivercity").find("option:selected").text();
+        var area = $("#deliverarea").find("option:selected").text();
+        $("#provence").val(provence);
+        $("#city").val(city);
+        $("#area").val(area);
+        var length=@Model.酒店基本信息.照片.Count;
+        if(length<=0){
+            var p=$("#attachtext").val();
+            var k=p.split("|");
+            if(k.length<5){
+                alert("请确认是否上传了至少4张图片!");
+                return false;
+            }
+        }
+    });
+    $(function () {
+        var point = new BMap.Point(@Model.酒店基本信息.地理位置[0],@Model.酒店基本信息.地理位置[1]);
+        var geoc = new BMap.Geocoder();
+        geoc.getLocation(point, function(rs){
+            var addComp = rs.addressComponents;
+            lngLatStr=addComp.province + "" + addComp.city + "" + addComp.district + "" + addComp.street + "" + addComp.streetNumber;
+            $("#showloc").html(lngLatStr).show();
+        });
+        $("table tr td :input").mouseover(function () { $(this).next("div.out_box").show(); $(this).next("div.out_box").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div.out_box").hide(); });
+        $("#酒店信息管理").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#酒店信息管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#piclist li").hover(function(){
+            $(this).children("span").show();
+        },function(){
+            $(this).children("span").hide();
+        });
+        $("#piclist span").click(function(){
+            var k=$(this).attr("value");
+            var id=$("#hidid").val();
+            $.ajax({
+                url:'/供应商后台/DelHotelImg',
+                data:{index:k,id:id},
+                success:function(data){
+                    window.location.reload();
+                },
+            });
+        });
+    });
+</script>

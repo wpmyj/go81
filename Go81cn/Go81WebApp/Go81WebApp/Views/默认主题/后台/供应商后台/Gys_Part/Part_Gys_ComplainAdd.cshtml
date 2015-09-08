@@ -1,0 +1,90 @@
+﻿<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<script>
+    var con = "";
+    var title = "";
+    var reasiver;
+    KindEditor.ready(function (K) {
+        var editor = K.create('#content', {
+            cssPath: '../../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true,
+            width: 300,
+            height: 400,
+            resizeType:0,
+            items: ['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+'superscript', '|', 'selectall', '-',
+'title', 'bold', 'italic', 'underline', 'strikethrough', 'removeformat', '|', 'hr', 'link']
+        });
+        K('input[name=submitcontent]').click(function (e) {
+            //con = editor.html();
+            editor.sync();
+            //con = document.getElementById('editor_id').value; // 原生API
+            //con = K('#content').val(); // KindEditor Node API
+            con = $('#content').val();
+            title = $(":text#title").val();
+            if (con != "" && title != "") {
+                $.get('/供应商后台/Gys_ComplainsAdd', { t: title, c: con }, function (data) {
+                    $("#tips").css("display", "block");
+                    $("#tips img").remove();
+                    $("#tips div#tips1").before("<img style='float:left;' src='/Images/success.png' alt='成功' />");
+                    $("#tips div#tips1").text(data);
+                    $(":text#title").val("");
+                    $(":text#Riseaver").val("");
+                    editor.html("");
+                });
+            }
+            else {
+                $("#tips").css("display", "block");
+                $("#tips img").remove();
+                $("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+                $("#tips div#tips1").text('请将待发送消息填写完整！');
+            }
+        });
+
+    });
+    function shutdown() {
+        $("#tips").fadeOut(500);
+    }
+
+    $(function () {
+        $("#发起投诉").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#发起投诉").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>
+<div style="text-align:center;color:red; position:absolute; background-color:#EFF0E7; margin-top:250px; margin-left:275px; display:none; width:250px; height:100px; border-radius:3px; font-size:12px;" id="tips">
+    <div style="width:auto"><a href="###" onclick="shutdown()" style="float:right;margin-top:10px; margin-right:10px">关闭</a></div>
+    <div style="clear:both; width:200px;height:30px;margin-left:35px;margin-top:40px;">
+        <div id="tips1" style="color:red; font-size:14px; float:left;margin-left:10px;"></div>
+    </div>
+</div>
+<div class="gys_znxx_topbox">
+    <div class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">发起投诉</div>
+    </div>
+</div>
+    <div class="gys_znxx_box">
+    
+    <table style="margin-top:10px; margin-left:50px;">
+        <tr>
+            <td align="right">标题: </td>
+            <td><input type="text" style="width:647px; height:30px;" id="title" /></td>
+        </tr>
+        <tr>
+            <td align="right" valign="top">内容:</td>
+            <td>
+                <textarea id="content" name="content" style="width: 880px; height: 550px; visibility: hidden;"></textarea>
+            </td>
+        </tr>
+        <tr><td align="center" colspan="2"><input id="sub_btn" type="submit" class="front_login_rightbox_button" name="submitcontent" value="发送" /></td></tr>
+    </table>
+</div>

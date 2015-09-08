@@ -1,0 +1,499 @@
+﻿@{
+    ViewBag.Title = "供应商注册";
+}
+@model Go81WebApp.Controllers.基本功能.注册Controller.RegInfo_Gys
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+<script src="~/JS/provinceandcity_all.js"></script>
+<script src="~/JS/jquery-1.6.min.js"></script>
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+@using (Html.BeginForm("Register_Gys", "注册", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="index_bottom_spdtbox">
+        <!--供应商库 模块-->
+        <div class="index_bottom_spdt_topbox">
+            <div class="tabbox_gysk">
+                <div class="index_bottom_zb_top_title">用户注册</div>
+                <div class="tabmenu_gysk">
+                    <ul>
+                        <li style="margin-left: 10px;">@Html.ActionLink("评审专家申请", "Register_Expert_Agree", "注册")</li>
+                        @*<li style=" margin-right: 10px;">@Html.ActionLink("个人用户", "Register_Person", "注册")</li>*@
+                        <li class="cli">供应商</li>
+                        <li style="margin-right: 10px;">@Html.ActionLink("单位用户", "Register_Unit", "注册")</li>
+                        <li class="front_register_loginlink">已有账号，现在就 @Html.ActionLink("登录", "Login", "登录")</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="front_login_box">
+            <div class="front_register_classbox">账户信息<a id="skan_org" style="float: right; margin-right: 10px; color: rgb(64, 105, 90); cursor: pointer;">查看采购机构信息</a></div>
+            <table class="front_login_rightbox">
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">账户名：</td>
+                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                        @Html.TextBoxFor(model => model.loginName, new { autocomplete = "off" })
+                        *
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">6-30字符,以字母开头(可用字母、数字或下划线),不能包括汉字</div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.loginName)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">请设置密码：</td>
+                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                        @Html.PasswordFor(model => model.Pwd, new { autocomplete = "off" })
+                        *
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">6-30字符,不建议使用纯字母、数字</div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Pwd)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">请确认密码：</td>
+                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                        @Html.PasswordFor(model => model.PwdConfirm)
+                       *
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请再次确认密码</div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.PwdConfirm)
+                    </td>
+                </tr>
+            </table>
+            @*<div class="front_login_leftbox"> </div>*@
+        </div>
+        <div class="front_login_box">
+            <div class="front_register_classbox">联系人信息</div>
+            <table class="front_login_rightbox">
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">联系人姓名：</td>
+                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                        @Html.EditorFor(model => model.Name)
+                        *
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">输入联系人姓名，如：张晓东</div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">联系人性别：</td>
+                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                        @Html.EnumDropDownListFor(model => model.Sex, new { @style = "width:304px;height:36px;" })
+                        *
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">您可以选择联系人的性别</div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Sex)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">固定电话：</td>
+                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                        @Html.HiddenFor(model => model.Phone, new { @id="modelPhone"})
+                         <input type="text" id="phone_area" placeholder="区号" style="width:70px;" />
+                         - 
+                        <input type="text" id="phone_num" placeholder="电话号码" style="width:208px;" />
+                        *
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">区号-电话号码，如：028-76817981或者0816-8245876</div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Phone)
+                        <span id="moelphone_error" style="color:red; display:none">请填写固定电话！</span>
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">手机：</td>
+                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                        @Html.EditorFor(model => model.Tel_Phone)
+                        *
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请输入手机号码,如13587669876，请注意格式</div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Tel_Phone)
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">联系人邮箱：</td>
+                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                        @Html.EditorFor(model => model.Mail)
+                        *
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">您可以填写QQ邮箱等如：1487578912@qq.com</div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Mail)
+                    </td>
+                </tr>
+            </table>
+            @*<div class="front_login_leftbox"> </div>*@
+        </div>
+        <div class="front_login_box">
+            <div class="front_register_classbox">企业信息</div>
+            <table class="front_login_rightbox">
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">企业名称：</td>
+                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                        @Html.TextBoxFor(model => model.company_Name, new { id = "companyName" })<span id="tip" style="color:red;"></span>
+                       *
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box"><span style="color:red;">注：企业名称只能是营业执照上面的企业名称，如果不统一，企业将通不过审核！</span></div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.company_Name)
+                    </td>
+                </tr>
+
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">供应商类型：</td>
+                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                            @Html.DropDownListFor(model => model.gystype, new  SelectList(Enum.GetValues(typeof(供应商.供应商类型))), new { id = "gystype", @style = "width:150px" })
+                            @Html.DropDownListFor(model => model.gystypename, new SelectList(Enum.GetValues(typeof(供应商.供应商细分类型))), new { id = "gystypename", @style = "width:150px;display:none" })
+                        *
+                            <div class="out_box">
+                                <div class="arrow"></div>
+                                <div class="con_box">请选择供应商类型</div>
+                            </div>
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">所在地域：</td>
+                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                        @Html.HiddenFor(model => model.Province, new { id = "province" })
+                        @Html.HiddenFor(model => model.City, new { id = "city" })
+                        @Html.HiddenFor(model => model.Area, new { id = "area" })
+                        <select id="deliverprovince" onblur="hidetip(this)" onclick="showtip(this)" name="deliverprovince" style=" width:98px;"></select>
+                        @*<div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请选择省份</div>
+                        </div>*@
+                        <select id="delivercity" onblur="hidetip(this)" onclick="showtip(this)" name="delivercity" style=" width:98px;"></select>
+                        @*<div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请选择城市</div>
+                        </div>*@
+                        <select id="deliverarea" onblur="hidetip(this)" onclick="showtip(this)" name="deliverarea" style=" width:98px;"></select>
+                        *
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">地域用来生成供应商编码的，选择后不能再做修改，请认真选择。</div>
+                        </div>
+                        <span id="place_error" style="color:red; display:none">请选择地域！</span>
+                    </td>
+                </tr>
+
+
+                @*<tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">所属行业：</td>
+                    <td class="front_login_rightbox_inputdiv">
+                        @Html.HiddenFor(model => model.Industry, new { id = "hidden" })
+                        @Html.HiddenFor(model => model.SecondHy, new { id = "hidden_second" })
+                        @Html.ValidationMessageFor(model => model.Industry)
+                        @{
+    IEnumerable<商品分类> goodclass = ViewData["行业列表"] as IEnumerable<商品分类>;
+    if (goodclass != null && goodclass.Any())
+    {
+        <select id="hy" name="hy" class="industry" style="width:150px;height:36px;" onchange="getLowerClass(this)">
+            <option>请选择行业</option>
+            @foreach (var i in goodclass)
+            {
+                <option class="industry" id="@i.Id" value="@i.分类名">@i.分类名</option>
+            }
+        </select>
+                            <div class="out_box">
+                                <div class="arrow"></div>
+                                <div class="con_box">请选择行业类型</div>
+                            </div>
+    }
+
+
+    <select id="secondclass" name="secondclass" style="width:149px; height:36px;" onchange="getLowerClass(this)">
+        <option class="yjfn" value="不限" id="-1">不限</option>
+    </select>
+                            <span style="color:red;">*</span>
+
+                        }<span id="industry_error" style="color:red; display:none">请选择行业！</span>
+                    </td>
+                </tr>*@
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_title">验证码：</td>
+                    <td style="color:red;" id="Veryfy_Code" class="front_login_rightbox_inputdiv">
+                        @Html.TextBoxFor(m => m.verifyCode)
+                        <div class="out_box">
+                            <div class="arrow" style="margin-left: 90px;"></div>
+                            <div class="con_box" style="margin-left: 110px;">请输入验证码，进行最后的验证</div>
+                        </div>
+                        <span></span>
+                        <span>@ViewBag.VCodeError</span>
+                        <img src=@Url.Action("NewVCodeImage", "登录") style="cursor:pointer;vertical-align:middle;margin-left:5px;" title="看不清，换一张" alt="看不清，换一张" onclick='$(this).attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());' />
+                    </td>
+                </tr>
+                <tr class="front_login_rightbox_listdiv">
+                    <td class="front_login_rightbox_checkboxdiv" colspan="2">
+                        <input type="checkbox" checked="checked" class="front_login_rightbox_checkbox" />我已阅读并同意<a id="agreement" href="#" style="text-decoration:underline;color:rgba(62, 139, 188, 1);">《西南物资采购网注册协议》</a>，<span style="border: solid 1px #f4a460; padding: 1px;">相关注册信息需提报成都军区物资采购管理部门审核</span><span id="error_agree" style="color:red; display:none; margin-left:10PX;">请阅读并同意《西南物资采购网注册协议》</span>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="front_login_rightbox_checkboxdiv" colspan="2">
+                        <input id="reg" type="submit" class="front_login_rightbox_button" value="注册" />
+                    </td>
+                </tr>
+            </table>
+            @*<div class="front_login_leftbox"> </div>*@
+        </div>
+    </div>
+    <input name="hid_input" type="hidden" value="@ViewData["申请采购机构"]" />
+}
+<div id="modal_agree" class="modal_style modal_p">
+    <span id="modal_clo">×</span>
+    <div class="modal_agree">@Html.Action("Part_Agree_Regist", "注册")</div>
+</div>
+<div id="modal" class="modal_style">
+    <div class="modal_content">
+        <input id="hid_input" type="hidden" value="@ViewData["申请采购机构"]" />
+        <p class="p">采购机构查看</p>
+        <table>
+            <tr>
+                <td class="lab">您选择的初审单位：</td>
+                <td id="org" class="lac"></td>
+            </tr>
+            @*<tr>
+                <td class="lab">联  系  人：</td>
+                <td id="org_re" class="lac"></td>
+            </tr>*@
+            <tr>
+                <td class="lab">联系方式：</td>
+                <td id="org_phone" class="lac"></td>
+            </tr>
+            @*<tr>
+                <td class="lab">地       址：</td>
+                <td id="org_address" class="lac"></td>
+            </tr>*@
+        </table>
+        <div style="text-align: center;margin-top: 30px; "><input id="modal_close" type="button" value="关闭" /></div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    window.onload = function () {
+        new PCAS("deliverprovince", "delivercity", "deliverarea");
+        var a = $("#hid_input").val();
+        switch (a) {
+            case "成都军区物资采购机构（成都）":
+                $("#org").html(a);
+                //$("#org_re").html("成都军区物资采购机构(成都),张助理");
+                $("#org_phone").html("028-68308761；4006826181");
+                //$("#org_address").html("成都市武侯区高攀路38号");
+                break;
+            case "成都军区物资采购机构（昆明）":
+                $("#org").html(a);
+                //$("#org_re").html("成都军区物资采购机构（昆明）,谢渝,助理");
+                $("#org_phone").html("028-68308761；4006826181");
+                //$("#org_address").html("昆明市东郊八公里贵昆路287号");
+                break;
+            case "成都军区物资采购机构（贵阳）":
+                $("#org").html(a);
+                //$("#org_re").html("成都军区物资采购机构（贵阳）,姚祖光,助理");
+                $("#org_phone").html("028-68308761；4006826181");
+                //$("#org_address").html("贵州省贵阳市油榨街东新区路1号");
+                break;
+            case "成都军区物资采购机构（重庆）":
+                $("#org").html(a);
+                //$("#org_re").html("成都军区物资采购机构（重庆）,丁文元,助理");
+                $("#org_phone").html("028-68308761；4006826181");
+                //$("#org_address").html("重庆市沙坪坝区石井坡216号");
+                break;
+            case "西藏军区物资采购中心":
+                $("#org").html(a);
+                //$("#org_re").html("成都军区物资采购机构（重庆）,丁文元,助理");
+                $("#org_phone").html("0891-6738571");
+                //$("#org_address").html("重庆市沙坪坝区石井坡216号");
+                break;
+            default:
+        }
+        var v = $("#gystype").find("option:selected").text();
+        if (v == "服务供应商") {
+            $("#gystypename").show();
+        }
+        else {
+            $("#gystypename").val("未填写").hide();
+        }
+    }
+    $("#modal_close").click(function () {
+        //document.body.style.overflow="scroll";
+        $("#modal").fadeOut();
+    });
+
+    $("#skan_org").click(function () {
+        //document.body.style.overflow="hidden";
+        $("#modal").fadeIn();
+    });
+    $("#agreement").click(function () {
+        //document.body.style.overflow="hidden";
+        $("#modal_agree").fadeIn();
+        return false;
+    });
+    $("#modal_clo").click(function () {
+        //document.body.style.overflow="scroll";
+        $("#modal_agree").fadeOut();
+    });
+    $("#reg").click(function () {
+        var v=$("#phone_area").val()+"-"+$("#phone_num").val();
+        $("#modelPhone").val(v);
+        var f = $("#modelPhone").val().replace("-","");
+        if ($("#deliverprovince").val() != null && $("#deliverprovince").val() != "" && $("#deliverprovince").val() != "不限省份" && $("input[type='checkbox']").prop("checked") == true && $("#phone_area").val() != "" && $("#phone_num").val()!="") {
+            $.ajax({
+                url: '/注册/Register_Gys',
+                type: 'post'
+            });
+        }
+        else {
+            if ($("#deliverprovince").val() == null || $("#deliverprovince").val() == "" || $("#deliverprovince").val() == "不限省份") {
+                $("#place_error").show();
+                return false;
+            } else {
+                document.getElementById("place_error").style.display = "none";
+            }
+          
+            if ($("#phone_num").val() == "" ||$("#phone_num").val()==null) {
+                $("#moelphone_error").show().html("请填写电话号码");
+                return false;
+            }
+            else {
+                $("#moelphone_error").hide();
+            }
+            if ($("#phone_area").val() == "" || $("#phone_area").val() == null) {
+                $("#moelphone_error").show().html("请填写区号");
+                return false;
+            }
+            else {
+                $("#moelphone_error").hide();
+            }
+            if (f == null || f == "") {
+                $("#moelphone_error").show();
+                return false;
+            }
+            //if ($("#hidden").val() == null || $("#hidden").val() == "" || $("#hidden").val() == "请选择行业" || $("#hidden_second").val() == "不限" || $("#hidden_second").val() == "-1" || $("#hidden_second").val() == null || $("#hidden_second").val() == "") {
+            //    $("#industry_error").show();
+            //    return false;
+            //}
+            if ($("input[type='checkbox']").prop("checked") == false) {
+                $("#error_agree").show();
+                return false;
+            }
+
+        }
+    });
+    //$(".industry").change(function () {
+    //    var val = $(".industry option:selected").text();
+    //    $("#hidden").val(val);
+    //    //$("#industry_error").hide();
+    //});
+    //$("#secondclass").change(function () {
+    //    var val = $("#secondclass option:selected").text();
+    //    $("#hidden_second").val(val);
+    //    $("#industry_error").hide();
+    //});
+    $("#deliverprovince").change(function () {
+        var val = $("#deliverprovince option:selected").text();
+        $("#province").val(val);
+        $("#place_error").hide();
+    });
+    $("#delivercity").change(function () {
+        var val = $("#delivercity option:selected").text();
+        $("#city").val(val);
+        $("#place_error").hide();
+    });
+    $("#deliverarea").change(function () {
+        var val = $("#deliverarea option:selected").text();
+        $("#area").val(val);
+        $("#place_error").hide();
+    });
+    $("#gystype").change(function () {
+        var val=$("#gystype option:selected").text();
+        if (val == "服务供应商") {
+            $("#gystypename").show();
+        }
+        else {
+            $("#gystypename").val("未填写").hide();
+        }
+    });
+    //$("input").focus(function () {
+    //    if ($(this).attr("type") != "checkbox") {
+    //        $(this).parent().children(".tips").show();
+    //        $(this).parent().children().eq(1).hide();
+    //    }
+    //}).blur(function () {
+    //    $(this).parent().children(".tips").hide();
+    //    $(this).parent().children().eq(1).show();
+    //});
+    function showtip(th)
+    {
+        $(th).parent().children("div").css("display","inline-block");
+        $(th).parent().children("div").show();
+    }
+    function hidetip(th)
+    {
+        $(th).parent().children("div").hide();
+    }
+    $(document).ready(function () {
+        $("table tr td :input").focus(function () {
+            $(this).parent().children("div.out_box").show();
+            $(this).parent().children("div.out_box").css("display", "inline-block");
+        });
+        $("table tr td :input").blur(function () { $(this).parent().children("div.out_box").hide(); });
+    });
+    $("#companyName").blur(function () {
+        $.get('/注册/CheckCompany', { n: $(this).val() }, function (data) {
+            if(data==1)
+            {
+                $("#tip").text("你已经注册过此供应商");
+            }
+            else
+            {
+                $("#tip").text("");
+            }
+        });
+    });
+</script>
+@*<script type="text/javascript">
+    function getLowerClass(obj) {
+        var id = $("#hy option:selected").attr("id");
+        var classname = obj.getAttribute("id");
+        if (classname == "hy") {
+            //$("#thirdclass").empty();
+            //$("#thirdclass").html("<option value=\"不限\" id=\"-1\"  class=\"yjfn\">不限</option>");
+
+            if (id == -1) {
+                $("#secondclass").empty();
+                $("#secondclass").html("<option value=\"不限\" id=\"-1\"  class=\"yjfn\">不限</option>");
+                return;
+            }
+        }
+        if (classname == "secondclass") {
+            $("#thirdclass").empty();
+            $("#thirdclass").html("<option value=\"不限\" id=\"-1\"  class=\"yjfn\">不限</option>");
+            id = $("#secondclass option:selected").attr("id");
+        }
+
+        $.get("ProductClass?classid=" + encodeURI(id), function (response) {
+            if (classname == "hy") {
+                $("#secondclass").html("<option value=\"不限\" id=\"-1\"  class=\"yjfn\">不限</option>" + response);
+            }
+            if (classname == "secondclass") {
+                $("#thirdclass").html("<option value=\"不限\" id=\"-1\"  class=\"yjfn\">不限</option>" + response);
+            }
+        });
+    }
+</script>*@

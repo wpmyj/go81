@@ -1,0 +1,69 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.政策法规
+<div class="gys_xttz_box">
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">政策法规详情</div>
+        </div>
+    </div>
+    <div class="gys_xttz_contentbox" id="gys_xttz_contentbox">
+        @if (Model != null)
+        {
+            <div class="gys_xttz_contentbox_news_title" style="border-bottom:none;">@Model.内容主体.标题</div>
+    <div class="gys_xttz_contentbox_news_from" style="border-bottom:1px solid #CCC; height:30px; width:950px;">
+        @if (Model.法规来源 != null)
+        {
+            if (!string.IsNullOrEmpty(Model.法规来源.来源名称))
+            {
+                <span style="padding:0 10px 0 10px;">来源名称:@Model.法规来源.来源名称</span>
+            }
+            if (!string.IsNullOrEmpty(Model.法规来源.来源链接))
+            {
+                <span style="padding:0 10px 0 10px;">
+                    来源地址:
+                    @if (Model.法规来源.来源链接.Length > 20)
+                    {
+                        <a target="_blank" title="@Model.法规来源.来源链接" href="@Model.法规来源.来源链接">@Model.法规来源.来源链接.Substring(0, 20)</a>
+                    }
+                    else
+                    {
+                        <a target="_blank" title="@Model.法规来源.来源链接" href="@Model.法规来源.来源链接">@Model.法规来源.来源链接</a>
+                    }
+                </span>
+            }
+        }
+        @if (!string.IsNullOrEmpty(Model.政策法规信息.发布机关))
+        {
+            <span style="padding:0 10px 0 10px;">发布机关:@Model.政策法规信息.发布机关</span>
+        }
+        <span style="padding:0 10px 0 10px;">发布时间:@Model.内容主体.发布时间.ToString("yyyy-MM-dd")</span>
+        @if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
+        {
+            <a class="printspan" href="@Model.内容主体.附件[0]" target="_blank"><img width="13" height="13" src="~/Images/download.PNG" />下载</a>
+        }
+        <a class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>
+    </div>
+            <div id="printContent" class="gys_xttz_contentbox_news_text">
+                @Html.Raw(Model.内容主体.内容)
+            </div>
+        }
+        else
+        {
+            <div class="gys_xttz_contentbox_news_title">暂无此类信息</div>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    function printpage() {
+        $(".printspan").hide();
+        document.body.innerHTML = document.getElementById('gys_xttz_contentbox').innerHTML;
+        window.print();
+
+        //var newWindow = window.open("打印窗口", "_blank");//打印窗口要换成页面的url
+        //var docStr = document.getElementById("printContent").innerHTML;
+        //newWindow.document.body.innerHTML = docStr;
+        //newWindow.document.close();
+        //newWindow.print();
+        //newWindow.close();
+    }
+</script>

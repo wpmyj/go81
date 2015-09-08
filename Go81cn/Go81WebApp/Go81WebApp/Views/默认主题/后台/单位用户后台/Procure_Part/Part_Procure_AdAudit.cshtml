@@ -1,0 +1,45 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型;
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">待审核公告列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <div class="front_login_rightbox_title" style="color:red; padding-bottom:20px;"> @TempData["AdTempDate"]</div>
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="40%">标题</th>
+                    <th width="10%">公告性质</th>
+                    <th width="12%">公告类别</th>
+                    <th width="15%">时间</th>
+                    <th width="23%">操作</th>
+                </tr>
+                @foreach (var item in (IEnumerable<公告>)ViewData["未审核公告列表"])
+                {
+                    <tr>
+                        <td><a href="~/单位用户后台/AdListDetail?id=@item.Id" target="_blank">@item.内容主体.标题</a></td>
+                        <td>@item.公告信息.公告性质</td>
+                        <td>@item.公告信息.公告类别</td>
+                        <td>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</td>
+                        <td class="gys_znxx_content_tabletime">
+                            @Html.ActionLink("查看", "Procure_AdDetail", new { id = item.Id })|@Html.ActionLink("删除", "Procure_AdDelete", new { id = item.Id,h="adaudit" })|
+                            @if (item.基本数据.已屏蔽 == false)
+                            {
+                                @Html.ActionLink("禁用", "Procure_AdForbid", new { id = item.Id })
+                            }
+                            else
+                            {
+                                @Html.ActionLink("解除禁用", "Procure_AdForbid", new { id = item.Id })
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>

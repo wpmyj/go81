@@ -1,0 +1,94 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型;
+@using Go81WebApp.Models.数据模型.用户数据模型
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">待审核公告列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="5%">序号</th>
+                    <th width="25%">标题</th>
+                    <th width="10%">公告性质</th>
+                    <th width="12%">公告类别</th>
+                    <th width="10%">时间</th>
+                    <th width="20%">发布者</th>
+                    <th width="18%">操作</th>
+                </tr>
+                @{var sortnum = 0;}
+                @foreach (var item in (IEnumerable<公告>)ViewData["未审核公告列表"])
+                {
+                    sortnum++;
+                    <tr>
+                        <td>@sortnum</td>
+                        <td><a href="~/运营团队后台/AdListDetail?id=@item.Id" target="_blank">@item.内容主体.标题</a></td>
+                        <td>@item.公告信息.公告性质</td>
+                        <td>@item.公告信息.公告类别</td>
+                        <td>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</td>
+                        @if (item.内容基本信息.所有者.用户ID > 0 && item.内容基本信息.所有者.用户ID < 100000000000)
+                        {
+                            try
+                            {
+                                var user = item.内容基本信息.所有者.用户数据 as 单位用户;
+                                <td>@user.单位信息.单位名称，@user.联系方式.联系人，@user.联系方式.手机</td>
+                            }
+                            catch (Exception)
+                            {
+                                <td>@item.内容基本信息.所有者.用户ID</td>
+                            }
+
+                        }
+                        else
+                        {
+                            <td>客服发布</td>
+                        }
+                        <td class="gys_znxx_content_tabletime">
+                            @Html.ActionLink("查看", "Procure_AdDetail", new { id = item.Id },new {target="_blank"})|@Html.ActionLink("删除", "Procure_AdDelete", new { id = item.Id,h="adaudit" })|
+                            @Html.ActionLink("修改", "Procure_AdModify", new { id = item.Id }, new { target = "_blank" })
+                            @*@if (item.基本数据.已屏蔽 == false)
+                            {
+                                @Html.ActionLink("禁用", "Procure_AdForbid", new { id = item.Id })
+                            }
+                            else
+                            {
+                                @Html.ActionLink("解除禁用", "Procure_AdForbid", new { id = item.Id })
+                            }*@
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).addClass("currentPage");
+            }
+            if ($(j == 1)) {
+                $(".gys_znxx_content_detailbox a:first").css({"background-color":"lightgray","color":"grey"});
+            }
+            if ($(num ==j)) {
+                $(".gys_znxx_content_detailbox a:last").css({"background-color":"lightgray","color":"grey"});
+            }
+        });
+        $("#审核公告").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#审核公告").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

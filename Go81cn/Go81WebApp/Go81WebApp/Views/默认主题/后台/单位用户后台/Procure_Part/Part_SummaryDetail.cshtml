@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.需求计划模型.需求计划物资>
+@{
+    var sort = 0;
+           }
+<table class="listdetailtable" style="float: left; width: 100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <th>需求部门</th>
+        <th>序号</th>
+        <th>物资名称</th>
+        <th>规格型号</th>
+        <th>计量单位</th>
+        <th>数量</th>
+        <th>单价</th>
+        <th>预算金额</th>
+        <th>质量技术标准</th>
+        <th>交货期限</th>
+        <th>采购方式建议</th>
+        <th>备注</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        sort++;
+        <tr id="smdetail_@(item.Id)">
+            <td>
+                @if (item.来源合并项.Any())
+                {
+                    <div name="treepic" class="tre_level1" flag="1" value="@item.Id" onclick='changeshow(this);' style="float: left; margin-top: 0;"></div>
+                }
+                @item.所属需求计划.需求计划数据.需求发起单位链接.用户数据.单位信息.单位名称
+            </td>
+            <td>@sort</td>
+            <td>@item.物资名称</td>
+            <td>@item.规格型号</td>
+            <td>@item.计量单位</td>
+            <td>@item.数量</td>
+            <td>@item.单价</td>
+            <td>@item.预算金额</td>
+            <td>@item.技术指标</td>
+            <td>@item.交货期限.ToString("yyyy/MM/dd")</td>
+            <td>@item.建议采购方式</td>
+            <td style="cursor: pointer;" bz="@item.备注"><img src="/Images/notice.png" style="width: 20px; vertical-align: middle;" title="@item.备注"></td>
+        </tr>
+    }
+</table>
+<script type="text/javascript">
+    function changeshow(obj) {
+        var id = $(obj).attr("value");
+        //alert(id);
+        var flag = $(obj).attr("flag");
+        if (flag == "0") {
+            $(obj).attr("class", "tre_level1");
+            $("#smdetail_" + id).next("tr").remove();
+            $(obj).attr("flag", "1");
+        } else {
+            $(obj).attr("class", "tre_level2");
+            $(obj).attr("flag", "0");
+            $.ajax({
+                cache: false,
+                async: false,
+                type: 'POST',
+                url: "/单位用户后台/SummaryDetail_Recursive",
+                data: "id=" + id,
+                success: function (data) {
+                    if (data != "0") {
+                        var tablecontent = "<tr><td colspan='11'>" + data + "</td></tr>";
+                        $("#smdetail_" + id).after(tablecontent);
+                    }
+                }
+            });
+        }
+    }
+</script>

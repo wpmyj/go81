@@ -1,0 +1,119 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.消息数据模型
+@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@{
+    ViewBag.Title = "供应商后台管理";
+    Layout = "_BackLayout.cshtml";
+}
+    <div class="bg_outdiv">
+        <div class="bg_outdiv_left">
+            @Html.Action("LeftMenu", "布局")
+        </div>
+        <div class="bg_outdiv_right">
+            <div class="rightboxContent">
+                <div style=" margin-top:20px; " id="tb1">
+                    <div style="font-size:14px; overflow:hidden;">
+                        <ol>
+                            @if (ViewData["U_message"] != null)
+                            {
+                                <li style="color:red;">@Html.Raw(ViewData["U_message"])</li>
+                            }
+                            @if (int.Parse(ViewData["msg_count"].ToString()) == 0)
+                            {
+                                <li style="color:red;">您有@(ViewData["msg_count"])条未读站内消息</li>
+                            }
+                            else
+                            {
+                                <li style="color:red;">您有@(ViewData["msg_count"])条未读站内消息，<a href="/供应商后台/Gys_Znxx" style="text-decoration:underline;">请点击此处查看>></a></li>
+                            }
+                            @if (int.Parse(ViewData["可报价数量"].ToString()) == 0)
+                            {
+                                <li style="color:red;">您有@(ViewData["可报价数量"])个商品可进行网上报价</li>
+                            }
+                            else
+                            {
+                                <li style="color:red">您有@(ViewData["可报价数量"])个商品可进行网上报价，<a href="/供应商后台/OnlineBiddingProject" style="text-decoration:underline">请点击此处查看</a></li>
+                            }
+                            @if (int.Parse(ViewData["回传单不合格数量"].ToString()) != 0)
+                            {
+                                <li style="color:red;">您有@(ViewData["回传单不合格数量"])张验收单回传单审核未通过<a href="/供应商后台/Service_Evaluate" style="text-decoration:underline">请点击此处查看</a></li>
+                            }
+                           
+                        </ol>
+                    </div>
+                    @if (ViewBag.BaseInfo == false || ViewBag.VipInfo == false || ViewBag.SalesInfo == false || ViewBag.Busniss == false || ViewBag.TaxInfo == false || ViewBag.LawPerson == false || ViewBag.Financial == false || ViewBag.servicedepart == false || ViewBag.qualify == false || ViewBag.Investor == false || ViewBag.goodType == 0 || ViewBag.GoodCount < 5)
+                    {
+                        <div style="width:100%; text-indent:20px; border:1px dashed black; margin-top:5px;">
+                            <table width="100%">
+                                <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="#">@ViewBag.PrintMessage</a></td></tr>
+                                @if (ViewBag.VipInfo == false)
+                                {
+                                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Vip_Manage">联系人信息还不完善，请从这里去完善>></a></td></tr>
+                                }
+                                @if (ViewBag.BaseInfo == false)
+                                {
+                                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Manage">基本信息还未完善，请从这里去完善>></a></td></tr>
+                                }
+                                @if (ViewBag.LawPerson == false)
+                                {
+                                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Law_Person">法定代表人的信息还不完善，请从这里去完善>></a></td></tr>
+                                }
+                                @if (ViewBag.SalesInfo == false || ViewBag.Busniss == false)
+                                {
+                                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Sales_Manage">营业信息还不完善，请从这里去完善>></a></td></tr>
+                                }
+                                @if (ViewBag.Investor == false)
+                                {
+                                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Investor_Management">出资人或股东信息还不完善，请从这里去完善>></a></td></tr>
+                                }
+                                @if (ViewBag.Financial == false)
+                                {
+                                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Financial_Manage">财务信息还不完善，请从这里去完善>></a></td></tr>
+                                }
+                                @if (ViewBag.TaxInfo == false)
+                                {
+                                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Tax_Management">税务信息还不完善，请从这里去完善>></a></td></tr>
+                                }
+                                @if (ViewBag.qualify == false)
+                                {
+                                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Qualify_Management">资质证书信息还不完善，请从这里去完善>></a></td></tr>
+                                }
+                                @if (ViewBag.servicedepart == false)
+                                {
+                                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Service_Management">售后服务机构信息还不完善，请从这里去完善>></a></td></tr>
+                                }
+                                @if (Model.供应商用户信息.供应商类型.ToString() == "物资供应商")
+                                {
+                                    if (ViewBag.goodType == 0)
+                                    {
+                                        <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Product_Type">可供商品类别信息还不完善，请从这里去完善>></a></td></tr>
+                                    }
+                                }
+                                @if (Model.供应商用户信息.供应商类型.ToString() == "物资供应商")
+                                {
+                                    if (ViewBag.GoodCount < 5)
+                                    {
+                                        <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Product_AddStep1">商品少于5个，您可以从这里去添加商品>></a></td></tr>
+                                    }
+                                }
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("#待办任务").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#待办任务").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#welcome").css({"background":"#207AD6"}).find("a.leftMenu_a").css({"color":"#fff"});
+            var count = @ViewData["msg_count"].ToString();
+            if(count == "0"){
+                $("div#tip").hide();
+            }
+            else{
+                $("div#tip").animate({ "bottom": "0px" }, 1000);
+            }
+        });
+    </script>

@@ -1,0 +1,502 @@
+﻿@model Go81WebApp.Models.数据模型.酒店
+@{
+    ViewBag.Title = "供应商后台";
+    Layout = "_BackLayout.cshtml";
+}
+
+<link href="~/css/hotelandticket.css" rel="stylesheet" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">酒店详情</div>
+            </div>
+        </div>
+        <div class="layout" style="width:900px;">
+            <div class="title_name" style="width:921px;">
+                <span class="name" style="width:921px;">
+                    <strong>@Model.酒店基本信息.酒店名</strong>
+                    @*@if(Model.酒店基本信息.Wifi)
+                {
+                    <label class="wifi" title="该酒店提供免费Wifi"></label>
+                }
+                @if (Model.酒店基本信息.免费停车场)
+                {
+                    <label class="stop" title="该酒店提供免费停车场"></label>
+                }*@
+                    @{
+                        var buss = Model.酒店基本信息.所属商圈.Contains("商圈") ? Model.酒店基本信息.所属商圈 : Model.酒店基本信息.所属商圈 + "商圈";
+                    }
+                    <span class="addr">@Model.酒店基本信息.地址</span>
+                    <label class="business">(@buss)</label>
+                </span>
+
+            </div>
+
+            <div class="pic_skan">
+                <div id="pic_room" class="picture">
+                    <div class="spo">
+                        @if (Model.酒店基本信息.照片.Count > 2)
+                        {
+                            for (int p = 0; p < 2; p++)
+                            {
+                                <a href="#"><img src="@Model.酒店基本信息.照片[p]" /></a>
+                            }
+                        }
+                    </div>
+                    <div class="pic_small">
+                        @if (Model.酒店基本信息.照片.Count > 4)
+                        {
+                            for (int p = 3; p < 5; p++)
+                            {
+                                <a href="#"><img src="@Model.酒店基本信息.照片[p]" /></a>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="hotel_info" style="width:288PX;">
+                    <div class="telnum" style="height:46px; line-height:46px;">
+                        <h3 style="display:inline-block; margin-top:0;">联系方式</h3>
+                        <h3 style="margin:0 20px; display:inline-block;">@Model.酒店基本信息.联系电话</h3>
+                    </div>
+                    <div class="tra_info" style="height:190px;margin-top:4px;">
+                        <h3>交通信息</h3>
+                        <div class="tra_info_d info_d" style="height:133px;width:267PX;">@Model.酒店基本信息.交通信息</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hotel_base">
+                <table cellpadding="0" cellspacing="0" style="width:920px;">
+                    <tr>
+                        <th colspan="5">房间信息</th>
+                    </tr>
+                    <tr>
+                        <td class="fontSize">房型</td>
+                        <td class="fontSize">床型</td>
+                        <td class="fontSize">房间描述</td>
+                        <td class="fontSize">是否提供早餐</td>
+                        <td class="fontSize">价格</td>
+                    </tr>
+                    @foreach (var mm in Model.房间信息)
+                    {
+                        <tr>
+                            <td class="roomt">@mm.房型 (@mm.图片.Count 张房间图片)</td>
+                            <td>@mm.床型</td>
+                            <td>@mm.简介</td>
+                            <td>@mm.早餐</td>
+                            <td>￥@mm.价格</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" style="display:none">
+                                <div>
+                                    @foreach (var pp in mm.图片)
+                                    {
+                                        <img width="120" height="80" src="@pp" />
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+
+            <div class="hotel_base">
+                <table cellpadding="0" cellspacing="0" style="width:920px;">
+                    <tr>
+                        <th colspan="2">酒店概况</th>
+                    </tr>
+                    <tr>
+                        <td class="align" valign="top">酒店简介</td>
+                        <td class="algn" style="line-height:25px;padding-left:10px;text-indent:0;">@Model.酒店基本信息.简介</td>
+                    </tr>
+                    <tr>
+                        <td class="align" valign="top">入住与离店时间</td>
+                        <td class="algn">@Model.酒店基本信息.入住和离店时间</td>
+                    </tr>
+                    <tr>
+                        <td class="align">网络设施</td>
+                        <td class="algn">
+                            @if (Model.酒店基本信息.Wifi)
+                            {
+                                <label class="wifi" title="该酒店提供免费Wifi"></label><label>该酒店提供免费Wifi</label>
+                            }
+                            else
+                            {
+                                <label class="nowifi" title="该酒店提供免费Wifi"></label>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align">停车场</td>
+                        <td class="algn">
+                            @if (Model.酒店基本信息.免费停车场)
+                            {
+                                <label class="stop" title="该酒店提供免费停车场"></label><label>该酒店提供免费停车场</label>
+                            }
+                            else
+                            {
+                                <label class="nostop" title="该酒店提供免费停车场"></label>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align">房间设施</td>
+                        <td class="algn">
+                            @{
+                                var a = false;
+                                var b = false;
+                                var c = false;
+                                var d = false;
+                                var e = false;
+                                var f = false;
+                                var g = false;
+                                var h = false;
+                            }
+                            @foreach (var p in Model.房间信息)
+                            {
+                                if (p.房间设施.吹风机)
+                                { a = true; }
+                                if (p.房间设施.二十四小时热水)
+                                { b = true; }
+                                if (p.房间设施.国际长途通话)
+                                { c = true; }
+                                if (p.房间设施.空调)
+                                { d = true; }
+                                if (p.房间设施.宽带上网)
+                                { e = true; }
+                                if (p.房间设施.免费国内长途通话)
+                                { f = true; }
+                                if (p.房间设施.免费市内电话)
+                                { g = true; }
+                                if (p.房间设施.暖气)
+                                { h = true; }
+                            }
+                            @if (a)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>吹风机</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>吹风机</label>}
+                            @if (b)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>二十四小时热水</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>二十四小时热水</label>}
+                            @if (c)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>国际长途通话</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>国际长途通话</label>}
+                            @if (c)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>空调</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>空调</label>}
+                            @if (a)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>宽带上网</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>宽带上网</label>}
+                            @if (b)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>免费国内长途通话</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>免费国内长途通话</label>}
+                            @if (c)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>免费市内电话</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>免费市内电话</label>}
+                            @if (c)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>暖气</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>暖气</label>}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align">酒店服务</td>
+                        <td class="algn">
+                            @if (Model.酒店服务.行李寄存)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>行李寄存</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>行李寄存</label>}
+                            @if (Model.酒店服务.叫醒服务)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>叫醒服务</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>叫醒服务</label>}
+                            @if (Model.酒店服务.接待外宾)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>接待外宾</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>接待外宾</label>}
+                            @if (Model.酒店服务.接机服务)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>接机服务</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>接机服务</label>}
+                            @if (Model.酒店服务.接站服务)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>接站服务</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>接站服务</label>}
+                            @if (Model.酒店服务.洗衣服务)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>洗衣服务</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>洗衣服务</label>}
+                            @if (Model.酒店服务.携带宠物)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>携带宠物</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>携带宠物</label>}
+                            @if (Model.酒店服务.租车)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>租车</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>租车</label>}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="align">酒店设施</td>
+                        <td class="algn">
+                            @if (Model.酒店设施.SPA)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>SPA</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>SPA</label>}
+                            @if (Model.酒店设施.残疾人设施)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>残疾人设施</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>残疾人设施</label>}
+                            @if (Model.酒店设施.会议室)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>会议室</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>会议室</label>}
+                            @if (Model.酒店设施.健身房)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>健身房</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>健身房</label>}
+                            @if (Model.酒店设施.棋牌)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>棋牌</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>棋牌</label>}
+                            @if (Model.酒店设施.桑拿)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>桑拿</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>桑拿</label>}
+                            @if (Model.酒店设施.商务中心)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>商务中心</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>商务中心</label>}
+                            @if (Model.酒店设施.室内游泳池)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>室内游泳池</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>室内游泳池</label>}
+                            @if (Model.酒店设施.室外游泳池)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>室外游泳池</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>室外游泳池</label>}
+                            @if (Model.酒店设施.温泉)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>温泉</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>温泉</label>}
+                            @if (Model.酒店设施.无烟房)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>无烟房</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>无烟房</label>}
+                            @if (Model.酒店设施.西式餐厅)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>西式餐厅</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>西式餐厅</label>}
+                            @if (Model.酒店设施.中式餐厅)
+                            { <input type="checkbox" checked="checked" disabled="disabled" /><label>中式餐厅</label>}
+                            else
+                            { <input type="checkbox" disabled="disabled" /><label>中式餐厅</label>}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="map_other" style="width:920px;">
+                <div id="mapp" class="map" style="width:920px;">
+                    
+                </div>
+            </div>
+            @if(ViewData["通过状态"]=="ex")
+            { 
+            <div style="text-align:center;padding-bottom:5px;" id="examine">
+                <input type="button" value="审核通过" name="审核通过" class="front_login_rightbox_button_less">
+                <input type="button" value="审核不通过" name="审核不通过" class="front_login_rightbox_button_less">
+            </div>
+            }
+        </div>
+        
+    </div>
+</div>
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript">
+    var attchtextstring = "";
+    $(document).ready(function () {
+        $("#uploadify").uploadify({
+            'uploader': '../../JS/jquery.uploadify-v2.1.4/uploadify.swf',
+            'script': 'UploadPhoto',
+            'cancelImg': '../../JS/jquery.uploadify-v2.1.4/cancel.png',
+            'folder': 'UploadFile',
+            'sizeLimit': 1024 * 1024 * 100,
+            'queueSizeLimit': 50,
+            //'fileDesc': '只允许上传bmp,gif,jpg,jpeg图片',
+            //'fileExt': '*.bmp;*.gif;*.jpg;*.jpeg',
+            'method': 'Post',
+            'queueID': 'ShowImage',
+            'buttonImg': '../../JS/jquery.uploadify-v2.1.4/btn.jpg',
+            'wmode': 'transparent',
+            'auto': false,
+            'multi': true,
+            'onComplete': function (e, q, f, data, d) {
+                attchtextstring = document.getElementById("attachtext").value + data + "|";
+                document.getElementById("attachtext").value = attchtextstring;
+                var filename = data;
+                var Image = "<img style='width:120px;height:70px;' src='" + data + "'/>";
+                var Preview = "<a href='" + data + "' target=\"_blank\">预览</a>&nbsp;&nbsp;";
+                var Original = "<a href=\"" + data + "\" target=\"_blank\">原图</a>&nbsp;&nbsp;";
+                var Delete = "<a href=\"javascript:DeleteAttachment('" + q + "','" + data + "')\" style='color:red; padding-left:20px;'>删除</a>";
+                var Div = "<div style='margin-top:5px;text-align:center'>" + Preview + Original + Delete + "</div>";
+                $("#uploadify" + q).html(Image + Div);
+            }
+        });
+        $("#btnBegin").click(function () { $("#uploadify").uploadifyUpload(); return false; });
+    });
+    function DeleteAttachment(q, n) {
+        $.ajax({
+            type: "POST",
+            url: "DeleteAttachment?q=" + q + "&n=" + n,
+            success: function (msg) {
+                if (msg != "0") {
+                    //document.getElementById("attachtext").value = document.getElementById("attachtext").value.replace(n + "|", "");
+                    jQuery("#uploadify").uploadifyCancel(msg);
+                }
+            }
+        });
+    }
+    @{
+        if (Model.酒店基本信息.地理位置 == null)
+        {
+            Model.酒店基本信息.地理位置 = new double[] { 104.067923, 30.679943 };
+        }
+        
+        }
+    //创建和初始化地图函数：
+    function initMap() {
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addMarker();//向地图中添加marker
+    }
+    //创建地图函数：
+    function createMap() {
+        var map = new BMap.Map("mapp");//在百度地图容器中创建一个地图
+        map.addControl(new BMap.MapTypeControl());
+        var point = new BMap.Point(@Model.酒店基本信息.地理位置[0],@Model.酒店基本信息.地理位置[1]);//定义一个中心点坐标
+        map.centerAndZoom(point, 17);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+
+    //地图事件设置函数：
+    function setMapEvent() {
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+    //地图控件添加函数：
+    function addMapControl() {
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1 });
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+        map.addControl(ctrl_sca);
+    }
+
+    //标注点数组
+    var markerArr = [{
+        title: "@Model.酒店基本信息.酒店名",
+        content: "", //@*(地址：@Model.所属地域.地域)*@
+        point:"@Model.酒店基本信息.地理位置[0]|@Model.酒店基本信息.地理位置[1]",
+        isOpen: 0,
+        icon: { w: 21, h: 21, l: 0, t: 0, x: 6, lb: 5 }
+    }];
+    //创建marker
+    function addMarker() {
+        for (var i = 0; i < markerArr.length; i++) {
+            var json = markerArr[i];
+            var p0 = json.point.split("|")[0];
+            var p1 = json.point.split("|")[1];
+            var point = new BMap.Point(p0, p1);
+            //var iconImg = createIcon(json.icon);
+            var iconImg=new BMap.Icon("../Images/marker.png", new BMap.Size(50, 50));
+            var marker = new BMap.Marker(point, { icon: iconImg });
+            var iw = createInfoWindow(i);
+            var label = new BMap.Label(json.title, { "offset": new BMap.Size(json.icon.lb - json.icon.x + 10, -20) });
+            marker.setLabel(label);
+            map.addOverlay(marker);
+            label.setStyle({
+                borderColor: "#808080",
+                color: "#333",
+                cursor: "pointer"
+            });
+
+            (function() {
+                var index = i;
+                var _iw = createInfoWindow(i);
+                var _marker = marker;
+                _marker.addEventListener("click", function() {
+                    this.openInfoWindow(_iw);
+                });
+                _iw.addEventListener("open", function() {
+                    _marker.getLabel().hide();
+                });
+                _iw.addEventListener("close", function() {
+                    _marker.getLabel().show();
+                });
+                label.addEventListener("click", function() {
+                    _marker.openInfoWindow(_iw);
+                });
+                if (!!json.isOpen) {
+                    label.hide();
+                    _marker.openInfoWindow(_iw);
+                }
+            })();
+        }
+    }
+    //创建InfoWindow
+    function createInfoWindow(i) {
+        var json = markerArr[i];
+        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>" + json.content + "</div>");
+        return iw;
+    }
+    //创建一个Icon
+    function createIcon(json) {
+        var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w, json.h), { imageOffset: new BMap.Size(-json.l, -json.t), infoWindowOffset: new BMap.Size(json.lb + 5, 1), offset: new BMap.Size(json.x, json.h) })
+        return icon;
+    }
+
+    initMap();//创建和初始化地图
+</script>
+
+<script type="text/javascript">
+    $("#examine input").click(function(){
+        var exatype=$(this).attr("name");
+        $.ajax({
+            url:'/运营团队后台/Hotel_Ticket_Examine',
+            data:{id:@Model.Id,type:exatype},
+            success:function(){
+                window.location.href="/运营团队后台/HotelExamine";
+            },
+        });
+    });
+    $(function () {
+        var t="@ViewData["通过状态"]";
+        if(t=="ex"){
+            $("#待审核酒店").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#待审核酒店").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        }
+        if(t=="exd"){
+            $("#已审核酒店").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#已审核酒店").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        }
+    });
+</script>

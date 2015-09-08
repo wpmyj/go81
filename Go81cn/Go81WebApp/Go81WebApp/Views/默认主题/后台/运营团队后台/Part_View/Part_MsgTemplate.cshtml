@@ -1,0 +1,154 @@
+﻿@using Go81WebApp.Models.数据模型.推送数据模型
+<script src="~/JS/provinceandcity_all.js"></script>
+<link href="~/css/index.css" rel="stylesheet" />
+<script type="text/javascript" language="javascript">
+    function AddorModify_MsgTemp(th) {
+        var tip = th.value;
+        if (tip == "添加")
+            {
+        var str = document.getElementById("txt").value;
+        $.get('/运营团队后台/Save_MsgTemp',
+            {
+                title: $(":text#title").val(),
+                types: $("select").val(),
+                con: str
+            },
+            function (data) {
+                if (data == 0) {
+                    $("#tips").show();
+                    $("#tips #tips1").text("添加失败!!!");
+                }
+                else {
+                    $("table").append("<tr><td>" + data + "</td><td>" + $(":text#title").val() + "</td><td>" + $(":selected").text() + "</td><td style='min-width:200px; max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;'>" + str + "</td><td><a href='###' title='"+data+"' onclick='SetText(this)'>修改</a><a href='/运营团队后台/Del_MsgTemp?id=" + data + "'>删除</a></td></tr>");
+                    $(":text#title").val("");
+                    $(":hidden").val(data);
+                    document.getElementById("txt").value = "";
+                }
+                });
+        }
+        else if (tip == "提交") {
+            var id = $(":hidden").val();
+            var str = document.getElementById("txt").value;
+            $.get('/运营团队后台/Modify_MsgTemp',
+                {
+                    Id: id,
+                    title: $(":text#title").val(),
+                    types: $("select").val(),
+                    con: str
+                },
+                function (data) {
+                    if (data == 0) {
+                        $("#tips").show();
+                        $("#tips #tips1").text("修改失败!!!");
+                    }
+                    else {
+                        window.location = '/运营团队后台/Msg_TemplateManage';
+                    }
+                });
+        }
+    }
+    function SetText(th) {
+        var id = th.title;
+        $(":hidden").val(id);
+        $.get('/运营团队后台/GetText', { Id: id }, function (data) {
+            var strArry = data.split(',');
+            $(":text#title").val(strArry[0]);
+            switch (strArry[2])
+            {
+                case "4": $("select").val("4"); break;
+                case "3": $("select").val("3"); break;
+                case "2": $("select").val("2"); break;
+                case "1": $("select").val("1"); break;
+            }
+            document.getElementById("txt").value = strArry[1];
+            $(":button").val("提交");
+        });
+    }
+    function shutdown()
+    {
+        $("#tips").hide();
+        window.location = "/运营团队后台/Msg_TemplateManage";
+    }
+</script>
+<style type="text/css">
+    .gys_znxx_content table.template {
+        border: none;
+    }
+
+        .gys_znxx_content table.template tr td {
+            border: none;
+        }
+
+        .gys_znxx_content table.template tr {
+            background: #fff;
+        }
+
+            .gys_znxx_content table.template tr:hover {
+                background: none;
+            }
+</style>
+<div style="text-align:center;color:red; box-shadow:0px 0px 10px black;-webkit-box-shadow:0px 0px 10px black; -moz-box-shadow:0px 0px 10px black; position:absolute; background-color:rgb(253, 255, 253); margin-top:250px; margin-left:220px; display:none; width:250px; height:100px; border-radius:3px; font-size:13px;" id="tips">
+    <div><a href="###" onclick="shutdown();" style="margin-right:10px; float:right; margin-right:5px; margin-top:5px;">关闭</a></div>
+    <div id="tips1" style="text-align:center;color:red;line-height:100px; width:250px; height:100px; font-size:12px;"></div>
+</div>
+@{IEnumerable<推送模板> model = ViewData["MsgTemplate"] as IEnumerable<推送模板>;}
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">消息模板管理</div>
+    </div>
+</div>
+<div class="gys_znxx_box">    
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <div style="font-size:12px;" id="tb1">
+                <form>
+                    <input type="hidden" value="" />
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr><th>编号</th><th>标题</th><th>类型</th><th>内容</th><th>操作</th></tr>
+                        @if (model.Count() != 0)
+                        {
+                            foreach (var item in model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.标题</td>
+                                    <td>@item.推送类型</td>
+                                    <td style="min-width:200px; max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">@item.内容</td>
+                                    <td><a href="###" title="@item.Id" onclick="SetText(this)">修改</a><a href="/运营团队后台/Del_MsgTemp?id=@item.Id">删除</a></td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                    <div>
+                        @Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString()))
+                    </div>
+                    <div id="box" style="margin-top:20px; background-color:rgb(255, 255, 252); border-color:rgb(214, 212, 188); border-style:solid; border-width:1px;">
+                        <div style="font-size:14px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模板类型: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select style="width:200px; margin-bottom:5px; margin-top:5px; ">
+                                <option value="@((int)推送类型.未指定)">未指定</option>
+                                <option value="@((int)推送类型.邮件消息)">电子邮件</option>
+                                <option value="@((int)推送类型.站内消息)">站内消息</option>
+                                <option value="@((int)推送类型.短信消息)">手机短息</option>
+                                <option value="@((int)推送类型.微信消息)">微信消息</option>
+                            </select>
+                        </div>
+                        <div style="font-size:14px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模板标题: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="title" style="width:200px; margin-top:5px;" />
+                        </div>
+                        <div style="font-size:14px; vertical-align:top;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;模板内容: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <textarea id="txt" style="width:550px;  margin-left:-4px;margin-top:5px; height:220px;"></textarea>
+                        </div>
+                        <input class="front_login_rightbox_button" style="margin-left:200px;" type="button" onclick="AddorModify_MsgTemp(this)" value="添加" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#消息模板").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#消息模板").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "商务小助手服务";
+    Layout = "~/Views/默认主题/_Shared/_Layout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("Part_PublicPuRNav", "jct")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div>
+            <div style="color:#bb0202; width:auto; font-size:24px;">商务小助手服务</div>
+            <div style="clear:both; padding-top:20px; color:#606060;line-height:25px; font-size:16px;">
+                <p>目前，已推出商品库管理助手，可提供商品分类管理和商品库数据导入与维护管理。</p>
+                <p style="text-indent:2em;">
+                    <h4>（一）商品分类管理</h4>
+                    为便于进行入网供应商的管理和在库供应商的抽取，同一家供应商只能注册一个账号（按组织机构代码证判断），每个账号可以选择一个一级商品分类，五个二级商品分类。
+                    军采通会员，可以选择更多的一级商品分类和二级商品分类，增加更多的商业机会。
+                </p>
+                <p style="text-indent:2em;">
+                    <h4>（二）商品库数据导入与维护</h4>
+                    非会员通过手动录入商品信息。如果商品种类过多，且又需要频繁进行价格调整的话，会导致工作量增加，消耗人力成本和时间成本。不及时地更新又会错过很多商业机会。
+                    <br />军采通会员，我们提供更加便捷的批量处理工具，可进行批量上传、批量管理、批量编辑，为您省下专人专管的成本。
+                </p>
+                <p style="text-indent:2em;">
+                    <h4>（三）商品数据库数据对接共享<span style="color:red;">（* 该项服务不包含在军采通会员费中，需根据实际情况另行收费）</span></h4>
+                    军采通会员还可申请直接使用网站数据库接口，更加轻松方便对接自己的商品数据库，更加便捷进行商品管理。
+                </p>
+            </div>
+            <div style="text-align:center; width:550px; height:270px; margin:0px auto; background-size:cover; margin-top:30px; margin-left:auto; margin-right:auto; background-image:url(/Images/productDb.JPG)">
+            </div>
+            <p style="text-indent:2em;">
+                <h4>（四）服务体现价值</h4>
+                使用商品数据库助手，将可减化供应商对商品数据的维护工作，节约人力成本和时间成本，同时，也方便采购机构即时了解到最新的商品信息，增加采购机会，增强供应商的竞争力。
+            </p>
+            <div><a href="/jct/Applyvip?sure=true" style="display:block; width:150px ;height:30px; text-align:center; line-height:30px; border:1px solid red; background-color:#E78E8E; color:white; margin:0px auto;">申请加入军采通会员</a></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(".action_link").each(function () {
+        if ($(this).text() == "军采通") {
+            $(this).parent("div").addClass("on");
+        }
+    });
+</script>

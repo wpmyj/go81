@@ -1,0 +1,40 @@
+﻿<div id="waitfor" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>请稍等...</span>
+    </div>
+</div>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">上传公告</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+
+            <div style="width: 800px; height: auto; padding: 20px; margin: 0 auto; padding-top:0;">
+
+                <form action="/运营团队后台/UploadAdMessage" name="uploadpic" method="POST" enctype="multipart/form-data" target="result_frame1">
+                    <div class="container-temp">
+                        <input type="file" onchange="filechange1()" name="pic_template" />
+                    </div>
+                </form>
+                <iframe id="uploadframegood" name="result_frame1" style="height:30px;margin-left: 55px;" scrolling="no" frameborder="0"></iframe>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#上传公告").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#上传公告").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function filechange1() {
+        $("#waitfor").show();
+        document.forms["uploadpic"].submit();
+    }
+</script>
+

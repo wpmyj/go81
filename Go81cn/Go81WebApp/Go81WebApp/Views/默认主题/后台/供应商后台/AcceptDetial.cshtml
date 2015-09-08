@@ -1,0 +1,1158 @@
+﻿﻿@model Go81WebApp.Models.数据模型.项目数据模型.验收单
+@using Gma.QrCodeNet.Encoding.DataEncodation
+@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Controllers.后台
+@{
+    Layout = null;
+}
+<script src="~/Scripts/jquery-1.11.1.min.js" type="text/javascript"></script>
+<link href="~/css/stylesheet.css" type="text/css" rel="stylesheet" />
+<title>验收单详情</title>
+<style type="text/css">
+    #accept_con table tr td.align {
+        text-align: right;
+    }
+
+    .modal_out {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 99999;
+        display: none;
+    }
+
+    .modal_in {
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        position: fixed;
+        background: #F0F0F0;
+        opacity: 0.5;
+    }
+
+    .modal_content_loading {
+        width: 260px;
+        height: 55px;
+        margin: 20% auto;
+        background: #fff;
+        border: 1px solid #07890C;
+        line-height: 55px;
+        text-indent: 3em;
+        position: relative;
+    }
+
+        .modal_content_loading span {
+            font-size: 13px;
+        }
+
+        .modal_content_loading img {
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+        }
+</style>
+
+@if (Model.审核数据.审核状态 == 审核状态.审核未通过)
+{
+    <div style="margin-top:20px;color:#ff0000">审核未通过原因：@Model.审核数据.审核不通过原因</div>
+}
+
+<div id="accept_con" style="margin: -30px 0 0;">
+    <input type="hidden" value="@Model.Id" id="model_id" />
+    @{
+        var vl = new List<Tuple<string, string, string, string, int, decimal, decimal>>();
+        if (Model.物资服务列表.Count > 8)
+        {
+            decimal price_total = Model.物资服务列表.Sum(o => o.总价);
+            vl.Add(Tuple.Create(Model.某批物资名称.ToString() + "(点击查看)", (string)null, (string)null, "批", 1, price_total, price_total));
+        }
+        else if (Model.物资服务列表.Count == 0 && Model.验收单附件.Count > 0)
+        {
+            decimal price_total = Model.验收单附件.Sum(o => o.价格);
+            vl.Add(Tuple.Create(Model.某批物资名称.ToString() + "(点击查看)", (string)null, (string)null, "批", 1, price_total, price_total));
+        }
+        else
+        {
+            foreach (var plnk in Model.物资服务列表)
+            {
+                if (plnk.商品链接.商品 != null)
+                {
+                    vl.Add(Tuple.Create(plnk.商品链接.商品.商品信息.商品名, plnk.规格型号, plnk.采购合同号, plnk.计量单位, plnk.数量, plnk.单价, plnk.总价));
+                }
+                else
+                {
+                    vl.Add(Tuple.Create("商品不存在", plnk.规格型号, plnk.采购合同号, plnk.计量单位, plnk.数量, plnk.单价, plnk.总价));
+                }
+            }
+        }
+        if (Model.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0, Model.运费, Model.运费)); }
+        if (Model.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0, Model.服务费, Model.服务费)); }
+        if (Model.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0, Model.维修费, Model.维修费)); }
+        foreach (var k in Model.其他费用) { vl.Add(Tuple.Create(k.费用名称, string.Empty, string.Empty, string.Empty, 0, k.金额, k.金额)); }
+
+        var vl_all = new List<Tuple<string, string, string, string, int, decimal, decimal>[]>();
+        for (var n_all = 0; n_all < vl.Count; n_all += 8) { vl_all.Add(vl.Skip(n_all).Take(8).ToArray()); }
+    }
+    @for (var yn = 1; yn <= vl_all.Count; ++yn)
+    {
+        <div style="width:1050px;margin:0px auto 0; padding:0 0 0 25px;border-left:1px dashed #222222">
+            @{{
+                <div style="font-size:14px;margin:0 auto;width:1030px;">
+                    <table width="100%" style="margin-top:30px;font-size:14px;">
+                        <tr>
+                            <td rowspan="3" width="33%">
+                                <div style="height:30px;;margin-top:20px;">验收单号：@Model.验收单号 - @yn</div>
+                                <div style="text-indent:16px;height:30px;;">核对码：@Model.验收单核对码</div>
+                                @*<div style="height:30px;;">生成日期：@DateTime.Now</div>*@
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" style="width:85%;font-size:32px;margin-top:35px; position:relative;">
+                                成都军区物资集中采购验收单
+                                @if (Model.审核数据.审核者.用户数据 != null)
+                                {
+                                    if (Model.审核数据.审核状态 == 审核状态.审核通过 && Model.审核数据.审核者.用户数据.单位信息.单位名称.Contains("成都军区联勤部军需物资油料部"))
+                                    {
+                                        <img src="~/Images/chapter.png" style="position:absolute;left:137px;top:-7px;width:139px;" />
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" style="width:100%;margin:0 auto; text-align:right">
+                                <img src="/供应商后台/OutPutQrCode?str=@Model.Id" style=" margin-right:60px;margin-top:-8PX;" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="margin:0 auto 15px;width:1030px;">
+                    <table style="width:100%; font-size:14px;" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td colspan="5" style="height:34px; text-indent:5px;">
+                                收货单位：@if (Model.收货单位 != null)
+                                { @Model.收货单位}
+                            </td>
+                            @*<td colspan="3" style="text-align:right;font-family:'Times New Roman'">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>*@
+                            <td colspan="3" style="text-align:right;padding-right:20px">生成日期：@DateTime.Now</td>
+                            <td rowspan="12" style="padding-left:14px;padding-top:25px;"><span>第一联</span><br /><br /><span style="height:34px;">供货单位留存</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" style="height:34px; border:1px solid black; border-bottom:none; text-indent:5px;">供货单位：@Model.供应商链接.用户数据.企业基本信息.企业名称</td>
+                        </tr>
+                        <tr>
+                            <td style="height:34px;line-height:34px; border:1px solid black; padding-left:5px;padding-right:5px;" align="center" width="4%">序号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="30%">物资名称</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="19%">规格型号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="12%">采购合同号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="4%">计量单位</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="8%">数量</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="11.8%">单价（元）</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">金额（元）</td>
+                        </tr>
+
+                        @{
+                                var totalcost = 0M;
+                                for (var vl_n = 1; vl_n <= 8; ++vl_n)
+                                {
+                                    var vl_content = vl_all[yn - 1].Length + 1 > vl_n
+                                        ? vl_all[yn - 1][vl_n - 1]
+                                        : Tuple.Create((string)null, (string)null, (string)null, (string)null, 0, -1M, -1M);
+                                    if (vl_content.Item7 > 0) { totalcost += vl_content.Item7; }
+                                    var sp = vl_content.Item1 != null && vl_content.Item1.EndsWith("(点击查看)") ? "height:34px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;cursor:pointer;color:red" : "height:34px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;";
+                                    var evt_clk = "";
+                                    if (Model.物资服务列表.Count > 0 && vl_n == 1)
+                                    {
+                                        evt_clk = "$('#good_list').fadeIn()";
+                                    }
+                                    if (Model.验收单附件.Count > 0 && vl_n == 1)
+                                    {
+                                        evt_clk = "$('#attach_list').fadeIn(200);";
+                                    }
+
+                                    <tr>
+                                        <td style="height:34px; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@vl_n</td>
+                                        <td style="@sp" align="left" onclick="@evt_clk">@(string.IsNullOrWhiteSpace(vl_content.Item1) ? " " : vl_content.Item1)</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;" align="left">@(string.IsNullOrWhiteSpace(vl_content.Item2) ? " " : vl_content.Item2)</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(string.IsNullOrWhiteSpace(vl_content.Item3) ? " " : vl_content.Item3)</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(string.IsNullOrWhiteSpace(vl_content.Item4) ? " " : vl_content.Item4)</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 == vl_content.Item5 ? " " : vl_content.Item5.ToString())</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 > vl_content.Item6 ? " " : "￥" + string.Format("{0:0.00}", vl_content.Item6))</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 > vl_content.Item7 ? " " : "￥" + string.Format("{0:0.00}", vl_content.Item7))</td>
+                                    </tr>
+                                }
+                        }
+                        <tr>
+                            <td style="height:34px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">9</td>
+                            <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; position:relative" align="center">
+                                金额合计（大写）
+                                <div style="position:absolute;top:15px; width:200px; height:200px;">
+                                    @if (!Model.是否作废)
+                                    {
+                                        if (Model.审核数据.审核者.用户数据 != null)
+                                        {
+                                            if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                            {
+
+                                                if (Model.审核数据.审核者.用户ID == 10015)
+                                                {
+                                                    <img src="~/Images/seal/昆明民族干部学院章.png" width="240" />
+                                                }
+                                                else if (Model.审核数据.审核者.用户ID == 20057)
+                                                {
+                                                    <img src="~/Images/seal/贵州省军区章.png" width="240" />
+                                                }
+                                                else if (Model.审核数据.审核者.用户ID == 20261)
+                                                {
+                                                    <img src="~/Images/xzwz.png" width="240" />
+                                                }
+                                                else if (Model.审核数据.审核者.用户ID == 20292)
+                                                {
+                                                    <img src="~/Images/seal/zjrwb.png" width="240" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="/供应商后台/SealWithText?txt=@Model.审核数据.审核者.用户数据.验收单名称&base=@Model.审核数据.审核者.用户数据.印章底部文本&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Images/avoid.png" />
+                                    }
+                                </div>
+
+                            </td>
+                            <td colspan="3" style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; text-align:right;padding-right:5px; letter-spacing:2px;">
+                                <span>@供应商后台Controller.MoneyToUpper(totalcost.ToString())</span>
+                            </td>
+                            <td colspan="2" style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（小写）</td>
+                            <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">
+                                <span>￥@(string.Format("{0:0.00}", totalcost))</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style=" border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center" rowspan="5">意见反馈</td>
+                            <td colspan="7" style=" border-right: 1px solid black; border-bottom: 1px solid black;">
+                                <table style="width:100%;font-size:14px;" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td style="width:23.3%;border-bottom: 1px solid black; border-right:1px solid black;height:34px;" align="center">用户通知时间</td>
+                                        <td style="width:28.2% ;border-bottom: 1px solid black;border-right:1px solid black;height:34px;" colspan="3">&nbsp;</td>
+                                        <td style="width:16.5%;border-bottom: 1px solid black; border-right:1px solid black;height:34px;" align="center" colspan="2">实际验收时间</td>
+                                        <td style="height:34px;border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                        <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                        <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;width:18%" align="center">供货情况满意度评价</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; width:9.4%" align="center">满意</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; width:9.3%" align="center">一般</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; width:9.3%" align="center">不满意</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; width:37.4%;text-indent:-18px;" align="center" colspan="4">不满意原因</td>
+                                        <td rowspan="3" align="center" style="padding-left:9px;">
+                                            军区投诉咨询电话:<br />
+                                            0821-683369
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">服务态度</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black;border-bottom: 1px solid black; " align="center" colspan="4">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height:34px; border-right: 1px solid black;" align="center">产品价格及其他</td>
+                                        <td style="height:34px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black; " align="center" colspan="4">&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="margin-top:3px;">
+                        <table style="width:100%; font-size:14px;margin-left:5px;" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td colspan="5" align="right" style="padding-right: 24px;height:22px;">（收货单位验收人已确认此票据与所供货物一致，无虚假现象）</td>
+                            </tr>
+                            <tr style="height:28px;">
+                                @if (Model.审核数据.审核者.用户ID == 10003)
+                                {
+                                    <td valign="top" style="width:250px; padding-top:5px;">管理审核部门：</td>
+                                }
+                                else
+                                {
+                                    <td valign="top" style="width:250px; padding-top:5px;">
+                                        管理部门审核人：
+                                        @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                        {
+                                            if (Model.审核数据.审核者.用户ID == 10015)
+                                            {
+                                                <img src="~/Images/seal/昆明民族干部学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10008)
+                                            {
+                                                <img src="~/Images/seal/77100签名.png" style="position:absolute; width:120px; height:80px; margin-top:-25px;" />
+                                            }
+                                            @*else if (Model.审核数据.审核者.用户ID == 10003)
+                                                {
+                                                    <img src="~/Images/seal/采购处签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                                }*@
+                                            else if (Model.审核数据.审核者.用户ID == 10007)
+                                            {
+                                                <img src="~/Images/seal/成都军区总医院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10004)
+                                            {
+                                                <img src="~/Images/seal/78006签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10005)
+                                            {
+                                                <img src="~/Images/seal/四川省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10011)
+                                            {
+                                                <img src="~/Images/seal/后勤工程学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10012)
+                                            {
+                                                <img src="~/Images/seal/324医院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10014)
+                                            {
+                                                <img src="~/Images/seal/云南省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10009)
+                                            {
+                                                <img src="~/Images/seal/重庆警备区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 20057)
+                                            {
+                                                <img src="~/Images/seal/贵州省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 20261)
+                                            {
+                                                <img src="~/Images/seal/xz.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 20292)
+                                            {
+                                                <img src="~/Images/seal/gzzj.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10001)
+                                            {
+                                                <img src="~/Images/seal/采购处签名1.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                                            }
+                                            else
+                                            {
+                                                if (Model.审核数据.审核者.用户数据 != null)
+                                                {
+                                                    <img src="~/Images/seal/@(Model.审核数据.审核者.用户数据.单位信息.单位代号)签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                }
+                                <td style="text-indent:2em;width:18%;text-align:right;padding-top:5px" valign="top">供货单位开票人：</td>
+                                <td colspan="2" style="width:65px;padding-top:5px" valign="top">@Model.供货单位开票人</td>
+                                <td>收货单位验收人：</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align:right">供货单位开票人电话：</td>
+                                <td colspan="2"></td>
+                                <td style="text-indent:-2em;">收货单位验收人电话：</td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+            }}
+            @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+            {
+                <img src="/供应商后台/SealWithText?txt=@Model.验收单号&base=@Model.验收单核对码&id=@Model.审核数据.审核者.用户ID" style="position:absolute; margin-top:-57px; width:150px; height:150px;" />
+            }
+            <div style="width:100%;border-bottom:1px dashed #222222;padding-top:20px; margin-left:-22px;"></div>
+            @{{
+                <div style="font-size:14px;margin:0 auto ;width:1030px;">
+                    <table width="100%" style="margin-top:25px;font-size:14px;">
+                        <tr>
+                            <td rowspan="3" width="33%">
+                                <div style="height:30px;; margin-top:20px;">验收单号：@Model.验收单号 - @yn</div>
+                                <div style="text-indent:16px;height:30px;;">核对码：@Model.验收单核对码</div>
+                                @*<div style="height:30px;;">生成日期：@DateTime.Now</div>*@
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" style="width:85%;font-size:32px;margin-top:35px; position:relative;">
+                                成都军区物资集中采购验收单
+                                @if (Model.审核数据.审核者.用户数据 != null)
+                                {
+                                    if (Model.审核数据.审核状态 == 审核状态.审核通过 && Model.审核数据.审核者.用户数据.单位信息.单位名称.Contains("成都军区联勤部军需物资油料部"))
+                                    {
+                                        <img src="~/Images/chapter.png" style="position:absolute;left:137px;top:-7px;width:139px;" />
+                                    }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" style="width:100%;margin:0 auto; text-align:right">
+                                <img src="/供应商后台/OutPutQrCode?str=@Model.Id" style=" margin-right:60px;margin-top:-8PX;" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="margin:0 auto;width:1030px;">
+                    <table style="width:100%; font-size:14px;" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td colspan="5" style="height:34px; text-indent:5px;">
+                                收货单位：@if (Model.收货单位 != null)
+                                { @Model.收货单位}
+                            </td>
+                            @*<td colspan="3" style="text-align:right;font-family:'Times New Roman'">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>*@
+                            <td colspan="3" style="text-align:right;padding-right:20px;">生成日期：@DateTime.Now</td>
+                            <td rowspan="12" style="padding-left:14px;padding-top:25px;"> <span>第二联</span><br /><br /><span style="height:34px;">收货单位财务报销附件</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" style="height:34px; border:1px solid black; border-bottom:none; text-indent:5px;">供货单位：@Model.供应商链接.用户数据.企业基本信息.企业名称</td>
+                        </tr>
+                        <tr>
+                            <td style="height:34px;line-height:34px; border:1px solid black; padding-left:5px;padding-right:5px;" align="center" width="4%">序号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="30%">物资名称</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="19%">规格型号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="12%">采购合同号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="4%">计量单位</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="8%">数量</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="11.8%">单价（元）</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">金额（元）</td>
+                        </tr>
+
+                        @{
+                                var totalcost = 0M;
+                                for (var vl_n = 1; vl_n <= 8; ++vl_n)
+                                {
+                                    var vl_content = vl_all[yn - 1].Length + 1 > vl_n
+                                        ? vl_all[yn - 1][vl_n - 1]
+                                        : Tuple.Create((string)null, (string)null, (string)null, (string)null, 0, -1M, -1M);
+                                    if (vl_content.Item7 > 0) { totalcost += vl_content.Item7; }
+                                    var sp = vl_content.Item1 != null && vl_content.Item1.EndsWith("(点击查看)") ? "height:34px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;cursor:pointer;color:red" : "height:34px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;";
+                                    var evt_clk = "";
+                                    if (Model.物资服务列表.Count > 0 && vl_n == 1)
+                                    {
+                                        evt_clk = "$('#good_list').fadeIn()";
+                                    }
+                                    if (Model.验收单附件.Count > 0 && vl_n == 1)
+                                    {
+                                        evt_clk = "$('#attach_list').fadeIn(200);";
+                                    }
+                                    <tr>
+                                        <td style="height:34px; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@vl_n</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px; @sp" align="left" onclick="@evt_clk">@(string.IsNullOrWhiteSpace(vl_content.Item1) ? " " : vl_content.Item1)</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;" align="left">@(string.IsNullOrWhiteSpace(vl_content.Item2) ? " " : vl_content.Item2)</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(string.IsNullOrWhiteSpace(vl_content.Item3) ? " " : vl_content.Item3)</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(string.IsNullOrWhiteSpace(vl_content.Item4) ? " " : vl_content.Item4)</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 == vl_content.Item5 ? " " : vl_content.Item5.ToString())</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 > vl_content.Item6 ? " " : "￥" + string.Format("{0:0.00}", vl_content.Item6))</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 > vl_content.Item7 ? " " : "￥" + string.Format("{0:0.00}", vl_content.Item7))</td>
+                                    </tr>
+                                }
+                        }
+                        <tr>
+                            <td style="height:34px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">9</td>
+                            <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; position:relative" align="center">
+                                金额合计（大写）
+                                <div style="position:absolute;top:15px; width:200px; height:200px;">
+                                    @if (!Model.是否作废)
+                                    {
+                                        if (Model.审核数据.审核者.用户数据 != null)
+                                        {
+                                            if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                            {
+                                                if (Model.审核数据.审核者.用户ID == 10015)
+                                                {
+                                                    <img src="~/Images/seal/昆明民族干部学院章.png" width="240" />
+                                                }
+                                                else if (Model.审核数据.审核者.用户ID == 20057)
+                                                {
+                                                    <img src="~/Images/seal/贵州省军区章.png" width="240" />
+                                                }
+                                                else if (Model.审核数据.审核者.用户ID == 20261)
+                                                {
+                                                    <img src="~/Images/xzwz.png" width="240" />
+                                                }
+                                                else if (Model.审核数据.审核者.用户ID == 20292)
+                                                {
+                                                    <img src="~/Images/seal/zjrwb.png" width="240" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="/供应商后台/SealWithText?txt=@Model.审核数据.审核者.用户数据.验收单名称&base=@Model.审核数据.审核者.用户数据.印章底部文本&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Images/avoid.png" />
+                                    }
+                                </div>
+
+                            </td>
+                            <td colspan="3" style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; text-align:right;padding-right:5px; letter-spacing:2px;">
+                                <span>@供应商后台Controller.MoneyToUpper(totalcost.ToString())</span>
+                            </td>
+                            <td colspan="2" style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（小写）</td>
+                            <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">
+                                <span>￥@(string.Format("{0:0.00}", totalcost))</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style=" border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center" rowspan="5">意见反馈</td>
+                            <td colspan="7" style=" border-right: 1px solid black; border-bottom: 1px solid black;">
+                                <table style="width:100%;font-size:14px;" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td style="width:23.3%;border-bottom: 1px solid black; border-right:1px solid black;height:34px;" align="center">用户通知时间</td>
+                                        <td style="width:28.2% ;border-bottom: 1px solid black;border-right:1px solid black;height:34px;" colspan="3">&nbsp;</td>
+                                        <td style="width:16.5%;border-bottom: 1px solid black; border-right:1px solid black;height:34px;" align="center" colspan="2">实际验收时间</td>
+                                        <td style="height:34px;border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                        <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                        <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;width:18%" align="center">供货情况满意度评价</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; width:9.4%" align="center">满意</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; width:9.3%" align="center">一般</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; width:9.3%" align="center">不满意</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black; width:37.4%;text-indent:-18px;" align="center" colspan="4">不满意原因</td>
+                                        <td rowspan="3" align="center" style="padding-left:9px;">
+                                            军区投诉咨询电话:<br />
+                                            0821-683369
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">服务态度</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black;border-bottom: 1px solid black; " align="center" colspan="4">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height:34px; border-right: 1px solid black;" align="center">产品价格及其他</td>
+                                        <td style="height:34px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height:34px; border-right: 1px solid black;" align="center" colspan="4">&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="margin-top:3px;">
+                        <table style="width:100%; font-size:14px;margin-left:5px;" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td colspan="5" align="right" style="padding-right: 24px;height:22px">（收货单位验收人已确认此票据与所供货物一致，无虚假现象）</td>
+                            </tr>
+                            <tr style="height:28px;">
+                                @if (Model.审核数据.审核者.用户ID == 10003)
+                                {
+                                    <td valign="top" style="width:250px; padding-top:5px;">管理审核部门：</td>
+                                }
+                                else
+                                {
+                                    <td valign="top" style="width:250px; padding-top:5px;">
+                                        管理部门审核人：
+                                        @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                        {
+                                            if (Model.审核数据.审核者.用户ID == 10015)
+                                            {
+                                                <img src="~/Images/seal/昆明民族干部学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10008)
+                                            {
+                                                <img src="~/Images/seal/77100签名.png" style="position:absolute; width:120px; height:80px; margin-top:-25px;" />
+                                            }
+                                            @*else if (Model.审核数据.审核者.用户ID == 10003)
+                                                {
+                                                    <img src="~/Images/seal/采购处签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                                }*@
+                                            else if (Model.审核数据.审核者.用户ID == 10007)
+                                            {
+                                                <img src="~/Images/seal/成都军区总医院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10004)
+                                            {
+                                                <img src="~/Images/seal/78006签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10005)
+                                            {
+                                                <img src="~/Images/seal/四川省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10011)
+                                            {
+                                                <img src="~/Images/seal/后勤工程学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10012)
+                                            {
+                                                <img src="~/Images/seal/324医院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10014)
+                                            {
+                                                <img src="~/Images/seal/云南省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10009)
+                                            {
+                                                <img src="~/Images/seal/重庆警备区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 20057)
+                                            {
+                                                <img src="~/Images/seal/贵州省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 20261)
+                                            {
+                                                <img src="~/Images/seal/xz.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 20292)
+                                            {
+                                                <img src="~/Images/seal/gzzj.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                                            }
+                                            else if (Model.审核数据.审核者.用户ID == 10001)
+                                            {
+                                                <img src="~/Images/seal/采购处签名1.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                                            }
+                                            else
+                                            {
+                                                if (Model.审核数据.审核者.用户数据 != null)
+                                                {
+                                                    <img src="~/Images/seal/@(Model.审核数据.审核者.用户数据.单位信息.单位代号)签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                }
+                                <td style="text-indent:2em;width:18%;text-align:right;padding-top:5px" valign="top">供货单位开票人：</td>
+                                <td colspan="2" style="width:65px;padding-top:5px" valign="top">@Model.供货单位开票人</td>
+                                <td>收货单位验收人：</td>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align:right">供货单位开票人电话：</td>
+                                <td colspan="2"></td>
+                                <td style="text-indent:-2em;">收货单位验收人电话：</td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            }}
+        </div>
+    }
+</div>
+
+@if (Model.审核数据.审核状态 == 审核状态.审核通过 && Model.供应商链接.用户数据.审核数据.审核状态 == 审核状态.审核通过)
+{
+    <div style="text-align:center;padding-bottom:30PX;">
+        <div style="color:red;">*提示：打印验收单时请同时打印物资清单，方便收货单位进行验收。另验收单及物资清单请在打印之日起10日内回传至本网站，逾期后将无法进行回传。</div>
+        @*<div><button id="skanTeach">查看打印电子文档教程</button></div>*@
+        @if (Model.是否已经打印)
+        {
+            <button class="gys_ztbsearch_search_botton btn-base" style="color:#0A0101;" id="printAccep" onclick="printno()">打   印</button>
+        }
+        else
+        {
+            if (ViewData["是否有未上传验收单"].ToString() == "True")
+            {
+                <button class="gys_ztbsearch_search_botton btn-base" style="color:#0A0101;" onclick="javascript:alert('您有存在未上传的验收单，请上传后再进行打印！');">打   印</button>
+            }
+            else
+            {
+                <button class="gys_ztbsearch_search_botton btn-base" style="color:#0A0101;" id="printAccep" onclick="printready()">打   印</button>
+            }
+        }
+    </div>
+}
+
+<!--物资清单列表-->
+@{
+    var wzlist = new List<Tuple<string, string, string, string, string, string, string, Tuple<string>>>();
+    var numbers = 0;
+    foreach (var k in Model.物资服务列表)
+    {
+        numbers++;
+        wzlist.Add(Tuple.Create(numbers.ToString(), (k.商品链接.商品 != null ? k.商品链接.商品.商品信息.商品名 : "商品不存在"), k.规格型号, k.采购合同号, k.计量单位, k.数量.ToString(), k.单价.ToString(), k.总价.ToString()));
+    }
+    if (Model.运费 > 0) { wzlist.Add(Tuple.Create((numbers++).ToString(), "运费", string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, Model.运费.ToString())); }
+    if (Model.服务费 > 0) { wzlist.Add(Tuple.Create((numbers++).ToString(), "服务费", string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, Model.服务费.ToString())); }
+    if (Model.维修费 > 0) { wzlist.Add(Tuple.Create((numbers++).ToString(), "维修费", string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, Model.维修费.ToString())); }
+    foreach (var k in Model.其他费用) { wzlist.Add(Tuple.Create((numbers++).ToString(), k.费用名称, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, k.金额.ToString())); }
+    var ymlist = new List<Tuple<string, string, string, string, string, string, string, Tuple<string>>[]>();
+    for (var i = 0; i < wzlist.Count; i += 23) { ymlist.Add(wzlist.Skip(i).Take(23).ToArray()); }
+}
+
+
+<div id="good_list" class="modal_out" style="display:none">
+    <div class="modal_in" style="background:#000"></div>
+    <div id="good_list_detail" style="width: 1200px; height: auto; margin: 2% auto;padding:10px; background: #FFF; border: 6px solid #D5D5D5;border-radius:4px; position: relative; max-height:85%; overflow-y: scroll; ">
+        @for (int j = 0; j < ymlist.Count; j++)
+        {
+            <div style="display:inline-block;height:65px; width:100%;text-align:center;position:relative;margin:10px;">
+                <div style="width:280px;display:inline-block;position:absolute;left:0;">
+                    <table width="100%" style="font-size:14px;">
+                        <tr>
+                            <td align="right">关联验收单号：</td>
+                            <td align="left">@Model.验收单号</td>
+                        </tr>
+                        <tr>
+                            <td align="right">核对码：</td>
+                            <td align="left">@Model.验收单核对码</td>
+                        </tr>
+                        <tr>
+                            <td align="right">生成日期：</td>
+                            <td align="left">@DateTime.Now</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="display:inline-block; font-size:32px; line-height:65px; text-indent:30px;">采购物资清单</div>
+            </div>
+            <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;border-top:1px solid #ccc; border-left:1px solid #ccc;margin-top:10px;">
+                <tr>
+                    <th width="4%" style="height:30px;line-height:34px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">序号</th>
+                    <th width="30%" style="height:30px;border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">物资名称</th>
+                    <th width="12%" style="height:30px;border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">规格型号</th>
+                    <th width="9%" style="height:30px;border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">
+                        采购合同号
+                        <div style="position:absolute;">
+                            @if (!Model.是否作废)
+                            {
+
+                                if (Model.审核数据.审核者.用户数据 != null)
+                                {
+                                    if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                    {
+                                        if (Model.审核数据.审核者.用户ID == 10015)
+                                        {
+                                            <img src="~/Images/seal/昆明民族干部学院章.png" width="240" />
+                                        }
+                                        else if (Model.审核数据.审核者.用户ID == 20057)
+                                        {
+                                            <img src="~/Images/seal/贵州省军区章.png" width="240" />
+                                        }
+                                        else if (Model.审核数据.审核者.用户ID == 20261)
+                                        {
+                                            <img src="~/Images/xzwz.png" width="240" />
+                                        }
+                                        else if (Model.审核数据.审核者.用户ID == 20292)
+                                        {
+                                            <img src="~/Images/seal/zjrwb.png" width="240" />
+                                        }
+                                        else
+                                        {
+                                            <img src="/供应商后台/SealWithText?txt=@Model.审核数据.审核者.用户数据.验收单名称&base=@Model.审核数据.审核者.用户数据.印章底部文本&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
+                                        }
+                                    }
+                                }
+                            }
+                        </div>
+                    </th>
+                    <th width="5%" style="height:30px;border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">计量单位</th>
+                    <th width="5%" style="height:30px;border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">数量</th>
+                    <th width="5%" style="height:30px;border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">单价</th>
+                    <th width="5%" style="height:30px;border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">金额</th>
+                </tr>
+                @{
+            foreach (var k in ymlist[j])
+            {
+                <tr>
+                    <td style="height:30px;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.Item1</td>
+                    <td style="height:30px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.Item2</td>
+                    <td style="height:30px;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.Item3</td>
+                    <td style="height:30px;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.Item4</td>
+                    <td style="height:30px;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.Item5</td>
+                    <td style="height:30px;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.Item6</td>
+                    <td style="height:30px;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.Item7</td>
+                    <td style="height:30px;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.Rest.Item1</td>
+                </tr>
+            }
+                }
+                @*<tr>
+                        <td colspan="5" width="10%" style="height:30px;;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">运费</td>
+                        <td colspan="3" style="height:30px;;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.运费))</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" width="10%" style="height:30px;;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">服务费</td>
+                        <td colspan="3" style="height:30px;;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.服务费))</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" width="10%" style="height:30px;;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">维修费</td>
+                        <td colspan="3" style="height:30px;;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.维修费))</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" width="10%" style="height:30px;;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">其他费用</td>
+                        <td colspan="3" style="height:30px;;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">
+                            @{
+                    decimal cost = 0;
+                    if (Model.其他费用 != null && Model.其他费用.Count() > 0)
+                    {
+                        foreach (var mmm in Model.其他费用)
+                        {
+                            cost += mmm.金额;
+                        }
+                    }
+                            }
+                            ￥@(string.Format("{0:0.00}", cost))
+                        </td>
+                    </tr>*@
+                <tr>
+                    <td colspan="5" width="10%" style="height:30px;;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">总金额</td>
+                    <td colspan="3" style="height:30px;text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", ymlist[j].Sum(o => decimal.Parse(o.Rest.Item1))))</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">
+                        管理部门审核人：
+                        @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                        {
+                            if (Model.审核数据.审核者.用户ID == 10015)
+                            {
+                                <img src="~/Images/seal/昆明民族干部学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 10003)
+                            {
+                                <img src="~/Images/seal/采购处签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 10004)
+                            {
+                                <img src="~/Images/seal/78006签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 10007)
+                            {
+                                <img src="~/Images/seal/成都军区总医院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 10005)
+                            {
+                                <img src="~/Images/seal/四川省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 10008)
+                            {
+                                <img src="~/Images/seal/77100签名.png" style="position:absolute; width:120px; height:80px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 10011)
+                            {
+                                <img src="~/Images/seal/后勤工程学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 10012)
+                            {
+                                <img src="~/Images/seal/324医院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 10014)
+                            {
+                                <img src="~/Images/seal/云南省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 10009)
+                            {
+                                <img src="~/Images/seal/重庆警备区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 20057)
+                            {
+                                <img src="~/Images/seal/贵州省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 20261)
+                            {
+                                <img src="~/Images/seal/xz.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 20292)
+                            {
+                                <img src="~/Images/seal/gzzj.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                            }
+                            else if (Model.审核数据.审核者.用户ID == 10001)
+                            {
+                                <img src="~/Images/seal/采购处签名1.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                            }
+                            else
+                            {
+                                <img src="~/Images/seal/@(Model.审核数据.审核者.用户数据.单位信息.单位代号)签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            }
+                        }
+                    </td>
+                    <td colspan="3" style="height:30px;;border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">供货单位开票人：@Model.供货单位开票人</td>
+                    <td colspan="3" style="height:30px;;border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">收货单位验收人：@Model.收货单位验收人</td>
+                </tr>
+            </table>
+        }
+
+
+        <div style="text-align:center;line-HEIGHT:50PX;padding:20px 0;">
+            @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+            {
+                <input type="button" onclick="printList(this)" class="btn-base" style="background: #139451;border: 3px solid #19791D" value="打    印" />
+            }
+            <input type="button" id="modal_clo" class="btn-base" style="background: #139451;border: 3px solid #19791D" value="关    闭" />
+        </div>
+    </div>
+</div>
+
+<!--附件列表-->
+<div id="attach_list" class="modal_out" style="display:none">
+    <div class="modal_in" style="background:#000"></div>
+    <div id="good_attach_detail" style="width: 900px; height: auto; margin: 2% auto;padding:10px; background: #FFF; border: 6px solid #D5D5D5;border-radius:4px; position: relative; max-height: 500px; overflow-y: scroll; ">
+        <div style="display:inline-block; width:100%;text-align:center;position:relative;height:65px;">
+            <div style="width:280px;display:inline-block;position:absolute;left:10px;">
+                <table width="100%">
+                    <tr>
+                        <td align="right">关联验收单号：</td>
+                        <td align="left">@Model.验收单号</td>
+                    </tr>
+                    <tr>
+                        <td align="right">核对码：</td>
+                        <td align="left">@Model.验收单核对码</td>
+                    </tr>
+                    <tr>
+                        <td align="right">生成日期：</td>
+                        <td align="left">@DateTime.Now</td>
+                    </tr>
+                </table>
+            </div>
+            <div style="display:inline-block; font-size:32px;line-height:65px;">附件清单</div>
+        </div>
+        <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #ccc; border-left:1px solid #ccc;margin-top:10px;">
+            <tr>
+                <th width="5%" style="line-height:34px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">序号</th>
+                <th width="30%" colspan="5" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">附件名称</th>
+                <th width="20%" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">金额</th>
+            </tr>
+            @{var num1 = 1;
+            foreach (var k in Model.验收单附件)
+            {
+                <tr>
+                    <td style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@(num1++)</td>
+                    <td width="30%" colspan="5" style="text-align: left; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc"><a style="color:#000;text-decoration:underline;" href="@k.附件路径" target="_blank">@k.附件路径.Substring(k.附件路径.LastIndexOf('/') + 1)</a><span style="color:red;">(点击/下载查看清单)</span></td>
+                    <td width="20%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", k.价格))</td>
+                </tr>
+
+            }
+            }
+            <tr>
+                <td colspan="6" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">运费</td>
+                <td colspan="2" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.运费))</td>
+            </tr>
+            <tr>
+                <td colspan="6" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">服务费</td>
+                <td colspan="2" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.服务费))</td>
+            </tr>
+            <tr>
+                <td colspan="6" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">维修费</td>
+                <td colspan="2" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.维修费))</td>
+            </tr>
+            <tr>
+                <td colspan="6" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">其他费用</td>
+                <td colspan="2" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">
+                    @{
+                        decimal cost1 = 0;
+                        if (Model.其他费用 != null)
+                        {
+                            foreach (var mmm in Model.其他费用)
+                            {
+                                cost1 += mmm.金额;
+                            }
+                        }
+                    }
+                    ￥@(string.Format("{0:0.00}", cost1))
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">总金额</td>
+                <td colspan="2" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.总金额))</td>
+            </tr>
+            <tr>
+                <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">
+
+                    管理部门审核人：
+                    @if (Model.审核数据.审核者.用户ID == 10015)
+                    {
+                        <img src="~/Images/seal/昆明民族干部学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 10003)
+                    {
+                        <img src="~/Images/seal/采购处签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 10004)
+                    {
+                        <img src="~/Images/seal/78006签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 10007)
+                    {
+                        <img src="~/Images/seal/成都军区总医院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 10005)
+                    {
+                        <img src="~/Images/seal/四川省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 10008)
+                    {
+                        <img src="~/Images/seal/77100签名.png" style="position:absolute; width:120px; height:80px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 10011)
+                    {
+                        <img src="~/Images/seal/后勤工程学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 10012)
+                    {
+                        <img src="~/Images/seal/324医院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 10014)
+                    {
+                        <img src="~/Images/seal/云南省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 10009)
+                    {
+                        <img src="~/Images/seal/重庆警备区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 20057)
+                    {
+                        <img src="~/Images/seal/贵州省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 20057)
+                    {
+                        <img src="~/Images/seal/xz.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 20292)
+                    {
+                        <img src="~/Images/seal/gzzj.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                    }
+                    else if (Model.审核数据.审核者.用户ID == 10001)
+                    {
+                        <img src="~/Images/seal/采购处签名1.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
+                    }
+                    else
+                    {
+                        if (Model.审核数据.审核者.用户数据 != null)
+                        {
+                            <img src="~/Images/seal/@(Model.审核数据.审核者.用户数据.单位信息.单位代号)签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                        }
+                    }
+                </td>
+                <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">供货单位开票人：@Model.供货单位开票人</td>
+                <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">
+                    收货单位验收人：@Model.收货单位验收人
+                </td>
+            </tr>
+        </table>
+        <div style="position:absolute; bottom: 20px;right: 35px;">
+            @if (!Model.是否作废)
+            {
+
+                if (Model.审核数据.审核者.用户数据 != null)
+                {
+                    if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                    {
+                        if (Model.审核数据.审核者.用户ID == 10015)
+                        {
+                            <img src="~/Images/seal/昆明民族干部学院章.png" width="240" />
+                        }
+                        else if (Model.审核数据.审核者.用户ID == 20057)
+                        {
+                            <img src="~/Images/seal/贵州省军区章.png" width="240" />
+                        }
+                        else if (Model.审核数据.审核者.用户ID == 20261)
+                        {
+                            <img src="~/Images/xzwz.png" width="240" />
+                        }
+                        else if (Model.审核数据.审核者.用户ID == 20292)
+                        {
+                            <img src="~/Images/seal/zjrwb.png" width="240" />
+                        }
+                        else
+                        {
+                            <img src="/供应商后台/SealWithText?txt=@Model.审核数据.审核者.用户数据.验收单名称&base=@Model.审核数据.审核者.用户数据.印章底部文本&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
+                        }
+                    }
+                }
+            }
+        </div>
+        <div style="text-align:center;line-height:34px;">
+            @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+            {
+                <button type="button" value="@Model.Id" onclick="printattachList(this)">打印</button>
+            }
+            <button type="button" onclick="$('#attach_list').fadeOut(200)">关闭</button>
+        </div>
+    </div>
+
+</div>
+
+<!--打印时提示验收单要完善的信息-->
+<div id="tipsMess" class="modal_out">
+    <div class="modal_in" style="background: #000000"></div>
+    <div style="margin:3% auto;position: relative;width:800px;height:84%; background:#fff">
+        <img src="~/Images/ysd-example.jpg" width="800px" height="80%" />
+        <div style="text-align:center">
+            <p style="color:red;padding:0 10px;margin:10px 0;text-align:left">提示：为了保证上传验收单的时候所上传的验收单信息完整，请在上传时确保图片中红方框所圈出位置的信息已填写；这些信息请在向收货单位递交验收单时填写完整。另上传验收单时请仅上传第一联。</p>
+            <input type="button" onclick="printpage()" value="确定" />
+            <input type="button" onclick="$('#tipsMess').fadeOut(200);" value="关闭" />
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#新增及打印验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#新增及打印验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        //var costlist=$(".costper").parents("tbody").children().slice(3,8);
+        //var costTotalNum=0;
+        //$.each(costlist,function(index,domEle){
+        //    var d= $(domEle).children().eq(7).html().replace("￥","");
+        //    //parseFloat(costTotalNum) += parseFloat(d);
+        //    costTotalNum += d;
+        //});
+        //var fff=costTotalNum;
+        //var ffff=0;
+        //$(".costper")
+        SetPrintSettings();
+    });
+    //打印物资清单
+    function printList(e) {
+        $(e).parent().hide();
+        document.body.innerHTML = $("#good_list_detail").html();
+        window.print();
+        window.reload();
+    };
+    //打印附件
+    function printattachList(e) {
+        $(e).parent().hide();
+        document.body.innerHTML = $("#good_attach_detail").html();
+        window.print();
+        window.location.reload();
+    }
+    function printready() {
+        $("#tipsMess").fadeIn(200);
+    };
+
+    function printpage() {
+        $('#tipsMess').fadeOut();
+        $(".separateblue").remove();
+        setTimeout(function () {
+            $("#accept_con").next().remove();
+            $.ajax({
+                url: '/供应商后台/EditPrint',
+                data: { id: $("#model_id").val() },
+            });
+            window.print();
+            window.location.reload();
+        }, 500);
+    }
+    function showList() {
+        $("#good_list").fadeIn();
+    };
+    function printno() {
+        alert("已经打印过一次，无法进行第二次打印!");
+    };
+    $("#modal_clo").click(function () {
+        $("#good_list").fadeOut();
+    });
+</script>

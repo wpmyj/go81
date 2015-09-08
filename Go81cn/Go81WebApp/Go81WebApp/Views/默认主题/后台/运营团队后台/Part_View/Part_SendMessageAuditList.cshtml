@@ -1,0 +1,179 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.推送数据模型
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <style type="text/css">
+        /*.gys_ztbsearch_contentbox {
+            width: 918px;
+        }
+        .pushmessagetitle {
+            width: 918px;
+        }*/
+    </style>
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">待审核信息推送列表</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox" style=" padding-bottom:10px; ">
+            <div class="gys_ztbsearch_contentbox" style="margin-top:10px;">
+                <div class="pushmessagetitle">未审核的公告推送消息列表</div>
+                <div class="gys_znxx_content" id="PushListTable" style="padding-top:5px;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="7%">信息编号</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="35%">关联公告标题</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="10%">公告性质</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="10%">公告类别</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="10%">信息状态</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="10%">时间</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="18%">操作</th>
+                        </tr>
+                        @foreach (var item in (IEnumerable<公告推送>)ViewData["公告推送列表"])
+                        {
+                            <tr>
+                                <td><a href="~/运营团队后台/SendMessageAudit?id=@(item.Id)&type=1" target="_blank">@item.Id</a></td>
+                                <td><a href="~/运营团队后台/SendMessageAudit?id=@(item.Id)&type=1" target="_blank">@item.关联公告.公告.内容主体.标题</a></td>
+                                <td>@item.关联公告.公告.公告信息.公告性质</td>
+                                <td>@item.关联公告.公告.公告信息.公告类别</td>
+                                <td>@item.审核数据.推送信息状态</td>
+                                <td>@item.基本数据.修改时间.ToString("yyyy.MM.dd")</td>
+                                <td class="gys_znxx_content_tabletime">
+                                    <a href="~/运营团队后台/SendMessageAudit?id=@(item.Id)&type=1" target="_blank">进行审核</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    <div class="gys_znxx_content_detailbox">
+                        @if (int.Parse(ViewData["adpushcurrentpage"].ToString()) == 1)
+                        {
+                            <a>首页</a>
+                        }
+                        else
+                        {
+                            <a id="1" onclick="changeMesspage(this)">首页</a>
+                        }
+                        @for (int i = 0; i <= 10; i++)
+                        {                       //一共最多显示10个页码，前面5个，后面5个
+                            if ((int.Parse(ViewData["adpushcurrentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["adpushcurrentpage"].ToString()) + i - 5) <= int.Parse(ViewData["adpushpagecount"].ToString()))
+                            {
+                                if (5 == i)
+                                {                               //当前页处理
+                                    <a>@int.Parse(ViewData["adpushcurrentpage"].ToString())</a>
+                                }
+                                else
+                                {                               //一般页处理
+                                    <a id="@(int.Parse(ViewData["adpushcurrentpage"].ToString()) + i - 5)" onclick="changeMesspage(this)">@(int.Parse(ViewData["adpushcurrentpage"].ToString()) + i - 5)</a>
+
+                                }
+                            }
+                        }
+                        @if (int.Parse(ViewData["adpushcurrentpage"].ToString()) == int.Parse(ViewData["adpushpagecount"].ToString()))
+                        {
+                            <a>末页</a>
+                        }
+                        else
+                        {
+                            <a id="@int.Parse(ViewData["adpushpagecount"].ToString())" onclick="changeMesspage(this)">末页</a>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+            <script type="text/javascript">
+                function changeMesspage(a) {
+                    $.get("/运营团队后台/Part_SendPushAuditList?page=" + encodeURI(a.getAttribute("id")), function (response) {
+
+                        $("#PushListTable").html(response)
+                    });
+                }
+            </script>
+            <div class="gys_ztbsearch_contentbox" style="margin-top:10px;">
+                <div class="pushmessagetitle">未审核的一般推送消息列表<a href="PushMessageDetail" style=" float:right; padding-right:10px;">添加一般推送信息</a></div>
+                <div class="gys_znxx_content" id="PushListTable_Us" style="padding-top:5px;">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="20%">信息编号</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="20%">信息状态</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="30%">时间</th>
+                            <th style="border-bottom:1px solid #999a96;border-top:1px solid #999a96" width="30%">操作</th>
+                        </tr>
+                        @foreach (var item in (IEnumerable<一般推送>)ViewData["一般推送列表"])
+                        {
+                            <tr>
+                                <td><a href="~/运营团队后台/SendMessageAudit?id=@item.Id" target="_blank">@item.Id</a></td>
+                                <td>@item.审核数据.推送信息状态</td>
+                                <td>@item.基本数据.修改时间.ToString("yyyy.MM.dd")</td>
+                                <td class="gys_znxx_content_tabletime">
+                                    <a href="~/运营团队后台/SendMessageAudit?id=@item.Id" target="_blank">进行审核</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    <div class="gys_znxx_content_detailbox">
+                        @if (int.Parse(ViewData["uspushcurrentpage"].ToString()) == 1)
+                        {
+                            <a>首页</a>
+                        }
+                        else
+                        {
+                            <a id="1" onclick="changeMesspage_us(this)">首页</a>
+                        }
+                        @for (int i = 0; i <= 10; i++)
+                        {                       //一共最多显示10个页码，前面5个，后面5个
+                            if ((int.Parse(ViewData["uspushcurrentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["uspushcurrentpage"].ToString()) + i - 5) <= int.Parse(ViewData["uspushpagecount"].ToString()))
+                            {
+                                if (5 == i)
+                                {                               //当前页处理
+                                    <a>@int.Parse(ViewData["uspushcurrentpage"].ToString())</a>
+                                }
+                                else
+                                {                               //一般页处理
+                                    <a id="@(int.Parse(ViewData["uspushcurrentpage"].ToString()) + i - 5)" onclick="changeMesspage_us(this)">@(int.Parse(ViewData["uspushcurrentpage"].ToString()) + i - 5)</a>
+
+                                }
+                            }
+                        }
+                        @if (int.Parse(ViewData["uspushcurrentpage"].ToString()) == int.Parse(ViewData["uspushpagecount"].ToString()))
+                        {
+                            <a>末页</a>
+                        }
+                        else
+                        {
+                            <a id="@int.Parse(ViewData["uspushpagecount"].ToString())" onclick="changeMesspage_us(this)">末页</a>
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+            <script type="text/javascript">
+                function changeMesspage_us(a) {
+                    $.get("/运营团队后台/Part_SendPushAuditList_Us?page=" + encodeURI(a.getAttribute("id")), function (response) {
+
+                        $("#PushListTable_Us").html(response)
+                    });
+                }
+
+            </script>
+        </div>
+
+    </div>
+}
+<script type="text/javascript" language="javascript">
+    var num=@(int.Parse(ViewData["uspushcurrentpage"].ToString()))
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).addClass("currentPage");
+            }
+        });
+        $("#推送信息审核").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#推送信息审核").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+

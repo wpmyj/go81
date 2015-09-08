@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.用户数据模型.供应商>
+@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    ViewBag.Title = "供应商和评审专家推荐流程";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">供应商和评审专家推荐流程</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div class="gys_znxx_contentbox">
+                <div class="gys_znxx_content">
+                    <div>
+                        <span style="font-size:30px;color:red"> 步骤1：</span>
+                        <p>
+                            被推荐的供应商或评审专家，根据网站的入库须知内容，准备好相关入库申请材料，向推荐单位（如某军分区，某部）提交。
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <span style="font-size:30px;color:red"> 步骤2：</span>
+                        <p>
+                            推荐单位（如某军分区，某部）收到入库材料后，自行组织初审，并填制本单位盖章的审批表格，报成都军区联勤部军需物资油料部采购管理处复审。
+                        </p>
+                    </div>
+                    <div>
+                        <span style="font-size:30px;color:red"> 步骤3：</span>
+                        <p>
+                            每季度由成都军区联勤部军需物资油料部物资采购管理处组织入库复审，复审通过的专家老师自动成为成都军区评审专家库的入库评审专家。
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#推荐流程说明").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#推荐流程说明").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+
+

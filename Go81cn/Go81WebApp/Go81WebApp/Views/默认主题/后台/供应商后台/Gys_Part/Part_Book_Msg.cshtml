@@ -1,0 +1,240 @@
+﻿@model Go81WebApp.Controllers.后台.供应商后台Controller.subMsg
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+<style>
+    table tr td span, div.tip span
+     {
+        font-size: 12px;
+        color: red;
+    }
+</style>
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<div class="gys_znxx_topbox">
+    <div class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">
+            消息订阅
+        </div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+
+    <form method="post" action="/供应商后台/Save_Bk_Msg">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+                <div style=" border-style:solid;border-width:1px; border-color:gray; height:140px;">
+                    <div style="float:left; width:550px; margin-top:5px; border-right:1px solid gray;">
+                        <div class="tip" style="text-align:center; margin-bottom:15px; margin-top:5px;">消息订阅方式</div>
+                        <div class="tip" style="text-align:center; margin-top:-8px; width:100%;">
+                            <table width="100%" style="background-color:white; border:none;">
+                                <tr>
+                                    <td width="25%" style="background-color:white; text-align:right; height:30px; border:none;">
+                                        手机号：
+                                    </td>
+                                    <td width="25%" style="background-color:white; text-align:left; height:30px; border:none;">
+                                        @Html.TextBoxFor(model => model.m.接收订阅短信手机号码)
+                                        <div class="out_box">
+                                            <div class="arrow"></div>
+                                            <div class="con_box">请填写手机号，以接收消息<em style="color:red;">请输入正确格式的手机号，如13215465289</em></div>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.m.接收订阅短信手机号码)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" style="background-color:white;text-align:right;  height:30px;border:none;">
+                                        微信号：
+                                    </td>
+                                    <td style="background-color:white;text-align:left; height:30px; border:none;">
+                                        @Html.TextBoxFor(model => model.m.接收订阅微信账号)
+                                        <div class="out_box">
+                                            <div class="arrow"></div>
+                                            <div class="con_box">请填写微博号码，以接收消息</div>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.m.接收订阅微信账号)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" style="background-color:white;text-align:right; height:30px; border:none;">
+                                        邮箱号：
+                                    </td>
+                                    <td style="background-color:white;text-align:left; height:30px; border:none;">
+                                        @Html.TextBoxFor(model => model.m.接收订阅邮件地址)
+                                        <div class="out_box">
+                                            <div class="arrow"></div>
+                                            <div class="con_box">请填写邮箱地址，以接收消息（可以使QQ邮箱）</div>
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.m.接收订阅邮件地址)
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="float:left; margin-left:100px; margin-top:5px;">
+                        <div style="text-align:center; margin-bottom:15px; margin-top:5px;">当前订阅情况</div>
+                        <div style="text-align:center; margin-bottom:12px;">固&nbsp;定&nbsp;订&nbsp;阅&nbsp;数：@Model.固定可订阅数</div>
+                        <div style="text-align:center; margin-bottom:12px;">已购买订阅数：@Model.已购买订阅数</div>
+                        <div style="text-align:center; margin-bottom:2px;">总&nbsp;&nbsp;订&nbsp;&nbsp;阅&nbsp;&nbsp;数&nbsp;：@{ int number = Model.固定可订阅数 + Model.已购买订阅数;}@number</div>
+                    </div>
+                </div>
+                <script>
+                    var diff_number = 0;
+                    var add_number = 0;
+                    var arr = new Array();
+                    var t = '<tr><td  style="text-align:center"><select style="width:150px;" onchange=typeWithNum("`") id="one`" name="m.订阅列表[`].一级分类">' +
+                        '</select></td><td  style="text-align:center"><select id="two`" onchange=thirdCls("#one`",this,"#three`") style="width:150px;" name="m.订阅列表[`].二级分类"></select></td><td  style="text-align:center"><select id="three`" style="width:150px;" name="m.订阅列表[`].三级分类" value=""></select></td><td  style="text-align:center"><input data-val="true" data-val-required="手机短信 字段是必需的。" name="m.订阅列表[`].手机短信" type="checkbox" value="true"><input name="m.订阅列表[`].手机短信" type="hidden" value="false"> 短信&nbsp;<input data-val="true" data-val-required="微信推送 字段是必需的。" name="m.订阅列表[`].微信推送" type="checkbox" value="true"><input name="m.订阅列表[`].微信推送" type="hidden" value="false"> 微信&nbsp;<input data-val="true" data-val-required="电子邮件 字段是必需的。" name="m.订阅列表[`].电子邮件" type="checkbox" value="true"><input name="m.订阅列表[`].电子邮件" type="hidden" value="false"> 邮件&nbsp;<input data-val="true" data-val-required="站内消息 字段是必需的。" name="m.订阅列表[`].站内消息" type="checkbox" value="true"><input name="m.订阅列表[`].站内消息" type="hidden" value="false"> 站内消息</td> <td></td></tr>';
+                    @{
+                        int count;
+                        if(Model.m.订阅列表==null)
+                        {
+                            count = 0;
+                        }
+                        else
+                        {
+                            count = Model.m.订阅列表.Count();
+                        }
+                    }
+                    var count =@count
+                    function typeWithNum(num) {
+                        $.get('/供应商后台/typeWithNum/',
+                            function (data) {
+                                setValue(data.Data, parseInt(num));
+                                secondCls('#one' + (count - 1).toString(), '#two' + (count - 1).toString());
+                            }
+                        );
+                        setTimeout('thirdCls("#one" + (count - 1).toString(), "#two" + (count - 1).toString(), "#three" + (count - 1).toString())', 1000);
+                    }
+                    function thirdCls(c, th, th1) {
+                        $.get('/供应商后台/types1/',
+                            { n: $(th).val(), cls: $("select" + c).val() },
+                            function (data) {
+                                SetVal(data.Data, th1);
+                            }
+                        );
+                    }
+                    function secondCls(th, th1) {
+                        $.get('/供应商后台/types/',
+                            { n: $(th).val() },
+                            function (data) {
+                                SetVal(data.Data, th1);
+                            }
+                        );
+                    }
+                    function SetVal(data, th) {
+                        var str = "";
+                        for (var i = 0; i < data.length; i++) {
+                            str += "<option value=" + data[i] + ">" + data[i] + "</option>";
+                            if (data[i] == "没有三级分类") {
+                                $("select" + th).attr("readonly", "readonly");
+                            }
+                            else
+                            {
+                                $("select" + th).removeAttr("readonly");
+                            }
+                        }
+                        $("select" + th).html(str);
+                    }
+                    function setValue(data, m) {
+                        var str = "";
+                        for (var i = 0; i < data.length; i++) {
+                            str += "<option value=" + data[i] + ">" + data[i] + "</option>";
+                        }
+                        m--;
+                        $("select#one" + m).html(str);
+                    }
+                    function addFi(th) {
+                        var str = t.replace(/`/g, count++);
+                        $('table#lst').append(str);
+                        typeWithNum(count);
+                        $(th).hide();
+                    }
+                </script>
+                <table id="lst" width="100%" cellpadding="0" cellspacing="0">
+                    <tr><th>行业一级分类</th><th>行业二级分类</th><th>行业三级分类</th><th>订阅类型</th><th>操作</th></tr>
+                    @if (Model.m.订阅列表 != null)
+                    {
+                        for (int i = 0; i < Model.m.订阅列表.Count(); i++)
+                        {
+                            <tr>
+                                <td style="text-align:center">
+                                    @Html.TextBoxFor(model => model.m.订阅列表[i].一级分类, new { @readonly = "readonly", @style = "border:none;" })
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.TextBoxFor(model => model.m.订阅列表[i].二级分类, new { @readonly = "readonly", @style = "border:none;" })
+                                </td>
+                                <td style="text-align:center">
+                                    @if (Model.m.订阅列表[i].三级分类 == "没有三级分类")
+                                    {
+                                        @Html.TextBoxFor(model => model.m.订阅列表[i].三级分类, new {@readonly = "readonly", @style = "border:none;" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(model => model.m.订阅列表[i].三级分类, new { @readonly = "readonly", @style = "border:none;" })
+                                    }
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.CheckBoxFor(model => model.m.订阅列表[i].手机短信, new { @readonly = "readonly" }) 短信
+                                    @Html.CheckBoxFor(model => model.m.订阅列表[i].微信推送, new { @readonly = "readonly" }) 微信
+                                    @Html.CheckBoxFor(model => model.m.订阅列表[i].电子邮件, new { @readonly = "readonly" }) 邮件
+                                    @Html.CheckBoxFor(model => model.m.订阅列表[i].站内消息, new { @readonly = "readonly" }) 站内消息
+                                </td>
+                                <td><a href="/供应商后台/Del_Msg?index=@i">删除</a></td>
+                            </tr>
+                        }
+                    }
+                </table>
+                <div style="margin-top:10px; text-align:center;">
+                    <input style="width:80px; height:40px; font-size:14px;" type="button" onclick="addFi(this)" value="新增" />
+                    <input style="width:80px; height:40px; font-size:14px;" type="submit" value="提交" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#shengyuday").html(countDown(2015, 3, 1));
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+        $("#公告订阅").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#公告订阅").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function countDown(year, month, day) {
+        var now = new Date();
+        var endDate = new Date(year, month - 1, day);
+        var leftTime = endDate.getTime() - now.getTime();//时间差的毫秒数
+        var leftsecond = parseInt(leftTime / 1000);
+        var day1 = Math.floor(leftsecond / (60 * 60 * 24));//计算出相差天数
+        return day1;
+    }
+</script>
+
+<div id="indexpagemodal2" class="modal fade" style="display:block;">
+    <div class="modal-dialog" style="margin: 7% auto;">
+        <div class="modal-content" style="height:400px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal2').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">温馨提示</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 280px; overflow-y: scroll; line-height:25px;">
+                    <h4 style="margin:0;">尊敬的用户：</h4>
+                        @{
+                         var endtime = new DateTime(2015,5,2);
+                         var ts = (endtime-DateTime.Now).Days;
+                         if(ts<=0){
+                             <p class="wenxintishi">
+                                 目前，您的账户可免费体验手机短信订阅服务（招标采购类信息）的功能已到期。正式订购请点击“<a href="/jct/ApplyVip" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">军采通会员中心</a>”或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">网站客服</a>。
+                                 </p>
+                         }
+                         else{
+                             <p class="wenxintishi">
+                                 目前，您的账户可免费体验手机短信订阅服务（招标采购类信息）的时间还剩@(ts)天。正式订购请点击“<a href="/jct/ApplyVip" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">军采通会员中心</a>”或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">网站客服</a>。
+                                 </p>
+                         }
+                        }
+                </div>
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="继续" onclick="$('#indexpagemodal2').hide();" /></div>
+
+            </div>
+        </div>
+    </div>
+</div>

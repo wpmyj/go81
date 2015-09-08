@@ -1,0 +1,13 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@{
+    ViewBag.Title = "商品库-首页";
+}
+<div style="height:auto; overflow:hidden; margin-bottom:5px; ">
+    <div class="prodtpage_leftbox" style="float:left; margin-top:5px;">
+        @Html.Action("Part_Recommend", "商品陈列")
+    </div>
+    <div class="prodtpage_rightbox" style="width:947px;float:left; margin-top:5px;margin-left:10px;">
+        @Html.Action("Part_GoodClass", "商品陈列")
+    </div>
+    
+</div>

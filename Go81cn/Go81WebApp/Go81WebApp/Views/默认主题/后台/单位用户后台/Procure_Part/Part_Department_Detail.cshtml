@@ -1,0 +1,141 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.单位用户
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">单位用户详情</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+
+                @if (Model != null)
+                {
+                    <div style=" margin: 20px auto; padding: 10px;">
+
+                        <div style=" height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">登录名：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.登录信息.登录名
+                            </div>
+                        </div>
+
+                        <div style=" height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">所在地域：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.所属地域.地域
+                            </div>
+                        </div>
+
+                        <div style=" height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">管理单位：</div>
+                            <div class="procure_selectlistdiv">
+                                @try
+                                {
+                                    <span>@Model.管理单位.用户数据.单位信息.单位名称</span>
+                                }
+                                catch
+                                {
+                                    <span>"未填写"</span>
+                                }
+
+                            </div>
+                        </div>
+
+                        <div style=" height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">单位名称：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.单位信息.单位名称
+                            </div>
+                        </div>
+
+
+                        <div style=" height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">单位代号：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.单位信息.单位代号
+                            </div>
+                        </div>
+
+                        <div style=" height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">所属单位：</div>
+                            <div class="procure_selectlistdiv">
+                               @try
+                               {
+                                <span>@(Model.管理单位.用户数据.单位信息.单位代号 != "" ? Model.管理单位.用户数据.单位信息.单位代号 : Model.管理单位.用户数据.单位信息.单位名称)</span>
+                               }
+                               catch
+                               {
+                                <span>未填写</span>
+                               }
+                            </div>
+                        </div>
+
+                        <div style=" height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">联系人：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.联系方式.联系人
+                            </div>
+                        </div>
+
+
+                        <div style="height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">联系人职务：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.联系人职务
+                            </div>
+                        </div>
+
+                        <div style="height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">固定电话：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.联系方式.固定电话
+                            </div>
+                        </div>
+
+
+                        <div style=" height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">手机：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.联系方式.手机
+                            </div>
+                        </div>
+                        <div style=" height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">所属用户组：</div>
+                            <div class="procure_selectlistdiv">
+                                @foreach (var item in Model.用户组)
+                                {
+                                    <label>@item</label><br />
+                                }
+                            </div>
+                        </div>
+
+                        @*<div class="procure_adaduditdiv">
+                                <input type="submit" value="审核通过" name="action" class="front_login_rightbox_button_less">
+                                <input type="submit" value="审核不通过" name="action" class="front_login_rightbox_button_less">
+                            </div>*@
+                    </div>
+                }
+                else
+                {
+                    <span>暂无此数据</span>
+                }
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $("#已审核的附属账号").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#已审核的附属账号").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+
+
+
+

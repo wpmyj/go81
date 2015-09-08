@@ -1,0 +1,139 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <script type="text/javascript" language="javascript" src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/JS/provinceandcity_all.js"></script>
+    <link rel="stylesheet" href="~/css/WeChat.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>热门推荐</title>
+    <style>
+        .name {
+            height: 40px;
+            line-height: 20px;
+            overflow: hidden;
+            /*text-overflow: ellipsis;
+            white-space: nowrap;*/
+            white-space:initial;
+            text-align: left;
+            margin: 0px auto;
+            margin-top: 5px;
+            font-size: 13px;
+        }
+
+        .price {
+            height: 20px;
+            color: #ff0000;
+            text-align: left;
+            margin: 0px auto;
+            font-size: 13px;
+        }
+
+            ul li {
+                display: inline-block;
+                background-color: #E2E2E2;
+                width: 32.4%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            .tabheader a {
+                display: inline-block;
+                width: 49.8%;
+                height: 100%;
+                line-height: 30px;
+                line-height: 30px;
+                text-align: center;
+                text-decoration: none;
+                border-bottom: 1px solid #b8b4b2;
+                color: #b8b4b2;
+            }
+
+            #contentContainer div {
+                width: 100%;
+                height: auto;
+                padding:0px;
+            }
+    </style>
+</head>
+<body>
+    @{
+        IEnumerable<供应商> gys = ViewData["gys"] as IEnumerable<供应商>;
+        IEnumerable<商品> good = ViewData["good"] as IEnumerable<商品>;
+    }
+    <div class="outbox">
+        <div class="tabheader"><a href="###" id="#gys" style="border-right:1px solid #b8b4b2;">热门供应商</a><a id="#good" href="###">热门商品</a></div>
+        <div id="contentContainer">
+            <div id="gys">
+                <ul>
+                    @foreach (var item in gys)
+                    {
+                        <li>
+                            <div style="position:relative;">
+                                <div class="hot" style="width:30px; height:30px;"></div>
+                                @if (item.供应商用户信息.供应商图片.Any())
+                                {
+                                    <a href="/WeChat/Gysdetail?id=@item.Id"><img src="@item.供应商用户信息.供应商图片.First()" /></a>
+                                }
+                                else
+                                {
+                                    <a href="/WeChat/Gysdetail?id=@item.Id"><img src="~/Images/noimage.jpg" /></a>
+                                }
+                            </div>
+                            <div class="name" style="width:115px;height:40px;">
+                                @item.企业基本信息.企业名称
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div id="good" style="padding-top:5px;display:none;">
+                <ul>
+                    @foreach (var item in good)
+                    {
+                        <li>
+                            <div style="position:relative;">
+                                <div class="hot" style="width:30px; height:30px;"></div>
+                                @if (item.商品信息.商品图片.Any())
+                                {
+                                    <a href="/WeChat/Gooddetail?id=@item.Id"><img src="@item.商品信息.商品图片.First()" /></a>
+                                }
+                                else
+                                {
+                                    <a href="/WeChat/Gysdetail?id=@item.Id"><img src="~/Images/noimage.jpg" /></a>
+                                }
+                            </div>
+                            <div class="name" style="width:115px;height:40px;">
+                                @item.商品信息.商品名
+                            </div>
+                            <div class="price" style="width:120px;">
+                                ¥@item.销售信息.价格
+                            </div>
+                            <div class="price" style="width:120px;">
+                                <a class="shopCar">加入购物车</a>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        $(".tabheader a").click(function () {
+            $(".tabheader a").each(function () {
+                $(this).css({ "border-bottom": "1px solid #b8b4b2", "color": "#b8b4b2" });
+            });
+            $("#contentContainer").children("div").hide();
+            var attr = $(this).attr("id");
+            $(this).css({ "border-bottom": "1px solid #ff0000", "color": "#ff0000" });
+            $(attr).show();
+        });
+        $(document).ready(function () {
+            $(".tabheader a:eq(0)").css({ "border-bottom": "1px solid #ff0000", "color": "#ff0000" });
+        });
+    </script>
+
+</body>
+</html>

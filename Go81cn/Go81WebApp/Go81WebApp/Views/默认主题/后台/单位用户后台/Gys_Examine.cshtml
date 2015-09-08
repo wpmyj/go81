@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.用户数据模型.供应商>
+@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    ViewBag.Title = "待审核供应商";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">供应商列表</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div class="gys_znxx_contentbox">
+                <div class="gys_znxx_content">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th>序号</th>
+                            <th>供应商名称</th>
+                            <th>所属行业</th>
+                            <th>认证级别</th>
+                            <th>注册时间</th>
+                            <th>审核状态</th>
+                            <th>操作</th>
+                        </tr>
+                        @{ var i = 0;
+                            foreach (var item in Model)
+                            {
+                                i++;
+                                <tr>
+                                    <td>@i</td>
+                                    <td><a href="~/单位用户后台/Gys_Detail?id=@item.Id" target="_blank">@item.企业基本信息.企业名称</a></td>
+                                    <td>@item.企业基本信息.所属行业</td>
+                                    <td>@item.供应商用户信息.认证级别</td>
+                                    <td>@item.基本数据.添加时间.ToString("yyyy-MM-dd")</td>
+                                        @if (item.供应商用户信息.复审数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.未审核)
+                                        {
+                                            if (item.供应商用户信息.初审数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核通过)
+                                            {
+                                                <td>初审通过,待复审</td>
+                                            }
+                                            else if (item.供应商用户信息.初审数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核未通过)
+                                            {
+                                                <td>初审未通过</td>
+                                            }
+                                            else
+                                            {
+                                                 <td>待初审</td>
+                                            }
+                                        }
+                                        else if (item.供应商用户信息.复审数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核未通过)
+                                        {
+                                                <td>初审通过,复审未通过</td>
+                                        }
+                                        else
+                                        { 
+                                            <td>初审通过，复审通过</td>
+                                        }                        
+                                    <td>
+                                        <a href="~/单位用户后台/Gys_Detail?id=@item.Id" target="_blank">审核</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                    <div class="gys_znxx_content_detailbox">
+                       @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    var num =@(int.Parse(ViewData["currentpage"].ToString()));
+    var j=@(int.Parse(ViewData["pagecount"].ToString()));
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border","1px solid #ff0000");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#待审核供应商").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#待审核供应商").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+
+

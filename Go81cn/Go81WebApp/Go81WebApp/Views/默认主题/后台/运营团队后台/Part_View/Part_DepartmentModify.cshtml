@@ -1,0 +1,230 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.单位用户
+@using Go81WebApp.Models.数据模型.权限数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.管理器
+<script src="~/JS/provinceandcity_all.js"></script>
+@{
+    IEnumerable<单位用户> user = ViewData["user"] as IEnumerable<单位用户>;
+}
+@using (Html.BeginForm("DepartmentEdit", "运营团队后台"))
+{
+    @Html.ValidationSummary(true)
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">单位修改</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box" onkeypress="BindEnter(event, 'modiibutton')">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+                 @Html.HiddenFor(model=>model.Id)
+                <div style=" width: 898px; height:auto; overflow:hidden; margin-top:20px;">
+                    <div style=" margin: 20px auto; padding:10px;">
+                        <div style=" height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">所属单位：</div>
+                            @{
+                                if (Model.所属单位.用户数据 != null)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(Model.所属单位.用户数据.单位信息.单位名称))
+                                    {
+                                        <div class="procure_selectlistdiv">
+                                            @Model.所属单位.用户数据.单位信息.单位名称
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="procure_selectlistdiv">
+                                            @Model.所属单位.用户数据.单位信息.单位代号
+                                        </div>
+                                    }
+                                }
+}
+                        </div>
+                        <div style=" height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位级别：</div>
+                            <div class="procure_selectlistdiv">
+                                <select id="gldw" name="gldw">
+                                    <option value="成都">四川</option>
+                                    <option value="重庆">重庆</option>
+                                    <option value="云南">云南</option>
+                                    <option value="贵州">贵州</option>
+                                    <option value="西藏">西藏</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style=" height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位名称：</div>
+                            <div class="procure_selectlistdiv">
+                                @Html.EditorFor(model => model.单位信息.单位名称, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">*@Html.ValidationMessageFor(model => model.单位信息.单位名称)</span>
+                            </div>
+                        </div>
+                        <div style="height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位代号：</div>
+                            <div class="procure_selectlistdiv">
+                                @Html.EditorFor(model => model.单位信息.单位代号, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">@*@Html.ValidationMessageFor(model => model.u.单位信息.单位代号)*@</span>
+                            </div>
+                        </div>
+                        <div style="height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">所属单位：</div>
+                            <div class="procure_selectlistdiv">
+                                <input id="admin" type="hidden" value="-1" name="admin" />
+                                <div id="admin_box">
+                                    <select style="width:100px;" onchange="searchUser(this)">
+                                        <option value="-1">请选择所属单位</option>
+                                        @foreach (var item in user)
+                                        {
+                                            if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                            {
+                                                <option value="@item.Id">@item.单位信息.单位代号</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.单位信息.单位名称</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                @*@Html.EditorFor(model => model.u.单位信息.所属单位, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">Html.ValidationMessageFor(model => model.u.单位信息.所属单位)</span>*@
+                            </div>
+                        </div>
+
+                        <div style=" height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位级别：</div>
+                            <div class="procure_selectlistdiv">
+                                @Html.DropDownListFor(model => model.单位信息.单位级别, new[] { new SelectListItem() { Text = "未设置", Value = "0" }, new SelectListItem() { Text = "正军级", Value = "1" }, new SelectListItem() { Text = "副军级", Value = "2" }, new SelectListItem() { Text = "正师级", Value = "3" }, new SelectListItem() { Text = "副师级", Value = "4" }, new SelectListItem() { Text = "正团级", Value = "4" }, new SelectListItem() { Text = "副团级", Value = "5" }, new SelectListItem() { Text = "正营级", Value = "6" }, new SelectListItem() { Text = "副营级", Value = "7" }, new SelectListItem() { Text = "营级以下", Value = "99" } }, new { @class = "procure_radioinput" })
+                            </div>
+                        </div>
+
+
+                        <div style=" height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">联系人：</div>
+                            <div class="procure_selectlistdiv">
+                                @Html.EditorFor(model => model.联系方式.联系人, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">*@Html.ValidationMessageFor(model => model.联系方式.联系人)</span>
+                            </div>
+                        </div>
+                        <div style="height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">联系人职务：</div>
+                            <div class="procure_selectlistdiv">
+                                @Html.EditorFor(model => model.联系人职务, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">*@Html.ValidationMessageFor(model => model.联系人职务)</span>
+                            </div>
+                        </div>
+                        <div style=" height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">固定电话：</div>
+                            <div class="procure_selectlistdiv">
+                                @Html.TextBoxFor(model => model.联系方式.固定电话, new { style = "width: 300px; height: 30px; line-height: 25px;" })
+                                <span style="color:red;">*@Html.ValidationMessageFor(model => model.联系方式.固定电话)</span>
+                                <span id="moelphone_error" style="color:red; display:none">请填写固定电话！</span>
+                            </div>
+                        </div>
+                        <div style=" height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">手机：</div>
+                            <div class="procure_selectlistdiv">
+                                @Html.EditorFor(model => model.联系方式.手机, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">*@Html.ValidationMessageFor(model => model.联系方式.手机)</span>
+                            </div>
+                        </div>
+                        <div style=" height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">联系地址：</div>
+                            <div class="procure_selectlistdiv">
+                                @if (Model.地址信息.Count > 0)
+                                {
+                                    @Html.EditorFor(model => model.地址信息[0].城市, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">*@Html.ValidationMessageFor(model => model.地址信息[0].城市)</span>
+                                }
+                                else
+                                {
+                                    <input class="text-box single-line valid" name="地址信息[0].城市" type="text" aria-invalid="false">
+                                    <span style="color:red;">*<span class="field-validation-valid" data-valmsg-for="地址信息[0].城市" data-valmsg-replace="true"></span></span>
+                                }
+                            </div>
+                        </div>
+
+                        <div style=" height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">所在地域：</div>
+                            <div class="procure_selectlistdiv">
+                                <select id="deliverprovince" name="deliverprovince" style="width: 98px; height: 30px;"></select>
+                                <select id="delivercity" name="delivercity" style="width:98px; height: 30px;"></select>
+                                <select id="deliverarea" name="deliverarea" style="width: 98px; height: 30px;"></select>
+                                <script>
+                                    window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea", "@Model.所属地域.省份", "@Model.所属地域.城市", "@Model.所属地域.区县");}
+                                </script>
+
+                            </div>
+                        </div>
+                        <div style=" height:30px; padding:10px;">
+                            <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位所属用户组：</div>
+                            <div class="procure_selectlistdiv">
+                                @{
+                                        var userlist = ViewData["用户组列表"] as IEnumerable<用户组>;
+                                        foreach (var k in userlist)
+                                        {
+                                            if (k.用户组名 != "超级管理员" && k.用户组名 != "抽取系统审核")
+                                            {
+                                                if (k.用户组名 == "站内消息与提醒" || k.用户组名 == "本账号管理" || Model.用户组.Contains(k.用户组名))
+                                                {
+                                                    <input class="groupname" style="width:auto;height:auto;line-height:normal;" checked="checked" id="@k.用户组名" type="checkbox" value="@k.用户组名" /><label for="@k.用户组名">@k.用户组名</label><br />
+                                                }
+                                                else
+                                                {
+                                                    <input class="groupname" style="width:auto;height:auto;line-height:normal;" id="@k.用户组名" type="checkbox" value="@k.用户组名" /><label for="@k.用户组名">@k.用户组名</label><br />
+                                                }
+                                            }
+                                        }
+                                }
+                                <input name="usergroup" id="usergroup" type="hidden" />
+                            </div>
+                        </div>
+                        <div style="text-align:center"><input id="modiibutton" type="submit" style="margin-top:20px; margin-left:-30px;" class="front_login_rightbox_button" value="确          定"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript" language="javascript">
+    $("#modiibutton").click(function () {
+        //var v = $("#phone_area").val() + "-" + $("#phone_num").val();
+        //$("#modelPhone").val(v);
+        //var f = $("#modelPhone").val().replace("-", "");
+        var d = $(".groupname");
+        var t = "";
+        $.each(d, function (index, domEle) {
+            if ($(domEle).is(":checked")) {
+                t += $(domEle).val() + ",";
+            }
+        });
+        $("#usergroup").val(t);
+        
+        if (f == null || f == "") {
+            $("#moelphone_error").show();
+        }
+    });
+    function hidetip(th) {
+        $(th).parent().children("div").hide();
+    }
+    function searchUser(th) {
+        if ($(th).val() != "-1") {
+            $.get('/运营团队后台/SearchUnit', { id: $(th).val() }, function (data) {
+                $(th).nextAll().remove();
+                $("#admin").val($(th).val());
+                if (data.Data.length != 0) {
+                    var str = "<select onchange='searchUser(this)' style='width:100px;margin-right:4px;'><option value='-1'>请选择所属单位</option>";
+                    for (var i = 0; i < data.Data.length; i++) {
+                        str += "<option value='" + data.Data[i].Id + "'>" + data.Data[i].Name + "</option>";
+                    }
+                    str += "</select>";
+                    $("#admin_box").append(str);
+                }
+            });
+        }
+        else {
+            $(th).nextAll().remove();
+            $("#admin").val($(th).prev().val());
+        }
+    }
+    $(document).ready(function () {
+        $("select option").each(function () { if ($(this).text() == '') { $(this).remove(); } });
+        $("#单位列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#单位列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    //$(document).ready(function () { $.get('/单位用户后台/CheckCode', {}, function (data,status) { $("#hide").text(data);}); });
+</script>
+

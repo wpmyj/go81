@@ -1,0 +1,330 @@
+﻿@using Go81WebApp.Models.数据模型.项目数据模型;
+@using Go81WebApp.Models.数据模型
+<script type="text/javascript" src="~/JS/NTClientJavascript.js"></script>
+<div class="gys_znxx_topbox">
+    <div class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">已上传验收单列表<i style="color:red">验收单回传附件请点击“已验收”字样查看</i></div>
+    </div>
+</div>
+
+<div id="indexpagemodal1" class="modal fade" style="display:none;">
+    <input type="hidden" id="ssid" name="ssid" value="@ViewData["Message"]" style="width:300px;" />
+    <input type="hidden" id="HidIAID" name="HidIAID" style="width:300px;" />
+    <input type="hidden" id="HidDigest" name="HidDigest" style="width:300px;" />
+    <div class="modal-dialog" style="margin: 10% auto;">
+        <div class="modal-content" style="height:230px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal1').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px;">请输入安全证书密码</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 100px; text-align:center; line-height:25px;">
+                    <input type="password" id="password" name="password" style=" height:25px; width:250px; line-height:25px; " /><br />
+                    <span style="color:red;" id="errortips"></span>
+                </div>
+                <div style="width: 100%; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" id="submitpassword" class="gys_ztbsearch_search_botton" style="margin-left:0;" value="确  定" onclick="return OnLogon();" /></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewData["是否持有U盾"] != null && ViewData["是否持有U盾"] == "1")
+{
+    <div class="gys_znxx_box">
+        @if (ViewBag.Shen)
+        {
+            <div class="gys_znxx_contentbox">
+                <div class="gys_znxx_content">
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th width="12%">供货单位</th>
+                            <th width="17%">收货单位</th>
+                            <th width="5%">总金额</th>
+                            <th width="8%">审核状态</th>
+                            <th width="6%">打印状态</th>
+                            <th width="6%">验收状态</th>
+                            @*<th width="8%">验收日期</th>*@
+                            <th width="6%">操作</th>
+                        </tr>
+                        @*@foreach (var item in (IEnumerable<项目服务记录>)ViewData["待评分项目服务列表"])
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.所属项目 != null && item.所属项目.招标采购项目ID != -1)
+                                        {
+                                            <a href="~/供应商后台/ProjectService_Detail?id=@item.Id" target="_blank">@item.所属项目.招标采购项目.中标公告链接.公告.项目信息.项目名称</a>
+
+                                        }
+                                    </td>
+                                    <td>@item.供应商链接.用户数据.企业基本信息.企业名称</td>
+                                    @if (item.服务评价.服务评级 == 项目服务记录.服务评级.未填写)
+                                    {
+                                        <td style="color:red;">未评分</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.服务评价.服务评级</td>
+                                    }
+                                    <td>@item.服务信息.验收时间.ToString("yyyy.MM.dd")</td>
+                                    @if (item.服务评价.服务评级 == 项目服务记录.服务评级.未填写)
+                                    {
+                                        <td class="gys_znxx_content_tabletime">@Html.ActionLink("查看详情", "ProjectService_Detail", new { id = item.Id })|@Html.ActionLink("删除", "ProjectService_Delete", new { id = item.Id })</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="gys_znxx_content_tabletime">@Html.ActionLink("查看详情", "ProjectService_Detail", new { id = item.Id })</td>
+                                    }
+                                </tr>
+                            }*@
+                        @foreach (var item in (IEnumerable<验收单>)ViewData["验收单列表"])
+                        {
+                            <tr>
+                                @if (item.供应商链接.用户数据.企业基本信息.企业名称.Length > 11)
+                                {
+                                    <td class="name" title="@item.供应商链接.用户数据.企业基本信息.企业名称"> @item.供应商链接.用户数据.企业基本信息.企业名称.Substring(0, 11) ... </td>
+                                }
+                                else
+                                {
+                                    <td class="name" title="@item.供应商链接.用户数据.企业基本信息.企业名称"> @item.供应商链接.用户数据.企业基本信息.企业名称</td>
+                                }
+                                @if (item.收货单位.Length > 13)
+                                {
+                                    <td title="@item.收货单位">@item.收货单位.Substring(0, 13) ...</td>
+                                }
+                                else
+                                {
+                                    <td title="@item.收货单位">@item.收货单位</td>
+                                }
+
+                                <td>@item.总金额</td>
+                                @if (item.审核数据.审核状态 == 审核状态.未审核)
+                                {
+                                    <td style="color:red">@item.审核数据.审核状态</td>
+                                }
+                                @if (item.审核数据.审核状态 == 审核状态.审核通过)
+                                {
+                                    <td style="color:#1f9434">@item.审核数据.审核状态</td>
+                                }
+                                @if (item.审核数据.审核状态 == 审核状态.审核未通过)
+                                {
+                                    <td style="color:#ff5e00">@item.审核数据.审核状态</td>
+                                }
+                                @if (item.是否已经打印)
+                                {
+                                    <td style="color:#1f9434">已打印</td>
+                                }
+                                else
+                                {
+                                    <td style="color:red" title="请等待供应商打印">未打印</td>
+                                }
+                                @if (item.验收单扫描件.Count>0)
+                                {
+                                    var ss = "";
+                                    foreach (var k in item.验收单扫描件)
+                                    {
+                                        ss += k.回传单路径 + ";";
+                                    }
+                                    <td id="@ss" onclick="ShowYsd(this)" style="color:#1f9434;cursor:pointer">已验收</td>
+                                }
+                                else
+                                {
+                                    <td style="color:red">未验收</td>
+                                }
+
+                                <td>
+                                    <a href="/供应商后台/AcceptDetial?id=@item.Id">查看详情</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    <div class="gys_znxx_content_detailbox">
+                        @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <h1 style="color:gray;text-align:center;">您还未通过审核，暂时无法使用验收单功能。</h1>
+        }
+    </div>
+    <div id="f1" class="modal_out">
+        <div class="modal_in" style="background: #000000"></div>
+        <span id='fsan' onclick='closeBtn()' style='position: absolute;top: 30px;right: 30px;font-size: 32px;cursor: pointer;background: #fff;border-radius: 50%;height: 30px;width: 30px;text-align: center;line-height: 24px;'>×</span>
+        <div id="showysd" style="background:#fff;margin:2% auto;position: relative;width:900px;height:90%;overflow-y:scroll;border:5px solid #B3B3B3;">
+            
+            @*<a href=""><img src="" width="600px" height="100%" /></a>*@
+        </div>
+    </div>
+}
+else
+{
+    <h4 style="color:gray;text-align:center;">您还未持有安全证书或安全证书已过期，为保证数据的安全性，暂时无法使用验收单功能，如有疑问，请联系客服。</h4>
+}
+<script type="text/javascript" language="javascript">
+    function ShowYsd(ev) {
+        var path = $(ev).attr("id");
+        var str="";
+        var patharr=path.split(";");
+        patharr.pop();
+        $.each(patharr,function(){
+            str+="<a target='_blank' href='"+this+"'><img src='"+this+"' style='display:block;margin:5px auto' width='95%' height='450px' /></a>";
+        });
+        str+="<div style='text-align:center;background:#fff;line-height:85px;'><input type='button' onclick='closeBtn()' style='text-align:center' class='btn-base' value='关    闭'/></div>";
+        $("#showysd").html(str);
+        $("#f1").show();
+    }
+    function closeBtn(){
+        $("#f1").hide();
+    }
+</script>
+@if (ViewData["是否持有U盾"] == "1")
+{
+    
+    int pages = int.Parse(ViewData["listcount"].ToString()) / int.Parse(ViewData["pagesize"].ToString());
+    if (int.Parse(ViewData["listcount"].ToString()) % int.Parse(ViewData["pagesize"].ToString()) > 0)
+    {
+        pages++;
+    }
+    <script type="text/javascript">
+        var num =@(int.Parse(ViewData["page"].ToString()));
+        var j=@pages
+        $(function () {
+           
+            $(".gys_znxx_content_detailbox a").each(function () {
+                if ($(this).text() == num) {
+                    $(this).css("border","1px solid #ff0000");
+                }
+                if (num == j) {
+                    $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+                }
+                if (num == 1) {
+                    $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+                }
+            });
+
+            $("#已上传验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#已上传验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+
+            $(".gys_znxx_box").hide();
+            if (!getcheck()) {
+                $(".gys_znxx_box").hide();
+                $("#indexpagemodal1").hide();
+            }
+            else {
+                $("#indexpagemodal1").show();
+            }
+        });
+
+        function getcheck() {
+            var flage = true;
+
+            var browser = DetectBrowser();
+            if (browser == "Unknown") {
+                alert("不支持该浏览器， 如果您在使用傲游或类似浏览器，请切换到IE模式，建议使用Google浏览器！");
+                flage = false;
+            }
+            createElementNT199();
+            var create = DetectNT199Plugin();
+            if (create == false) {
+                alert("插件未安装,,请直接安装CD区的插件!");
+                flage = false;
+            }
+
+            var Rtn = NT199_Find();
+            if (Rtn < 1) {
+                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                flage = false;
+            }
+
+            if (flage) {
+                $("#indexpagemodal1").show();
+                $("#password").focus();
+            }
+            return flage;
+        }
+        function OnLogon() {
+            var Rtn = NT199_Find();
+            if (Rtn < 1) {
+                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                return false;
+            }
+            var pwd = document.getElementById("password").value;
+            if (pwd == "") {
+                alert("用户密码不能为空");
+                return false;
+            }
+            var retVal = NT199_CheckPassword(pwd);
+            if (retVal != 0) {
+                if (retVal == 1) {
+                    alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                }
+                else {
+                    alert("ErrorCode:" + NT199_GetLastError() + "   密码不正确");
+                }
+                return false;
+            }
+            var IAID = NT199_GetHardwareId();
+
+            var randomMessageFromServer = "@ViewData["Message"]";
+            var hashVal = NT199_Sha1WithSeed(randomMessageFromServer);
+
+            document.getElementById("HidDigest").value = hashVal;
+            document.getElementById("HidIAID").value = IAID;
+
+            var tempparm = "HidDigest=" + hashVal + "&HidIAID=" + IAID + "&ssid=" + $("#ssid").val();
+
+            $("#indexpagemodal1").hide();
+            $("#errortips").html("");
+            $.ajax({
+                cache: false,
+                async: false,
+                //dataType: 'json', type: 'post',
+                type: 'POST',
+                url: "/供应商后台/CheckUOfYsd",
+                data: tempparm,
+                success: function (data) {
+                    if (data == "1") {
+                        $(".gys_znxx_box").show();
+                        return true;
+                    }
+                    else {
+                        $("#indexpagemodal1").show();
+                        $("#errortips").html(data);
+                    }
+                }
+            });
+            return false;
+        }
+    </script>
+}
+else
+{
+    int pages = int.Parse(ViewData["listcount"].ToString()) / int.Parse(ViewData["pagesize"].ToString());
+    if (int.Parse(ViewData["listcount"].ToString()) % int.Parse(ViewData["pagesize"].ToString()) > 0)
+    {
+        pages++;
+    }
+    <script>
+        var num =@(int.Parse(ViewData["page"].ToString()));
+        var j=@pages
+        $(function () {
+            $(".gys_znxx_content_detailbox a").each(function () {
+                if ($(this).text() == num) {
+                    $(this).addClass("currentPage");
+                }
+                if (num == j) {
+                    $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+                }
+                if (num == 1) {
+                    $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+                }
+            });
+
+            $("#已上传验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#已上传验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        });
+    </script>
+}
+

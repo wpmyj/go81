@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "应急采购-首页";
+}
+
+<div style="height:auto; overflow:hidden; margin-bottom:5px; ">
+    <div style="height:auto; overflow:hidden; margin-bottom:5px; ">
+        <div class="prodtpage_leftbox" style="float:left; margin-top:5px;">
+            @Html.Action("Part_Recommend", "应急采购")
+        </div>
+        <div class="prodtpage_rightbox" style="float:left; margin-top:5px;margin-left:10px;">
+            @*<div id="top" style="margin-top: 4px; border-bottom:1px solid #999; height:33px;">
+                    <span style="display: inline-block;margin-left:80px; width:250px;background-color:#fff;height:23px; border: 1px solid #999; border-bottom:none; text-align: center; padding: 5px; font-weight: bold;"><a style=" font-family:'微软雅黑';display: inline-block; width:250px;" href="/应急采购/Index">应急供应商查询</a></span>
+                    <span style="display: inline-block;width:250px; text-align: center;margin-left: -5px; padding: 5px; font-weight: bold; "><a style=" font-family:'微软雅黑';display: inline-block; width:250px;" href="/单位用户后台/demandlist">需求计划提报</a></span>
+                    <span style="display: inline-block;width:250px; text-align: center;margin-left: -5px; padding: 5px; font-weight: bold; "><a style=" font-family:'微软雅黑';display: inline-block; width:250px;" href="/单位用户后台/OnlineBidding_List">网上竞价管理</a></span>
+                </div>*@
+            @Html.Action("Part_GysList", "应急采购")
+        </div>
+
+
+        @*<div>
+                <div class="prodtpage_rightbox" id="em_class" style="width:947px;float:left; margin-top:5px;margin-left:10px;">
+                    @Html.Action("Part_GysList", "应急采购")
+                </div>
+            </div>*@
+    </div>
+</div>

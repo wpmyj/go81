@@ -1,0 +1,138 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.推送数据模型
+@{
+    ViewBag.Title = "推送信息审核";
+}
+<script src="~/JS/provinceandcity_all.js"></script>
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<script>
+    KindEditor.ready(function (K) {
+        var editor = K.create('#content', {
+            cssPath: '../../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true
+        });
+    });
+</script>
+@using Go81WebApp.Models.数据模型.内容数据模型
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="gys_znxx_box">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">推送信息编辑</div>
+            </div>
+        </div>
+
+        <div class="gys_znxx_contentbox" style=" padding-bottom:10px; width:938px;">
+
+            @if (Model.GetType().Name == "公告推送")
+            {
+                <div class="gys_ztbsearch_contentbox" style=" margin-top: 10px; text-align:center;">
+                    <div class="pushmessagetitle" style="text-align:left;">公告详情</div>
+                    @try
+                    {
+                        <input type="hidden" id="connectionid" name="connectionid" value="@Model.关联公告.公告ID" />
+                        <div class="gys_xttz_contentbox_news_title">@Model.关联公告.公告.内容主体.标题)</div>
+                        <div class="gys_xttz_contentbox_news_from">@Model.关联公告.公告.基本数据.修改时间.ToString("yyyy-MM-dd"))</div>
+                        <div class="gys_xttz_contentbox_news_text">
+                            <textarea style=" width:880px; height:400px;" id="content" readonly="readonly">
+                                @Model.关联公告.公告.内容主体.内容)
+                            </textarea>
+                        </div>
+                    }
+                    catch
+                    {
+                        <div class="gys_xttz_contentbox_news_title">无此条信息</div>
+                    }
+
+                </div>
+            }
+            <div class="gys_ztbsearch_contentbox" style="margin-top: 10px;">
+                <div class="pushmessagetitle">推送标题</div>
+                <div style=" padding:10px;">
+                    <input type="text" style=" height:30px; width:400px;" id="pushtitle" name="pushtitle" value="@Model.电子邮件推送数据.标题" />
+                </div>
+            </div>
+
+
+            <div style=" width:918px; margin:0 auto; height:auto; overflow: hidden;">
+                <div class="gys_ztbsearch_contentbox" style="margin-top: 10px; width: 450px; float: left;">
+                    <div class="pushmessagetitle" style=" width:450px;">站内消息推送</div>
+                    <div style=" padding:10px;">
+                        <textarea style=" width:420px; height:100px;" name="znxxtextarea" id="znxxtextarea">@Model.站内消息推送数据.内容</textarea>
+                    </div>
+                </div>
+
+                <div class="gys_ztbsearch_contentbox" style="margin-top: 10px; width: 450px; float: right;">
+                    <div class="pushmessagetitle" style=" width:450px;">短信推送</div>
+                    <div style=" padding:10px;">
+                        <textarea style=" width:420px; height:100px;" name="messagetextarea" id="messagetextarea">@Model.短信推送数据.内容</textarea>
+                    </div>
+                </div>
+
+                <div class="gys_ztbsearch_contentbox" style="margin-top: 10px; width: 450px; float: left;">
+                    <div class="pushmessagetitle" style=" width:450px;">邮箱推送</div>
+                    <div style=" padding:10px;">
+                        <textarea style=" width:420px; height:100px;" name="mailtextarea" id="mailtextarea">@Model.电子邮件推送数据.内容</textarea>
+                    </div>
+                </div>
+
+                <div class="gys_ztbsearch_contentbox" style="margin-top: 10px; width: 450px; float: right;">
+                    <div class="pushmessagetitle" style=" width:450px;" id="weixinmailtextarea">微信推送</div>
+                    <div style=" padding:10px;">
+                        <textarea style=" width:420px; height:100px;" name="weixinmailtextarea" id="weixinmailtextarea">@Model.微信推送数据.内容</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="gys_ztbsearch_contentbox" style=" margin-bottom:10px;">
+                <div class="pushmessagetitle">最终选取结果</div>
+                <div class="gys_znxx_content">
+                    <table width="100%" cellpadding="0" cellspacing="0" id="AdListTableok">
+                        <tr>
+                            <th width="15%">登录名</th>
+                            <th width="15%">联系人姓名</th>
+                            <th width="15%">企业名称</th>
+                            <th width="15%">所属行业</th>
+                            <th width="15%">联系方式</th>
+                            <th width="25%">地区</th>
+                        </tr>
+                        @foreach (var item in Model.站内消息推送数据.收信人列表)
+                        {
+                            <tr>
+                                <td><a href="~/单位用户后台/AdListDetail?id=@item.用户ID" target="_blank">@item.用户数据.登录信息.登录名</a></td>
+                                <td>@((item.用户数据 as 供应商).企业联系人信息.联系人姓名)</td>
+                                <td>@((item.用户数据 as 供应商).企业基本信息.企业名称)</td>
+                                <td>@((item.用户数据 as 供应商).企业基本信息.所属行业)</td>
+                                <td>@(item.用户数据.联系方式.手机)<br />@(item.用户数据.联系方式.固定电话)</td>
+                                <td class="gys_znxx_content_tabletime">
+                                    @((item.用户数据 as 供应商).所属地域.地域)
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+
+            <div style=" width:600px; margin:0 auto; margin-top:20px; text-align:center;">
+                <input type="submit" value="审核通过并发送" name="action" onclick="return sendmessage();" class="front_login_rightbox_button_less">
+                <input type="submit" value="审核不通过" name="action" onclick="return sendmessage();" class="front_login_rightbox_button_less">
+            </div>
+
+        </div>
+        
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $("#推送信息审核").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#推送信息审核").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

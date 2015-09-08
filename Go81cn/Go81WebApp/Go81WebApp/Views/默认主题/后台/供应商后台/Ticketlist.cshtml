@@ -1,0 +1,159 @@
+﻿@{
+    ViewBag.Title = "供应商后台";
+    Layout = "_BackLayout.cshtml";
+}
+<style>
+    div#pager a {
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        line-height: 25px;
+        font-size: 12px;
+        height: 25px;
+        border: 1px solid gray;
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+        div#pager a:hover {
+            background-color: rgb(243, 243, 243);
+        }
+</style>
+<link href="~/css/index.css" rel="stylesheet" />
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="height:650px;" class="bg_outdiv_right">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">代售点列表</div>
+        </div>
+        <div class="gys_znxx_box">
+            <div class="gys_znxx_contentbox">
+                <div class="gys_znxx_content">
+                    <table class="ticket" width="100%" cellpadding="0" cellspacing="0">
+                    </table>
+                    <div style="text-align:center;" id="pager">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function setValue(data) {
+        var str = "<tr><th width='25%'>代售点名称</th><th width='25%'>代售点地址</th><th width='30%'>代售点所属商圈</th><th width='10%'>审核状态</th><th width='10%'>操作</th></tr>";
+        for (var i = 0; i < data.length;i++)
+        {
+            str += "<tr><td style='text-align:center;'><a href='/供应商后台/Ticket_Detail?id=" + data[i].id + "'>" + data[i].name + "</a></td><td style='text-align:center;'>" + data[i].address + "</td><td style='text-align:center;'>" + data[i].sq + "</td><td>"+data[i].Istrue+"</td><td style='text-align:center;'><a href='/供应商后台/Modify_Ticket?id=" + data[i].id + "'>修改</a><a href='/供应商后台/delete_ticket?id=" + data[i].id + "'>删除</a></td></tr>";
+        }
+        $("table.ticket").html(str);
+    }
+    function setPage(pg_count, current_page) {
+        if (pg_count <= 6) {
+            str = '';
+            for (var i = 1; i <= pg_count; i++) {
+                str += "<a onclick='current_page(" + i + ")'>" + i + "</a><span>" + current_page + "/" + pg_count + "</span>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (current_page < 6) {
+                if (current_page != 1) {
+                    var str = "<a onclick='pre_page()'>上一页</a>";
+                    for (var i = 1; i < 6; i++) {
+                        str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a><span>" + current_page + "/" + pg_count + "</span>";
+                    $("div#pager").html(str);
+                }
+                else {
+                    var str = "";
+                    for (var i = 1; i < 6; i++) {
+                        str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a><span>" + current_page + "/" + pg_count + "</span>";
+                    $("div#pager").html(str);
+                }
+            }
+            else if (current_page >= 6 && current_page < pg_count - 3) {
+                var str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(" + 1 + ")'>1</a>...";
+                for (var i = (current_page - 4 + 1) ; i <= current_page; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a><span>" + current_page + "/" + pg_count + "</span>";
+                $("div#pager").html(str);
+            }
+            else if (current_page >= pg_count - 3) {
+                str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(1)'>1</a>...";
+                for (var i = pg_count - 5 + 1; i < pg_count; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><span>" + current_page + "/" + pg_count + "</span>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == current_page.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    var number = 1;
+    var list_count = 0;
+    function Find_User() {
+        var page = '1';
+        $.get('/供应商后台/SearchTicket/',
+            {p:page},
+            function (data) {
+                setValue(data.Data.dt);
+                number = 1;
+                list_count = data.Data.p;
+                setPage(list_count, number);
+            }
+        );
+    }
+    function current_page(num) {
+        $.get('/供应商后台/SearchTicket/',
+            { p: num },
+            function (data) {
+                setValue(data.Data.dt);
+                setPage(data.Data.p, num);
+            }
+        );
+        number = num;
+    }
+    function pre_page() {
+        if (number > 1) {
+            number--;
+            $.get('/供应商后台/SearchTicket/',
+                { p: number },
+                function (data) {
+                    setValue(data.Data.dt);
+                    setPage(data.Data.p, number);
+                }
+            );
+        }
+    }
+    function next_page() {
+        if (number < list_count) {
+            number++;
+            $.get('/供应商后台/SearchTicket/',
+                {p:number},
+                function (data) {
+                    setValue(data.Data.dt);
+                    setPage(data.Data.p, number);
+                }
+            );
+        }
+    }
+    $(document).ready(function () {
+        Find_User();
+        $("#代售点列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#代售点列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

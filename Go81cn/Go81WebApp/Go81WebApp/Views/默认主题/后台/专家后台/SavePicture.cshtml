@@ -1,0 +1,40 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "图片";
+}
+<script src="~/Scripts/jquery-1.11.1.min.js"></script>
+<input type="hidden" value="@ViewData["path"].ToString()" id="pics" />
+<input type="hidden" value="@ViewBag.type.ToString()" id="zjtype" />
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(
+            function () {
+                var path = document.getElementById("pics").value;
+                if (path.split('|')[0] != "出错") {
+                    window.parent.document.getElementById("databack").value = path;
+                    window.parent.setPic($("#zjtype").val());
+                    window.parent.document.getElementById("f1").style.display = "none";
+                }
+            }
+            );
+    function delPic(th) {
+        var path = $(th).attr("lang");
+        var type = $(th).attr("type");
+        $.get('/专家后台/DeletePic', { uri: path, type: type },
+            function (data) {
+                if (data == 1) { $(th).parent().remove(); }
+            });
+
+        //var newpath = document.getElementById("pics").value.split('|');
+        //var str = "";
+        //for (j = 0; j < newpath.length - 1; j++) {
+        //    if (path != newpath[j]) {
+        //        str += newpath[j] + "|";
+        //    }
+        //}
+        //document.getElementById("pics").value = str;
+        //window.parent.document.getElementById("picture").value = document.getElementById("pics").value;
+    }
+</script>
+
+

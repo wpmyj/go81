@@ -1,0 +1,43 @@
+﻿@model Go81WebApp.Models.数据模型.商品数据模型.商品分类
+@using Go81WebApp.Models.数据模型.商品数据模型
+
+
+<style type="text/css">
+    .p_area .tig{position: absolute; height:0;width:0; border-bottom: 20px solid #aaa; border-left: 2em solid transparent; border-right: 2em solid transparent; top:18px; left: 60px;}
+.p_area .tig:after{ content: "";position: absolute; height:0;width:0; border-bottom: 20px solid #fff; border-left: 2em solid transparent; border-right: 2em solid transparent; top:1px; left:-24px;}
+
+     .pronav{font-size: 12px; color: rgb(107, 107, 107); text-indent: 20px;}
+</style>
+<div class="pronav">
+    @if (WebApiApplication.IsIntranet)
+    {
+        if (Model != null && Model.分类性质 == 商品分类性质.通用物资)
+        {
+            <label style="font-size: 22px;">@Model.父分类.商品分类.父分类.商品分类.分类名</label><label>&nbsp; &gt; &nbsp;</label> @Model.父分类.商品分类.分类名 <label>&nbsp; &gt; &nbsp;</label> @Model.分类名
+        }
+        else if (Model != null && Model.分类性质 == 商品分类性质.专用物资)
+        {
+            <label style="font-size: 22px;">专用物资</label><label>&nbsp; &gt; &nbsp;</label> @Model.父分类.商品分类.分类名 <label>&nbsp; &gt; &nbsp;</label> @Model.分类名
+        }
+        else
+        {
+            <label>不好意思，出错了！</label>
+        }
+    }
+    else
+    {
+        if (Model != null && Model.分类性质 == 商品分类性质.通用物资)
+        {
+            <label style="font-size: 22px;">@Model.父分类.商品分类.父分类.商品分类.分类名</label><label>&nbsp; &gt; &nbsp;</label> @Model.父分类.商品分类.分类名 <label>&nbsp; &gt; &nbsp;</label> @Model.分类名
+        }
+        else if (Model != null && Model.分类性质 == 商品分类性质.专用物资)
+        {
+            <label style="font-size: 22px;">专用物资</label><label>&nbsp; &gt; &nbsp;</label> @Model.父分类.商品分类.分类名 <label>&nbsp; &gt; &nbsp;</label> @Model.分类名
+        }
+        else
+        {
+            <label>不好意思，出错了！</label>
+        }
+    }
+        
+</div>

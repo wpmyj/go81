@@ -1,0 +1,29 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.招标采购项目
+<link rel="stylesheet" href="~/css/index.css" type="text/css">
+
+<div class="gys_xttz_box">
+    <div class="gys_xttz_topbox">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">需求申请详情</div>
+        </div>
+    </div>
+    <div class="gys_xttz_contentbox">
+        @if (Model != null)
+        {
+            <div class="gys_xttz_contentbox_news_title">@Html.DisplayFor(model => model.需求申请来源.需求申请.标题)</div>
+            <div class="gys_xttz_contentbox_news_text">
+                @Html.Raw(Model.需求申请来源.需求申请.正文)
+            </div>
+        }
+        else
+        {
+            <div class="gys_xttz_contentbox_news_title">暂无此信息</div>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#我的需求列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#我的需求列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

@@ -1,0 +1,154 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.公告
+@using Go81WebApp.Models.数据模型
+<style>
+    table {
+        border: 1px solid gray;
+        border-right: none;
+        border-bottom: none;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+        table tr td {
+            border: 1px solid gray;
+            border-top: none;
+            border-left: none;
+        }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <link rel="stylesheet" href="~/css/index.css" type="text/css" />
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">公告详情</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        @if (Model != null)
+        {
+            <div class="gys_xttz_contentbox" id="gys_xttz_contentbox">
+                <div class="gys_xttz_contentbox_news_title">@Html.DisplayFor(model => model.内容主体.标题)</div>
+                <div class="gys_xttz_contentbox_news_from">
+                    @if (Model.公告来源 != null)
+                    {
+                        if (!string.IsNullOrEmpty(Model.公告来源.来源名称))
+                        {
+                            <span style="padding:0 10px 0 10px;">来源:<a target="_blank" title="@Model.公告来源.来源链接" href="@Model.公告来源.来源链接" style="text-decoration:underline;">@Model.公告来源.来源名称</a></span>
+                        }
+                        @*if (!string.IsNullOrEmpty(Model.公告来源.来源链接))
+                        {
+                            <span style="padding:0 10px 0 10px;">
+                                来源地址:
+                                @if (Model.公告来源.来源链接.Length > 20)
+                                {
+                                    <a target="_blank" title="@Model.公告来源.来源链接" href="@Model.公告来源.来源链接">@Model.公告来源.来源链接.Substring(0, 20)</a>
+                                }
+                                else
+                                {
+                                    <a target="_blank" title="@Model.公告来源.来源链接" href="@Model.公告来源.来源链接">@Model.公告来源.来源链接</a>
+                                }
+                            </span>
+                        }*@
+                        if (!string.IsNullOrEmpty(Model.公告信息.一级分类))
+                        {
+                            <span style="padding:0 10px 0 10px;">相关行业:@Model.公告信息.一级分类</span>
+                        }
+                    }
+                    <span style="padding:0 10px 0 10px;">时间:@Model.内容主体.发布时间.ToString("yyyy-MM-dd")</span>
+                    <span style="padding:0 10px 0 10px;">需求单位:@Model.公告信息.需求单位</span>
+                    <a class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>
+                </div>
+                <div class="gys_xttz_contentbox_news_text">
+                    @Html.Raw(Model.内容主体.内容)
+                </div>
+                @if (Model.内容主体.图片 != null && Model.内容主体.图片.Count > 0)
+                {
+                    <div class="showattachment" style="width:100%;">扫描件列表:</div>
+                    foreach (var item in Model.内容主体.图片)
+                    {
+                        <div class="showattachment_list" style="width: 140px; height: 100px; padding: 13px; float: left; background-color: #eee; margin: 10px;">
+                            <a target="_blank" href="@item">
+                                <img style="width: 140px; height: 100px; border: none" src="@item" />
+                            </a>
+                        </div>
+                    }
+                }
+                @if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
+                {
+                    <div class="showattachment" style="width: 800px;">附件列表:</div>
+                    for (int i = 0; i < Model.内容主体.附件.Count; i++)
+                    {
+                        <div class="showattachment_list">
+                            <a target="_blank" href="@Model.内容主体.附件[i]">附件@(i + 1)</a>
+                        </div>
+                    }
+                }
+                
+                @if (ViewData["开启预报名"] != null && ViewData["开启预报名"] == "1")
+                {
+                    <a style="color:red; padding:20px; text-decoration:underline;" title="点击查看" href="/单位用户后台/SignUp_List" target="_blank">已开启预报名</a>
+                }
+            </div>
+            if (ViewData["s"] != null && ViewData["s"].ToString() == "0" && Model.审核数据.审核状态== Go81WebApp.Models.数据模型.审核状态.未审核)
+            {
+                <div class="procure_adaduditdiv">
+            <input type="hidden" name="reason" id="reason" />
+                    <input type="submit" value="审核通过" name="action" class="front_login_rightbox_button" style="width:200px;">
+                    <input type="submit" value="审核不通过" name="action" class="front_login_rightbox_button" style="width:200px;" onclick="return  getreason();">
+                </div>
+            }
+        }
+        else
+        {
+            <div class="gys_xttz_contentbox_news_title">暂无此类信息</div>
+        }
+            <div>
+                @if ((Model.审核数据.审核状态 == 审核状态.未审核 || Model.审核数据.审核状态 == 审核状态.审核未通过) && !Model.公告信息.是否撤回 &&ViewData["s"].ToString()=="1")
+                {
+                    <input alt="@Model.Id" type="button" onclick="resetad(this)" value="撤回" class="front_login_rightbox_button" style="margin:0px auto;display:block; margin-bottom:10px;"/>
+                }
+    </div>
+        </div>
+}
+<script type="text/javascript">
+    function getreason() {
+        var reason = prompt("请输入审核不通过原因", "");
+        if (reason == null || reason == "" || $.trim(reason) == "") {
+            alert("原因必须填写！");
+            return false;
+        } else {
+            $("#reason").val(reason);
+        }
+    }
+    function printpage() {
+        $(".printspan").hide();
+        document.body.innerHTML = document.getElementById('gys_xttz_contentbox').innerHTML;
+        window.print();
+    }
+    $(document).ready(function () {
+        $("table tr td:first").css("width", "200px");
+    });
+</script>
+<script>
+        $(function () { 
+        $("#@ViewData["come"]").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#@ViewData["come"]").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+        function resetad(th)
+        {
+            var adid = $(th).attr("alt");
+            $.get("/单位用户后台/resetAd", {id:adid}, function (data) {
+                if(data==1)
+                {
+                    alert("成功撤回公告，你可以去修改");
+                    window.location = "/单位用户后台/Procure_AdSendList_S";
+                }
+                else
+                {
+                    alert("撤回公告失败！请重新撤回");
+                }
+    });
+        }
+</script>

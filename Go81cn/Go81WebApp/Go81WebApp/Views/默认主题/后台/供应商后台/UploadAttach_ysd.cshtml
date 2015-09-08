@@ -1,0 +1,39 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "图片";
+}
+<script src="~/Scripts/jquery-1.11.1.min.js"></script>
+@{
+    string[] path = ViewData["path"].ToString().Split('|');
+}
+<input type="hidden" value="@ViewData["path"].ToString()" id="pics" />
+<input type="hidden" value="@ViewData["which"].ToString()" id="which" />
+<script type="text/javascript" language="javascript">
+    $(document).ready(
+            function () {
+                var path = document.getElementById("pics").value;
+                if(path.split('|')[0]!="出错")
+                {
+                    var element = window.parent.document.getElementById("picture");
+                    if (element!=null)
+                    {
+                        window.parent.document.getElementById("picture").value += path;
+                        window.parent.setPic("#picture");
+                        window.parent.document.getElementById("f1").style.display = "none";
+                    }
+                    else
+                    {
+                        window.parent.document.getElementById("picture" + $("#which").val()).value += path;
+                        window.parent.setPic(path,$("#which").val());
+                        window.parent.document.getElementById("f1").style.display = "none";
+                    }
+                }
+                else
+                {
+                    window.parent.document.getElementById("f1").style.display = "none";
+                }
+            }
+            );
+</script>
+
+

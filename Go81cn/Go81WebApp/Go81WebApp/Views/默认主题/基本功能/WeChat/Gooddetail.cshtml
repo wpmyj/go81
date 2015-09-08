@@ -1,0 +1,84 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@model Go81WebApp.Models.数据模型.商品数据模型.商品
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <script type="text/javascript" language="javascript" src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/JS/provinceandcity_all.js"></script>
+    <link rel="stylesheet" href="~/css/WeChat.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>商品详情</title>
+</head>
+<body>
+    <div class="outbox">
+        <div class="imgContainer">
+            <ul>
+                @foreach (var item in Model.商品信息.商品图片)
+                {
+                <li><img title="图片" src="@item" /></li>
+                }
+            </ul>
+        </div>
+        <div class="tabheader"><a href="###" id="#direct">商品描述</a><a href="###" id="#param"><span class="linespan" style="float:left;"></span>商品参数<span class="linespan" style="float:right;"></span></a><a id="#sale" href="###">售后服务</a></div>
+        <div id="contentContainer">
+            <div id="direct">
+                <p>
+                    商品名称：@Model.商品信息.商品名
+                </p>
+                <p>
+                    商品品牌：@Model.商品信息.品牌
+                </p>
+                <p>
+                    商品简介：@Html.Raw(Model.商品数据.商品简介)
+                </p>
+                <p>
+                    商品详情：@Html.Raw(Model.商品数据.商品详情)
+                </p>
+            </div>
+            <div id="param" style="display:none;">
+                @foreach (var arr in Model.商品数据.商品属性)
+                {
+                    <table cellspacing="0" cellpadding="0" width="100%">
+                        <tr>
+                            <th colspan="2" align="center">@arr.Key</th>
+                        </tr>
+                        @foreach (var proname in arr.Value)
+                        {
+                            <tr>
+                                <td width="15%" style="text-align:center;">@proname.Key</td>
+                                <td width="85%">
+                                    @foreach (var list in proname.Value)
+                                    {
+                                        @list
+                                        if (list != proname.Value[proname.Value.Count - 1])
+                                        {<span>、</span>}
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+            </div>
+            <div id="sale" style="padding-top:5px;display:none;">
+                @Html.Raw(Model.商品数据.售后服务)
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        $(".tabheader a").click(function () {
+            $(".tabheader a").each(function () {
+                $(this).css({ "border-bottom": "1px solid #b8b4b2", "color": "#b8b4b2" });
+            });
+            $("#contentContainer div").hide();
+            var attr = $(this).attr("id");
+            $(this).css({ "border-bottom": "1px solid #ff0000", "color": "#ff0000" });
+            $(attr).show();
+        });
+        $(document).ready(function () {
+            $(".tabheader a:eq(0)").css({ "border-bottom": "1px solid #ff0000", "color": "#ff0000" });
+        });
+    </script>
+</body>
+</html>

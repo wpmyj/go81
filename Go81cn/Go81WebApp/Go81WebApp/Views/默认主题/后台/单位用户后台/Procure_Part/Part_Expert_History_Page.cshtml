@@ -1,0 +1,111 @@
+﻿@using Go81WebApp.Models.数据模型
+
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <th width="20%">项目名称</th>
+            <th width="15%">项目编号</th>
+            <th width="13%">经办人</th>
+            <th width="17%">评标时间</th>
+            <th width="8%">是否评分</th>
+            <th width="27%">操作</th>
+        </tr>
+        @{
+            IEnumerable<专家抽选记录> hisrecord = ViewData["历史抽选专家列表"] as IEnumerable<专家抽选记录>;
+            if (hisrecord != null && hisrecord.Any())
+            {
+                foreach (var i in hisrecord)
+                {
+                    <tr>
+                        <td>@i.项目名称</td>
+                        <td>@i.项目编号</td>
+                        @if (i.经办人.用户ID != -1 && i.经办人.用户数据 != null && i.经办人.用户数据.联系方式 != null && !string.IsNullOrWhiteSpace(i.经办人.用户数据.联系方式.联系人))
+                        {
+                            <td>@i.经办人.用户数据.联系方式.联系人</td>
+                        }
+                        else
+                        {
+                            <td>未填写</td>
+                        }
+                        <td>@i.评标时间.ToString()</td>
+                        @if (i.是否已评分)
+                        {
+                            <td>已评分</td>
+                        }
+                        else
+                        {
+                            <td style="color: red;">未评分</td>
+                        }
+                        <td>
+                            <a href="Expert_Choose_Print?id=@i.Id" target="_blank">打印名单</a>|
+                            <a href="Expert_HistoryDetail?id=@i.Id" target="_blank">查看详情</a>
+                            @if (!i.是否已评分)
+                            {
+                                <span>|</span><a href="Expert_Scoring?id=@i.Id" target="_blank">进行评分</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6">暂无历史抽选评审专家</td>
+                </tr>
+            }
+        }
+
+    </table>
+    <div class="gys_znxx_content_detailbox">
+        @if (int.Parse(ViewData["currentpage"].ToString()) == 1)
+        {
+            <a>首页</a>
+        }
+        else
+        {
+            <a id="1" onclick="changeMesspage(this)">首页</a>
+        }
+        @for (int i = 0; i <= 10; i++)
+        {                       //一共最多显示10个页码，前面5个，后面5个
+            if ((int.Parse(ViewData["currentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentpage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+            {
+                if (5 == i)
+                {                               //当前页处理
+                    <a>@int.Parse(ViewData["currentpage"].ToString())</a>
+                }
+                else
+                {                               //一般页处理
+                    <a id="@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)" onclick="changeMesspage(this)">@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)</a>
+
+                }
+            }
+        }
+        @if (int.Parse(ViewData["currentpage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+        {
+            <a>末页</a>
+        }
+        else
+        {
+            <a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeMesspage(this)">末页</a>
+        }
+
+    </div>
+<script type="text/javascript" language="javascript">
+    var i = @(int.Parse(ViewData["currentpage"].ToString()));
+    var j=@(int.Parse(ViewData["pagecount"].ToString()))
+    $(document).ready(function () {
+        $("#历史抽取记录").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#历史抽取记录").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == i) {
+                $(this).addClass("currentPage");
+            }
+            if (i== j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (i == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");;
+            }
+        });
+    });
+</script>

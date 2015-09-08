@@ -1,0 +1,750 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.验收单
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    ViewBag.Title = "修改验收单";
+    Layout = "_BackLayout.cshtml";
+}
+<link href="~/css/css.css" rel="stylesheet" />
+<script src="~/JS/myComfirm.js" type="text/javascript"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style type="text/css">
+    .accept {
+        width: 100%;
+    }
+
+        .accept td {
+            line-height: 30px;
+        }
+
+        .accept .align {
+            text-align: right;
+            width: 150px;
+            font-size: 16px;
+        }
+
+        .accept span {
+            color: red;
+        }
+
+        .accept .lis {
+            text-align: right;
+            font-size: 14px;
+            color: #575757;
+        }
+
+    .gys_ztbsearch_contentbox a {
+        margin-left: 5px;
+    }
+    .text
+    {
+        width:80px;
+    }
+    td{
+        text-align:center;
+    }
+     #pager {
+        text-align: center;
+    }
+
+        #pager a {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+            line-height: 25px;
+            font-size: 12px;
+            height: 25px;
+            border: 1px solid rgb(204, 204, 204);
+            margin-top: 10px;
+            margin-left: 5px;
+            margin-right: auto;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+            #pager a:hover {
+                background-color: rgb(243, 243, 243);
+            }
+            .gname{
+                display: inline-block;
+width: 320px;
+height: 25px;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+            }
+            .out_box {
+            display:none;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 3%;
+    }
+
+    .out_box_insecond_child {
+        width:725px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+        border:1px solid red;
+    }
+
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
+</style>
+<div id="pdf1" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" title="关闭窗口" onclick="$('#pdf1').hide()">×</a></div>
+            <div style="width:725px; max-height:440px; overflow-y:scroll; overflow-x:hidden;">
+                <div id="content" style="padding-left:10px; line-height:30px;" lang="aa"></div>
+                <div id="pager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div id="title_div" class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">修改验收单</div>
+        </div>
+        <div id="Uppicture" style="position:fixed; display:none; top:0; left:0; width:100%;height:100%;background:rgba(0, 0, 0, 0.5) ">
+            <div style="min-height: 200px;margin:5% auto; width:50%; background-color: rgb(245, 245, 245);border-radius: 4px;border: 4px solid rgb(219, 218, 218); filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=3);-webkit-box-shadow:0px 0px 11px #BFAEAE; -moz-box-shadow:0px 0px 11px #BFAEAE;">
+                <a style="display:block; width:20px; height:20px; line-height:20px; color:white; background-color:red; text-align:center; float:right; cursor:pointer;" onclick="hidethis('#Uppicture')" title="关闭">×</a>
+                <form action="/供应商后台/UploadAttach_ysd" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                    <table width="70%" height="100" style="font-size:14px; margin-left:20px;">
+                        <tr><td colspan="4" align="left" style="font-size:16px;">请从这里添加验收单附件信息<label style="font-size:13px;color:red;">(格式为jpg,png,word或者excel的文件)上传后的附件显示在保存按钮下方</label></td></tr>
+                        <tr>
+                            <td>附件商品总金额：</td>
+                            <td align="left"><input type="text" name="sum" id="sum" /></td>
+                            <td>请选择附件：</td>
+                            <td align="left">
+                                <input type="file" onchange="filechange()" style="width:70px;" name="file1" />
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+                <div id="uploadimg" style="padding:0 17px"></div>
+                <div id="framebox" style="margin-left:20px; display:none; margin-top:10px;width:700px; height:auto;  margin-right: auto;">
+                    <iframe name="showPic" scrolling="no" id="showPic" frameborder="0" style="height:auto; width:100%;"></iframe>
+                </div>
+            </div>
+        </div>
+        @{
+            IEnumerable<商品> goods = ViewData["商品列表"] as IEnumerable<商品>;
+        }
+        @using (Html.BeginForm("Editform", "供应商后台"))
+        {
+            <input type="hidden" value="@ViewData["供应商ID"].ToString()" id="uid" />
+            <input type="hidden" name="count" id="count" value="@Model.物资服务列表.Count" />
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+            @Html.HiddenFor(model => model.Id)
+            <table class="accept">
+                <tr>
+                    <td align="right">审核单位：</td>
+                    <td width="105px;">
+                        @Html.HiddenFor(model => model.管理单位审核人.用户ID, new { @id = "unit_user_sh" })
+                        <select style="width:100px;" name="checker" id="selectSh_unit">
+                            @{
+            var sh_unit = ViewData["审核单位列表"] as IEnumerable<单位用户>;
+            foreach (var j in sh_unit)
+            {
+                if (Model.管理单位审核人.用户ID == j.Id)
+                {
+                    <option value="@j.Id" selected="selected">@j.单位信息.单位名称</option>
+                }
+                else
+                {
+                    <option value="@j.Id">@j.单位信息.单位名称</option>
+                }
+            }
+                            }
+                        </select>
+                    </td>
+                    <td>收货单位：</td>
+                    <td width="268px;">
+                        @*@Html.HiddenFor(model => model.收货单位, new { @id = "unit_user_id" })*@
+                        @*<select onchange="showtext(this)" id="unit_user" style="width:130px;">
+                                @{
+                                    var dw = ViewData["收货单位列表"] as IEnumerable<单位用户>;
+                                    foreach (var t in dw)
+                                    {
+                                        <option value="@t.单位信息.单位名称">@t.单位信息.单位名称</option>
+                                    }
+                                }
+                                <option value="-1">不限</option>
+                            </select>*@
+                        @Html.TextBoxFor(model => model.收货单位, new { id = "reciever", style = "width:120px" })
+                    </td>
+                    <td>供货单位开票人：</td>
+                    <td width="160px;">@Html.EditorFor(model => model.供货单位开票人, new { id = "sender", style = "width:155px;" })</td>
+                </tr>
+                <tr>
+                    <td class="align" valign="top">物资服务列表：</td>
+                    <td colspan="5">
+                        @if (Model.物资服务列表.Count > 5)
+                        {
+                            <i>该批物资名称：</i>@Html.EditorFor(model => model.某批物资名称)
+                        }
+                        <table id="good_list" cellpadding="0" cellspacing="0" class="tb_wzi" style="width: 100%; border-top: 1px solid #ccc; border-left: 1px solid #ccc;">
+                            <tr>
+                                <th style="font-size:14px; line-height:30px;background:#DEDEDE; border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" align="center" width="28%">商品</th>
+                                <th style="font-size:14px;line-height:30px;background:#DEDEDE;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" align="center" width="15%">规格型号</th>
+                                <th style="font-size:14px;line-height:30px;background:#DEDEDE;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" align="center" width="13%">采购合同号</th>
+                                <th style="font-size:14px;line-height:30px;background:#DEDEDE;border-bottom: 1px solid #ccc;border-right: 1px solid #ccc;" align="center" width="8%">计量单位</th>
+                                <th style="font-size:14px;line-height: 30px;background:#DEDEDE; border-bottom: 1px solid #ccc; border-right: 1px solid #ccc;" align="center" width="6%">数量</th>
+                                <th style="font-size:14px;line-height: 30px;background:#DEDEDE; border-bottom: 1px solid #ccc; border-right: 1px solid #ccc;" align="center" width="10%">单价</th>
+                                <th style="font-size:14px;line-height: 30px;background:#DEDEDE; border-bottom: 1px solid #ccc; border-right: 1px solid #ccc;" align="center" width="5%">操作</th>
+                            </tr>
+                            @for (int k = 0; k < Model.物资服务列表.Count; k++)
+                            {
+                                <tr>
+                                    <td style=" font-size:13px; position:relative; line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center">
+                                        @Html.HiddenFor(m => m.物资服务列表[k].商品链接.商品ID)
+                                        <select style="position:absolute; top:0px; left:37px;">
+                                            @foreach (var item in goods)
+                                            {
+                                                if (Model.物资服务列表[k].商品链接.商品.商品信息.商品名 == item.商品信息.商品名)
+                                                {
+                                                    <option selected="selected" id="@item.Id" value="@item.销售信息.价格" class="@item.商品信息.型号 / @item.商品信息.精确型号" title="@item.商品信息.计量单位">@item.商品信息.商品名</option>
+                                                }
+                                                else
+                                                {
+                                                    <option id="@item.Id" value="@item.销售信息.价格" class="@item.商品信息.型号 / @item.商品信息.精确型号" title="@item.商品信息.计量单位">@item.商品信息.商品名</option>
+                                                }
+                                            }
+                                        </select> @*@Model.物资服务列表[k].商品链接.商品.商品信息.商品名*@
+                                        <input type='text' style="position:absolute; top:0px; left:37px;opacity:0;filter:alpha(opacity=0);width:155px;" onclick="selectGoods(this)" />
+                                    </td>
+                                    <td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center">@Html.TextBoxFor(m => m.物资服务列表[k].规格型号, new { @class="text"}) @*@Model.物资服务列表[k].规格型号*@</td>
+                                    <td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center">@Html.TextBoxFor(m => m.物资服务列表[k].采购合同号, new { @class = "text" }) @*@Model.物资服务列表[k].采购合同号*@</td>
+                                    <td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center">@Html.TextBoxFor(m => m.物资服务列表[k].计量单位, new { @class = "text" }) @*@Model.物资服务列表[k].计量单位*@</td>
+                                    <td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center">@Html.TextBoxFor(m => m.物资服务列表[k].数量, new { @class = "text" }) @*@Model.物资服务列表[k].数量*@</td>
+                                    <td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center">@Html.TextBoxFor(m => m.物资服务列表[k].单价, new { @class = "text" }) @*￥@Model.物资服务列表[k].单价*@</td>
+                                    @*<td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center">@Html.TextBoxFor(m => m.物资服务列表[k].总价, new { @style = "width:80px;" }) @*￥@Model.物资服务列表[k].总价</td>*@
+                                    <td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center"><a href="/供应商后台/DelResourse?index=@k&id=@Model.Id">删除</a></td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="5" style="text-align:center">
+                        @if (Model.验收单附件.Count <= 0)
+                        {
+                            <button type="button" id="btn_addForm" onclick="addFi(this)">新增物资服务</button>
+                        }
+                         @if (Model.物资服务列表.Count <= 0)
+                         {
+                            <button type="button" id="btn_addForm" onclick="showattach('#Uppicture')">添加附件</button>
+                         }
+                       
+                        <button type="button" id="" onclick="addOtherCost()">添加费用</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="6">
+                        <table width="100%" >
+                            <tr>
+                                <td style="font-size:13px; text-align:right;">运费：</td>
+                                <td>@Html.EditorFor(model => model.运费)</td>
+                                <td style="font-size:13px; text-align:right;">服务费：</td>
+                                <td>@Html.EditorFor(model => model.服务费)</td>
+                                <td style="font-size:13px; text-align:right;">维修费：</td>
+                                <td>@Html.EditorFor(model => model.维修费)</td>
+                            </tr>
+                            @{
+            if (Model.其他费用 != null && Model.其他费用.Count() != 0)
+            {
+                <tr><td colspan="6" align="center"><span style="font-size:16px; color:black; font-weight:bold;">其他费用</span></td></tr>
+                double s = Model.其他费用.Count / 3;
+                            int d = (int)Math.Ceiling(Convert.ToDouble(s.ToString()));
+                            for (int i = 0; i <= d; i++)
+                            {
+                                <tr>
+                                    @if (i < d)
+                                    {
+                                        for (int j = (3 * ((1 / 3) + i)) + 1; j <= 3 * (i + 1); j++)
+                                        {
+                                            <td style="font-size:13px; text-align:right;">
+                                    @Html.TextBoxFor(m => m.其他费用[j - 1].费用名称, new { @style = "width:50px;", placeholder = "费用名称" })
+                                            </td>
+                                            <td>@Html.EditorFor(model => model.其他费用[j - 1].金额, new { placeholder = "费用金额" })</td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (int j = 3 * i + 1; j <= Model.其他费用.Count; j++)
+                                        {
+                                                    <td style="font-size:13px; text-align:right;">@Html.TextBoxFor(m => m.其他费用[j - 1].费用名称, new { @style = "width:50px;", placeholder = "费用名称" }) </td>
+                                            <td>@Html.TextBoxFor(model => model.其他费用[j - 1].金额, new { placeholder = "费用金额" })</td>
+                                        }
+                                    }
+                                </tr>
+                            }
+            }
+                            }
+                            <tr id="cost">
+                                <td colspan="6">
+                                    <div id="pBox"></div>
+                                </td>
+                            </tr>
+                            @if (Model.验收单附件 != null && Model.验收单附件.Count() != 0)
+                            {
+                                foreach (var k in Model.验收单附件)
+                                {
+                                    <tr>
+                                        <td colspan="6" style="font-size:13px;"><a target="_blank" href="@k.附件路径">@k.附件路径.Substring(k.附件路径.LastIndexOf('/')+1)</a>  总金额：@k.价格  <a lang="@k.附件路径" onclick="delPic1(this)" style="color:white; margin-left:5px; display:inline-block; cursor:pointer; background-color:red; width:15px; height:15px; line-height:15px; text-align:center; font-size:12px;">×</a></td>
+                                    </tr>
+                                }
+                            }
+                            
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="text-align:center">
+                        <button id="btn_sub" style="margin-left:0;" class="gys_ztbsearch_search_botton" type="submit" value="保存">保存</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="hidden" value="" name="attachSum" id="attachSum" />
+                        <input type="hidden" name="pic" id="picture" value="" />
+                    </td>
+                </tr>
+            </table>
+        }
+
+    </div>
+</div>
+<div style="display:none;">
+    <select id="gaa_name">
+        <option>请选择商品</option>
+        @{
+            IEnumerable<商品> gg = ViewData["商品列表"] as IEnumerable<商品>;
+            if (gg != null && gg.Any())
+            {
+                foreach (var j in gg)
+                {
+                    <option id="@j.Id" value="@j.销售信息.价格" class="@j.商品信息.型号 / @j.商品信息.精确型号" title="@j.商品信息.计量单位">@j.商品信息.商品名</option>
+                }
+            }
+            else
+            {
+                <option>请选择商品</option>
+            }
+        }
+    </select>
+</div>
+<script type="text/javascript">
+    function filechange() {//上传附件
+        var reg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
+        if (!$("#sum").val().match(reg) || $("#sum").val() == "") {
+            //alert("请填写商品价格");
+            if ($("#comfirm-u").length > 0) {
+                $("#comfirm-u").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-u",
+                    btncloseid: "btnclose12",
+                    btnsubid: "btnsub12",
+                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                    content: "请先填写商品价格！",  //提示信息内容 必须
+                    iscomfirm: false,
+                    onComfirm: function () {
+                        $("#comfirm-u").fadeOut(200);
+                    },
+                });
+            }
+        }
+        else {
+            $("#f1").css({ "display": "block" });
+            document.forms["upload"].submit();
+            var str = $("#attachSum").val();
+            str += $("#sum").val() + ",";
+            $("#attachSum").val(str);
+            $("#sum").val("");
+        }
+    }
+    function setPic(th) {//重新设置附件顺序
+        var str = "<table>";
+        var path = $(th).val();
+        var path1 = path.split('|');
+        var sum = $("#attachSum").val().split(',');
+        var count = 0;
+        for (var i = 0; i < path1.length - 1; i++) {
+            var path_t=path1[i].substring(path1[i].lastIndexOf('/')+1);
+            str += "<tr><td><a style='font-size:13px;' target='_blank' href='" + path1[i] + "'>" + path_t + "</a>&nbsp&nbsp&nbsp&nbsp总金额" + sum[i] + "元<a href='###' title='删除' onclick='delPic(this)' style='color:white; margin-left:10px; display:inline-block; background-color:red; width:15px; height:15px; line-height:15px; text-align:center; font-size:12px;' lang='" + path1[i] + "'>×</a></td></tr>";
+        }
+        str += "</table>";
+        document.getElementById("pBox").innerHTML = str;
+        document.getElementById("uploadimg").innerHTML = str;
+    }
+    function delPic(th) {
+        var path = $(th).attr("lang");
+        $.get('/供应商后台/DeleteAttach_ysd', { n: path },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+        var newpath = document.getElementById("picture").value.split('|');
+        var index = 0;
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+            else {
+                index = j;
+            }
+        }
+        var arrNum = $("#attachSum").val().split(',');
+        var newArrNum = "";
+        for (var n = 0; n < arrNum.length - 1; n++) {
+            if (n != index) {
+                newArrNum += arrNum[n] + ",";
+            }
+        }
+        $("#attachSum").val(newArrNum);
+        document.getElementById("picture").value = str;
+        setPic("#picture");
+    }
+    function delPic1(th) {
+        var path = $(th).attr("lang");
+        $.get('/供应商后台/DeleteAttach_ysd', { n: path },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().parent().remove();
+                }
+            });
+    }
+    var del=-1;
+    //添加其他费用
+    var st="<tr><td style='font-size:14px; text-align:right;border-top:none;border-left:none;padding-right:7px;'>费用名称</td>";
+    st += "<td style='border-left:none;border-top:none;'><input class='text-box single-line' name='其他费用[`].费用名称' type='text'></td>";
+    st+="<td style='font-size:14px; text-align:right;border-top:none;border-left:none;padding-right:7px;'>金额</td>";
+    st += "<td colspan='2' style='border-left:none;border-top:none;'><input min='1' name='其他费用[`].金额' type='number' ><a class='del_good_list' style='margin-left:10px;cursor:pointer' onclick='delOtherCost(this)'>删除</a></td></tr>";
+    var countnumer=@Model.其他费用.Count;
+    function addOtherCost() {
+        $("#cost").before(st.replace(/`/g, countnumer++));
+    }
+    function delOtherCost(e) {
+        var ipt=$(e).parent().parent().find("input");
+        $.each(ipt,function(index,domEle){
+            $(domEle).val("");
+        });
+        $(e).parent().parent().hide();
+    }
+
+
+    var t = "<tr><td style='font-size:13px;line-height: 25px; position:relative; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;'><input data-val='true' data-val-number='字段 商品ID 必须是一个数字。' data-val-required='商品ID 字段是必需的。' class='hidgood' name='物资服务列表[`].商品链接.商品ID' type='hidden' value=\"\">";
+    t += "<select class='g_name' style='position:absolute; top:0px; left:37px;'  onchange='set_price(this)' onload='set_price(this)'>";
+    t += " </select>";
+    t += "<input type='text' onclick='selectGoods(this)' style='position:absolute; top:0px; left:37px;opacity:0;filter:alpha(opacity=0);width:155px;'/></td>";
+    t += "<td style='font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;'><input class='text-box single-line text' data-val='true' data-val-number='字段 规格型号 必须是一个数字。' placeholder='必填' data-val-required='规格型号 字段是必需的。' name='物资服务列表[`].规格型号' type='text' value=\"\"></td>";
+    t += "<td style='font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;'><input class='text'  name='物资服务列表[`].采购合同号' placeholder='可不填' type='text' value=\"\"></td>";
+    t += "<td style='font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;'><input class='text-box single-line text' placeholder='必填' data-val='true' data-val-number='字段 计量单位 必须是一个数字。' data-val-required='计量单位 字段是必需的。' name='物资服务列表[`].计量单位' type='text' value=\"\"></td>";
+    t += "<td style='font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;'><input class='text-box single-line text' placeholder='必填' data-val='true' data-val-number='字段 数量 必须是一个数字。' data-val-required='数量 字段是必需的。' name='物资服务列表[`].数量' type='text' value=\"\"></td>";
+    t += "<td style='font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;'><input class='text-box single-line text' placeholder='必填' data-val='true' data-val-number='字段 单价 必须是一个数字。' data-val-required='单价 字段是必需的。' name='物资服务列表[`].单价' type='text' value=\"\" onkeyup='checkPrice(this)'></td>";
+    t += "<td style='font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;'><a class='del_good_list' id='`' onclick='DelGoodList(this)' style='cursor:pointer'>删除</a></td>";
+    t += "</tr>";
+    var count = $("#count").val();
+    function addFi(th) {
+        setTimeout(function () {
+            var ff = $(".g_name");
+            $(ff[ff.length - 1]).html($("#gaa_name").html());
+        });
+        $('#good_list').append(t.replace(/`/g, count++));
+        $(".del_good_list").show();
+    }
+    function showtext(th) {
+        if (th.value != -1) {
+            $("#reciever").show();
+            $("#reciever").val(th.value);
+        }
+        else {
+            $("#reciever").hide();
+        }
+    };
+    function DelGoodList(th) {
+        $(th).parent("td").parent("tr").children(":input[type='text']").val("0");
+        $(th).parent("td").parent("tr").hide();
+    }
+
+    function setPage(pgCount, currentPage) {
+        if (pgCount <= 6) {
+            var str = '';
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+            }
+            if (pgCount != 0) {
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (currentPage < 6) {
+                if (currentPage != 1) {
+                    var str = "<a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a>";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a  onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
+                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    $("div#pager").html(str);
+                }
+                else {
+                    var str = "";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a  onclick='getGoods(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
+                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    $("div#pager").html(str);
+                }
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                var str = "<a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a><a onclick='getGoods(" + (1) + ")'>1</a>...";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+            else if (currentPage >= pgCount - 3) {
+                var str = "<a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a><a onclick='getGoods(" + 1 + ")'>1</a>...";
+                for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
+                    str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                }
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    var ev = null;
+    function getChecked()
+    {
+        var id = $(ev).find("option:selected").attr("id");
+        var elem = document.getElementsByName("good");
+        for (var i = 0; i < elem.length;i++)
+        {
+            if(elem[i].value==id)
+            {
+                elem[i].checked = true;
+                break;
+            }
+            else
+            {
+                if (elem[i].checked)
+                {
+                    elem[i].checked = false;
+                }
+            }
+        }
+    }
+    function setValue(data) {
+        var str = "";
+        var row = parseInt(data.length / 2);
+        var maintain = data.length % 2;
+        var num = 0;
+        if (row > 0) {
+            for (var i = 0; i < row; i++) {
+                var s0 = "<table><tr>";
+                for (var j = 0; j < 2; j++) {
+                    s0 += "<td align='left'><input type='radio' onclick='Set_Val(this)' name='good' value='" + data[num].Id + "'/><span class='gname'  title='" + data[num].name + "'>" + data[num].name + "</span></td>";
+                    num++;
+                }
+                s0 += "</tr>";
+                str += s0;
+            }
+        }
+        if (maintain > 0) {
+            var s1 = "<tr>";
+            for (var k = 0; k < maintain; k++) {
+                s1 += "<td align='left'><input type='radio' onclick='Set_Val(this)' name='good' value='" + data[num].Id + "'/><span class='gname'  title='" + data[num].name + "'>" + data[num].name + "</span></td>";
+                num++;
+            }
+            s1 += "</table></tr>";
+            str += s1;
+        }
+        $("#content").html(str);
+        getChecked();
+    }
+    function selectGoods(th) {
+        ev = $(th).prev("select");
+        $("#pdf1").show();
+        if($("#content").attr("lang")=="aa")
+        {
+            $("#content").attr("lang","ab");
+            $.get("/供应商后台/GoodList", { p: 1, id: $("#uid").val() }, function (data) {
+                setPage(data.Data.Pcount, 1);
+                setValue(data.Data.Newgood);
+            });
+        }
+        getChecked();
+    }
+    function getGoods(cp) {
+        $.get("/供应商后台/GoodList", { p: cp, id: $("#uid").val() }, function (data) {
+            setPage(data.Data.Pcount, cp);
+            setValue(data.Data.Newgood);
+        });
+    }
+    function Set_Val(th) {
+        var id = $(th).val();
+        $(ev).children("option").each(function () {
+            if ($(this).attr("id") == id) {
+                $(this).attr("selected", "selected");
+                $(ev).prev(":input").val(id);
+            }
+        });
+        set_price(ev);
+    }
+    //选择商品时填充价格和计量单位
+    function set_price(ev) {
+        var price = $(ev).find("option:selected").val();
+        var unit = $(ev).find("option:selected").attr("title");
+        var type_num = $(ev).find("option:selected").attr("class");
+        if (price != "请选择商品") {
+            $(ev).parent().parent().children().eq(5).find("input").val(price).attr({ "alt": price });
+            $(ev).parent().parent().children().eq(3).find("input").val(unit);
+            $(ev).parent().parent().children().eq(1).find("input").val(type_num);
+        }
+        else {
+            $(ev).parent().parent().children().eq(5).find("input").val("").removeAttr("alt").removeAttr("title");
+            $(ev).parent().parent().children().eq(3).find("input").val("");
+            $(ev).parent().parent().children().eq(1).find("input").val("");
+        };
+        getChecked();
+    };
+    //添加验收单时检查商品价格是否高于参考价格
+    function checkPrice(ev) {
+        var t = $(ev);
+        var oldval = t.attr("alt");
+        setInterval(function () {
+            var newval = t.val();
+            if (parseFloat(newval) > parseFloat(oldval)) {
+                t.val(oldval);
+                alert("输入的价格不能高于商品参考价格！");
+            };
+        }, 100);
+    };
+    function showattach(th) {
+        $(th).show();
+    }
+    $("#unit_user").change(function () {
+        var id = $(this).find("option:selected").attr("id");
+        $("#unit_user_id").val(id);
+    });
+    $("#btn_sub").click(function () {
+        var isnull;
+        var list = $(".g_name:visible");
+        $(list).each(function (index, domEle) {
+            $(domEle).prev().val($(domEle).find("option:selected").attr("id"));
+            var a = $(domEle).prev().val();
+            if (a == "") {
+                isnull = true;
+            }
+        });
+
+        var d = $("#good_list").find("input:visible");
+        //if (d.length <= 0) {
+        //    isnull = true;
+        //}
+        $(d).each(function (index, domEle) {
+            var mm = $(domEle).attr("name");
+            var ff = mm.split(".");
+            var v = $(domEle).val();
+            if (v == "" && ff[ff.length - 1] != "采购合同号") {
+                isnull = true;
+            }
+        });
+        if (isnull) {
+            alert("请将填写物资信息！");
+            return false;
+        }
+        if (!isnull) {
+            if (confirm("已提交，请等待审核！")) {
+                alert("修改成功！");
+                return true;
+             
+            };
+        }
+        return false;
+    });
+    function hidethis(th) {
+        $(th).hide();
+    }
+    $("a.add_g").click(function () {
+        $("#hidid").val($(this).attr("id"));
+        $("#ace").show();
+    });
+    $("#close_btn").click(function () {
+        $("#ace").hide();
+    });
+    $("#selectSh_unit").change(function () {
+        var val = $(this).find("option:selected").attr("value");
+        $("#unit_user_sh").val(val);
+    });
+    $(function () {
+        $("#unit_user").val($("#unit_user_id").val());
+        $("#unit_user_sh").val($("#selectSh_unit").val());
+        $("#新增及打印验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#新增及打印验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

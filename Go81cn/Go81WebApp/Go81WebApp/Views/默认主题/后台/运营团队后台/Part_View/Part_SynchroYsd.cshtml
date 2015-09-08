@@ -1,0 +1,32 @@
+﻿<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">同步验收单</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+
+        $("#同步验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#同步验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function getloginstatistic() {
+        var loginuser = $("#loginuser").val();
+        var loginresult = $("#loginresult").val();
+        var time = $("#time").val();
+        var nettype = $("#nettype").val();
+        var parm = "loginuser=" + loginuser + "&loginresult=" + loginresult + "&time=" + time + "&nettype=" + nettype;
+        $.ajax({
+            cache: false,
+            async: false,
+            url: "/运营团队后台/Part_StatisticsLoginSearch",
+            data: parm,
+            success: function (data) {
+                $("#textcontent").html(data);
+            }
+        });
+    }
+</script>
+Part_SynchroYsd

@@ -1,0 +1,21 @@
+﻿@model Go81WebApp.Models.数据模型.商品数据模型.商品分类
+<link rel="stylesheet" type="text/css" href="~/css/css.css" />
+<script type="text/javascript" src="~/JS/SimpleTree.js"></script>
+<div class="class_tree">
+    <ul>
+        @if (Model != null)
+        {
+            <li class="class_tree_first_tittle" style="text-indent:0;"><span style="text-indent:0;">@Model.父分类.商品分类.分类名</span></li>
+            <ul show="true">
+                @foreach (var i in Model.父分类.商品分类.子分类)
+                {
+                    <li class="class_tree_second_title"><a href="/商品陈列/ProductList?id=@i.Id">@i.分类名</a></li>
+                }
+            </ul>
+        }
+        else
+        {
+
+        }
+    </ul>
+</div>

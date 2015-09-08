@@ -1,0 +1,80 @@
+﻿<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<link href="~/css/css.css" rel="stylesheet" />
+<style type="text/css">
+    .statis_month_title {
+        margin-top: 20px;
+        font-size: 18px;
+        text-indent: 20px;
+    }
+
+        .statis_month_title label {
+            font-size: 12px;
+        }
+
+    .p_statis_month_total {
+        text-indent: 2em;
+        font-size: 14px;
+        color: red;
+    }
+    th{text-align:left;padding:0 10px;}
+    .gys_ztbsearch_contentbox table tr td {
+        text-align: left;
+        padding: 0 10px;
+    }
+</style>
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">统计详情</div>
+            <a style="position:absolute;top:8px;right:20px;" class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>
+        </div>
+    </div>
+    <div class="statis_month_title">时间段内预报名统计数据：</div>
+    <div style="padding-left:20px;padding-right:20px;padding-top:10px;"><label style="font-size:13px;">请选择时间范围：</label><input id="startdate" value="@DateTime.Now.AddDays(1 - DateTime.Now.Day).ToString("yyyy/MM/dd")" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd' })" /> - <input id="enddate" value="@DateTime.Now.AddDays(1 - DateTime.Now.Day).AddMonths(1).ToString("yyyy/MM/dd")" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd' })" /><button id="btn_date_search">查询</button></div>
+    <div id="printContent">
+        <div class="gys_ztbsearch_contentbox" id="adstatislist">
+           
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+
+
+    function printpage() {
+        //$('#adstatislist').children().eq(1).hide();
+        document.body.innerHTML = $('#printContent').html();
+        window.print();
+    }
+   
+
+    $("#btn_date_search").click(function(){
+        var a=$("#startdate").val();
+        var b=$("#enddate").val();
+        $.ajax({
+            url:'/运营团队后台/GetRegistrationCount',
+            data:{startdate:a,enddate:b},
+            success:function(data){
+                $("#adstatislist").html(data);
+            },
+            error:function(){
+                alert("请求失败！");
+            },
+        });
+    });
+    $(function () {
+        $("#预报名统计").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#预报名统计").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

@@ -1,0 +1,85 @@
+﻿<link rel="stylesheet" href="~/css/index.css" type="text/css">
+
+<div class="gys_xttz_box">
+    <div class="gys_xttz_topbox">
+        @*<div class="index_bottom_zb_top_left_or_right"> <img src="~/images/index_content_left.jpg" /> </div>*@
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">价格组合管理</div>
+        </div>
+        @*<div class="index_bottom_zb_top_left_or_right"> <img src="~/images/index_content_right.jpg" /> </div>*@
+    </div>
+    <div class="gys_xttz_contentbox">
+        <div style="height:auto; overflow:hidden;">
+
+            @foreach (var arr in (Dictionary<string, Dictionary<string, List<string>>>)ViewData["商品属性"])
+            {
+                if (arr.Key != "其他")
+                {
+                    <div class="product_add_toptitle" style=" width:900px; float:left; height:auto; overflow:hidden;" id="@arr.Key" name="attrbox">@arr.Key
+                        @foreach (var item in arr.Value)
+                        {
+                            if (item.Value.Count > 0) { 
+                            <div style="width: 900px; font-size: 14px; font-weight: bold; float: left; margin-top: 20px; height: auto; overflow: hidden;" id="@item.Key" name="@arr.Key"><span style="float:left;">@item.Key</span>
+                            @foreach (var listitem in item.Value)
+                            {
+                                <div style=" width:150px; height:auto; float:left; overflow:hidden; margin-top:20px;">
+                                    <input style=" float:left; width:auto;" type="checkbox" id="@listitem" name="@item.Key" value="@listitem" onclick="GetPriceList()" />@listitem
+                                </div>
+                            }
+                        </div>
+                            }
+                        }
+                    </div>
+                }
+            }
+
+            <script type="text/javascript">
+                function setTableInnerHTML(table, html) {
+                    if (navigator && navigator.userAgent.match(/msie/i)) {
+                        var temp = table.ownerDocument.createElement('div');
+                        temp.innerHTML = '<table><tbody>' + html + '</tbody></table>';
+                        if (table.tBodies.length == 0) {
+                            var tbody = document.createElement("tbody");
+                            table.appendChild(tbody);
+                        }
+                        table.replaceChild(temp.firstChild.firstChild, table.tBodies[0]);
+                    } else {
+                        table.innerHTML = html;
+                    }
+                }
+                function GetPriceList() {
+                    var retstr = "<tr><th width='200'>颜色</th><th width='300'>尺码</th><th width='298'>价格</th></tr>";
+                    var test = document.getElementsByName("color");
+                    for (i = 0; i < test.length ; i++) {
+                        if (test[i].type == "checkbox" && test[i].checked) {
+                            var testsize = document.getElementsByName("size");
+                            for (j = 0; j < testsize.length ; j++) {
+                                if (testsize[j].type == "checkbox" && testsize[j].checked) {
+                                    document.getElementById("pricelist").style.display = 'block';
+                                    retstr += "<tr><td>" + test[i].value + "</td><td>" + testsize[j].value + "</td><td><input type=text /></td></tr>"
+                                }
+                            }
+                        }
+                    }
+                    var tablecontent = document.getElementById("pricelist");
+                    setTableInnerHTML(tablecontent, retstr);
+                }
+            </script>
+
+        </div>
+        <table cellspacing="0" id="pricelist" class="product_add_sealresultdiv" style=" display:block; border-left: solid #000 1px; border-bottom: solid #000 1px; border-right:none;">
+            @foreach (var arr in (Dictionary<string, Dictionary<string, List<string>>>)ViewData["商品属性"])
+            {
+                if (arr.Key != "其他")
+                {
+                    foreach (var item in arr.Value)
+                    {
+                        <th width="200">@item.Key</th>
+                    }
+                }
+            }
+
+        </table>
+
+    </div>
+</div>

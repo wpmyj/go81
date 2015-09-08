@@ -1,0 +1,44 @@
+﻿<div class="gys_xttz_box" style="width:auto;">
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">评审专家抽取<span style="color:red;">若有待批准申请，请联系成都军区联勤部军需物资油料部采购管理处：方助理0821-683389。</span></div>
+        </div>
+    </div>
+
+    <div class="gys_znxx_box" style=" width:1300px;">
+        <div class="gys_znxx_contentbox" style=" width:1304px;">
+            <div class="gys_znxx_content" style=" width:1304px;">
+                @if (ViewData["登录"].ToString() == "0")
+                {
+                    <div style="width:450px; margin:0 auto; height:auto; overflow:hidden;">
+                        <input type="button" value="申请抽取评审专家" class="gys_ztbsearch_search_botton" style=" height:50px; width:200px; font-size:20px;" onclick="window.location.href = '/登录/Login?ReturnUrl=/专家库'" />
+                        <input type="button" value="抽取评审专家" class="gys_ztbsearch_search_botton" style=" height:50px; width:200px; font-size:20px;" onclick="window.location.href = '/登录/Login?ReturnUrl=/专家库'" />
+                    </div>
+                }
+                else
+                {
+                    if (ViewData["单位用户登录"].ToString() == "0")
+                    {
+                        <div style="width:450px; margin:0 auto; height:auto; overflow:hidden;">
+                            <input type="button" value="申请抽取评审专家" class="gys_ztbsearch_search_botton" style=" height:50px; width:200px; font-size:20px;" onclick="alert('只有单位用户才能抽取评审专家');" />
+                            <input type="button" value="抽取评审专家" class="gys_ztbsearch_search_botton" style=" height:50px; width:200px; font-size:20px;" onclick="alert('只有单位用户才能抽取评审专家');" />
+                        </div>
+                        <div style=" height:auto; overflow:hidden; width:1140px; margin:0 auto; text-align: center; color: red; margin-top: 20px; font-size: 20px;">
+                            只有单位用户才能抽取评审专家
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="width:450px; margin:0 auto; height:auto; overflow:hidden;">
+                            <input type="button" value="申请抽取评审专家" class="gys_ztbsearch_search_botton" style=" height:50px; width:200px; font-size:20px;" onclick="window.location.href='/专家库/Expert_Applay'" />
+                            <input type="button" value="抽取评审专家" class="gys_ztbsearch_search_botton" style=" height:50px; width:200px; font-size:20px;" />
+                        </div>
+                        <div style=" height:auto; overflow:hidden; width:1140px; margin:0 auto;">
+                            @Html.Action("Part_Expert_Applay_S", "专家库")
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

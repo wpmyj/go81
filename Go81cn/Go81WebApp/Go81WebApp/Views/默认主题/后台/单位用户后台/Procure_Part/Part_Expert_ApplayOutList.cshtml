@@ -1,0 +1,121 @@
+﻿@using MongoDB.Bson
+@{var m = (IEnumerable<MongoDB.Bson.BsonDocument>)ViewData["屏蔽专家"];}
+<style type="text/css">
+    #outlistdiv table {
+        margin-top: 5px;
+        border-top: 1px solid #999a96;
+        border-left: 1px solid #999a96;
+    }
+
+        #outlistdiv table tr:hover td {
+            background: #ecf0d7;
+        }
+
+        #outlistdiv table th {
+            background-color: #c9cfad;
+            font-size: 15px;
+            height: 35px;
+            border-right: 1px solid #999a96;
+            border-bottom: 1px solid #999a96;
+        }
+
+    #outlistdiv td {
+        border-right: 1px solid #999a96;
+        border-bottom: 1px solid #999a96;
+        padding: 5px;
+        letter-spacing: 0;
+    }
+</style>
+@if (m.Any())
+{
+
+    <table width="95%" style="margin: 0 auto;" cellspacing="0" cellpadding="0" id="outlisttemptable">
+        <tr>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>所在单位</th>
+            <th>取得现技术职称时间</th>
+        </tr>
+
+        @foreach (var item in m)
+        {
+            <tr>
+                <td id="@item["_id"].ToString()"><input type="checkbox" id="@item["身份信息"]["姓名"].ToString()" value="@item["_id"].ToString()" />@if (!item["身份信息"]["姓名"].IsBsonNull){var name = item["身份信息"]["姓名"].ToString();if (name.Length > 8){<span>@name.Substring(0, 8)</span>}else{<span>@name</span>}}</td>
+                @if (item["身份信息"]["性别"].ToString() == "1")
+                {
+                    <td>男</td>
+                }
+                else if (item["身份信息"]["性别"].ToString() == "0")
+                {
+                    <td>女</td>
+                }
+                else
+                {
+                    <td>未知</td>
+                }
+
+                <td>
+                    &nbsp;
+                    @if (!item["工作经历信息"]["工作单位"].IsBsonNull)
+                    {
+                        @item["工作经历信息"]["工作单位"].ToString()
+                    }
+                </td>
+                <td>
+                    &nbsp;
+                    @if (!item["学历信息"]["取得现技术职称时间"].IsBsonNull)
+                    {
+                        var time = item["学历信息"]["取得现技术职称时间"].ToLocalTime();
+                        if (time != default(DateTime))
+                        {
+                            @time.ToString()
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+    if (ViewData["currentpage"] != null)
+    {
+        <div class="gys_znxx_content_detailbox">
+            @if (int.Parse(ViewData["currentpage"].ToString()) == 1)
+            {
+                <a>首页</a>
+            }
+            else
+            {
+                <a id="1" onclick="changeMesspage(1, $('#expertname').val(), $('#unitname').val());">首页</a>
+            }
+            @for (int i = 0; i <= 10; i++)
+            {                       //一共最多显示10个页码，前面5个，后面5个
+                if ((int.Parse(ViewData["currentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentpage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                {
+                    if (5 == i)
+                    {                               //当前页处理
+                        <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentpage"].ToString())</a>
+                    }
+                    else
+                    {                               //一般页处理
+                        <a id="@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)" onclick="changeMesspage(@(int.Parse(ViewData["currentpage"].ToString()) + i - 5), $('#expertname').val(), $('#unitname').val());">@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)</a>
+
+                    }
+                }
+            }
+            @if (int.Parse(ViewData["currentpage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+            {
+                <a>末页</a>
+            }
+            else
+            {
+                <a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeMesspage(@int.Parse(ViewData["pagecount"].ToString()), $('#expertname').val(), $('#unitname').val());">末页</a>
+            }
+            @ViewData["currentpage"].ToString()/@ViewData["pagecount"].ToString()
+        </div>
+    }
+}
+else
+{
+    <div style="color:red;">
+        暂无满足条件评审专家
+    </div>
+}

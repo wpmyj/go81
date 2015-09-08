@@ -1,0 +1,33 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.专家
+@{
+    ViewBag.Title = "评审专家后台首页";
+    Layout = "_BackLayout.cshtml";
+}
+<style>
+    table{background-color:green; width:520px;}
+    td{background-color:white;}
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="height:650px; width:920px; margin-left:10px;  border:1px solid green;" class="bg_outdiv_right">
+        <div style="font-size:16px;margin-top:30px;">
+            您好，欢迎登录西南物资采购网。本后台只用于专家个人信息的修改和下载专家申请资料。相关事宜，您可以通过以下方式联系我们。<br /><br />
+            <table cellspacing="1">
+                <tr>
+                    <td align="right" valign="middle">电话：</td><td>4006826181&nbsp;或者028-68308761</td>
+                </tr>
+                <tr>
+                    <td align="right" valign="middle">邮箱：</td><td>2803407183@qq.com&nbsp;或者&nbsp;2105595009@qq.com</td>
+                </tr>
+            </table> 
+    </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#欢迎页面").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#欢迎页面").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

@@ -1,0 +1,60 @@
+﻿
+@using Go81WebApp.Models.数据模型.用户数据模型
+<div class="gys_znxx_box">
+    <div class="gys_znxx_topbox">
+        <div class="gys_znxx_topbg">
+            <div class="index_bottom_zb_top_title">评审专家列表</div>
+        </div>
+    </div>
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="10%">姓名</th>
+                    <th width="12%">评审专家类型</th>
+                    <th width="12%">专业技术职称</th>
+                    <th width="15%">从事专业</th>
+                    <th width="15%">所属地区</th>
+                   
+                </tr>
+                @{
+                    IEnumerable<用户基本数据> basedata = ViewData["专家列表"] as IEnumerable<用户基本数据>;
+                    if (basedata != null && basedata.Any())
+                    {
+                        foreach (var i in basedata)
+                        {
+                            专家 expert = i as 专家;
+                            <tr>
+                                <td>@Html.ActionLink(expert.身份信息.姓名, "Expert_History_Detail", new { id = expert.Id }, new { target="_blank"})</td>
+                                <td>@expert.身份信息.专家类型</td>
+                                <td>@expert.学历信息.专业技术职称</td>
+                                <td>@expert.工作经历信息.从事专业</td>
+                                <td>@expert.所属地域.地域</td>
+                                <td class="gys_znxx_content_tabletime">
+                                    @Html.ActionLink("修改", "Expert_Edit", new { id=expert.Id })|@Html.ActionLink("删除", "DeleteExpert", new { id=expert.Id })
+                                    @*@if (false)
+                                    {
+                                        @Html.ActionLink("禁用", "Procure_AdForbid", new { })
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("解除禁用", "Procure_AdForbid", new { })
+                                    }*@
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    { 
+                        <tr>
+                            <td>暂无相关评审专家</td>
+                        </tr>
+                    }
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>

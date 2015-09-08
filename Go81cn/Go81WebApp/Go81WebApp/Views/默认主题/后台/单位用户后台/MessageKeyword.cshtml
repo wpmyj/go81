@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "修改密码";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+@model Go81WebApp.Controllers.后台.单位用户后台Controller.DepartmentAddModel
+
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">密码修改</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div class="gys_znxx_contentbox">
+                <div class="gys_znxx_content">
+
+                    <div style="width: 898px; height: auto; overflow: hidden; margin-top: 20px;">
+                        <div style="width: 800px; margin: 20px auto; padding: 10px;">
+
+                            <div style="width: 800px; height: 30px; padding: 10px;">
+                                <div style="width: 155px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">原密码：</div>
+                                <div class="procure_selectlistdiv">
+                                    <input type="password" name="oldpass" id="oldpass" /><span style="color: red;" id="oldpass_check"></span>
+                                </div>
+                            </div>
+
+                            <div style="width: 800px; height: 30px; padding: 10px;">
+                                <div style="width: 155px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">新密码：</div>
+                                <div class="procure_selectlistdiv">
+                                    @Html.PasswordFor(model => model.u.登录信息.密码)<span style="color:red;">@Html.ValidationMessageFor(model => model.u.登录信息.密码)</span>
+                                </div>
+                            </div>
+                            <div style="width: 800px; height: 30px; padding: 10px;">
+                                <div style="width: 155px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">确认新密码：</div>
+                                <div class="procure_selectlistdiv">
+                                    <input type="password" name="newpass_r" id="newpass_r" /><span style="color: red;" id="newpass_check_r"></span>
+                                </div>
+                            </div>
+
+
+                            <div style="text-align: center"><input id="modiibutton" type="submit" style="margin-top: 20px; width: 307px;margin-left:-33px; " onclick="return checkform();" class="front_login_rightbox_button" value="确          定"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    </div>
+</div>
+
+<script type="text/javascript">
+    function checkform() {
+        if ($.trim($("#oldpass").val()) == "") {
+            $("#oldpass_check").html("原密码不能为空");
+            $("#oldpass").focus();
+            return false;
+        } else {
+            $("#oldpass_check").html("");
+        }
+
+        if ($.trim($("#newpass_r").val()) == "") {
+            $("#newpass_check_r").html("不能为空");
+            return false;
+        } else {
+            $("#newpass_check_r").html("");
+        }
+
+        if ($("input[name='u.登录信息.密码']").val() != $("#newpass_r").val()) {
+            $("#newpass_check_r").html("两次密码不一致");
+            return false;
+        } else {
+            $("#newpass_check_r").html("");
+        }
+        return true;
+    }
+    $(function () {
+        $("#修改登录密码").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#修改登录密码").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

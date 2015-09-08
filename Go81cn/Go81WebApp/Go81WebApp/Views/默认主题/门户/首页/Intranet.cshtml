@@ -1,0 +1,165 @@
+﻿@{
+    ViewBag.Title = "成都军区物资采购网";
+}
+<style type="text/css">
+    .wenxintishi{
+text-indent:2.0em;
+}
+    .modal{width:100%;height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 9999;left: 0;top: 0;position: fixed;display: none;}
+.modal-dialog{position: relative;width: 600px;margin: 15% auto;}
+.modal-content{position: relative;background-color: #fff;-webkit-background-clip: padding-box;background-clip: padding-box;border: 1px solid #999;border: 1px solid rgba(0, 0, 0, .2);border-radius: 6px;outline: 0;-webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);box-shadow: 0 3px 9px rgba(0, 0, 0, .5);}
+.close{margin-top: -2px; float: right;font-size: 21px;font-weight: bold;line-height: 1;color: #000;text-shadow: 0 1px 0 #fff;filter: alpha(opacity=20);opacity: .2;-webkit-appearance: none;padding: 0;cursor: pointer;background: transparent;border: 0;}
+h4{font-size:18px;}
+label {display: inline-block;max-width: 100%;margin-bottom: 5px;font-weight: bold;}
+.modal-header {min-height: 16.42857143px;padding: 15px;border-bottom: 1px solid #e5e5e5;}
+.modal-title{  margin: 0;line-height: 1.42857143;}
+.modal-body {position: relative;padding: 15px;}
+.modal-footer{  padding: 15px;text-align: right;border-top: 1px solid #e5e5e5;}
+</style>
+
+@*<div id="indexpagemodal1" class="modal fade" style="display:none;">
+    <div class="modal-dialog" style="margin: 7% auto;">
+        <div class="modal-content" style="height:400px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick='$("#indexpagemodal1").hide();'>×</button>
+                <div style="margin:0; width:500px; float:left; font-size:16px; font-weight:bold; line-height:23px;">温馨提示   <a href="/下载/Download_List" style="color:red;font-size:13px;text-decoration:underline;float:right;">成都军区物资采购网·操作视频教学已上线（查看）</a></div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 280px; overflow-y: scroll; line-height:25px;">
+                    <p class="wenxintishi">欢迎登录成都军区物资采购网！</p>
+                    <p class="wenxintishi">
+                        成都军区物资采购网是由成都军区联勤部军需物资油料部授权发布，主要面向成都战区军队单位、地方物资供应商家和评审专家，为成都军区各部队单位更好地进行集中物资采购工作而服务。
+                    </p>
+                    <p class="wenxintishi">
+                        一期上线功能包括：招标采购信息的发布、供应商与评审专家的远程抽取、供应商与评审专家推荐、验收单管理、协议采购供应商与商品查询、在线采购业务流程培训等。
+                    </p>
+                    <p class="wenxintishi">
+                        部队采购单位在网站上进行账号注册，并审核通过后，可正常使用上述功能。网站详细操作手册请进入<a style="text-decoration:underline;color:blue;" target="_blank" href="/下载/Download_List">"下载专区"
+                        </a>查看。
+                        <a style="text-decoration:underline; color:blue;" target="_blank" href="/下载/Download_List">"下载专区"</a>同时还提供采购业务文件范本及采购公告编写模板。
+                    </p>
+                    <p class="wenxintishi">谢谢！</p>
+                </div>
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="关闭" onclick="$('#indexpagemodal1').hide();" /></div>
+
+            </div>
+
+        </div>
+    </div>
+</div>*@
+@*<div id="indexpagemodal2" class="modal fade" style="display:block;">
+    <div class="modal-dialog" style="margin: 7% auto;">
+        <div class="modal-content" style="height:auto">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal2').hide(); $('#indexpagemodal1').show();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">通知</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 280px; overflow-y: scroll; line-height:25px;">
+                    <p><h4>尊敬的各位用户：</h4></p>
+                    <p class="wenxintishi">
+                        为了确保正常使用网站，请<a style="text-decoration:underline; color:blue;" target="_blank" href="/下载/Download_Detail?id=15">下载Google浏览器</a>
+                </div>
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="关闭" onclick="$('#indexpagemodal2').hide(); $('#indexpagemodal1').show();" /></div>
+
+            </div>
+        </div>
+    </div>
+</div>*@
+<div id="f1" class="modal fade">
+    <div class="modal-dialog" style="margin: 10% auto;">
+        <div class="modal-content" style="height:200px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick='$("#f1").hide();'>×</button>
+                <div style="margin:0; width:100px; float:left; font-size:16px; font-weight:bold; line-height:23px;">温馨提示</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 80px; line-height:25px;">
+                    <p class="wenxintishi"> 验收单暂时未对内网开放，请登录本网站的外网使用验收单核对功能。</p>
+                </div>
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="关闭" onclick="$('#f1').hide();" /></div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="indexpagemodaluser" class="modal fade">
+    <div class="modal-dialog" style="margin: 7% auto;">
+        <div class="modal-content" style="height:auto">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodaluser').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">温馨提示</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 280px; overflow-y: scroll; line-height:25px;">
+                    <p><h4>尊敬的用户：</h4></p>
+                    <p class="wenxintishi">
+                        为简化用户操作，单位用户账号由网站管理员统一注册，请致电<b style="color:red;">028-69759681</b>进行账号申请！
+                        </p>
+                    <p class="wenxintishi">
+                        或填写以下信息，网站管理员会及时与您联系。
+                    </p>
+                    <div style="border:1px solid #eee; padding:10px; width:90%; height:auto; overflow:hidden; margin-top:10px;">
+                        <p class="wenxintishi" style="text-indent:6em; line-height:25px; padding-bottom:10px;">
+                            联系人：<input type="text" id="contact_name" style="height:25px; line-height:25px; width:200px;" />
+                        </p>
+                        <p class="wenxintishi" style="text-indent:5em;line-height:25px; padding-bottom:10px;">
+                            联系电话：<input type="text" id="contact_tel" style="height:25px; line-height:25px; width:200px;" />
+                        </p>
+                        <p class="wenxintishi" style="line-height:25px;">
+                            单位名称或番号：<input type="text" id="contact_unit" style="height:25px; line-height:25px; width:200px;" />
+                        </p>
+                        <p style="text-align:center;color:red;" id="applayusererrortip"></p>
+                    </div>
+                </div>
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="提交" onclick="return doApplayNewUser();" /><input type="button" class="gys_ztbsearch_search_botton" value="关闭" onclick="$('#indexpagemodaluser').hide();" /></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div style="width:1304px; margin:0 auto; height:auto; overflow:hidden;">
+    <div style="width:1304px;">
+        <div class="left_menu">@Html.Action("Part_Index_LeftMenu_Intranet", "首页")</div>
+        <div style=" width:1063px; float:left;">@Html.Action("Part_Index_Content_Intranet", "首页")</div>
+    </div>
+    <div style="width:1304px; margin-top:10px; float:right;">
+        @Html.Action("Part_Index_Bottom_Intranet", "首页")
+    </div>
+</div>
+<script type="text/javascript">
+    function doApplayNewUser(a) {
+        $("#applayusererrortip").html("");
+        var contact_tel = $("#contact_tel").val();
+        if (contact_tel == "") {
+            $("#applayusererrortip").html("联系电话必须填写！");
+            return false;
+        }
+
+        var tempparm = "contact_name=" + encodeURIComponent($("#contact_name").val()) + "&contact_tel=" + encodeURIComponent(contact_tel) + "&contact_unit=" + encodeURIComponent($("#contact_unit").val());
+        $.ajax({
+            cache: false,
+            async: false,   // 太关键了，同步和异步的参数
+            //dataType: 'json', type: 'post',
+            type: 'POST',
+            //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
+            url: "/首页/doApplayNewUser",
+            data: tempparm,
+            success: function (data) {
+                if (data == "1") {
+                    alert("提交成功，网站管理员会及时与您联系！");
+                    $('#indexpagemodaluser').hide();
+                }
+                else {
+                    $("#applayusererrortip").html(data);
+                }
+            }
+        });
+    }
+</script>

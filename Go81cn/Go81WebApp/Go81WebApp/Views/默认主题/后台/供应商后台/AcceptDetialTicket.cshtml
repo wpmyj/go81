@@ -1,0 +1,347 @@
+﻿﻿@model Go81WebApp.Models.数据模型.项目数据模型.机票验收单
+@using Go81WebApp.Models.数据模型.项目数据模型
+@using Go81WebApp.Controllers.后台
+@{
+    Layout = null;
+}
+<script src="~/Scripts/jquery-1.11.1.min.js" type="text/javascript"></script>
+<link href="~/css/stylesheet.css"  rel="stylesheet"/>
+<title>验收单详情</title>
+<style type="text/css">
+    #accept_con table tr td.align {
+        text-align: right;
+    }
+
+    .modal_out {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 99999;
+        display: none;
+    }
+
+    .modal_in {
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        position: fixed;
+        background: #F0F0F0;
+        opacity: 0.5;
+    }
+
+    .modal_content_loading {
+        width: 260px;
+        height: 55px;
+        margin: 20% auto;
+        background: #fff;
+        border: 1px solid #07890C;
+        line-height: 55px;
+        text-indent: 3em;
+        position: relative;
+    }
+
+        .modal_content_loading span {
+            font-size: 13px;
+        }
+
+        .modal_content_loading img {
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+        }
+</style>
+
+<div id="accept_con" style="width:100%;margin:0 auto 20px;">
+    <input type="hidden" value="@Model.Id" id="model_id" />
+    @{
+      
+        var vl = new List<Tuple<string, string, string, decimal,机票验证状态, decimal,string>>();
+        decimal price_total = Model.服务列表.Sum(o => o.单价 * o.数量);
+        foreach (var k in Model.服务列表)
+        {
+            vl.Add(Tuple.Create(k.客户姓名, k.航班号, k.行程单号, k.单价, k.验证状态, k.数量 * k.单价,k.验证附件路径));
+        }
+        var vl_all = new List<Tuple<string, string, string, decimal, 机票验证状态, decimal, string>[]>();
+        for (var n_all = 0; n_all < vl.Count; n_all += 5) { vl_all.Add(vl.Skip(n_all).Take(5).ToArray()); }
+    }
+    <div style="width:875px; margin:20px auto;color:red;font-size:24px;">
+        注：点击旅客姓名查看、打印旅客对应的验真附件
+    </div>
+    @for (var yn = 1; yn <= vl_all.Count; ++yn)
+    {
+        var total_cost = (decimal)0;
+        <div style="width:875px;margin:-20px auto; padding:0 10px 12px 30px;border-left:1px dashed #222222">
+            @{{
+                <div style="font-size:14px;margin:0 auto;width:900px;">
+                    <table width="100%" style="margin-top:30px;">
+                        <tr>
+                            <td rowspan="3" width="33%">
+                                <div style="height:25px;margin-top:20px;">验收单号：@Model.验收单号 - @yn</div>
+                                <div style="height:25px;">生成日期：@DateTime.Now</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" style="width:85%;font-size:32px;margin-top:35px; position:relative;">机票验收单</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="margin:0 auto;width:900px;">
+                    <table style="width:97%; font-size:14px;" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td colspan="7" style="text-align:right;font-family:'Times New Roman'">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+                            <td rowspan="12" style="padding-left:14px;padding-top:25px;"> <span style="display:inline-block;width:20px;">第一联</span><br /><br /><span style="display:inline-block;width:20px;">开票单位留存</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" style="height:33px; border:1px solid black; border-bottom:none; text-indent:5px;">开票单位：@Model.供应商链接.用户数据.企业基本信息.企业名称</td>
+                        </tr>
+                        <tr>
+                            <td style="height:33px;line-height:33px; border:1px solid black; padding-left:5px;padding-right:5px;" align="center" width="5%">序号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">旅客姓名</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="20%">航班号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">行程单号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">单价（元）</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="6%">数量</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">总价（元）
+                            </td>
+                        </tr> 
+                        @{
+                            var number=0;
+                            foreach (var items in vl_all[yn-1])
+                            {
+                                total_cost+=items.Item6;
+                                number++;
+                                <tr>
+                                    <td style="height: 33px; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@number</td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;" align="center"><a style="cursor:pointer" onclick="showYsd(this)" title="@items.Item5" id="@items.Item7">@items.Item1</a></td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;" align="center">@items.Item2</td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@items.Item3</td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@items.Item4.ToString("C")</td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">1</td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@items.Item6.ToString("C")</td>
+                                </tr>
+                            }
+                            if (vl_all[yn - 1].Count() < 5)
+                            {
+                                for (int i = 0; i < 5 - vl_all[yn - 1].Count(); i++)
+                                {
+                                    number++;
+                                        
+                                    <tr>
+                                        <td style="height: 33px; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@number</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;" align="center">&nbsp;</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;" align="center">&nbsp;</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                    </tr>
+                                }
+                            }
+}
+                          
+                        <tr>
+                            <td style="height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(number+1)</td>
+                            <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（大写）</td>
+                            <td colspan="2" style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; text-align:right;padding-right:5px; letter-spacing:2px;">
+                                <span>@供应商后台Controller.MoneyToUpper(total_cost.ToString())</span>
+                            </td>
+                            <td colspan="2" style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（小写）</td>
+                            <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">
+                                <span>￥@total_cost.ToString("C")</span>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="margin-top:3px;">
+                        <table style="width:100%; font-size:14px;margin-left:5px;" cellpadding="0" cellspacing="0">
+                            <tr style="height:33px;">
+                                <td valign="top" rowspan="2" style="width:200px; padding-top:5px;">管理部门审核人：</td>
+                                <td style="text-indent:2em;width:295px;">开票单位经办人：@Model.供货单位承办人</td>
+                                <td ></td>
+                                <td style="text-indent:2em;">收票单位验收人：</td>
+                                <td></td>
+                            </tr>
+                            <tr style="height:33px;">
+                                <td>开票单位经办人电话：@Model.供货单位承办人电话</td>
+                                <td ></td>
+                                <td>收票单位验收人电话：</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            }}
+            <div style="width:100%;border-bottom:1px dashed #222222;padding-top:20px; margin-left:-31px;"></div>
+            @{{
+                <div style="font-size:14px;margin:0 auto;width:900px;">
+                    <table width="100%" style="margin-top:30px;">
+                        <tr>
+                            <td rowspan="3" width="33%">
+                                <div style="height:25px;margin-top:20px;">验收单号：@Model.验收单号 - @yn</div>
+                                <div style="height:25px;">生成日期：@DateTime.Now</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" style="width:85%;font-size:32px;margin-top:35px; position:relative;">机票验收单</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="margin:0 auto;width:900px;">
+                    <table style="width:97%; font-size:14px;" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td colspan="7" style="text-align:right;font-family:'Times New Roman'">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
+                            <td rowspan="12" style="padding-left:14px;padding-top:25px;"> <span style="display:inline-block;width:20px;">第二联</span><br /><br /><span style="display:inline-block;width:20px;">收票单位财务报销附件</span></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7" style="height:33px; border:1px solid black; border-bottom:none; text-indent:5px;">开票单位：@Model.供应商链接.用户数据.企业基本信息.企业名称</td>
+                        </tr>
+                        <tr>
+                            <td style="height:33px;line-height:33px; border:1px solid black; padding-left:5px;padding-right:5px;" align="center" width="5%">序号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">旅客姓名</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="20%">航班号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">行程单号</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">单价（元）</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="6%">数量</td>
+                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">
+                                总价（元）
+                            </td>
+                        </tr>
+                        @{
+                              var number = 0;
+                              foreach (var items in vl_all[yn - 1])
+                              {
+                                  number++;
+                                <tr>
+                                    <td style="height: 33px; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@number</td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;" align="center"><a style="cursor:pointer" onclick="showYsd(this)" title="@items.Item5" id="@items.Item7">@items.Item1</a></td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;" align="center">@items.Item2</td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@items.Item3</td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@items.Item4.ToString("C")</td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">1</td>
+                                    <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@items.Item6.ToString("C")</td>
+                                </tr>
+                              }
+                              if (vl_all[yn - 1].Count() < 5)
+                              {
+                                  for (int i = 0; i < 5 - vl_all[yn - 1].Count(); i++)
+                                  {
+                                      number++;
+
+                                    <tr>
+                                        <td style="height: 33px; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@number</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;" align="center">&nbsp;</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black; font-size:12px;" align="center">&nbsp;</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                        <td style="height: 33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                    </tr>
+                                  }
+                              }
+}
+
+                        <tr>
+                            <td style="height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(number + 1)</td>
+                            <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（大写）</td>
+                            <td colspan="2" style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; text-align:right;padding-right:5px; letter-spacing:2px;">
+                                <span>@供应商后台Controller.MoneyToUpper(total_cost.ToString())</span>
+                            </td>
+                            <td colspan="2" style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（小写）</td>
+                            <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">
+                                <span>￥@total_cost.ToString("C")</span>
+                            </td>
+                        </tr>
+                    </table>
+                    <div style="margin-top:3px;">
+                        <table style="width:100%; font-size:14px;margin-left:5px;" cellpadding="0" cellspacing="0">
+                            <tr style="height:33px;">
+                                <td valign="top" rowspan="2" style="width:200px; padding-top:5px;">管理部门审核人：</td>
+                                <td style="text-indent:2em;width:295px;">开票单位经办人：@Model.供货单位承办人</td>
+                                <td></td>
+                                <td style="text-indent:2em;">收票单位验收人：</td>
+                                <td></td>
+                            </tr>
+                            <tr style="height:33px;">
+                                <td>开票单位经办人电话：@Model.供货单位承办人电话</td>
+                                <td></td>
+                                <td>收票单位验收人电话：</td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+              }}
+        </div>
+    }
+</div>
+
+@if (!Model.是否作废 && Model.服务列表.Where(o=>o.验证状态 == Go81WebApp.Models.数据模型.项目数据模型.机票验证状态.已验证).Count() == Model.服务列表.Count())
+{
+    <div style="text-align:center;padding-bottom:30PX;">
+        @*<div style="color:red;">*提示：为了保证打印出来信息完整，打印验收单时最好先点击打印按钮将验收单保存成电子文档，再通过电子文档进行打印</div>*@
+        @*<div><button id="skanTeach">查看打印电子文档教程</button></div>*@
+        @if (Model.是否已经打印)
+        {
+            <button class="btn-base" id="printAccep" onclick="printno()">打印</button>
+            <button onclick="window.location.href = '/供应商后台/AcceptanceTicketList';" class="btn-base">返回</button>
+        }
+        else
+        {
+            <button class="btn-base" id="printAccep" onclick="printready()">打印</button>
+            <button onclick="window.location.href = '/供应商后台/AcceptanceTicketList';" class="btn-base">返回</button>
+        }
+    </div>
+}
+
+<!--验证附件-->
+<div id="f1" class="modal_out">
+    <div class="modal_in" style="background: #000000"></div>
+    <div style="margin:10% auto;position: relative;width:900px;height:50%;padding:5px; background:#fff">
+        <span onclick="$('#f1').hide();" style="position: absolute;top: -17px;right: -18px;font-size: 25px;cursor: pointer;background: #fff;border-radius: 50%;height: 30px;width: 30px;text-align: center;line-height: 30px;">×</span>
+        <img src="" width="900px" height="87%" alt="尚未验证或验证失败" /> 
+        <div style="margin-top:10px;text-align:center">
+            <button class="btn-base" onclick="printyzfj()">打印</button>
+        </div>                                                                                                                                                              
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#新增机票验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#新增机票验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    //显示验证附件
+    function showYsd(ev) {
+        var img_src = $(ev).attr("id");//验证附件路径
+        var isyz = $(ev).attr("title");//验证状态
+        if (img_src != undefined || img_src != null) {
+            $("#f1").show().find("img").attr({ "src": img_src,"alt":isyz });
+        }
+        else {
+            alert(isyz);
+        }
+    }
+
+    //打印验证附件
+    function printyzfj() {
+        $("#f1").find("span").remove().end().find("button").remove();
+        document.body.innerHTML = document.getElementById('f1').innerHTML;
+        window.print();
+        window.location.reload();
+    }
+    function printready() {
+        setTimeout(function () {
+            $("#accept_con").next().remove();
+            $.ajax({
+                url: '/供应商后台/EditPrintTicket',
+                data: { id: $("#model_id").val() },
+            });
+            window.print();
+            window.location.reload();
+        }, 500);
+    }
+    function printno() {
+        alert("已经打印过一次，无法进行第二次打印!");
+    };
+</script>

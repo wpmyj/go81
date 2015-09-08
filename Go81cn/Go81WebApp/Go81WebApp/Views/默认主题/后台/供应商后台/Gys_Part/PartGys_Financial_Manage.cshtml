@@ -1,0 +1,211 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style>
+    table tr td span {
+        font-size: 11px;
+        color: red;
+    }
+
+    .submenulist li h3 a.on {
+        line-height: 30px;
+        width: 231px;
+    }
+                .out_box {
+        display: none;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 10%;
+    }
+
+    .out_box_insecond_child {
+        width: 830px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+    }
+
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
+</style>
+<div id="f" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child" style="border:1px solid red;">
+            <div style="width:100%; height:auto;"><a class="close_outbox" title="关闭窗口" onclick="$('#f').hide()">×</a></div>
+            <div style="width:830px; height:380px; overflow:hidden;">
+                <h3 style="text-align:center;">新增财务信息</h3>
+                <form action="/供应商后台/Financial_Manage" method="post">
+                    <table width="100%">
+                        <tr>
+                            <td height="30" width="20%" align="right">年份：</td>
+                            <td height="30" width="25%"><input onfocus="WdatePicker({dateFmt:'yyyy'})" onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="财务状况信息[0].年份" type="text" value="0"><span>*</span></td>
+                            <td height="30" width="25%" align="right">会计事务所名称：</td>
+                            <td height="30" width="30%"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="财务状况信息[0].会计事务所名称" type="text" value=""><div class="out_box"><div class="arrow"></div><div class="con_box">会计事务所名称是必要内容</div></div><span>*</span></td>
+                        </tr>
+                        <tr><td height="30" align="right">会计事务所联系电话：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="财务状况信息[0].会计事务所联系电话" type="text" value=""><div class="out_box"><div class="arrow"></div><div class="con_box">会计事务所联系电话，如：13214786542或028-14786523或0816-25894562</div></div><span>*</span></td><td align="right"><input id="zc" class="check-box valid" data-val="true" data-val-required="*请确认是否注册会计师审计" name="财务状况信息[0].会计报表是否经注册会计师审计" type="checkbox" onmouseover="showdiv(this)" onmouseout="hidediv(this)" value="true"><input name="财务状况信息[0].会计报表是否经注册会计师审计" type="hidden" value="false"> <div class="out_box"><div class="arrow"></div><div class="con_box">已注册请勾选，否则不勾选</div></div></td><td><label style="font-size:small;" for="zc">会计报表是否经注册会计师审计</label></td></tr>
+                        <tr><td height="30" align="right">资产总额(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 资产总额 必需是一个数字。" data-val-required="*请输入资产总额" name="财务状况信息[0].资产总额" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写资产总额,如100</div></div><span>*</span></td><td align="right"> 负债总额(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 负债总额 必需是一个数字。" data-val-required="*请输入负债总额" name="财务状况信息[0].负债总额" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写负债总额,如100</div></div><span>*</span></td></tr>
+                        <tr><td height="30" align="right">销售收入(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 销售收入 必需是一个数字。" data-val-required="*请输入销售收入" name="财务状况信息[0].销售收入" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写销售收入,如120</div></div><span>*</span></td><td align="right">资产负债率(%)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 资产负债率 必需是一个数字。" data-val-required="*请输入资产负债率" name="财务状况信息[0].资产负债率" type="text" value="0" aria-required="true"><div class="out_box"><div class="arrow"></div><div class="con_box">请直接填写数字,如20</div></div><span>*</span></td></tr>
+                        <tr><td height="30" align="right">利润总额(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 净利润 必需是一个数字。" data-val-required="*请输入利润总额" name="财务状况信息[0].利润总额" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写总利润,如2200000</div></div><span>*</span></td><td height="30" align="right">净利润(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 净利润 必需是一个数字。" data-val-required="*请输入净利润" name="财务状况信息[0].净利润" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写净利润,如2200000</div></div><span>*</span></td></tr>
+                        <tr><td height="30" align="right">资本金(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 净利润 必需是一个数字。" data-val-required="*请输入利润总额" name="财务状况信息[0].资本金" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写实收资本,如2200</div></div><span>*</span></td></tr>
+                    </table>
+                    <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
+                </form>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="title_div" class="gys_xttz_topbg">
+    <div class="index_bottom_zb_top_title">
+        财务信息
+        @if (Model.供应商用户信息.已提交)
+        {
+            <span style="font-size:15px; color:red;"><em>您已提交过申请，不能修改信息。如需修改信息，请联系网站管理员。</em></span>
+        }
+        else
+        {
+            <a style="cursor: pointer;" onclick="$('#f').show()">【新增】</a>
+        }
+    </div>
+</div>
+<div style="font-size:14px;">
+    <div class="company_msg">
+        <div id="financialInfo" class="gys_znxx_box">
+            <div class="gys_znxx_content">
+                @if (Model.财务状况信息.Count != 0)
+                {
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr><th>年份</th><th>会计事务所名称</th><th>会计事务所电话</th><th>会计报表是否经注册会计师审计</th><th>资产总额(万元)</th><th>负债总额(万元)</th><th>销售收入(万元)</th><th>资产负债率(%)</th><th>资本金(万元)</th><th>利润总额(万元)</th><th>净利润(万元)</th>
+                        @if(!Model.供应商用户信息.已提交)
+                        {
+                            <th>操作</th>
+                        }
+                        </tr>
+                        @for (int i = 0; i < Model.财务状况信息.Count; ++i)
+                        {
+                            <tr>
+                                <td width="5%">@Model.财务状况信息[i].年份</td>
+                                <td width="15%">@Model.财务状况信息[i].会计事务所名称</td>
+                                <td width="10%">@Model.财务状况信息[i].会计事务所联系电话</td>
+                                <td width="10%">
+                                    @if (Model.财务状况信息[i].会计报表是否经注册会计师审计)
+                                    {
+                                        <span>是</span>
+                                    }
+                                    else
+                                    {
+                                        <span>否</span>
+                                    }
+                                </td>
+                                <td width="7%">@Model.财务状况信息[i].资产总额</td>
+                                <td width="7%">@Model.财务状况信息[i].负债总额</td>
+                                <td width="7%">@Model.财务状况信息[i].销售收入</td>
+                                <td width="7%">@Model.财务状况信息[i].资产负债率</td>
+                                <td width="7">@Model.财务状况信息[i].资本金</td>
+                                <td width="7%">@Model.财务状况信息[i].利润总额</td>
+                                <td width="7%">@Model.财务状况信息[i].净利润</td>
+                                @if(!Model.供应商用户信息.已提交)
+                                {
+                                    <td width="11%"><a href="/供应商后台/Modify_Finance?index=@i">修改</a><a href="/供应商后台/Delete_Finance?index=@i">删除</a></td>
+                                }
+                            </tr>
+                        }
+                    </table>
+                }
+                else
+                {
+                    if(!Model.供应商用户信息.已提交)
+                    {
+                        <h1 style="width: 100%; text-align: center; color: red;"><em>没有财务信息，点击【新增】按钮添加财务信息</em></h1>
+                    }
+                    else
+                    {
+                        <h1 style="width: 100%; text-align: center; color: red;"><em>您已提交过信息，如需修改，请联系网站管理员</em></h1>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("a.modify").click(function () { $(".company_msg :text,.company_msg :checkbox,.company_msg :file,.company_msg :submit").each(function () { $(this).removeAttr("disabled"); $(".company_msg a.add").show(); }); $(".company_msg :submit").css("background-color", "#2c5735"); });
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+
+        $("#财务信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#财务信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function show_tip(t) {
+        $(t).next("div").show();
+        $(t).next("div").css("display", "inline-block");
+    }
+    function hide_tip(t) {
+        $(t).next("div").hide();
+    }
+    function showdiv(th) {
+        $(th).parent().children("div").show();
+        $(th).parent().children("div").css("display", "inline-block");
+    }
+    function hidediv(th) {
+        $(th).parent().children("div").hide();
+    }
+</script>
+<script type="text/javascript" language="javascript">
+    @{
+        int number =0;
+        if(Model.财务状况信息!=null&&Model.财务状况信息.Count()!=0)
+        {
+            number=Model.财务状况信息.Count();
+        }
+    }
+    var num =@number
+        $(document).ready(function () {
+            if (num != 0) {
+                $(".company_msg a.add").hide();
+            }
+        });
+    $(".company_msg :text,.company_msg :checkbox,.company_msg :file,.company_msg :submit").each(function () { $(this).attr("disabled", "disabled"); $(this).css("background-color", "white"); });
+</script>

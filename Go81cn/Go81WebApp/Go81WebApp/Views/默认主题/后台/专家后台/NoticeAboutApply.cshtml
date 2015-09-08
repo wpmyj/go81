@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "评审专家入库申请表打印须知";
+}
+<style>
+    ul, ol {
+        list-style-type: none;
+    }
+
+        ol li {
+            text-align: left;
+        }
+
+        ul li {
+            text-align: left;
+            line-height: 50px;
+        }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="float:left; width:930px; margin-left:28px;">
+        <div style=" padding:20px;height:632px; margin-top:20px;">
+            <a target="_blank" href="/App_Uploads/下载/附件/2015/8/21/1236e267-8cbe-467c-8af6-84aa27e0418f专家老师入库打印须知.doc" style="position:absolute; display:block;width:100px; box-shadow:0px 1px 1px black; -webkit-box-shadow:0px 1px 1px black; -moz-box-shadow:0px 1px 1px black;height:30px; text-align:center; line-height:30px; background-color:#FF8888; color:white; text-align:center;">点击下载</a>
+            <div>
+                <div style="width:900px;height:632px; font-size:18px; text-align:center; line-height:30px;">
+                    <div style="overflow:scroll; overflow-x:hidden;width:900px; border:1px solid black; height:100%; background-color:white;">
+                        <div id="f1" style="margin-top:70px;">
+                            <div style="width:80%;margin-left: auto;margin-right: auto;">
+                                <div><h3>评审专家入库申请表打印须知</h3></div>
+                                <div style="text-align:left;">一、申请表三份：</div>
+                                <ul>
+                                    <li>
+                                        ①、封面：
+                                        <div>
+                                            <img src="~/Images/cover1.jpg" />
+                                        </div>
+                                    </li>
+                                    <li>
+                                        ②、内容：
+                                        <div>
+                                            <img src="~/Images/cover2.jpg" />
+                                        </div>
+                                        <div>
+                                            <img src="~/Images/cover3.jpg" />
+                                        </div>
+                                        <div>
+                                            <img src="~/Images/cover4.jpg" />
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div style="text-align:left;">二、资质材料：</div>
+                                <ul>
+                                    <li>
+                                        <div>
+                                            <img src="~/Images/cover5.jpg" style="width:80%;" />
+                                        </div>
+                                        <div>
+                                            <img src="~/Images/cover6.jpg" style="width:80%;" />
+                                        </div>
+                                        <div>
+                                            <img src="~/Images/cover7.jpg" style="width:80%;" />
+                                        </div>
+                                        <div>
+                                            <img src="~/Images/cover8.jpg" style="width:80%;" />
+                                        </div>
+                                        <div>
+                                            <img src="~/Images/cover9.jpg" style="width:80%;" />
+                                        </div>
+                                        <div>
+                                            <img src="~/Images/cover10.jpg" style="width:80%;" />
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(function () {
+        $("#打印须知").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#打印须知").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

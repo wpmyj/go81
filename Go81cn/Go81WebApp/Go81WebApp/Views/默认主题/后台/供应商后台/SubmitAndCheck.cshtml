@@ -1,0 +1,659 @@
+﻿@using PanGu.Framework
+@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    ViewBag.Title = "提交申请";
+    Layout = "_BackLayout.cshtml";
+}
+<link href="~/css/Bk_Mangage.css" rel="stylesheet" />
+<div id="f">
+    <div style="position:fixed;z-index:10; top:0px; left:0px; text-align:center; right:0; bottom:0px; background-color:black; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity:50); height:100%; width:100%;border:1px solid green;">
+    </div>
+    <div style="position:fixed; left:0px; top:20%; width:100%;z-index:20;">
+        <div style="width:500px;position:relative; margin:0px auto;z-index:12; height:300px; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#f')">×</a></div>
+            <div style="float:right; margin-top:50px;"><em style="color:red;">请注意：请确保贵企业的所有必填信息都已填写完整。一旦提交预审，企业将不能再对信息作修改。</em></div>
+        </div>
+        </div>
+    </div>
+<div id="f1" style="display:none;">
+    <div style="position:fixed;z-index:20; top:0px; left:0px; text-align:center; right:0; bottom:0px; background-color:black; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity:50); height:100%; width:100%;border:1px solid green;">
+    </div>
+    <div style="position:fixed; left:0px; top:20%; width:100%;z-index:20;">
+        <div style="width:500px;position:relative;z-index:21; height:300px; margin:0px auto; font-size:16px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#f1')">×</a></div>
+            <div style="float:right; margin-top:50px;">
+                点击确定进行提交预审，预审通过后，您可以联系采购机构<p />
+                @if (Model.供应商用户信息.所属管理单位.ToString() == "成都军区物资采购机构_重庆")
+                {
+                    <table width="100%">
+                        <tr><td align="right">联系人：</td><td>成都军区物资采购机构（重庆）,丁文元,助理</td></tr>
+                        <tr><td align="right">联系电话：</td><td>023-68778041</td></tr>
+                        <tr><td align="right">地址：</td><td>重庆市沙坪坝区石井坡216号,400032</td></tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <a href="###" id="sbmt" style="display:inline-block; width:100px; cursor:pointer; height:40px; color:white; border:none; background-color:#5e6f00; line-height:40px; font-weight: bold; text-align:center; font-size:16px;">确定</a>
+                            </td>
+                        </tr>
+                    </table>
+                }
+                else if (Model.供应商用户信息.所属管理单位.ToString() == "成都军区物资采购机构_昆明")
+                {
+                    <table width="100%">
+                        <tr><td align="right">联系人：</td><td>成都军区物资采购机构（昆明）,谢渝,助理</td></tr>
+                        <tr><td align="right">联系电话：</td><td>0871-64783672</td></tr>
+                        <tr><td align="right">地址：</td><td>昆明市东郊八公里贵昆路287号,650206</td></tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <a href="###" id="sbmt" style="display:inline-block; width:100px; cursor:pointer; height:40px; color:white; border:none; background-color:#5e6f00; line-height:40px; font-weight: bold; text-align:center; font-size:16px;">确定</a>
+                            </td>
+                        </tr>
+                    </table>
+                }
+                else if (Model.供应商用户信息.所属管理单位.ToString() == "成都军区物资采购机构_贵阳")
+                {
+                    <table width="100%">
+                        <tr><td align="right">联系人：</td><td>成都军区物资采购机构（贵阳）,姚祖光,助理</td></tr>
+                        <tr><td align="right">联系电话：</td><td>13984817881</td></tr>
+                        <tr><td align="right">地址：</td><td>贵州省贵阳市油榨街东新区路1号,550005</td></tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <a href="###" id="sbmt" style="display:inline-block; width:100px; cursor:pointer; height:40px; color:white; border:none; background-color:#5e6f00; line-height:40px; font-weight: bold; text-align:center; font-size:16px;">确定</a>
+                            </td>
+                        </tr>
+                    </table>
+                }
+                else if (Model.供应商用户信息.所属管理单位.ToString() == "西藏军区物资采购中心")
+                {
+                    <table width="100%">
+                        <tr><td align="right">联系人：</td><td>西藏军区物资采购中心,梁助理</td></tr>
+                        <tr><td align="right">联系电话：</td><td>0891-6738571</td></tr>
+                        <tr><td align="right">地址：</td><td>西藏自治区拉萨市</td></tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <a href="###" id="sbmt" style="display:inline-block; width:100px; cursor:pointer; height:40px; color:white; border:none; background-color:#5e6f00; line-height:40px; font-weight: bold; text-align:center; font-size:16px;">确定</a>
+                            </td>
+                        </tr>
+                    </table>
+                }
+                else
+                {
+                    <table width="100%">
+                        <tr><td align="right">联系人：</td><td>成都军区物资采购机构(成都),张助理</td></tr>
+                        <tr><td align="right">联系电话：</td><td>028-86686673</td></tr>
+                        <tr><td align="right">地址：</td><td>成都市武侯区高攀路38号</td></tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <a href="###" id="sbmt" style="display:inline-block; width:100px; cursor:pointer; height:40px; color:white; border:none; background-color:#5e6f00; line-height:40px; font-weight: bold; text-align:center; font-size:16px;">确定</a>
+                            </td>
+                        </tr>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+    </div>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="gys_znxx_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">企业详情</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div style="margin-left:55px;">
+                <div style="margin-top:20px;" class="Tab">
+                    <a onmouseover="checks(this,'tb2')">企业概况</a><a onmouseover="checks(this,'tb3')">企业基本信息</a><a onmouseover="checks(this,'tb4')">工商注册信息</a><a onmouseover="checks(this,'tb5')">营业执照信息</a><a onmouseover="checks(this,'tb6')">法定代表人信息</a><a onmouseover="checks(this,'tb7')">出资人或股东</a><a onmouseover="checks(this,'tb8')">财务状况信息</a><a onmouseover="checks(this,'tb9')" style="border-right:none;">税务信息</a>
+                </div>
+                <div class="tb2">
+                    <table cellspacing="1" width="100%">
+                        <tr>
+                            <td colspan="4"><span style ="font-size:14px;color:black;">企业简介：</span>@Html.DisplayTextFor(m => m.企业基本信息.企业简介)</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tb3">
+                    <table cellspacing="1" width="100%">
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">企业名称：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.企业基本信息.企业名称)</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">注册地址：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.企业基本信息.注册地址)</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">成立时间：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.企业基本信息.成立时间)</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">注册资本：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.营业执照信息.营业执照注册资金)</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">经营类型：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.企业基本信息.经营类型)</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">经营子类型：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.企业基本信息.经营子类型)</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">注册号：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.营业执照信息.营业执照注册号)</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">法定代表人：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.法定代表人信息.法定代表人姓名)</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">员工人数：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.企业基本信息.员工人数)</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">经济性质：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.企业基本信息.经济性质)</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">企业网址：</span></td>
+                            <td><a href="@Model.企业基本信息.网站网址">@Model.企业基本信息.网站网址</a></td>
+                            <td align="right"><span style ="font-size:14px;color:black;">邮政编码：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.企业基本信息.邮政编码)</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">是否是协议供货商：</span></td>
+                            @if (Model.供应商用户信息.协议供应商)
+                            {
+                                <td><div style="width:30px; height:30px; background-image:url(/Images/qualifies.png);background-position-x:60px;background-position-y:0px;"></div></td>
+                            }
+                            else
+                            {
+                                <td>否</td>
+                            }
+                            <td align="right"><span style ="font-size:14px;color:black;">是否是应急供应商：</span></td>
+                            @if (Model.供应商用户信息.应急供应商)
+                            {
+                                <td><div style="width:30px; height:30px; background-image:url(/Images/qualifies.png);background-position-x:90px;background-position-y:0px;"></div></td>
+                            }
+                            else
+                            {
+
+                                <td>否</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">是否年检：</span></td>
+                            <td colspan="3">
+                                @if (Model.供应商用户信息.年检列表 != null && Model.供应商用户信息.年检列表.Any() && Model.供应商用户信息.年检列表.ContainsKey(DateTime.Now.Year.ToString()))
+                                {
+                                    <div style="width:30px; height:30px; background-image:url(/Images/qualifies.png);background-position-x:120px;background-position-y:0px;"></div>
+                                }
+                                else
+                                {
+                                    <span style="color:red;">未通过年检</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr><td align="right"><span style ="font-size:14px;color:black;">所在区域：</span></td><td colspan="3">@Model.所属地域.地域</td></tr>
+                        @if (Model.可提供产品类别列表 != null && Model.可提供产品类别列表.Count() != 0)
+                        {
+                            <tr><td colspan="4" align="center"><h2>可提供产品类别</h2></td></tr>
+                            <tr>
+                                <td align="center"><span style="font-weight:bolder;">一级产品名称</span></td>
+                                <td align="center" colspan="3"><span style="font-weight:bolder;">二级产品名称</span></td>
+                            </tr>
+                            for (int i = 0; i < Model.可提供产品类别列表.Count(); i++)
+                            {
+                                <tr>
+                                    <td align="center">@Model.可提供产品类别列表[i].一级分类</td>
+                                    <td colspan="3">
+                                        @if (Model.可提供产品类别列表[i].二级分类 != null && Model.可提供产品类别列表[i].二级分类.Count() != 0)
+                                        {
+                                            foreach (var item in Model.可提供产品类别列表[i].二级分类)
+                                            {
+                                                <span>@item,</span>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        <tr><td align="center" colspan="4"><h2>联系人信息</h2></td></tr>
+                        <tr>
+                            <td width="20%" align="right"><span style ="font-size:14px;color:black;">联系人姓名：</span></td>
+                            <td width="30%">@Model.企业联系人信息.联系人姓名</td>
+                            <td width="20%" align="right"><span style ="font-size:14px;color:black;">联系人性别：</span></td>
+                            <td width="30%">@Model.企业联系人信息.联系人性别</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">联系人手机：</span></td>
+                            <td>@Model.企业联系人信息.联系人手机</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">联系人固定电话：</span></td>
+                            <td>@Model.企业联系人信息.联系人固定电话</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">联系人传真：</span></td>
+                            <td>@Model.企业联系人信息.联系人传真</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">联系人地址：</span></td>
+                            <td>@Model.企业联系人信息.联系人地址</td>
+                        </tr>
+                        @if (Model.售后服务机构列表 != null && Model.售后服务机构列表.Count() != 0)
+                        {
+                            int j = 1;
+                            <tr><td colspan="4" align="center"><h2>售后服务机构表</h2></td></tr>
+                            foreach (var item in Model.售后服务机构列表)
+                            {
+                                <tr>
+                                    <td align="right"><span style ="font-size:14px;color:black;">@(j++)、服务机构名称：</span></td>
+                                    <td>@item.售后服务机构名称</td>
+                                    <td align="right" style="font-size:14px;color:black;"><span>服务机构类别：</span></td>
+                                    <td>@item.售后服务机构类别.ToString()</td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><span style ="font-size:14px;color:black;">服务机构所在地：</span></td>
+                                    <td>@(item.所在地.省份)-@(item.所在地.城市)-@(item.所在地.地域)</td>
+                                    <td align="right"><span style ="font-size:14px;color:black;">服务机构联系人：</span></td>
+                                    <td>@item.负责人联系方式.联系人</td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><span style ="font-size:14px;color:black;">联系手机号：</span></td>
+                                    <td colspan="3">@item.负责人联系方式.手机</td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+                <div class="tb4">
+                    <table cellspacing="1" width="100%">
+                        <tr>
+                            <td width="25%" align="right"><span style ="font-size:14px;color:black;">组织机构代码：</span></td>
+                            <td width="25%">@Html.DisplayTextFor(m => m.工商注册信息.组织机构代码)</td>
+                            <td width="30%" align="right"><span style ="font-size:14px;color:black;">组织机构代码证电子扫描件：</span></td>
+                            @if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.组织机构代码证电子扫描件)))
+                            {
+                                <td><a href="@Model.工商注册信息.组织机构代码证电子扫描件" target="_blank">查看大图</a></td>
+                            }
+                            else
+                            {
+                                <td><a style="color:red;">您还没有上传组织机构代码证电子扫描件</a></td>
+                            }
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">基本账户开户银行：</span></td>
+                            <td width="15%">@Html.DisplayTextFor(m => m.工商注册信息.基本账户开户银行)</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">基本账户银行帐号：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.工商注册信息.基本账户银行帐号)</td>
+                        </tr>
+                        <tr>
+                            @if (Model.工商注册信息.基本账户开户银行资信证明 == true)
+                            {
+                                <td align="right"><span style ="font-size:14px;color:black;">基本账户开户银行资信证明：</span></td>
+                                <td width="15%">已通过</td>
+                                <td align="right"><span style ="font-size:14px;color:black;"> 基本账户开户银行资信证明电子扫描件：</span></td>
+                                if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.基本账户开户银行资信证明电子扫描件)))
+                                {
+                                    <td><a href="@Model.工商注册信息.基本账户开户银行资信证明电子扫描件" target="_blank">查看大图</a></td>
+                                }
+                                else
+                                {
+                                    <td><a style="color:red;">您还没有上传基本账户开户银行资信证明电子扫描件</a></td>
+                                }
+                            }
+                            else
+                            {
+                                <td align="right"><span style ="font-size:14px;color:black;">基本账户开户银行资信证明：</span></td>
+                                <td width="15%">未通过</td>
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年缴纳社会保证金证明电子扫描件：</span></td>
+                                if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.近3年缴纳社会保证金证明电子扫描件)))
+                                {
+                                    <td><a href="@Model.工商注册信息.近3年缴纳社会保证金证明电子扫描件" target="_blank">查看大图</a></td>
+                                }
+                                else
+                                {
+                                    <td><a style="color:red;">您还没有上传近3年缴纳社会保证金证明电子扫描件</a></td>
+                                }
+                            }
+
+
+                        </tr>
+                        <tr>
+                            @if (Model.工商注册信息.近3年缴纳社会保证金证明 == true)
+                            {
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年缴纳社会保证金证明：</span></td>
+                                <td>已缴纳</td>
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年缴纳社会保证金证明电子扫描件：</span></td>
+                                if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.近3年缴纳社会保证金证明电子扫描件)))
+                                {
+                                    <td><a href="@Model.工商注册信息.近3年缴纳社会保证金证明电子扫描件" target="_blank">查看大图</a></td>
+                                }
+                                else
+                                {
+                                    <td><a style="color:red;">您还没有上传近3年缴纳社会保证金证明电子扫描件</a></td>
+                                }
+                            }
+                            else
+                            {
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年缴纳社会保证金证明：</span></td>
+                                <td>未缴纳</td>
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年缴纳社会保证金证明电子扫描件：</span></td>
+                                if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.近3年缴纳社会保证金证明电子扫描件)))
+                                {
+                                    <td><a href="@Model.工商注册信息.近3年缴纳社会保证金证明电子扫描件" target="_blank">查看大图</a></td>
+                                }
+                                else
+                                {
+                                    <td><a style="color:red;">您还没有上传近3年缴纳社会保证金证明电子扫描件</a></td>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            @if (Model.工商注册信息.近3年有无重大违法记录 == true)
+                            {
+                                <td align="right"><span style ="font-size:14px;color:black;">是否有近3年无重大违法记录证明：</span></td>
+                                <td width="15%">有</td>
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年无重大违法记录电子扫描件：</span></td>
+                                if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.近3年有无重大违法记录电子扫描件)))
+                                {
+                                    <td><a href="@Model.工商注册信息.近3年有无重大违法记录电子扫描件" target="_blank">查看大图</a></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                            }
+                            else
+                            {
+                                <td align="right"><span style ="font-size:14px;color:black;">是否有近3年无重大违法记录证明：</span></td>
+                                <td width="15%">无</td>
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年无重大违法记录电子扫描件：</span></td>
+                                if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.近3年有无重大违法记录电子扫描件)))
+                                {
+                                    <td><a href="@Model.工商注册信息.近3年有无重大违法记录电子扫描件" target="_blank">查看大图</a></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                            }
+                        </tr>
+                    </table>
+                </div>
+                <div class="tb5">
+                    <table cellspacing="1" width="100%">
+                        <tr>
+                            <td width="25%" align="right"><span style ="font-size:14px;color:black;">营业执照电子扫描件：</span></td>
+                            @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.营业执照电子扫描件)))
+                            {
+                                <td><a href="@Model.营业执照信息.营业执照电子扫描件" target="_blank">查看大图</a></td>
+                            }
+                            else
+                            {
+                                <td style="color:red;">您还没有上传营业执照电子扫描件</td>
+                            }
+                            <td width="25%" align="right"><span style ="font-size:14px;color:black;">营业执照发证机关：</span></td>
+                            <td width="25%">@Html.DisplayTextFor(m => m.营业执照信息.营业执照发证机关)</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">营业执照注册号：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.营业执照信息.营业执照注册号)</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">营业执照注册地址：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.营业执照信息.营业执照注册地址)</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">营业执照注册资金：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.营业执照信息.营业执照注册资金)</td>
+                            <td align="right"><span style ="font-size:14px;color:black;"> 营业执照有效期类型：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.营业执照信息.营业执照有效期类型)</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">营业执照有效期起始日期：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.营业执照信息.营业执照有效期起始日期)</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">营业执照有效期结束日期：</span></td>
+                            @if (Model.营业执照信息.营业执照有效期类型 == 供应商.有效期类型.长期有效)
+                            {
+                                <td>永久有效</td>
+                            }
+                            else
+                            {
+                                <td>@Html.DisplayTextFor(m => m.营业执照信息.营业执照有效期结束日期)</td>
+                            }
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">营业执照最近年检日期：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.营业执照信息.营业执照最近年检日期)</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">经营范围：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.营业执照信息.经营范围)</td>
+                        </tr>
+                        @if (Model.资质证书列表 != null && Model.资质证书列表.Count() != 0)
+                        {
+                            int i = 1;
+                            <tr><td colspan="4" align="center"><h2>资质认证表</h2></td></tr>
+                            foreach (var item in Model.资质证书列表)
+                            {
+                                <tr>
+                                    <td align="right"><span style ="font-size:14px;color:black;">@(i++)、资质证书名称：</span></td>
+                                    <td>@item.名称</td>
+                                    <td align="right"><span style ="font-size:14px;color:black;">资质证书等级：</span></td>
+                                    <td>@item.等级</td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><span style ="font-size:14px;color:black;">发证机关：</span></td>
+                                    <td>@item.发证机构</td>
+                                    <td align="right"><span style ="font-size:14px;color:black;">年检日期：</span></td>
+                                    <td>@item.年检日期</td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><span style ="font-size:14px;color:black;">有效起始日期：</span></td>
+                                    <td>@item.有效期起始日期.ToString("yyyy-MM-dd")</td>
+                                    <td align="right"><span style ="font-size:14px;color:black;">有效结束日期</span></td>
+                                    <td>@item.有效期结束日期.ToString("yyyy-MM-dd")</td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><span style ="font-size:14px;color:black;">证书扫描件：</span></td>
+                                    <td colspan="3">
+                                        @if (item.资质证书电子扫描件 != null && item.资质证书电子扫描件.Count() != 0)
+                                        {
+                                            <table width="100%" cellspacing="0">
+                                                <tr>
+                                                    @foreach (var m in item.资质证书电子扫描件)
+                                                    {
+                                                        if (m.路径 != null)
+                                                        {
+                                                            <td style="text-align: center;"><a href="@m.路径" target="_blank"><img src="@m.路径" width="30" height="30" /></a><br />@m.名称<br />@m.说明</td>
+                                                        }
+
+                                                    }
+                                                </tr>
+                                            </table>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+                <div class="tb6">
+                    <table cellspacing="1" width="100%">
+                        <tr>
+                            <td width="25%" align="right"><span style ="font-size:14px;color:black;">法定代表人姓名：</span></td>
+                            <td width="25%">@Html.DisplayTextFor(m => m.法定代表人信息.法定代表人姓名)</td>
+                            <td width="25%" align="right"><span style ="font-size:14px;color:black;">法定代表人身份证号：</span></td>
+                            <td width="25%">@Html.DisplayTextFor(m => m.法定代表人信息.法定代表人身份证号)</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">法定代表人手机：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.法定代表人信息.法定代表人手机)</td>
+                            <td align="right"><span style ="font-size:14px;color:black;"> 法定代表人固定电话：</span></td>
+                            <td>@Html.DisplayTextFor(m => m.法定代表人信息.法定代表人固定电话)</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">法定代表人身份证电子扫描件：</span></td>
+                            @if (System.IO.File.Exists(Server.MapPath(@Model.法定代表人信息.法定代表人身份证电子扫描件)))
+                            {
+                                <td colspan="3"><a href="@Model.法定代表人信息.法定代表人身份证电子扫描件" target="_blank">查看大图</a></td>
+                            }
+                            else
+                            {
+                                <td colspan="3" style="color:red;">您还未上传法定代表人身份证电子扫描件</td>
+                            }
+                        </tr>
+                    </table>
+                </div>
+                <div class="tb7">
+                    @for (int i = 0; i < Model.出资人或股东信息.Count; i++)
+                    {
+                        <table cellspacing="1" style="margin-bottom:2px;" width="100%">
+                            <tr>
+                                <td width="20%" align="right"><span style ="font-size:14px;color:black;">@(i + 1)、出资人或股东姓名：</span></td>
+                                <td width="30%">@Model.出资人或股东信息[i].出资人或股东姓名</td>
+                                <td width="20%" align="right"><span style ="font-size:14px;color:black;">出资人或股东性质：</span></td>
+                                <td width="30%">@Model.出资人或股东信息[i].出资人或股东性质</td>
+                            </tr>
+                            <tr>
+                                <td align="right"><span style ="font-size:14px;color:black;">身份证号码：</span></td>
+                                <td>@Model.出资人或股东信息[i].身份证号码</td>
+                                <td align="right"><span style ="font-size:14px;color:black;">国籍：</span></td>
+                                <td>@Model.出资人或股东信息[i].国籍</td>
+                            </tr>
+                            <tr>
+                                <td align="right"><span style ="font-size:14px;color:black;"> 出资金额：</span></td>
+                                <td>@Model.出资人或股东信息[i].出资金额</td>
+                                <td align="right"><span style ="font-size:14px;color:black;">所占比例额：</span></td>
+                                <td>@(Model.出资人或股东信息[i].所占比例)%</td>
+                            </tr>
+                        </table>
+                    }
+
+                </div>
+                <div class="tb8">
+                    @for (int j = 0; j < Model.财务状况信息.Count; j++)
+                    {
+                        <table cellspacing="1" style="margin-bottom:2px;" width="100%">
+                            <tr>
+                                <td width="20%" align="right"><span style ="font-size:14px;color:black;">@(j + 1)、年份：</span></td>
+                                <td width="30%">@Model.财务状况信息[j].年份</td>
+                                <td width="30%" align="right"><span style ="font-size:14px;color:black;">会计事务所名称：</span></td>
+                                <td width="20%">@Model.财务状况信息[j].会计事务所名称</td>
+                            </tr>
+                            <tr>
+                                <td align="right"><span style ="font-size:14px;color:black;">会计事务所联系电话：</span></td>
+                                <td>@(Model.财务状况信息[j].会计事务所联系电话)(可填可不填)</td>
+                                @if (Model.财务状况信息[j].会计报表是否经注册会计师审计)
+                                {
+                                    <td align="right"><span style ="font-size:14px;color:black;">会计报表是否经注册会计师审计：</span></td>
+                                    <td>已注册</td>
+                                }
+                                else
+                                {
+                                    <td align="right"><span style ="font-size:14px;color:black;">会计报表是否经注册会计师审计：</span></td>
+                                    <td>未注册</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td align="right"><span style ="font-size:14px;color:black;">资产总额：</span></td>
+                                <td>@Model.财务状况信息[j].资产总额</td>
+                                <td align="right"><span style ="font-size:14px;color:black;"> 负债总额：</span></td>
+                                <td>@Model.财务状况信息[j].负债总额</td>
+                            </tr>
+                            <tr>
+                                <td align="right"><span style ="font-size:14px;color:black;">销售收入：</span></td>
+                                <td>@Model.财务状况信息[j].销售收入</td>
+                                <td align="right"><span style ="font-size:14px;color:black;">资产负债率：</span></td>
+                                <td>@(Model.财务状况信息[j].资产负债率)%</td>
+                            </tr>
+                            <tr>
+                                <td align="right"><span style ="font-size:14px;color:black;">净利润：</span></td>
+                                <td colspan="3">@Model.财务状况信息[j].净利润</td>
+                            </tr>
+                        </table>
+                    }
+                </div>
+                <div class="tb9">
+                    <table cellspacing="1" width="100%">
+                        <tr>
+                            <td width="25%" align="right"><span style ="font-size:14px;color:black;">国税税务登记证号：</span></td>
+                            <td width="30%">@Model.税务信息.国税税务登记证号</td>
+                            <td width="25%" align="right"><span style ="font-size:14px;color:black;">国税税务登记证发证机关：</span></td>
+                            <td width="20%">@Model.税务信息.国税税务登记证发证机关</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">国税税务登记证有效期类型：</span></td>
+                            <td>@Model.税务信息.国税税务登记证有效期类型</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">国税税务登记证有效期起始日期：</span></td>
+                            <td>@Model.税务信息.国税税务登记证有效期起始日期</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">国税税务登记证有效期结束日期：</span></td>
+                            <td>@Model.税务信息.国税税务登记证有效期结束日期</td>
+                            <td align="right"><span style ="font-size:14px;color:black;"> 地税税务登记证号：</span></td>
+                            <td>@Model.税务信息.地税税务登记证号</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">地税税务登记证发证机关：</span></td>
+                            <td>@Model.税务信息.地税税务登记证发证机关</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">地税税务登记证有效期类型：</span></td>
+                            <td>@Model.税务信息.地税税务登记证有效期类型</td>
+                        </tr>
+                        <tr>
+                            <td align="right"><span style ="font-size:14px;color:black;">地税税务登记证有效期起始日期：</span></td>
+                            <td>@Model.税务信息.地税税务登记证有效期起始日期</td>
+                            <td align="right"><span style ="font-size:14px;color:black;">地税税务登记证有效期结束日期：</span></td>
+                            <td>@Model.税务信息.地税税务登记证有效期结束日期</td>
+                        </tr>
+                        <tr>
+                            @if (Model.税务信息.近3年完税证明 == true)
+                            {
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年完税证明：</span></td>
+                                <td>已完税</td>
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年完税证明电子扫描件：</span></td>
+                                if (System.IO.File.Exists(Server.MapPath(@Model.税务信息.近3年完税证明电子扫描件)))
+                                {
+                                    <td><a href="@Model.税务信息.近3年完税证明电子扫描件" target="_blank">查看大图</a></td>
+                                }
+                                else
+                                {
+                                    <td style="color:red;">您还未上传近3年完税证明电子扫描件</td>
+                                }
+                            }
+                            else
+                            {
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年完税证明：</span></td>
+                                <td>未完税</td>
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年完税证明电子扫描件：</span></td>
+                                if (System.IO.File.Exists(Server.MapPath(@Model.税务信息.近3年完税证明电子扫描件)))
+                                {
+                                    <td><a href="@Model.税务信息.近3年完税证明电子扫描件" target="_blank">查看大图</a></td>
+                                }
+                                else
+                                {      
+                                    <td style="color:red;">您还未上传近3年完税证明电子扫描件</td>
+                                }
+                            }
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div style="position:relative;z-index:11;margin-top:10px;">
+                <div id="Operate_box" style="text-align:center; font-size:12px; margin-bottom:10px;">
+                    <a href="###" id="sbt" style="display:inline-block; width:100px; cursor:pointer; height:40px; color:white; border:none; background-color:#5e6f00; line-height:40px; font-weight: bold; text-align:center; font-size:16px;">提交</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $("document").ready(function () {
+        $(".Tab a:first").css({ "background-color": "#5e6f00", "color": "white" });
+        $(".tb2").show();
+        $(":checkbox#ns").click(function () {
+            if (this.checked) {
+                $(this).val("1");
+            }
+            else { $(this).val("0"); }
+        });
+        $("#提交预审").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#提交预审").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function hidebox(th) {
+        $(th).hide(200);
+    }
+    $("a#sbt").click(function () {
+        $("#f1").show(200);
+    });
+    $("a#sbmt").click(function () {
+        window.location = "/供应商后台/WaitForCheck";
+    });
+</script>

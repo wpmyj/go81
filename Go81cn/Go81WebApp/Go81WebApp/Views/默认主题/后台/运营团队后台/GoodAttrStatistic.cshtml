@@ -1,0 +1,99 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.商品数据模型.商品分类>
+@using Go81WebApp.Models.数据模型.商品数据模型
+@{
+    ViewBag.Title = "未添加商品属性分类统计";
+    Layout = "_BackLayout.cshtml";
+}
+<link href="~/css/css.css" rel="stylesheet" />
+<style type="text/css">
+
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+        
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">未添加商品属性分类统计详情</div>
+                @*<a style="position:absolute;top:8px;right:20px;" class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>*@
+            </div>
+        </div>
+        <div style="width:947px;border: 1px solid rgb(204, 210, 176); margin-top: 10px;" id="printContent">
+           @{
+               List<商品分类> list = new List<商品分类>();
+           }
+            @if (Model != null && Model.Any())
+            {
+                foreach (var i in Model)
+                {
+                    if (i.分类性质 == 商品分类性质.通用物资)
+                    {
+                        <div class="goodclass_yjfn">
+                            <div class="yjfn_name">@i.分类名</div>
+                        </div>
+                        foreach (var f in i.子分类)
+                        {
+                            <div class="goodclass_ejfn">
+                                <table width="100%" cellspacing="0">
+                                    <tr>
+                                        <td class="ejfn_name">@f.分类名</td>
+                                        <td class="sjfn_name" style="padding-left:30px;">
+                                            @foreach (var g in f.子分类)
+                                            {
+                                                if (g.商品属性模板.Count == 0)
+                                                {
+                                                    if(g.商品属性模板.Count==0)
+                                                    { 
+                                                        <a href="/商品陈列/ProductList/@g.Id">@g.分类名</a>
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        }
+                    }
+                }
+                <div class="goodclass_yjfn">
+                    <div class="yjfn_name">专用物资</div>
+                </div>
+                foreach (var k in Model)
+                {
+                    if (k.分类性质 == 商品分类性质.专用物资)
+                    {
+                        <div class="goodclass_ejfn">
+                            <table cellspacing="0">
+                                <tr>
+                                    <td class="ejfn_name">@k.分类名</td>
+                                    <td class="sjfn_name" style=" padding-left:30px;">
+                                        @foreach (var g in k.子分类)
+                                        {
+                                            if(g.商品属性模板.Count==0)
+                                            { 
+                                                <a href="/商品陈列/ProductList/@g.Id">@g.分类名</a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function printpage() {
+        document.body.innerHTML = $('#printContent').html();
+        window.print();
+    }
+    
+    $(function () {
+        $("#商品属性统计").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#商品属性统计").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

@@ -1,0 +1,791 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型;
+@using Go81WebApp.Models.数据模型.商品数据模型;
+@using Go81WebApp.Models.数据模型.用户数据模型;
+@using Go81WebApp.Models.数据模型.竞标数据模型;
+@using Microsoft.Ajax.Utilities
+
+<script src="~/JS/s3Slider.js" type="text/javascript"></script>
+<script src="~/JS/clickStatistics.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(function () {
+        $('#sliderPlay').sliderPlay();
+        $('#sliderPlay2').sliderPlay({
+            speed: 500, //动画效果持续时间
+            timeout: 4000,//幻灯间隔时间
+            btnBox: 'btnBox2', //按钮的容器id
+            btnCurClassName: 'cur', //当前按钮的className,
+            direction: 'up', //left , up
+            mouseEvent: 'hover' //事件类型，默认是click ,hover
+        });
+    });
+</script>
+
+<style type="text/css">
+* {
+    margin: 0;
+    padding: 0;
+  }
+    .gdjyhjl {
+        cursor: pointer;
+        float: left;
+        _margin: 50px 7px 0px 0px;
+        background: url(../Images/left.jpg) no-repeat center left;
+        WIDTH: 14px;
+        HEIGHT: 100%;
+        TEXT-INDENT: -999px;
+    }
+
+    .gdjyhjr {
+        cursor: pointer;
+        float: right;
+        _margin: 50px 5px 0px 0px;
+        background: url(../Images/right.jpg) no-repeat center right;
+        WIDTH: 13px;
+        HEIGHT: 100%;
+        TEXT-INDENT: -999px;
+    }
+
+    #gdjyhj {
+        float: left;
+    }
+</style>
+
+
+<div class="index_bottom_zb_cg_box" style="height: 270px; width:1304px;">
+    <div style="float:left">
+        <div class="index_content_newsbox_top" style="width: 240px;">
+           <div class="news_title">核对验收单</div>
+        </div>
+        <div class="index_content_news" style="width: 238px; border: 1px solid #003399;margin-top:6px;  height: 230px;">
+            <table width="100%">
+                <tr><td width="45%" align="right" height="35" style="font-size:13px;">验收单号：</td><td><input type="text" id="ysd_num" name="ysd_num" style="width: 100px; height: 20px; line-height: 20px;" /></td></tr>
+                <tr><td align="right" height="35" style="font-size:13px;">核对码：</td><td><input type="text" id="ysd_code" name="ysd_code" style="width: 100px; height: 20px; line-height: 20px;" /></td></tr>
+                <tr><td align="right" height="35" style="font-size:13px;">验收总价：</td><td><input type="text" id="ysd_cost" name="ysd_cost" style="width: 100px; height: 20px; line-height: 20px;" /></td></tr>
+                <tr><td height="35" colspan="2" align="center"><input type="button" value="查询" class="gys_ztbsearch_search_botton" style="width:130px; color:#003399;border:2px solid #003399;  background-color:white;" onclick="checkYsd();" /></td></tr>
+                <tr><td colspan="2"></td></tr>
+                <tr><td colspan="2" height="35" align="center"><a href="/通知/NoticeDetail?id=32" target="_blank" style="text-decoration: underline;cursor:pointer;">如何使用验收单？</a></td></tr>
+                <tr><td colspan="2" height="35" align="center"><div style=" padding-bottom:10px; text-align: center; color: red;" id="checkysdresult"></div></td></tr>
+            </table>
+        </div>
+    </div>
+    <div style="float:left;margin-left:10px;">
+        <div class="index_content_newsbox_top " style="width:732px;">
+            <div class="news_title">推荐商品</div>
+            <a class="more" href="/商品陈列/">更多+</a>
+        </div>
+        <div class="index_content_news" style="width: 732px;height:204px;padding-top:15px; ">
+            @{var add_sp = ((IEnumerable<商品>)ViewData["新增推荐商品"]).ToList();}
+            <div class="gdjyhjl" id="gdjyhjl" title="上一个"></div>
+            <div id="gdjyhj" style="width: 670px;margin-left:15px; overflow: hidden;">
+                <div>
+                    @for (var spindex = 0; spindex < add_sp.Count(); spindex++)
+                    {
+                        <div class="index_onlinbox">
+                            <div class="index_onlinbox_listimg">
+                                <a target="_blank" href="/商品陈列/Product_Detail?id=@add_sp[spindex].Id" onclick='clickStatistics("A1","1", "@add_sp[spindex].Id","@add_sp[spindex].商品信息.所属供应商.用户ID")'>
+                                    @if (add_sp[spindex].商品信息.商品图片 != null && add_sp[spindex].商品信息.商品图片.Count != 0)
+                                    {
+                                        <img src="@add_sp[spindex].商品信息.商品图片.First()" width="125px" height="107px" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Images/noimage.jpg" width="125px" height="107px" />
+                                    }
+                                </a>
+
+                            </div>
+                            <div class="index_onlinbox_list"><span>商品名称：</span><a target="_blank" href="/商品陈列/Product_Detail?id=@add_sp[spindex].Id" onclick='clickStatistics("A1","1", "@add_sp[spindex].Id","@add_sp[spindex].商品信息.所属供应商.用户ID")'>@add_sp[spindex].商品信息.商品名</a></div>
+                            <div class="index_onlinbox_list"><span>商品型号：</span><a target="_blank" href="/商品陈列/Product_Detail?id=@add_sp[spindex].Id" onclick='clickStatistics("A1","1", "@add_sp[spindex].Id","@add_sp[spindex].商品信息.所属供应商.用户ID")' title="@add_sp[spindex].商品信息.精确型号">@add_sp[spindex].商品信息.精确型号</a></div>
+                            <div class="index_onlinbox_list"><span>销售价格：</span><a target="_blank" href="/商品陈列/Product_Detail?id=@add_sp[spindex].Id" onclick='clickStatistics("A1","1", "@add_sp[spindex].Id","@add_sp[spindex].商品信息.所属供应商.用户ID")'><em style="color:red; font-size:15px; font-weight:bolder;">￥@add_sp[spindex].销售信息.价格</em></a></div>
+                            <div class="index_onlinbox_list"><span>浏览次数：</span><a target="_blank" href="/商品陈列/Product_Detail?id=@add_sp[spindex].Id" onclick='clickStatistics("A1","1", "@add_sp[spindex].Id","@add_sp[spindex].商品信息.所属供应商.用户ID")' title="外网浏览：@add_sp[spindex].销售信息.点击量">@add_sp[spindex].销售信息.点击量</a></div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="gdjyhjr" id="gdjyhjr" title="下一个"></div>
+        </div>
+
+
+
+
+
+        @*<div class="index_content_newsbox_top" style="width: 732px;">
+            <div class="index_content_newsbox_middle" style="width: 732px;">
+                <div class="index_content_newsbox_title">
+                    <div class="news_title">网上竞价</div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 8px;height: 230px;width: 730px;border: 1px solid #003399;">
+            <div class="index_content_left_picbox" style="width:100%">
+                <div class="index_bottom_zb_topbox outtab" style="width:100%;border-bottom:none;background:none">
+                    <div class="tabbox_zb">
+                        <div class="tabmenu_zb tab" style="margin-left:0;">
+                            <ul>
+                                <li index="0" class="changechildtab  cli" style="padding-left:18px;padding-right:18px;background:#fff;border-left:none; line-height:36px;font-family:STSong;font-size:14px;color:#003399">需求公告</li>
+                                <li index="1" class="changechildtab" style="padding-left:18px;padding-right:18px;background:#fff;line-height:36px;font-family:STSong;font-size:14px;color:#003399">成交公告</li>
+                                <li index="2" class="changechildtab" style="padding-left:18px;padding-right:18px;background:#fff;line-height:36px;font-family:STSong;font-size:14px;color:#003399">废标公告</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="index_bottom_zb_content_box tabcontent" id="tabcontent_zb" style="width:100%;height:auto;border-top:1px solid #99cccc;margin-top:0;">
+                    <ul class="fdiv">  
+                        @{
+                            var wsjj = ViewData["网上竞标"] as IEnumerable<网上竞标>;
+                            if (wsjj.Any() && wsjj.Count() > 0)
+                            {
+                                foreach (var item in wsjj)
+                                {
+                                    <li class="wsjblist">
+                                        
+                                        @if (item.报价结束时间 > DateTime.Now)
+                                        {
+                                            <p style="float: right;color: #666;padding-right: 10px;">倒计时：<label class="countdown" endtime="@item.报价结束时间.ToString("yyyy-MM-dd HH:mm:ss")" style="color: #fff;height: 20px;display: inline-block;width: 72px;background: #ff0000;text-align: center;line-height: 20px;font-weight: bold;font-size: 13px;">00:00:00</label></p>
+                                        }
+                                        else
+                                        {
+                                            <p style="float: right;color: #666;padding-right: 10px;">倒计时：截止时间已到</p>
+                                        }
+                                        <a style="width:455px;" target="_blank" href="##" title="">@item.项目名称</a>
+                                    </li>
+                                }
+                            }
+                        }   
+                    </ul>
+                </div>
+            </div>
+        </div>*@
+
+
+
+
+    </div>
+    <div style="margin-left:10px;float:left;">
+        <div class="index_content_newsbox_top" style="width: 310px;">
+            <div class="news_title">服务指南</div>
+            <a target="_blank" href="~/办事指南/ServiceGuideList" style=" font-size:12px;color:#003399; float:right; padding-top:13px;  padding-right:5px;">更多+</a>
+        </div>
+        <div class="index_content_zcfg_content" id="tabcontent_zcfg">
+            <ul style="margin-top:7px;">
+                @{ var ikk = 0;}
+                @foreach (var item in (IEnumerable<办事指南>)ViewData["服务指南"])
+                {
+                    TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                    if (ikk % 2 == 0)
+                    {
+                        <li class="oddlinecolor">
+                            @if (ts.TotalHours < 360)
+                            {
+                                <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                <a class="new" style="width:230px" target="_blank" href="~/下载/Download_Detail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                            }
+                            else
+                            {
+                                <a style="width:250px;" target="_blank" href="~/下载/Download_Detail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                            }
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="oddlinecolor_exp">
+                            @if (ts.TotalHours < 360)
+                            {
+                                <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
+                                <a class="new" style="width:230px;" target="_blank" href="~/下载/Download_Detail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                            }
+                            else
+                            {
+                                <a target="_blank" style="width:250px;" href="~/下载/Download_Detail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                            }
+                        </li>
+                    }
+                    ikk++;
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+<div style="width:1305px;height:89px;background:url('../Images/wssc.jpg') no-repeat;margin:10px auto 0;"></div>
+
+<div class="index_bottom_spdtbox" style="margin-top:0;">
+    <!--商品动态 模块-->
+    <div class="index_bottom_spdt_topbox outtab" style="width:1304px;">
+        <div class="index_content_newsbox_top" style="width:1304px;">
+            <div class="news_title">商品动态</div>
+            <div class="tabmenu_spdt">
+                <ul>
+                    <li @*onmouseover="change_spdt(this)"*@ index="0" class="changetab cli">热门商品</li>
+                    @*@if (ViewData["A2类别"] != null && ViewData["A2类别"].ToString() == "2")
+                    {
+                        <li index="1" class="changetab">热门商品</li>
+                    }
+                    @if (ViewData["A2类别"] != null && ViewData["A2类别"].ToString() == "3")
+                    {
+                        <li index="1" class="changetab">热门商品</li>
+                        <li index="2" class="changetab">热门商品</li>
+                    }*@
+                </ul>
+            </div><a target="_blank" href="~/商品陈列/Index" class="more" style="padding-top: 13px; color: #003399;">更多+</a>
+        </div>
+    </div>
+    <div class="index_bottom_spdt_content_box tabcontent" id="tabcontent_spdt" style="height:550px;width:1304px;">
+        <div class="divhide fdiv">
+            <ul>
+                @{
+                    var 首页主推商品集合 = ViewData["首页主推商品信息"] as IEnumerable<商品>;
+                    var 首页主推商品 = 首页主推商品集合.Take(10);
+                }
+                @foreach (var item in 首页主推商品)
+                {
+                    <li style="height:255px;width:250px;">
+                        @if (item.商品信息.商品图片.Count > 0)
+                        {
+                            <div class="index_bottom_spdt_content_img" style="width:250px;"><a target="_blank" href="~/商品陈列/Product_Detail?id=@item.Id" onclick='clickStatistics("A2","1", "@item.Id","@item.商品信息.所属供应商.用户ID")'><img src="@item.商品信息.商品图片[0].Replace("original/", "150X150/")" width="220" height="132" /></a></div>
+                        }
+                        else
+                        {
+                            <div class="index_bottom_spdt_content_img" style="width:250px;"><a target="_blank" href="~/商品陈列/Product_Detail?id=@item.Id" onclick='clickStatistics("A2","1", "@item.Id","@item.商品信息.所属供应商.用户ID")'><img src="~/images/noimage.jpg" width="220" height="132" /></a></div>
+                        }
+                        <div class="index_bottom_spdt_content_text" style="height:40px;">
+                            <a class="proname" target="_blank" href="~/商品陈列/Product_Detail?id=@item.Id" onclick='clickStatistics("A2","1", "@item.Id","@item.商品信息.所属供应商.用户ID")' title="@item.商品信息.商品名">@item.商品信息.商品名</a>
+                        </div>
+                        <em style="color:red; font-size:15px; font-weight:bolder;">￥@(string.Format("{0:0.00}", item.销售信息.价格))</em><span style="padding-left:20px; color:#999; cursor:pointer;" title="报价时间">(@item.销售信息.价格修改日期.ToString("yyyy-MM-dd"))</span>
+                        <br />
+
+                        <a class="links index_overflowspan" href="/供应商陈列/Supplier_Destination?id=@item.商品信息.所属供应商.用户ID" target="_blank" title="@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
+                        <a class="index_overflowspan" title="@item.商品信息.所属供应商.用户数据.所属地域.地域">所在地域：@item.商品信息.所属供应商.用户数据.所属地域.地域</a>
+                        <span style="color:gray;">外网浏览:@item.销售信息.点击量</span>
+                        <span style="color:gray; float:right; padding-right:2px;">
+                            内网浏览:
+                            @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                            {
+                                <a>@item.销售信息.内网点击量</a>
+                            }
+                            else
+                            {
+                                <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/首页/">登陆查看</a>
+                            }
+                        </span>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        @*@if (ViewData["A2类别"] != null && ViewData["A2类别"].ToString() == "2")
+        {
+            <div class="divhide" style="display:none;">
+                <ul>
+                    @{
+            var 首页主推商品2 = 首页主推商品集合.Skip(10).Take(10);
+                    }
+                    @foreach (var item in 首页主推商品2)
+                    {
+                        <li style="height:255px;">
+                            @if (item.商品信息.商品图片.Count > 0)
+                            {
+                                <div class="index_bottom_spdt_content_img"><a target="_blank" href="~/商品陈列/Product_Detail?id=@item.Id" onclick='clickStatistics("A2","1", "@item.Id","@item.商品信息.所属供应商.用户ID")'><img src="@item.商品信息.商品图片[0].Replace("original/", "150X150/")" width="220" height="132" /></a></div>
+                            }
+                            else
+                            {
+                                <div class="index_bottom_spdt_content_img"><a target="_blank" href="~/商品陈列/Product_Detail?id=@item.Id" onclick='clickStatistics("A2","1", "@item.Id","@item.商品信息.所属供应商.用户ID")'><img src="~/images/noimage.jpg" width="220" height="132" /></a></div>
+                            }
+                            <div class="index_bottom_spdt_content_text" style="height:40px;">
+                                <a class="proname" target="_blank" href="~/商品陈列/Product_Detail?id=@item.Id" onclick='clickStatistics("A2","1", "@item.Id","@item.商品信息.所属供应商.用户ID")' title="@item.商品信息.商品名">@item.商品信息.商品名</a>
+                            </div>
+                            <em style="color:red; font-size:15px; font-weight:bolder;">￥@(string.Format("{0:0.00}", item.销售信息.价格))</em><span style="padding-left:20px; color:#999; cursor:pointer;" title="报价时间">(@item.销售信息.价格修改日期.ToString("yyyy-MM-dd"))</span>
+                            <br />
+
+                            <a class="links index_overflowspan" href="/供应商陈列/Supplier_Destination?id=@item.商品信息.所属供应商.用户ID" target="_blank" title="@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
+                            <a class="index_overflowspan" title="@item.商品信息.所属供应商.用户数据.所属地域.地域">所在地域：@item.商品信息.所属供应商.用户数据.所属地域.地域</a>
+                            <span style="color:gray;">外网浏览:@item.销售信息.点击量</span>
+                            <span style="color:gray; float:right; padding-right:2px;">
+                                内网浏览:
+                                @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                                {
+                                    <a>@item.销售信息.内网点击量</a>
+                                }
+                                else
+                                {
+                                    <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/首页/">登陆查看</a>
+                                }
+                            </span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }*@
+
+        @*@if (ViewData["A2类别"] != null && ViewData["A2类别"].ToString() == "3")
+        {
+            <div class="divhide" style="display:none;">
+                <ul>
+                    @{
+            var 首页主推商品3 = 首页主推商品集合.Skip(20).Take(10);
+                    }
+                    @foreach (var item in 首页主推商品3)
+                    {
+                        <li style="height:255px;">
+                            @if (item.商品信息.商品图片.Count > 0)
+                            {
+                                <div class="index_bottom_spdt_content_img"><a target="_blank" href="~/商品陈列/Product_Detail?id=@item.Id" onclick='clickStatistics("A2","1", "@item.Id","@item.商品信息.所属供应商.用户ID")'><img src="@item.商品信息.商品图片[0].Replace("original/", "150X150/")" width="220" height="132" /></a></div>
+                            }
+                            else
+                            {
+                                <div class="index_bottom_spdt_content_img"><a target="_blank" href="~/商品陈列/Product_Detail?id=@item.Id" onclick='clickStatistics("A2","1", "@item.Id","@item.商品信息.所属供应商.用户ID")'><img src="~/images/noimage.jpg" width="220" height="132" /></a></div>
+                            }
+                            <div class="index_bottom_spdt_content_text" style="height:40px;">
+                                <a class="proname" target="_blank" href="~/商品陈列/Product_Detail?id=@item.Id" onclick='clickStatistics("A2","1", "@item.Id","@item.商品信息.所属供应商.用户ID")' title="@item.商品信息.商品名">@item.商品信息.商品名</a>
+                            </div>
+                            <em style="color:red; font-size:15px; font-weight:bolder;">￥@(string.Format("{0:0.00}", item.销售信息.价格))</em><span style="padding-left:20px; color:#999; cursor:pointer;" title="报价时间">(@item.销售信息.价格修改日期.ToString("yyyy-MM-dd"))</span>
+                            <br />
+
+                            <a class="links index_overflowspan" href="/供应商陈列/Supplier_Destination?id=@item.商品信息.所属供应商.用户ID" target="_blank" title="@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
+                            <a class="index_overflowspan" title="@item.商品信息.所属供应商.用户数据.所属地域.地域">所在地域：@item.商品信息.所属供应商.用户数据.所属地域.地域</a>
+                            <span style="color:gray;">外网浏览:@item.销售信息.点击量</span>
+                            <span style="color:gray; float:right; padding-right:2px;">
+                                内网浏览:
+                                @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                                {
+                                    <a>@item.销售信息.内网点击量</a>
+                                }
+                                else
+                                {
+                                    <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/首页/">登陆查看</a>
+                                }
+                            </span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }*@
+
+
+    </div>
+</div>
+<!--商品动态 模块 结束-->
+
+<div class="index_bottom_spdtbox" style="width:1304px;">
+    <!--供应商库 模块-->
+    <div class="index_bottom_spdt_topbox outtab" id="ad" style="width:1304px;">
+        <div class="index_content_newsbox_top" style="width:1304px;">
+            <div class="news_title">供应商库</div>
+            <div class="tabmenu_gysk" id="tabmenu">
+                <ul>
+                    <li index="0" class="changetab cli">优质企业</li>
+
+                    @if (ViewData["A3类别"] != null && ViewData["A3类别"].ToString() == "2")
+                    {
+                        <li index="1" class="changetab">优质企业</li>
+                    }
+                    @if (ViewData["A3类别"] != null && ViewData["A3类别"].ToString() == "3")
+                    {
+                        <li index="1" class="changetab">优质企业</li>
+                        <li index="2" class="changetab">优质企业</li>
+                    }
+                </ul>
+            </div><a target="_blank" href="~/供应商陈列/Gyslist" class="more" style="padding-top: 13px; color: #003399;">更多+</a>
+        </div>
+    </div>
+    <div class="index_bottom_spdt_content_box tabcontent" style="width:1304px;" id="tabcontent_gysk">
+        <div class="divhide fdiv">
+            <ul>
+                @{
+                    IEnumerable<供应商> gyslist = ViewData["供应商信息"] as IEnumerable<供应商>;
+                    var gys = gyslist.Take(10);
+                }
+                @if (gyslist.Count() == 0)
+                {
+                    <li class="no_data"><div>暂无此类信息</div></li>
+                }
+                else
+                {
+                    var index = 0;
+                    foreach (var item0 in gys)
+                    {
+                        ++index;
+                        var item = item0 as 供应商;
+                        <li style="width:250px;">
+                            @if (item0.供应商用户信息.供应商图片.Any() || item0.供应商用户信息.展示商品.Any())
+                            {
+                                <div class="index_bottom_spdt_content_img" style="position:relative ;width:250px;">
+                                    <a exist="false" index="@index" class="showBrief" id="@item0.Id" target="_blank" href="~/供应商陈列/Supplier_Destination?id=@item.Id" onclick='clickStatistics("A3","2", "-1","@item0.Id")'>
+                                        @if (item0.供应商用户信息.展示商品.Any())
+                                        {
+                                            <img src="@item0.供应商用户信息.展示商品.First()" width="220" height="132" />
+                                        }
+                                        else
+                                        {
+                                            <img src="@item0.供应商用户信息.供应商图片.Last()" width="220" height="132" />
+                                        }
+                                    </a>
+                                    @*<span class="arrow_left"></span>
+                                        <div class="gys_brief_info">
+                                            <img src="~/Images/ajax-loader.gif" />
+                                            <div>主营产品：计算机通信</div>
+                                            <div>认证级别：@item.供应商用户信息.认证级别</div>
+                                            <div>经营类型：@item.企业基本信息.经营类型 / @item.企业基本信息.经营子类型</div>
+                                            <div>员工人数：@item.企业基本信息.员工人数</div>
+                                        </div>*@
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="index_bottom_spdt_content_img" style="position:relative;width:250px;">
+                                    <a exist="false" index="@index" class="showBrief" id="@item0.Id" target="_blank" href="~/供应商陈列/Supplier_Destination?id=@item0.Id" onclick='clickStatistics("A3","2", "-1","@item0.Id")'>
+                                        <img src="~/images/noimage.jpg" width="220" height="132" />
+                                    </a>
+                                </div>
+                            }
+                            <div class="index_bottom_spdt_content_text" style="line-height:23px; font-size:14px;">
+                                <a class="gysname" target="_blank" href="~/供应商陈列/Supplier_Destination?id=@item0.Id" title="@item0.企业基本信息.企业名称" onclick='clickStatistics("A3","2", "-1","@item0.Id")'>@item0.企业基本信息.企业名称</a><br />
+                                <span class="index_overflowspan" title="@item0.企业基本信息.所属行业">所属行业： @item0.企业基本信息.所属行业</span>
+                                @if (item0.所属地域.地域.Contains("请选择") || string.IsNullOrEmpty(item0.所属地域.地域))
+                                {
+                                    <span class="index_overflowspan" title="未选择">所属地区： 未选择</span>
+                                }
+                                else
+                                {
+                                    <span class="index_overflowspan" title="@item0.所属地域.地域">所属地区： @item0.所属地域.地域</span>
+                                }
+                                <span style="color:gray;">外网浏览:@item0.供应商用户信息.点击量</span>
+                                <span style="color:gray; float:right; padding-right:2px;">
+                                    内网浏览:
+                                    @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                                    {
+                                        <a>@item0.供应商用户信息.内网点击量</a>
+                                    }
+                                    else
+                                    {
+                                        <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/供应商陈列/GysList">登陆查看</a>
+                                    }
+
+                                </span>
+                            </div>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        @if (ViewData["A3类别"] != null && ViewData["A3类别"].ToString() == "2")
+        {
+            <div class="divhide" style="display:none;">
+                <ul>
+                    @{
+            var gys1 = gyslist.Skip(10).Take(10);
+                    }
+                    @if (gys1.Count() == 0)
+                    {
+                        <li class="no_data"><div>暂无此类信息</div></li>
+                    }
+                    else
+                    {
+                        var index = 0;
+                        foreach (var item0 in gys1)
+                        {
+                            ++index;
+                            var item = item0 as 供应商;
+                            <li>
+                                @if (item0.供应商用户信息.供应商图片.Any() || item0.供应商用户信息.展示商品.Any())
+                                {
+                                    <div class="index_bottom_spdt_content_img" style="position:relative">
+                                        <a exist="false" index="@index" class="showBrief" id="@item0.Id" target="_blank" href="~/供应商陈列/Supplier_Destination?id=@item.Id" onclick='clickStatistics("A3","2", "-1","@item0.Id")'>
+                                            @if (item0.供应商用户信息.展示商品.Any())
+                                            {
+                                                <img src="@item0.供应商用户信息.展示商品.First()" width="220" height="132" />
+                                            }
+                                            else
+                                            {
+                                                <img src="@item0.供应商用户信息.供应商图片.Last()" width="220" height="132" />
+                                            }
+                                        </a>
+                                        @*<span class="arrow_left"></span>
+                                            <div class="gys_brief_info">
+                                                <img src="~/Images/ajax-loader.gif" />
+                                                <div>主营产品：计算机通信</div>
+                                                <div>认证级别：@item.供应商用户信息.认证级别</div>
+                                                <div>经营类型：@item.企业基本信息.经营类型 / @item.企业基本信息.经营子类型</div>
+                                                <div>员工人数：@item.企业基本信息.员工人数</div>
+                                            </div>*@
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="index_bottom_spdt_content_img" style="position:relative">
+                                        <a exist="false" index="@index" class="showBrief" id="@item0.Id" target="_blank" href="~/供应商陈列/Supplier_Destination?id=@item0.Id" onclick='clickStatistics("A3","2", "-1","@item0.Id")'>
+                                            <img src="~/images/noimage.jpg" width="220" height="132" />
+                                        </a>
+                                    </div>
+                                }
+                                <div class="index_bottom_spdt_content_text" style="line-height:23px; font-size:14px;">
+                                    <a class="gysname" target="_blank" href="~/供应商陈列/Supplier_Destination?id=@item0.Id" title="@item0.企业基本信息.企业名称" onclick='clickStatistics("A3","2", "-1","@item0.Id")'>@item0.企业基本信息.企业名称</a><br />
+                                    <span class="index_overflowspan" title="@item0.企业基本信息.所属行业">所属行业： @item0.企业基本信息.所属行业</span>
+                                    @if (item0.所属地域.地域.Contains("请选择") || string.IsNullOrEmpty(item0.所属地域.地域))
+                                    {
+                                        <span class="index_overflowspan" title="未选择">所属地区： 未选择</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="index_overflowspan" title="@item0.所属地域.地域">所属地区： @item0.所属地域.地域</span>
+                                    }
+                                    <span style="color:gray;">外网浏览:@item0.供应商用户信息.点击量</span>
+                                    <span style="color:gray; float:right; padding-right:2px;">
+                                        内网浏览:
+                                        @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                                        {
+                                            <a>@item0.供应商用户信息.内网点击量</a>
+                                        }
+                                        else
+                                        {
+                                            <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/供应商陈列/GysList">登陆查看</a>
+                                        }
+
+                                    </span>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+        @if (ViewData["A3类别"] != null && ViewData["A3类别"].ToString() == "3")
+        {
+            <div class="divhide" style="display:none;">
+                <ul>
+                    @{
+            var gys2 = gyslist.Skip(20).Take(10);
+                    }
+                    @if (gys2.Count() == 0)
+                    {
+                        <li class="no_data"><div>暂无此类信息</div></li>
+                    }
+                    else
+                    {
+                        var index = 0;
+                        foreach (var item0 in gys2)
+                        {
+                            ++index;
+                            var item = item0 as 供应商;
+                            <li>
+                                @if (item0.供应商用户信息.供应商图片.Any() || item0.供应商用户信息.展示商品.Any())
+                                {
+                                    <div class="index_bottom_spdt_content_img" style="position:relative">
+                                        <a exist="false" index="@index" class="showBrief" id="@item0.Id" target="_blank" href="~/供应商陈列/Supplier_Destination?id=@item.Id" onclick='clickStatistics("A3","2", "-1","@item0.Id")'>
+                                            @if (item0.供应商用户信息.展示商品.Any())
+                                            {
+                                                <img src="@item0.供应商用户信息.展示商品.First()" width="220" height="132" />
+                                            }
+                                            else
+                                            {
+                                                <img src="@item0.供应商用户信息.供应商图片.Last()" width="220" height="132" />
+                                            }
+                                        </a>
+                                        @*<span class="arrow_left"></span>
+                                            <div class="gys_brief_info">
+                                                <img src="~/Images/ajax-loader.gif" />
+                                                <div>主营产品：计算机通信</div>
+                                                <div>认证级别：@item.供应商用户信息.认证级别</div>
+                                                <div>经营类型：@item.企业基本信息.经营类型 / @item.企业基本信息.经营子类型</div>
+                                                <div>员工人数：@item.企业基本信息.员工人数</div>
+                                            </div>*@
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="index_bottom_spdt_content_img" style="position:relative">
+                                        <a exist="false" index="@index" class="showBrief" id="@item0.Id" target="_blank" href="~/供应商陈列/Supplier_Destination?id=@item0.Id" onclick='clickStatistics("A3","2", "-1","@item0.Id")'>
+                                            <img src="~/images/noimage.jpg" width="220" height="132" />
+                                        </a>
+                                    </div>
+                                }
+                                <div class="index_bottom_spdt_content_text" style="line-height:23px; font-size:14px;">
+                                    <a class="gysname" target="_blank" href="~/供应商陈列/Supplier_Destination?id=@item0.Id" title="@item0.企业基本信息.企业名称" onclick='clickStatistics("A3","2", "-1","@item0.Id")'>@item0.企业基本信息.企业名称</a><br />
+                                    <span class="index_overflowspan" title="@item0.企业基本信息.所属行业">所属行业： @item0.企业基本信息.所属行业</span>
+                                    @if (item0.所属地域.地域.Contains("请选择") || string.IsNullOrEmpty(item0.所属地域.地域))
+                                    {
+                                        <span class="index_overflowspan" title="未选择">所属地区： 未选择</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="index_overflowspan" title="@item0.所属地域.地域">所属地区： @item0.所属地域.地域</span>
+                                    }
+                                    <span style="color:gray;">外网浏览:@item0.供应商用户信息.点击量</span>
+                                    <span style="color:gray; float:right; padding-right:2px;">
+                                        内网浏览:
+                                        @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                                        {
+                                            <a>@item0.供应商用户信息.内网点击量</a>
+                                        }
+                                        else
+                                        {
+                                            <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/供应商陈列/GysList">登陆查看</a>
+                                        }
+
+                                    </span>
+                                </div>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="~/JS/common.js" type="text/javascript"></script>
+<script type="text/javascript">
+    
+    function countDown(year, month, day, hour, minute, second, isnum) {
+        var now = new Date();
+        var endDate = new Date(year, month - 1, day, hour, minute, second);
+        var leftTime = endDate.getTime() - now.getTime();//时间差的毫秒数
+        var leftsecond = parseInt(leftTime / 1000);
+        //var day1=parseInt(leftsecond/(24*60*60*6));
+        var day1 = Math.floor(leftsecond / (60 * 60 * 24));//计算出相差天数
+        var hour = Math.floor((leftsecond - day1 * 24 * 60 * 60) / 3600);//计算相差小时数
+        hour = zeroOccupy(hour);
+        var minute = Math.floor((leftsecond - day1 * 24 * 60 * 60 - hour * 3600) / 60);//计算相差分钟数
+        minute = zeroOccupy(minute);
+        var second = Math.floor(leftsecond - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);//计算相差秒数
+        second = zeroOccupy(second);
+        var time = "";
+        if (day1 > 0) {
+            time = isnum ? hour + ":" + minute + ":" + second : day1 + "天" + hour + "时" + minute + "分" + second + "秒";
+        }
+        else {
+            time = isnum ? hour + ":" + minute + ":" + second : hour + "时" + minute + "分" + second + "秒";
+        }
+        return time;
+    }
+    function zeroOccupy(num) {
+        var number;
+        if (num < 10) {
+            number = "0" + num;
+        }
+        else {
+            number = num;
+        }
+        return number;
+    }
+    function cSplit(splittime) {
+        var date = splittime.split(" ")[0];
+        var year = date.split("-")[0];
+        var month = date.split("-")[1];
+        var day = date.split("-")[2];
+        var time = splittime.split(" ")[1];
+        var hours = time.split(":")[0];
+        var minute = time.split(":")[1];
+        var second = time.split(":")[2];
+        var arr = new Array(year, month, day, hours, minute, second);
+        return arr;
+    }
+
+
+    $(function () {
+
+        var timer1;
+        $("li.changechildtab").hover(function () {
+            var tab = $(this);
+            timer1 = setTimeout(function () {
+                var index = tab.attr("index");
+                var divs = tab.parents(".outtab").next(".tabcontent");
+                tab.addClass("cli").siblings().removeClass("cli");
+                divs.children().hide().eq(index).show("fast");
+            }, 500);
+        }, function () {
+            clearTimeout(timer1);
+        });
+
+        var listwb = $(".wsjblist");
+        $.each(listwb, function (i) {
+            var timer = "timer" + i,
+                label = $(this).find("label.countdown"),
+                endTime = cSplit(label.attr("endtime"));
+            timer = setInterval(function () {
+                dateTime = countDown(endTime[0], endTime[1], endTime[2], endTime[3], endTime[4], endTime[5], true); //报价结束时间倒计时
+                label.html(dateTime);
+            }, 1000);
+        });
+
+
+    });
+    $(document).ready(function () {
+        if ($("ul.showout li").length >=12) {
+            setInterval("PicScroll()", 1500);
+        }
+    });
+    function PicScroll() {
+        $("ul.showout").animate({ "margin-top": "-20px" },
+            function () {
+                var s = $("ul.showout li:first").html();
+                $("ul.showout li:first").remove();
+                $("ul.showout").append("<li  style='background-image:none; padding:0px; border-bottom:none; height:20px; line-height:20px; display:inline-block; text-align:left;'>" + s + "</li>");
+                $("ul.showout").css("margin-top", "0px");
+            });
+    };
+
+    var scrollPic_01 = new ScrollPic();
+    scrollPic_01.scrollContId = "gdjyhj"; //内容容器ID
+    scrollPic_01.arrLeftId = "gdjyhjl";//左箭头ID
+    scrollPic_01.arrRightId = "gdjyhjr"; //右箭头ID
+    scrollPic_01.frameWidth = 670;//显示框宽度
+    scrollPic_01.pageWidth = 675; //翻页宽度
+    scrollPic_01.speed = 40; //移动速度(单位毫秒，越小越快)
+    scrollPic_01.space = 40; //每次移动像素(单位px，越大越快)
+    scrollPic_01.autoPlay = true; //自动播放
+    scrollPic_01.autoPlayTime = 4; //自动播放间隔时间(秒)
+    scrollPic_01.initialize(); //初始化
+
+
+    $(".showBrief").hover(function () {
+        var $this = $(this);
+        var exist = $(this).attr("exist");
+        if (exist != "false") {
+            timer = setTimeout(function () {
+                $this.next().show().next().show();
+            }, 100);
+        }
+        else {
+            timer = setTimeout(function () {
+                var id = $this.attr("id");
+                var index = $this.attr("index");
+                $.ajax({
+                    url: '/首页/ShowBrief',
+                    data: { id: id },
+                    dataType: 'json',
+                    beforeSend: function () {
+                        var str = "";
+                        (index != 5 && index != 10) ? str = "<span class='arrow_left'></span>" : str = "<span class='arrow_right'></span>";
+                        (index != 5 && index != 10)
+                            ? str += "<div class='gys_brief_info'><img style='width:30px;height:30px;border:none; vertical-align: middle;margin-top:86px;' src='../Images/ajax-loader.gif'/></div>"
+                            : str += "<div class='gys_brief_info' style='left:-220px;'><img style='width:30px;height:30px;border:none; vertical-align: middle;margin-top:86px;' src='../Images/ajax-loader.gif'/></div>";
+                        $this.after(str);
+                    },
+                    success: function (data) {
+                        var str = "";
+                        $this.next().remove();
+                        $this.next().remove();
+                        (index != 5 && index != 10) ? str = "<span class='arrow_left'></span>" : str = "<span class='arrow_right'></span>";
+                        (index != 5 && index != 10) ? str += "<div class='gys_brief_info'>" : str += "<div class='gys_brief_info' style='left:-220px;'>";
+                        str += "<img src='" + data.Data.图片 + "' />";
+                        str += "<div>主营产品：" + data.Data.主营产品 + "</div>";
+                        //str += "<div>信用评级：" + data.Data.认证级别 + "</div>";
+                        str += "<div>经营类型：" + data.Data.经营类型 + "</div>";
+                        str += "<div>员工人数：" + data.Data.员工人数 + "</div></div>";
+                        $this.after(str);
+                    },
+                    error: function () {
+                        var str = "<span class='arrow_left'></span>";
+                        str += "<div class='gys_brief_info'>请求出错</div>";
+                        $this.after(str);
+                    },
+                });
+                $this.attr({ "exist": "true" });
+            }, 100);
+        }
+    }, function () {
+        $(this).next().hide().next().hide();
+        clearTimeout(timer);
+    });
+</script>

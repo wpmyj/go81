@@ -1,0 +1,111 @@
+﻿@charset "utf-8";
+.st_tree {
+    margin-top: 10px;
+}
+.st_tree_first_tittle {
+	font-weight: bold;
+	/*background:#ccd2b0;*/
+	background-repeat: repeat-x;
+}
+.st_tree_first_tittle span{ margin-left:30px; width:10px; height:10px;background:url('../Images/tree_icons.png') -99px -4px; text-align:center; display:inline-block;padding-right:0;}
+/* 超链接 */
+.st_tree_first_tittle a {
+	color: #222;
+    margin-left:3px;
+	text-decoration: none;
+	line-height: 25px;
+	height: 25px;
+	background-repeat: no-repeat;
+}
+/* 鼠标经过的超链接 */
+.st_tree a:hover {
+	color: #f33;
+	text-decoration: underline;
+}
+/* 菜单 */
+.st_tree ul {
+    margin-top:0;
+	padding-left: 0;
+    margin:0;
+}
+/* 菜单项 */
+.st_tree ul li {
+	font-size: 14px;
+	color: #222;
+	line-height: 25px;
+	cursor: pointer;
+	list-style: none;
+}
+/*.st_tree ul li:hover {
+	background-color: #dcffe9;
+}*/
+.st_tree_second_title {
+    /*margin-top:1px;*/
+	/*background:#eef2d9;*/
+	background-repeat: repeat-x;
+	font-weight: normal;
+}
+.st_tree_second_title span{
+    margin-left:40px; 
+    width:10px;
+    height:10px;
+    text-align:center; 
+    display:inline-block;
+    vertical-align:middle;
+    padding-right:0;
+}
+.st_tree_second_title a {
+    margin-left:3px;
+	color: #222;
+	text-decoration: none;
+	background-repeat: no-repeat;
+}
+/*.st_tree_second_title:hover {
+	background-color: #dcffe9;
+}*/
+.st_tree_third_title {
+    margin-top:1px;
+	/*background:#EFF5DB;*/
+	background-repeat: repeat-x;
+	font-weight: normal;
+}
+.st_tree_third_title span{
+    width:10px;
+    height:10px;
+    text-align:center; 
+    display:inline-block;
+    vertical-align:middle;
+    margin-left:50px;
+    padding-right:0;
+}
+.st_tree_third_title a {
+    margin-left:3px;
+	color: #222;
+	text-decoration: none;
+	background-repeat: no-repeat;
+}
+/*.st_tree_third_title:hover {
+	background-color: #dcffe9;
+}*/
+/* 子菜单 */
+.st_tree ul li ul {
+}
+/* 子菜单项 */
+.st_tree ul li ul li {
+}
+/* 子菜单的父节点 */
+.st_tree .folder {
+	/*list-style-image:url(imgs/st_icon.png);*/ 
+	list-style-type: none;/*background-image: url(../images/gys_menu_class_first.jpg);
+	background-repeat: no-repeat;*/ 
+}
+/* 展开的父节点 */
+.st_tree .open {
+	list-style-type: none;
+}
+.gys_left_treemenu_emptydiv {
+	width: 238px;
+	height: 20px;
+	border-left: 1px solid #CCD2B0;
+	border-right: 1px solid #CCD2B0;
+}

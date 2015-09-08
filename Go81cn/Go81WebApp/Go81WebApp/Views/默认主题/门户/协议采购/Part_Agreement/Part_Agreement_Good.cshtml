@@ -1,0 +1,205 @@
+﻿
+@using Go81WebApp.Models.数据模型.商品数据模型
+<link href="~/css/css.css" rel="stylesheet" />
+<script src="~/JS/provinceandcity_all.js"></script>
+<div class="gyspage_index_menu_top" style="margin-top:0;width:100%">
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">协议采购-商品品牌列表</div>
+        </div>
+    </div>
+</div>
+<div class="agreement_good">
+    <input type="hidden" class="hid" value="@ViewData["id"]" />
+    <input type="hidden" id="brand_t" />
+    <p><span style="color:red;">@ViewData["商品名称"]</span>所有品牌</p>
+    <div>
+        @{
+            List<string> goodclass= ViewData["品牌"] as List<string>;
+            if (goodclass.Count>0)
+            {
+                for (int i = 0; i < goodclass.Count; i++)
+                { 
+                    <a style="display:inline-block;margin-bottom: 5px; width:auto; height:20px; border:1px solid #FAC1C1; padding:3px 15px;" class="brand" href="##" name="@goodclass[i]">@goodclass[i]<span>@*(@Model.商品属性模板[i][s].值.Count)*@</span></a>
+                }
+            }
+            else
+            {
+                <p>该商品分类下没有任何品牌！</p> 
+            }
+        }
+    </div>
+</div>
+<div id="agreement_good_out" class="agreement_good_out">
+    <div>
+        <table width="100%" style="margin-top:20px;">
+            <tr>
+                <td style="text-align: right">所属地区：</td>
+                <td colspan="3">
+                    <select id="deliverprovince" name="deliverprovince"></select>
+                    <select id="delivercity" name="delivercity"></select>
+                    <select id="deliverarea" name="deliverarea"></select>
+                    <script>
+                        window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: right">价格：</td>
+                <td style="width: 175px;">
+                    <input type="text" id="search_price" />
+                </td>
+                <td style="text-align: right">所属公司：</td>
+                <td>
+                    <input id="search_gys" type="text" @*class="gys_ztbsearch_search_text"*@ />
+                    <input id="ss_btn" type="button" class="gys_ztbsearch_search_botton" value="查询" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="compare_fix" class="compare_fix">
+        <span style="float:left;margin-left:10px;">产品比较</span><br /><br />
+        <input id="compare_btn" style="margin-left:50px;" type="button" value="进行比较" /><br />
+    </div>
+    <div id="waitfor" style="position:absolute; z-index:100; width:800px; height:200px; text-align:center; line-height:300px; display:none;">
+        <img src="~/Images/ajax-loader.gif" width="50px" height="50px" />
+    </div>
+    <div class="agreement_good_class">
+        @*@Html.Action("Part_Agreement_Good_Page","协议采购")*@
+    </div>
+</div>
+<script type="text/javascript"> 
+    $(document).scroll(function () {
+        var scrollTop = $(this).scrollTop();
+        var outHeight = $("#agreement_good_out").css("height");
+        var docHeight = $(document).height();
+        var scrol = parseInt(outHeight) * parseInt(scrollTop) / docHeight;
+        $("#compare_fix").css({ "top": scrol + "px" });
+    });
+    $("#compare_btn").click(function () {
+        var i = 0;
+        var checklist = $("#compare_fix").find("p");
+        var str = "";
+        checklist.each(function (index, domEle) {
+            i++;
+            if (i < 4) {
+                str += $(domEle).attr("id") + "|";
+            }
+            else {
+                $("#compare_fix div").remove();
+                $("#compare_fix").append("<div style='color:red;'>最多只能选择3个！</div>");
+            }
+        });
+        if (i < 4) {
+            if (i <= 1)
+            {
+                $("#compare_fix").append("<div style='color:red;'>至少需要选择2项！</div>");
+            }
+            else 
+            {
+                $("#compare_fix div").remove();
+                $.ajax({
+                    url: '/商品陈列/ProductContrast?Contrastparmer=' + str,
+                    success: function () {
+                        window.location.href = "/商品陈列/ProductContrast?Contrastparmer=" + str;
+                    },
+                });
+            }
+        }
+    });
+
+    $("#ss_btn").click(function () {
+        var city = $("#delivercity").find("option:selected").text();
+        var provence = $("#deliverprovince").find("option:selected").text();
+        var area = $("#deliverarea").find("option:selected").text();
+        var price = $("#search_price").val();
+        var gys = $("#search_gys").val();
+        var id = $(".hid").val();
+        var type = unescape($("#brand_t").val());
+
+        $.ajax({
+            url: '/协议采购/Part_Agreement_Good_Page',
+            data: { city: city, provence: provence, area: area, price: price, gys: gys, id: id, type: type },
+            success: function (data) {
+                $(".agreement_good_class").empty().append(data);
+            },
+            error: function () {
+                alert("查找失败！");
+            },
+        });
+    });
+    $(".brand").click(function () {
+        $(".brand").each(function () { $(this).css("border", "1px solid #FAC1C1"); });
+        $(this).css("border", "1px solid red");
+        $("#deliverprovince option:first").prop({ "selected": "selected" });
+        $("#delivercity option:first").prop({ "selected": "selected" });
+        $("#deliverarea option:first").prop({ "selected": "selected" });
+        $("#search_price").val("");
+        $("#search_gys").val("");
+        $("#compare_fix div").remove();
+        $("#compare_fix p").remove();
+        $("#compare_fix").hide();
+        var type = escape($(this).attr("name"));
+        $("#brand_t").val(type);
+        var id = $(".hid").val();
+        $.ajax({
+            url: '/协议采购/Part_Agreement_Good_Page?id=' + id + "&type=" + type,
+            dataType: 'html',
+            beforeSend: function () {
+                $(".agreement_good_class").empty();
+                $("#waitfor").show();
+            },
+            success: function (data) {
+                $("#waitfor").hide();
+                    $(".agreement_good_class").empty().append(data);
+                    $(".compare_other").click(function () {
+                        var a = $(this).is(":checked");
+                        if (a == 1) {
+                            $("#compare_fix").show().append("<p id='" + $(this).attr("id") + "'>" + $(this).attr("name").substring(0,9) + "</p>");
+                            var i = 0;
+                            var p = $("#compare_fix").find("p");
+                            p.each(function (index) {
+                                i++;
+                            });
+                            if (i > 1) {
+                                $("#compare_fix div").remove();
+                            }
+                            if (i > 3)
+                            {
+                                $("#compare_fix").append("<div style='color:red;'>最多只能选择3个！</div>");
+                            }
+                        }
+                        else
+                        {
+                            var i = 0;
+                            var p = $("#compare_fix").find("p");
+                            $("#compare_fix p").remove("#" + $(this).attr("id"));
+                            p.each(function(index){
+                                i++;
+                            });
+                            if (i <= 1)
+                            {
+                                $("#compare_fix").hide();
+                            }
+                            if (i <= 4)
+                            {
+                                $("#compare_fix div").remove();
+                            }
+                        }
+                    });
+               // }
+            },
+            error: function () {
+                $(".agreement_good_class").empty().append('根据条件未找到相关信息');
+            },
+        });
+    });
+
+    $(document).ready(function () {
+        $(".action_link").each(function () {
+            if ($(this).text() == "办公物资") {
+                $(this).parent("div").addClass("on");
+            }
+        });
+    });
+</script>

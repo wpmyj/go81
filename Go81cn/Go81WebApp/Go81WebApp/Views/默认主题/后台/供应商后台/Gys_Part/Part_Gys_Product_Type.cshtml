@@ -1,0 +1,413 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.推广业务数据模型
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/index.css" rel="stylesheet" />
+<style>
+    .submenulist li h3 a.on {
+        width: 231px;
+        color: #006400;
+        border: 1px solid #aaa;
+        border-right: none;
+        border-left: none;
+        overflow: hidden;
+        margin: 0;
+        height: 30px;
+        font-size: 14px;
+        line-height: 30px;
+        background: #fff;
+        box-shadow: -10px 0 14px #ccc;
+        z-index: 9999;
+        text-decoration: none;
+    }
+</style>
+@{
+    供应商服务记录 modal = ViewData["service"] as 供应商服务记录;
+    int sum = 0;
+    if (modal.已开通的服务.Count != 0)
+    {
+        foreach (var item in modal.已开通的服务)
+        {
+            if (item.所申请项目名 == "添加商品一级分类")
+            {
+                if (item.结束时间 >= DateTime.Now)
+                {
+                    sum += item.开通个数;
+                }
+            }
+            if (item.所申请项目名 == "商务会员")
+            {
+                if (item.结束时间 >= DateTime.Now)
+                {
+                    sum += 2;
+                }
+            }
+        }
+    }
+    sum += 1;
+}
+<div id="indexpagemodalt" class="modal" style="display:block;">
+    <div class="modal-dialog" style="margin: 7% auto;">
+        <div class="modal-content" style="height:400px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodalt').hide();">×</button>
+                <b>温馨提示</b>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 280px; overflow-y: scroll; line-height:25px;">
+                    <h4 style="margin:0;">尊敬的用户：</h4>
+                    <p class="wenxintishi">
+                        <span>为了管理的方便和网站空间资源的有效利用，从<b style="color:red;">2015年5月1日</b>起，我们默认1个账户可管理1个一级商品类别。您目前的账户可管理@(sum)个一级商品类别。如需管理更多一级商品类别，请查看“<a href="/jct/ApplyVip" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">商品类别管理</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">网站客服</a>。</span>
+                    </p>
+                </div>
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="继续" onclick="$('#indexpagemodalt').hide();" /></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="f1" style="display:none; font-size:14px;">
+    <div style="position:fixed; z-index:5; top:0px; left:0px; text-align:center; right:0; bottom:0px; background-color:black; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50); height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="position:fixed; left:0px; top:10%; width:100%;z-index:20;">
+        <div style="width:700px; height:auto; margin:0px auto; border:1px solid red; background-color:white;">
+            <div style="padding-left:20px;">
+                <a href="###" style="float:right; display:block; width:30px; height:30px; background-color:red; color:white; text-align:center; line-height:30px; margin-right:10px;" onclick="$('#f1').hide()">×</a>
+                <h4>商品类别</h4>
+            </div>
+            <div class="modal-body">
+                <span>一级分类名：</span><a id="fClass"></a>
+                <div>
+                    <p>二级分类名：</p><table width="100%" id="sType"></table>
+                </div>
+                <div style="text-align: center;">
+                    <input type="button" disabled="disabled" onclick="ModifyGoodType()" id="mbt" style="background-color:gray; width:80px; height:30px; font-size:16px; border:none;color:white;" value="修改">
+                    <br />
+                    <span id="warn1"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="f2" style="display:none; font-size:14px;">
+    <div style="position:fixed; z-index:5; top:0px; left:0px; text-align:center; right:0; bottom:0px; background-color:black; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50); height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="position:fixed; left:0px; top:10%; width:100%;z-index:20;">
+        <div style="width:700px; height:auto; margin:0px auto; border:1px solid red; background-color:white;">
+            <div style="padding-left:20px;">
+                <a href="###" style="float:right; display:block; width:30px; height:30px; background-color:red; color:white; text-align:center; line-height:30px; margin-right:10px;" onclick="$('#f2').hide()">×</a>
+                <h4>商品类别</h4>
+            </div>
+            <div style="padding-left:20px;">
+                <form>
+                    <input type="radio" name="tp" onclick="search_type(this)" checked="checked" value="通用物资" /><span>通用物资</span>
+                    <input type="radio" name="tp" onclick="search_type(this)" value="专用物资" /><span>专用物资</span>
+                    <p />
+                    <span>一级分类名：</span>
+                    <select id="firstClass" onchange="searchtype(this)">
+                        @foreach (var item in ViewData["goodType"] as IEnumerable<商品分类>)
+                        {
+                            if (item.分类性质.ToString() != "专用物资")
+                            {
+                                <option value="@item.分类名">@item.分类名</option>
+                            }
+                        }
+                    </select>
+                </form>
+                <div>
+                    <p>二级分类名：</p><table width="100%" id="thirdType"></table>
+                </div>
+                <div style="text-align: center;">
+                    <input type="button" disabled="disabled" onclick="sendGoodType()" id="bt" style="background-color:gray;width:80px; height:30px; margin-bottom:10px; font-size:16px;border:none;color:white;" value="添加">
+                    <br />
+                    <span id="warn"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Service" style="font-size:14px;">
+    <div id="title_div" class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">
+            可提供商品类别
+            @if (!Model.供应商用户信息.已提交)
+            {
+                if (Model.可提供产品类别列表.Count < sum)
+                {
+                    <span><a id="addtype" style="cursor:pointer; text-decoration:underline;" onclick="$('#f2').show()">【新增】</a></span>
+                }
+            }
+        </div>
+    </div>
+    <div style="border:1px solid green; margin-top:8px;">
+        <table style="margin-left:10px;">
+            <tr>
+                <td>
+                    <div>
+                        <div>
+                            <div class="gys_znxx_content">
+                                @if (Model.供应商用户信息.已提交)
+                                {
+                                    <span style="font-size:15px; color:red;"><em>您已提交过申请，不能修改信息了。如需修改信息，请联系网站客服</em></span>
+                                }
+                                else
+                                {
+                                    if (Model.可提供产品类别列表.Count < sum)
+                                    {
+                                        <span style="font-size:15px; color:red;">注：您最多只能选择@(sum)个一级商品分类，如果您需要申请@(sum)个及以上一级商品分类,请联系网站客服(如果您还没有可供商品分类，请点击【新增】按钮添加商品分类)</span>
+                                    }
+                                }
+                                @{
+                                    string typetwo = "";
+                                }
+                                <table id="addedContainer" width="100%" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <th width="20%">一级分类名</th>
+                                        <th width="60%">二级分类名</th>
+                                        @if (!Model.供应商用户信息.已提交)
+                                        {
+                                            <th width="20%">操作</th>
+                                        }
+                                    </tr>
+                                    @if (Model.可提供产品类别列表 != null && Model.可提供产品类别列表.Count() != 0)
+                                    {
+                                        for (int i = 0; i < Model.可提供产品类别列表.Count; i++)
+                                        {
+                                            <tr>
+                                                <td style="text-align:center;">@Model.可提供产品类别列表[i].一级分类</td>
+                                                <td>
+                                                    @if (Model.可提供产品类别列表[i].二级分类 != null && Model.可提供产品类别列表[i].二级分类.Count() != 0)
+                                                    {
+                                                        string s = "";
+                                                        foreach (var m in Model.可提供产品类别列表[i].二级分类)
+                                                        {
+                                                            typetwo += m + ",";
+                                                            <span>@(m)，</span>
+                                                        }
+                                                    }
+                                                </td>
+                                                @if (!Model.供应商用户信息.已提交)
+                                                {
+                                                    <td style="text-align:center;">
+                                                        <a data-toggle="modal" id="modify" onclick="mdialog(this)" lang="@Model.可提供产品类别列表[i].一级分类" href="###">修改</a>
+                                                        @*<a style="color:red;" href="###" onclick="delGood(@i)">删除</a>*@
+                                                    </td>
+                                                }
+                                            </tr>
+                                        }
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <input type="hidden" value="@typetwo" name="twice" id="twice" />
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    var alltype = "通用物资"
+    function setValue(data, container) {
+        var str = "";
+        var str1 = "<tr>";
+        var num = 0;
+        var rows = parseInt((data.length) / 4);
+        var maintain = parseInt((data.length) % 4);
+        for (var j = 0; j < rows; j++) {
+            var s1 = "";
+            for (var k = 0; k < 4; k++) {
+                s1 += "<td><input type='checkbox' onclick='Set_Val()' value='" + data[num] + "'>" + data[num] + "</td>";
+                num++;
+            }
+            str1 += s1 + "</tr>";
+        }
+        if (maintain > 0 && rows > 0) {
+            var s3 = "<tr>";
+            for (var m = 0; m < maintain; m++) {
+                s3 += "<td><input type='checkbox' onclick='Set_Val()' value='" + data[num] + "'>" + data[num] + "</td>";
+                num++;
+            }
+            s3 += "</tr>";
+            str1 += s3;
+        }
+        else if (maintain > 0 && rows == 0) {
+            var s3 = "<tr>";
+            for (var m = 0; m < maintain; m++) {
+                s3 += "<td><input type='checkbox' onclick='Set_Val()' value='" + data[m] + "'>" + data[m] + "</td>";
+            }
+            s3 += "</tr>";
+            str1 += s3;
+        }
+        $(container).html(str1);
+    }
+    var name = '';
+    var s = '';
+    var which = 0;
+    $("a#addtype").click(function () {
+        which = 0;
+    });
+    function search_type(th) {
+        alltype = $(th).val();
+        var str = "";
+        name = $(th).val();
+        $.get('/供应商后台/Search_Type/',
+            { n: name },
+            function (data) {
+                for (var i = 0; i < data.Data.length; i++) {
+                    str += "<option value='" + data.Data[i] + "'>" + data.Data[i] + "</option>";
+                }
+                $("select#firstClass").html(str);
+                searchtype("select#firstClass");
+            }
+        );
+    }
+    function Set_Val() {
+        s = '';
+        if (which == 0) {
+            $("table#thirdType :checkbox").each(
+                            function () {
+                                if (this.checked) {
+                                    s += $(this).val() + ',';
+                                }
+                            }
+                        );
+            s += "";
+            if (s != '') {
+                $("#bt").removeAttr("disabled");
+                $("#bt").css("background-color", "#506605");
+            }
+            else {
+                $("#bt").attr("disabled", disabled);
+                $("#bt").css("background-color", "gray");
+            }
+        }
+        else if (which == 1) {
+            $("table#sType :checkbox").each(
+                                        function () {
+                                            if (this.checked) {
+                                                s += $(this).val() + ',';
+                                            }
+                                        }
+                                    );
+            s += "";
+            if (s != '') {
+                $("#mbt").removeAttr("disabled");
+                $("#mbt").css("background-color", "#506605");
+            }
+            else {
+                $("#mbt").attr("disabled", disabled);
+                $("#mbt").css("background-color", "gray");
+            }
+        }
+    }
+    function searchtype(th) {
+        which = 0;
+        $.get('/供应商后台/ThirdClass', { n: $(th).val(), tpy: alltype }, function (data) { setValue(data.Data, "#thirdType"); });
+    }
+    function mdialog(th) {
+        which = 1;
+        $("#f1").show();
+        var firstCls = $(th).attr("lang");
+        $("#fClass").text(firstCls);
+        $.get('/供应商后台/ThirdClass', { n: firstCls, tpy: alltype }, function (data) {
+            setValue(data.Data, "#sType");
+            s = $("#twice").val();
+            var t = s.split(',');
+            for (var m = 0; m < t.length - 1; m++) {
+                $("table#sType :checkbox").each(function () {
+                    if (this.value == t[m]) {
+                        this.checked = true;
+                    }
+                });
+            }
+        });
+    }
+    $(document).ready(function () {
+        if ($("select#firstClass").val() == undefined) {
+            $.get('/供应商后台/TwoClass', { fclass: $("a#firstClass").text() }, function (data) { setValue(data.Data, "#thirdType"); });
+        }
+        else {
+            setTimeout(function () { searchtype("select#firstClass"); }, 500)
+        }
+        //$(":input#search_bt").css({ "height": "42px", "line-height": "42px" });
+        $("#可提供商品类别").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#可提供商品类别").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function sendGoodType() {
+        if (s != "") {
+            var oldFirst = "";
+            oldFirst = $("#addedContainer tr:eq(1) td:first").text();
+            var firstname = "";
+            if ($("select#firstClass").val() == undefined) {
+                firstname = $("a#firstClass").text();
+            }
+            else {
+                firstname = $("select#firstClass").val();
+            }
+            if ((s.split(',').length - 1) > 5) {
+                alert("二级分类只能选择5个！");
+            }
+            else {
+                $.get('/供应商后台/Add_Good_Type', { second_type: s, first_type: firstname, tpy: alltype, old: oldFirst }, function (data) {
+                    if (data != '-1') {
+                        $("span#warn").text("添加成功").show();
+                        if (alltype == "专用物资") {
+                            $("a#addtype").hide();
+                            setTimeout("shade()", 500);
+                        }
+                        else {
+                            $("a#addtype").hide();
+                        }
+                        setTimeout("shade()", 500);
+                    }
+                    else {
+                        $("span#warn").text("添加失败！");
+                        setTimeout("shade()", 500);
+                    }
+                });
+            }
+        }
+        else {
+            alert("您还没有选择二级分类");
+        }
+    }
+    function shade() {
+        $("span#warn").hide();
+        window.location = "/供应商后台/Gys_Product_Type";
+    }
+    function ModifyGoodType() {
+        if (s != "") {
+            var firstname = $("#fClass").text();
+            if ((s.split(',').length - 1) > 5) {
+                alert("二级分类只能选择5个！");
+            }
+            else {
+                $.get('/供应商后台/Modify_Good_Type', { second_type: s, first_type: firstname }, function (data) {
+                    if (data != '-1') {
+                        $("span#warn1").text(data).show();
+                        setTimeout("shade()", 1000);
+                    }
+                    else {
+                        $("span#warn1").text(data).show();
+                        setTimeout("shade()", 1000);
+                    }
+                });
+            }
+        }
+        else {
+            alert("您还没有选择二级分类");
+        }
+    }
+    //function delGood(num)
+    //{
+    //    if(confirm("确定要删除吗？"))
+    //    {
+    //        window.location = '/供应商后台/delGtype?index='+num;
+    //    }
+    //}
+    $(function () {
+        $("#商品类别").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#商品类别").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

@@ -1,0 +1,263 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.政策法规
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<script>
+    var editor
+    KindEditor.ready(function (K) {
+        editor = K.create('#content', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true,
+            width:880,
+            height:450,
+            items: [
+        'undo', 'redo', '|', 'preview', 'print', 'template', 'code', 'cut', 'copy', 'paste',
+       'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+       'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+       'superscript', 'clearhtml', 'quickformat', 'selectall', '|', '/',
+       'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',
+       'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'image', 'multiimage',
+       'flash', 'media', 'insertfile', 'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
+       'anchor', 'link', 'unlink', '|', 'about'
+            ],
+            resizeType: 0
+        });
+        $("#modiibutton").click(function () {
+            if (editor.html() == null || editor.html() == "") {
+                $("#tips").css("display", "block");
+                $("#tips img").remove();
+                $("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+                $("#tips div#tips1").text('请填写政策法规内容！');
+                return false;
+            }
+            if ($("#attachtext").val() == null || $("#attachtext").val() == "") {
+                $("#tips").css("display", "block");
+                $("#tips img").remove();
+                $("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+                $("#tips div#tips1").text('请上传法规的下载文件！');
+                return false;
+            }
+        });
+    });
+    function shutdown() {
+        $("#tips").fadeOut(500);
+    }
+</script>
+
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+@*<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery-1.4.2.min.js" charset="gb2312"></script>*@
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript">
+    var attchtextstring = "";
+    $(document).ready(function () {
+        $("#uploadify").uploadify({
+            'uploader': '../../JS/jquery.uploadify-v2.1.4/uploadify.swf',
+            'script': '/运营团队后台/UploadAttachment_Zcfg',
+            'cancelImg': '../../JS/jquery.uploadify-v2.1.4/cancel.png',
+            'folder': 'UploadFile',
+            'sizeLimit': 1024 * 1024 * 100,
+            'queueSizeLimit': 50,
+            //'fileDesc': '只允许上传bmp,gif,jpg,jpeg图片',
+            //'fileExt': '*.bmp;*.gif;*.jpg;*.jpeg',
+            'method': 'Post',
+            'queueID': 'ShowImage',
+            'buttonImg': '../../JS/jquery.uploadify-v2.1.4/btn.jpg',
+            'wmode': 'transparent',
+            'auto': false,
+            'multi': true,
+            'onComplete': function (e, q, f, data, d) {
+                attchtextstring = document.getElementById("attachtext").value + data + "|";
+                document.getElementById("attachtext").value = attchtextstring;
+                var filename = data;
+                var Delete = "<a href=\"javascript:DeleteAttachment('" + q + "','" + data + "')\" style='color:red; padding-left:20px;'>删除</a>";
+                var Div = "<div style='margin-top:5px;text-align:center'>" + filename + Delete + "</div>";
+                $("#uploadify" + q).html(name + Div);
+            }
+        });
+        $("#btnBegin").click(function () { $("#uploadify").uploadifyUpload(); return false; });
+    });
+    function DeleteAttachment(q, n) {
+        $.ajax({
+            type: "POST",
+            url: "/运营团队后台/DeleteAttachment?q=" + q + "&n=" + n,
+            success: function (msg) {
+                if (msg != "0") {
+                    document.getElementById("attachtext").value = document.getElementById("attachtext").value.replace(n + "|", "");
+                    jQuery("#uploadify").uploadifyCancel(msg);
+                }
+            }
+        });
+    }
+</script>
+<style type="text/css">
+    .uploadifyQueueItem {
+        font: 11px Verdana, Geneva, sans-serif;
+        margin-top: 5px;
+        padding: 5px;
+        width: 650px;
+        height: 30px;
+        margin-right: 5px;
+        float: left;
+        text-align: left;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">发布政策法规</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+                @*<div class="procuretipmessage"> @TempData["AddTipMessage"]</div>*@
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">法规标题：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.TextBoxFor(model => model.内容主体.标题, new { placeholder = "政策法规标题" })
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请填写政策法规标题</div>
+                        </div>
+                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.内容主体.标题)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">发布机关：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.TextBoxFor(model => model.政策法规信息.发布机关, new { placeholder = "政策法规发布机关" })
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请填写政策法规发布机关名称</div>
+                        </div>
+                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.政策法规信息.发布机关)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">来源名称：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.TextBoxFor(model => model.法规来源.来源名称, new { placeholder = "政策法规来源名称" })
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请填写政策法规来源名称</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">来源链接：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.TextBoxFor(model => model.法规来源.来源链接, new { placeholder = "政策法规来源链接" })
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请填写政策法规来源链接路径</div>
+                        </div>
+                        <span style="color:red;">@Html.ValidationMessageFor(model => model.法规来源.来源链接)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">发布时间：</div>
+                    <div class="procure_formlistdiv">
+                        <input id="publishtime" placeholder="政策法规发布时间" style="width: 300px;" name="publishtime" type="text" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd HH:mm:ss' })" />
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请填写通知发布时间<em style="color:red;">注：如果是转载的内容，请选择原时间，该时间将显示在页面上(可不填)</em></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">
+                        内容：
+                        <span class="tipmessage" id="contenerror"></span>
+                    </div>
+                </div>
+                @*<textarea id="content" style="width: 880px; height: 550px; visibility: hidden;"></textarea>*@
+                <div style="position:relative">
+                    @Html.TextAreaFor(model => model.内容主体.内容, new { style = "width: 880px; height: 550px; visibility: hidden;", id = "content" })
+                    <div style="text-align:center;color:red; position:absolute; background-color:#EFF0E7; margin-top:-355px; margin-left:310px; display:none; width:250px; height:100px; border-radius:3px; font-size:12px;" id="tips">
+                        <div style="width:auto"><a href="###" onclick="shutdown()" style="float:right;margin-top:10px; margin-right:10px">关闭</a></div>
+                        <div style="clear:both; width:200px;height:30px;margin-left:35px;margin-top:40px;">
+                            <div id="tips1" style="color:red; font-size:14px; float:left;margin-left:10px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div id="attachdiv" class="attachdiv" style="display:block;">
+                    <div class="attachtitle">添加政策法规下载文件</div>
+                    <br />上传说明：
+                    <font color="red">附件大小不超过100M</font><br />
+                    <div style="text-align:center">
+                        <div></div>
+                        <div id="ShowImage" class="product_add_upimagesbox"></div>
+                        <div class="product_add_upimagesbox_image"></div>
+                        <div style="padding-top:5px;">
+                            <input type="file" name="uploadify" id="uploadify" />&nbsp;&nbsp;
+                            <a id="btnBegin" href="javascript:return false"><img alt="开始上传" src="~/js/jquery.uploadify-v2.1.4/btn1.jpg" width="120" height="30" style="border:0px" /></a>
+                        </div>
+                    </div>
+                </div>
+                @Html.TextAreaFor(model => model.内容主体.附件, new { style = "width:500px; height:100px; display:none", id = "attachtext" })
+
+
+
+
+
+
+
+
+
+                @*<textarea id="content" style="width: 880px; height: 550px; visibility: hidden;"></textarea>*@
+
+                <div style="text-align:center;"><input id="modiibutton" name="submitcontent" type="submit" @*onclick="return checkcontent();"*@ style="margin-top:20px;" class="front_login_rightbox_button" value="确定"></div>
+                <script type="text/javascript">
+                    function checkcontent() {
+                        editor.sync("content");
+                        if (document.getElementById("content").value.replace(/(^\s*)|(\s*$)/g, "") == "") {
+                            $("#contenerror").html("内容必须填写");
+                            return false;
+                        }
+                        else {
+                            $("#contenerror").html("");
+                            return true;
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $("input").focus(function () {
+        $(this).parent().children(".tipmessage").hide();
+    }).blur(function () {
+        if ($(this).val() == null || $(this).val() == "") {
+            $(this).parent().children(".tipmessage").show();
+        }
+        else {
+            $(this).parent().children(".tipmessage").hide();
+        }
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("div.procure_formlistdiv :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("div.procure_formlistdiv :input").mouseout(function () { $(this).next("div").hide(); });
+        $("#发布政策法规").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#发布政策法规").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

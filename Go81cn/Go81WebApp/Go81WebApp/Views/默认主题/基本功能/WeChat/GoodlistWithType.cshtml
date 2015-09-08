@@ -1,0 +1,111 @@
+﻿@{
+    Layout = null;
+}
+@using Go81WebApp.Models.数据模型.商品数据模型
+<html>
+<head>
+    <script type="text/javascript" language="javascript" src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/JS/provinceandcity_all.js"></script>
+    <link rel="stylesheet" href="~/css/WeChat.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <title>西南物资采购网采购商城-商品</title>
+    <style>
+        #pager a{
+            width:100%;
+        }
+    </style>
+</head>
+<body style="overflow:no-content;">
+    @{
+        IEnumerable<商品分类> gt = ViewData["gt"] as IEnumerable<商品分类>;
+    }
+    <div class="outbox">
+        <input type="hidden" value="@ViewData["id"].ToString()" id="gt" />
+        <div class="searchBox">
+            <div id="company">
+                <div id="typebox" style="display:inline-block;">
+                    <img src="~/Images/goodtype.png" id="type_icon" />
+                    <div id="second_type">
+                        <ul>
+                            @foreach (var item in gt)
+                            {
+                                <li>
+                                    <div>
+                                        <a href="###" class="secondItem">@item.分类名</a>
+                                        <div class="third_type">
+                                            <ul>
+                                                @foreach (var item1 in item.子分类)
+                                                {
+                                                    <li><a class="thirdItem" href="###" id="@item1.Id">@item1.分类名</a></li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                商品名称：
+                <div style="display:inline-block;width:60%; background-color:#6192F9; height:29px; border-radius:3px;">
+                    <form>
+                        <input type="text" id="name" value="" />
+                        <input type="button" id="search_bt" onclick="search_good(1, 'bt')" value="搜索" />
+                    </form>
+                </div>
+            </div>
+        </div>
+        <ul id="goodcontainer"></ul>
+        <div id="pager">
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        function setPage(pgCount, currentPage) {
+            if (pgCount > currentPage) {
+                currentPage++;
+                $("#pager").html("<a onclick='search_good(" + currentPage + ",\"more\")'>查看更多>></a>");
+            }
+            else {
+                $("#pager").html("<a>数据已经加载完毕</a>");
+            }
+        }
+        function search_good(pg, which) {
+            var str = "";
+            var tid = $("#gt").val();
+            $.get("/WeChat/Search_Goods", { skip: pg, name: $("#name").val(),id:tid}, function (data) {
+                setPage(data.Data.pageSize, pg);
+                for (var i = 0; i < data.Data.Glist.length; i++) {
+                    str += "<li><div class='rightbox'><a href='/WeChat/Gooddetail?id=" + data.Data.Glist[i].Id + "'><img src='" + data.Data.Glist[i].url + "' /></a><div class='gname'>" + data.Data.Glist[i].name + "</div><div class='gprice'>¥" + data.Data.Glist[i].price + "</div> <div class='gprice'><a class='shopCar'>加入购物车</a></div></div></li>";
+                }
+                if (which == "more") {
+                    $("#goodcontainer").append(str);
+                }
+                else {
+                    $("#goodcontainer").html(str);
+                }
+            });
+        }
+        $(document).ready(function () {
+            search_good(1, 'bt');
+            $(".third_type").css("margin-left", $("#second_type").css("width"));
+        });
+        $("#typebox").mouseover(function () {
+            $("#second_type").show();
+        });
+        $("#typebox").mouseout(function () {
+            $("#second_type").hide();
+        });
+        $(".secondItem").mouseover(function () {
+            $(".third_type").hide();
+            $(this).next("div").show();
+        });
+        $(".thirdItem").click(function () {
+            var typeid = $(this).attr("id");
+            $("#gt").val(typeid);
+            $("#second_type").hide();
+            search_good(1, 'bt');
+        });
+    </script>
+</body>
+</html>

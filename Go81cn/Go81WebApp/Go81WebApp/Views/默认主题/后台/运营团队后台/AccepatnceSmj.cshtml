@@ -1,0 +1,177 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.验收单
+@using Go81WebApp.Models.数据模型.项目数据模型;
+@using Go81WebApp.Models.数据模型.用户数据模型;
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "验收单扫描件";
+    Layout = "_BackLayout.cshtml";
+}
+
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div id="title_div" class="title-base-middle">
+                <div class="title-base-inner">上传验收单<i style="color:red">请上传格式为jpg或png且大小小于2M的扫描件，可以上传多张。</i></div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div id="f1" class="modal_out">
+                <div class="modal_in"></div>
+                <div class="modal_content_loading">
+                    <img src="~/Images/ajax-loader.gif" />
+                    <span>正在上传，请稍等...</span>
+                </div>
+            </div>
+
+            @using (Html.BeginForm("Add_Service_Evaluate", "运营团队后台", FormMethod.Post, new { enctype = "multipart/form-data", name = "data" }))
+            {
+                @*@Html.HiddenFor(m => m.验收单扫描件, new { id = "pic" })*@
+                <input type="hidden" name="YsdNumber" value="@Model.Id" />
+                <input type="hidden" name="smj" value="" id="picture" lang="@Model.Id" />
+            }
+            <form action="/运营团队后台/SavePicture" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                <input type="hidden" value="ysd" name="pic1" />
+                <table width="80%">
+                    <tr>
+                        <td width="50%" align="right">&nbsp;验收单电子扫描件：</td>
+                        <td width="50%">
+                            <input type="file" accept="image/jpeg" onchange="fileChange()" name="file1" style="width:72px;" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <div id="framebox" style="display:none;margin-left:150px; width:700px; margin-right: auto;">
+                <iframe name="showPic" id="showPic" frameborder="0" height="150" width="100%"></iframe>
+            </div>
+            <table width="100%">
+                <tr><td align="center"><input type="button" onclick="submitData()" id="submit_btn" value="提交" /></td></tr>
+            </table>
+            <div style="width:720px; margin:0px auto 0px auto; overflow:hidden;">
+                <table>
+                    <tbody>
+                        <tr id="showhc_ysd">
+                            @foreach (var item in Model.验收单扫描件)
+                            {
+                                <td>
+                                    <a title="删除" id="@Model.Id" href="###" onclick='delPicExist(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='@item'>×</a>
+                                    <a href="@item" target="_blank"><img style='border:1px solid gray;' src='@item' height='80' width='100'></a>
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="pBox" style="width:720px; margin:0px auto 0px auto; overflow:hidden;">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#验收单列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#验收单列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+    });
+
+    function submitData() {
+       document.forms["data"].submit();
+    }
+
+    //$("#selectSh_unit").change(function () {
+    //    var id = $(this).val();
+    //    if (id != "") {
+    //        $.ajax({
+    //            url: '/供应商后台/GetSmj',
+    //            data: { id: id },
+    //            dataType: 'json',
+    //            success: function (data) {
+    //                var str = "";
+    //                $.each(data, function () {
+    //                    str += "<td><a title='删除' id='" + this.id + "' href='###' onclick='delPicExist(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + this.path + "'>×</a>";
+    //                    str += "<img style='border:1px solid gray;' src='" + this.path + "' height='80' width='100'></td>";
+    //                });
+    //                $("#showhc_ysd").html(str);
+    //            },
+    //            error: function () {
+
+    //            },
+    //        });
+    //    }
+    //});
+
+    function fileChange() {
+        document.forms["upload"].submit();
+        //$("#framebox").show();
+        $("#f1").show();
+    }
+
+    function setPic(th) {
+        var str = "<table>";
+        var id = $(th).attr("lang");
+        var path = $(th).val();
+        var path1 = path.split('|');
+        var row = parseInt((path1.length - 1) / 4);
+        var maintain = parseInt((path1.length - 1) % 4);
+        var count = 0;
+        if (row > 0) {
+            for (var i = 0; i < row; i++) {
+                str += "<tr>";
+                for (var j = 0; j < 4; j++) {
+                    str += "<td><a title='删除' id='" + id + "' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /></a></td>"
+                    count++;
+                }
+                str += "</tr>";
+            }
+        }
+        if (maintain > 0) {
+            str += "<tr>";
+            for (var m = 0; m < maintain; m++) {
+                str += "<td><a title='删除' id='" + id + "' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /></a></td>";
+                count++;
+            }
+            str += "</tr>";
+        }
+        str += "</table>";
+        document.getElementById("pBox").innerHTML = str;
+        $("#f1").hide();
+    }
+    function delPic(th) {
+        var id = $(th).attr("id");
+        var path = $(th).attr("lang");
+        $.get('/运营团队后台/Del_YsdPic', { id: path, index: id },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+        var newpath = document.getElementById("picture").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("picture").value = str;
+        setPic("#picture");
+    }
+
+    function delPicExist(th) {
+        var id = @Model.Id;
+        var path = $(th).attr("lang");
+        $.get('/运营团队后台/DelYsdSmj', { n: path, gid: id },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+    }
+</script>

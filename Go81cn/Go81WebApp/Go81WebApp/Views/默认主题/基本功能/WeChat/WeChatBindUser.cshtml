@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>用户绑定</title>
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <form class="form-signin">
+            <h2 class="form-signin-heading">身份验证</h2>
+            @if (ViewData["已绑定"] != null && ViewData["已绑定"].ToString() == "0")
+            {
+                <div class="input-group" style="padding-bottom:20px;">
+                    <label for="username" class="input-group-addon">用户名</label>
+                    <input type="text" id="username" class="form-control" placeholder="请输入用户名" required autofocus>
+                </div>
+
+
+                <div class="input-group" style="padding-bottom:20px;">
+                    <label for="password" class="input-group-addon">密&emsp;码</label>
+                    <input type="password" id="password" class="form-control" placeholder="请输入密码" required autofocus>
+                </div>
+
+
+
+                <div class="input-group" style="padding-bottom:20px;">
+                    <label for="telephone" class="input-group-addon">手&emsp;机</label>
+                    <input type="text" id="telephone" class="form-control" placeholder="请输入该账号绑定的手机号" required autofocus>
+                    <span class="input-group-btn">
+                        <button class="btn btn-success" type="button" id="getcodebtn" onclick="return sendCode();">免费获取验证码</button>
+                    </span>
+                </div>
+
+                <div class="input-group" style="padding-bottom:20px; display:none;" id="hiddenphone">
+                    <label for="telephone_check" class="input-group-addon">验证码</label>
+                    <input type="text" id="telephone_check" class="form-control" placeholder="请输入手机验证码" required autofocus>
+                </div>
+
+
+                <div style="color:red; text-align:center;padding-bottom:20px;" id="tipmessage"></div>
+                <span id="phoneunmtips" style="display:none;"></span>
+                <span id="loginphone" style="display:none;"></span>
+                <span id="openid" style="display:none;">@ViewData["weChatUserOpenId"]</span>
+                <button class="btn btn-lg btn-primary btn-block" type="button" id="submitCheckBtn" onclick="return submitthisform();">确&emsp;定</button>
+            }
+            else
+            {
+                <h4>@Html.Raw(ViewData["绑定信息"].ToString())</h4>
+            }
+
+            
+        </form>
+    </div> <!-- /container -->
+        <script src="~/JS/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript">
+        var wait = 60;
+
+        function sendCode() {
+            $("#tipmessage").html("");
+            if ($("#username").val() == "" || $("#password").val() == "" || $("#telephone").val() == "") {
+                $("#tipmessage").html("请将内容输入完整！");
+                return false;
+            }
+            $.ajax({
+                cache: false,
+                async: false,   // 太关键了，同步和异步的参数
+                type: 'POST',
+                url: "/WeChat/CheckLoginMessage",
+                data: "username=" + $("#username").val() + "&password=" + $("#password").val(),
+                success: function (data) {
+                    $("#phoneunmtips").html(data);
+                }
+            });
+
+            var phone = $("#phoneunmtips").html();
+            if (phone == "信息未填写完整！" || phone == "用户名或密码错误！" || phone == "该账号还未填写手机号，无法实现绑定，如有疑问，请联系客服！") {
+                $("#tipmessage").html(phone);
+                return false;
+            }
+            if($("#telephone").val()!=$("#phoneunmtips").html()){
+                $("#tipmessage").html("该手机号与该账户绑定的手机号不一致，请核对！");
+                return false;
+            }
+
+
+            $.ajax({
+                cache: false,
+                async: false,   // 太关键了，同步和异步的参数
+                type: 'POST',
+                url: "/WeChat/SendCode",
+                data: "phone="+$("#telephone").val(),
+                success: function (data) {
+                    if(data=="号码为空！"){
+                        $("#tipmessage").html("手机号为空！请重新填写！");
+                        return false;
+                    }
+                    $("#loginphone").html(data);
+                    $("#hiddenphone").show();
+                }
+            });
+            time();
+        }
+        function submitthisform() {
+            if ($("#username").val() == "" || $("#password").val() == "" || $("#telephone").val() == "") {
+                $("#tipmessage").html("请将内容输入完整！");
+                return false;
+            }
+            if ($("#hiddenphone").is(":hidden") || $("#telephone_check").val() == "") {
+                $("#tipmessage").html("请先获取验证码，并填写！");
+                return false;
+            }
+
+            if ($("#loginphone").html() != $("#telephone_check").val()) {
+                $("#tipmessage").html("验证码不正确！");
+                return false;
+            }
+
+            $.ajax({
+                cache: false,
+                async: false,   // 太关键了，同步和异步的参数
+                type: 'POST',
+                url: "/WeChat/CheckSuccess",
+                data: "openid=" + $("#openid").html(),
+                success: function (data) {
+                    if (data == "1") {
+                        $("#tipmessage").html("验证成功！请点击左上角关闭按钮！");
+                        $("#getcodebtn").attr("disabled", true);
+                        $("#submitCheckBtn").hide();
+                    }
+                    else if (data == "该账号已经绑定过，无需重复绑定！如有疑问，请联系客服！") {
+                        $("#tipmessage").html(data);
+                        $("#getcodebtn").attr("disabled", true);
+                        $("#submitCheckBtn").hide();
+                    }
+                    else {
+                        $("#tipmessage").html(data);
+                    }
+                }
+            });
+        }
+        
+
+        function time() {
+            if (wait == 0) {
+                $("#getcodebtn").removeAttr("disabled");
+                $("#getcodebtn").html("免费获取验证码");
+                wait = 60;
+            } else {
+                    $("#getcodebtn").attr("disabled", true);
+                    $("#getcodebtn").html("重新发送(" + wait + ")");
+                    wait--;
+                    setTimeout(function () {
+                        time()
+                    },
+                    1000)
+                }
+        }
+       
+    </script>
+
+</body>
+</html>

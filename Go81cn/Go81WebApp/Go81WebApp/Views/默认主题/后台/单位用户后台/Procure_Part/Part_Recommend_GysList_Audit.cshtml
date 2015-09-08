@@ -1,0 +1,167 @@
+﻿
+@using Go81WebApp.Models.数据模型.推荐数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+<style type="text/css">
+    .gys_xttz_topbg a {
+        margin-top: 0;
+    }
+
+    .adaddtip {
+        font-weight: normal;
+        font-size: 14px;
+        padding-left: 10px;
+        text-decoration: underline;
+        color: red;
+        padding-top: 5px;
+        font-weight: bold;
+    }
+</style>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">审核推荐的供应商</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox" id="tablecontent">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="20%">企业名称</th>
+                    <th width="10%">联系人姓名</th>
+                    <th width="15%">时间</th>
+                    <th width="40%">状态</th>
+                    <th width="15%" class="printspan">操作</th>
+                </tr>
+                @foreach (var item in (IEnumerable<推荐信息>)ViewData["审核推荐的供应商"])
+                {
+                    <tr>
+                        <td>@item.名称</td>
+                        <td>@item.联系方式.联系人</td>
+                        <td>@item.基本数据.添加时间.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            @if (item.推荐审核数据3.审核者.用户ID != -1)
+                            {
+                                <div>
+                                    @if (item.推荐审核数据3.审核者.用户数据 != null && (item.推荐审核数据3.审核者.用户数据 as 单位用户).单位信息 != null)
+                                    {
+                                    <span>@((item.推荐审核数据3.审核者.用户数据 as 单位用户).单位信息.单位名称) : </span>
+                                    }
+                                    else
+                                    {
+                                    <span>该单位已删除: </span>
+                                    }
+                                    @if (item.推荐审核数据3.推荐状态 == 推荐状态.推荐未通过)
+                                    {
+                                    <span style="color: red;">@item.推荐审核数据3.推荐状态</span>
+                                    }
+                                    else if (item.推荐审核数据3.推荐状态 == 推荐状态.待联系)
+                                    {
+                                    <span style="color: green;">@item.推荐审核数据3.推荐状态</span>
+                                    }
+                                    else
+                                    {
+                                    <span>@item.推荐审核数据3.推荐状态</span>
+                                    }
+                                </div>
+                            }
+                            @if (item.推荐审核数据2.审核者.用户ID != -1)
+                            { 
+                            <div>
+                                @if (item.推荐审核数据2.审核者.用户数据 != null && (item.推荐审核数据2.审核者.用户数据 as 单位用户).单位信息 != null)
+                                {
+                                <span>@((item.推荐审核数据2.审核者.用户数据 as 单位用户).单位信息.单位名称) : </span>
+                                }
+                                else
+                                {
+                                <span>该单位已删除: </span>
+                                }
+                                @if (item.推荐审核数据2.推荐状态 == 推荐状态.推荐未通过)
+                                {
+                                <span style="color: red;">@item.推荐审核数据2.推荐状态</span>
+                                }
+                                else if (item.推荐审核数据2.推荐状态 == 推荐状态.待联系)
+                                {
+                                <span style="color: green;">@item.推荐审核数据2.推荐状态</span>
+                                }
+                                else
+                                {
+                                <span>@item.推荐审核数据2.推荐状态</span>
+                                }
+                            </div>
+                            }
+                            @if (item.推荐审核数据.审核者.用户ID != -1)
+                            { 
+                            <div>
+                                @if (item.推荐审核数据.审核者.用户数据 != null && (item.推荐审核数据.审核者.用户数据 as 单位用户).单位信息 != null)
+                                {
+                                <span>@((item.推荐审核数据.审核者.用户数据 as 单位用户).单位信息.单位名称) : </span>
+                                }
+                                else
+                                {
+                                <span>该单位已删除: </span>
+                                }
+                                @if (item.推荐审核数据.推荐状态 == 推荐状态.推荐未通过)
+                                {
+                                <span style="color: red;">@item.推荐审核数据.推荐状态</span>
+                                }
+                                else if (item.推荐审核数据.推荐状态 == 推荐状态.待联系)
+                                {
+                                <span style="color: green;">@item.推荐审核数据.推荐状态</span>
+                                }
+                                else
+                                {
+                                <span>@item.推荐审核数据.推荐状态</span>
+                                }
+                            </div>
+                            }
+                            
+                        </td>
+                        <td class="printspan">
+                            <a onclick="del(@item.Id)">删除</a>
+                            @if (!((ViewData["用户ID"].ToString() == item.推荐审核数据3.审核者.用户ID.ToString() && item.推荐审核数据2.推荐状态 != 推荐状态.待联系) || item.推荐审核数据.推荐状态 != 推荐状态.待联系))
+                            {
+                                <span>|</span><a href="/单位用户后台/Recommend_Detail/@item.Id">审核</a>
+                            }
+                           
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+            <input type="button" style="float: right; width: 100px; height: 30px; margin-top: 10px;" class="printspan" value="打印" onclick="printpage()" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function del(num) {
+        if (confirm("点击确定即将删除此消息！确定删除吗？")) {
+            window.location = "/单位用户后台/Delete_Recommend_Gys?id=" + num;
+        }
+    }
+    function printpage() {
+        $(".printspan").hide();
+        document.body.innerHTML = document.getElementById('tablecontent').innerHTML;
+        window.print();
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@(int.Parse(ViewData["maxpage"].ToString()));
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border","1px solid #ff0000");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+
+        $("#审核推荐的供应商").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#审核推荐的供应商").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>
+

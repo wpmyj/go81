@@ -1,0 +1,65 @@
+﻿@model Go81WebApp.Controllers.基本功能.登录Controller.LoginInfo
+@if (WebApiApplication.IsIntranet)
+{
+    @*<div class="layout_topbox">
+    <div class="layout_topcontent" style="width:1200px;">
+            <div class="layout_topcontent_right" style="padding-left:0;">
+                <span class="layout_topcontent_span">成都军区联勤部军需物资油料部</span>
+            </div>
+            <div class="layout_topcontent_left" style="padding-left:0;">
+                <font>您好，<span id="topbarLoginName">游客(未登录)</span>，欢迎来到成都军区物资采购网！</font>
+                <a style="color:#fff">登录</a>
+                <i></i>
+                <a style="color:#fff;padding-right:16px;">购物车</a>
+                <a href="#" id="bgLink" style="display: none;"></a>*@
+                @*@using (Html.BeginForm("Login", "登录", FormMethod.Post, new { style = "display:inline;", id = "indexloginform" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <span>用户名：</span>@Html.TextBoxFor(m => m.LoginName, new { @style = "display:inline; width:100px;", placeholder = "请输入用户名", id = "name" })
+                    <span>密码：</span>@Html.TextBoxFor(m => m.LoginPwd, new { @style = "display:inline; width:80px;", @type = "password", placeholder = "请输入密码", id = "pwd" })
+                    <span>验证码：</span>
+                    @Html.TextBoxFor(model => model.VerifyCode, new { placeholder = "请输入验证码", @style = "display:inline; width:75px;" })
+                    <span>
+                        <img id="yzcode" src=@Url.Action("NewVCodeImage", "登录") style="cursor:pointer; vertical-align:middle; display:inline;height:23px; margin-bottom:4px; width:50px;" title="看不清，换一张" alt="看不清，换一张" onclick='$(this).attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());' />
+                    </span>
+                    <input style="display:inline; width:50px;height:23px;" type="submit" value="登录" />
+                }*@
+                @*<a id="topbarActionLink"></a>
+        </div>
+           
+        </div>*@
+        @*@Ajax.ActionLink("dummy", "TopBarLoginInfo", "布局", null, new AjaxOptions()
+        {
+            HttpMethod = "POST",
+            OnSuccess = "$('#topbarLoginName').html(data[0]);if(data[3]=='LogOut'){$('#indexloginform').remove();$('#topbarActionLink').attr('href','/'+data[2]+'/'+data[3]).html(data[1]);$('#bgLink').attr('style','').attr('href','/'+data[4]+'/Index').html('[我的后台]');}",
+        }, new
+        {
+            id = "readLoginInfo",
+            style = "display:none"
+        })
+        <script>$('#readLoginInfo').click();</script>*@
+    @*</div>*@
+}
+else
+{
+    <div class="layout_topbox">
+        <div class="layout_topcontent">
+            <div class="layout_topcontent_left">
+                <font>您好，<span id="topbarLoginName">游客(未登录)</span>，欢迎来到西南物资采购网！</font><a href="#" id="bgLink" style="display: none;"></a>@Html.ActionLink("登录", "Login", "登录", null, new { id = "topbarActionLink" })
+            </div>
+            <div class="layout_topcontent_right"><span class="layout_topcontent_span">授权发布：成都军区联勤部军需物资油料部@*<a href="#">手机APP</a></span><span class="layout_topcontent_span"><a href="#">网站导航</a>*@</span></div>
+        </div>
+        @Ajax.ActionLink("dummy", "TopBarLoginInfo", "布局", null, new AjaxOptions()
+    {
+        HttpMethod = "POST",
+        OnSuccess = "$('#topbarLoginName').html(data[0]);$('#topbarActionLink').attr('href','/'+data[2]+'/'+data[3]).html(data[1]);if(data[3]=='LogOut'){$('#bgLink').attr('style','').attr('href','/'+data[4]+'/Index').html('[我的后台]');}",
+    }, new
+    {
+        id = "readLoginInfo",
+        style = "display:none"
+    })
+        <script>$('#readLoginInfo').click();</script>
+    </div>
+}
+

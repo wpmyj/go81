@@ -1,0 +1,326 @@
+﻿@model Dictionary<string, object>
+<link rel="stylesheet" type="text/css" href="~/css/gys_treemenu.css" />
+<link rel="stylesheet" type="text/css" href="~/css/index.css" />
+<style type="text/css">
+    .wenxintishi {
+        text-indent: 2.0em;
+    }
+
+    .modal {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        position: fixed;
+        display: none;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: 600px;
+        margin: 15% auto;
+    }
+
+    .modal-content {
+        position: relative;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, .2);
+        border-radius: 6px;
+        outline: 0;
+        -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    }
+
+    .close {
+        margin-top: -2px;
+        float: right;
+        font-size: 21px;
+        font-weight: bold;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        filter: alpha(opacity=20);
+        opacity: .2;
+        -webkit-appearance: none;
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+    }
+
+    h4 {
+        font-size: 18px;
+    }
+
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .modal-header {
+        min-height: 16.42857143px;
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .modal-title {
+        margin: 0;
+        line-height: 1.42857143;
+    }
+
+    .modal-body {
+        position: relative;
+        padding: 15px;
+    }
+
+    .modal-footer {
+        padding: 15px;
+        text-align: right;
+        border-top: 1px solid #e5e5e5;
+    }
+</style>
+<script type="text/javascript" src="~/JS/SimpleTree.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".st_tree").SimpleTree({
+            click: function (a) {
+
+                if (!$(a).attr("hasChild")) {
+                    window.location.href = $(a).attr("href");
+                }
+                else if((@ViewData["登录用户类型"].ToString())!="0"){
+
+                    if ($(a).html() == "验收单管理") {
+                        $("#indexpagemodalleftmenu0").show();
+                    }
+                    if ($(a).html() == "商品管理") {
+                        $("#indexpagemodalleftmenu1").show();
+                    }
+                }
+            }
+        });
+    });
+</script>
+<div id="indexpagemodalleftmenu0" class="modal fade" style="display:none;">
+    <div class="modal-dialog" style="margin: 7% auto;">
+        <div class="modal-content" style="height:400px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodalleftmenu0').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">温馨提示</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div style="height: 280px; overflow-y: scroll; line-height:25px;">
+                    <h4 style="margin:0;">尊敬的用户：</h4>
+                    <p class="wenxintishi">
+                        由于该功能涉及部分敏感信息，从<b style="color:red;">2015年5月1日</b>起，为确保您的账户信息安全，需要进行安全认证，并使用U盾进行操作。若您已成功申请安全认证，请插入U盾后点击“继续”。若您还未申请安全认证，请点击“返回”进行其他操作。同时，为了确保您能正常使用该功能，请尽快向网站管理中心申请安全认证，并办理U盾。谢谢！
+                    </p>
+                </div>
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="返回" onclick="$('#indexpagemodalleftmenu0').hide();" /><input type="button" class="gys_ztbsearch_search_botton" value="继续" onclick="$('#indexpagemodalleftmenu0').hide();" /></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="indexpagemodalleftmenu1" class="modal fade" style="display:none;">
+    <div class="modal-dialog" style="margin: 7% auto;">
+        <div class="modal-content" style="height:400px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodalleftmenu1').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">温馨提示</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div style="height: 280px; overflow-y: scroll; line-height:25px;">
+                    <h4 style="margin:0;">尊敬的用户：</h4>
+                    @if (ViewData["企业模板"] == null || ViewData["企业模板"].ToString() == "G")
+                    {
+                        <p class="wenxintishi">
+                            您目前订购的企业展示模板为G类，从<b style="color:red;">2015年5月1日</b>起，可上架8个商品。如需上架更多商品，请查看“<a href="/jct/ApplyVip" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">网站客服</a>。
+                        </p>
+                    }
+                    else
+                    {
+                        if (ViewData["企业模板"].ToString() == "A")
+                        {
+                            <p class="wenxintishi">
+                                您目前订购的企业展示模板为A类，从<b style="color:red;">2015年5月1日</b>起，可无限制上架商品。
+                            </p>
+                        }
+                        if (ViewData["企业模板"].ToString() == "B")
+                        {
+                            <p class="wenxintishi">
+                                您目前订购的企业展示模板为B类，从<b style="color:red;">2015年5月1日</b>起，可上架200个商品。如需上架更多商品，请查看“<a href="/jct/ApplyVip" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">网站客服</a>。
+                            </p>
+                        }
+                        if (ViewData["企业模板"].ToString() == "C")
+                        {
+                            <p class="wenxintishi">
+                                您目前订购的企业展示模板为C类，从<b style="color:red;">2015年5月1日</b>起，可上架80个商品。如需上架更多商品，请查看“<a href="/jct/ApplyVip" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">网站客服</a>。
+                            </p>
+                        }
+                        if (ViewData["企业模板"].ToString() == "D")
+                        {
+                            <p class="wenxintishi">
+                                您目前订购的企业展示模板为D类，从<b style="color:red;">2015年5月1日</b>起，可上架60个商品。如需上架更多商品，请查看“<a href="/jct/ApplyVip" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">网站客服</a>。
+                            </p>
+                        }
+                        if (ViewData["企业模板"].ToString() == "E")
+                        {
+                            <p class="wenxintishi">
+                                您目前订购的企业展示模板为E类，从<b style="color:red;">2015年5月1日</b>起，可上架40个商品。如需上架更多商品，请查看“<a href="/jct/ApplyVip" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">网站客服</a>。
+                            </p>
+                        }
+                        if (ViewData["企业模板"].ToString() == "F")
+                        {
+                            <p class="wenxintishi">
+                                您目前订购的企业展示模板为F类，从<b style="color:red;">2015年5月1日</b>起，可上架20个商品。如需上架更多商品，请查看“<a href="/jct/ApplyVip" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">网站客服</a>。
+                            </p>
+                        }
+                    }
+
+                </div>
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="继续" onclick="$('#indexpagemodalleftmenu1').hide();" /></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="lm">栏目分类</div>
+    if (ViewData["用户类型"].ToString()=="单位用户")
+    {
+        <div style="margin-top:15px; font-size:14px; margin-left:15px; margin-bottom:10px;">
+            <div style="float:left; height:30px; width:auto;"><img src="~/Images/uhead.png" /></div>
+            <div style="float:left; height:30px;width:auto; text-indent:8px; line-height:35px; font-size:14px; font-weight:bold; color:#2d6dad; letter-spacing:2px;">采购人信息系统</div>
+            <div style="clear:both;"></div>
+        </div>
+        <ul style="margin:0;padding:0">
+            <li id="欢迎页面" style="line-height:25px;"><a href="/单位用户后台/" style="margin-left:50px" class="st_tree_second_title">欢迎页面</a></li>
+            <li id="待办任务" style="line-height:25px;"><a href="/单位用户后台/Backlog" style="margin-left:50px" class="st_tree_second_title">待办任务</a></li>
+        </ul>
+    } 
+    else if (ViewData["用户类型"].ToString() == "供应商")
+    {
+        <div style="margin-top:15px; font-size:14px; margin-left:15px; margin-bottom:10px;">
+            <div style="float:left; height:30px; width:auto;"><img src="~/Images/uhead.png" /></div>
+            <div style="float:left; height:30px;width:auto; text-indent:8px; line-height:35px; font-size:14px; font-weight:bold; color:#2d6dad; letter-spacing:2px;">供应商信息系统</div>
+            <div style="clear:both;"></div>
+        </div>
+        <ul style="margin:0;padding:0">
+            <li id="欢迎页面" style="line-height:25px;"><a href="/供应商后台/" style="margin-left:50px" class="st_tree_second_title">欢迎页面</a></li>
+            <li id="待办任务" style="line-height:25px;"><a href="/供应商后台/Backlog" style="margin-left:50px" class="st_tree_second_title">待办任务</a></li>
+        </ul>
+    }
+    else if (ViewData["用户类型"].ToString() == "运营团队")
+    {
+        <div style="margin-top:15px; font-size:14px; margin-left:15px; margin-bottom:10px;">
+            <div style="float:left; height:30px; width:auto;"><img src="~/Images/uhead.png" /></div>
+            <div style="float:left; height:30px;width:auto; text-indent:8px; line-height:35px; font-size:14px; font-weight:bold; color:#2d6dad; letter-spacing:2px;">运营团队信息系统</div>
+            <div style="clear:both;"></div>
+        </div>
+        <ul style="margin:0;padding:0">
+            <li id="欢迎页面" style="line-height:25px;"><a href="/运营团队后台/" style="margin-left:50px" class="st_tree_second_title">欢迎页面</a></li>
+            <li id="待办任务" style="line-height:25px;"><a href="/运营团队后台/Backlog" style="margin-left:50px" class="st_tree_second_title">待办任务</a></li>
+        </ul>
+    }
+    else if (ViewData["用户类型"].ToString() == "专家")
+    {
+        <div style="margin-top:15px; font-size:14px; margin-left:15px; margin-bottom:10px;">
+            <div style="float:left; height:30px; width:auto;"><img src="~/Images/uhead.png" /></div>
+            <div style="float:left; height:30px;width:auto; text-indent:8px; line-height:35px; font-size:14px; font-weight:bold; color:#2d6dad; letter-spacing:2px;">专家信息系统</div>
+            <div style="clear:both;"></div>
+        </div>
+        <ul style="margin:0;padding:0">
+            <li id="欢迎页面" style="line-height:25px;"><a href="/专家后台/" style="margin-left:50px" class="st_tree_second_title">欢迎页面</a></li>
+            <li id="待办任务" style="line-height:25px;"><a href="/专家后台/Backlog" style="margin-left:50px" class="st_tree_second_title">待办任务</a></li>
+        </ul>
+    }
+    <div class="st_tree">
+        <ul>
+            @if (Model != null)
+            {
+                foreach (var itemlist in Model)
+                {
+                    <li class="st_tree_first_tittle"><span></span><a href="#">@itemlist.Key</a></li>
+                    var itemlistvalue = itemlist.Value;
+                    if (itemlistvalue != null)
+                    {
+                        <ul show="false">
+                            @foreach (var item in itemlistvalue as Dictionary<string, object>)
+                            {
+                                var itemvalue = item.Value;
+                                if (itemvalue != null)
+                                {
+                                    if (itemvalue is string)
+                                    {
+                                        <li id="@item.Key" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/@itemvalue">@item.Key</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li id="@item.Key" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="#">@item.Key</a></li>
+                                        <ul show="false">
+                                            @foreach (var it in itemvalue as Dictionary<string, object>)
+                                            {
+                                                if (it.Value is string)
+                                                {
+                                                    <li id="@it.Key" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/@it.Value">@it.Key</a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li id="@it.Key" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="#">@it.Key</a></li>
+                                                    <ul show="false">
+                                                        @foreach (var im in it.Value as Dictionary<string, object>)
+                                                        {
+                                                            <li id="@im.Key" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/@im.Value">@im.Key</a></li>
+                                                        }
+                                                    </ul>
+                                                }
+
+                                            }
+                                        </ul>
+                                    }
+                                }
+                            }
+                        </ul>
+                    }
+                }
+            }
+            else
+            {
+                <li><span>您的账户信息还未经过审核，<br />审核通过后方可使用网站的功能，<br />如有疑问请联系管理员！</span><br />当前状态：@ViewData["单位状态"]</li>
+            }
+            @*<li class="st_tree_first_tittle"><span>＋</span><a href="#">消息管理</a></li>
+                <ul show="true">
+                    <li class="st_tree_second_title"><span>＋</span><a href="#">站内消息</a></li>
+                    <ul show="true">
+                        <li id="send_new_msg" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_ZnxxAdd?link=send_new_msg">发新消息</a></li>
+                        <li id="receive_mag" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_Znxx?link=receive_mag">已收消息</a></li>
+                        <li id="sended_msg" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_ZnxxSend?link=sended_msg">已发消息</a></li>
+                    </ul>
+                </ul>
+                <li class="st_tree_first_tittle"><span>＋</span><a href="#">公告管理</a></li>
+                <ul show="true">
+                    <li id="adlist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_AdList?link=adlist">公告列表</a></li>
+                    <li id="adadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_AdAdd?link=adadd">发布公告</a></li>
+
+                </ul>*@
+
+        </ul>
+    </div>
+}
+<script type="text/javascript">
+    $(function(){
+        $(".bg_outdiv_left").css({"border":"1px solid #ebe5e5"});
+    });
+</script>

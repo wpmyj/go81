@@ -1,0 +1,277 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.用户数据模型.专家>
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using (Html.BeginForm("ExpertBatchModify", "运营团队后台", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    Html.AntiForgeryToken();
+    <table class="table-post" cellpadding="0" cellspacing="0">
+        @if (Model.Count() > 0 && Model.Any())
+        {
+            for (int i = 0; i < Model.Count(); i++)
+            {
+                <tr>
+                    <td class="padding">
+                        <table width="100%" class="parent">
+                            <tr>
+                                <td class="align-right"><label>姓名：</label></td>
+                                <td>
+                                    @Html.HiddenFor(model => model.ElementAt(i).Id)
+                                    @Html.EditorFor(model => model.ElementAt(i).身份信息.姓名)
+                                </td>
+                                <td class="align-right"><label>性别：</label></td>
+                                <td>@Html.EnumDropDownListFor(model => model.ElementAt(i).身份信息.性别, new SelectList(Enum.GetValues(typeof(性别))))</td>
+                                <td class="align-right"><label>专家证号：</label></td>
+                                <td>@Html.EditorFor(model => model.ElementAt(i).身份信息.专家证号)</td>
+                            </tr>
+                            <tr>
+                                <td class="align-right"><label>证件类型：</label></td>
+                                <td>@Html.EnumDropDownListFor(model => model.ElementAt(i).身份信息.证件类型, new SelectList(Enum.GetValues(typeof(证件类型))))</td>
+                                <td class="align-right"><label>证件号：</label></td>
+                                <td>@Html.EditorFor(model => model.ElementAt(i).身份信息.证件号)</td>
+                                <td class="align-right"><label>专业技术职称：</label></td>
+                                <td>@Html.EnumDropDownListFor(model => model.ElementAt(i).学历信息.专业技术职称, new SelectList(Enum.GetValues(typeof(专业技术职称))))</td>
+                            </tr>
+                            <tr>
+                                <td class="align-right"><label>毕业院校：</label></td>
+                                <td>@Html.EditorFor(model => model.ElementAt(i).学历信息.毕业院校)</td>
+                                <td class="align-right"><label>最高学历：</label></td>
+                                <td>@Html.EnumDropDownListFor(model => model.ElementAt(i).学历信息.最高学历, new SelectList(Enum.GetValues(typeof(学历))))</td>
+                                <td class="align-right"><label>工作单位：</label></td>
+                                <td>@Html.EditorFor(model => model.ElementAt(i).工作经历信息.工作单位)</td>
+                            </tr>
+                            <tr>
+                                <td class="align-right"><label>从事专业：</label></td>
+                                <td>@Html.EditorFor(model => model.ElementAt(i).工作经历信息.从事专业)</td>
+                                <td class="align-right"><label>联系电话：</label></td>
+                                <td>@Html.EditorFor(model => model.ElementAt(i).联系方式.手机)</td>
+                            </tr>
+                            <tr>
+                                <td valign="top" class="align-right">
+                                    <label>可参评物资类别：</label>
+                                    <input name="可参评物资类别列表" type="hidden" class="kpblb" />
+                                </td>
+                                <td colspan="5" style="width: 645px;">
+                                    @foreach (var k in Model.ElementAt(i).可参评物资类别列表)
+                                    {
+                                        <h5 style="margin:3px" name="@k.一级分类"><span class="kpbtype" onclick='delthis(this)' name="1">@k.一级分类<i></i></span></h5>
+                                        <p style="margin:3px;font-size:12px;">
+                                            @foreach (var m in k.二级分类)
+                                            {
+                                                <span class="kpbtype" onclick='delthis(this)' name="2">@m<i></i></span>
+                                            }
+                                        </p>
+                                    }
+                                    <a class="kpbedit" id="@Model.ElementAt(i).Id">新增</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6" style="text-align:center">
+                                    <input type="button" class="btn-pri btnsave" value="保  存" />
+                                    <input type="button" class="btn-pri btndel" value="删  除" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+           <tr>
+               <td colspan="6" style="text-align:center">未找到相关信息！</td>
+           </tr>
+        }
+    </table>
+    <div style="text-align:center">
+        <input type="submit" id="submit" class="btn-base" value="全 部 保 存" />
+    </div>
+}
+
+@if (ViewData["currentpage"] != null)
+{
+    <div class="gys_znxx_content_detailbox">
+        @if (int.Parse(ViewData["currentpage"].ToString()) == 1)
+        {
+            <a>首页</a>
+        }
+        else
+        {
+            <a id="1" class="page">首页</a>
+        }
+        @for (int i = 0; i <= 10; i++)
+        {                       //一共最多显示10个页码，前面5个，后面5个
+            if ((int.Parse(ViewData["currentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentpage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+            {
+                if (5 == i)
+                {                               //当前页处理
+                    <a>@int.Parse(ViewData["currentpage"].ToString())</a>
+                }
+                else
+                {                               //一般页处理
+                    <a class="page" id="@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)">@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)</a>
+
+                }
+            }
+        }
+        @if (int.Parse(ViewData["currentpage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+        {
+            <a>末页</a>
+        }
+        else
+        {
+            <a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+        }
+
+    </div>
+}
+
+
+
+
+<script type="text/javascript">
+    $("a.page").click(function () {
+        $.ajax({
+            url: "/运营团队后台/Part_ExpertBatchModify",
+            data: { page: $(this).attr("id") },
+            success: function (data) {
+                $("#expertlist").html(data);
+            }
+        });
+    });
+
+    //新增可评标类别
+    $(".kpbedit").click(function () {
+        $("#nowclick").val($(this).attr("id"));
+        $("#selectconditionbox").find("input:checked").each(function () {
+            $(this).prop("checked", false);
+        });
+        $("#selectcontent").html("");
+        $("#modal0").show();
+    });
+
+    $(".btnsave").click(function () {
+        var parentable = $(this).parents(".parent");
+        var kpblb = parentable.find(".kpblb");
+        var data1 = "";
+        var span = kpblb.parent().next().find("span");
+        $.each(span, function () {
+            if ($(this).attr("name") == 1) {
+                data1 += ";" + $(this).text() + ":";
+            }
+            if ($(this).attr("name") == 2) {
+                data1 += $(this).text() + " ";
+            }
+        });
+        kpblb.val(data1);
+        var id = parentable.find("input[name='Id']").val();
+        var names = parentable.find("input[name='身份信息.姓名']").val();
+        var sexs = parentable.find("select[name='身份信息.性别']").val();
+        var zjcards = parentable.find("input[name='身份信息.专家证号']").val();
+        var cardtype = parentable.find("select[name='身份信息.证件类型']").val();
+        var cardnumbers = parentable.find("input[name='身份信息.证件号']").val();
+        var degrees = parentable.find("select[name='学历信息.专业技术职称']").val();
+        var schools = parentable.find("input[name='学历信息.毕业院校']").val();
+        var maxdegree = parentable.find("select[name='学历信息.最高学历']").val();
+        var workadress = parentable.find("input[name='工作经历信息.工作单位']").val();
+        var workcontent = parentable.find("input[name='工作经历信息.从事专业']").val();
+        var telnumber=parentable.find("input[name='联系方式.手机']").val();
+        var kpbtype = parentable.find("input[name='可参评物资类别列表']").val();
+        $.ajax({
+            url: "/运营团队后台/ExpertModifyOne",
+            type: 'post',
+            data: {
+                id: id,
+                names: names,
+                sexs: sexs,
+                zjcards: zjcards,
+                cardtype: cardtype,
+                cardnumbers: cardnumbers,
+                degrees: degrees,
+                schools: schools,
+                maxdegree: maxdegree,
+                workadress: workadress,
+                workcontent: workcontent,
+                telnumber:telnumber,
+                kpbtype: kpbtype,
+            },
+            success: function (data) {
+                alert(data);
+            },
+            error: function (data) {
+                alert(data);
+            },
+        });
+    });
+
+    //删除专家
+    $(".btndel").click(function(){
+        var $this=$(this);
+        if(confirm("你确定要删除该专家吗？")){
+            var id=$this.parents(".parent").find("input[name='Id']").val();
+            $.ajax({
+                url:'/运营团队后台/DelExpert',
+                data:{id:id},
+                success:function(data){
+                    $this.parents(".padding").parent().fadeOut(300).remove();
+                },
+                error:function(){
+                    alert("删除失败！");
+                },
+            });
+        }
+    });
+
+    //全部保存
+    $("#submit").click(function () {
+        var kpblb = $(".kpblb");
+        $.each(kpblb, function () {
+            var data = "";
+            var span = $(this).parent().next().find("span");
+            $.each(span, function () {
+                if ($(this).attr("name") == 1) {
+                    data += ";" + $(this).text() + ":";
+                }
+                if ($(this).attr("name") == 2) {
+                    data += $(this).text() + " ";
+                }
+            });
+            $(this).val(data);
+        });
+    });
+
+    function delthis(e) {
+        $this = $(e);
+        var t = $this.attr("name");
+        if (t == 1) {
+            $this.parent().next().remove().end().remove();
+        }
+        else {
+            var parent = $this.parent();
+            $this.remove();
+            if (parent.children().length <= 0) {
+                parent.prev().remove().end().remove();
+            }
+        }
+    }
+
+</script>
+@if (ViewData["有无页码"].ToString() == "1")
+{
+    <script type="text/javascript">
+        var i = @(int.Parse(ViewData["currentpage"].ToString()));
+        var j=@(int.Parse(ViewData["pagecount"].ToString()));
+
+        $(function () {
+            $(".gys_znxx_content_detailbox a").each(function () {
+                if ($(this).text() == i) {
+                    $(this).addClass("currentPage");
+                }
+                if (i== j) {
+                    $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+                }
+                if (i == 1) {
+                    $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,175 @@
+﻿@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+
+    @foreach (var item in (IEnumerable<商品>)ViewData["商品信息"])
+    {
+        if (item.基本数据.已删除)
+        {
+            <div class="gyspage_list_content">
+                <div class="gyspage_list_content_imgdiv" id="@item.Id">
+                    <a>
+                        @if (item.商品信息.商品图片.Count > 0)
+                        {
+                            <img src="@item.商品信息.商品图片[0].Replace("original/", "150X150/")" width="100" height="100" />
+                        }
+                        else
+                        {
+                            <img src="~/images/noimage.jpg" width="100" height="100" />
+                        }
+                    </a>
+                </div>
+                <div class="gyspage_list_content_listdiv">
+                    <div class="gyspage_list_content_list">
+                        <div class="gyspage_list_content_list_cont" style="color:#aaa;">名称：@item.商品信息.商品名</div>
+                        <div class="gyspage_list_content_list_cont" style="color:#aaa;">价格：￥@item.销售信息.价格</div>
+                        <div class="gyspage_list_content_list_cont" style="color:#aaa;">
+                            编号：<span>@item.Id</span>
+                        </div>
+                        <div class="gyspage_list_content_list_cont" style="color:#aaa;">
+                            供应商：
+                            @try
+                            {
+                                @item.商品信息.所属供应商.用户数据.企业基本信息.企业名称
+                            }
+                            catch
+                            {
+                                <span>未知</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="gyspage_list_content_list">
+                        <a style="padding:0 10px 0 0; color:red;">已删除</a>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="gyspage_list_content">
+                <div class="gyspage_list_content_imgdiv">
+                    <a href="~/运营团队后台/Gys_Product_Modify?id=@item.Id" target="_blank">
+                        @if (item.商品信息.商品图片.Count > 0)
+                        {
+                            <img src="@item.商品信息.商品图片[0].Replace("original/", "150X150/")" width="100" height="100" />
+                        }
+                        else
+                        {
+                            <img src="~/images/noimage.jpg" width="100" height="100" />
+                        }
+                    </a>
+                </div>
+                <div class="gyspage_list_content_listdiv">
+                    <div class="gyspage_list_content_list">
+                        <div class="gyspage_list_content_list_cont">名称：@item.商品信息.商品名</div>
+                        <div class="gyspage_list_content_list_cont">价格：￥@item.销售信息.价格</div>
+                        <div class="gyspage_list_content_list_cont">
+                            状态：
+                            @if (item.审核数据.审核状态 == 审核状态.未审核)
+                            {
+                                <span style="color:red">@item.审核数据.审核状态</span>
+                            }
+                            else if (item.审核数据.审核状态 == 审核状态.审核未通过)
+                            {
+                                <span style="color:green">@item.审核数据.审核状态</span><span style="color:green">(@item.审核数据.审核不通过原因)</span>
+                            }
+                            else
+                            {
+                                <span>@item.审核数据.审核状态</span>
+                            }
+                        </div>
+                        <div class="gyspage_list_content_list_cont">
+                            供应商：
+                            @try
+                            {
+                                @item.商品信息.所属供应商.用户数据.企业基本信息.企业名称
+                            }
+                            catch
+                            {
+                                <span>未知</span>
+                            }
+                        </div>
+                        <div class="gyspage_list_content_list_cont" id="sjShelves__@item.Id">
+                            上架：@if (item.基本数据.已屏蔽)
+                            {<font color="red">未上架</font>}
+                            else
+                            {<font color="green">已上架</font>}
+                        </div>
+                        @if (item.中标商品)
+                        {
+                            <div class="gyspage_list_content_list_cont" id="sjShelves__@item.Id">
+                                <font color="red">中标商品</font>
+                            </div>
+                        }
+                    </div>
+                    <div class="gyspage_list_content_list">
+                        <a href="~/运营团队后台/Gys_Product_Modify?id=@item.Id" style="padding:0 10px 0 0;" target="_blank">进行处理</a>
+                        <a href="~/运营团队后台/GoodExamineXiajia?id=@item.Id" style="padding:0 10px 0 0;" target="_blank">下架</a>
+                    </div>
+                    <div class="gyspage_list_content_list">
+                        @if (item.审核数据.审核状态 == 审核状态.审核通过)
+                        {
+                            if (item.基本数据.已屏蔽)
+                            {
+                                <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" onclick="return doShelves(this);" title="点击上架" /><span>上架</span>
+                            }
+                            else
+                            {
+                                <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" checked="checked" onclick="return doShelves(this);" title="点击下架" /><span>上架</span>
+                            }
+                        }
+                        else
+                        {
+                            <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" disabled="disabled" title="未审核通过，不能上架" /><span>上架</span>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+    }
+    @if (ViewData["currentpage"].ToString() != "0")
+    {
+        <div class="gys_znxx_content_detailbox">
+            @if (int.Parse(ViewData["currentpage"].ToString()) == 1)
+            {
+                <a>首页</a>
+            }
+            else
+            {
+                <a id="1" onclick="changePage(this)">首页</a>
+            }
+            @for (int i = 0; i <= 10; i++)
+            {                       //一共最多显示10个页码，前面5个，后面5个
+                if ((int.Parse(ViewData["currentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentpage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                {
+                    if (5 == i)
+                    {                               //当前页处理
+                        <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentpage"].ToString())</a>
+                    }
+                    else
+                    {                               //一般页处理
+                        <a id="@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)" onclick="changePage(this)">@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)</a>
+
+                    }
+                }
+            }
+            @if (int.Parse(ViewData["currentpage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+            {
+                <a>末页</a>
+            }
+            else
+            {
+                <a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changePage(this)">末页</a>
+            }
+            @ViewData["currentpage"].ToString()/@ViewData["pagecount"].ToString()
+            <div style="text-align:center;">页码：<input type="text" value="" id="" size="20" /><input type="button" onclick="changePage1(this)" value="搜索" /></div>
+        </div>
+        
+    }
+    else
+    {
+        <div class="gys_znxx_content_detailbox">
+            暂无信息
+        </div>
+
+    }

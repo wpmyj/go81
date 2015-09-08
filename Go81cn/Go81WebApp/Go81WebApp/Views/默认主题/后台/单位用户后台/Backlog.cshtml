@@ -1,0 +1,51 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.消息数据模型
+@model Go81WebApp.Models.数据模型.用户数据模型.单位用户
+@{
+    ViewBag.Title = "单位用户后台管理";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+    <div class="bg_outdiv">
+        <div class="bg_outdiv_left">
+            @Html.Action("LeftMenu", "布局")
+        </div>
+        <div class="bg_outdiv_right">
+            <div class="rightboxContent">
+                 <div style="padding-left:15px;" id="rightcontent">
+                    <div class="task">
+                        <div class="header"><img src="~/Images/notebook.png" />我的待办任务：</div>
+                        <div>
+                            <ul>
+                                @if (WebApiApplication.IsIntranet)
+                                {
+                                    @*<li><img src="~/Images/lb.png" />采购任务管理：您共有<a href="##" style="color:red;font-weight:bold;padding:0 5px;">0</a>个采购管理业务待办。</li>
+                                    <li><img src="~/Images/lb.png" />电子标书管理：您共有<a href="##" style="color:red;font-weight:bold;padding:0 5px;">0</a>个电子标书管理业务待办。</li>*@
+                                    <li><img src="~/Images/lb.png" />评审专家抽取：您共有<a href="/专家抽选/Expert_Applay_S" style="color:red;font-weight:bold;padding:0 5px;">@ViewData["dcxzj"]</a>个评审专家抽取待办</li>
+                                    @*<li><img src="~/Images/lb.png" />入库供应商抽取：您有<a href="/专家抽选/GysChoose_Applay_S" style="color:red;font-weight:bold;padding:0 5px;">@ViewData["dcxgys"]</a>个入库供应商抽取待办。</li>*@
+                                    <li><img src="~/Images/lb.png" />采购需求管理：您共有<a href="/单位用户后台/DemandCheck?page=1" style="color:red;font-weight:bold;padding:0 5px;">@ViewData["Demand"]</a>个采购需求待办。</li>
+                                    @*<li><img src="~/Images/lb.png" />评审专家入库：您共有<a href="##" style="color:red;font-weight:bold;padding:0 5px;">0</a>个评审专家入库待办。</li>*@
+                                    @*<li><img src="~/Images/lb.png" />供应商入库：您共有<a href="/单位用户后台/Gys_Examine" style="color:red;font-weight:bold;padding:0 5px;">@ViewData["gysrk"]</a>个供应商入库待办。</li>*@
+                                }
+                                <li><img src="~/Images/lb.png" />验收单管理：您共有<a href="/单位用户后台/AcceptanceList" style="color:red;font-weight:bold;padding:0 5px;">@ViewData["ysd"]</a>个验收单管理待办。</li>
+                                <li><img src="~/Images/lb.png" />站内消息：您共有<a href="/单位用户后台/Procure_Znxx" style="color:red;font-weight:bold;padding:0 5px;">@ViewData["msg_count"]</a>个站内消息待处理。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $("#待办任务").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#待办任务").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#welcome").css({"background":"#207AD6"}).find("a.leftMenu_a").css({"color":"#fff"});
+            var count = @ViewData["msg_count"].ToString();
+            if(count == "0"){
+                $("div#tip").hide();
+            }
+            else{
+                $("div#tip").animate({ "bottom": "0px" }, 1000);
+            }
+        });
+    </script>

@@ -1,0 +1,556 @@
+﻿<script src="~/JS/provinceandcity_all.js"></script>
+<style type="text/css">
+    .expert_condition {
+        width: 898px;
+        border: solid 1px #ccd2b0;
+        height: auto;
+        overflow: hidden;
+        padding: 10px 0 20px 0;
+    }
+
+    .expert_condition {
+        width: 898px;
+        border: solid 1px #ccd2b0;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .expert_condition_inner {
+        width: 800px;
+        margin: 0 auto;
+        height: auto;
+        overflow: hidden;
+        margin-top: 10px;
+        border: solid 1px #ccd2b0;
+        padding: 10px;
+    }
+
+    .expert_condition_innerleft {
+        width: 150px;
+        float: left;
+        height: auto;
+        overflow: hidden;
+        font-size: 14px;
+        color: rgb(51, 51, 51);
+        padding-bottom: 10px;
+    }
+
+    .expert_condition_innerright {
+        width: 650px;
+        float: left;
+        font-size: 14px;
+        color: rgb(51, 51, 51);
+        padding-bottom: 10px;
+    }
+
+    .expert_condition_innerrightlist {
+        width: 300px;
+        float: left;
+    }
+
+    .expert_condition_input {
+        height: 30px;
+        width: 150px;
+        float: right;
+        margin-right: 60px;
+    }
+
+    .expert_condition_button1 {
+        border: 1px solid #f00;
+        color: #f00;
+    }
+
+    .expert_condition_reason {
+        width: 150px;
+        height: 28px;
+        margin: 2px;
+        display: none;
+    }
+
+    .expert_condition_button2 {
+        border: 1px solid #55f;
+        color: #55f;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*可以出席-选中*/
+    .expert_condition_button2_y_sel {
+        border: 1px solid #5f5;
+        background-color: #5f5;
+        color: #fff;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*可以出席-未选中*/
+    .expert_condition_button2_y_unsel {
+        border: 1px solid #f55;
+        color: #55f;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*不能出席-选中*/
+    .expert_condition_button2_n_sel {
+        border: 1px solid #f55;
+        background-color: #f55;
+        color: #fff;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*不能出席-未选中*/
+    .expert_condition_button2_n_unsel {
+        border: 1px solid #5f5;
+        color: #55f;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+</style>
+@model Go81WebApp.Models.数据模型.专家抽选记录
+<div class="gys_znxx_box">
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">筛选专家</div>
+        </div>
+    </div>
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <div class="expert_condition">
+
+                <div class="expert_condition_inner">
+                    <div class="expert_condition_innerleft">项目信息</div>
+                    <div class="expert_condition_innerright">
+                        <div class="expert_condition_innerrightlist">
+                            项目名称<input type="text" name="pro_name" id="pro_name" class="expert_condition_input" value="@Model.项目名称" readonly="readonly" />
+                        </div>
+                        <div class="expert_condition_innerrightlist">
+                            项目编号<input type="text" name="pro_num" id="pro_num" class="expert_condition_input" value="@Model.项目编号" readonly="readonly" />
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            评标时间<input type="date" name="pro_time" id="pro_time" class="expert_condition_input" value="@Model.评标时间.ToString("yyyy-MM-dd")" readonly="readonly" />
+                        </div>
+
+                        @*<div class="expert_condition_inner" style="border:none; font-size:14px;">
+                                抽取总数
+                                <input type="text" name="抽取总个数" id="抽取总个数" style=" width:300px; height:30px;" value="5" /><span style="color:red; font-size:12px;">提交后将不能而过修改</span>
+                            </div>*@
+                        <div class="expert_condition_inner" style="border:none; padding-left:0; padding-bottom:0; font-size:14px;">
+                            抽取总数
+                            <input type="text" name="抽取总个数" id="抽取总个数" style=" margin-left:25px; width:300px; height:30px;" value="@Model.总计预定抽选专家数" readonly="readonly" />
+                        </div>
+                        <div class="expert_condition_inner" style="border:none; padding-left:0; font-size:14px;">
+                            回避列表
+                            <input type="text" name="回避列表" id="回避列表" style=" margin-left:25px; width:300px; height:30px;" /><span style="color: purple; font-size: 12px;">多个请以逗号，分隔</span>
+                        </div>
+                        <div class="expert_condition_inner" style="border:none; padding-left:0; font-size:14px;">
+                            抽取轮数
+                            <input type="text" name="回避列表" id="回避列表" style=" margin-left:25px; width:300px; height:30px;" /><span style="color: purple; font-size: 12px;">多个请以逗号，分隔</span>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            <span class="tipmessage" id="toptipmessage"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expert_condition_inner">
+                    <div style=" width: 800px; height: 30px; color:rgb(51, 51, 51);">抽选条件</div>
+                    <div class="expert_condition_innerleft">学历信息</div>
+                    <div class="expert_condition_innerright">
+                        <div class="expert_condition_innerrightlist">
+                            专业技术职称
+                            <select name="专业技术职称" id="专业技术职称" class="expert_condition_input">
+                                @foreach (var a in (Dictionary<string, int>)ViewData["专家技术职称"])
+                                {
+                                    <option name="专业技术职称" id="@a.Value" value="@a.Value">@a.Key</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="expert_condition_innerrightlist">
+                            最高学位
+                            <select name="最高学位" id="最高学位" class="expert_condition_input">
+                                @foreach (var a in (Dictionary<string, int>)ViewData["最高学位"])
+                                {
+                                    <option name="最高学位" id="@a.Value" value="@a.Value">@a.Key</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="expert_condition_innerleft">工作经历信息</div>
+                    <div class="expert_condition_innerright">
+                        <div class="expert_condition_innerrightlist">
+                            从事专业<input type="text" name="从事专业" id="从事专业" class="expert_condition_input" />
+                        </div>
+                    </div>
+                    <div class="expert_condition_innerleft">身份信息</div>
+                    <div class="expert_condition_innerright">
+                        <div class="expert_condition_innerrightlist">
+                            评审专家类型
+                            <select name="专家类型" id="专家类型" class="expert_condition_input">
+                                @foreach (var a in (Dictionary<string, int>)ViewData["专家类型"])
+                                {
+                                    <option name="专家类型" id="@a.Value" value="@a.Value">@a.Key</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="expert_condition_innerrightlist">
+                            评审专家类别
+                            <select name="专家类别" id="专家类别" class="expert_condition_input">
+                                @foreach (var a in (Dictionary<string, int>)ViewData["专家类别"])
+                                {
+                                    <option name="专家类别" id="@a.Value" value="@a.Value">@a.Key</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style=" width:570px; margin-top:10px;">
+                            所在地域
+                            <select id="deliverprovince" name="deliverprovince" style=" height:30px; width:150px; margin-left:30px;"></select>
+                            <select id="delivercity" name="delivercity" style=" height: 30px; width: 142px;"></select>
+                            <select id="deliverarea" name="deliverarea" style=" height: 30px; width: 150px;"></select>
+                            <script>
+                                window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expert_condition_inner" style="border:none; font-size:14px;">
+                    此次抽取个数
+                    <input type="text" name="抽取个数" id="抽取个数" style=" width:400px; height:30px;" value="5" />
+                    <span class="tipmessage" id="numtipmessage"></span>
+                    <input type="button" value="进行抽取" style="width:100px; height:30px; float:right;" onclick="getsearch();" />
+                </div>
+                <script type="text/javascript">
+                    function checkform() {
+                        var flag = true;
+                        var reg = /^\d+$/;
+                        var objRegExp = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+                        if ($("#pro_name").val() == "" || $("#pro_name").val() == null) {
+                            $("#toptipmessage").html("请填写项目名称!");
+                            $("#pro_name").focus();
+                            flag = false;
+                            return flag;
+                        }
+
+                        if ($("#pro_num").val() == "" || $("#pro_num").val() == null) {
+                            $("#toptipmessage").html("请填写项目编号!");
+                            $("#pro_num").focus();
+                            flag = false;
+                            return flag;
+                        }
+
+                        if ($("#pro_time").val() == "" || $("#pro_time").val() == null) {
+                            $("#toptipmessage").html("请填写评标时间!");
+                            $("#pro_time").focus();
+                            flag = false;
+                            return flag;
+                        }
+                        else if (!RQcheck($("#pro_time").val())) {
+                            $("#toptipmessage").html("评标时间格式不正确!格式:2014-07-16");
+                            $("#pro_time").focus();
+                            flag = false;
+                            return flag;
+                        }
+
+                        if ($("#抽取个数").val() == "" || $("#抽取个数").val() == null) {
+                            $("#numtipmessage").html("请填写抽取个数!");
+                            $("#抽取个数").focus();
+                            flag = false;
+                            return flag;
+                        }
+                        else if (!($("#抽取个数").val().match(reg))) {
+                            $("#numtipmessage").html("请输入正确的数字");
+                            $("#抽取个数").focus();
+                            flag = false;
+                            return flag;
+                        }
+
+                        if ($("#抽取总个数").val() == "" || $("#抽取总个数").val() == null) {
+                            $("#numtipmessage").html("请填写抽取总个数!");
+                            $("#抽取总个数").focus();
+                            flag = false;
+                            return flag;
+                        }
+                        else if (!($("#抽取总个数").val().match(reg))) {
+                            $("#numtipmessage").html("请输入正确的数字");
+                            $("#抽取总个数").focus();
+                            flag = false;
+                            return flag;
+                        }
+
+                        if (parseInt($("#抽取个数").val()) > parseInt($("#抽取总个数").val())) {
+                            alert("抽取个数不能大于抽取总个数!");
+                            flag = false;
+                            return flag;
+                        }
+
+                        if ($(".expert_condition_button2").length > 0) {
+                            alert("请对抽取结果进行确认!");
+                            flag = false;
+                            return flag;
+                        }
+
+
+
+                        if (flag) {
+                            $("#toptipmessage").html("");
+                            $("#numtipmessage").html("");
+                            return flag;
+                        }
+                    }
+
+                    function getsearch() {
+                        //if (parseInt($("#抽取个数").val()) > parseInt($("#抽取总个数").val()))
+                        //{
+                        //    alert("抽取个数不能大于抽取总个数!");
+                        //    return;
+                        //}
+
+                        if (!checkform()) {
+                            return;
+                        }
+
+                        if ($(".expert_condition_button2_y_sel").length + parseInt($("#抽取个数").val()) > parseInt($("#抽取总个数").val()) || $(".expert_condition_button2_y_sel").length == parseInt($("#抽取总个数").val())) {
+                            alert("抽取个数已经达到上线,不能再进行抽取!");
+                            return;
+                        }
+
+                        //if ($(".expert_condition_button2").length > 0) {
+                        //    alert("请对抽取结果进行确认!");
+                        //    return;
+                        //}
+
+
+                        document.getElementById("抽取总个数").readOnly = "readOnly";//一旦点击抽取后,总个数不能再更改
+
+
+                        var a = document.getElementById("专业技术职称").value;
+                        var b = document.getElementById("最高学位").value;
+                        var c = document.getElementById("从事专业").value;
+                        var d = document.getElementById("专家类型").value;
+                        var e = document.getElementById("deliverprovince").value + "|" + document.getElementById("delivercity").value + "|" + document.getElementById("deliverarea").value;
+                        var f = document.getElementById("专家类别").value;
+
+                        var g = document.getElementById("抽取个数").value;
+                        //if (document.getElementById("thiscount").value == "-1") {
+                        //    g = document.getElementById("抽取个数").value;//第一次抽取按照输入的个数
+                        //}
+                        //else {
+                        //    g = document.getElementById("thiscount").value;//上次抽取的总个数
+                        //}
+
+                        var h = document.getElementById("回避列表").value;
+                        //var i = document.getElementById("selectnum").value;//去除不能出席的后剩余的个数
+                        var j = document.getElementById("selectnumlist").value;//已抽取的专家的ID集合,防止重复抽取
+                        var k = document.getElementById("n").value;//当前第几次抽取
+                        var l = document.getElementById("trnumcount").value;//已有总行数,用于确定序号
+
+                        var tr = document.getElementById("selecttable").getElementsByTagName("tr");
+                        for (y = 0; y < tr.length; y++) {
+                            if (tr[y].getAttribute("num") == (k - 1)) {
+                                var lable = tr[y].getElementsByTagName("label");
+                                for (z = 0; z < lable.length; z++) {
+                                    lable[z].onclick = function () { return false; };
+                                }
+                            }
+                        }
+                        //document.getElementById("pro_name").readOnly = "readOnly";
+                        //document.getElementById("pro_num").readOnly = "readOnly";
+                        //document.getElementById("pro_time").readOnly = "readOnly";
+
+                        //document.getElementById("专业技术职称").disabled = "disabled";
+                        //document.getElementById("最高学位").disabled = "disabled";
+                        //document.getElementById("专家类型").disabled = "disabled";
+                        //document.getElementById("专家类别").disabled = "disabled";
+                        //document.getElementById("deliverprovince").disabled = "disabled";
+                        //document.getElementById("delivercity").disabled = "disabled";
+                        //document.getElementById("deliverarea").disabled = "disabled";
+                        //document.getElementById("从事专业").readOnly = "readOnly";
+                        //document.getElementById("回避列表").readOnly = "readOnly";
+
+                        //var parms = "zc=" + a + "&xw=" + b + "&zy=" + c + "&type=" + d + "&palce=" + e + "&class=" + f + "&num=" + g + "&outlist=" + h + "&count=" + i + "&selectlist=" + j + "&n=" + k + "&trcount=" + l;
+                        var parms = "zc=" + a + "&xw=" + b + "&zy=" + c + "&type=" + d + "&palce=" + e + "&class=" + f + "&num=" + g + "&outlist=" + "&selectlist=" + j + "&n=" + k + "&trcount=" + l;
+
+                        $.get("/专家/SearchByCondition?" + encodeURI(parms), function (response) {
+
+
+                            document.getElementById("n").value = (parseInt(document.getElementById("n").value) + 1);
+                            $("#selecttable").append(response);
+                            //document.getElementById("selecttable").style.display = "block";
+                            //document.getElementById("selectnum").value = $("input.rescount:last").val();//当前抽取的个数
+                            //document.getElementById("thiscount").value = $("input.rescount:last").val();//当前抽取的个数
+
+                            document.getElementById("trnumcount").value = (parseInt(document.getElementById("trnumcount").value) + parseInt($("input.rescount:last").val()));//总行数
+
+                            var oldlist = "";
+                            var trlist = document.getElementById("selecttable").getElementsByTagName("tr");
+                            for (var i = 0; i < trlist.length; i++) {
+                                if (trlist[i].getAttribute("name") != null && trlist[i].getAttribute("name") != "listtop") {
+                                    oldlist += trlist[i].getAttribute("id") + "|";
+                                }
+                            }
+                            document.getElementById("selectnumlist").value = oldlist;
+
+
+                            //$("input.rescount:last").val()
+                            //var str = response.split('%');
+                            //document.getElementById("selecttable").innerHTML += str[0];
+                            //document.getElementById("selectnum").value = (parseInt(str[1]) + parseInt(document.getElementById("selectnum").value)).toString();
+                            //document.getElementById("selecttable").style.display = "block";
+
+                            //var trlist = document.getElementById("selecttable").getElementsByTagName("tr");
+                            //for (var i = 0; i < trlist.length; i++) {
+                            //    if (trlist[i].getAttribute("id") != "head") {
+                            //        document.getElementById("selectnumlist").value = trlist[i].getAttribute("id") + "|";
+                            //    }
+                            //}
+
+                        });
+
+                    }
+                    function RQcheck(RQ) {
+                        var date = RQ;
+                        var result = date.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+
+                        if (result == null)
+                            return false;
+                        var d = new Date(result[1], result[3] - 1, result[4]);
+                        return (d.getFullYear() == result[1] && (d.getMonth() + 1) == result[3] && d.getDate() == result[4]);
+
+                    }
+                </script>
+            </div>
+            @*<input type="hidden" id="selectnum" value="0" />*@
+            <input type="hidden" id="selectnumlist" value="" />
+            <input type="hidden" id="n" value="1" />
+            @*<input type="hidden" id="thiscount" value="-1" />*@
+
+            <input type="hidden" id="trnumcount" value="0" />
+
+            <table width="900" cellpadding="0" cellspacing="0" id="selecttable">
+                <tr id="head">
+                    <th width="10%">序号</th>
+                    <th width="10%">评审专家类型</th>
+                    <th width="15%">专业技术职称</th>
+                    <th width="15%">最高学位</th>
+                    <th width="20%">联系方式</th>
+                    <th width="30%">操作</th>
+                </tr>
+            </table>
+
+            <div class="expert_condition_inner" style="border:none; font-size:14px;">
+                <input type="button" value="确认抽取结果" style="width:100px; height:30px; float:right;" onclick="sendSearchResult();" />
+            </div>
+            <script type="text/javascript">
+                function sendSearchResult() {
+
+                    if (!checkform()) {
+                        return;
+                    }
+
+
+                    if ($(".expert_condition_button2_y_sel").length < parseInt($("#抽取总个数").val())) {
+                        alert("还未达到总抽取个数,请继续抽取!");
+                        return;
+                    }
+
+                    var retstr = ""
+
+                    var tr = document.getElementById("selecttable").getElementsByTagName("tr");
+                    for (var i = 0; i < tr.length; i++) {
+                        if (tr[i].getAttribute("name") == "listtop") {
+
+                            retstr += tr[i].getAttribute("num") + "|" + tr[i].getAttribute("time") + "|" + tr[i].getAttribute("condition") + "^";
+                            //alert(retstr);
+
+                            var num = tr[i].getAttribute("num");
+                            for (var j = 0; j < tr.length; j++) {
+                                if (tr[j].getAttribute("num") == num && tr[j].getAttribute("name") != "listtop") {
+
+                                    var str = ""//每一行的内容串
+                                    str += tr[j].getElementsByTagName("td")[0].innerHTML + "|";
+                                    str += tr[j].getAttribute("id") + "|";
+                                    if (tr[j].getAttribute("sure") == "1") {
+                                        str += "1"
+                                    }
+                                    else {
+
+                                        str += "0," + tr[j].getElementsByTagName("td")[5].getElementsByTagName("input")[2].value;
+                                    }
+
+                                    retstr += str + "^";
+
+                                }
+                            }
+                            retstr += "%";
+                        }
+
+
+                    }
+                    //筛选条件
+                    //var a = document.getElementById("专业技术职称").selectedIndex;
+                    //var b = document.getElementById("最高学位").selectedIndex;
+                    //var c = document.getElementById("从事专业").value;
+                    //var d = document.getElementById("专家类型").selectedIndex;
+                    //var e = document.getElementById("deliverprovince").value + "|" + document.getElementById("delivercity").value + "|" + document.getElementById("deliverarea").value;
+                    //var f = document.getElementById("专家类别").selectedIndex;
+
+
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/专家/SaveHistory?parm=" + retstr + "&pro_name=" + $("#pro_name").val() + "&pro_num=" + $("#pro_num").val() + "&pro_time=" + $("#pro_time").val() + "&otherlist=" + $("#回避列表").val() + "&count=" + $("#抽取总个数").val(),
+                        success: function (msg) {
+                            if (msg != "0") {
+                                //document.getElementById("attachtext").value = document.getElementById("attachtext").value.replace(n + "|", "");
+                                //jQuery("#uploadify").uploadifyCancel(msg);
+                            }
+                        }
+                    });
+                    //alert(retstr);
+                }
+                function deleteline(a) {
+                    //a.style.backgroundColor = '#f00'; a.style.color = '#fff';
+                    a.setAttribute("class", "expert_condition_button2_n_sel");
+                    var b = a.parentNode.parentNode.getElementsByTagName("input")[2];
+                    b.style.display = "block";
+                    //if (a.getAttribute("n") == "0") {
+                    //    document.getElementById("selectnum").value = (parseInt(document.getElementById("selectnum").value) - 1).toString();
+                    //    a.setAttribute("n", "1");//不能重复选择
+                    //    a.parentNode.getElementsByTagName("label")[0].setAttribute("n", "0");//使确认按钮可用
+                    //}
+
+                    a.parentNode.parentNode.parentNode.setAttribute("sure", "0");
+
+                    a.parentNode.getElementsByTagName("label")[0].setAttribute("class", "expert_condition_button2_y_unsel");
+                    //a.parentNode.getElementsByTagName("label")[0].style.backgroundColor = "#fff";
+                    //a.parentNode.getElementsByTagName("label")[0].style.color = "#ccf";
+                }
+
+                function addline(a) {
+                    //a.style.backgroundColor = '#0f0'; a.style.color = '#fff';
+                    a.setAttribute("class", "expert_condition_button2_y_sel");
+                    var b = a.parentNode.parentNode.getElementsByTagName("input")[2];
+                    b.style.display = "none";
+                    b.value = "";
+
+                    //if (a.getAttribute("n") == "0") {
+                    //    document.getElementById("selectnum").value = (parseInt(document.getElementById("selectnum").value) + 1).toString();
+                    //    a.setAttribute("n", "1")//不能重复选择
+                    //    a.parentNode.getElementsByTagName("label")[1].setAttribute("n", "0");//使不能出席按钮可用
+                    //}
+
+                    //document.getElementById("selectnum").value = (parseInt(document.getElementById("selectnum").value) + 1).toString();
+                    a.parentNode.parentNode.parentNode.setAttribute("sure", "1");
+
+                    a.parentNode.getElementsByTagName("label")[1].setAttribute("class", "expert_condition_button2_n_unsel");
+                    //a.parentNode.getElementsByTagName("label")[1].style.backgroundColor = "#fff";
+                    //a.parentNode.getElementsByTagName("label")[1].style.color = "#ccf";
+                }
+            </script>
+        </div>
+    </div>
+</div>

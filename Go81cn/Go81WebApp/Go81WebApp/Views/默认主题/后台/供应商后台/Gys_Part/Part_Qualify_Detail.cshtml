@@ -1,0 +1,119 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<style>
+    .submenulist li h3 a.on {
+        width: 241px;
+    }
+</style>
+<div id="f1" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>正在上传，请稍等...</span>
+    </div>
+</div>
+<div id="title_div" class="gys_xttz_topbg">
+    <div class="index_bottom_zb_top_title" style="font-family:'Microsoft YaHei';">资质证书信息</div>
+</div>
+<div class="gys_znxx_box">
+    @using (Html.BeginForm("Modify_qualify", "供应商后台", FormMethod.Post, new { enctype = "multipart/form-data", name = "formdata" }))
+    {
+        if (Model.资质证书列表 != null && Model.资质证书列表.Count() != 0)
+        {
+            for (int i = 0; i < Model.资质证书列表.Count(); i++)
+            {
+                if (i != int.Parse(ViewData["index"].ToString()))
+                {
+                    <span>@Html.HiddenFor(m => m.资质证书列表[i])</span>
+                }
+            }
+        }
+        <input type="hidden" value="@ViewData["index"].ToString()" name="index1" />
+        <table style="width:90%; margin:40px auto 0px auto;" class="table table-bordered table-striped">
+            @if (Model.资质证书列表 != null && Model.资质证书列表.Count() != 0)
+            {
+                <tr><td align="right">证书名称：</td><td>@Html.TextBoxFor(m => m.资质证书列表[int.Parse(ViewData["index"].ToString())].名称)</td><td align="right">资质等级：</td><td>@Html.TextBoxFor(m => m.资质证书列表[int.Parse(ViewData["index"].ToString())].等级)</td></tr>
+                <tr><td align="right">发证机构：</td><td>@Html.TextBoxFor(m => m.资质证书列表[int.Parse(ViewData["index"].ToString())].发证机构)</td><td align="right">年检日期：</td><td>@Html.TextBoxFor(m => m.资质证书列表[int.Parse(ViewData["index"].ToString())].年检日期, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })</td></tr>
+                <tr><td align="right">有效起始日期：</td><td>@Html.TextBoxFor(m => m.资质证书列表[int.Parse(ViewData["index"].ToString())].有效期起始日期, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })</td><td align="right">有效结束日期：</td><td>@Html.TextBoxFor(m => m.资质证书列表[int.Parse(ViewData["index"].ToString())].有效期结束日期, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })</td></tr>
+                <tr><td align="right">扫描件名称：</td><td>@Html.TextBoxFor(m => m.资质证书列表[int.Parse(ViewData["index"].ToString())].资质证书电子扫描件[0].名称)</td><td align="right">扫描件说明：</td><td>@Html.TextBoxFor(m => m.资质证书列表[int.Parse(ViewData["index"].ToString())].资质证书电子扫描件[0].说明)</td></tr>
+            }
+        </table>
+    }
+    <table width="100%" style="margin-bottom:10px; margin-left:50px; margin-top:10px;">
+        <tr>
+            <td align="left" valign="top">
+                扫描件：
+                @if ( System.IO.File.Exists(Server.MapPath(@Model.资质证书列表[int.Parse(ViewData["index"].ToString())].资质证书电子扫描件[0].路径)))
+                {
+                    <a id="skan" href="@Model.资质证书列表[int.Parse(ViewData["index"].ToString())].资质证书电子扫描件[0].路径" target="_blank" style="margin-left:10px; color:red;"><img src="@Model.资质证书列表[int.Parse(ViewData["index"].ToString())].资质证书电子扫描件[0].路径" width="50" height="30" /></a><a id="mdf" href="###" onclick="showButton(this)" style="margin-left:10px; color:red;">修改</a>
+                }
+                else
+                {
+                    <span id="uppic">还没有上传扫描件<a style="color:red;" onclick="showButton(this)">【点击上传】</a></span>
+                }
+                <div id="box1" style="margin-top:10px; display:inline-block;">
+                    <form action="/供应商后台/SavePicture" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                        <span id="bx" style="display:none;">
+                            <input style="margin-left:15px; width:72px;display:inline;" onchange="fileChange(this, '#box1')" type="file" accept="image/jpeg" onmouseover="show_tip(this)" onmouseout="hide_tip(this)" multiple="multiple" name="file1" /><span><em style="color:red;">(注：请上传2M以下的jpg格式的彩色扫描件图片)</em></span></span>
+                        <input type="hidden" value="quality,@int.Parse(ViewData["index"].ToString())" name="pic1" />
+                    </form>
+                    <div id="framebox" style="display:none;">
+                        <iframe name="showPic" id="showPic" frameborder="0" height="150;" width="100%"></iframe>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr><td colspan="2" align="center"><input style="width:60px; height:30px;" onclick="submitForm()" type="submit" value="保存" /></td></tr>
+    </table>
+</div>
+<script type="text/javascript">
+    function showButton(th) {
+        $("#bx").css({ "display": "inline-block" });
+        $("#box1").css({ "margin-top": "-10px" });
+        $("a#skan").hide();
+        $("a#mdf").hide();
+        $("span#uppic").hide();
+    }
+    function fileChange(target,th)
+    {
+        document.forms["upload"].submit();
+        $(th).children("#framebox").show();
+        $("#f1").show();
+        $("a#skan").hide();
+        $("a#mdf").hide();
+        $("#box1").css({ "margin-top": "0px" });
+    }
+    function submitForm() {
+        $("form[name='formdata']").submit();
+    }
+</script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        setInterval("PicScroll()", 2000);
+        $("#资质证书信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#资质证书信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function PicScroll() {
+        if ($("table#picture tr td").length >= 6) {
+            $("table#picture").animate({ "margin-left": "-100" },
+                    function () {
+                        var s = $("table#picture tr td:first img:first").attr("src");
+                        var h1 = $("table#picture tr td:first a:eq(0)").attr("href");
+                        var h = $("table#picture tr td:first a:eq(1)").attr("href");
+                        $("table#picture tr td:first").remove();
+                        $("table#picture tr").append("<td><a target='_blank' href='" + h1 + "'><img width='100' height='50' src='" + s + "'/></a><br/><a  style='text-decoration:underline;' href=" + h + ">删除</a></td>");
+                        $("table#picture").css("margin-left", "0px");
+                    })
+        }
+    }
+    function show_tip(t) {
+        $(t).next("div").show();
+        $(t).next("div").css("display", "inline-block");
+    }
+    function hide_tip(t) {
+        $(t).next("div").hide();
+    }
+</script>

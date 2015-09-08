@@ -1,0 +1,92 @@
+﻿@using Go81WebApp.Models.数据模型.项目数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+@model IEnumerable<供应商>
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <script type="text/javascript" language="javascript" src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/JS/provinceandcity_all.js"></script>
+    <link rel="stylesheet" href="~/css/WeChat.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>西南物资采购网采购商城-供应商</title>
+    <style>
+        #pager a {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="outbox">
+        <div class="searchBox">
+            <div id="area">
+                所在地区：<select id="deliverprovince" name="deliverprovince"></select>
+                <select id="delivercity" name="delivercity"></select>
+                <select id="deliverarea" name="deliverarea"></select>
+                <script>
+                    window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                </script>
+            </div>
+            <div id="industry">
+                @{
+                    IEnumerable<商品分类> goodclass = ViewData["行业列表"] as IEnumerable<商品分类>;
+
+                }
+                @if (goodclass != null && goodclass.Any())
+                {
+                    <span>所属行业：</span><select id="fac">
+                        <option value="">请选择行业</option>
+                        @foreach (var i in goodclass)
+                        {
+                            <option class="yjfn" id="@i.分类名">@i.分类名</option>
+                        }
+                    </select>
+                }
+            </div>
+            <div id="company">
+                企业名称：<div style="display:inline-block;width:70%; background-color:#6192F9; height:29px; border-radius:3px;"><input type="text" id="name" value="" /><input type="button" id="search_bt" onclick="search_gys(1,'bt')" value="搜索" /></div>
+            </div>
+        </div>
+        <ul id="usercontainer"></ul>
+        <div id="gys_pager">
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        function setPage(pgCount, currentPage) {
+            if (pgCount >currentPage)
+            {
+                currentPage++;
+                $("#gys_pager").html("<a onclick='search_gys(" + currentPage + ",\"more\")'>查看更多>></a>");
+            }
+            else
+            {
+                $("#gys_pager").html("<a>数据已经加载完毕</a>");
+            }
+        }
+        function search_gys(pg,which)
+        {
+            var str = "";
+            $.get("/WeChat/Search_Supplier", { provice: $("#deliverprovince").val(), city: $("#delivercity").val(), area: $("#deliverarea").val(), factory: $("#fac").val(), name: $("#name").val(),skip:pg }, function (data) {
+                setPage( data.Data.pageSize,pg);
+                for (var i = 0; i < data.Data.Slist.length;i++)
+                {
+                    str += "<li><div class='container'><div class='leftbox'><a href='/WeChat/Gysdetail?id=" + data.Data.Slist[i].Id + "'><img title='展示图片' src='" + data.Data.Slist[i].Picture + "' /></a></div><div class='gys_rightbox'><div>企业名称：" + data.Data.Slist[i].Name + "</div><div>所在地区：" + data.Data.Slist[i].Area + "</div><div>主营产品：" + data.Data.Slist[i].Product + "</div><div>员工人数：" + data.Data.Slist[i].employer + "</div><div>经营类型：" + data.Data.Slist[i].Sales + "</div><div>联系方式：" + data.Data.Slist[i].Contact + "</div></div><div style='clear:both;'></div></div></li>";
+                }
+                if (which=="more")
+                {
+                    $("#usercontainer").append(str);
+                }
+                else
+                {
+                    $("#usercontainer").html(str);
+                }
+            });
+        }
+        $(document).ready(function () {
+            search_gys(1,'bt');
+        });
+    </script>
+</body>
+</html>

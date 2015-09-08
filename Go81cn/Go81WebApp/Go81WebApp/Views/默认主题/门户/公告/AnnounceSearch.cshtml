@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "公告搜索";
+}
+<div class="front_outdiv">
+    @if (WebApiApplication.IsIntranet)
+    {
+        <div class="front_outdiv_right">
+            @Html.Action("Part_OtherList", "公告")
+        </div>
+        <div class="front_outdiv_left">
+            @Html.Action("Part_AnnounceSearch", "公告")
+        </div>
+    }
+    else
+    {
+        <div class="front_outdiv_left">
+            @Html.Action("Part_AnnounceSearch", "公告")
+        </div>
+        <div class="front_outdiv_right">
+            @Html.Action("Part_OtherList", "公告")
+        </div>
+    }
+    
+</div>
+
+

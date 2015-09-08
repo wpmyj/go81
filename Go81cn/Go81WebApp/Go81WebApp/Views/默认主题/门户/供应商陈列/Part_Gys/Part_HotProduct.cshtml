@@ -1,0 +1,82 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+<style>
+    .links:hover {
+        text-decoration: underline;
+    }
+</style>
+<div class="title-base-out" style=" margin-top:0;">
+    <div class="title-base-middle">
+        @if (WebApiApplication.IsIntranet)
+        {
+            <div class="title-base-inner">优质供应商推荐</div>
+        }
+        else
+        {
+            <div class="title-base-inner">新入库供应商</div>
+        }
+    </div>
+</div>
+<div style="width:240px; float:left;margin-top:5px;">
+
+    <div class="index_menu_content_box">
+        @{
+            IEnumerable<供应商> hotgood = ViewData["热销商品列表"] as IEnumerable<供应商>;
+            if (hotgood.Any() && hotgood != null)
+            {
+                foreach (var item in hotgood)
+                {
+                    <div class="gyspage_detail_leftimgbox">
+                        <a href="~/供应商陈列/Supplier_Destination?id=@item.Id" target="_blank" onclick='clickStatistics("B2","2", "-1","@item.Id")'>
+                            @if (item.供应商用户信息.供应商图片.Any() || item.供应商用户信息.展示商品.Any())
+                            {
+                                if (item.供应商用户信息.展示商品.Any())
+                                {
+                                    <img src="@item.供应商用户信息.展示图片.First()" />
+                                }
+                                else
+                                {
+                                    <img src="@item.供应商用户信息.供应商图片.Last() " />
+                                }
+                            }
+                            else
+                            {
+                                <img src="~/images/noimage.jpg" />
+                            }
+                        </a>
+                        <div style="text-align:left; width:220px; margin-left:auto;margin-right:auto;font-size:12px;">
+                            <table style="margin-top:10px; margin-bottom:10px;text-align:right;">
+                                <tr>
+                                    <td style="width:62px;">企业名称：</td>
+                                    <td align="left">
+                                        <a href="~/供应商陈列/Supplier_Destination?id=@item.Id" target="_blank" onclick='clickStatistics("B2","2", "-1","@item.Id")'>
+                                            @if (item.企业基本信息.企业名称.Length > 12)
+                                            {
+                                                @item.企业基本信息.企业名称.Substring(0, 12)
+                                            }
+                                            else
+                                            {
+                                                @item.企业基本信息.企业名称
+                                            }
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:62px;">所属行业：</td>
+                                    <td align="left">@item.企业基本信息.所属行业</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:62px;">所属地域：</td>
+                                    <td align="left">@item.所属地域.地域</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div>暂无相关数据！</div>
+            }
+        }
+    </div>
+</div>

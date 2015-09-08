@@ -1,0 +1,533 @@
+﻿@model Go81WebApp.Models.数据模型.推广业务数据模型.供应商充值余额
+@using Go81WebApp.Models.数据模型.推广业务数据模型
+@{
+    ViewBag.Title = "账户资金管理";
+    Layout = "_BackLayout.cshtml";
+}
+<style type="text/css">
+    .tabmenu_zb li {
+        margin-left:5px;
+        background:#4AC58D;
+        padding-bottom:1px;
+    }
+    .tabmenu_zb .onhover {
+        background-color: #ffffff;
+        cursor: pointer;
+        padding-bottom: 5px;
+        border: 1px solid #C7C7C7;
+        border-bottom: none;
+    }
+    .account-total {
+        display:none;
+    }
+    .account-total table{
+        width:100%;
+        padding:0 20px;
+        font-size:14px;
+    }
+    .account-total table tr {
+        line-height:30px;
+    }
+    .account-total table tr:nth-child(2n) {
+        background:#F7F7F7;
+    }
+
+    .account-total table tr td.decimal-cost{
+        text-align:center;
+    }
+
+     .account-total span.expire{
+        letter-spacing: 2px;
+        cursor: pointer;
+        color: #FFF;
+        background: none repeat scroll 0% 0% #8C8C8C;
+        text-align: center;
+        padding: 0px 10px;
+        margin: 0px 5px;
+        height: 25px;
+        display: inline-block;
+        line-height: 25px;
+    }
+
+    .modal_content_charge {
+        width: 500px;
+        height: 270px;
+        margin: 6% auto;
+        background: #fff;
+        border: 1px solid #A6C2A7;
+        text-indent: 3em;
+        position: relative;
+    }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div id="title_div" class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">服务管理</div>
+        </div>
+        <div class="gys_xttz_topbox outtab" style="width:940px;margin-top:20px;">
+            <div class="gys_xttz_topbg" style="width:940px;border-bottom:none;">
+                <div class="tabmenu_zb">
+                    <ul>
+                        <li index="0" class="changetab onhover">已开通服务</li>
+                        <li index="1" class="changetab">已申请服务</li>
+                        @*<li index="2" class="changetab">广告资金池</li>
+                        <li index="3" class="changetab">专项资金池</li>*@
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="index_bottom_zb_content_box tabcontent" id="tabcontent_zb" style="width: 937px; margin-top: 0; border: 1px solid #C7C7C7;height:auto;padding-bottom:10px;">
+                  
+            <div class="account-total" style="display:block">
+                <table cellpadding="0" cellspacing="0">
+                    <tr style="line-height:40px;">
+                        @*<td colspan="3 ">现金余额：
+                            <strong style="font-size:24px;">@Model.可用余额.ToString("C")</strong>
+                        </td>*@
+                        @*<td>优惠余额</td>
+                        <td style="font-size:24px;"><strong>￥0.00</strong></td>
+                        <td>补偿余额</td>
+                        <td style="font-size:24px;"><strong>￥0.00</strong></td>*@
+                        <td>@*<a style="letter-spacing: 2px;cursor: pointer;color: #fff;background: #10A64F;text-align: center;width: 70px;height: 25px;display: inline-block;line-height: 25px;" onclick="$('#recharge').fadeIn()">充值</a>*@</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="font-size: 18px;color: #504F4F;"><strong>我的已开通服务</strong></td>
+                    </tr>
+                    <tr>
+                        <th style="font-size:16px;border-top:#edecec 1px solid;text-align:center">服务名称</th>
+                        <th style="font-size:16px;border-top:#edecec 1px solid;text-align:center">费用</th>
+                        <th style="font-size:16px;border-top:#edecec 1px solid;text-align:center">开始时间</th>
+                        <th style="font-size:16px;border-top:#edecec 1px solid;text-align:center">时长</th>
+                        <th style="font-size:16px;border-top:#edecec 1px solid;text-align:center">结束日期</th>
+                        <th style="font-size:16px;border-top:#edecec 1px solid;text-align:center">操作</th>
+                    </tr>
+                    @{
+                        var mode = ViewData["已开通服务"] as List<供应商增值服务申请记录>;
+                        if (mode != null)
+                        {
+                            var num = 0;
+                            foreach (var item in mode)
+                            {
+                                <tr>
+                                    <td align="left">@item.所申请项目名</td>
+                                    <td>
+                                        @foreach (var m in 扣费规则.规则列表)
+                                        {
+                                            if (item.所申请项目名 == m.扣费项目名)
+                                            {
+                                                if (item.所申请项目名 == "购买U盾")
+                                                {
+                                                    <span>@(m.扣费金额) 元/个</span>
+                                                }
+                                                else if (m.扣费类型 == 扣费类型.按年扣费)
+                                                {
+                                                    <span>@(m.扣费金额) 元/年</span>
+                                                }
+                                                else if (m.扣费类型 == 扣费类型.按月扣费)
+                                                {
+                                                    <span>@(m.扣费金额) 元/月</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@(m.扣费金额) 元/次</span>
+                                                }
+                                                @*if (item.所申请项目名 == "标准会员" || item.所申请项目名 == "基础会员" || item.所申请项目名 == "添加商品二级分类" || item.所申请项目名 == "添加商品一级分类" || item.所申请项目名 == "商务会员")
+                                                {
+                                                    <span>@(m.扣费金额) 元/年</span>
+                                                }
+                                                else
+                                                {
+                                                    if (item.所申请项目名 == "购买U盾")
+                                                    {
+                                                        <span>@(m.扣费金额) 元/个</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@(m.扣费金额) 元/月</span>
+                                                    }
+                                                }*@
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">@item.签订时间.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                                    <td align="center">
+                                        @item.服务期限
+                                        @if (item.所申请项目名 == "标准会员" || item.所申请项目名 == "商务会员" || item.所申请项目名 == "基础会员" || item.所申请项目名 == "添加商品一级分类" || item.所申请项目名 == "添加商品二级分类" || item.所申请项目名 == "U盾服务")
+                                        {
+                                            <span>年</span>
+
+                                        }
+                                        else
+                                        {
+                                            if (item.所申请项目名 == "购买U盾")
+                                            {
+                                                <span>个</span>
+                                            }
+                                            else
+                                            {
+                                                <span>月</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td align="center">
+                                        @*@if (item.所申请项目名 == "标准会员" || item.所申请项目名 == "商务会员" || item.所申请项目名 == "基础会员")
+                                        {
+                                            <span>
+                                                @item.结束时间.ToString("yyyy/MM/dd  HH:mm:ss")
+                                            </span>
+                                        }
+                                        else
+                                        {*@
+                                            <span>
+                                                @item.结束时间.ToString("yyyy/MM/dd  HH:mm:ss")
+                                            </span>
+                                        @*}*@
+                                    </td>
+                                    <td>
+                                        @switch (item.所申请项目名)
+                                        {
+                                            case "企业推广服务A1位置":<a href="/供应商后台/Showproduct?name=@item.所申请项目名">修改首页推荐商品</a>; break;
+                                            case "企业推广服务A2位置":<a href="/供应商后台/Showproduct?name=@item.所申请项目名">修改首页动态商品</a>; break;
+                                            case "企业推广服务B1-1位置":<a href="/供应商后台/ChoosePicture?name=@item.所申请项目名">修改供应商列表展示商品</a>; break;
+                                            case "企业推广服务B1-2位置":<a href="/供应商后台/ChoosePicture?name=@item.所申请项目名">修改供应商列表展示商品</a>; break;
+                                            case "企业推广服务B3位置":<a href="/供应商后台/Showproduct?name=@item.所申请项目名">修改供应商主页热销商品</a>; break;
+                                            case "企业推广服务C1位置":<a href="/供应商后台/Showproduct?name=@item.所申请项目名">修改供应商主页热销商品</a>; break;
+                                            case "企业推广服务C2位置":<a href="/供应商后台/Showproduct?name=@item.所申请项目名">修改供应商主页热销商品</a>; break;
+                                            case "标准会员":<a href="/供应商后台/ChoosePicture?name=@item.所申请项目名">修改供应商列表展示商品</a>; break;
+                                            case "商务会员":<a href="/供应商后台/ChoosePicture?name=@item.所申请项目名">修改供应商列表展示商品</a>; break;
+                                        }
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+                    }
+
+                </table>
+            </div>
+            <div class="account-total">
+                <table cellpadding="0" cellspacing="0" width="100%">
+                    @*<tr style="line-height:40px;">
+                        <td colspan="3">
+                            现金余额：
+                            <strong style="font-size:24px;">@Model.可用余额.ToString("C")</strong>
+                        </td>
+                        <td><a style="letter-spacing: 2px;cursor: pointer;color: #fff;background: #10A64F;text-align: center;width: 70px;height: 25px;display: inline-block;line-height: 25px;" onclick="$('#recharge').fadeIn()">充值</a></td>
+                    </tr>*@
+                    @{
+                        var mode1 = ViewData["已申请服务"] as List<供应商增值服务申请记录>;  
+                    }
+                    <tr>
+                        <th style="font-size:16px;border-top:#edecec 1px solid;text-align:center">服务名称</th>
+                        <th style="font-size:16px;border-top:#edecec 1px solid;text-align:center">费用</th>
+                        <th style="font-size:16px;border-top:#edecec 1px solid;text-align:center">开始时间</th>
+                        <th style="font-size:16px;border-top:#edecec 1px solid;text-align:center">时长</th>
+                        <th style="font-size:16px;border-top:#edecec 1px solid;text-align:center">结束日期</th>
+                    </tr>
+                    @if (mode1.Count != 0)
+                    {
+                        foreach (var item in mode1)
+                        {
+                            <tr>
+                                <td align="center">@item.所申请项目名</td>
+                                <td>
+                                    @foreach (var m in 扣费规则.规则列表)
+                                    {
+                                        if (item.所申请项目名 == m.扣费项目名)
+                                        {
+                                            if (item.所申请项目名 == "标准会员" || item.所申请项目名 == "基础会员" || item.所申请项目名 == "商务会员" || item.所申请项目名 == "添加商品一级分类" || item.所申请项目名 == "添加商品二级分类" || item.所申请项目名 == "U盾服务")
+                                            {
+                                                <span>@(m.扣费金额) 元/年</span>
+                                            }
+                                            else
+                                            {
+                                                if (item.所申请项目名 == "购买U盾")
+                                                {
+                                                    <span>@(m.扣费金额) 元/个</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>@(m.扣费金额) 元/月</span>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @if (item.签订时间 == default(DateTime))
+                                    {
+                                        <span>尚未签订</span>
+                                    }
+                                    else
+                                    {
+                                        @item.签订时间.ToString("yyyy/MM/dd HH:mm:ss")
+                                    }
+                                </td>
+                                <td align="center">
+                                    @item.服务期限
+                                    @if (item.所申请项目名 == "标准会员" || item.所申请项目名 == "商务会员" || item.所申请项目名 == "基础会员" || item.所申请项目名 == "添加商品一级分类" || item.所申请项目名 == "添加商品二级分类" || item.所申请项目名 == "U盾服务")
+                                    {
+                                        <span>年</span>
+
+                                    }
+                                    else
+                                    {
+                                        if (item.所申请项目名 == "购买U盾")
+                                        {
+                                            <span>个</span>
+                                        }
+                                        else
+                                        {
+                                            <span>月</span>
+                                        }
+                                    }
+                                </td>
+                                <td align="center">
+                                    @if (item.签订时间 == default(DateTime))
+                                    {
+                                        <span>等待开通</span>
+                                    }
+                                    else
+                                    {
+                                        <span>等待开通</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="5" align="center">暂时没有未开通的服务，您可以从<em><a href="/jct/" target="_blank" style="color:red; font-size:16px;">这里</a></em>去申请服务。</td></tr>
+                    }
+              
+                </table>
+            </div>
+
+
+
+            @*<div class="account-total">
+                <table cellpadding="0" cellspacing="0">
+                    <tr style="line-height:40px;">
+                        <td>现金余额</td>
+                        <td style="font-size:24px;"><strong>￥0.00</strong></td>
+                        <td>优惠余额</td>
+                        <td style="font-size:24px;"><strong>￥0.00</strong></td>
+                        <td>补偿余额</td>
+                        <td style="font-size:24px;"><strong>￥0.00</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>资金池总余额</strong></td>
+                        <td class="decimal-cost" colspan="2">￥0.00 元</td>
+                        <td><strong>资金池总消费额</strong></td>
+                        <td class="decimal-cost" colspan="2">￥0.00 元</td>
+                    </tr>
+                    <tr>
+                        <td><strong>资金池总补偿额</strong></td>
+                        <td class="decimal-cost" colspan="2">￥0.00 元</td>
+                    </tr>
+                    <tr>
+                        <td><strong>总投资现金</strong></td>
+                        <td class="decimal-cost" colspan="2">￥0.00 元</td>
+                        <td><strong>优惠补偿总额</strong></td>
+                        <td class="decimal-cost" colspan="2">￥0.00 元</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="account-total">
+                <table cellpadding="0" cellspacing="0">
+                    <tr style="line-height:40px;">
+                        <td>现金余额</td>
+                        <td style="font-size:24px;"><strong>￥0.00</strong></td>
+                        <td>优惠余额</td>
+                        <td style="font-size:24px;"><strong>￥0.00</strong></td>
+                        <td>补偿余额</td>
+                        <td style="font-size:24px;"><strong>￥0.00</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>资金池总余额</strong></td>
+                        <td class="decimal-cost" colspan="2">￥0.00 元</td>
+                        <td><strong>资金池总消费额</strong></td>
+                        <td class="decimal-cost" colspan="2">￥0.00 元</td>
+                    </tr>
+                    <tr>
+                        <td><strong>资金池总补偿额</strong></td>
+                        <td class="decimal-cost" colspan="2">￥0.00 元</td>
+                    </tr>
+                    <tr>
+                        <td><strong>总投资现金</strong></td>
+                        <td class="decimal-cost" colspan="2">￥0.00 元</td>
+                        <td><strong>优惠补偿总额</strong></td>
+                        <td class="decimal-cost" colspan="2">￥0.00 元</td>
+                    </tr>
+                </table>
+            </div>*@
+        </div>
+    </div>
+
+    
+    <!--充值窗口-->
+    @*<div id="recharge" class="modal_out">
+        <div class="modal_in" style="background: #4B4B4B;"></div>
+        <div class="modal_content_charge">
+            <div style="font-size: 22px;margin-top: 30px;color: #585656;text-indent: 17px;">您正在进行充值操作：<span onclick="$('#recharge').fadeOut()" style="cursor: pointer;position: absolute;top: 1px;right: 10px;">×</span></div>
+            <div style="margin-top: 15px;">
+                <input id="qulify" type="hidden" value="@ViewData["会员级别"]"/>  
+                <form action="/jct/SendMessage1" method="post">
+                    请选择充值金额：
+                    <select id="select_amount" name="AmountRecharge" style="height: 30px;width: 150px;font-size: 15px;">
+                        <option>0.01元</option>
+                        <option>6000元</option>
+                        <option>10000元</option>
+                        <option>20000元</option>
+                    </select>
+                    @if ((int)ViewData["会员级别"] <= 4)
+                    {
+                        <div style="text-indent: 2em;font-size: 13px;padding: 15px;line-height: 25px;">
+                            您选择的充值金额为
+                            <span id="amount_recharge" style="color: red;font-size: 20px">3000元</span>，
+                            由于您非本网站会员，在本网站购买服务时<span id="amount_discount" style="color: red;font-size: 20px">仅享受9.8折</span>优惠，您的实际充值金额为
+                            <span id="amount_real" style="color: red;font-size: 20px">2940元</span>
+                            ，成为会员将享受更多优惠！<a href="/jct/ApplyVip" style="color: #233AB6;text-decoration: underline" target="_blank">成为会员>></a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="text-indent: 2em;font-size: 13px;padding: 15px;line-height: 25px;">
+                            您选择的充值金额为<span id="amount_recharge" style="color: red;font-size: 20px">3000元</span>，由于您是尊贵的
+                            @if ((int)ViewData["会员级别"] == 5)
+                            {
+                                <span style="color: red">标准会员</span>
+                            }
+                            @if ((int)ViewData["会员级别"] == 6)
+                            {
+                                <span style="color: red">商务会员</span>
+                            }，本次充值将享受
+                            @if ((int)ViewData["会员级别"] == 5)
+                            {
+                                <span id="amount_discount" style="color: red;font-size: 20px">9.5折</span>
+                            }
+                            @if ((int)ViewData["会员级别"] == 6)
+                            {
+                                <span id="amount_discount" style="color: red;font-size: 20px">9折</span>
+                            }优惠。您的实际充值金额为
+                           @if ((int)ViewData["会员级别"] == 5)
+                           {
+                                <span id="amount_real" style="color: red;font-size: 20px">2850元</span>
+                           }
+                           @if ((int)ViewData["会员级别"] == 6)
+                           {
+                                <span id="amount_real" style="color: red;font-size: 20px">2700元</span>
+                           }
+                        </div>
+                    }
+                    <div style="text-align: center;text-indent: 0;">
+                        <input id="submit_recharge" class="btn-base" type="submit" value="确认充值" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>*@
+<script type="text/javascript">
+    var timer;
+    $(function () {
+        $("li.changetab").hover(function () {
+            var tab = $(this);
+            timer = setTimeout(function () {
+                var index = tab.attr("index");
+                var divs = tab.parents(".outtab").next(".tabcontent");
+                tab.addClass("onhover").siblings().removeClass("onhover");
+                divs.children().hide().eq(index).show();
+            }, 200);
+        }, function () {
+            clearTimeout(timer);
+        });
+
+        $("#我订购的服务").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#我订购的服务").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+
+    //充值提醒是否充值
+    $("#submit_recharge").click(function() {
+        var numberRecharge = $("#select_amount").find("option:selected").text();
+        if (confirm("请确认是否充值" + numberRecharge)) {
+            return true;
+        }
+        return false;
+    });
+
+    //选择充值金额时根据会员级别以及选择的充值金额给出折扣
+    $("#select_amount").change(function () {
+        var membership = $("#qulify").val();
+        var amount = $(this).find("option:selected").text();
+        $("#amount_recharge").html(amount);
+        switch(membership) {
+            default:
+                switch(amount) {
+                    case "3000元":
+                        $("#amount_discount").html("9.8折");
+                        $("#amount_real").html(3000 * 0.98 + "元");
+                        break;
+                    case "6000元":
+                        $("#amount_discount").html("9.5折");
+                        $("#amount_real").html(6000 * 0.95 + "元");
+                        break;
+                    case "10000元":
+                        $("#amount_discount").html("9.2折");
+                        $("#amount_real").html(10000 * 0.92 + "元");
+                        break;
+                    case "20000元":
+                        $("#amount_discount").html("9折");
+                        $("#amount_real").html(20000 * 0.9 + "元");
+                        break;
+                }
+                break;
+            case "军采通标准会员":
+                switch (amount) {
+                    case "3000元":
+                        $("#amount_discount").html("9.5折");
+                        $("#amount_real").html(3000 * 0.95 + "元");
+                        break;
+                    case "6000元":
+                        $("#amount_discount").html("9折");
+                        $("#amount_real").html(6000 * 0.9 + "元");
+                        break;
+                    case "10000元":
+                        $("#amount_discount").html("8.5折");
+                        $("#amount_real").html(10000 * 0.85 + "元");
+                        break;
+                    case "20000元":
+                        $("#amount_discount").html("8折");
+                        $("#amount_real").html(20000 * 0.8 + "元");
+                        break;
+                }
+                break;
+            case "军采通高级会员":
+                switch (amount) {
+                    case "3000元":
+                        $("#amount_discount").html("9折");
+                        $("#amount_real").html(3000 * 0.9 + "元");
+                        break;
+                    case "6000元":
+                        $("#amount_discount").html("8.5折");
+                        $("#amount_real").html(6000 * 0.85 + "元");
+                        break;
+                    case "10000元":
+                        $("#amount_discount").html("8折");
+                        $("#amount_real").html(10000 * 0.8 + "元");
+                        break;
+                    case "20000元":
+                        $("#amount_discount").html("7.5折");
+                        $("#amount_real").html(20000 * 0.75 + "元");
+                        break;
+                }
+                break;
+        }
+        $(this).next().show().next().show();
+    });
+</script>

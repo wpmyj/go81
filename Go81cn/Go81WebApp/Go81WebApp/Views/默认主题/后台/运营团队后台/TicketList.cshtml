@@ -1,0 +1,200 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.项目数据模型.机票验收单>
+@using Go81WebApp.Models.数据模型.项目数据模型
+@{
+    ViewBag.Title = "机票验收单管理";
+    Layout = "_BackLayout.cshtml";
+}
+<style>
+    table tr td span {
+        font-size: 11px;
+        color: red;
+    }
+</style>
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="margin-bottom:50px;" class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div id="title_div" class="title-base-middle">
+                <div class="title-base-inner">机票管理</div>
+            </div>
+        </div>
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th>验收单号</th>
+                    <th>经办企业</th>
+                    <th>供货单位经办人</th>
+                    <th>经办人电话</th>
+                    <th>验证状态</th>
+                    <th>添加时间</th>
+                    <th>打印状态</th>
+                    <th>操作</th>
+                </tr>
+                @if (Model != null && Model.Count() != 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.验收单号</td>
+                            <td>
+                                @if (item.供应商链接.用户数据 != null)
+                                {
+                                    <label>@item.供应商链接.用户数据.企业基本信息.企业名称</label>
+                                }
+                            </td>
+                            <td>@item.供货单位承办人</td>
+                            <td>@item.供货单位承办人电话</td>
+                            <td>
+                                @if(item.服务列表!=null&&item.服务列表.Count!=0)
+                                {
+                                    bool Nopass=false;
+                                    foreach(var n in item.服务列表)
+                                    {
+                                        if(n.验证状态!=机票验证状态.已验证)
+                                        {
+                                            Nopass = true;
+                                            break;
+                                        }
+                                    }
+                                    if(Nopass)
+                                    {
+                                       <label style="color:red;">待验证</label>
+                                    }
+                                    else
+                                    {
+                                        <label style="color:green;">验证通过</label>
+                                    }
+                                }
+                            </td>
+                            <td>@item.基本数据.添加时间.ToString("yyyy/MM/dd")</td>
+                            <td>@if(item.是否已经打印)
+                                {
+                                    <span style="color:green;">已打印</span>
+                                }
+                                else
+                                {
+                                    <span style="color:red;">未打印</span>
+                                }
+                                    </td>
+                            <td><a href="/运营团队后台/uploadyzd?id=@item.Id" title="查看详情">查看详情</a></td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td align="center" colspan="8">还没有任何验收单</td></tr>
+                }
+            </table>
+        </div>
+        <div class="gys_znxx_content_detailbox">
+            @{
+                int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                if (Pagecount <= 6)
+                {
+                    for (int i = 1; i <= Pagecount; i++)
+                    {
+                        if (CurrentPage == i)
+                        {
+                            <a style="border:1px solid red;" href='/运营团队后台/TicketList?page=@i'>@i</a>
+                        }
+                        else
+                        {
+                            <a href='/运营团队后台/TicketList?page=@i'>@i</a>
+                        }
+                    }
+                    if (Pagecount != 0)
+                    {
+                        <span>@(CurrentPage)/@(Pagecount) 页</span>
+                    }
+                }
+                else
+                {
+                    if (CurrentPage < 6)
+                    {
+                        if (CurrentPage != 1)
+                        {
+                            <a href="/运营团队后台/TicketList?page=@(CurrentPage-1)">上一页</a>
+                            for (int i = 1; i < 7; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/运营团队后台/TicketList?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/运营团队后台/TicketList?page=@i'>@i</a>
+                                }
+                            }
+                            <span>...</span><a href="/运营团队后台/TicketList?page=@(Pagecount)">@Pagecount</a><a href="/运营团队后台/TicketList?page=@(CurrentPage+1)">下一页</a>
+                            <span>@(CurrentPage)/@(Pagecount) 页</span>
+                        }
+                        else
+                        {
+                            for (int i = 1; i < 7; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/运营团队后台/TicketList?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/运营团队后台/TicketList?page=@i'>@i</a>
+                                }
+                            }
+                            <span>...</span><a href="/运营团队后台/TicketList?page=@(Pagecount)">@Pagecount</a><a href="/运营团队后台/TicketList?page=@(CurrentPage+1)">下一页</a>
+                            <span>@(CurrentPage)/@(Pagecount) 页</span>
+                        }
+                    }
+                    else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                    {
+                        <a href="/运营团队后台/TicketList?page=@(CurrentPage-1)">上一页</a><a href="/运营团队后台/TicketList?page=1">1</a><span>...</span>
+                        for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/运营团队后台/TicketList?page=@i'>@i</a>
+                            }
+                            else
+                            {
+                                <a href='/运营团队后台/TicketList?page=@i'>@i</a>
+                            }
+                        }
+                        <span>...</span><a href="/运营团队后台/TicketList?page=@(Pagecount)">@Pagecount</a><a href="/运营团队后台/TicketList?page=@(CurrentPage+1)">下一页</a>
+                        <span>@(CurrentPage)/@(Pagecount) 页</span>
+                    }
+                    else if (CurrentPage >= Pagecount - 3)
+                    {
+                        <a href="/运营团队后台/TicketList?page=@(CurrentPage-1)">上一页</a><a href="/运营团队后台/TicketList?page=1">1</a><span>...</span>
+                        for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/运营团队后台/TicketList?page=@i'>@i</a>
+                            }
+                            else
+                            {
+                                <a href='/运营团队后台/TicketList?page=@i'>@i</a>
+                            }
+                        }
+                        <span>@(CurrentPage)/@(Pagecount) 页</span>
+                    }
+                }
+            }
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#机票验收单管理").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#机票验收单管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

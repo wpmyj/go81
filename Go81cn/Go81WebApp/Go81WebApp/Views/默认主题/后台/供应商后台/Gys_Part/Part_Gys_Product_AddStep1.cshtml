@@ -1,0 +1,135 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.管理器
+<script type="text/javascript" src="~/JS/Get_productClass.js"></script>
+<div class="gys_xttz_box">
+    <div class="gys_xttz_topbox">
+        @*<div class="index_bottom_zb_top_left_or_right"> <img src="~/images/index_content_left.jpg" /> </div>*@
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">添加商品<span style="color:red;">(如果你没有找到你所要的分类，请选择‘其他’)</span></div>
+        </div>
+        @*<div class="index_bottom_zb_top_left_or_right"> <img src="~/images/index_content_right.jpg" /> </div>*@
+    </div>
+    <div class="gys_xttz_contentbox gys_znxx_box">
+        <div style="width: 800px; color: #006400; padding: 20px 0 10px 20px; font-size: 14px; font-weight: bold;">第一步选择商品分类:</div>
+        @if (ViewData["是否中标商品"].ToString() == "0")
+        {
+            <div class="product_add_classlistbox" id="firstclass">
+                @if (((List<供应商._产品类别>)Model).Count > 0)
+                {
+                    <ul>
+                        @foreach (var item in ((List<供应商._产品类别>)Model))
+                        {
+                            <li id="@商品分类管理.查找分类(item.一级分类).Id" lang="first" onclick="GetSonClass(this); ">@(item.一级分类)</li>
+                        }
+                    </ul>
+                    if (((List<供应商._产品类别>)Model)[0].一级分类 == "医疗设备" || ((List<供应商._产品类别>)Model)[0].一级分类 == "油料设备器材" || ((List<供应商._产品类别>)Model)[0].一级分类 == "给养器材" || ((List<供应商._产品类别>)Model)[0].一级分类 == "军用食品" || ((List<供应商._产品类别>)Model)[0].一级分类 == "被装材料" || ((List<供应商._产品类别>)Model)[0].一级分类 == "后勤装备" || ((List<供应商._产品类别>)Model)[0].一级分类 == "药品" || ((List<供应商._产品类别>)Model)[0].一级分类 == "被装" || ((List<供应商._产品类别>)Model)[0].一级分类 == "医用耗材" || ((List<供应商._产品类别>)Model)[0].一级分类 == "军事交通器材" || ((List<供应商._产品类别>)Model)[0].一级分类 == "基建营房工程器材")
+                    {
+                        <input type="hidden" value="special" name="special" id="special" />
+                    }
+                    else
+                    {
+                        <input type="hidden" value="" name="special" id="special" />
+                    }
+                }
+                else
+                {
+                    <span style="color: red; font-size: 12px;">请先到企业信息管理-->可提供商品类别栏目进行添加</span>
+                }
+            </div>
+            <div class="product_add_classlistbox" id="secondclass">
+                @if (((List<供应商._产品类别>)Model).Count > 0 && ((List<供应商._产品类别>)Model)[0].二级分类.Count > 0)
+                {
+                    var defaultsecondclass = 商品分类管理.查找子分类(商品分类管理.查找分类(((List<供应商._产品类别>)Model)[0].一级分类).Id);
+                    <ul>
+                        @foreach (var it in defaultsecondclass)
+                        {
+                            if (((List<供应商._产品类别>)Model)[0].二级分类.Contains(it.分类名))
+                            {
+                                <li id="@it.Id" lang="second" onclick="GetSonClass(this);">@it.分类名</li>
+                            }
+                        }
+                    </ul>
+                }
+            </div>
+            <div class="product_add_classlistbox" id="thirdclass" style=" display:none;">
+            </div>
+        }
+        else
+        {
+            <div class="product_add_classlistbox" id="firstclass">
+                @if (((IEnumerable<商品分类>)Model).Count() > 0)
+                {
+                    <ul>
+                        @foreach (var item in ((IEnumerable<商品分类>)Model))
+                        {
+                            if (item.分类性质 == 商品分类性质.通用物资)
+                            {
+                                <li id="@item.Id" lang="first" onclick="GetClass(this); ">@(item.分类名)</li>
+                            }
+                        }
+                        <li id="101" lang="first" onclick="GetClass(this); ">专用物资</li>
+                    </ul>
+                }
+                else
+                {
+                    <span style="color: red; font-size: 12px;">服务器出现错误！</span>
+                }
+            </div>
+            <div class="product_add_classlistbox" id="secondclass" style="display:none">
+            </div>
+            <div class="product_add_classlistbox" id="thirdclass" style=" display:none;">
+            </div>
+        }
+        
+        <div style="width: 800px; float:left;">
+            <input type="hidden" value="@ViewData["是否中标商品"]" id="isbid" />
+            <div style="width:800px; height:30px; margin-left:20px; display:none;" id="classresult"></div>
+            <input type="hidden" id="classidbox" value="" />
+            <div style="margin-left:auto; margin-right:auto; margin-top:65px; width:300px;">
+                <input id="modiibutton" name="submitcontent" type="button" class="front_login_rightbox_button" onclick="ChechClassId()" value="下一步">
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    function GetClass(e) {
+        var id = $(e).attr("id");
+        var ap = $(e).attr("lang");
+        $(e).css({ "background": "rgb(83, 126, 43)" }).siblings().css({ "background": "#fff" });
+        if (ap != "third") {
+            $("#thirdclass").hide();
+            $("#classresult").html("").hide();
+            $("#classidbox").val("");
+            $.ajax({
+                url: '/供应商后台/GetClass',
+                data: { id: id, ap: ap },
+                success: function (data) {
+                    if (ap == "first") {
+                        $("#secondclass").html(data).show();
+                    }
+                    if (ap == "second") {
+                        $("#thirdclass").html(data).show();
+                    }
+
+                },
+                error: function () {
+                    $("#secondclass").html("获取数据出错！");
+                },
+            });
+        }
+        else {
+            var str="<span style=' color: #006400; padding: 10px 0 10px 0; font-size: 14px; font-weight: bold;'>选择的商品类别是<font color='red'>"+$(e).html()+"</font></span>";
+            $("#classresult").html(str).show();
+            $("#classidbox").val(id);
+        }
+    }
+
+    $(function () {
+        var x = $("#firstclass").find("ul li:first-child");
+        x.css({ background: "rgb(83, 126, 43)", color: "black" });
+        $("#新增中标商品").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#新增中标商品").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

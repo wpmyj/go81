@@ -1,0 +1,1453 @@
+﻿﻿@model Go81WebApp.Models.数据模型.项目数据模型.验收单
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.项目数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型
+@{
+    ViewBag.Title = "添加验收单";
+  
+}
+<link href="~/css/css.css" rel="stylesheet" />
+@*<script src="~/Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>*@
+<script src="~/JS/myComfirm.js" type="text/javascript"></script>
+<script type="text/javascript" src="~/JS/NTClientJavascript.js"></script>
+@*<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+    <script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+    <script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>*@
+<style type="text/css">
+    .accept {
+        width: 1150px;
+        padding: 20px;
+        margin: 30px auto;
+        background: #fff;
+    }
+
+        .accept th {
+            background: none repeat scroll 0 0 #DEDEDE;
+            border-right: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .accept td {
+            line-height: 30px;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            border-right: none;
+        }
+
+            .accept td.left_none {
+                border-left: none;
+            }
+
+        .accept .align {
+            text-align: right;
+            width: 150px;
+            font-size: 16px;
+        }
+
+        .accept span {
+            color: red;
+            font-size: 12px;
+        }
+
+        .accept .lis {
+            text-align: right;
+            font-size: 14px;
+            color: #575757;
+        }
+
+    .gys_ztbsearch_contentbox a {
+        margin-left: 5px;
+    }
+
+    #good_list td {
+        border: none;
+    }
+
+    .select_unit {
+        display: none;
+    }
+
+    .del_good_list {
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+     .wenxintishi {
+        text-indent: 2.0em;
+    }
+
+    .modal {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        position: fixed;
+        display: none;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: 600px;
+        margin: 15% auto;
+    }
+
+    .modal-content {
+        position: relative;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, .2);
+        border-radius: 6px;
+        outline: 0;
+        -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    }
+
+    .close {
+        margin-top: -2px;
+        float: right;
+        font-size: 21px;
+        font-weight: bold;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        filter: alpha(opacity=20);
+        opacity: .2;
+        -webkit-appearance: none;
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+    }
+
+    h4 {
+        font-size: 18px;
+    }
+
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .modal-header {
+        min-height: 16.42857143px;
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .modal-title {
+        margin: 0;
+        line-height: 1.42857143;
+    }
+
+    .modal-body {
+        position: relative;
+        padding: 15px;
+    }
+
+    .modal-footer {
+        padding: 15px;
+        text-align: right;
+        border-top: 1px solid #e5e5e5;
+    }
+     .out_box {
+            display:none;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 3%;
+    }
+
+    .out_box_insecond_child {
+        width:725px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+        border:1px solid red;
+    }
+
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
+    #pager {
+        text-align: center;
+    }
+
+        #pager a {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+            line-height: 25px;
+            font-size: 12px;
+            height: 25px;
+            border: 1px solid rgb(204, 204, 204);
+            margin-top: 10px;
+            margin-left: 5px;
+            margin-right: auto;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+            #pager a:hover {
+                background-color: rgb(243, 243, 243);
+            }
+            .gname{
+                display: inline-block;
+width: 320px;
+height: 25px;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+            }
+</style>
+<div id="pdf1" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" title="关闭窗口" onclick="$('#pdf1').hide()">×</a></div>
+            <div style="width:725px; max-height:440px; overflow-y:scroll; overflow-x:hidden;">
+                <div id="content" style="padding-left:10px; line-height:30px;" lang="aa"></div>
+                <div id="pager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="indexpagemodal1" class="modal fade" style="display:none;">
+    <input type="hidden" id="ssid" name="ssid" value="@ViewData["Message"]" style="width:300px;" />
+    <input type="hidden" id="HidIAID" name="HidIAID" style="width:300px;" />
+    <input type="hidden" id="HidDigest" name="HidDigest" style="width:300px;" />
+    <div class="modal-dialog" style="margin: 10% auto;">
+        <div class="modal-content" style="height:230px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal1').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px;">请输入安全证书密码</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 100px; text-align:center; line-height:25px;">
+                    <input type="password" id="password" name="password" style=" height:25px; width:250px; line-height:25px; " /><br />
+                    <span style="color:red;" id="errortips"></span>
+                </div>
+                <div style="width: 100%; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" id="submitpassword" class="gys_ztbsearch_search_botton" style="margin-left:0;" value="确  定" onclick="return OnLogon();" /></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="f1" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <span>正在上传，请稍等...</span>
+    </div>
+</div>
+@if (ViewData["是否持有U盾"] != null && ViewData["是否持有U盾"] == "1")
+{
+
+<div class="bg_outdiv">
+    <div id="title_div" class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">新增验收单</div>
+    </div>
+       @using (Html.BeginForm("AddAcceptence", "供应商后台", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+           <input type="hidden" value="@ViewData["供应商ID"].ToString()" id="uid" />
+            <div style=" width:1200px;margin:30px auto;background:#fff;border-radius:5px;">
+                <table class="accept" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="right">审核单位：</td>
+                        <td class="left_none">
+                            @Html.HiddenFor(model => model.管理单位审核人.用户ID, new { @id = "unit_user_sh" })
+                            <select style="width:200px;" name="checker" id="selectSh_unit">
+                                @{
+                                    <option value="">请选择审核单位</option>
+                                    var sh_unit = ViewData["审核单位列表"] as IEnumerable<单位用户>;
+                                    foreach (var j in sh_unit)
+                                    {
+                                            <option value="@j.Id">@j.验收单审核单位名称</option>
+                                    }
+                                }
+                            </select>
+                        </td>
+                        <td class="left_none" align="center">收货单位：</td>
+                        <td style="width:315px;" class="left_none">
+                            @Html.HiddenFor(model => model.收货单位, new { @id = "unit_user_id" })
+                            @*<select onchange="showtext(this)" id="unit_user" style="width:130px;">
+                                    @{
+                                        var dw = ViewData["收货单位列表"] as IEnumerable<单位用户>;
+                                        foreach (var t in dw)
+                                        {
+                                            <option value="@t.单位信息.单位名称">@t.单位信息.单位名称</option>
+                                        }
+                                    }
+                                    <option value="-1">其他</option>
+                                </select>*@
+                            <input id="reciever" type="text" />
+                        </td>
+                        <td class="left_none" align="center">供货单位开票人：</td>
+                        <td class="left_none" style="border-right:1px solid #aaa">@Html.TextBoxFor(m => m.供货单位开票人, new { id = "sender" })</td>
+                    </tr>
+                    <tr>
+                        <td class="align" valign="top">物资服务列表：</td>
+                        <td colspan="7" width="870px">
+                            <table style="width:100%;" id="good_list" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <th width="20%">物资名称</th>
+                                    <th width="15%">规格型号</th>
+                                    <th width="20%">采购合同号</th>
+                                    <th width="10%">计量单位</th>
+                                    <th width="8%">数量</th>
+                                    <th width="8%">单价</th>
+                                    <th width="5%">操作</th>
+                                </tr>
+                                <tr id="add_goodlist" style="display:none">
+                                    <td colspan="7" style="border-right:1px solid #ccc; border-bottom:1px solid #ccc; text-indent:1em;font-size:13px;">
+                                        <div style="float:left;display:inline-block;margin-top:4px;">@Html.EnumDropDownListFor(model => model.某批物资名称)<label style="display:inline;margin-left:5px;font-weight:normal">请选择待添加的一批物资的名称</label></div>
+
+                                        <div style="display: inline-block; border: 1px solid #C0C0C0; padding-left: 5px;padding-right: 5px; margin-bottom: 5px;margin-top:5px; cursor: pointer;background: none repeat scroll 0% 0% #F0EBEB;font-size: 13px;float:right;text-indent:0;margin-right:10px" onclick="delFi()">
+                                            <a style="background: url('../Images/AddDel20x20.png') right center no-repeat scroll transparent;width:20px;height:20px;margin-bottom:3px;margin-right:4px; vertical-align:middle; display:inline-block"> </a>
+                                            取消
+                                        </div>
+                                    </td>
+                                </tr>
+                                @*<tr>
+                                        <td colspan="7" id="good_list">
+                                            <table width="100%" style="border-right:1px solid #ccc;border-top:1px solid #ccc">
+                                                    <tr>
+                                                        <td>物资名称</td>
+                                                        <td style='text-align:center'><input data-val='true' data-val-number='字段 商品ID 必须是一个数字。' data-val-required='商品ID 字段是必需的。' name='物资服务列表[`].商品链接.商品ID' value='' type='hidden'> <select class='g_name' onchange='set_price(this)'></select></td>
+                                                        <td>规格型号</td>
+                                                        <td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='物资服务列表[`].规格型号' value='' type='text'></td>
+                                                        <td>采购合同号</td>
+                                                        <td style='text-align:center'><input placeholder='可不填' class='text-box single-line' name='物资服务列表[`].采购合同号' value='' type='text'></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>计量单位</td>
+                                                        <td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='物资服务列表[`].规格型号' value='' type='text'></td>
+                                                        <td>数量</td>
+                                                        <td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='物资服务列表[`].规格型号' value='' type='text'></td>
+                                                        <td>单价</td>
+                                                        <td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='物资服务列表[`].规格型号' value='' type='text'></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>运费</td>
+                                                        <td style='text-align:center'><input placeholder="可不填" class="text-box single-line" data-val="true" data-val-number="字段 运费 必须是一个数字。" data-val-required="运费 字段是必需的。" name="物资服务列表[`].运费" value="" type="text"></td>
+                                                        <td>服务费</td>
+                                                        <td style='text-align:center'><input placeholder="可不填" class="text-box single-line" data-val="true" data-val-number="字段 服务费 必须是一个数字。" data-val-required="服务费 字段是必需的。" name="物资服务列表[`].服务费" value="" type="text"></td>
+                                                        <td>维修费</td>
+                                                        <td style='text-align:center'><input placeholder="可不填" class="text-box single-line" data-val="true" data-val-number="字段 维修费 必须是一个数字。" data-val-required="维修费 字段是必需的。" name="物资服务列表[`].维修费" value="" type="text"></td>
+                                                    </tr>
+                                                </table>
+                                        </td>
+                                    </tr>*@
+                            </table>
+                        </td>
+                    </tr>
+                    <tr id="good_cost" style="display:none">
+                        <td></td>
+                        <td colspan="7">
+                            <table width="100%" id="cost" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="font-size:14px; text-align:right;border-left:none;border-top:none;">运费：</td>
+                                    <td style='border-left:none;border-top:none;'>@Html.TextBoxFor(model => model.运费, new { style = "width:93px" })</td>
+                                    <td style="font-size:14px; text-align:right;border-top:none;border-left:none">服务费：</td>
+                                    <td style='border-left:none;border-top:none;'>@Html.TextBoxFor(model => model.服务费, new { style = "width:93px" })</td>
+                                    <td style="font-size:14px; text-align:right;border-top:none;border-left:none">维修费：</td>
+                                    <td style='border-left:none;border-top:none'>@Html.TextBoxFor(model => model.维修费, new { style = "width:93px" })</td>
+                                    <td colspan="2" style='border-left:none;border-top:none;border-right:1px solid #ccc;font-size:13px;text-indent:10px;'>
+                                        如果需要添加更多费用，请点击增加
+                                        <div style="display:inline-block; border: 1px solid #C0C0C0; padding-right: 5px; margin-bottom: 5px;margin-top:5px; cursor: pointer;background: none repeat scroll 0% 0% #F0EBEB;font-size: 13px;" onclick="addOtherCost()">
+                                            <a style="background: url('../Images/AddDel20x20.png') left center no-repeat scroll transparent;width:20px;height:20px;margin-bottom:3px;margin-right:4px; vertical-align:middle; display:inline-block"> </a>
+                                            增加
+                                        </div>
+                                    </td>
+                                </tr>
+
+
+                                @*<tr>
+                                        <td colspan="2" style="font-size:14px; text-align:right;border-top:none;border-left:none;padding-right:7px;">费用名称</td>
+                                        <td colspan="2" style='border-left:none;border-top:none;'><input type="text" /></td>
+                                        <td colspan="2" style="font-size:14px; text-align:right;border-top:none;border-left:none;padding-right:7px;">金额</td>
+                                        <td colspan="2" style='border-left:none;border-top:none;border-right:1px solid #ccc'>
+                                            <input type="text" />
+                                            <a class='del_good_list' style="margin-left:10px;" onclick='' id=''>删除</a>
+                                        </td>
+                                    </tr>*@
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border-top:none"></td>
+                        <td class="align" style="text-align:left;padding-left:10px;border-right:1px solid #aaa" colspan="7">
+                            <div style="display: inline-block; border: 1px solid #C0C0C0; padding-left: 5px;padding-right: 5px; margin-bottom: 5px;margin-top:5px; cursor: pointer;background: none repeat scroll 0% 0% #F0EBEB;font-size: 13px;" id="btn_addForms" onclick="addForms(this)">
+                                <a style="background: url('../Images/AddDel20x20.png') left center no-repeat scroll transparent;width:20px;height:20px;margin-bottom:3px;margin-right:4px; vertical-align:middle; display:inline-block"> </a>
+                                新增一批物资
+                            </div>
+                            <div style="display: inline-block; border: 1px solid #C0C0C0; padding-left: 5px;padding-right: 5px; margin-bottom: 5px;margin-top:5px; cursor: pointer;background: none repeat scroll 0% 0% #F0EBEB;font-size: 13px;" id="btn_addForm" onclick="addFi(this)">
+                                <a style="background: url('../Images/AddDel20x20.png') left center no-repeat scroll transparent;width:20px;height:20px;margin-bottom:3px;margin-right:4px; vertical-align:middle; display:inline-block"> </a>
+                                新增单个物资
+                            </div>
+
+                            <div style="display: none; border: 1px solid #C0C0C0; padding-left: 5px;padding-right: 5px; margin-bottom: 5px;margin-top:5px; cursor: pointer;background: none repeat scroll 0% 0% #F0EBEB;font-size: 13px;text-indent:0;" id="add_good_list1" onclick="addFi(this)">
+                                <a style="background: url('../Images/AddDel20x20.png') left center no-repeat scroll transparent;width:20px;height:20px;margin-bottom:3px;margin-right:4px; vertical-align:middle; display:inline-block"> </a>
+                                添加物资清单
+                            </div>
+                            <div style="position:relative; display: none; border: 1px solid #C0C0C0; padding-left: 5px;padding-right: 5px; margin-bottom: 5px;margin-top:5px; cursor: pointer;background: none repeat scroll 0% 0% #F0EBEB;font-size: 13px;text-indent:0;" id="addattach">
+                                <a style="background: url('../Images/AddDel20x20.png') left center no-repeat scroll transparent;width:20px;height:20px;margin-bottom:3px;margin-right:4px; vertical-align:middle; display:inline-block"> </a>
+                                添加附件
+                                <span id="uploadsucc" style="font-size:13px; background:url(../Images/success.png);display: inline-block;width: 20px;height: 20px;margin-bottom: -4px;display:none"></span>
+                                <input id="uploadattach" type="button" style="width: 89px;height:30px;left:0;display: block;position: absolute;top: 0;cursor: pointer;opacity: 0; filter:alpha(opacity=0)" multiple="multiple" name="file1" onchange="getUploadNum()" />
+                            </div>
+                            <div style="display: inline-block; border: 1px solid #C0C0C0; padding-left: 5px;padding-right: 5px; margin-bottom: 5px;margin-top:5px; cursor: pointer;background: none repeat scroll 0% 0% #F0EBEB;font-size: 13px;" id="btn_addCost" onclick="addCost(this)">
+                                <a style="background: url('../Images/AddDel20x20.png') left center no-repeat scroll transparent;width:20px;height:20px;margin-bottom:3px;margin-right:4px; vertical-align:middle; display:inline-block"> </a>
+                                新增费用
+                            </div>
+                            <div style="display: none; border: 1px solid #C0C0C0; padding-left: 5px;padding-right: 5px; margin-bottom: 5px;margin-top:5px; cursor: pointer;background: none repeat scroll 0% 0% #F0EBEB;font-size: 13px;" id="btn_delCost" onclick="delCost(this)">
+                                <a style="background: url('../Images/AddDel20x20.png') right center no-repeat scroll transparent;width:20px;height:20px;margin-bottom:3px;margin-right:4px; vertical-align:middle; display:inline-block"> </a>
+                                删除费用
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;font-size:14px" valign="top">注：</td>
+                        <td colspan="7" style="color:red;font-size:13px;padding-left:5px;border-right:1px solid #ccc">
+                            如果待添加的物资过多（超过8条），请选择新增一批物资。
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="text-align:center;border-left:none;padding-top:10px;">
+                            <button class="gys_ztbsearch_search_botton" type="submit" id="btn_sub" value="保存">保存</button>
+                        </td>
+                    </tr>
+                </table>
+                <div id="pBox" style="width:90%;margin:0 auto;"></div>
+                <input type="hidden" value="" name="attachSum" id="attachSum" />
+                <input type="hidden" name="pic" id="picture" value="" />
+                <input type="hidden" value="@ViewBag.user" id="hideuser" />
+                <input type="hidden" id="costJson" name="costJson" />
+            </div>
+        }
+</div>
+
+<div id="Uppicture" style="position:fixed; display:none; top:0; left:0; width:100%;height:100%;background:rgba(0, 0, 0, 0.5) ">
+    <div style="min-height: 200px; min-width:670px; margin:5% auto; width:50%; background-color: rgb(245, 245, 245);border-radius: 4px;border: 4px solid rgb(219, 218, 218); filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=3);-webkit-box-shadow:0px 0px 11px #BFAEAE; -moz-box-shadow:0px 0px 11px #BFAEAE;">
+        <a style="display:block; width:20px; height:20px; line-height:20px; color:white; background-color:red; text-align:center; float:right; cursor:pointer;" onclick="hidethis('#Uppicture')" title="关闭">×</a>
+        <form action="/供应商后台/UploadAttach_ysd" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+            <table width="70%" height="100" style="font-size:14px; margin-left:20px;">
+                <tr><td colspan="4" align="left" style="font-size:16px;">请从这里添加验收单附件信息<label style="font-size:13px;color:red;">(格式为jpg,png,word或者excel的文件)上传后的附件显示在保存按钮下方</label></td></tr>
+                <tr>
+                    <td style="width:120px;">附件商品总金额：</td>
+                    <td align="left"><input type="text" name="sum" id="sum" /></td>
+                    <td style="width:90px;">请选择附件：</td>
+                    <td align="left">
+                        <input type="file" onchange="filechange()" style="width:70px;" name="file1" />
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div id="uploadimg" style="padding:0 17px"></div>
+        <div id="framebox" style="margin-left:20px; display:none; margin-top:10px;width:700px; height:auto;  margin-right: auto;">
+            <iframe name="showPic" scrolling="no" id="showPic" frameborder="0" style="height:auto; width:100%;"></iframe>
+        </div>
+        <div style="text-align:center;margin-top:20px;">
+            <input type="button" class="btn-pri" style="background:#5A8625" value="关 闭" onclick="hidethis('#Uppicture')" />
+        </div>
+    </div>
+</div>
+<div style="display:none;">
+    <select id="gaa_name">
+        <option>请选择商品</option>
+        @{
+            IEnumerable<商品> gg = ViewData["商品列表"] as IEnumerable<商品>;
+            if (gg != null && gg.Any())
+            {
+                foreach (var j in gg)
+                {
+                    <option id="@j.Id" class="@j.商品信息.型号 / @j.商品信息.精确型号" value="@j.销售信息.价格" title="@j.商品信息.计量单位">@j.商品信息.商品名</option>
+                }
+            }
+            else
+            {
+                <option>请选择商品</option>
+            }
+        }
+    </select>
+</div>
+}
+else
+{
+    <h4 style="color:gray;text-align:center;">您还未持有安全证书或安全证书已过期，为保证数据的安全性，暂时无法使用验收单功能，如有疑问，请联系客服。</h4>
+}
+<script type="text/javascript" language="javascript">
+
+    //序列化其他费用数据
+    function ToSearlize(table) {
+        var data = "";
+        var rows = table.children().children();  //获取table的行
+
+        for (var i = 1; i < rows.length; i++) {
+            var tableRow = rows.eq(i);//获得某一行
+            var cells = tableRow.children(); //获得一行中的单元格
+            for (var j = 0; j < cells.length; j++) {
+
+                if (j % 2 != 0) {  //只取包含input的单元格
+
+                    if (j == cells.length - 1) {  //如果是最后一个单元格，则不在data后加分隔符逗号
+                        data += $(cells[j]).children("input").val();
+                    }
+                    else {
+                        data += $(cells[j]).children("input").val() + ",";
+                    }
+                }
+            }
+            if (i != rows.length - 1) {
+                data += ";";
+            }
+        }
+        return data;
+    }
+
+    function filechange() {//上传附件
+        var reg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
+        if (!$("#sum").val().match(reg) || $("#sum").val() == "") {
+            //alert("请填写商品价格");
+            if ($("#comfirm-u").length > 0) {
+                $("#comfirm-u").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-u",
+                    btncloseid: "btnclose12",
+                    btnsubid: "btnsub12",
+                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                    content: "请先填写商品价格！",  //提示信息内容 必须
+                    iscomfirm: false,
+                    onComfirm: function () {
+                        $("#comfirm-u").fadeOut(200);
+                    },
+                });
+            }
+        }
+        else {
+            $("#f1").css({ "display": "block" });
+            document.forms["upload"].submit();
+            var str = $("#attachSum").val();
+            str += $("#sum").val() + ",";
+            $("#attachSum").val(str);
+            $("#sum").val("");
+        }
+    }
+    function setPic(th) {//重新设置附件顺序
+        var str = "<table>";
+        var path = $(th).val();
+        var path1 = path.split('|');
+        var sum = $("#attachSum").val().split(',');
+        var count = 0;
+        for (var i = 0; i < path1.length - 1; i++) {
+            var path_t = path1[i].substring(path1[i].lastIndexOf('/') + 1);
+            str += "<tr><td><a style='font-size:13px;' target='_blank' href='" + path1[i] + "'>" + path_t + "</a>&nbsp&nbsp&nbsp&nbsp总金额" + sum[i] + "元<a href='###' title='删除' onclick='delPic(this)' style='color:white; margin-left:10px; display:inline-block; background-color:red; width:20px; height:20px; line-height:20px; text-align:center;' lang='" + path1[i] + "'>×</a></td></tr>";
+        }
+        str += "</table>";
+        document.getElementById("pBox").innerHTML = str;
+        document.getElementById("uploadimg").innerHTML = str;
+    }
+    function delPic(th) {
+        var path = $(th).attr("lang");
+        $.get('/供应商后台/DeleteAttach_ysd', { n: path },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+        var newpath = document.getElementById("picture").value.split('|');
+        var index = 0;
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+            else {
+                index = j;
+            }
+        }
+        var arrNum = $("#attachSum").val().split(',');
+        var newArrNum = "";
+        for (var n = 0; n < arrNum.length - 1; n++) {
+            if (n != index) {
+                newArrNum += arrNum[n] + ",";
+            }
+        }
+        $("#attachSum").val(newArrNum);
+        document.getElementById("picture").value = str;
+        setPic("#picture");
+    }
+    $(document).ready(function () {
+        $("#unit_user_sh").val($("#selectSh_unit").val());
+    });
+
+    $("#fsan").click(function () {
+        $("#f1").hide();
+    });
+    function showtext(th) {
+        if (th.value != -1) {
+            $("#reciever").hide();
+            $("#reciever").val(th.value);
+        }
+        else {
+            $("#reciever").show();
+            $("#reciever").val("");
+        }
+    };
+    //如果有附件则显示标志
+    function getUploadNum() {
+        $("#uploadsucc").css({ "display": "inline-block" });
+    };
+
+    //点击上传文件按钮事件
+
+    var isc = false;
+    $("#uploadattach").click(function () {
+        if (!isc) {
+            if ($("#comfirm-k").length > 0) {
+                $("#comfirm-k").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-k",
+                    btncloseid: "btnclose8",
+                    btnsubid: "btnsub8",
+                    img: "url('../Images/alert-comfirm.png') -80px 0", //提示信息相应图片  必须
+                    content: "如果添加商品少于20个,请选择“添加物资清单”！其次，如果选择上传附件，则不用添加物资清单。<strong style='color:red;'>另外请保证附件内容包含商品名、数量、金额、总金额！</strong>",  //提示信息内容 必须
+                    iscomfirm: true,
+                    onComfirm: function () {
+                        $("#comfirm-k").fadeOut(200);
+                        isc = true;
+                        $("#uploadattach").click();
+                    },
+                    onCancel: function () {
+                        $("#comfirm-k").fadeOut(200);
+                        isc = false;
+                    },
+                });
+            };
+        }
+        if (isc) {
+            $("#add_good_list1").hide();
+            $("#Uppicture").show();
+            return true;
+        }
+        else {
+            return false;
+        };
+    });
+    function hidethis(th) {
+        $(th).hide();
+        isc = false;
+        if ($("#pBox").children().html() == undefined)          //如果未上传附件，添加物资清单按钮显示，否则不显示
+        {
+            if ($("#pBox").html() == "") {
+                $("#btn_addForm").next().show();
+            }
+        }
+    }
+    $("#selectSh_unit").change(function () {
+        var val = $(this).find("option:selected").attr("value");
+        $("#unit_user_sh").val(val);
+    });
+    //添加验收单时检查商品价格是否高于参考价格
+    function checkPrice(ev) {
+        var t = $(ev);
+        var oldval = t.attr("alt");
+        setInterval(function () {
+            var newval = t.val();
+            if (parseFloat(newval) > parseFloat(oldval)) {
+                t.val(oldval);
+                //alert("输入的价格不能高于商品参考价格！");
+                if ($("#comfirm-c").length > 0) {
+                    $("#comfirm-c").fadeIn(200);
+                }
+                else {
+                    $("body").myComfirm({
+                        index: "comfirm-c",
+                        title: "警告",
+                        btncloseid: "btnclose",
+                        btnsubid: "btnsub",
+                        img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                        content: "输入的价格不能高于商品参考价格！",  //提示信息内容 必须
+                        iscomfirm: false,
+                        onComfirm: function () {
+                            //$.fn.myComfirm.close("comfirm-c",200);
+                            $("#comfirm-c").fadeOut(200);
+                        },
+                    });
+                }
+            };
+        }, 100);
+    };
+    function setPage(pgCount, currentPage) {
+        if (pgCount <= 6) {
+            var str = '';
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+            }
+            if (pgCount != 0) {
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (currentPage < 6) {
+                if (currentPage != 1) {
+                    var str = "<a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a>";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a  onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
+                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    $("div#pager").html(str);
+                }
+                else {
+                    var str = "";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a  onclick='getGoods(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
+                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    $("div#pager").html(str);
+                }
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                var str = "<a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a><a onclick='getGoods(" + (1) + ")'>1</a>...";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+            else if (currentPage >= pgCount - 3) {
+                var str = "<a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a><a onclick='getGoods(" + 1 + ")'>1</a>...";
+                for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
+                    str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                }
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    var ev = null;
+    function getChecked()
+    {
+        var id = $(ev).find("option:selected").attr("id");
+        var elem = document.getElementsByName("good");
+        for (var i = 0; i < elem.length;i++)
+        {
+            if(elem[i].value==id)
+            {
+                elem[i].checked = true;
+                break;
+            }
+            else
+            {
+                if (elem[i].checked)
+                {
+                    elem[i].checked = false;
+                }
+            }
+        }
+    }
+    function setValue(data) {
+        var str = "";
+        var row = parseInt(data.length / 2);
+        var maintain = data.length % 2;
+        var num = 0;
+        if (row > 0) {
+            for (var i = 0; i < row; i++) {
+                var s0 = "<table><tr>";
+                for (var j = 0; j < 2; j++) {
+                    s0 += "<td align='left'><input type='radio' onclick='Set_Val(this)' name='good' value='" + data[num].Id + "'/><span class='gname'  title='" + data[num].name + "'>" + data[num].name + "</span></td>";
+                    num++;
+                }
+                s0 += "</tr>";
+                str += s0;
+            }
+        }
+        if (maintain > 0) {
+            var s1 = "<tr>";
+            for (var k = 0; k < maintain; k++) {
+                s1 += "<td align='left'><input type='radio' onclick='Set_Val(this)' name='good' value='" + data[num].Id + "'/><span class='gname'  title='" + data[num].name + "'>" + data[num].name + "</span></td>";
+                num++;
+            }
+            s1 += "</table></tr>";
+            str += s1;
+        }
+        $("#content").html(str);
+        getChecked();
+    }
+    function selectGoods(th) {
+        ev = $(th).prev("select");
+        $("#pdf1").show();
+        if($("#content").attr("lang")=="aa")
+        {
+            $("#content").attr("lang","ab");
+            $.get("/供应商后台/GoodList", { p: 1, id: $("#uid").val() }, function (data) {
+                setPage(data.Data.Pcount, 1);
+                setValue(data.Data.Newgood);
+            });
+        }
+        getChecked();
+    }
+    function getGoods(cp) {
+        $.get("/供应商后台/GoodList", { p: cp, id: $("#uid").val() }, function (data) {
+            setPage(data.Data.Pcount, cp);
+            setValue(data.Data.Newgood);
+        });
+    }
+    function Set_Val(th) {
+        var id = $(th).val();
+        $(ev).children("option").each(function () {
+            if ($(this).attr("id") == id) {
+                $(this).attr("selected", "selected");
+            }
+        });
+        set_price(ev);
+    }
+    //选择商品时填充价格和计量单位
+    function set_price(ev) {
+        var price = $(ev).find("option:selected").val();
+        var unit = $(ev).find("option:selected").attr("title");
+        var type_num = $(ev).find("option:selected").attr("class");
+        if (price != "请选择商品") {
+            $(ev).parent().parent().children().eq(5).find("input").val(price).attr({ "alt": price });
+            $(ev).parent().parent().children().eq(3).find("input").val(unit);
+            $(ev).parent().parent().children().eq(1).find("input").val(type_num);
+        }
+        else {
+            $(ev).parent().parent().children().eq(5).find("input").val("").removeAttr("alt").removeAttr("title");
+            $(ev).parent().parent().children().eq(3).find("input").val("");
+            $(ev).parent().parent().children().eq(1).find("input").val("");
+        };
+        getChecked();
+    };
+
+    function checkNum(ev) {
+        var reg = new RegExp("^[1-9]+[0-9]*]*$");
+        if (!reg.test($(ev).val())) {
+            if ($("#comfirm-lk").length > 0) {
+                $("#comfirm-lk").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-lk",
+                    btncloseid: "btnclose13",
+                    btnsubid: "btnsub13",
+                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                    content: "请输入数字！",  //提示信息内容 必须
+                    iscomfirm: false,
+                    onComfirm: function () {
+                        $("#comfirm-lk").fadeOut(200);
+                    },
+                });
+            }
+        }
+    }
+
+    //物资列表
+    var t = "<tr>";
+    t += "<td style='text-align:center;position:relative;'><input data-val='true' data-val-number='字段 商品ID 必须是一个数字。' data-val-required='商品ID 字段是必需的。' name='物资服务列表[`].商品链接.商品ID' value='' type='hidden'> <select class='g_name' onchange='set_price(this)' style='position:absolute;left:15px;top:5px;'></select><input type='text'  style='position:absolute;left:15px;top:5px;width:155px;opacity:0;filter:alpha(opacity=0);' onclick='selectGoods(this)'/></td>";
+    t += "<td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='物资服务列表[`].规格型号' value='' type='text'></td>";
+    t += "<td style='text-align:center'><input placeholder='可不填' class='text-box single-line' name='物资服务列表[`].采购合同号' value='' type='text'></td>";
+    t += "<td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='物资服务列表[`].计量单位' value='' type='text' style='width:60px;'></td>";
+    t += "<td style='text-align:center'><input placeholder='必填' style='width:70px;' class='text-box single-line' data-val='true' data-val-number='字段 数量 必须是一个数字。' data-val-required='数量 字段是必需的。' name='物资服务列表[`].数量' value='' type='number' onkeyup='checkNum(this)' min='1'></td>";
+    t += "<td style='text-align:center'><input placeholder='必填' style='width:70px;' class='text-box single-line' data-val='true' data-val-number='字段 单价 必须是一个数字。' data-val-required='单价 字段是必需的。' name='物资服务列表[`].单价' value='' type='text' title='`'  onkeyup='checkPrice(this)' ></td>";
+    t += "<td style='text-align:center;border-right:1px solid #aaa'><a class='del_good_list'onclick='DelGoodList(this)' id='`'>删除</a></td>";
+    t += "</tr>";
+
+    var count = 0;//列表索引
+    var num = 0;//计数物资列表的行数
+    //var countNum = 1;//计数其他费用行数
+    var xz = false;//判断是否已新增费用
+    //新增单个物资  或添加物资清单
+    function addFi(th) {
+        $("#uploadattach").parent().hide();  //隐藏上传附件按钮
+        var id = $(th).attr("id");
+        if (id == "btn_addForm") {
+            $(th).prev().hide();
+            if (!xz) {
+                $(th).parent().children().eq(4).css({ "display": "inline-block" });
+            }
+        };
+        if (num < 8) {
+            setTimeout(function () {
+                var ff = $(".g_name");
+                $(ff[ff.length - 1]).html($("#gaa_name").html());
+            });
+            //var m=t.replace(/~/g,num++);
+            $('#good_list').append(t.replace(/`/g, count++));
+            //.$(".del_good_list").show();
+            ++num;
+        }
+        else {
+            if (id == "btn_addForm") {
+                if ($("#comfirm-a").length > 0) {
+                    $("#comfirm-a").fadeIn(200);
+                }
+                else {
+                    $("body").myComfirm({
+                        index: "comfirm-a",
+                        btncloseid: "btnclose1",
+                        btnsubid: "btnsub1",
+                        img: "url('../Images/alert-comfirm.png') 80px 0", //提示信息相应图片  必须
+                        content: "您添加的物资数已超过8条，系统已自动转换成新增一批物资！",  //提示信息内容 必须
+                        iscomfirm: false,
+                        onComfirm: function () {
+                            // $.fn.myComfirm.close("comfirm-a",200);
+                            $("#comfirm-a").fadeOut(200);
+                        },
+                    });
+                }
+                $("#btn_addForms").parent().children().hide().eq(2).css({ "display": "inline-block" });   //显示添加物资清单
+                $("#btn_addForms").parent().children().eq(4).css({ "display": "inline-block" });       //显示新增费用按钮
+                $("#add_goodlist").show().find("input").val("办公物资一批");
+                $(th).hide();
+                setTimeout(function () {
+                    var ff = $(".g_name");
+                    $(ff[ff.length - 1]).html($("#gaa_name").html());
+                });
+                $('#good_list').append(t.replace(/`/g, count++));
+                ++num;
+            }
+            else {
+                setTimeout(function () {
+                    var ff = $(".g_name");
+                    $(ff[ff.length - 1]).html($("#gaa_name").html());
+                });
+                $('#good_list').append(t.replace(/`/g, count++));
+                ++num;
+            }
+        }
+    }
+
+    //新增一批物资
+    function addForms(th) {
+        $('#add_goodlist').show();
+        $(th).parent().children().hide().eq(2).css({ "display": "inline-block" });   //显示添加物资清单
+        $(th).parent().children().eq(3).css({ "display": "inline-block" });     //显示添加附件按钮
+        $(th).parent().children().eq(4).css({ "display": "inline-block" });       //显示新增费用按钮
+    };
+
+
+    //添加费用
+    function addCost(th) {
+        //var d=$("#good_list").find("input:visible");   //如果物资列表数为0  ，则验收单恢复默认
+        //if(d.length<=0){
+        //    //alert("请先添加验收物资！");
+        //    if($("#comfirm-b").length>0){
+        //        $("#comfirm-b").fadeIn(200);
+        //    }
+        //    else{
+        //        $("body").myComfirm({
+        //            index:"comfirm-b",
+        //            btncloseid:"btnclose2",
+        //            btnsubid:"btnsub2",
+        //            img:"url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+        //            content:"请先添加验收物资！",  //提示信息内容 必须
+        //            iscomfirm:false,
+        //            onComfirm:function(){
+        //                //$.fn.myComfirm.close("comfirm-b",200);
+        //                $("#comfirm-b").fadeOut(200);
+        //            },
+        //        });
+        //    }
+        //}
+        //else{
+        $("#good_cost").show();
+        xz = true;
+        $(th).hide().next().css({ "display": "inline-block" });
+        // }
+    };
+
+    //删除费用
+    function delCost(th) {
+        $("#good_cost").hide();
+        var ipt = $("#good_cost").find("input");
+        $.each(ipt, function (index, domEle) {
+            $(domEle).val("");
+        });
+        $(th).hide().prev().show();
+        xz = false;
+        $("#cost").children().children().slice(1).remove();
+    }
+
+    //添加其他费用
+
+
+    var st = "<tr><td colspan='2' style='font-size:14px; text-align:right;border-top:none;border-left:none;padding-right:7px;'>费用名称</td>";
+    st += "<td colspan='2' style='border-left:none;border-top:none;'><input type='text' /></td>";
+    st += "<td colspan='2' style='font-size:14px; text-align:right;border-top:none;border-left:none;padding-right:7px;'>金额</td>";
+    st += "<td colspan='2' style='border-left:none;border-top:none;border-right:1px solid #ccc'><input type='number' min='1' /><a class='del_good_list' style='margin-left:10px;' onclick='delOtherCost(this)'>删除</a></td></tr>";
+    function addOtherCost() {
+        $("#cost").append(st);
+    }
+    function delOtherCost(e) {
+        $(e).parent().parent().remove();
+    }
+
+
+    //取消按钮事件
+    function delFi() {
+        if ($("#pBox").children().html() != undefined)          //如果未上传附件，添加物资清单按钮显示，否则不显示
+        {
+            if ($("#pBox").children().html() != "") {
+                if ($("#comfirm-px").length > 0) {
+                    $("#comfirm-px").fadeIn(200);
+                }
+                else {
+                    $("body").myComfirm({
+                        index: "comfirm-px",
+                        btncloseid: "btnclose21",
+                        btnsubid: "btnsub21",
+                        img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                        content: "你添加了附件，请先删除附件再进行取消操作。",  //提示信息内容 必须
+                        iscomfirm: false,
+                        onComfirm: function () {
+                            $("#comfirm-px").fadeOut(200);
+                            return false;
+                        },
+                    });
+                }
+                return false;
+            }
+        }
+        $('#add_goodlist').hide();
+        $("#good_list").children().children().slice(2).hide(); //隐藏物资列表
+        var input = $("#good_list").find("input");
+        $.each(input, function (index, domEle) {
+            $(domEle).val("");  ///清空物资列表数据
+            num = 0;
+        });
+        $("#btn_addForm").show();
+        $("#btn_addForms").show();
+        $("#btn_addForms").show().parent().children().eq(2).hide();     //新增一批物资按钮   隐藏添加物资清单按钮
+        $("#btn_addForms").parent().children().eq(3).hide();      //隐藏添加附件按钮
+        $("#btn_addForms").parent().children().eq(4).show();      //隐藏新增费用按钮
+
+        $("#cost").children().children().slice(1).remove(); //清空费用
+        $("#good_cost").hide();
+        $("#btn_delCost").hide();
+        xz = false;
+        var ipt = $("#good_cost").find("input");
+        $.each(ipt, function (index, domEle) {
+            $(domEle).val("");
+        });
+
+    }
+
+    //删除某行物资
+    function DelGoodList(a) {
+        var k = $(a).attr("id");
+        $(a).parent().parent().parent().children().eq(parseInt(k) + 2).hide();//查找到要删除的哪一行并隐藏
+        var d = $(a).parent().parent().parent().children().eq(parseInt(k) + 2).find("input");//列出该行中所有输入框
+        $(d).each(function (index, domEle) {
+            var v = $(domEle).val("");         //将该行中的输入框的数据清空
+        });
+        num--;
+        var dd = $("#good_list").find("input:visible");   //如果物资列表数为0  ，则验收单恢复默认
+        if (dd.length <= 0) {
+            $('#add_goodlist').hide();    //隐藏一批物资 --办公物资一批
+            $("#btn_addForm").show();      //新增单个物资
+            $("#btn_addForms").show().parent().children().eq(2).hide();     //新增一批物资按钮   隐藏添加物资清单按钮
+            $("#btn_addForms").parent().children().eq(3).hide();      //隐藏添加附件按钮
+            $("#btn_addForms").parent().children().eq(4).show();      //隐藏新增费用按钮
+
+            $("#cost").children().children().slice(1).remove(); //清空费用
+            $("#good_cost").hide();
+            $("#btn_delCost").hide();
+            xz = false;
+            var ipt = $("#good_cost").find("input");
+            $.each(ipt, function (index, domEle) {
+                $(domEle).val("");
+            });
+        }
+    }
+
+
+    var b = false;//判断是否正式提交
+    $("#btn_sub").click(function () {
+        var isnull;
+        var list = $(".g_name:visible");
+        $("#unit_user_id").val($("#reciever").val());
+        if ($("#unit_user_sh").val() == "") {
+            if ($("#comfirm-m").length > 0) {
+                $("#comfirm-m").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-m",
+                    btncloseid: "btnclose9",
+                    btnsubid: "btnsub9",
+                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                    content: "请选择审核单位！",  //提示信息内容 必须
+                    iscomfirm: false,
+                    onComfirm: function () {
+                        $("#comfirm-m").fadeOut(200);
+                    },
+                });
+            }
+            return false;
+        }
+        if ($("#sender").val() == "") {
+            if ($("#comfirm-n").length > 0) {
+                $("#comfirm-n").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-n",
+                    btncloseid: "btnclose10",
+                    btnsubid: "btnsub10",
+                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                    content: "请填写供货单位开票人！",  //提示信息内容 必须
+                    iscomfirm: false,
+                    onComfirm: function () {
+                        $("#comfirm-n").fadeOut(200);
+                    },
+                });
+            }
+            return false;
+        }
+        if ($("#unit_user_id").val() == "") {
+            if ($("#comfirm-f").length > 0) {
+                $("#comfirm-f").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-f",
+                    btncloseid: "btnclose5",
+                    btnsubid: "btnsub5",
+                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                    content: "请填写收货单位！",  //提示信息内容 必须
+                    iscomfirm: false,
+                    onComfirm: function () {
+                        $("#comfirm-f").fadeOut(200);
+                    },
+                });
+            }
+            return false;
+        }
+
+        var listattach = $("#pBox").html();
+        if (listattach == "") {
+            $(list).each(function (index, domEle) {    //判断物资列表商品是否选择
+
+                $(domEle).prev().val($(domEle).find("option:selected").attr("id"));
+                var a = $(domEle).prev().val();
+                if (a == "") {
+                    isnull = true;
+                }
+            });
+            var d = $("#good_list").find("input:visible");  //物资列表信息是否完善
+            //if (d.length <= 0) {
+            //    isnull = true;
+            //}
+            $(d).each(function (index, domEle) {
+                var v = $(domEle).val();
+                var mm = $(domEle).attr("name");
+                var ff = mm.split(".");
+                if (ff[ff.length - 1] != "采购合同号" && ff[ff.length - 1] != "file1" && v == "") {
+                    isnull = true;
+                }
+            });
+        } else {
+            $(list).each(function (index, domEle) {    //判断物资列表商品是否选择
+
+                $(domEle).prev().val($(domEle).find("option:selected").attr("id"));
+
+            });
+            isnull = false;
+        }
+
+
+        var isFoo = false;
+        if (!$("#good_cost").is(":hidden")) {
+            var costIpt = $("#cost").find("input");      //判断费用是否添加并填写
+            $.each(costIpt, function (index, domEle) {
+                if ($(domEle).val() == "") {
+                    if ($("#comfirm-p").length > 0) {
+                        $("#comfirm-p").fadeIn(200);
+                    }
+                    else {
+                        $("body").myComfirm({
+                            index: "comfirm-p",
+                            btncloseid: "btnclose11",
+                            btnsubid: "btnsub11",
+                            img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                            content: "您添加了费用，请确认费用信息已填写完整！如果某项费用为零，请输入0。",  //提示信息内容 必须
+                            iscomfirm: false,
+                            onComfirm: function () {
+                                $("#comfirm-p").fadeOut(200);
+                            },
+                        });
+                    }
+                    isFoo = true;
+                    return false;
+                }
+                else {
+                    isFoo = false;
+                }
+            });
+        };
+        if (isFoo) {
+            return false;
+        };
+
+        if (isnull) {
+            if ($("#comfirm-g").length > 0) {
+                $("#comfirm-g").fadeIn(200);
+            }
+            else {
+                $("body").myComfirm({
+                    index: "comfirm-g",
+                    btncloseid: "btnclose6",
+                    btnsubid: "btnsub6",
+                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+                    content: "请将完善物资信息！",  //提示信息内容 必须
+                    iscomfirm: false,
+                    onComfirm: function () {
+                        $("#comfirm-g").fadeOut(200);
+                    },
+                });
+            }
+            return false;
+        }
+        if (!isnull) {
+            if (!b) {
+                b = true;
+                if ($("#comfirm-e").length > 0) {
+                    $("#comfirm-e").fadeIn(200);
+                    return false;
+                }
+                else {
+                    $("body").myComfirm({
+                        index: "comfirm-e",
+                        btncloseid: "btnclose4",
+                        btnsubid: "btnsube4",
+                        img: "url('../Images/alert-comfirm.png') 160px 0", //提示信息相应图片  必须
+                        content: "是否提交并保存验收单?",  //提示信息内容 必须
+                        iscomfirm: true,
+                        onComfirm: function () {
+                            var dt = ToSearlize($("#cost"));
+                            $("#costJson").val(dt);
+                            $("#btn_sub").click();
+
+                            $("#comfirm-e").fadeOut(200);
+                            setTimeout(function () {
+                                if ($("#comfirm-h").length > 0) {
+                                    $("#comfirm-h").fadeIn(200);
+                                    return false;
+                                }
+                                else {
+                                    $("body").myComfirm({
+                                        index: "comfirm-h",
+                                        btncloseid: "btnclose7",
+                                        btnsubid: "btnsub7",
+                                        img: "url('../Images/alert-comfirm.png') 0 70px", //提示信息相应图片  必须
+                                        content: "已提交，请等待审核！",  //提示信息内容 必须
+                                        iscomfirm: false,
+                                        onComfirm: function () {
+                                            //$.fn.myComfirm.close("comfirm-h",200);
+                                            $("#comfirm-h").fadeOut(200);
+                                        },
+                                    });
+                                }
+                            }, 300);
+                        },
+                        onCancel: function () {
+                            $("#comfirm-e").fadeOut(200);
+                            b = false;
+                        },
+                    });
+                    return false;
+                };
+            }
+        }
+    });
+    $("#unit_user").change(function () {
+        var id = $(this).find("option:selected").attr("value");
+        $("#unit_user_id").val(id);
+    });
+
+
+    @*var i = @(int.Parse(ViewData["currentpage"].ToString()));
+    var j=@(int.Parse(ViewData["pagecount"].ToString()));*@
+
+</script>
+
+
+
+@if (ViewData["是否持有U盾"] == "1" && ViewData["供应商ID"].ToString() != "200000000003")
+{
+    <script type="text/javascript" language="javascript">
+        $(function () {
+            $(".bg_outdiv").hide();
+            if (!getcheck()) {
+                $(".bg_outdiv").hide();
+                $("#indexpagemodal1").hide();
+            }
+            else {
+                $("#indexpagemodal1").show();
+            }
+        });
+
+        function getcheck() {
+            var flage = true;
+
+            var browser = DetectBrowser();
+            if (browser == "Unknown") {
+                alert("不支持该浏览器， 如果您在使用傲游或类似浏览器，请切换到IE模式，建议使用Google浏览器！");
+                flage = false;
+            }
+            createElementNT199();
+            var create = DetectNT199Plugin();
+            if (create == false) {
+                alert("插件未安装,,请直接安装CD区的插件!");
+                flage = false;
+            }
+
+            var Rtn = NT199_Find();
+            if (Rtn < 1) {
+                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                flage = false;
+            }
+
+            if (flage) {
+                $("#indexpagemodal1").show();
+                $("#password").focus();
+            }
+            return flage;
+        }
+        function OnLogon() {
+            var Rtn = NT199_Find();
+            if (Rtn < 1) {
+                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                return false;
+            }
+            var pwd = document.getElementById("password").value;
+            if (pwd == "") {
+                alert("用户密码不能为空");
+                return false;
+            }
+            var retVal = NT199_CheckPassword(pwd);
+            if (retVal != 0) {
+                if (retVal == 1) {
+                    alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                }
+                else {
+                    alert("ErrorCode:" + NT199_GetLastError() + "   密码不正确");
+                }
+                return false;
+            }
+            var IAID = NT199_GetHardwareId();
+
+            var randomMessageFromServer = "@ViewData["Message"]";
+            var hashVal = NT199_Sha1WithSeed(randomMessageFromServer);
+
+            document.getElementById("HidDigest").value = hashVal;
+            document.getElementById("HidIAID").value = IAID;
+
+            var tempparm = "HidDigest=" + hashVal + "&HidIAID=" + IAID + "&ssid=" + $("#ssid").val();
+
+            $("#indexpagemodal1").hide();
+            $("#errortips").html("");
+            $.ajax({
+                cache: false,
+                async: false,
+                //dataType: 'json', type: 'post',
+                type: 'POST',
+                url: "/供应商后台/CheckUOfYsd",
+                data: tempparm,
+                success: function (data) {
+                    if (data == "1") {
+                        $(".bg_outdiv").show();
+                        return true;
+                    }
+                    else {
+                        $("#indexpagemodal1").show();
+                        $("#errortips").html(data);
+                    }
+                }
+            });
+            return false;
+        }
+    </script>
+}
+else
+{
+    <script type="text/javascript" language="javascript">
+        $(function () {
+            $("#reciever").val($("#unit_user").val());
+            var id = $("#unit_user").val();
+            $("#unit_user_id").val(id);
+
+            $("#unit_user_sh").val($("#selectSh_unit").val());
+
+            var u = $("#hideuser").val();
+            $("#sender").val(u);
+            $("#新增及打印验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#新增及打印验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+    </script>
+}

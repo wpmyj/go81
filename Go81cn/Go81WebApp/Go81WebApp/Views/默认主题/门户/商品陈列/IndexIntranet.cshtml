@@ -1,0 +1,463 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@{
+    ViewBag.Title = "商品库-首页";
+}
+@using Go81WebApp.Models.管理器
+@using MongoDB.Driver.Builders
+@*<div style="height:auto; overflow:hidden; margin-bottom:5px; ">
+        <div class="prodtpage_leftbox" style="float:left; margin-top:5px;">
+            @Html.Action("Part_Recommend", "商品陈列")
+        </div>
+        <div class="prodtpage_rightbox" style="width:947px;float:left; margin-top:5px;margin-left:10px;">
+            @Html.Action("Part_GoodClass", "商品陈列")
+        </div>
+
+    </div>*@
+<link rel="stylesheet" href="~/css/area.css" type="text/css" />
+
+<style type="text/css">
+    .search-condit {
+        border: 1px solid #3366cc;
+        float: left;
+        padding: 5px 0 5px 70px;
+    }
+
+        .search-condit .class-father {
+            font-weight: bold;
+            color: #003399;
+            font-size: 16px;
+            float: left;
+            width: 85px;
+            margin-right: 5px;
+            background: url('../Images/rg.png') no-repeat right center;
+        }
+
+        .search-condit .class-son {
+            width: 1140px;
+            float: left;
+            font-size: 13px;
+        }
+
+    .class-son a {
+        padding: 0 5px;
+    }
+
+    .search-condit .pricearea a {
+        border: 1px solid #ccc;
+    }
+
+    .class-son input[type='text'] {
+        border-color: #207AD6;
+        height: 25px;
+        width: 356px;
+    }
+
+    .class-son input[type='button'] {
+        width: 80px;
+        height: 31px;
+        border: none;
+        background: #207AD6;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .floor {
+        border: 1px solid #3366cc;
+        margin-top: 10px;
+        width: 1232px;
+        float: left;
+        padding: 10px 0 10px 70px;
+    }
+
+        .floor .floor-num {
+            width: 85px;
+            float: left;
+            height: 33px;
+            line-height: 33px;
+            text-align: center;
+            background: #3366CC;
+            color: #FFF;
+        }
+
+        .floor .floor-name {
+            font-size: 15px;
+            color: #003399;
+            width: auto;
+            height: 31px;
+            border-bottom: 2px solid #3366cc;
+            float: left;
+            padding: 0 5px;
+            font-weight: bold;
+            line-height: 40px;
+        }
+
+    table tr td a {
+        padding:0 5px;
+        line-height:25px;
+        font-size: 14px;
+    }
+
+        table tr td a:hover {
+            text-decoration: underline;
+        }
+
+    .prodtpage_prodtlistdiv {
+        height:330px;
+        width: 200px;
+    }
+
+    .prodtpage_prodtlistdiv_imgdiv a img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .prodtpage_prodtlistdiv_imgdiv {
+        height: 150px;
+    }
+</style>
+
+<div style="height:auto; overflow:hidden; margin-bottom:5px; ">
+    @*<div class="prodtpage_leftbox" style="float:left; margin-top:5px;">
+            @Html.Action("Part_Recommend", "商品陈列")
+        </div>*@
+    <div class="prodtpage_rightbox" style="width:1304px; margin-top:5px;">
+        <div class="search-condit">
+            <!--物资分类-->
+            <div style="float:left;line-height:30px">
+                <div class="class-father">物资分类</div>
+                <div class="class-son">
+                    <a href="/商品陈列/ProductList?id=3">办公设备</a>/
+                    <a href="/商品陈列/ProductList?id=155">文体器材</a>/
+                    <a href="/商品陈列/ProductList?id=668">计算机及通信</a>/
+                    <a href="/商品陈列/ProductList?id=573">电气设备</a>/
+                    <a href="/商品陈列/ProductList?id=328">机械设备</a>/
+                    <a href="/商品陈列/ProductList?id=91">家具</a>/
+                    <a href="/商品陈列/ProductList?id=867">仪器仪表</a>/
+                    <a href="/商品陈列/ProductList?id=202">原材料</a>/
+                    <a href="/商品陈列/ProductList?id=305">建筑装修材料</a>/
+                    <a href="/商品陈列/ProductList?id=515">车辆</a>/
+                    <a href="/商品陈列/ProductList?id=1217">其他服务</a>/
+                    <a href="/商品陈列/ProductList?id=1029">专用物资</a>
+                    <span>》</span>
+                </div>
+            </div>
+            <!--地域分类-->
+            @*<div style="float:left;line-height:30px">
+                    <div class="class-father" style="clear:both">地域分类</div>
+                    <div class="class-son">
+                        <div class="area" style=" height:32px;background:none;border:none;margin:0;padding:0;width:auto">
+                            <div style="width:100%; height:32px;">
+                                <b>地区：</b>
+                                <span class="def_box"><a id="hasselectplace">所有地区</a></span>
+                            </div>
+                        </div>
+                        @*<a>四川</a>/
+                            <a>重庆</a>/
+                            <a>西藏</a>/
+                            <a>云南</a>/
+                            <a>贵州</a>/
+                            <a>陕西</a>/
+                            <a>北京</a>/
+                            <a>上海</a>/
+                            <a>新疆</a>/
+                            <a>更多</a>
+                            <span>》</span>
+                        <input type="hidden" value="" name="deliverprovince" id="deliverprovince" />
+                        <input type="hidden" value="" name="delivercity" id="delivercity" />
+                    </div>
+                </div>*@
+            <!--价格区间-->
+            @*<div style="float:left;line-height:30px">
+                    <div class="class-father" style="clear:both">价格区间</div>
+                    <div class="class-son pricearea">
+                        <a>0-999</a>
+                        <a>1000-1599</a>
+                        <a>1600-2699</a>
+                        <a>2700-5799</a>
+                        <a>5800-8199</a>
+                        <a>8200-29399</a>
+                        <a>29400及以上</a>
+                    </div>
+                </div>*@
+            <!--物资查询-->
+            @*<div style="float:left;line-height:40px">
+                    <div class="class-father" style="clear:both">物资查询</div>
+                    <div class="class-son">
+                        <input type="text" /><input type="button" value="搜 索" />
+                    </div>
+                </div>*@
+        </div>
+        <div style="clear:both">
+            @{
+                IEnumerable<商品分类> goodclass = ViewData["商品分类"] as IEnumerable<商品分类>;
+                List<商品分类> special = new List<商品分类>();
+                int index = 1;
+            }
+            @foreach (var item in goodclass)
+            {
+
+
+
+                if (item.分类性质 != 商品分类性质.专用物资)
+                {
+                    if (item.分类名 != "畜牧养殖业" && item.分类名 != "其他服务")
+                    {
+                        <div class="floor">
+                            <div style="width:100%;float:left">
+                                <div class="floor-num">@(index++)F</div>
+                                <div class="floor-name">
+                                    @item.分类名
+                                </div>
+                                <div class="more" style="margin-right:30px;">
+                                    <a target="_blank" href="/商品陈列/ProductList?id=@item.子分类.First().子分类.First().Id">更多+</a>
+                                </div>
+                            </div>
+                            <div style="clear:both;float:left">
+                                <div style="float:left;width:430px;height:330px;text-align:center">
+                                    @{
+                                         int tr_row = item.子分类.Count() / 2;
+                                    }
+                                    <table width="100%" height="100px" cellpadding="0" cellspacing="0" style="margin-top:15px; display:block; overflow:hidden;">
+                                        @{
+                                            int elem_index = 0;
+                                            for (int i = 0; i < tr_row; i++)
+                                            {
+                                                if (i < 4)
+                                                {
+                                                    <tr><td align="left"><a target="_blank" href="/商品陈列/ProductList?id=@item.子分类.ElementAt(elem_index).子分类.First().Id">@item.子分类.ElementAt(elem_index).分类名</a></td><td align="left"><a target="_blank" href="/商品陈列/ProductList?id=@item.子分类.ElementAt((elem_index+1)).子分类.First().Id">@item.子分类.ElementAt((elem_index + 1)).分类名</a></td></tr>
+                                                    elem_index += 2;
+                                                }
+                                            }
+                                            if (item.子分类.Count() < 2)
+                                            {
+                                                <tr><td align="left"><a target="_blank" href="/商品陈列/ProductList?id=@item.子分类.ElementAt((item.子分类.Count() - 1)).子分类">@item.子分类.ElementAt((item.子分类.Count() - 1)).分类名</a></td></tr>
+                                            }
+                                        }
+                                    </table>
+                                    @{
+                                        IEnumerable<商品> goods = null;
+                                        switch (item.分类名)
+                                        {
+                                            case "办公设备": goods = 商品管理.查询分类下商品(3, 0, 4); break;
+                                            case "文体器材": goods = 商品管理.查询分类下商品(166, 0, 4); break;
+                                            case "计算机及通信": goods = 商品管理.查询分类下商品(668, 0, 4); break;
+                                            case "电气设备": goods = 商品管理.查询分类下商品(573, 0, 4); break;
+                                            case "机械设备": goods = 商品管理.查询分类下商品(328, 0, 4); break;
+                                            case "家具": goods = 商品管理.查询分类下商品(91, 0, 4); break;
+                                            case "仪器仪表": goods = 商品管理.查询分类下商品(864, 0, 4); break;
+                                            case "原材料": goods = 商品管理.查询分类下商品(263, 0, 4); break;
+                                            case "建筑装修材料": goods = 商品管理.查询分类下商品(1196, 0, 4); break;
+                                            case "车辆": goods = 商品管理.查询分类下商品(515, 0, 4); break;
+                                            case "技术训练器材": goods = 商品管理.查询分类下商品(1225, 0, 4); break;
+                                            case "畜牧养殖业": goods = 商品管理.查询分类下商品(1230, 0, 4); break;
+                                            case "其他服务": goods = 商品管理.查询分类下商品(1220, 0, 4); break;
+                                        }
+                                    }
+                                    @if (goods.Any())
+                                    {
+                                        if (goods.First().商品信息.商品图片.Any())
+                                        {
+                                            <a target="_blank" href="/商品陈列/Product_Detail?id=@goods.First().Id"><img src="@goods.First().商品信息.商品图片.First()" style="width:300px; height:165px; float:left;" /></a>
+                                        }
+                                        else
+                                        {
+                                            <a target="_blank" href="/商品陈列/Product_Detail?id=@goods.First().Id"><img src="~/Images/floorfive.jpg" style="width:300px; height:165px; float:left;" /></a>
+                                        }
+                                    }
+                                </div>
+                                <div style="float:left">
+                                    @{
+                                    //IEnumerable<商品> goods = 商品管理.查询分类下商品(item.子分类.First().子分类.First().Id, 0, 4);//.获取分类下商品列表;
+                                    foreach (var gd in goods)
+                                    {
+                                        <div class="prodtpage_prodtlistdiv">
+                                            <div class="prodtpage_prodtlistdiv_imgdiv">
+                                                <a href="/商品陈列/Product_Detail?id=@gd.Id" title="@gd.商品信息.商品名" target="_blank">
+                                                    @if (gd.商品信息.商品图片.Count > 0)
+                                                    {
+                                                        <img src="@gd.商品信息.商品图片[0].Replace("original", "150X150")" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/images/noimage.jpg" />
+                                                    }
+                                                </a>
+                                            </div>
+                                            <div class="prodtpage_prodtlistdiv_textdiv">
+                                                @{ var thisp_name = gd.商品信息.商品名.Replace("<font color=\"red\">", "").Replace("</font>", ""); }
+                                                <div style="height:40px;">
+                                                    <a href="/商品陈列/Product_Detail?id=@gd.Id" title="@thisp_name" class="product_name_twoline" target="_blank">
+                                                        @Html.Raw(gd.商品信息.商品名)
+                                                    </a>
+                                                </div>
+                                                <div class="prodtpage_prodtlistdiv_price"><a href="/商品陈列/Product_Detail?id=@gd.Id" target="_blank">￥@(string.Format("{0:0.00}", gd.销售信息.价格))</a><span style="padding-left:20px; color:#999; cursor:pointer;" title="报价时间">(@gd.销售信息.价格修改日期.ToString("yyyy-MM-dd"))</span></div>
+                                                <div style="height:20px;">
+                                                    @try
+                                                    {
+                                                        <a class="product_gysname_oneline" href="/供应商陈列/Supplier_Destination?id=@gd.商品信息.所属供应商.用户数据.Id" title="@gd.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@gd.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
+                                                    }
+                                                    catch
+                                                    {
+                                                        <a>供应商未知</a>
+                                                    }
+                                                </div>
+                                                <div style="height:20px;">
+                                                    <span style="color:gray;">外网浏览：@gd.销售信息.点击量</span>
+                                                </div>
+                                                <div style="height:20px;">
+                                                    <span style="color:gray;">
+                                                        内网浏览：
+                                                        @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                                                        {
+                                                            <a>@gd.销售信息.内网点击量</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/商品陈列">登陆查看</a>
+                                                        }
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    special.Add(item);
+                }
+            }
+            <!--专用物资楼层-->
+            @*<div class="floor">
+                    <div style="width:100%;float:left">
+                        <div class="floor-num">@(index++)F</div>
+                        <div class="floor-name">
+                            专用物资
+                        </div>
+                        <div class="more" style="margin-right:30px;">
+                            <a target="_blank" href="/商品陈列/ProductList?id=@special.First().Id">更多+</a>
+                        </div>
+                    </div>
+                    <div style="clear:both;float:left">
+                        <div style="float:left;width:430px;height:370px;text-align:center">
+                            @{
+                                int tr_row1 = special.Count / 2;
+                            }
+                            <table width="75%" cellpadding="0" cellspacing="0" style="margin-top:15px;">
+                                @{
+                                    int elem_index1 = 0;
+                                    for (int i = 0; i < tr_row1; i++)
+                                    {
+                                        <tr><td align="left"><a target="_blank" href="/商品陈列/ProductList?id=@special[elem_index1].子分类.First().Id">@special[elem_index1].分类名</a></td><td align="left"><a target="_blank" href="/商品陈列/ProductList?id=@special[elem_index1+1].子分类.First().Id">@special[elem_index1].分类名</a></td></tr>
+                                        elem_index1 += 2;
+                                    }
+                                    if (special.Count % 2 > 0)
+                                    {
+                                        <tr><td align="left"><a target="_blank" href="/商品陈列/ProductList?id=@special.Last().子分类.First().Id">@special.Last().分类名</a></td></tr>
+                                    }
+                                }
+                            </table>
+                            <img src="~/Images/floorsix.jpg" style="width:300px; height:120px; float:left;" />
+                        </div>
+                        <div style="float:left">
+                            @{
+                                IEnumerable<商品> goods1 = 商品管理.查询分类下商品(1024, 0, 4); ;//.获取分类下商品列表;
+                                foreach (var gd in goods1)
+                                {
+                                    <div class="prodtpage_prodtlistdiv">
+                                        <div class="prodtpage_prodtlistdiv_imgdiv">
+                                            <a href="/商品陈列/Product_Detail?id=@gd.Id" title="@gd.商品信息.商品名" target="_blank">
+                                                @if (gd.商品信息.商品图片.Count > 0)
+                                                {
+                                                    <img src="@gd.商品信息.商品图片[0]" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/images/noimage.jpg" />
+                                                }
+                                            </a>
+                                        </div>
+                                        <div class="prodtpage_prodtlistdiv_textdiv">
+                                            @{ var thisp_name = gd.商品信息.商品名.Replace("<font color=\"red\">", "").Replace("</font>", ""); }
+                                            <div style="height:40px;">
+                                                <a href="/商品陈列/Product_Detail?id=@gd.Id" title="@thisp_name" class="product_name_twoline" target="_blank">
+                                                    @Html.Raw(gd.商品信息.商品名)
+                                                </a>
+                                            </div>
+                                            <div class="prodtpage_prodtlistdiv_price"><a href="/商品陈列/Product_Detail?id=@gd.Id" target="_blank">￥@(string.Format("{0:0.00}", gd.销售信息.价格))</a><span style="padding-left:20px; color:#999; cursor:pointer;" title="报价时间">(@gd.销售信息.价格修改日期.ToString("yyyy-MM-dd"))</span></div>
+                                            <div style="height:20px;">
+                                                @try
+                                                {
+                                                    <a class="product_gysname_oneline" href="/供应商陈列/Supplier_Destination?id=@gd.商品信息.所属供应商.用户数据.Id" title="@gd.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@gd.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
+                                                }
+                                                catch
+                                                {
+                                                    <a>供应商未知</a>
+                                                }
+                                            </div>
+                                            <div style="height:20px;">
+                                                <span style="color:gray;">外网浏览：@gd.销售信息.点击量</span>
+                                            </div>
+                                            <div style="height:20px;">
+                                                <span style="color:gray;">
+                                                    内网浏览：
+                                                    @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                                                    {
+                                                        <a>@gd.销售信息.内网点击量</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/商品陈列">登陆查看</a>
+                                                    }
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</div>
+<script src="~/JS/provinceandcity_all.js"></script>
+<script type="text/javascript" src="~/JS/area.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".action_link").each(function () {
+            if ($(this).text() == "采购商城") {
+                $(this).parent("div").addClass("on");
+            }
+        });
+    });
+
+    function prosuct_searchbyplace(obj) {
+        $("#hasselectplace").html("");
+        $("#deliverprovince").val("");
+        $("#delivercity").val("");
+
+        var province = $(obj).attr("p");
+        var city = $(obj).attr("v");
+        $("#deliverprovince").val(province);
+        if (province != city) {
+            $("#delivercity").val(city);
+        }
+        if (province != "") {
+            $("#hasselectplace").html($("#deliverprovince").val() + $("#delivercity").val());
+
+        }
+        else {
+            $("#hasselectplace").html("所有地区");
+        }
+        $(".sw-ui-area-box").hide();
+        @*$.get("/商品陈列/ChangeProductClass?classname=" + encodeURI(parms)+ "&classid=@ViewData["classid"].ToString()"+ "&province=" + encodeURI($("#deliverprovince").val())+ "&city=" + encodeURI($("#delivercity").val())+ "&price=" + encodeURI($("#hasselect_price").val()), function (response) {
+            document.getElementById("pro_search_content").innerHTML = response;
+            //document.getElementById("pagediv").style.display = "none";
+        });*@
+    }
+</script>

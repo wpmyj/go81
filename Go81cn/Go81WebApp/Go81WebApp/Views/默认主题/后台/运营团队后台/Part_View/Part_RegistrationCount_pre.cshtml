@@ -1,0 +1,21 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+<p style="text-align:center;">预报名供应商总数为： @ViewData["供应商总数"] 个</p>
+<table cellpadding="0" cellspacing="0" id="adlist" style="width:100%;">
+    <tr>
+        <th width="30%">企业名称</th>
+        <th width="10%">联系人</th>
+        <th width="15">电话</th>
+        <th width="15">固定电话</th>
+        <th width="30">所属地域</th>
+    </tr>
+    @foreach (var item in (IList<供应商>)ViewData["预报名供应商"])
+    {
+        <tr>
+            <td>@item.企业基本信息.企业名称</td>
+            <td>@item.企业联系人信息.联系人姓名</td>
+            <td>@item.企业联系人信息.联系人手机</td>
+            <td>@item.企业联系人信息.联系人固定电话</td>
+            <td>@item.所属地域.地域</td>
+        </tr>
+    }
+</table>

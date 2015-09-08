@@ -1,0 +1,208 @@
+﻿@using Go81WebApp.Models.数据模型.项目数据模型
+@using Go81WebApp.Models.数据模型
+<table cellpadding="0" cellspacing="0">
+    <tr>
+        <th width="12%">生成时间</th>
+        <th width="12%">供货单位</th>
+        <th width="17%">收货单位</th>
+        <th width="5%">总金额</th>
+        <th width="8%">审核状态</th>
+        <th width="6%">打印状态</th>
+        <th width="6%">验收状态</th>
+        @*<th width="8%">验收日期</th>*@
+        <th width="6%">操作</th>
+    </tr>
+    @{
+        IEnumerable<验收单> gd = ViewData["验收单列表"] as IEnumerable<验收单>;
+        if (gd != null && gd.Any())
+        {
+            foreach (var k in gd)
+            {
+                var vl = new List<Tuple<string, string, string, string, int, decimal, decimal>>();
+                if (k.物资服务列表.Count > 5)
+                {
+                    decimal price_total = k.物资服务列表.Sum(o => o.总价);
+                    vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1, price_total, price_total));
+                }
+                else if (k.物资服务列表.Count == 0 && k.验收单附件.Count > 0)
+                {
+                    decimal price_total = k.验收单附件.Sum(o => o.价格);
+                    vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1, price_total, price_total));
+                }
+                else
+                {
+                    foreach (var plnk in k.物资服务列表)
+                    {
+                        if (plnk.商品链接.商品 != null)
+                        {
+                            vl.Add(Tuple.Create(plnk.商品链接.商品.商品信息.商品名, plnk.规格型号, plnk.采购合同号, plnk.计量单位, plnk.数量, plnk.单价, plnk.总价));
+                        }
+                    }  
+                }
+                if (k.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0, k.运费, k.运费)); }
+                if (k.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0, k.服务费, k.服务费)); }
+                if (k.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0, k.维修费, k.维修费)); }
+                foreach (var hj in k.其他费用) { vl.Add(Tuple.Create(hj.费用名称, string.Empty, string.Empty, string.Empty, 0, hj.金额, hj.金额)); }
+
+                var vl_all = new List<Tuple<string, string, string, string, int, decimal, decimal>[]>();
+                for (var n_all = 0; n_all < vl.Count; n_all += 5) { vl_all.Add(vl.Skip(n_all).Take(5).ToArray()); }
+                <tr>
+                    <td>@k.基本数据.添加时间</td>
+                    @if (k.供应商链接.用户数据!=null)
+                    {
+                        if (k.供应商链接.用户数据.企业基本信息.企业名称.Length > 10)
+                        {
+                            <td class="name" title="@k.供应商链接.用户数据.企业基本信息.企业名称">
+                                @k.供应商链接.用户数据.企业基本信息.企业名称.Substring(0, 9) ...
+                                @for (var yn = 1; yn <= vl_all.Count; ++yn)
+                                {
+                                    <p style="padding: 0; margin: 0; font-size: 12px; color: #ff5e00; line-height: 17px;">@k.验收单号 - @yn</p>
+                                }
+                            </td>
+                        }
+                        else
+                        {
+                            <td class="name" title="@k.供应商链接.用户数据.企业基本信息.企业名称">
+                                @k.供应商链接.用户数据.企业基本信息.企业名称
+                                @for (var yn = 1; yn <= vl_all.Count; ++yn)
+                                {
+                                    <p style="padding: 0; margin: 0; font-size: 12px; color: #ff5e00; line-height: 17px;">@k.验收单号 - @yn</p>
+                                }
+                            </td>
+                        }
+                    }
+                    @if (k.收货单位.Length > 9)
+                    {
+                        <td title="@k.收货单位">@k.收货单位.Substring(0, 9) ...</td>
+                    }
+                    else
+                    {
+                        <td title="@k.收货单位">@k.收货单位</td>
+                    }
+
+                    <td>￥@(string.Format("{0:0.00}", k.总金额))</td>
+                    @if (k.审核数据.审核状态 == 审核状态.未审核)
+                    {
+                        <td style="color:red">@k.审核数据.审核状态</td>
+                    }
+                    @if (k.审核数据.审核状态 == 审核状态.审核通过)
+                    {
+                        <td style="color:#1f9434">@k.审核数据.审核状态</td>
+                    }
+                    @if (k.审核数据.审核状态 == 审核状态.审核未通过)
+                    {
+                        <td style="color:#ff5e00">@k.审核数据.审核状态</td>
+                    }
+                    @if (k.是否已经打印)
+                    {
+                        <td style="color:#1f9434">
+                            已打印
+                            <p style="padding:0;margin:0;font-size:12px;color:#ff5e00;line-height:17px;">
+                                @if (k.打印信息.Count > 0)
+                                {
+                                    <span>@k.打印信息[k.打印信息.Count - 1].打印时间</span>
+                                }
+                            </p>
+                        </td>
+                    }
+                    else
+                    {
+                        <td style="color:red" title="请等待供应商打印">未打印</td>
+                    }
+                    @if (k.验收单扫描件.Count > 0)
+                    {
+                        var ss = "";
+                        foreach (var item in k.验收单扫描件)
+                        {
+                            ss += item.回传单路径 + "|" + item.审核数据.审核状态 + "," + item.审核数据.审核不通过原因 + ";";
+                        }
+                        <td onclick="ShowYsd(this)" id="@ss" name="@k.Id" style="color:#1f9434;cursor:pointer">已验收<br />
+                            @if (k.扫描件审核状态 == "审核通过")
+                            {
+                                <i style="color:#1f9434;font-size:13px;">审核通过</i>
+                            }
+                            else if (k.扫描件审核状态 == "审核未通过")
+                            {
+                                <i style="color:red;font-size:13px;">审核未通过</i>
+                            }
+                            else
+                            {
+                                <i style="color:red;font-size:13px;">未审核</i>
+                        }
+                        </td>
+                        @*<td style="color:#1f9434">已验收</td>*@
+                    }
+                    else
+                    {
+                        <td style="color:red">未验收</td>
+                    }
+
+                    <td>
+                        <a href="/单位用户后台/AcceptanceDetail?id=@k.Id&comes=已审核">查看详情</a>
+                        <a style="cursor:pointer" id="@k.Id" onclick="ConfirmCancel(this)">撤销审核</a>
+                        @if (k.是否作废)
+                        {
+                            <span style="color: red;">已作废</span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    }
+</table>
+
+@if (ViewData["currentPage"] != null)
+{
+    <div class="gys_znxx_content_detailbox">
+        @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+        {
+            <a>首页</a>
+        }
+        else
+        {
+            <a id="1" class="page">首页</a><a id="@(int.Parse(ViewData["currentpage"].ToString()) - 1)" class="page">上一页</a>
+        }
+        @for (int i = 0; i <= 10; i++)
+        {                       //一共最多显示10个页码，前面5个，后面5个
+            if ((int.Parse(ViewData["currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+            {
+                if (5 == i)
+                {                               //当前页处理
+                    <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentPage"].ToString())</a>
+                }
+                else
+                {                               //一般页处理
+                    <a class="page" id="@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)">@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)</a>
+
+                }
+            }
+        }
+        @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+        {
+            <a>末页</a>
+        }
+        else
+        {
+            <a id="@(int.Parse(ViewData["currentpage"].ToString()) + 1)" class="page">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+        }
+
+    </div>
+}
+<script type="text/javascript">
+
+    $("a.page").click(function () {
+        var sl=$("#ysd_status").find("option:selected").html();
+        $.ajax({
+            type: "POST",
+            url: "/单位用户后台/Part_AcceptanceChecked",
+            data: { page: $(this).attr("id"),status:sl},
+            success: function (data) {
+                $("#acceptlist").html(data);
+            }
+        });
+    });
+    $(function () {
+        $("#验收单管理").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#验收单管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

@@ -1,0 +1,354 @@
+﻿@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+@*<script type="text/javascript" src="~/JS/Get_ProductClass.js"></script>*@
+<link rel="stylesheet" href="~/css/index.css" type="text/css">
+
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">商品列表</div>
+    </div>
+</div>
+<table width="90%" style="margin:0 auto; margin-top:10px;">
+    <tr>
+        <td style="text-align: right; padding-right: 10px;">所属供应商:</td>
+        <td><input type="text" value="@ViewData["name"]" id="gysval" name="gysval" style="height: 20px; line-height: 20px; margin: 0; width: 200px;" /></td>
+        <td style="text-align: right; padding-right: 10px;">供应商状态:</td>
+        <td>
+            <select id="gys_auditval" name="gys_auditval" style="width: 153px; height: 26px; line-height: 26px;width: 200px;">
+                <option value="-1">不限</option>
+                <option value="0">未审核</option>
+                <option value="1" selected="selected">审核通过</option>
+                <option value="2">审核未通过</option>
+            </select>
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="text-align: right; padding-right: 10px;">商品状态:</td>
+        <td>
+            <select id="auditval" name="auditval" style="width: 153px; height: 26px; line-height: 26px;width: 200px;">
+                <option value="-1">不限</option>
+                <option value="0" selected="selected">未审核</option>
+                <option value="1">审核通过</option>
+                <option value="2">审核未通过</option>
+            </select>
+        </td>
+        <td style="text-align: right; padding-right: 10px;">商品名称:</td>
+        <td><input type="text" value="" id="nameval" name="nameval" style="height: 20px; line-height: 20px; margin: 0;width: 200px;" /></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td style="text-align: right; padding-right: 10px;">是否中标商品:</td>
+        <td>
+            <select id="iszhongbiao" name="iszhongbiao" style="width: 153px; height: 26px; line-height: 26px;width: 200px;">
+                <option value="-1" selected="selected">全部</option>
+                <option value="1">是</option>
+                <option value="0">否</option>
+            </select>
+            @*<input type="button" id="search" onclick="getSearchPro()" style="width:60px; margin-left:100px; height:25px; width: 80px; background-color:green; cursor:pointer; color:white; border: none;" value="查询" />*@
+        </td>
+        <td style="text-align: right; padding-right: 10px;">是否删除:</td>
+        <td>
+            <select id="isprodelete" name="isprodelete" style="width: 153px; height: 26px; line-height: 26px;width: 200px;">
+                <option value="-1">全部</option>
+                <option value="0" selected="selected">未删除</option>
+                <option value="1">已删除</option>
+            </select>
+            @*<input type="button" id="search" onclick="getSearchPro()" style="width:60px; margin-left:100px; height:25px; width: 80px; background-color:green; cursor:pointer; color:white; border: none;" value="查询" />*@
+        </td>
+        <td><input type="button" id="search" onclick="getSearchPro()" style=" margin-left:20px; height:25px; width: 80px; background-color:green; cursor:pointer; color:white; border: none;" value="查询" /></td>
+    </tr>
+</table>
+
+
+<div class="gys_znxx_box">
+    <div class="gys_ztbsearch_contentbox" id="serchcontent">
+        @{
+            var SP = ViewData["商品信息"] as IEnumerable<商品>;
+        }
+        @foreach (var item in SP)
+        {
+            var kk = (long)-2;
+            if (item.审核数据.审核状态 == 审核状态.审核通过)
+            {
+                kk = item.Id;
+            }
+            if (item.基本数据.已删除)
+            {
+                <div class="gyspage_list_content" key="@kk">
+                    <div class="gyspage_list_content_imgdiv" id="@item.Id">
+                        <a>
+                            @if (item.商品信息.商品图片.Count > 0)
+                            {
+                                <img src="@item.商品信息.商品图片[0].Replace("original/", "150X150/")" width="100" height="100" />
+                            }
+                            else
+                            {
+                                <img src="~/images/noimage.jpg" width="100" height="100" />
+                            }
+                        </a>
+                    </div>
+                    <div class="gyspage_list_content_listdiv">
+                        <div class="gyspage_list_content_list">
+                            <div class="gyspage_list_content_list_cont" style="color:#aaa;">名称：@item.商品信息.商品名</div>
+                            <div class="gyspage_list_content_list_cont" style="color:#aaa;">价格：￥@item.销售信息.价格</div>
+                            <div class="gyspage_list_content_list_cont" style="color:#aaa;">
+                                编号：<span>@item.Id</span>
+                            </div>
+                            <div class="gyspage_list_content_list_cont" style="color:#aaa;">
+                                供应商：
+                                @try
+                                {
+                                    @item.商品信息.所属供应商.用户数据.企业基本信息.企业名称
+                                }
+                                catch
+                                {
+                                    <span>未知</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="gyspage_list_content_list">
+                            <a style="padding:0 10px 0 0; color:red;">已删除</a>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="gyspage_list_content" key="@kk">
+                    <div class="gyspage_list_content_imgdiv">
+                        <a href="~/运营团队后台/Gys_Product_Modify?id=@item.Id" target="_blank">
+                            @if (item.商品信息.商品图片.Count > 0)
+                            {
+                                <img src="@item.商品信息.商品图片[0].Replace("original/", "150X150/")" width="100" height="100" />
+                            }
+                            else
+                            {
+                                <img src="~/images/noimage.jpg" width="100" height="100" />
+                            }
+                        </a>
+                    </div>
+                    <div class="gyspage_list_content_listdiv">
+                        <div class="gyspage_list_content_list">
+                            <div class="gyspage_list_content_list_cont">名称：@item.商品信息.商品名</div>
+                            <div class="gyspage_list_content_list_cont">价格：￥@item.销售信息.价格</div>
+                            <div class="gyspage_list_content_list_cont">
+                                状态：
+                                @if (item.审核数据.审核状态 == 审核状态.未审核)
+                                {
+                                    <span style="color:red">@item.审核数据.审核状态</span>
+                                }
+                                else if (item.审核数据.审核状态 == 审核状态.审核未通过)
+                                {
+                                    <span style="color:green">@item.审核数据.审核状态</span><span style="color:green">(@item.审核数据.审核不通过原因)</span>
+                                }
+                                else
+                                {
+                                    <span>@item.审核数据.审核状态</span>
+                                }
+                            </div>
+                            <div class="gyspage_list_content_list_cont">
+                                供应商：
+                                @try
+                                {
+                                    @item.商品信息.所属供应商.用户数据.企业基本信息.企业名称
+                                }
+                                catch
+                                {
+                                    <span>未知</span>
+                                }
+                            </div>
+                            <div class="gyspage_list_content_list_cont" id="sjShelves__@item.Id">
+                                上架：@if (item.基本数据.已屏蔽)
+                                {<font color="red">未上架</font>}
+                                else
+                                {<font color="green">已上架</font>}
+                            </div>
+                            @if (item.中标商品)
+                            {
+                                <div class="gyspage_list_content_list_cont">
+                                    <font color="red">中标商品</font>
+                                </div>
+                            }
+                            
+                        </div>
+                        <div class="gyspage_list_content_list">
+                            <a href="~/运营团队后台/Gys_Product_Modify?id=@item.Id" style="padding:0 10px 0 0;" target="_blank">进行处理</a>
+                            @if (item.审核数据.审核状态 == 审核状态.审核通过)
+                            {
+                                <a href="~/运营团队后台/AddRecommend_good?id=@item.Id" style="padding:0 10px 0 0;" target="_blank">加广告</a>
+                            }
+                            <a href="~/运营团队后台/GoodExamineXiajia?id=@item.Id" style="padding:0 10px 0 0;" target="_blank">下架</a>
+                        </div>
+                        <div class="gyspage_list_content_list">
+                            @if (item.审核数据.审核状态 == 审核状态.审核通过)
+                            {
+                                if (item.基本数据.已屏蔽)
+                                {
+                                    <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" onclick="return doShelves(this);" title="点击上架" /><span>上架</span>
+                                }
+                                else
+                                {
+                                    <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" checked="checked" onclick="return doShelves(this);" title="点击下架" /><span>上架</span>
+                                }
+                            }
+                            else
+                            {
+                                <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" disabled="disabled" title="未审核通过，不能上架" /><span>上架</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        @if (ViewData["listcount"].ToString() != "0")
+        {
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        }
+        else
+        {
+            <div class="gys_znxx_content_detailbox">
+                暂无信息
+            </div>
+
+        }
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    var i = @(int.Parse(ViewData["currentPage"].ToString()));
+    var j=@(int.Parse(ViewData["pagecount"].ToString()))
+    $(document).ready(function () {
+        var name=$("#gysval").val();
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == i) {
+                $(this).css("border","1px solid #ff0000");
+            }
+            if (i== j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (i == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");;
+            }
+        });
+        if(name!="")
+        {
+            getSearchPro();
+        }
+        $("#商品列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#商品列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function getSearchPro() {
+        var gys = $.trim($("#gysval").val());
+        var name = $.trim($("#nameval").val());
+        var auditval = $.trim($("#auditval").val());
+        var isdelete = $.trim($("#isprodelete").val());
+        var gys_auditval = $.trim($("#gys_auditval").val());
+        var iszhongbiao = $.trim($("#iszhongbiao").val());
+
+        $.get("getSearchPro?gys=" + encodeURI(gys) + "&name=" + encodeURI(name) + "&auditval=" + encodeURI(auditval)  + "&gys_auditval=" + encodeURI(gys_auditval) + "&page=1&isdelete="+isdelete+ "&iszhongbiao=" + encodeURI(iszhongbiao), function (response) {
+            if (response == "0") {
+                window.location.href = "/运营团队后台/GoodExamine";
+            }
+            else{
+                $("#serchcontent").html(response);
+            }
+        });
+    }
+    function changePage(a) {
+        var page = $(a).attr("id");
+        var gys = $.trim($("#gysval").val());
+        var name = $.trim($("#nameval").val());
+        var auditval = $.trim($("#auditval").val());
+        var isdelete = $.trim($("#isprodelete").val());
+        var gys_auditval = $.trim($("#gys_auditval").val());
+        var iszhongbiao = $.trim($("#iszhongbiao").val());
+
+        $.get("getSearchPro?gys=" + encodeURI(gys) + "&name=" + encodeURI(name) + "&auditval=" + encodeURI(auditval)  + "&gys_auditval=" + encodeURI(gys_auditval)+ "&page="+page+"&isdelete="+isdelete+ "&iszhongbiao=" + encodeURI(iszhongbiao), function (response) {
+            if (response == "0") {
+                window.location.href = "/运营团队后台/GoodExamine";
+            }
+            else{
+                $("#serchcontent").html(response);
+            }
+        });
+    }
+    function changePage1(th)
+    {
+        var val=$(th).prev(":input").val();
+        var obj=$(th).prev(":input");
+        $(th).prev(":input").attr("id",val);
+        changePage(obj);
+    }
+
+    function doShelves(obj){
+        if(!confirm("确定此项操作无误？")){
+            return false;
+        }
+        var id = $(obj).val();
+        var status = "0";
+        if(id=="上架当页所有商品" || id=="上架所有商品"|| $(obj).is(':checked')){
+            status="1";
+        }
+        //改变的类型，选一个或选当前页为1，选择所有商品为2
+        var changetype="1";
+        //全选当前页
+        if(id=="上架当页所有商品" || id=="下架当页所有商品"){
+            var idstr = "";
+            $(".gyspage_list_content").each(function (){
+                var keyid = $(this).attr("key");
+                if(keyid!="-2"){
+                    idstr+=$(this).attr("key")+"|";
+                }
+            });
+            id=idstr;
+        }
+        else if(id == "上架所有商品" || id == "下架所有商品"){
+            //全选所有商品
+            id = $("#gysid").val();
+            changetype="2";
+        }
+
+
+        $.ajax({
+            cache: false,
+            async: false,   // 太关键了，同步和异步的参数
+            //dataType: 'json', type: 'post',
+            type: 'POST',
+            //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
+            url: "/运营团队后台/doProductShelves",
+            data: "id="+id+"&status="+status+"&changetype="+changetype,
+            success: function (data) {
+                if(data!="0"){
+                    if(data=="overflow"){
+                        alert("上架商品数已达到上限");
+                    }
+                    else{
+                        alert(data);
+                    }
+                    window.location='/供应商后台/Gys_Product_List';
+                }
+                else{
+                    //所有商品
+                    if(changetype=="2"){
+                        window.location='/供应商后台/Gys_Product_List';
+                    }
+                    else{
+                        if(id.indexOf("|")>-1){
+                            window.location='/供应商后台/Gys_Product_List';
+                        }
+                        else{
+                            if(status=="0"){
+                                $("#sjShelves__"+id).html("上架：<font color='red'>未上架</font>");
+                            }
+                            else{
+                                $("#sjShelves__"+id).html("上架：<font color='green'>已上架</font>");
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>

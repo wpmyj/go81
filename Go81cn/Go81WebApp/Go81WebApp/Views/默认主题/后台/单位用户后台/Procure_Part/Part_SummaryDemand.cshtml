@@ -1,0 +1,919 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.需求计划模型
+@using Microsoft.Ajax.Utilities
+@model  IEnumerable<需求计划物资>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style type="text/css">
+    .classtype1 {
+        cursor: pointer;
+    }
+
+        .classtype1:hover {
+            text-decoration: underline;
+        }
+
+    .classtype2 {
+        cursor: pointer;
+        /*text-decoration: underline;
+        padding-left: 20px;*/
+    }
+
+        .classtype2:hover {
+            text-decoration: underline;
+        }
+
+    .checkboxclass1 {
+    }
+
+    .checkboxclass2 {
+    }
+
+    .divclass1 {
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .divclass2 {
+        width: 100%;
+        padding-left: 20px;
+    }
+
+
+    .listdetailtable {
+        margin-top: 5px;
+        border-top: 1px solid #999a96;
+        border-left: 1px solid #999a96;
+    }
+
+        .listdetailtable tr:hover td {
+            background: #ecf0d7;
+        }
+
+
+        .listdetailtable th {
+            background-color: #c9cfad;
+            font-size: 15px;
+            height: 35px;
+            border-right: 1px solid #999a96;
+            border-bottom: 1px solid #999a96;
+        }
+
+        .listdetailtable td {
+            border-right: 1px solid #999a96;
+            border-bottom: 1px solid #999a96;
+            padding: 5px;
+            letter-spacing: 0;
+        }
+
+    .listdetailtable_exp {
+        border: none;
+    }
+
+        .listdetailtable_exp tr:hover td {
+            background: #ecf0d7;
+        }
+
+
+        .listdetailtable_exp th {
+            background-color: #c9cfad;
+            font-size: 15px;
+            height: 35px;
+            border-right: 1px solid #999a96;
+            border-bottom: 1px solid #999a96;
+        }
+
+        .listdetailtable_exp td {
+            border-right: 1px solid #999a96;
+            border-bottom: 1px solid #999a96;
+            padding: 5px;
+            letter-spacing: 0;
+        }
+
+    /*.listdetailtable_exp tr:nth-child(2n) td{
+             background-color: #f00;
+         }*/
+
+    /*///////////////////////////////*/
+
+
+    .wenxintishi {
+        text-indent: 2.0em;
+    }
+
+    .modal {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        position: fixed;
+        display: none;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: 700px;
+        margin: 15% auto;
+    }
+
+    .modal-content {
+        position: relative;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, .2);
+        border-radius: 6px;
+        outline: 0;
+        -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    }
+
+    .close {
+        margin-top: -2px;
+        float: right;
+        font-size: 21px;
+        font-weight: bold;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        filter: alpha(opacity=20);
+        opacity: .2;
+        -webkit-appearance: none;
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+    }
+
+    h4 {
+        font-size: 18px;
+    }
+
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .modal-header {
+        min-height: 16.42857143px;
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .modal-title {
+        margin: 0;
+        line-height: 1.42857143;
+    }
+
+    .modal-body {
+        position: relative;
+        padding: 15px;
+    }
+
+    .modal-footer {
+        padding: 15px;
+        text-align: right;
+        border-top: 1px solid #e5e5e5;
+    }
+
+    .icon {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background: url(/Images/tree_icons.png) 0px -5px;
+    }
+
+    #auditoutdiv input, #auditoutdiv select {
+        height: 25px;
+        line-height: 25px;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div id="Summarymodal4" class="modal fade" style="display: none">
+        <div class="modal-dialog" style="margin: 1% auto; width: 1240px;">
+            <div class="modal-content" style="height: 620px; width: 1240px;">
+                <div class="modal-header" style="padding-bottom: 20px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick=' $("#Summarymodal4").hide(); '>×</button>
+                    <div style="margin: 0; width: 200px; float: left; font-size: 16px; font-weight: bold; line-height: 23px;">需求计划来源详情</div>
+                </div>
+                <div class="modal-body">
+                    <div style="height: 480px; overflow: scroll;">
+                        @{ var jhdetaillist = ViewData["计划详情"] as IEnumerable<需求计划>;}
+
+                        <table width="100%" cellpadding="0" cellspacing="0" class="listdetailtable">
+                            <tr><th>需求计划标题</th><th>单位名称</th></tr>
+                            @foreach (var item in jhdetaillist)
+                            {
+                                var j = 0;
+                                <tr class="trodd">
+                                    <td>
+                                        <span class="icon"></span><a class="name" style="text-decoration: underline; cursor: pointer;" lang="0">@item.需求计划标题</a>
+                                    </td>
+                                    <td>@item.需求发起单位链接.用户数据.单位信息.单位名称</td>
+                                </tr>
+                                <tr>
+                                    <td align="left" style="display:none; padding: 0;" colspan="5">
+                                        <table class="trodd" width="100%" cellpadding="0" cellspacing="0" class="listdetailtable_exp">
+                                            <tr tablehead="1">
+                                                <th>序号</th>
+                                                <th>物资名称</th>
+                                                <th>规格型号</th>
+                                                <th>计量单位</th>
+                                                <th>数量</th>
+                                                <th>单价</th>
+                                                <th>预算金额</th>
+                                                <th>质量技术标准</th>
+                                                <th>交货期限</th>
+                                                <th>采购方式建议</th>
+                                                <th style="width:45px;">备注</th>
+                                            </tr>
+                                            @foreach (var m in item.物资列表)
+                                            {
+                                                if (m.需求计划物资数据 != null)
+                                                {
+                                                    j++;
+                                                    <tr>
+                                                        <td>@j</td>
+                                                        <td>@m.需求计划物资数据.物资名称</td>
+                                                        <td>@m.需求计划物资数据.规格型号</td>
+                                                        <td>@m.需求计划物资数据.计量单位</td>
+                                                        <td>@m.需求计划物资数据.数量</td>
+                                                        <td>@m.需求计划物资数据.单价</td>
+                                                        <td>@m.需求计划物资数据.预算金额</td>
+                                                        <td>@m.需求计划物资数据.技术指标</td>
+                                                        <td>@m.需求计划物资数据.交货期限.ToString("yyyy/MM/dd")</td>
+                                                        <td>@m.需求计划物资数据.建议采购方式</td>
+                                                        <td style="text-align: center;">
+                                                            @if (!string.IsNullOrWhiteSpace(m.需求计划物资数据.备注))
+                                                            {
+                                                                <img title="@m.需求计划物资数据.备注" style="width:20px; vertical-align:middle;" src="~/Images/notice.png" />
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+
+                                            }
+                                        </table>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+                <div style="width: 1000px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="index_online_btn" value="确定" onclick=' $("#Summarymodal4").hide(); ' /></div>
+            </div>
+
+        </div>
+    </div>
+
+
+    @*<div id="Summarymodal3" class="modal fade" style="display: none;">
+        <div class="modal-dialog" style="margin: 1% auto; width: 1240px;">
+            <div class="modal-content" style="height: 620px; width: 1240px;">
+                <div class="modal-header" style="padding-bottom: 20px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick=' $("#Summarymodal3").hide(); '>×</button>
+                    <div style="margin: 0; width: 100px; float: left; font-size: 16px; font-weight: bold; line-height: 23px;">查看详情</div>
+                </div>
+                <div class="modal-body">
+                    <div style="height: 480px; overflow: scroll;" id="detailoutdiv">
+
+                    </div>
+                </div>
+                <div style="width: 1000px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="index_online_btn" value="确定" onclick=' $("#Summarymodal3").hide(); ' /></div>
+            </div>
+
+        </div>
+    </div>*@
+
+
+    var userlist = ViewData["user"] as IEnumerable<单位用户>;
+
+    <div id="Summarymodal2" class="modal fade" style="display: none">
+        <div class="modal-dialog" style="margin: 1% auto;">
+            <div class="modal-content" style="height: 620px;">
+                <div class="modal-header" style="padding-bottom: 20px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick=' $("#Summarymodal2").hide(); '>×</button>
+                    <div style="margin: 0;  float: left; font-size: 16px; font-weight: bold; line-height: 23px;">选择审核单位</div>
+                    <div style="margin-left: 50px; width: 400px; float: left; font-size: 16px; font-weight: bold; line-height: 23px;">
+                        <input type="button" value="新增本级审核单位" class="front_login_rightbox_button" style="width:150px; height: 30px; margin: 0; float: left;" onclick="addnewaudit() " />
+                        <input type="button" value="新增上级助理员" class="front_login_rightbox_button" style="width:150px; height: 30px; margin: 0; margin-left:20px;" onclick="addnewaudit_p() " />
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form action="/单位用户后台/SubDemand" method="post">
+                        <input type="hidden" name="resultparm" id="resultparm" value="" />
+                        <input type="hidden" name="auditunitlist" id="auditunitlist" value="0|1|p|" />
+                        <input type="hidden" value="@ViewData["idstr"]" id="resultid" name="resultid" />
+                    <div style="height: 480px; overflow-y: scroll;" id="auditoutdiv">
+                        <div id="auditexample" style="display: none;">
+                            <div id="auditdiv__a" style="width: 100%; height: 30px; padding: 10px 0 10px 0;">
+                                <div style="float: left;">本级审核单位：</div>
+                                <div style="float: left;">
+                                    <select id="审核单位__a" name="审核单位__a">
+                                        @foreach (var item in userlist)
+                                        {
+                                            if (item.Id == 11)
+                                            {
+                                                <option selected="selected" value="@item.Id">
+                                                    @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                    {
+                                                        <text>@item.单位信息.单位代号</text>
+                                                    }
+                                                    else
+                                                    {
+                                                        <text>@item.单位信息.单位名称</text>
+                                                    }：
+                                                    @item.联系方式.联系人
+                                                </option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">
+                                                    @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                    {
+                                                        <text>@item.单位信息.单位代号</text>
+                                                    }
+                                                    else
+                                                    {
+                                                        <text>@item.单位信息.单位名称</text>
+                                                    }：
+                                                    @item.联系方式.联系人
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div style="float: left; margin-left: 20px;">
+                                    <input type="button" id="deletebtn__a" value="删除该单位" onclick=" deleteAuditdiv(this) " />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 0 0 5px 0;">
+                            <div style="float: left;">需求计划标题：</div>
+                            <div style="float: left;"><input type="text" id="需求计划标题" name="需求计划标题" /><span style="color:red;">*</span></div>
+                        </div>
+                        
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;秘密等级：</div>
+                            <div style="float: left;">
+                                <select id="秘密等级" name="秘密等级" style="width: 150px;">
+                                    @foreach (var md in ViewData["秘密等级"] as Dictionary<string, int>)
+                                    {
+                                        <option value="@md.Value">@md.Key</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;编制单位：</div>
+                            <div style="float: left;"><input type="text" id="编制单位" name="编制单位" /><span style="color:red;">*</span></div>
+                        </div>
+                        
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;承办部门：</div>
+                            <div style="float: left;"><input type="text" id="承办部门" name="承办部门" /><span style="color:red;">*</span></div>
+                        </div>
+                        
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;采购年度：</div>
+                            <div style="float: left;"><input type="text" id="采购年度" name="采购年度" onfocus=" WdatePicker({ dateFmt: 'yyyy' }) " /><span style="color:red;">*</span></div>
+                        </div>
+
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">建议完成时间：</div>
+                            <div style="float: left;"><input type="text" id="建议完成时间" name="建议完成时间" onfocus=" WdatePicker({ dateFmt: 'yyyy/MM/dd' }) " /><span style="color:red;">*</span></div>
+                        </div>
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;&#12288;联系人：</div>
+                            <div style="float: left;"><input type="text" id="联系人" name="联系人" value="@ViewData["联系人"].ToString()" /><span style="color:red;">*</span></div>
+                        </div>
+                        <div style="width: 100%; height: auto; overflow: hidden; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;&#12288;联系电话：</div>
+                            <div style="float: left;"><input type="text" id="联系电话" name="联系电话" /><span style="color:red;">*</span></div>
+                        </div>
+                        
+                        <div id="auditdiv__0" style="width: 100%; height: 30px; padding: 5px 0 5px 0;">
+                            <div style="float: left;">本级审核单位：</div>
+                            <div style="float: left;">
+                                <select id="审核单位__0" name="审核单位__0">
+                                    @foreach (var item in userlist)
+                                    {
+                                        <option value="@item.Id">@item.单位信息.单位名称：@item.联系方式.联系人</option>
+                                    }
+                                </select>
+                            </div>
+                            <div style="float: left; margin-left: 20px;">
+                                <input type="button" id="deletebtn__0" value="删除该单位" onclick=" deleteAuditdiv(this) " />
+                            </div>
+                        </div>
+                        <div id="auditdiv__1" style="width: 100%; height: 30px; padding: 5px 0 5px 0;">
+                            <div style="float: left;">本级审核单位：</div>
+                            <div style="float: left;">
+                                <select id="审核单位__1" name="审核单位__1">
+                                    @foreach (var item in userlist)
+                                    {
+                                        <option value="@item.Id">@item.单位信息.单位名称：@item.联系方式.联系人</option>
+                                    }
+                                </select>
+                            </div>
+                            <div style="float: left; margin-left: 20px;">
+                                <input type="button" id="deletebtn__1" value="删除该单位" onclick=" deleteAuditdiv(this) " />
+                            </div>
+                        </div>
+
+                        <div id="auditdiv__p" style="width: 100%; height: 30px; padding: 5px 0 5px 0;">
+                            <div style="float: left;">&#12288;上级助理员：</div>
+                            <div style="float: left;">
+                                <select id="审核单位__p" name="审核单位__p">
+                                    @foreach (var item in userlist)
+                                    {
+                                        <option value="@item.Id">@item.单位信息.单位名称：@item.联系方式.联系人</option>
+                                    }
+                                </select>
+                            </div>
+                            <div style="float: left; margin-left: 20px;">
+                                <input type="button" id="deletebtn__p" value="删除该单位" onclick="deleteAuditdiv_p(this) " />
+                            </div>
+                        </div>
+
+
+                    </div>
+                    </form>
+                </div>
+
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="submit" class="index_online_btn" value="确定" onclick="return  sendSummaryData();" /></div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="Summarymodal1" class="modal fade">
+        <div class="modal-dialog" style="margin: 1% auto; width: 640px;">
+            <div class="modal-content" style="height: 620px; width: 640px;">
+                <div class="modal-header" style="padding-bottom: 20px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick=' $("#Summarymodal1").hide(); '>×</button>
+                    <div style="margin: 0; width: 100px; float: left; font-size: 16px; font-weight: bold; line-height: 23px;">合并物资项</div>
+                </div>
+                <div class="modal-body">
+                    <div style="height: 480px; overflow-y: scroll;">
+                        <input type="hidden" id="fromid" value="" />
+                        <input type="hidden" id="targetid" value="" />
+                        <input type="hidden" id="idsum" value="" />
+                        <div style="width: 100%; height: 30px;"><div style="float: left;">物资名称：</div><div id="wzmc" style="float: left;"></div></div>
+                        <div style="width: 100%; height: 30px;"><div style="float: left;">规格型号：</div><div id="ggxh" style="float: left;"></div></div>
+                        <div style="width: 100%; height: 30px;"><div style="float: left;">计量单位：</div><div id="jldw" style="float: left;"></div></div>
+                        <div style="width: 100%; height: 30px;"><div style="float: left;">数量：</div><div id="sl" style="float: left;"></div></div>
+                        <div style="width: 100%; height: 30px;"><div style="float: left;">单价：</div><div id="dj" style="float: left;"></div></div>
+                        <div style="width: 100%; height: 30px;"><div style="float: left;">预算金额：</div><div id="ysje" style="float: left;"></div></div>
+                        <div style="width: 100%; height: 30px;"><div style="float: left;">质量技术标准：</div><div id="jszb" style="float: left;"></div></div>
+                        <div style="width: 100%; height: 30px;">
+                            <div style="float: left;">交货期限：</div>
+                            <div style="float: left; margin-right: 20px;">
+                                <input type="text" id="交货期限" name="交货期限" onfocus=" WdatePicker({ dateFmt: 'yyyy/MM/dd' }) " />
+                            </div>
+                            <div id="xyrq" style="float: left;"></div>
+                        </div>
+                        <div style="width: 100%; height: 30px;">
+                            <div style="float: left;">
+                                采购方式建议：
+                            </div>
+                            <div style="float: left; margin-right: 20px;">
+                                <select id="建议采购方式" name="建议采购方式" onchange='if ($(this).val() == "9999") { $("#建议采购方式其他").show(); } else { $("#建议采购方式其他").hide(); }'>
+                                    <option value="0">未设置</option>
+                                    <option value="1">公开招标</option>
+                                    <option value="2">邀请招标</option>
+                                    <option value="3">询价采购</option>
+                                    <option value="4">竞争性谈判</option>
+                                    <option value="5">单一来源</option>
+                                    <option value="6">协议采购</option>
+                                    <option value="7">网上竞标</option>
+                                    <option value="9999">其他</option>
+                                </select>
+                                <input style="display: none;" type="text" id="建议采购方式其他" name="建议采购方式其他" />
+                            </div>
+                            <div id="cgfs" style="float: left;">
+                            </div>
+                        </div>
+                        <div style="width: 100%; height: 30px;">
+                            <div style="float: left;">备注：</div>
+                            <div style="float: left">
+                                <textarea id="备注" name="备注" style="width: 500px; height: 100px;"></textarea>
+                            </div>
+                            <div id="bz" style="float: left; width: 500px; margin-left: 50px;"></div>
+                        </div>
+
+
+                    </div>
+                    <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="index_online_btn" value="确定" onclick="MergeData(); " /></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    
+
+
+
+    <div class="gys_znxx_topbox">
+        <div class="title-base-out" style="width:99%">
+            <div class="title-base-middle" style="width:99%">
+                <div class="title-base-inner">需求汇总</div>
+            </div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content" style="padding-top: 0;">
+                
+                <input type="button" value="查看来源详情" onclick='$("#Summarymodal4").show()' class="front_login_rightbox_button" style="width: 150px; float: right;" />
+                <table width="100%" cellpadding="0" cellspacing="0" id="tablecontent">
+                    <tr ishead="1">
+                        <th>序号</th>
+                        <th>物资名称</th>
+                        <th>规格型号</th>
+                        <th>计量单位</th>
+                        <th>数量</th>
+                        <th>单价</th>
+                        <th>预算金额</th>
+                        <th>质量技术标准</th>
+                        <th>交货期限</th>
+                        <th>采购方式建议</th>
+                        <th>备注</th>
+                        <th>需求单位</th>
+                    </tr>
+                    @{
+                        var i = 0;
+                    }
+                    @foreach (var item in Model)
+                    {
+                        i++;
+                        var comeidlist = "";
+                        foreach (var comeid in item.来源合并项)
+                        {
+                            comeidlist += comeid.需求计划物资ID + "|";
+                        }
+                        <tr id="tr__@i" key="@comeidlist" draggable="true" ondragstart="drag(event)" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <td>@i</td>
+                            <td>@item.物资名称</td>
+                            <td>@item.规格型号</td>
+                            <td>@item.计量单位</td>
+                            <td>@item.数量</td>
+                            <td>@item.单价</td>
+                            <td>@item.预算金额</td>
+                            <td>@item.技术指标</td>
+                            <td>@item.交货期限.ToString("yyyy/MM/dd")</td>
+                            <td>@item.建议采购方式</td>
+                            <td style="cursor: pointer;" bz="@item.备注"><img src="/Images/notice.png" style="width: 20px; vertical-align: middle;" title="@item.备注"></td>
+                            <td><span class="icon"></span><a class="name" style="text-decoration: underline; cursor: pointer;" onclick="getdetail(this)" name="@comeidlist" lang="0">需求单位</a></td>
+                        </tr>
+                        <tr ishead="1">
+                            <td align="left" class="detailoutdiv" style="padding-left:34px;display:none" colspan="12"></td>
+                        </tr>
+                    }
+                </table>
+                <div style="text-align: center;">
+                    <input onclick="Summary() " id="btn" type="button" style="margin-top: 20px; display: block; margin-left: auto; margin-right: auto; text-align: center; line-height: 40px;" class="front_login_rightbox_button" value="提交审核">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        //正整数正则表达式
+        var positiveinteger = "^[0-9]*[1-9][0-9]*$";
+        var re = new RegExp(positiveinteger);
+        //正浮点数正则表达式
+        var floatexp = "^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$";
+        var refloat = new RegExp(floatexp);
+
+        var auditcount = 2;
+
+        //增加审核单位
+        function addnewaudit() {
+            var html = $("#auditexample").html().replace(/__a/g, "__" + auditcount);
+            $("#auditdiv__p").before(html);
+            $("#auditunitlist").val($("#auditunitlist").val() + auditcount + "|");
+            auditcount++;
+        }
+        //增加上级助理员，只能有一个上级助理员
+        function addnewaudit_p() {
+            if ($("#auditunitlist").val().indexOf("p") > -1) {
+                alert("只能选一个上级助理员");
+                return;
+            }
+            $('#auditdiv__p').show();
+            $("#auditunitlist").val($("#auditunitlist").val() + "p|");
+        }
+
+        function deleteAuditdiv(obj) {
+            var id = $(obj).attr("id").replace("deletebtn__", "");
+            var auditdivid = "auditdiv__" + id;
+            $("#" + auditdivid).remove();
+            $("#auditunitlist").val($("#auditunitlist").val().replace(id + "|", ""));
+        }
+        //删除上级助理员
+        function deleteAuditdiv_p(obj) {
+            $('#auditdiv__p').hide();
+            $("#auditunitlist").val($("#auditunitlist").val().replace("p|", ""));
+        }
+       
+        function sendSummaryData() {
+            if ($("#需求计划标题").val() == "") {
+                alert("需求计划标题必须填写！");
+                $("#需求计划标题").focus();
+                return false;
+            }
+            if ($("#编制单位").val() == "") {
+                alert("编制单位必须填写！");
+                $("#编制单位").focus();
+                return false;
+            }
+            if ($("#承办部门").val() == "") {
+                alert("承办部门必须填写！");
+                $("#承办部门").focus();
+                return false;
+            }
+            if ($("#采购年度").val() == "") {
+                alert("采购年度必须填写！");
+                $("#采购年度").focus();
+                return false;
+            }
+            if ($("#建议完成时间").val() == "") {
+                alert("建议完成时间必须填写！");
+                $("#建议完成时间").focus();
+                return false;
+            }
+            if ($("#联系人").val() == "") {
+                alert("联系人必须填写！");
+                $("#联系人").focus();
+                return false;
+            }
+            if ($("#联系电话").val() == "") {
+                alert("联系电话必须填写！");
+                $("#联系电话").focus();
+                return false;
+            }
+            if ($("#auditunitlist").val() == "") {
+                alert("至少应有一个审核单位，请点击上方新增审核单位按钮或新增上级助理员按钮进行添加！");
+                return false;
+            }
+        }
+
+        function Summary() {
+            var re1 = new RegExp("^^^^", "g");
+            var re2 = new RegExp("$$$$", "g");
+            var retstr = "";
+            $("#tablecontent").find("tr").each(function () {
+                if ($(this).attr("ishead") != "1") {
+                    var wzmc = $(this).find("td").eq(1).html().replace(re1, "").replace(re2, "");
+                    var ggxh = $(this).find("td").eq(2).html().replace(re1, "").replace(re2, "");
+                    var jldw = $(this).find("td").eq(3).html().replace(re1, "").replace(re2, "");
+                    var jszb = $(this).find("td").eq(7).html().replace(re1, "").replace(re2, "");
+                    var cgfs = $(this).find("td").eq(9).html().replace(re1, "").replace(re2, "");
+                    var dj = $(this).find("td").eq(5).html().replace(re1, "").replace(re2, "");
+                    var sl = $(this).find("td").eq(4).html().replace(re1, "").replace(re2, "");
+                    var ysje = $(this).find("td").eq(6).html().replace(re1, "").replace(re2, "");
+                    var xyrq = $(this).find("td").eq(8).html().replace(re1, "").replace(re2, "");
+                    var bz = $(this).find("td").eq(10).attr("bz").replace(re1, "").replace(re2, "");
+                    retstr += $(this).attr("key") + "^^^^" + wzmc + "^^^^" + ggxh + "^^^^" + jldw + "^^^^" + jszb + "^^^^" + cgfs + "^^^^" + dj + "^^^^" + sl + "^^^^" + ysje + "^^^^" + xyrq + "^^^^" + bz + "$$$$";
+                    console.log(retstr);
+                }
+            });
+            $("#resultparm").val(retstr);
+            $("#Summarymodal2").show();
+        }
+
+
+        function MergeData() {
+            //确定合并事件
+
+            //取出表单的值
+            var wzmc = $('input[name="rad_wzmc"]:checked').val();
+            var ggxh = $('input[name="rad_ggxh"]:checked').val();
+            var jldw = $('input[name="rad_jldw"]:checked').val();
+            var jszb = $('input[name="rad_jszb"]:checked').val();
+            var cgfs = ($("#建议采购方式 option:selected").text() == "其他" && $.trim($("#建议采购方式其他").val()) != "") ? $.trim($("#建议采购方式其他").val()) : $("#建议采购方式 option:selected").text(); //$('#建议采购方式').val();
+            var dj = $('input[name="rad_dj"]:checked').val();
+            var sl = $('#数量').val();
+            var ysje = $('#预算金额').val();
+            var xyrq = $('#交货期限').val();
+            var bz = $('#备注').val();
+            if (xyrq == "") {
+                alert("交货期限必须选择！");
+                $('#交货期限').focus();
+                return;
+            }
+            if (ysje == "" || ysje.match(refloat) == null) {
+                alert("预算金额未填写或格式错误！");
+                $('#预算金额').focus();
+                return;
+            }
+            if (sl == "" || sl.match(re) == null) {
+                alert("数量未填写或格式错误！");
+                $('#数量').focus();
+                return;
+            }
+
+            //新组合的tr值
+            var trstr = '<td>1</td>' + '<td>' + wzmc + '</td>'
+                + '<td>' + ggxh + '</td>'
+                + '<td>' + jldw + '</td>'
+                + '<td>' + sl + '</td>'
+                + '<td>' + dj + '</td>'
+                + '<td>' + ysje + '</td>'
+                + '<td>' + jszb + '</td>'
+                + '<td>' + xyrq + '</td>'
+                + '<td>' + cgfs + '</td>'
+                + '<td style="cursor: pointer;" bz="' + bz + '"><img src="/Images/notice.png" style="width:20px;vertical-align:middle;" title="' + bz + '"></td>'
+                + ' <td><a onclick=\'getdetail("' + $("#idsum").val() + '")\'>查看详情</a></td>';
+            $("#" + $("#targetid").val()).html(trstr);
+            $("#" + $("#targetid").val()).attr("key", $("#idsum").val());
+            $("#" + $("#fromid").val()).remove();
+
+            $("#wzmc").html("");
+            $("#ggxh").html("");
+            $("#jldw").html("");
+            $("#jszb").html("");
+            //$("#cgfs").html(cgfs);
+            $("#sl").html("");
+            $("#xyrq").html("");
+            $("#bz").html("");
+            $("#dj").html("");
+
+            $('#交货期限').val("");
+            $('#备注').val("");
+            $('#预算金额').val("");
+            $("#建议采购方式其他").val("");
+            $("#fromid").val("");
+            $("#targetid").val("");
+            $("#idsum").val("");
+            reSort();
+            $("#Summarymodal1").hide();
+        }
+        //合并物资后序号重新设置
+        function reSort() {
+            var sortstart = 0;
+            $("#tablecontent").find("tr").each(function () {
+                if ($(this).attr("ishead") != "1") {
+                    $(this).find("td").eq(0).html(++sortstart);
+                }
+            });
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("Text", ev.target.id);
+        }
+
+        function drop(ev) {
+            //拖动的tr的id
+            var fromid = ev.dataTransfer.getData("Text");
+            //拖动的目的地TD的id
+            var targetid = $(ev.target).parent().attr("id");
+            //防止拖动在本行
+            if (targetid == fromid) {
+                return false;
+            }
+
+            if (!confirm("确定合并这2条数据？")) {
+                return false;
+            }
+            var idsum = "";
+            ev.preventDefault();
+
+            //拖动的tr的key值:存放合并的需求id
+            var fromkey = $("#" + fromid).attr("key");
+            idsum += fromkey;
+
+            //拖动的目的地TD的key值:存放合并的需求id
+            var targetkey = $(ev.target).parent().attr("key");
+            //两条数组的可用值组合
+            idsum += targetkey;
+
+            //将ID赋值到弹出框
+            $("#fromid").val(fromid);
+            $("#targetid").val(targetid);
+            $("#idsum").val(idsum);
+
+            //将选中的2条TR的数据赋值到弹出框
+
+            //物资名称
+            var wzmcfrom = $("#" + fromid).find("td").eq(1).html();
+            var wzmctarget = $("#" + targetid).find("td").eq(1).html();
+            var wzmc = '<input name="rad_wzmc" type="radio" checked="checked" value="' + wzmcfrom + '" />' + wzmcfrom;
+            if (wzmcfrom != wzmctarget) {
+                wzmc += '<input name="rad_wzmc" type="radio"  value="' + wzmctarget + '" style="margin-left: 20px;" />' + wzmctarget;
+            }
+            //规格型号
+            var ggxhfrom = $("#" + fromid).find("td").eq(2).html();
+            var ggxhtarget = $("#" + targetid).find("td").eq(2).html();
+            var ggxh = '<input name="rad_ggxh" type="radio" checked="checked" value="' + ggxhfrom + '" />' + ggxhfrom;
+            if (ggxhfrom != ggxhtarget) {
+                ggxh += '<input name="rad_ggxh" type="radio"  value="' + ggxhtarget + '" style="margin-left: 20px;" />' + ggxhtarget;
+            }
+            //单价
+            var djfrom = $("#" + fromid).find("td").eq(5).html();
+            var djtarget = $("#" + targetid).find("td").eq(5).html();
+            var dj = '<input name="rad_dj" type="radio" checked="checked" value="' + djfrom + '" />' + djfrom;
+            if (djfrom != djtarget) {
+                dj += '<input name="rad_dj" type="radio"  value="' + djtarget + '" style="margin-left: 20px;" />' + djtarget;
+            }
+
+            //计量单位
+            var jldwfrom = $("#" + fromid).find("td").eq(3).html();
+            var jldwtarget = $("#" + targetid).find("td").eq(3).html();
+            var jldw = '<input name="rad_jldw" type="radio" checked="checked" value="' + jldwfrom + '" />' + jldwfrom;
+            if (jldwfrom != jldwtarget) {
+                jldw += '<input name="rad_jldw" type="radio"  value="' + jldwtarget + '" style="margin-left: 20px;" />' + jldwtarget;
+            }
+            //技术指标
+            var jszbfrom = $("#" + fromid).find("td").eq(7).html();
+            var jszbtarget = $("#" + targetid).find("td").eq(7).html();
+            var jszb = '<input name="rad_jszb" type="radio" checked="checked" value="' + jszbfrom + '" />' + jszbfrom;
+            if (jszbfrom != jszbtarget) {
+                jszb += '<input name="rad_jszb" type="radio"  value="' + jszbtarget + '" style="margin-left: 20px;" />' + jszbtarget;
+            }
+            //采购方式
+            //var cgfs = $("#" + fromid).find("td").eq(4).html() + $("#" + targetid).find("td").eq(4).html();
+            var ysje = '<input id="预算金额" type="text" value="' + parseInt(parseInt($("#" + fromid).find("td").eq(6).html()) + parseInt($("#" + targetid).find("td").eq(6).html())) + '"/>';
+            var sl = '<input id="数量" type="text" value="' + parseInt(parseInt($("#" + fromid).find("td").eq(4).html()) + parseInt($("#" + targetid).find("td").eq(4).html())) + '"/>';
+            //交货期限
+            var xyrqfrom = $("#" + fromid).find("td").eq(8).html();
+            var xyrqtarget = $("#" + targetid).find("td").eq(8).html();
+            var xyrq = xyrqfrom;
+            if (xyrqfrom != xyrqtarget) {
+                xyrq += ' ， ' + xyrqtarget;
+            }
+
+            var bz = $("#" + fromid).find("td").eq(10).attr("bz") + ' ， ' + $("#" + targetid).find("td").eq(10).attr("bz");
+
+            $("#wzmc").html(wzmc);
+            $("#ggxh").html(ggxh);
+            $("#jldw").html(jldw);
+            $("#jszb").html(jszb);
+            //$("#cgfs").html(cgfs);
+            $("#dj").html(dj);
+            $("#sl").html(sl);
+            $("#ysje").html(ysje);
+            $("#xyrq").html("（参考日期：" + xyrq + "）");
+            $("#bz").html("（原备注：" + bz + "）");
+            $("#Summarymodal1").show();
+        }
+
+        function getdetail(e) {
+            var idstr = $(e).attr("name"),
+                $this=$(e);
+            $.ajax({
+                cache: false,
+                async: false, // 太关键了，同步和异步的参数
+                //dataType: 'json', type: 'post',
+                type: 'POST',
+                //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
+                url: "/单位用户后台/SummaryDetail",
+                data: "id=" + idstr,
+                success: function (data) {
+                    $this.parents("tr").next().children(".detailoutdiv").html(data).end().show();
+                    //$("#Summarymodal3").show();
+                }
+            });
+        }
+
+        $(function () {
+            $("#审核需求计划").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#审核需求计划").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+
+
+        $(".name").click(function () {
+            $(this).parent("td").parent("tr").next("tr").children("td").toggle();
+            var num = $(this).attr("lang");
+            if (num == "0") {
+                $(this).prev("span").css("background", "url(/Images/tree_icons.png) 0px -22px");
+                $(this).attr("lang", "1");
+            }
+            else {
+                $(this).prev("span").css("background", "url(/Images/tree_icons.png) 0px -5px");
+                $(this).attr("lang", "0");
+            }
+        });
+    </script>
+}

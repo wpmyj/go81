@@ -1,0 +1,236 @@
+﻿<style type="text/css">
+    .expert_condition {
+        width: 898px;
+        border: solid 1px #ccd2b0;
+        height: auto;
+        overflow: hidden;
+        padding: 10px 0 20px 0;
+    }
+
+    .expert_condition {
+        width: 898px;
+        border: solid 1px #ccd2b0;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .expert_condition_inner {
+        width: 800px;
+        margin: 0 auto;
+        height: auto;
+        overflow: hidden;
+        margin-top: 10px;
+        border: solid 1px #ccd2b0;
+        padding: 10px;
+    }
+
+    .expert_condition_innerleft {
+        width: 140px;
+        float: left;
+        height: 36px;
+        line-height: 36px;
+        text-align: right;
+        padding-right: 10px;
+        overflow: hidden;
+        font-size: 14px;
+        color: rgb(51, 51, 51);
+    }
+
+    .expert_condition_innerright {
+        width: 650px;
+        float: left;
+        font-size: 14px;
+        color: rgb(51, 51, 51);
+        padding-bottom: 10px;
+    }
+
+    .expert_condition_innerrightlist {
+        width: 300px;
+        float: left;
+    }
+
+    .expert_condition_innerrightlist_title {
+        width: 100px;
+        text-align: right;
+        float: left;
+        line-height: 30px;
+        padding-right: 5px;
+    }
+
+    .expert_condition_input {
+        height: 30px;
+        width: 150px;
+        float: left;
+        /*margin-right: 60px;*/
+    }
+
+    .expert_condition_button1 {
+        border: 1px solid #f00;
+        color: #f00;
+    }
+
+    .expert_condition_reason {
+        width: 150px;
+        height: 28px;
+        margin: 2px;
+        display: none;
+    }
+
+    .expert_condition_button2 {
+        border: 1px solid #55f;
+        color: #55f;
+        float: left;
+        width: 30px;
+        padding: 0 2px;
+    }
+</style>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">推荐供应商</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+
+                
+                
+                <div class="expert_condition">
+                    <div id="ExpertTurndiv">
+                        <div id="list">
+                            <div class="expert_condition_inner" id="turndivid__0">
+                                <div style=" width: 800px; height: 30px; color:rgb(51, 51, 51);" id="number__0">填写供应商信息</div>
+                                
+                                <div class="expert_condition_innerleft">企业名称</div>
+                                <div class="expert_condition_innerright">
+                                    <input id="name__0" name="name__0" placeholder="企业名称" style=" width:400px; height:30px; float:left; line-height: 30px;" />
+                                    <div style="float:left; width:190px; height:36px; line-height: 36px; padding-left: 10px; color: red;">
+                                        *必填
+                                    </div>
+                                </div>
+                                
+                                <div class="expert_condition_innerleft">联系人姓名</div>
+                                <div class="expert_condition_innerright">
+                                    <input id="Cname__0" name="Cname__0" placeholder="企业联系人姓名" style=" width:400px; height:30px; float:left; line-height: 30px;" />
+                                    <div style="float:left; width:190px; height:36px; line-height: 36px; padding-left: 10px; color: red;">
+                                        *必填
+                                    </div>
+                                </div>
+                                
+                                <div class="expert_condition_innerleft">联系人手机</div>
+                                <div class="expert_condition_innerright">
+                                    <input id="tel__0" name="tel__0" placeholder="企业联系人手机" style=" width:400px; height:30px; float:left; line-height: 30px;" />
+                                    <div style="float:left; width:190px; height:36px; line-height: 36px; padding-left: 10px; color: red;">
+                                        *必填
+                                    </div>
+                                </div>
+                                
+                                <div class="expert_condition_innerleft">联系人固定电话</div>
+                                <div class="expert_condition_innerright">
+                                    <input type="text" id="phonearea__0" name="phonearea__0" placeholder="区号" style="width:100px;height:30px; float:left; line-height: 30px;" />
+                                    <span style="float:left;line-height:30px;width:20px;text-align:center"> - </span>
+                                    <input type="text" id="phonenum__0" name="phonenum__0" placeholder="电话号码" style="width:276px; height:30px; float:left; line-height: 30px;" />
+                                    <div style="float:left; width:190px; height:36px; line-height: 36px; padding-left: 10px; color: red;">
+                                        *必填
+                                    </div>
+                                </div>
+                                
+
+                                <div class="expert_condition_innerleft">推荐理由</div>
+                                <div class="expert_condition_innerright">
+                                    <textarea id="reason__0" name="reason__0" placeholder="推荐理由" style=" width:400px; height:100px; float:left; line-height: 30px;"></textarea>
+                                    <div style="float:left; width:190px; height:100px;padding-left: 10px; color: red;">
+                                        *必填
+                                    </div>
+                                </div>
+                                <input type="button" id="deleteid__0" style="display:none; float:right;" value="删除本条信息" onclick="deletepart(this)" />
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" value="1" name="count" id="count" />
+                    <div class="expert_condition_inner" style="border:none; font-size:14px;">
+                        <input type="button" value="添加推荐信息" style="width:100px; height:30px;" onclick="AddExpertTurn();" />
+                    </div>
+
+                    <div class="expert_condition_inner" style="border:none; font-size:14px;">
+                        <div class="tipmessage" id="toptipmessage" style="width: 700px; text-align: right; float: left; line-height: 24px;"></div>
+                        <input type="submit" value="提交本次推荐" style="width:100px; height:30px; float:right;" onclick="return checkform()" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    var count = 1;
+    function AddExpertTurn() {
+        $("#ExpertTurndiv").append($("#list").html().replace(/__0/g, "__" + count));
+        //$("#deleteid__" + count)
+        document.getElementById("deleteid__" + count).style.display = "block";
+        //$("#number__" + count).html("第" + (++count) + "轮抽取");
+        $("#count").val(++count);
+    }
+    function deletepart(a) {
+        var thisturnid = a.getAttribute("id").replace("deleteid__", "")
+        $("#turndivid__" + thisturnid).remove();
+        for (var i = parseInt(thisturnid) + 1 ; i < count; i++) {
+            var reg = new RegExp("__" + i, "g");
+
+            //存入已有值
+            var name = $("#name__" + i).val();
+            var Cname = $("#Cname__" + i).val();
+            var tel = $("#tel__" + i).val();
+            var phone = $("#phone__" + i).val();
+            var reason = $("#reason__" + i).val();
+
+            $("#turndivid__" + i).html($("#turndivid__" + i).html().replace(reg, "__" + (i - 1)));
+            document.getElementById("turndivid__" + i).setAttribute("id", "turndivid__" + (i - 1))
+
+            //重新赋值
+            $("#name__" + (i-1)).val(name);
+            $("#Cname__" + (i - 1)).val(Cname);
+            $("#tel__" + (i - 1)).val(tel);
+            $("#phone__" + (i - 1)).val(phone);
+            $("#reason__" + (i - 1)).val(reason);
+
+            //$("#number__" + (i - 1)).html("第" + i + "轮抽取");
+        }
+
+        $("#count").val(--count);
+    }
+
+    function checkform() {
+        var textarea = document.getElementById("ExpertTurndiv").getElementsByTagName("textarea");
+        var input = document.getElementById("ExpertTurndiv").getElementsByTagName("input");
+        
+        for (var i = 0; i < input.length; i++) {
+            if ($.trim(input[i].value) == "") {
+                $("#toptipmessage").html("请将信息填写完整！");
+                input[i].focus();
+                return false;
+            }
+        }
+        for (i = 0; i < textarea.length; i++) {
+            if ($.trim(textarea[i].value) == "") {
+                $("#toptipmessage").html("请将信息填写完整！");
+                textarea[i].focus();
+                return false;
+            }
+        }
+
+        $("#toptipmessage").html("");
+        return true;
+    }
+</script>
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#推荐供应商").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#推荐供应商").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

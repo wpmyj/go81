@@ -1,0 +1,35 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.机票验收单
+
+<table id="enable_select" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <th width="30%">行程单号</th>
+            <th width="20%">旅客姓名</th>
+            <th width="20%">验证状态</th>
+            <th width="10%">操作</th>
+        </tr>
+        @foreach (var items in Model.服务列表)
+        {
+            <tr>
+                <td>@items.行程单号</td>
+                <td>@items.客户姓名</td>
+                <td>@items.验证状态</td>
+                <td name="@items.验证附件路径" class="skanxcd" style="cursor:pointer">查看验真附件</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div id="showxcd" style="display:none;position:absolute;left:8px;top:135px;width:840px;padding:15px;background: #EEEEEE;">
+    <img alt="验证状态" width="840px" height="345px" />
+    <div style="text-align:center">
+        <button class="btn-base" onclick="$('#showxcd').hide();">关闭</button>
+    </div>
+</div>
+<script type="text/javascript">
+    $(".skanxcd").click(function () {
+        var path = $(this).attr("name");
+        $("#showxcd").show().find("img").attr({ "src": path });
+    });
+</script>

@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "注册提示";
+}
+<style type="text/css">
+    .successed_register {
+        height: 300px;
+        width: 800PX;
+        margin: 30PX auto;
+    }
+
+        .successed_register img {
+            margin-top: 150px;
+            margin-left: 100px;
+            float: left;
+        }
+
+        .successed_register .success_content {
+            float: left;
+            margin-top: 100px;
+            margin-left: 20px;
+        }
+</style>
+<div class="successed_register">
+    <img src="~/Images/tip.png" />
+    <div class="success_content" style="margin-left:7px;">
+        <p style="font-size:18px; color:red;">供应商用户请到外网进行注册！如有疑问，请联系相关负责人进行解决。</p>
+        <p>如已有账号，可直接登录！</p>
+        <p id="urlredirect">秒后跳转到登录页面</p><a style="font-size:12px; color:red; text-decoration:underline;" href="/登录/Login">直接登录</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var i = 10;
+        var timer;
+        $("#urlredirect").html(i + "秒后跳转到登录页面！");
+        timer = setInterval(function () {
+            i--;
+            $("#urlredirect").html(i + "秒后跳转到登录页面！");
+            if (i < 1) {
+                setTimeout(function () {
+                    window.location.href = "/登录/Login";
+                }, 500);
+                clearInterval(timer);
+            }
+        }, 1000);
+    });
+</script>

@@ -1,0 +1,245 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@model Go81WebApp.Models.数据模型.内容数据模型.下载
+
+<link rel="stylesheet" href="~/css/index.css" type="text/css">
+<style type="text/css">
+    .gys_xttz_contentbox_news_text p {
+        line-height: 30px;
+    }
+
+    .successed_register {
+        height: 100px;
+        width: 700PX;
+        margin: 30PX auto;
+    }
+
+        .successed_register img {
+            margin-top: 50px;
+            margin-left: 100px;
+            float: left;
+        }
+
+    .links:hover {
+        text-decoration: underline;
+    }
+
+    .successed_register .success_content {
+        float: left;
+        margin-top: 0;
+        margin-left: 20px;
+    }
+
+    .brg {
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        position: absolute;
+        top: 0;
+        left: 0;
+        filter: alpha(opacity=60);
+        -moz-opacity: 0.6;
+        opacity: 0.6;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+    }
+
+    .showdiv {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        left: 0;
+        top: 300px;
+        z-index: 20;
+        display: none;
+    }
+
+    .testdiv {
+        width: 600px;
+        height: auto;
+        margin: 0 auto;
+        border: 1px solid #fff;
+        background: #f2f2f2;
+    }
+
+    .close {
+        width: 580px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: right;
+        color: #f00;
+        padding: 10px;
+        background-color: burlywood;
+    }
+
+    .select_contentbox {
+        padding: 10px;
+        height: auto;
+        overflow: hidden;
+        text-align: center;
+    }
+
+        .select_contentbox input {
+            width: 200px;
+            height: 30px;
+            line-height: 30px;
+            margin: 0 auto;
+        }
+</style>
+<div class="gys_xttz_box">
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">下载信息详情</div>
+        </div>
+    </div>
+    <div class="gys_xttz_contentbox" id="gys_xttz_contentbox">
+        <div id="brg" class="brg"></div>
+        <div id="showdiv" class="showdiv">
+            <div id="testdiv" class="testdiv">
+                <div id="close" class="close"><a onclick="hideselectbox()">关闭</a></div>
+
+                <div id="select_content" class="select_contentbox">
+                    <input type="text" id="checkcode" name="checkcode" />
+
+                </div>
+                <div style="width: 200px; text-align: center; margin: 5px auto; color: red;" id="errortip"></div>
+                <div style="width: 200px; text-align: center; margin: 20px auto;"><input id="result_btn" name="btnname_0" type="button" value="确定" style="width: 100px; height: 30px;" onclick="getselectresult()" /></div>
+            </div>
+        </div>
+        @if (Model != null)
+        {
+            if (ViewData["登录"].ToString() == "1" || WebApiApplication.IsIntranet)
+            {
+                <div class="gys_xttz_contentbox_news_title">@Html.DisplayFor(model => model.内容主体.标题)</div>
+
+                <div class="gys_xttz_contentbox_news_from">
+                    <span style="padding: 0 10px 0 10px;">时间:@Model.基本数据.修改时间.ToString("yyyy-MM-dd")</span>
+                    <span style="padding: 0 10px 0 10px;">点击次数:@Model.点击次数</span>
+                    <span style="padding: 0 10px 0 10px;">下载次数:@Model.下载次数</span>
+                    <span id="topdownloadspan">
+                        @if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
+                        {
+                            if (Model.下载类型!= 下载类型.标书)
+                            {
+                                <a id="@Model.Id" onclick=" AddDownNum(this)" class="printspan" href="@Model.内容主体.附件[0]" target="_blank"><img width="13" height="13" src="~/Images/download.PNG" />下载</a>
+                            }
+                            else
+                            {
+                                <a class="printspan" onclick="showselectbox()"><img width="13" height="13" src="~/Images/download.PNG" />下载</a>
+                            }
+                        }
+                    </span>
+                    <a class="printspan" onclick=" printpage() "><img width="13" height="13" src="~/Images/print.PNG" />打印</a>
+                </div>
+                <div class="gys_xttz_contentbox_news_text" id="printContent">
+                    @Html.Raw(Model.内容主体.内容)
+                </div>
+
+                if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
+                {
+                    if (Model.下载类型 != 下载类型.标书)
+                    {
+                        <div style="padding: 20px;">
+                            点击下载：<a id="@Model.Id" onclick="AddDownNum(this)" style="cursor: pointer; text-decoration: underline;" href="@Model.内容主体.附件[0]" target="_blank">@Model.内容主体.标题</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div style="padding: 20px;" id="downloadcontent">
+                            <a style="text-decoration: underline; cursor: pointer;" onclick="showselectbox()">点击下载：</a>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                <div class="successed_register">
+                    <img src="~/Images/tip.png" />
+                    <div class="success_content">
+                        <p style="font-size:20px; color:red;">您还没登录，请登录！</p>
+                        <p>如已有账号，可直接登录！</p>
+                        <p id="urlredirect">秒后跳转到登录页面</p><a style="font-size:12px; color:red; text-decoration:underline;" href="/登录/Login">直接登录</a>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $(function () {
+                        var i = 10;
+                        var timer;
+                        $("#urlredirect").html(i + "秒后跳转到登录页面！");
+                        timer = setInterval(function () {
+                            i--;
+                            $("#urlredirect").html(i + "秒后跳转到登录页面！");
+                            if (i <= 1) {
+                                setTimeout(function () {
+                                    window.location.href = "/登录/Login";
+                                }, 500);
+                                clearInterval(timer);
+                            }
+                        }, 1000);
+                    });
+                </script>
+            }
+            <script type="text/javascript">
+                function getselectresult() {
+                    var code = $("#checkcode").val();
+                    if (code != "") {
+                        $.get("/下载/CheckYsd?id=" + encodeURI(@Model.Id) + "&num=" + encodeURI(code), function (response) {
+                            if (response != "0") {
+                                $("#downloadcontent").html('点击下载：<a id="@Model.Id" onclick="AddDownNum(this)" style="cursor: pointer; text-decoration: underline;" href="' + response + '" target="_blank">@Model.内容主体.标题</a>');
+                                $("#topdownloadspan").html('<a  id="@Model.Id" onclick="AddDownNum(this)" class="printspan" href="' + response + '" target="_blank"><img width="13" height="13" src="/Images/download.PNG" />下载</a>');
+                                hideselectbox();
+                            } else {
+                                $("#errortip").html("验证码输入有误");
+                            }
+                        });
+                    }
+                }
+            </script>
+        }
+        else
+        {
+            <span>不存在该条信息</span>
+        }
+    </div>
+</div>
+<script type="text/javascript">
+    function printpage() {
+        $(".printspan").hide();
+        document.body.innerHTML = document.getElementById('gys_xttz_contentbox').innerHTML;
+        window.print();
+    }
+    function AddDownNum(a) {
+        $.ajax({
+            url: '/下载/AddDownCount',
+            data: { id: $(a).attr("id") },
+        });
+    }
+    function showselectbox() {
+        $("#brg").css("display", "block");
+        $("#showdiv").css("display", "block");
+    }
+    function hideselectbox() {
+        $("#brg").css("display", "none");
+        $("#showdiv").css("display", "none");
+    }
+
+</script>
+@if (WebApiApplication.IsIntranet)
+{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () { $("div.Page7").addClass("on"); });
+    </script>
+
+}
+else
+{
+    <script type="text/javascript" language="javascript">
+        $(document).ready(function () { $("div.Page6").addClass("on"); });
+    </script>
+
+}
+

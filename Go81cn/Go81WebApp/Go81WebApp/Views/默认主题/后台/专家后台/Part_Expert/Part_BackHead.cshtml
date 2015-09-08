@@ -1,0 +1,129 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.消息数据模型
+@model Go81WebApp.Models.数据模型.用户数据模型.专家
+@*<link href="~/css/Intranet_p.css" rel="stylesheet" />*@
+<link href="~/css/pageStyle.css" rel="stylesheet" />
+<script src="~/JS/SimpleTree.js" type="text/javascript" language="javascript"></script>
+
+<div style="width:1200px; margin:0px auto;">
+    <div class="topLogin_in" style="width:1200px;">
+        <div class="topLogin_inLeft">成都军区联勤部军需物资油料部</div>
+        <div class="topLogin_inRight">您好，@Model.登录信息.登录名,欢迎来到西南物资采购网！<a href="/专家后台/">[我的后台]</a>&nbsp;&nbsp;<a href="/登录/LogOut">注销登录</a>&nbsp;&nbsp;<img src="~/Images/purchaseCar.png" />采购车</div>
+        @*<div style="clear:both;"></div>*@
+    </div>
+</div>
+<div class="back_nav">
+    <div class="topLogin_in" style="height:65px;width:1200px;">
+        <div class="navBoxLeft_Right" style="width:250px;">
+            @if (WebApiApplication.IsIntranet)
+            {
+                <img src="~/Images/backStar.png" style="margin-left:20px;" />
+            }
+            else
+            {
+                <img src="~/Images/logo_O.png" style="margin-left:20px;" />
+            }
+            
+        </div>
+        <div class="navBoxMiddle">
+            <div><a class="action_link" href="/">首页</a></div><div><a class="action_link" href="/%E4%BE%9B%E5%BA%94%E5%95%86%E9%99%88%E5%88%97/GysList">供应商库</a></div><div><a class="action_link" href="/%E5%95%86%E5%93%81%E9%99%88%E5%88%97">采购商城</a></div><div><a href="/%E4%B8%9A%E5%8A%A1%E5%9F%B9%E8%AE%AD/TrainingList">采购范本</a></div><div onmouseover="$('#dropList').show()" onmouseout="$('#dropList').hide()">
+                <a style="display:block; height:65px; line-height:65px;">应用<img style="margin-left:3px;" src="~/Images/arrow_bottom.png" /></a>
+               @if (WebApiApplication.IsIntranet)
+               {
+                    <div id="dropList" style="_margin-left:-50px;*margin-left:-50px;">
+                        <a href="/%E4%B8%8B%E8%BD%BD/Download_List">入库须知和下载</a>
+                        <a href="/下载/Download_Detail?id=15">谷歌浏览器下载</a>
+                        <a href="/专家后台/">站内消息</a>
+                        <a href="/%E4%B8%8B%E8%BD%BD/Download_List">网站操作手册</a>
+                    </div>
+               }
+               else
+               {
+                    <div id="dropList">
+                        <a href="/%E4%B8%8B%E8%BD%BD/Download_List">入库须知和下载</a>
+                        <a href="/下载/Download_Detail?id=15">谷歌浏览器下载</a>
+                        <a href="/专家后台/">站内消息</a>
+                        <a href="/%E4%B8%8B%E8%BD%BD/Download_List">网站操作手册</a>
+                    </div>
+               }
+            </div>
+        </div>
+        <div class="navBoxLeft_Right" style="width:430px;">
+            <div style="background-color:white;">
+                <div class="searchfm" style="background-color:#fff;width:260px;">
+                    <div id="searchSelect">
+                        <div id="tptext" style="float:left; height:37px; width:39px; line-height:37px;text-align: center;">供应商</div>
+                        <div style="float:left; width:15px; height:37px; line-height:37px; background-image:url(/Images/dropbutton.png)"></div>
+                        <div style="clear:both;"></div>
+                        <div id="type">
+                            <div><a lang="gys">供应商</a></div>
+                            <div><a lang="sp">商品</a></div>
+                        </div>
+                    </div>
+                    <div style="float:left;width:auto; height:37px;">
+                        <input type="hidden" id="info_type" value="" />
+                        <input type="text" id="txt" class="search_ipt" style="width:160px;line-height:35px;" value="" placeholder="请输入您要查找的内容" />
+                        <input type="button" onclick="searchValue()" class="search_ipt" value="" style="background-image:url(/Images/searchbt.png);width:30px; height:30px; background-color:white; border:none;" />
+                    </div>
+                </div>
+                <div class="searchfm" style="padding-left:5px;width:155px;">欢迎您，
+                @if (!string.IsNullOrWhiteSpace(Model.登录信息.登录名))
+                {
+                    <span title="@Model.登录信息.登录名" style="display: inline-block;width: 70px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;vertical-align: bottom;">@Model.登录信息.登录名</span>
+                }
+              <br /><span id="systime"></span>&nbsp;&nbsp;@*第22次登录*@</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#systime").html(GetNowTime());
+    });
+    function GetNowTime() {
+        var myDate = new Date();        
+        var fullyear = myDate.getFullYear();    
+        var month = myDate.getMonth() + 1;       
+        var date = myDate.getDate();       
+        var weekday = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+        var week = weekday[myDate.getDay()];
+        var nowtime = fullyear + "-" + zeroCupy(month) + "-" + zeroCupy(date) +" "+week;
+        return nowtime;
+    };
+    function zeroCupy(m) {
+        var d;
+        if (m < 10) {
+            d = "0" + m;
+        }
+        else {
+            d = m;
+        }
+        return d;
+    };
+
+    function searchValue() {
+        var searchtext = $("#txt").val();
+        var type = $("#info_type").val();
+        if (searchtext == "") {
+            return false;
+        }
+        if (type == "sp") {
+            window.open("/商品陈列/ProductSearch?name=" + searchtext);
+        } else {
+            window.open("/供应商陈列/GysList?name=" + searchtext);
+        }
+    }
+    $("#searchSelect").mouseover(function () {
+        $("#type").show();
+    });
+    $("#searchSelect").mouseout(function () {
+        $("#type").hide();
+    });
+    $("#type a").click(function () {
+        var str = $(this).attr("lang");
+        var html = $(this).html();
+        $("#info_type").val(str);
+        $("#tptext").html(html);
+        $("#type").hide();
+    });
+</script>

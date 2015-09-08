@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.内容数据模型.办事指南>
+@{
+    ViewBag.Title = "办事指南列表";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<style>
+    td span {
+        font-size: 12px;
+        color: red;
+    }
+</style>
+<link href="~/css/index.css" rel="stylesheet" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="width:1042px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">办事指南列表</div>
+            </div>
+        </div>
+        <div class="gys_znxx_content">
+            @if(Model==null||Model.Count()==0)
+            {
+                <span>暂时没有办事指南</span>
+            }
+            else
+            {
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr><th width="40%">标题</th><th width="20%">来源</th><th width="15%">发布时间</th><th width="25%" colspan="3">操作</th></tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.内容主体.标题</td>
+                            <td><a href="@item.信息来源.来源链接" target="_blank">@item.信息来源.来源名称</a></td>
+                            <td>@item.内容主体.发布时间.ToString("yyyy-MM-dd")</td>
+                            <td align="center"><a target="_blank" href="/单位用户后台/guideDetail?id=@item.Id">详情</a></td>
+                            <td align="center"><a target="_blank" href="/单位用户后台/GuideModify?id=@item.Id">修改</a></td>
+                            <td align="center"><a onclick="del(@item.Id)">删除</a></td>
+                        </tr>
+                    }
+                </table>
+            }
+            
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function del(num) {
+        if (confirm("点击确定即将删除此消息！确定删除吗？")) {
+            window.location = "/单位用户后台/DelGuide?id=" + num;
+        }
+    }
+    $(function () {
+        $("#办事指南列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#办事指南列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

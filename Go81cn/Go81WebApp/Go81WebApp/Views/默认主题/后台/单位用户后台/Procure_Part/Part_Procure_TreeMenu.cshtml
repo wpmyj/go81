@@ -1,0 +1,101 @@
+﻿<link rel="stylesheet" type="text/css" href="~/css/gys_treemenu.css" />
+<link rel="stylesheet" type="text/css" href="~/css/index.css" />
+<script type="text/javascript" src="~/JS/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="~/JS/SimpleTree.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".st_tree").SimpleTree({
+            click: function (a) {
+                if (!$(a).attr("hasChild")) {
+                    window.location.href = $(a).attr("href");
+                }
+            }
+        });
+        if ($("#links").val() != null && $("#links").val() != "") {
+            var dom = $("#" + $("#links").val());
+            $(dom).css({ "background": "#F00" }).children("a").css({ "color": "#fff" });
+        }
+
+    });
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    
+    <div class="index_menu_top">
+        <div class="index_menu_top_middle">
+            <div class="index_menu_top_title">栏目分类</div>
+        </div>
+    </div>
+    <div class="st_tree">
+        <ul>
+            <!--<li><a href="#" ref="hyjm">欢迎界面</a></li>-->
+            <li class="st_tree_first_tittle"><span>＋</span><a href="#">消息管理</a></li>
+            <ul show="true">
+                <li class="st_tree_second_title"><span>＋</span><a href="#">站内消息</a></li>
+                <ul show="true">
+                    <li id="send_new_msg" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_ZnxxAdd">发新消息</a></li>
+                    <li id="receive_mag" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_Znxx">已收消息</a></li>
+                    <li id="sended_msg" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_ZnxxSend">已发消息</a></li>
+                </ul>
+            </ul>
+            <li class="st_tree_first_tittle"><span>＋</span><a href="#">公告管理</a></li>
+            <ul show="true">
+                <li id="adlist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_AdList">公告列表</a></li>
+                <li id="adadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_AdAdd">发布公告</a></li>
+                @*<li id="adaudit" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_AdAudit?link=adaudit">审核公告</a></li>*@
+            </ul>
+            <li class="st_tree_first_tittle"><span>＋</span><a href="#">新闻管理</a></li>
+            <ul show="true">
+                <li id="newslist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_NewsList">新闻列表</a></li>
+                <li id="newsadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_NewsAdd">发布新闻</a></li>
+            </ul>
+            
+                @*<li class="st_tree_first_tittle"><span>＋</span><a href="#">政策法规管理</a></li>
+                <ul show="true">
+                    <li id="zcfglist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_ZcfgList?link=zcfglist">政策法规列表</a></li>
+                    <li id="zcfgadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_ZcfgAdd?link=zcfgadd">发布政策法规</a></li>
+                </ul>*@
+                <li class="st_tree_first_tittle"><span>＋</span><a href="#">通知管理</a></li>
+                <ul show="true">
+                    <li id="tzlist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_TzList">通知列表</a></li>
+                    <li id="tzadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_TzAdd">发布通知</a></li>
+                </ul>
+            @*<li class="st_tree_first_tittle"><span>＋</span><a href="#">单位管理</a></li>
+                <ul show="true">
+                    <li id="departmentlist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/DepartmentList?link=departmentlist">单位列表</a></li>
+                    <li id="departmentadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/DepartmentAdd?link=departmentadd">单位添加</a></li>
+                </ul>*@
+
+            <li class="st_tree_first_tittle"><span>＋</span><a href="#">评审专家管理</a></li>
+            <ul show="true">
+                <li id="expertadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/专家抽选/Expert_Add">添加专家</a></li>
+                <li id="expertlist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/专家抽选/Expert_list">专家列表</a></li>
+                <li id="expertapplay" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/专家抽选/Expert_Applay">专家抽取申请</a></li>
+                <li id="appplayaudit" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/专家抽选/Expert_ApplayAuditList">专家抽取审核</a></li>
+                @*<li id="expertselect" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/专家抽选/Expert_Select?link=expertselect">抽取专家</a></li>*@
+                <li id="experthistory" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/专家抽选/Expert_History">历史抽取记录</a></li>
+            </ul>
+
+            @*<li class="st_tree_first_tittle"><span>＋</span><a href="#">供应商管理</a></li>
+                <ul show="true">
+                    <li id="expertapplay" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/专家/Expert_Applay?link=expertapplay">供应商抽取申请</a></li>
+                    <li id="appplayaudit" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/专家/Expert_ApplayAuditList?link=appplayaudit">供应商抽取审核</a></li>
+                    <li id="experthistory" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/专家/Expert_History?link=experthistory">供应商抽取记录</a></li>
+                </ul>
+                <li class="st_tree_first_tittle"><span>＋</span><a href="#">会话管理</a></li>
+                <ul show="true">
+                    <li class="st_tree_second_title"><span>＋</span><a href="#">安全设置</a></li>
+                    <ul show="true">
+                        <li class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_Znxx">基本设置</a></li>
+                        <li class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_Znxx">密码保护</a></li>
+                        <li class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_Znxx">安全验证</a></li>
+                        <li class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_Znxx">U盾管理</a></li>
+                    </ul>
+                    <li class="st_tree_second_title"><span>-</span><a href="#">注销登录</a></li>
+                </ul>*@
+        </ul>
+    </div>
+}

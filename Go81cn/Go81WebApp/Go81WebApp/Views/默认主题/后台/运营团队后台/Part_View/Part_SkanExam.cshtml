@@ -1,0 +1,109 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+           @using Go81WebApp.Models.数据模型
+
+<style type="text/css">
+.arrow_down{
+    height: 0px;
+    width: 0px;
+    top: 14px;
+    left: 35px;
+    position: absolute;
+    z-index: 2;
+    border-left: 0px solid transparent;
+    border-top: 9px solid #F5C93B;
+    border-right: 14px solid transparent;
+    display:none;
+}
+.arrow_down:after{
+    border-left: 0px solid transparent;
+    border-top: 9px solid #F7F3B4;
+    border-right: 14px solid transparent;
+    content: "";
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    z-index: 3;
+    left: 1px;
+    top: -12px;
+}
+</style>
+
+<p>@Model.企业基本信息.企业名称 审核进度：</p>
+<div>
+    <div style="display:inline-block;line-height:normal;text-indent:0;vertical-align:middle;text-align:center;position:relative">
+        @if(Model.审核数据.审核状态== 审核状态.审核通过)
+        { 
+            <span style="background:url(../Images/progress.png) 70px 0;display: inline-block;width: 60px;height: 60px;" class="progress"></span>
+            <span style="position: absolute;left: 35px;top: -10px;border: 1px solid #F5C93B;background: #F7F3B4;padding: 3px;width: 177px;z-index: 1;display:none">于 @Model.审核数据.审核时间.ToString("yyyy年MM月dd日") 通过预审</span>
+            <span class='arrow_down'></span>
+        }
+        else
+        {
+            <span style="background:url(../Images/progress.png) 0 0;display: inline-block;width: 60px;height: 60px;"></span>
+        }
+        <br />
+        <label style="margin-left:-7px;">预审</label>
+    </div>
+
+        @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+        {
+            <div style="width:80px;height:3px;display:inline-block;background:#1f9434;vertical-align:middle;margin-top:-24px;"></div>
+        }
+        else
+        {
+            <div style="width:80px;height:3px;display:inline-block;background:#b7bab8;vertical-align:middle;margin-top:-24px;"></div>
+        }
+    
+    <div style="display:inline-block;line-height:normal;text-indent:0;vertical-align:middle;text-align:center;position:relative">
+        @if (Model.供应商用户信息.初审数据.审核状态 == 审核状态.审核通过)
+        {
+            <span style="background:url(../Images/progress.png) 70px 0;display: inline-block;width: 60px;height: 60px;" class="progress"></span>
+            <span style="position: absolute;left: 35px;top: -10px;border: 1px solid #F5C93B;background: #F7F3B4;padding: 3px;width: 177px;z-index: 1;display:none">于 @Model.供应商用户信息.初审数据.审核时间.ToString("yyyy年MM月dd日") 通过初审</span>
+            <span class='arrow_down'></span>
+        }
+        else
+        {
+            <span style="background:url(../Images/progress.png) 0 0;display: inline-block;width: 60px;height: 60px;"></span>
+        }
+        <br />
+        <label style="margin-left:-7px;">初审</label>
+    </div>
+     @if (Model.供应商用户信息.初审数据.审核状态 == 审核状态.审核通过)
+     {
+        <div style="width:80px;height:3px;display:inline-block;background:#1f9434;vertical-align:middle;margin-top:-24px;"></div>
+     }
+     else
+     {
+        <div style="width:80px;height:3px;display:inline-block;background:#b7bab8;vertical-align:middle;margin-top:-24px;"></div>
+     }
+    
+    <div style="display:inline-block;line-height:normal;text-indent:0;vertical-align:middle;text-align:center;position:relative">
+        @if (Model.供应商用户信息.复审数据.审核状态 == 审核状态.审核通过)
+        {
+            <span style="background:url(../Images/progress.png) 70px 0;display: inline-block;width: 60px;height: 60px;" class="progress"></span>
+            <span style="position: absolute;left: 35px;top: -10px;border: 1px solid #F5C93B;background: #F7F3B4;padding: 3px;width: 177px;z-index: 1;display:none">于 @Model.供应商用户信息.复审数据.审核时间.ToString("yyyy年MM月dd日") 通过复审</span>
+            <span class='arrow_down'></span>
+        }
+        else
+        {
+            <span style="background:url(../Images/progress.png) 0 0;display: inline-block;width: 60px;height: 60px;"></span>
+        }
+        <br />
+        <label style="margin-left:-7px;">复审</label>
+    </div>
+
+    @*<div style="width:80px;height:3px;display:inline-block;background:#1f9434;vertical-align:middle;margin-top:-24px;"></div>
+    <div style="display:inline-block;line-height:normal;text-indent:0;vertical-align:middle;text-align:center">
+        <span style="background:url(../Images/progress.png) 0 0;display: inline-block;width: 60px;height: 60px;"></span>
+        <br />
+        <label style="margin-left:-7px;">终审</label>
+    </div>*@
+</div>
+<div style="text-align:center;text-indent:0;margin-top:60px; "><a style="width:100px;height:30px;cursor:pointer; line-height:30px;display:inline-block; background:#1f9434" onclick="$('#skan-exam-con').fadeOut(200);">确定</a></div>
+<script type="text/javascript">
+    $(".progress").hover(function () {
+        $(this).next().fadeIn(300).next().fadeIn(300);
+    }, function () {
+        $(this).next().fadeOut(300).next().fadeOut(300);
+    });
+</script>

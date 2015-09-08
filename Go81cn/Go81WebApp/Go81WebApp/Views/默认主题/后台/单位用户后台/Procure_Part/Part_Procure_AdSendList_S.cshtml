@@ -1,0 +1,167 @@
+﻿@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+
+<style type="text/css">
+    .gys_xttz_topbg a {
+        margin-top: 0;
+    }
+
+    .adaddtip {
+        font-weight: normal;
+        font-size: 14px;
+        padding-left: 10px;
+        text-decoration: underline;
+        color: red;
+        padding-top: 5px;
+    }
+</style>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">公告列表<a href="/单位用户后台/Procure_AdAdd" class="adaddtip">【+发布公告】</a></div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="20%">提交单位</th>
+                    <th width="20%">公告标题</th>
+                    <th width="33%">公告状态</th>
+                    @*<th width="30%">是否已读</th>*@
+                    <th width="10%">时间</th>
+                    <th width="17%">操作</th>
+                </tr>
+                @foreach (var item in (IEnumerable<公告>)ViewData["我的公告列表"])
+                {
+                    
+                        <tr>
+                            @if ((单位用户)item.内容基本信息.所有者.用户数据 != null)
+                            {
+                                <td><a href="~/单位用户后台/Procure_AdDetail?id=@item.Id&come=s" target="_blank">@((item.内容基本信息.所有者.用户数据 as 单位用户).单位信息.单位名称)</a></td>
+                            }
+                            else
+                            {
+                                <td><a href="~/单位用户后台/Procure_AdDetail?id=@item.Id&come=s" target="_blank">未知</a></td>
+                            }
+                            <td><a href="~/单位用户后台/Procure_AdDetail?id=@item.Id&come=s" target="_blank">@item.内容主体.标题</a></td>
+                            <td>
+                                @if (WebApiApplication.IsIntranet)
+                                {
+                                    if (item.审核数据2.审核者.用户ID != -1)
+                                    {
+                                        if (item.审核数据2.审核者.用户数据 != null)
+                                        {
+                                            try
+                                            {
+                                                <span>@((item.审核数据2.审核者.用户数据 as 单位用户).单位信息.单位名称) : </span>
+                                            }
+                                            catch
+                                            {
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>未知</span>
+                                        }
+                                        if (item.审核数据2.审核状态 == 审核状态.审核未通过)
+                                        {
+                                            <span style="color: red;">@item.审核数据2.审核状态 (@item.审核数据2.未通过理由)</span>
+                                        }
+                                        else if (item.审核数据2.审核状态 == 审核状态.未审核)
+                                        {
+                                            <span style="color: green;">@item.审核数据2.审核状态</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.审核数据2.审核状态</span>
+                                        }
+                                    }
+                                    if (item.审核数据.审核者.用户ID != -1)
+                                    {
+                                        if (item.审核数据2.审核者.用户ID != -1)
+                                        {
+                                            <br />
+                                        }
+                                        if (item.审核数据.审核者.用户数据 != null)
+                                        {
+                                            try
+                                            {
+                                                <span>@((item.审核数据.审核者.用户数据 as 单位用户).单位信息.单位名称) : </span>
+                                            }
+                                            catch
+                                            {
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>未知</span>
+                                        }
+                                        if (item.审核数据.审核状态 == 审核状态.审核未通过)
+                                        {
+                                            <span style="color: red;">@item.审核数据.审核状态 (@item.审核数据.未通过理由)</span>
+                                        }
+                                        else if (item.审核数据.审核状态 == 审核状态.未审核)
+                                        {
+                                            <span style="color: green;">@item.审核数据.审核状态</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.审核数据.审核状态</span>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <span>@item.审核数据.审核状态</span>
+                                }
+                            </td>
+                            <td>@item.基本数据.添加时间.ToString("yyyy-MM-dd")</td>
+                            <td class="gys_znxx_content_tabletime">
+                                @if (item.审核数据.审核状态 != 审核状态.审核通过 || item.审核数据2.审核状态 != 审核状态.审核通过)
+                                {
+                                    <a href="~/单位用户后台/Procure_AdModify?id=@item.Id&h=s" target="_blank">修改</a><span>|</span>
+                                }
+                                <a href="~/单位用户后台/Procure_AdDetail?id=@item.Id&come=s" target="_blank">查看</a>|<a onclick="del(@item.Id)">删除</a>
+                            </td>
+                        </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j = @(int.Parse(ViewData["maxpage"].ToString()));
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border","1px solid #ff0000");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#我的采购公告").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#我的采购公告").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此消息！确定删除吗？"))
+        {
+            window.location="/单位用户后台/Procure_AdDeleteMy?id="+num+"&h=adlist_s";
+        }
+    }
+</script>
+
+
+

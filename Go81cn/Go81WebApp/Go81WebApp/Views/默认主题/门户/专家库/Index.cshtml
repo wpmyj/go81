@@ -1,0 +1,190 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@model Go81WebApp.Models.数据模型.内容数据模型.通知
+@{
+    ViewBag.Title = "评审专家统计";
+}
+<style type="text/css">
+    table {
+        width: 240px;
+        border-top: 1px solid #758C0E;
+        border-left: 1px solid #758C0E;
+    }
+
+        table tr {
+            height: 40px;
+        }
+
+            table tr th {
+                border-right: 1px solid #758C0E;
+                border-bottom: 1px solid #758C0E;
+            }
+
+            table tr td {
+                border-right: 1px solid #758C0E;
+                border-bottom: 1px solid #758C0E;
+            }
+
+    #dropbt {
+        color: red;
+        display: block;
+        border-top: 2px solid red;
+        width: 100%;
+        height: 30px;
+        border-radius:1px;
+        line-height: 30px;
+        cursor: pointer;
+        font-size: 15px;
+        background-color: #EBEBEB;
+        box-shadow: 0px 1px 1px gray;
+        -webkit-box-shadow: 0px 1px 1px gray;
+        -moz-box-shadow: 0px 1px 1px gray;
+        -o-box-shadow: 0px 1px 1px gray;
+    }
+    #dropbt:hover{
+        background-color: #E0E0E0;
+    }
+</style>
+<div class="front_outdiv">
+    <div class="front_outdiv_left">
+        <div class="gys_xttz_box">
+            <div class="gys_xttz_topbox">
+                <div class="gys_xttz_topbg">
+                    <div class="index_bottom_zb_top_title">评审专家入库注册须知</div>
+                </div>
+            </div>
+
+            <div id="conbox" style="width: 938px; height:463px; overflow:hidden; margin-top: 0; letter-spacing: 0;">
+                @if (Model != null)
+                {
+                    <div class="gys_xttz_contentbox_news_title" style="border-bottom:none;">@Model.内容主体.标题<a class="printspan" onclick="printpage()" style="font-size: 12px;"><img width="13" height="13" src="/Images/print.PNG">打印</a></div>
+                    <div class="gys_xttz_contentbox_news_text">
+                        @Html.Raw(Model.内容主体.内容)
+                    </div>
+                    if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
+                    {
+                        <div class="showattachment">附件列表:</div>
+                        for (int i = 0; i < Model.内容主体.附件.Count; i++)
+                        {
+                            <div class="showattachment_list">
+                                <a target="_blank" href="@Model.内容主体.附件[i]">附件@(i + 1)</a>
+                            </div>
+                        }
+                    }
+                }
+                else
+                {
+                    <div class="gys_xttz_contentbox_news_title">暂无此信息</div>
+                }
+            </div>
+            <div style="width:100%; margin-top:10px; text-align:center; font-size:12px;"><a id="dropbt" onclick="showAll(this)">点击查看全部>></a></div>
+        </div>
+
+
+
+        <div class="gys_xttz_box">
+            <div class="gys_xttz_topbox">
+                <div class="gys_xttz_topbg">
+                    <div class="index_bottom_zb_top_title">往期评审专家入库通知</div>
+                </div>
+            </div>
+            <div class="gys_xttz_contentbox_front" id="pagecontent">
+                <ul>
+                    @{ var j = 0;}
+                    @foreach (var item in (IEnumerable<通知>)ViewData["专家通知列表"])
+                    {
+                        TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
+                        if (j % 2 == 0)
+                        {
+                            <li>
+                                @if (ts.TotalHours < 48)
+                                {
+                                    <img src="~/Images/newico.gif" />
+                                    <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a class="new" href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                }
+                                else
+                                {
+                                    <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                }
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="oddlinecolor">
+                                @if (ts.TotalHours < 48)
+                                {
+                                    <img src="~/Images/newico.gif" />
+                                    <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a class="new" href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                }
+                                else
+                                {
+                                    <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                }
+                            </li>
+                        }
+                        j++;
+                    }
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="front_outdiv_right">
+        <div class="index_menu_top">
+            <div class="index_menu_top_middle">
+                <div class="index_menu_top_title">评审专家库统计</div>
+            </div>
+        </div>
+        <div class="front_newslist_rightdiv" style="margin-top:-5px;">
+            <div class="index_content_zcfg_content" style=" width:238px; height:auto; overflow:hidden;" id="tabcontent_zcfg">
+                <ul>
+                    <li>
+                        <a title="成都军区物资采购评审专家总计人数：130">成都军区物资采购评审专家总计人数：130</a>
+                    </li>
+                    @*<li>
+                            <a title="成都军区技术评审专家人数：40">成都军区技术评审专家人数：40</a>
+                        </li>
+                        <li>
+                            <a title="成都军区法律评审专家人数：30">成都军区法律评审专家人数：30</a>
+                        </li>
+                        <li>
+                            <a title="成都军区经济评审专家人数：30">成都军区经济评审专家人数：30</a>
+                        </li>
+                        <li>
+                            <a title="最近一个月评标评审专家的人数：0">最近一个月评标专家的人数：0</a>
+                        </li>*@
+                </ul>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function printpage() {
+        $(".printspan").hide();
+        document.body.innerHTML = document.getElementById('conbox').innerHTML;
+        window.print();
+    }
+    var n = 0;
+    function showAll(th) {
+        if (n == 0) {
+            n++;
+            $("div#conbox").animate({ "height": "1625px" }, 500);
+            $(th).text("收起<<");
+        }
+        else {
+            n = 0;
+            $("div#conbox").animate({ "height": "473px" }, 500);
+            $(th).text("点击查看全部>>");
+        }
+    }
+    //$(document).ready(function () { $("div.Page3").css("background-color", "#990808"); });
+    $(document).ready(function () {
+        $(".action_link").each(function () {
+            if ($(this).text() == "评审专家") {
+                $(this).parent("div").addClass("on");
+            }
+        });
+    });
+</script>

@@ -1,0 +1,120 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.项目服务记录
+<style type="text/css">
+    input.procure_radioinput {
+        width: 15px;
+        height: 15px;
+        line-height: 37px;
+        padding-left: 0;
+        margin-left: 0;
+    }
+
+    .procure_selectlist {
+        padding-left: 0;
+    }
+
+    .procure_selectlistdiv {
+        line-height: 30px;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="gys_znxx_topbox">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">项目服务详情</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content" style="height:auto; overflow:hidden;">
+
+                @if (Model != null)
+                {
+                    <div style="width: 800px; margin: 20px auto; padding: 10px; height: auto; overflow: hidden;">
+
+                        @if (Model.所属项目 != null && Model.所属项目.招标采购项目ID != -1)
+                        {
+                            try
+                            {
+                                <div style="width: 800px; height: 30px; padding: 10px;">
+                                    <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">项目名称：</div>
+                                    <div class="procure_selectlistdiv">
+                                        @Model.所属项目.招标采购项目.中标公告链接.公告.项目信息.项目名称
+                                    </div>
+                                </div>
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+
+
+                        <div style="width: 800px; height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">供应商名称：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.供应商链接.用户数据.企业基本信息.企业名称
+                            </div>
+                        </div>
+                        <div style="width: 800px; height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">事物概要：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.服务信息.事务概要
+                            </div>
+                        </div>
+                        <div style="width: 800px; height: 310px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">验收单：</div>
+                            <div class="procure_selectlistdiv">
+                                <img src="@Model.服务信息.验收单电子扫描件" width="500" height="500" />
+                            </div>
+                        </div>
+
+
+
+                        <div style="width: 800px; height: 30px; padding: 10px; float:left;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">验收时间：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.服务信息.验收时间.ToString("yyyy-MM-dd")
+                            </div>
+                        </div>
+                        @if (Model.服务评价.服务评级 != Go81WebApp.Models.数据模型.项目数据模型.项目服务记录.服务评级.未填写)
+                        {
+                            <div style="width: 800px; height: 150px; padding: 10px;">
+                                <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">评价内容：</div>
+                                <div class="procure_selectlistdiv">
+                                    <textarea style="width:500px; height:100px;" name="content" id="content">@Model.服务评价.服务评价内容</textarea>
+                                </div>
+                            </div>
+                            <div style="width: 800px; height: 40px; padding: 10px;">
+                                <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">服务评分：</div>
+                                <div class="procure_selectlistdiv" style="padding-left:0">
+                                    @Model.服务评价.服务评级
+                                </div>
+                            </div>
+                        }
+                        @*<div class="procure_adaduditdiv">
+                        <input type="submit" value="确定" name="action" class="front_login_rightbox_button_less">
+                    </div>*@
+                    </div>
+                }
+                else
+                {
+                    <span>暂无此数据</span>
+                }
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $("#我的服务列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#我的服务列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>
+
+
+
+

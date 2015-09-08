@@ -1,0 +1,1465 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.酒店>
+@using Go81WebApp.Models.数据模型
+@{
+    ViewBag.Title = "机票酒店查询";
+}
+<style type="text/css">
+.marker_la{position:absolute;font-size:12px;font-family:宋体; font-weight:normal; display:inline-block;height:17px;width:170px;left:-60px;top:30px;padding:2px; max-width:none; border:1px solid #B0B0B0 }
+.marker_tig{ position:absolute;height:0;width:0;border-bottom:11px solid #B0B0B0;border-right:5px solid transparent;border-left:5px solid transparent;left:9px;top:20px;}
+.marker_tig::after{content:"";position:absolute;height:0;width:0;border-bottom:11px solid #fff;border-right:5px solid transparent;border-left:5px solid transparent;top:2px;left:-5px; }
+.trans-tabmeun{
+    float:left;
+    height:400px;
+}
+.tabmenu-btn{
+    width: 240px;
+    border: 1px solid #E9E9E9;
+}
+.tabmenu-btn ul li{
+    font-size: 22px;
+    height: 55px;
+    text-align: center;
+    line-height: 55px;
+    cursor:pointer;
+    color:#739C8A;
+}
+.tabmenu-btn ul li.hover{
+    background:#F1F1F1;
+}
+.tabmenu-content{
+    border: 1px solid #E9E9E9;
+    border-left:none;    
+    width: 957px;
+}
+.tab-contents{
+   width:100%;
+   height:100%;
+   display:none;
+}
+</style>
+<link href="~/css/hotelandticket.css" rel="stylesheet" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+<div class="hotel_ticket">
+    <div style="margin-bottom:10px;float:left">
+        <div class="tabmenu-btn trans-tabmeun">
+            <ul>
+                <li class="changetab hover" index="0">机票</li>
+                <li class="changetab" index="1">酒店</li>
+                <li class="" index="2">网上商城</li>
+            </ul>
+        </div>
+        <div class="tabmenu-content trans-tabmeun">
+            <div class="tab-contents" style="display:block">
+                <div class="ticket_search">
+                    <div class="hotel_search_title">
+                        <a><strong>国内机票代售点</strong></a>
+                    </div>
+                    <div class="tab_change_menu">
+                        <a index="0" class="hov">按关键字搜索</a>
+                        <a index="1">按地理位置搜索</a>
+                        <div class="ico_arrow"></div>
+                    </div>
+                    <div class="h_t_search">
+                        <div class="direction">
+                            <table>
+                                <tr>
+                                    <td class="align"><span>关键字：</span></td>
+                                    <td>
+                                        <input id="search_key_t" class="tic_name" type="text" placeholder="代售点名称/城市/街道" />
+                                        <button id="ticket_search_btn">搜索</button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="hotel_catalog" style="margin-left: -35px; border: 1px solid #ccc;">
+                                <div class="hotel_catalog_class">
+                                    <span><strong>机票代售点目录</strong></span>
+                                    <ul>
+                                        <li index="0" class="hove">
+                                            <label>四川</label>
+                                            <div class="next_city">
+                                                <span><a>成都</a></span>
+                                                <span><a>自贡</a></span>
+                                                <span><a>攀枝花</a></span>
+                                                <span><a>泸州</a></span>
+                                                <span><a>德阳</a></span>
+                                                <span><a>绵阳</a></span>
+                                                <span><a>广元</a></span>
+                                                <span><a>遂宁</a></span>
+                                                <span><a>内江</a></span>
+                                                <span><a>乐山</a></span>
+                                                <span><a>南充</a></span>
+                                                <span><a>眉山</a></span>
+                                                <span><a>宜宾</a></span>
+                                                <span><a>广安</a></span>
+                                                <span><a>达州</a></span>
+                                                <span><a>雅安</a></span>
+                                                <span><a>巴中</a></span>
+                                                <span><a>资阳</a></span>
+                                                <span><a>阿坝藏族羌族自治州</a></span>
+                                                <span><a>甘孜藏族自治州</a></span>
+                                                <span><a>凉山彝族自治州</a></span>
+                                            </div>
+                                        </li>
+                                        <li index="1">
+                                            <label>贵州</label>
+                                            <div class="next_city gz">
+                                                <span><a>贵阳</a></span>
+                                                <span><a>六盘水</a></span>
+                                                <span><a>遵义</a></span>
+                                                <span><a>安顺</a></span>
+                                                <span><a>铜仁地区</a></span>
+                                                <span><a>黔西南布依族苗族自治州</a></span>
+                                                <span><a>毕节地区</a></span>
+                                                <span><a>黔东南苗族侗族自治州</a></span>
+                                                <span><a>黔南布依族苗族自治州</a></span>
+                                            </div>
+                                        </li>
+                                        <li index="2">
+                                            <label>云南</label>
+                                            <div class="next_city yn">
+                                                <span><a>昆明</a></span>
+                                                <span><a>曲靖</a></span>
+                                                <span><a>玉溪</a></span>
+                                                <span><a>保山</a></span>
+                                                <span><a>昭通</a></span>
+                                                <span><a>楚雄彝族自治州</a></span>
+                                                <span><a>红河哈尼族彝族自治州</a></span>
+                                                <span><a>文山壮族苗族自治州</a></span>
+                                                <span><a>思茅地区</a></span>
+                                                <span><a>西双版纳傣族自治州</a></span>
+                                                <span><a>大理白族自治州</a></span>
+                                                <span><a>德宏傣族景颇族自治州</a></span>
+                                                <span><a>丽江地区</a></span>
+                                                <span><a>怒江傈僳族自治州</a></span>
+                                                <span><a>迪庆藏族自治州</a></span>
+                                                <span><a>临沧地区</a></span>
+                                            </div>
+                                        </li>
+                                        <li index="3">
+                                            <label>西藏</label>
+                                            <div class="next_city xz">
+                                                <span><a>拉萨</a></span>
+                                                <span><a>昌都地区</a></span>
+                                                <span><a>山南地区</a></span>
+                                                <span><a>日喀则地区</a></span>
+                                                <span><a>那曲地区</a></span>
+                                                <span><a>阿里地区</a></span>
+                                                <span><a>林芝地区</a></span>
+                                            </div>
+                                        </li>
+                                        <li index="4">
+                                            <label>重庆</label>
+                                            <div class="next_city cq">
+                                                <span><a>重庆</a></span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="hotel_area_catalog">
+                                    <table height="179px;">
+                                        <tr>
+                                            <th scope="row">商圈</th>
+                                            <td>
+                                                <ul class="businesslist">
+                                                    @{
+                                                        Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> sq = ViewData["商圈列表"] as Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>;
+                                                        foreach (var k in sq.Keys)
+                                                        {
+                                                            if (k.Contains("四川"))
+                                                            {
+
+                                                                foreach (var t in sq[k].Keys)
+                                                                {
+                                                                    if (t.Contains("成都"))
+                                                                    {
+
+                                                                        foreach (var p in sq[k][t].Keys)
+                                                                        {
+                                                                            <li class="fic">
+                                                                                <a class="fc" href="#"><b>@p</b></a>
+                                                                                <ul>
+                                                                                    @foreach (var y in sq[k][t][p])
+                                                                                    {
+                                                                                        <li><a href="#">@y</a></li>
+                                                                                    }
+                                                                                </ul>
+                                                                            </li>
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @*<li class="fic">
+                                    <a class="fc" href="#"><b>邛崃市</b></a>
+                                    <ul>
+                                        <li><a href="#">平乐镇</a></li>
+                                        <li><a href="#">天台山景区</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>大邑县</b></a>
+                                    <ul>
+                                        <li><a href="#">花水湾</a></li>
+                                        <li><a href="#">西岭雪山</a></li>
+                                        <li><a href="#">安仁古镇</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>金牛区</b></a>
+                                    <ul>
+                                        <li><a href="#">成都北站</a></li>
+                                        <li><a href="#">营门口</a></li>
+                                        <li><a href="#">茶店子</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>锦江区</b></a>
+                                    <ul>
+                                        <li><a href="#">九眼桥</a></li>
+                                        <li><a href="#">喜年广场</a></li>
+                                        <li><a href="#">万达广场</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>青羊区</b></a>
+                                    <ul>
+                                        <li><a href="#">人民公园</a></li>
+                                        <li><a href="#">宽窄巷子</a></li>
+                                        <li><a href="#">西南财大</a></li>
+                                    </ul>
+                                </li>*@
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                        <th scope="row">品牌</th>
+                        <td>
+                            <ul>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>经济型</b></a>
+                                    <ul>
+                                        <li><a href="#">锦江之星</a></li>
+                                        <li><a href="#">速8</a></li>
+                                        <li><a href="#">99连锁</a></li>
+                                        <li><a href="#">布丁</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>舒适型</b></a>
+                                    <ul>
+                                        <li><a href="#">宜必思</a></li>
+                                        <li><a href="#">智选假日</a></li>
+                                        <li><a href="#">山水时尚</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>高档豪华型</b></a>
+                                    <ul>
+                                        <li><a href="#">喜来登</a></li>
+                                        <li><a href="#">假日</a></li>
+                                        <li><a href="#">皇冠假日</a></li>
+                                        <li><a href="#">索菲特</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>*@
+                                    </table>
+                                    <table class="tab_change">
+                                        <tr>
+                                            <th scope="row">商圈</th>
+                                            <td>
+                                                <ul class="businesslist">
+                                                    @{
+                                                        // Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> sq = ViewData["商圈列表"] as Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>;
+                                                        foreach (var k in sq.Keys)
+                                                        {
+                                                            if (k.Contains("贵州"))
+                                                            {
+
+                                                                foreach (var t in sq[k].Keys)
+                                                                {
+                                                                    if (t.Contains("贵阳"))
+                                                                    {
+
+                                                                        foreach (var p in sq[k][t].Keys)
+                                                                        {
+                                                                            <li class="fic">
+                                                                                <a class="fc" href="#"><b>@p</b></a>
+                                                                                <ul>
+                                                                                    @foreach (var y in sq[k][t][p])
+                                                                                    {
+                                                                                        <li><a href="#">@y</a></li>
+                                                                                    }
+                                                                                </ul>
+                                                                            </li>
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                        <th scope="row">商圈</th>
+                        <td>
+                            <ul>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>*@
+                                    </table>
+                                    <table class="tab_change">
+                                        <tr>
+                                            <th scope="row">商圈</th>
+                                            <td>
+                                                <ul class="businesslist">
+                                                    @{
+                                                        //Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> sq = ViewData["商圈列表"] as Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>;
+                                                        foreach (var k in sq.Keys)
+                                                        {
+                                                            if (k.Contains("云南"))
+                                                            {
+
+                                                                foreach (var t in sq[k].Keys)
+                                                                {
+                                                                    if (t.Contains("昆明"))
+                                                                    {
+
+                                                                        foreach (var p in sq[k][t].Keys)
+                                                                        {
+                                                                            <li class="fic">
+                                                                                <a class="fc" href="#"><b>@p</b></a>
+                                                                                <ul>
+                                                                                    @foreach (var y in sq[k][t][p])
+                                                                                    {
+                                                                                        <li><a href="#">@y</a></li>
+                                                                                    }
+                                                                                </ul>
+                                                                            </li>
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                        <th scope="row">商圈</th>
+                        <td>
+                            <ul>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>*@
+                                    </table>
+                                    <table class="tab_change">
+                                        <tr>
+                                            <th scope="row">商圈</th>
+                                            <td>
+                                                <ul class="businesslist">
+                                                    @{
+                                                        //Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> sq = ViewData["商圈列表"] as Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>;
+                                                        foreach (var k in sq.Keys)
+                                                        {
+                                                            if (k.Contains("西藏"))
+                                                            {
+
+                                                                foreach (var t in sq[k].Keys)
+                                                                {
+                                                                    if (t.Contains("拉萨"))
+                                                                    {
+
+                                                                        foreach (var p in sq[k][t].Keys)
+                                                                        {
+                                                                            <li class="fic">
+                                                                                <a class="fc" href="#"><b>@p</b></a>
+                                                                                <ul>
+                                                                                    @foreach (var y in sq[k][t][p])
+                                                                                    {
+                                                                                        <li><a href="#">@y</a></li>
+                                                                                    }
+                                                                                </ul>
+                                                                            </li>
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                        <th scope="row">商圈</th>
+                        <td>
+                            <ul>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>*@
+                                    </table>
+                                    <table class="tab_change">
+                                        <tr>
+                                            <th scope="row">商圈</th>
+                                            <td>
+                                                <ul class="businesslist">
+                                                    @{
+                                                        //Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> sq = ViewData["商圈列表"] as Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>;
+                                                        foreach (var k in sq.Keys)
+                                                        {
+                                                            if (k.Contains("重庆"))
+                                                            {
+
+                                                                foreach (var t in sq[k].Keys)
+                                                                {
+                                                                    if (t.Contains("重庆"))
+                                                                    {
+
+                                                                        foreach (var p in sq[k][t].Keys)
+                                                                        {
+                                                                            <li class="fic">
+                                                                                <a class="fc" href="#"><b>@p</b></a>
+                                                                                <ul>
+                                                                                    @foreach (var y in sq[k][t][p])
+                                                                                    {
+                                                                                        <li><a href="#">@y</a></li>
+                                                                                    }
+                                                                                </ul>
+                                                                            </li>
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                        <th scope="row">商圈</th>
+                        <td>
+                            <ul>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>*@
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="direction hidden">
+                            <table>
+                                <tr>
+                                    <td class="align"><span>地理位置：</span></td>
+                                    <td style="position:relative">
+                                        @*<span style="display:inline-block;width:28px;height:22px;position:relative;">
+                                            <input id="loc_name" class="marker" type="button" />
+                                            <label class="marker_la" style="">请点击此按钮在地图上选择地址</label>
+                                            <label class="marker_laggg marker_la" style="display:none;text-align:center; width: 230px;"></label>
+                                            <span class="marker_tig"></span>
+                                        </span>*@
+                                        <input type="hidden" id="hidloc_t" />
+                                        <span>距离：</span><input id="range_t" type="text" class="loc_name" /><span>公里</span>&nbsp;&nbsp;&nbsp;<span>数量：</span><input id="num_t" class="loc_name" type="text" /><span>个</span>
+                                        <button id="search_loca_t" style="height:24px;">搜索</button>
+                                        <label style="font-size:14px;color:#929292">请在地图上选择地址</label>
+
+                                        @*<div class="loc_div_out">
+                                            <div class="close_div">×</div>
+                                            
+                                        </div>*@
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="modal_m" style="margin: 10px 0 0 -35px;position: relative;">
+                                <div class="loc_ing" id="loc_lag"></div>
+                                <div id="MapSel" class="loc_div" style="height: 222px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             
+            </div>
+            <div class="tab-contents">
+                <div class="hotel_search">
+                    <div class="hotel_search_title">
+                        <a><strong>国内酒店</strong></a>
+                    </div>
+                    <div class="tab_change_menu">
+                        <a index="0" class="hov">按关键字搜索</a>
+                        <a index="1">按地理位置搜索</a>
+                        <div class="ico_arrow"></div>
+                    </div>
+                    <div class="h_t_search">
+                        <div class="direction">
+                            <table>
+                                <tr>
+                                    <td class="align"><span>关键字：</span></td>
+                                    <td>
+                                        <input id="search_key_h" class="tic_name" type="text" placeholder="酒店名称/城市/街道" />
+                                        <button id="hotel_search_btn">搜索</button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="hotel_catalog" style="margin-left: -35px; border: 1px solid #ccc;">
+                                <div class="hotel_catalog_class">
+                                    <span><strong>酒店目录</strong></span>
+                                    <ul>
+                                        <li index="0" class="hove">
+                                            <label>四川</label>
+                                            <div class="next_city">
+                                                <span><a>成都</a></span>
+                                                <span><a>自贡</a></span>
+                                                <span><a>攀枝花</a></span>
+                                                <span><a>泸州</a></span>
+                                                <span><a>德阳</a></span>
+                                                <span><a>绵阳</a></span>
+                                                <span><a>广元</a></span>
+                                                <span><a>遂宁</a></span>
+                                                <span><a>内江</a></span>
+                                                <span><a>乐山</a></span>
+                                                <span><a>南充</a></span>
+                                                <span><a>眉山</a></span>
+                                                <span><a>宜宾</a></span>
+                                                <span><a>广安</a></span>
+                                                <span><a>达州</a></span>
+                                                <span><a>雅安</a></span>
+                                                <span><a>巴中</a></span>
+                                                <span><a>资阳</a></span>
+                                                <span><a>阿坝藏族羌族自治州</a></span>
+                                                <span><a>甘孜藏族自治州</a></span>
+                                                <span><a>凉山彝族自治州</a></span>
+                                            </div>
+                                        </li>
+                                        <li index="1">
+                                            <label>贵州</label>
+                                            <div class="next_city gz">
+                                                <span><a>贵阳</a></span>
+                                                <span><a>六盘水</a></span>
+                                                <span><a>遵义</a></span>
+                                                <span><a>安顺</a></span>
+                                                <span><a>铜仁地区</a></span>
+                                                <span><a>黔西南布依族苗族自治州</a></span>
+                                                <span><a>毕节地区</a></span>
+                                                <span><a>黔东南苗族侗族自治州</a></span>
+                                                <span><a>黔南布依族苗族自治州</a></span>
+                                            </div>
+                                        </li>
+                                        <li index="2">
+                                            <label>云南</label>
+                                            <div class="next_city yn">
+                                                <span><a>昆明</a></span>
+                                                <span><a>曲靖</a></span>
+                                                <span><a>玉溪</a></span>
+                                                <span><a>保山</a></span>
+                                                <span><a>昭通</a></span>
+                                                <span><a>楚雄彝族自治州</a></span>
+                                                <span><a>红河哈尼族彝族自治州</a></span>
+                                                <span><a>文山壮族苗族自治州</a></span>
+                                                <span><a>思茅地区</a></span>
+                                                <span><a>西双版纳傣族自治州</a></span>
+                                                <span><a>大理白族自治州</a></span>
+                                                <span><a>德宏傣族景颇族自治州</a></span>
+                                                <span><a>丽江地区</a></span>
+                                                <span><a>怒江傈僳族自治州</a></span>
+                                                <span><a>迪庆藏族自治州</a></span>
+                                                <span><a>临沧地区</a></span>
+                                            </div>
+                                        </li>
+                                        <li index="3">
+                                            <label>西藏</label>
+                                            <div class="next_city xz">
+                                                <span><a>拉萨</a></span>
+                                                <span><a>昌都地区</a></span>
+                                                <span><a>山南地区</a></span>
+                                                <span><a>日喀则地区</a></span>
+                                                <span><a>那曲地区</a></span>
+                                                <span><a>阿里地区</a></span>
+                                                <span><a>林芝地区</a></span>
+                                            </div>
+                                        </li>
+                                        <li index="4">
+                                            <label>重庆</label>
+                                            <div class="next_city cq">
+                                                <span><a>重庆</a></span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="hotel_area_catalog">
+                                    <table height="179px;">
+                                        <tr>
+                                            <th scope="row">商圈</th>
+                                            <td>
+                                                <ul class="businesslist">
+                                                    @{
+
+                                                        foreach (var k in sq.Keys)
+                                                        {
+                                                            if (k.Contains("四川"))
+                                                            {
+
+                                                                foreach (var t in sq[k].Keys)
+                                                                {
+                                                                    if (t.Contains("成都"))
+                                                                    {
+
+                                                                        foreach (var p in sq[k][t].Keys)
+                                                                        {
+                                                    <li class="fic">
+                                                        <a class="fc" href="#"><b>@p</b></a>
+                                                        <ul>
+                                                            @foreach (var y in sq[k][t][p])
+                                                                                    {
+                                                                                    <li><a href="#">@y</a></li>
+                                                                                    }
+                                                        </ul>
+                                                    </li>
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+
+                                                    @*<li class="fic">
+                                    <a class="fc" href="#"><b>邛崃市</b></a>
+                                    <ul>
+                                        <li><a href="#">平乐镇</a></li>
+                                        <li><a href="#">天台山景区</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>大邑县</b></a>
+                                    <ul>
+                                        <li><a href="#">花水湾</a></li>
+                                        <li><a href="#">西岭雪山</a></li>
+                                        <li><a href="#">安仁古镇</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>金牛区</b></a>
+                                    <ul>
+                                        <li><a href="#">成都北站</a></li>
+                                        <li><a href="#">营门口</a></li>
+                                        <li><a href="#">茶店子</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>锦江区</b></a>
+                                    <ul>
+                                        <li><a href="#">九眼桥</a></li>
+                                        <li><a href="#">喜年广场</a></li>
+                                        <li><a href="#">万达广场</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>青羊区</b></a>
+                                    <ul>
+                                        <li><a href="#">人民公园</a></li>
+                                        <li><a href="#">宽窄巷子</a></li>
+                                        <li><a href="#">西南财大</a></li>
+                                    </ul>
+                                </li>*@
+                                                </ul>
+
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                        <th scope="row">品牌</th>
+                        <td>
+                            <ul>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>经济型</b></a>
+                                    <ul>
+                                        <li><a href="#">锦江之星</a></li>
+                                        <li><a href="#">速8</a></li>
+                                        <li><a href="#">99连锁</a></li>
+                                        <li><a href="#">布丁</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>舒适型</b></a>
+                                    <ul>
+                                        <li><a href="#">宜必思</a></li>
+                                        <li><a href="#">智选假日</a></li>
+                                        <li><a href="#">山水时尚</a></li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a class="fc" href="#"><b>高档豪华型</b></a>
+                                    <ul>
+                                        <li><a href="#">喜来登</a></li>
+                                        <li><a href="#">假日</a></li>
+                                        <li><a href="#">皇冠假日</a></li>
+                                        <li><a href="#">索菲特</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>*@
+                                    </table>
+                                    <table class="tab_change">
+                                        <tr>
+                                            <th scope="row">商圈</th>
+                                            <td>
+                                                <ul class="businesslist">
+                                                    @{
+                                                        //Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> sq = ViewData["商圈列表"] as Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>;
+                                                        foreach (var k in sq.Keys)
+                                                        {
+                                                            if (k.Contains("贵州"))
+                                                            {
+
+                                                                foreach (var t in sq[k].Keys)
+                                                                {
+                                                                    if (t.Contains("贵阳"))
+                                                                    {
+
+                                                                        foreach (var p in sq[k][t].Keys)
+                                                                        {
+                                                    <li class="fic">
+                                                        <a class="fc" href="#"><b>@p</b></a>
+                                                        <ul>
+                                                            @foreach (var y in sq[k][t][p])
+                                                                                    {
+                                                                                    <li><a href="#">@y</a></li>
+                                                                                    }
+                                                        </ul>
+                                                    </li>
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                        <th scope="row">商圈</th>
+                        <td>
+                            <ul>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>*@
+                                    </table>
+                                    <table class="tab_change">
+                                        <tr>
+                                            <th scope="row">商圈</th>
+                                            <td>
+                                                <ul class="businesslist">
+                                                    @{
+                                                        //Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> sq = ViewData["商圈列表"] as Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>;
+                                                        foreach (var k in sq.Keys)
+                                                        {
+                                                            if (k.Contains("云南"))
+                                                            {
+
+                                                                foreach (var t in sq[k].Keys)
+                                                                {
+                                                                    if (t.Contains("昆明"))
+                                                                    {
+
+                                                                        foreach (var p in sq[k][t].Keys)
+                                                                        {
+                                                    <li class="fic">
+                                                        <a class="fc" href="#"><b>@p</b></a>
+                                                        <ul>
+                                                            @foreach (var y in sq[k][t][p])
+                                                                                    {
+                                                                                    <li><a href="#">@y</a></li>
+                                                                                    }
+                                                        </ul>
+                                                    </li>
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                        <th scope="row">商圈</th>
+                        <td>
+                            <ul>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>*@
+                                    </table>
+                                    <table class="tab_change">
+                                        <tr>
+                                            <th scope="row">商圈</th>
+                                            <td>
+                                                <ul class="businesslist">
+                                                    @{
+                                                        //Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> sq = ViewData["商圈列表"] as Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>;
+                                                        foreach (var k in sq.Keys)
+                                                        {
+                                                            if (k.Contains("西藏"))
+                                                            {
+
+                                                                foreach (var t in sq[k].Keys)
+                                                                {
+                                                                    if (t.Contains("拉萨"))
+                                                                    {
+
+                                                                        foreach (var p in sq[k][t].Keys)
+                                                                        {
+                                                    <li class="fic">
+                                                        <a class="fc" href="#"><b>@p</b></a>
+                                                        <ul>
+                                                            @foreach (var y in sq[k][t][p])
+                                                                                    {
+                                                                                    <li><a href="#">@y</a></li>
+                                                                                    }
+                                                        </ul>
+                                                    </li>
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                        <th scope="row">商圈</th>
+                        <td>
+                            <ul>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>*@
+                                    </table>
+                                    <table class="tab_change">
+                                        <tr>
+                                            <th scope="row">商圈</th>
+                                            <td>
+                                                <ul class="businesslist">
+                                                    @{
+                                                        //Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>> sq = ViewData["商圈列表"] as Dictionary<string, Dictionary<string, Dictionary<string, List<string>>>>;
+                                                        foreach (var k in sq.Keys)
+                                                        {
+                                                            if (k.Contains("重庆"))
+                                                            {
+
+                                                                foreach (var t in sq[k].Keys)
+                                                                {
+                                                                    if (t.Contains("重庆"))
+                                                                    {
+
+                                                                        foreach (var p in sq[k][t].Keys)
+                                                                        {
+                                                    <li class="fic">
+                                                        <a class="fc" href="#"><b>@p</b></a>
+                                                        <ul>
+                                                            @foreach (var y in sq[k][t][p])
+                                                                                    {
+                                                                                    <li><a href="#">@y</a></li>
+                                                                                    }
+                                                        </ul>
+                                                    </li>
+                                                                        }
+
+                                                                    }
+                                                                }
+
+                                                            }
+                                                        }
+                                                    }
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                        @*<tr>
+                        <th scope="row">商圈</th>
+                        <td>
+                            <ul>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                                <li class="fic">
+                                    <a href="#"><b>朝阳区</b></a>
+                                    <ul>
+                                        <li>首都机场</li>
+                                        <li>三里屯</li>
+                                        <li>国贸</li>
+                                        <li>三元桥</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>*@
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="direction hidden">
+                            <table>
+                                <tr>
+                                    <td class="align"><span>地理位置：</span></td>
+                                    <td style="position:relative">
+                                        @*<span style="display:inline-block;width:28px;height:22px;position:relative;">
+                                            <input id="loa_name" class="marker" type="button" />
+                                            <label class="marker_la" style="">请点击此按钮在地图上选择地址</label>
+                                            <label class="marker_lagg marker_la" style="display:none;text-align:center; width: 230px;"></label>
+                                            <span class="marker_tig"></span>
+
+                                        </span>*@
+                                        <input type="hidden" id="hidloc_h" />
+                                        <span>距离：</span><input id="range_h" type="text" class="loc_name" /><span>公里</span>&nbsp;&nbsp;&nbsp;<span>数量：</span><input id="num_h" class="loc_name" type="text" /><span>个</span>
+                                        <button id="search_loca_h" style="height:24px;">搜索</button>
+                                        @*<div class="loc_div_out">
+                                            <div class="close_div">×</div>
+                                            
+                                        </div>*@
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="modal_m" style="margin: 10px 0 0 -35px;position: relative;">
+                                <div class="loc_ing" id="loc_lag"></div>
+                                <div id="MapHot" class="loc_div" style="height: 222px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             
+            </div>
+            <div class="tab-contents">
+                333
+            </div>
+        </div>
+    </div>
+
+    @*<div class="hotel">
+     
+        <div class="hotel_list">
+            @if (Model != null && Model.Any())
+            {
+                var m = 0;
+                var c = "";
+                foreach (var k in Model)
+                {  
+                    m++;
+                    <div class="list_hotel">
+                        <div class="hotel_pic">
+                            @{ c = k.酒店基本信息.所属地域 != null ? k.酒店基本信息.所属地域.地域 : "未填写";}
+
+                            @if (k.酒店基本信息.照片 != null && k.酒店基本信息.照片.Count > 0)
+                            {
+                                <a href="/机票酒店/HotelDetial?id=@k.Id"><img src="@k.酒店基本信息.照片[0]" title="@k.酒店基本信息.酒店名" /></a>
+                            }
+                            else
+                            {
+                                <a href="/机票酒店/HotelDetial?id=@k.Id"><img src="~/Images/hotel3.jpg" title="@k.酒店基本信息.酒店名" /></a>
+                            }
+                        </div>
+                        <div class="hotel_brief">
+                            <div class="hotel_til">
+                                <span>@m</span><a href="/机票酒店/HotelDetial?id=@k.Id">@k.酒店基本信息.酒店名</a>  
+                                @if (k.酒店基本信息.Wifi)
+                                {<label class="wifi" style="float:right;" title="该酒店提供免费Wifi"></label>}
+                                @if (k.酒店基本信息.免费停车场)
+                                {<label class="stop" style="float:right;" title="该酒店提供免费停车场"></label>}
+                            </div>
+                            <p>位于<a>@c</a>
+                                <label class="tel">联系方式：@k.酒店基本信息.联系电话</label>
+                            </p>
+                            <p class="indent">@k.酒店基本信息.简介</p>
+                            <div class="hotel_review">
+                                <p><a href="#">"环境挺不错，东西都挺新的"</a></p>
+                                    <p><a href="#">"一次性洗漱用品齐全,设施设备非常周到"</a></p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <span>暂无相关数据！</span>
+            }
+        </div>
+    </div>*@
+    <div class="ticket">
+      
+       
+        <div class="ticket_list">
+            @{
+                IEnumerable<机票代售点> ticket = ViewData["机票代售点"] as IEnumerable<机票代售点>;
+                if (ticket != null && ticket.Any())
+                {
+                    var m = 0;
+                    var a = "";
+                    foreach (var p in ticket)
+                    { 
+                        m++;
+                        <div class="list_hotel">
+                            <div class="hotel_pic">
+                                @{a = p.所属地域 != null ? p.所属地域.地域 : "未填写";}
+                                @if (p.照片 != null && p.照片.Count > 0)
+                                {
+                                    <a href="/机票酒店/TicketDetial?id=@p.Id"><img src="@p.照片[0]" title="@p.代售点名称" /></a>
+                                }
+                                else
+                                {
+                                    <a href="/机票酒店/TicketDetial?id=@p.Id"><img src="~/Images/ticket1.jpg" title="@p.代售点名称" /></a>
+                                }
+                            </div>
+                            <div class="hotel_brief">
+                                <div class="hotel_til"><span>@m</span><a href="/机票酒店/TicketDetial?id=@p.Id">@p.代售点名称</a></div>
+                                <p>位于<a href="/机票酒店/TicketFilter/@a">@a</a></p>
+                                <p class="indent">@p.简介 </p>
+                                <div class="hotel_review">
+                                    @*<p><a href="#">"环境挺不错，东西都挺新的"</a></p>
+                                        <p><a href="#">"一次性洗漱用品齐全,设施设备非常周到"</a></p>*@
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <span>暂无相关数据！</span>
+                }
+            }
+        </div>
+    </div>
+</div>
+@{
+    string position = "104.071893,30.663434";
+}
+<script type="text/javascript" src="~/JS/baiduMap.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var timer;
+        $("li.changetab").hover(function () {
+            var tab = $(this);
+            timer = setTimeout(function () {
+                var index = tab.attr("index");
+                var divs = tab.parents(".tabmenu-btn").next(".tabmenu-content");
+                tab.addClass("hover").siblings().removeClass("hover");
+                divs.children().hide().eq(index).show();
+            }, 200);
+        }, function () {
+            clearTimeout(timer);
+        });
+
+        $(".tab_change_menu a").click(function(){
+            var aa=$(this).attr("index");
+            $(this).addClass("hov").siblings().removeClass("hov").parents(".tab_change_menu").next(".h_t_search").children().hide().eq(aa).show();
+            if(aa==0)
+            {
+                $(this).siblings(".ico_arrow").css({"left":"82px"});
+            }
+            else
+            {
+                $(this).siblings(".ico_arrow").css({"left":"187px"});
+            }
+        });
+        //$(".hotel_catalog_class li").click(function () {
+        //    var aa = $(this).parents(".hotel_catalog_class").next(".hotel_area_catalog").children().eq(0).attr("class");
+        //    var index = $(this).attr("index");
+        //    $(this).addClass("hove").siblings().removeClass("hove").parents(".hotel_catalog_class").next(".hotel_area_catalog").children().hide().eq(index).show();
+        //});
+        var timer;
+        $(".hotel_catalog_class li").hover(function () {
+            var ali = $(this);
+            var index=$(this).attr("index");
+            timer = setTimeout(function () {
+                $(ali).addClass("hove").siblings().removeClass("hove");
+                $(ali).children(".next_city").show();
+                $(ali).siblings().children(".next_city").hide();
+                $(ali).parents(".hotel_catalog_class").next().children().eq(index).show().siblings().hide();
+            }, 200);
+        }, function () {
+            var al=$(this);
+            setTimeout(function(){
+                $(al).children(".next_city").hide();
+            },200);
+            clearTimeout(timer);
+        });
+
+        $("#hotel_search_btn").click(function () {
+            window.location.href = "/机票酒店/HotelFilter?a=" + $("#search_key_h").val();
+        });
+        $("#ticket_search_btn").click(function(){
+            window.location.href="/机票酒店/TicketFilter?a="+$("#search_key_t").val();
+        });
+
+        $("#search_loca_h").click(function(){
+            window.location.href="/机票酒店/HotelFilter?c="+$("#hidloc_h").val()+"&range="+$("#range_h").val()+"&num="+$("#num_h").val();
+        });
+        $("#search_loca_t").click(function(){
+            window.location.href="/机票酒店/TicketFilter?c="+$("#hidloc_t").val()+"&range="+$("#range_t").val()+"&num="+$("#num_t").val();
+        });
+
+        $("#loc_name").click(function() {
+            $(this).parent().siblings(".loc_div_out").fadeIn();
+            $(this).siblings(".marker_la").hide();
+        });
+        $(".close_div").click(function(){
+            $(this).parents(".loc_div_out").fadeOut();
+        });
+        //    .blur(function(){
+        //    $(this).siblings(".loc_div").mouseover(function(){
+        //        $(this).css({"display":"block"});
+        //    }).mouseout(function(){
+        //        $(this).hide();
+        //    });
+        //    $(this).siblings(".loc_div").hide();
+        //});
+        $(".next_city span a").click(function(){
+            var str="";
+            var index=$(this).parents(".next_city").parents().attr("index");
+            var des=$(this).parents(".hotel_catalog_class").next().children().eq(index).find("ul.businesslist");
+            var c=$(this).html();
+            var p=$(this).parents(".next_city").prev().html();
+            $.ajax({
+                url:'/机票酒店/GetBusinessByCity',
+                data:{p:p,c:c},
+                dataType:'json',
+                success:function(data){
+                    $.each(data.Data, function (index, item){
+                        str+="<li class='fic'>";
+                        str+="<a class='fc' href='#'><b>"+index+"</b></a>";
+                        str+="<ul>";
+                        $.each(item,function(index,item){
+                            str+="<li><a href='#'>"+item+"</a></li>";
+                        });
+                        str+="</ul></li>";
+                    });
+                    des.empty().append(str);
+                },
+                error:function(){
+                    alert("请求失败！");
+                },
+            });
+        });
+
+        $("#loa_name").click(function(){
+            $(this).parent().siblings(".loc_div_out").fadeIn();
+            $(this).siblings(".marker_la").hide();
+        })
+        //    .blur(function(){
+        //    $(this).siblings(".loc_div_out").mouseover(function(){
+        //        $(this).css({"display":"block"});
+        //    }).mouseout(function(){
+        //        $(this).hide().siblings(".top_up").hide();
+        //    });
+        //    $(this).siblings(".loc_div").hide().siblings(".top_up").hide();
+        //});
+    });
+
+    //创建和初始化地图函数：
+    function initMap(idName,xPos,yPos) {
+        var mapName = new BMap.Map(idName, { defaultCursor: 'default' });//在百度地图容器中创建一个地图
+        var point = new BMap.Point(xPos,yPos);//定义一个中心点坐标
+        mapName.centerAndZoom(point, 17);//设定地图的中心点和坐标并将地图显示在地图容器中
+        mapName.panBy(500,250);
+        window.mapName = mapName;//将map变量存储在全局
+        setMapEvent(mapName);//设置地图事件
+        addMapControl(mapName);//向地图添加控件
+        addMarker(mapName,xPos,yPos);//向地图中添加marker
+    }
+    function initMap1(idName,xPos,yPos) {
+        var mapName1 = new BMap.Map(idName, { defaultCursor: 'default' });//在百度地图容器中创建一个地图
+        var point = new BMap.Point(xPos,yPos);//定义一个中心点坐标
+        mapName1.centerAndZoom(point, 17);//设定地图的中心点和坐标并将地图显示在地图容器中
+        mapName1.panBy(500,250);
+        window.mapName1 = mapName1;//将map变量存储在全局
+        setMapEvent(mapName1);//设置地图事件
+        addMapControl(mapName1);//向地图添加控件
+        addMarker(mapName1,xPos,yPos);//向地图中添加marker
+    }
+    initMap("MapSel",@position.Split(',')[0],@position.Split(',')[1]);//创建和初始化地图
+    initMap1("MapHot",@position.Split(',')[0],@position.Split(',')[1]);
+    mapName.addEventListener('click', function (e) {
+        mapName.clearOverlays(marker);
+        var info = new BMap.InfoWindow('');
+        var mark=new BMap.Icon("../Images/marker.png", new BMap.Size(50, 50),{
+            anchor: new BMap.Size(16,22),
+            infoWindowAnchor: new BMap.Size(10, 0)
+        });
+        var projection = this.getMapType().getProjection();
+        var lngLat = e.point;
+        var marker = new BMap.Marker(lngLat, { icon: mark });
+        var lngLatStr;
+        var geoc = new BMap.Geocoder();
+        geoc.getLocation(lngLat, function(rs){
+            var addComp = rs.addressComponents;
+            lngLatStr=addComp.province + "" + addComp.city + "" + addComp.district + "" + addComp.street + "" + addComp.streetNumber;
+            //lngLatConfirm =lngLatStr+"<a id='loc_refo' style='display:block; border-radius:3px; float:right; width:50px; height:25px;margin-top:7px; text-align:center;color:white; background-color:#5e6f00;' onclick='closeInfo()'>确定</a>";
+            //info.setContent(lngLatConfirm);
+            info.setContent(lngLatStr);
+            //$(".marker_laggg").html(lngLatStr).show();
+            mapName.openInfoWindow(info, lngLat);
+            mapName.addOverlay(marker);  
+        });
+        $("#hidloc_t").val(lngLat.lng+","+lngLat.lat);
+    });
+    mapName.addEventListener("dragend", function (e) {
+        $("#loc_lag").html("当前位置：" + e.point.lng + ", " + e.point.lat);
+        //alert("当前位置：" + e.point.lng + ", " + e.point.lat);
+    });
+    mapName1.addEventListener('click', function (e) {
+        mapName1.clearOverlays(marker);
+        var info = new BMap.InfoWindow('');
+        var mark=new BMap.Icon("../Images/marker.png", new BMap.Size(50, 50),{
+            anchor: new BMap.Size(16,22),
+            infoWindowAnchor: new BMap.Size(10, 0)
+        });
+        var projection = this.getMapType().getProjection();
+        var lngLat = e.point;
+        var marker = new BMap.Marker(lngLat, { icon: mark });
+        var lngLatStr;
+        var geoc = new BMap.Geocoder();
+        geoc.getLocation(lngLat, function(rs){
+            var addComp = rs.addressComponents;
+            lngLatStr=addComp.province + "" + addComp.city + "" + addComp.district + "" + addComp.street + "" + addComp.streetNumber;
+            //lngLatConfirm =lngLatStr+"<a id='loc_refo' style='display:block; border-radius:3px; float:right; width:50px; height:25px;margin-top:7px; text-align:center;color:white; background-color:#5e6f00;' onclick='closeInfo()'>确定</a>";
+            // info.setContent(lngLatConfirm);
+            info.setContent(lngLatStr);
+            //$(".marker_lagg").html(lngLatStr).show();
+            mapName1.openInfoWindow(info,lngLat);
+            mapName1.addOverlay(marker);  
+        });
+        
+        $("#hidloc_h").val(lngLat.lng+","+lngLat.lat);
+    });
+    mapName1.addEventListener("dragend", function (e) {
+        $("#loc_ing").html("当前位置：" + e.point.lng + ", " + e.point.lat);
+    });
+    function closeInfo(){
+        $(".loc_div_out").fadeOut();
+    };
+</script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () { $("div#Pages").css("background-color", "rgb(94,111,0)"); });
+</script>

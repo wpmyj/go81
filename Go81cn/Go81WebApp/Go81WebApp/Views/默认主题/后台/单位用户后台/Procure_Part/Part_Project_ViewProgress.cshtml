@@ -1,0 +1,308 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.招标采购项目
+<style type="text/css">
+    .gys_znxx_content table {
+        border: none;
+        background: #fff;
+    }
+
+        .gys_znxx_content table tr td {
+            border: none;
+            background: #fff;
+        }
+
+        .gys_znxx_content table tr:hover td {
+            background: #fff;
+        }
+
+    .progresspage_viewname {
+        width: 300px;
+        margin: 0 auto;
+        font-size: 30px;
+        font-weight: bold;
+        color: #1b9c8c;
+        line-height: 60px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .progresspage_viewbg {
+        width: 20px;
+        height: 60px;
+        background-color: #0b7f8f;
+        margin: 0 auto;
+    }
+     .progresspage_viewok {
+        width: 70px;
+        background-image: url('/Images/progress.png');
+        background-position: -70px 0;
+        background-repeat: no-repeat;
+        height: 60px;
+        margin: 0 auto;
+        float: left;
+    }
+
+    .progresspage_viewno {
+        width: 70px;
+        background-image: url('/Images/progress.png');
+        background-position: 0px 0;
+        background-repeat: no-repeat;
+        height: 60px;
+        margin: 0 auto;
+        float: left;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="gys_znxx_topbox">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">项目进度查看</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+
+                @if (Model != null)
+                {
+
+                    <table style=" width:600px; margin:0 auto;">
+                        <tr>
+                            <td width="50%">
+                                <div class="progresspage_viewname">
+                                    需求申请
+                                </div>
+                            </td>
+                            <td width="50%">
+                                <div class="progresspage_viewok"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="50%">
+                                <div class="progresspage_viewbg"></div>
+                            </td>
+                            <td width="50%">
+                                @*<div style="width: 20px; height:100px; background-color:#0b7f8f; margin: 0 auto;"></div>*@
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td width="50%">
+                                <div class="progresspage_viewname">
+                                    需求审核
+                                </div>
+                            </td>
+                            <td width="50%">
+                                <div class="progresspage_viewok"></div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="50%">
+                                <div class="progresspage_viewbg"></div>
+                            </td>
+                            <td width="50%">
+                                @*<div style="width: 20px; height:100px; background-color:#0b7f8f; margin: 0 auto;"></div>*@
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="50%">
+                                @if (Model.审核数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核未通过)
+                                {
+                                    <div class="progresspage_viewname" style="color:red;">
+                                        审核未通过
+                                    </div>
+
+                                }
+                                else
+                                {
+                                    <div class="progresspage_viewname">
+                                        审核通过
+                                    </div>
+                                }
+
+                            </td>
+                            <td width="50%">
+                                @if (Model.审核数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核通过)
+                                {
+                                    <div class="progresspage_viewok"></div>
+                                }
+                                else
+                                {
+                                    <div class="progresspage_viewno"></div>
+                                }
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="50%">
+                                <div class="progresspage_viewbg"></div>
+                            </td>
+                            <td width="50%">
+                                @*<div style="width: 20px; height:100px; background-color:#0b7f8f; margin: 0 auto;"></div>*@
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="50%">
+                                <div class="progresspage_viewname">
+                                    技术公告
+                                </div>
+                            </td>
+                            <td width="50%">
+                                @if (Model.技术公告链接.公告ID != -1)
+                                {
+                                    <div class="progresspage_viewok"></div>
+                                }
+                                else
+                                {
+                                    <div class="progresspage_viewno"></div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="50%">
+                                <div class="progresspage_viewbg"></div>
+                            </td>
+                            <td width="50%">
+                                @*<div style="width: 20px; height:100px; background-color:#0b7f8f; margin: 0 auto;"></div>*@
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="50%">
+                                <div class="progresspage_viewname">
+                                    招标公告
+                                </div>
+                            </td>
+                            <td width="50%">
+                                @if (Model.招标公告链接.公告ID != -1)
+                                {
+                                    <div class="progresspage_viewok"></div>
+                                }
+                                else
+                                {
+                                    <div class="progresspage_viewno"></div>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="50%">
+                                <div class="progresspage_viewbg"></div>
+                            </td>
+                            <td width="50%">
+                                @*<div style="width: 20px; height:100px; background-color:#0b7f8f; margin: 0 auto;"></div>*@
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="50%">
+                                <div class="progresspage_viewname">
+                                    中标公告
+                                </div>
+                            </td>
+                            <td width="50%">
+                                @if (Model.中标公告链接.公告ID != -1)
+                                {
+                                    <div class="progresspage_viewok"></div>
+                                }
+                                else
+                                {
+                                    <div class="progresspage_viewno"></div>
+                                }
+                            </td>
+                        </tr>
+                        @if (Model.流标公告链接.公告ID == -1 && Model.废标公告链接.公告ID == -1)
+                        {
+
+                            <tr>
+                                <td width="50%">
+                                    <div class="progresspage_viewbg"></div>
+                                </td>
+                                <td width="50%">
+                                    @*<div style="width: 20px; height:100px; background-color:#0b7f8f; margin: 0 auto;"></div>*@
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="50%">
+                                    <div class="progresspage_viewname">
+                                        项目完成
+                                    </div>
+                                </td>
+                                <td width="50%">
+                                    @if (Model.中标公告链接.公告ID != -1)
+                                    {
+                                        <div class="progresspage_viewok"></div>
+                                    }
+                                    else
+                                    {
+                                        <div class="progresspage_viewno"></div>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            if (Model.流标公告链接.公告ID != -1)
+                            {
+                                <tr>
+                                    <td width="50%">
+                                        <div class="progresspage_viewbg"></div>
+                                    </td>
+                                    <td width="50%">
+                                        @*<div style="width: 20px; height:100px; background-color:#0b7f8f; margin: 0 auto;"></div>*@
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="50%">
+                                        <div class="progresspage_viewname" style="color:red;">
+                                            流标公告
+                                        </div>
+                                    </td>
+                                    <td width="50%">
+                                        <div class="progresspage_viewok"></div>
+                                    </td>
+                                </tr>
+                            }
+
+                            if (Model.废标公告链接.公告ID != -1)
+                            {
+                                <tr>
+                                    <td width="50%">
+                                        <div class="progresspage_viewbg"></div>
+                                    </td>
+                                    <td width="50%">
+                                        @*<div style="width: 20px; height:100px; background-color:#0b7f8f; margin: 0 auto;"></div>*@
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="50%">
+                                        <div class="progresspage_viewname" style="color:red;">
+                                            废标公告
+                                        </div>
+                                    </td>
+                                    <td width="50%">
+                                        <div class="progresspage_viewok"></div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                }
+                else
+                {
+                    <div class="progresspage_viewname" style="color:red;">
+                        暂无此信息
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $("#我的需求列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#我的需求列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>
+

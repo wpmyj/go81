@@ -1,0 +1,135 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+<script type="text/javascript" src="~/JS/Get_productClass.js"></script>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="gys_xttz_box">
+        <div class="gys_xttz_topbox">
+            @*<div class="index_bottom_zb_top_left_or_right"> <img src="~/images/index_content_left.jpg" /> </div>*@
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">修改商品价格</div>
+            </div>
+            @*<div class="index_bottom_zb_top_left_or_right"> <img src="~/images/index_content_right.jpg" /> </div>*@
+        </div>
+        <div class="gys_xttz_contentbox gys_znxx_box">
+            <div class="product_add_textarabox">
+                <div class="product_add_toptitle">军采价格</div>
+                <input type="text" name="price" id="price" value="@ViewData["price"].ToString()" /><span>*</span><span id="p_price" style="display: none;">请输入正确的价格，只能为数字或者小数</span>
+                @*@Html.ValidationMessageFor(model => model.销售信息.价格)*@
+            </div>
+
+            <span style="color: red; padding-left: 20px;" id="priceerrormessage"></span>
+            @{ var attr = (商品._价格属性组合) ViewData["price_march"]; }
+            @if (attr.属性列表.Count > 0)
+            {
+                <div id="tablecontent" style="width: 900px; height: auto; margin: 0 auto; overflow: hidden; margin-bottom: 20px;"><table class='product_att_table' cellpadding='0' cellspacing=' 0'><tr name='tr_th'>@foreach (var item in attr.属性列表){<th class="product_att_table_th">@item</th>}<th class="product_att_table_th">价格匹配</th></tr>@foreach (var item in attr.组合列表){<tr name='table_tr'>@foreach (var ite in item.属性值表){<td class="product_att_table_td">@ite</td>}<td class="product_att_table_td"><input style='border:none; width:100%; height:100%;' type='text' value="@item.价格" onblur='if($(this).val()==""){value="在这里输入价格";$(this).css("color","#aaa");}' onfocus='if($(this).val()=="在这里输入价格"){value="";$(this).css("color","#000");}' /></td></tr>}</table></div>
+            }
+            else
+            {
+                <div id="tablecontent" style="width: 900px; height: auto; margin: 0 auto; overflow: hidden; display: none; margin-bottom: 20px;"></div>
+            }
+            <input name="pricesttrsrr" id="pricesttrsrr" type="hidden" />
+            <input name="p_id" id="p_id" type="hidden" value="@ViewData["p_id"].ToString()" />
+        
+            <div style="width: 100px; margin: 0 auto">
+                <input type="submit" name="submitcontent" class="index_online_btn" value="确认修改" onclick=" return getatt(); " />
+            </div>
+
+
+
+
+
+        </div>
+
+    </div>
+    <script type="text/javascript">
+
+        function getatt() {
+            var pricerg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
+            $("#p_price").hide();
+            $("#priceerrormessage").html("");
+            if ($.trim($("#price").val()) == "" || !($("#price").val().match(pricerg)) || $("#price").val()==0) {
+                $("#p_price").show();
+                $("#price").focus();
+                return false;
+            }
+
+            var pricestr = "";
+            var tr_thcontent = document.getElementsByName("tr_th"); //价格匹配表头
+            var trcontent = document.getElementsByName("table_tr"); //价格匹配表格内容td
+            if (trcontent.length > 0) {
+                var tdcont = trcontent[0].childNodes.length;
+                //一个条件作为价格组合--2列
+                if (tdcont == 2) {
+                    pricestr += tr_thcontent[0].childNodes[0].innerHTML + "^^^^";
+                }
+
+                //两个条件作为价格组合--3列
+                if (tdcont == 3) {
+                    pricestr += tr_thcontent[0].childNodes[0].innerHTML + "||||" + tr_thcontent[0].childNodes[1].innerHTML + "^^^^";
+                }
+
+                //三个条件作为价格组合--4列
+                if (tdcont == 4) {
+                    pricestr += tr_thcontent[0].childNodes[0].innerHTML + "||||" + tr_thcontent[0].childNodes[1].innerHTML + "||||" + tr_thcontent[0].childNodes[2].innerHTML + "^^^^";
+                }
+                //trcontent.length==>价格匹配总行数
+                for (var i = 0; i < trcontent.length; i++) {
+                    var tdcontent = trcontent[i].childNodes;
+
+                    //一个条件作为价格组合--2列
+                    if (tdcont == 2) {
+                        if (!((tdcontent[1].getElementsByTagName("input")[0].value).match(pricerg)) || tdcontent[1].getElementsByTagName("input")[0].value == 0) {
+                            $("#priceerrormessage").html("价格填写有误!");
+                            tdcontent[1].getElementsByTagName("input")[0].focus();
+                            return false;
+                        } else {
+                            $("#priceerrormessage").html("");
+                        }
+
+                        pricestr += tdcontent[1].getElementsByTagName("input")[0].value + "####" + tdcontent[0].innerHTML + "&&&&";
+                    }
+
+                    //两个条件作为价格组合--3列
+                    if (tdcont == 3) {
+
+                        if (!((tdcontent[2].getElementsByTagName("input")[0].value).match(pricerg)) || tdcontent[2].getElementsByTagName("input")[0].value == 0) {
+                            $("#priceerrormessage").html("价格填写有误!");
+                            tdcontent[2].getElementsByTagName("input")[0].focus();
+                            return false;
+                        } else {
+                            $("#priceerrormessage").html("");
+                        }
+
+                        pricestr += tdcontent[2].getElementsByTagName("input")[0].value + "####" + tdcontent[0].innerHTML + "||||" + tdcontent[1].innerHTML + "&&&&";
+                    }
+
+                    //两个条件作为价格组合--3列
+                    if (tdcont == 4) {
+
+                        if (!((tdcontent[3].getElementsByTagName("input")[0].value).match(pricerg)) || tdcontent[3].getElementsByTagName("input")[0].value == 0) {
+                            $("#priceerrormessage").html("价格填写有误!");
+                            tdcontent[3].getElementsByTagName("input")[0].focus();
+                            return false;
+                        } else {
+                            $("#priceerrormessage").html("");
+                        }
+
+                        pricestr += tdcontent[3].getElementsByTagName("input")[0].value + "####" + tdcontent[0].innerHTML + "||||" + tdcontent[1].innerHTML + "||||" + tdcontent[2].innerHTML + "&&&&";
+                    }
+                }
+                //alert(pricestr);
+                document.getElementById("pricesttrsrr").value = pricestr;
+            }
+        }
+
+    </script>
+    <script type="text/javascript">
+        $(function() {
+            $("#@ViewData["comes"]").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#@ViewData["comes"]").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        });
+    </script>
+}

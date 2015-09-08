@@ -1,0 +1,699 @@
+﻿<link href="~/css/css.css" type="text/css" rel="stylesheet">
+<style type="text/css">
+    label {
+        margin-bottom: 0;
+        font-weight: normal;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: 800px;
+        margin: 10% auto;
+    }
+
+    .expert_condition {
+        width: 898px;
+        border: solid 1px #ccd2b0;
+        height: auto;
+        overflow: hidden;
+        padding: 10px 0 20px 0;
+    }
+
+    .expert_condition {
+        width: 898px;
+        border: solid 1px #ccd2b0;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .expert_condition_inner {
+        width: 900px;
+        margin: 0 auto;
+        height: auto;
+        overflow: hidden;
+        margin-top: 10px;
+        border: solid 1px #ccd2b0;
+        padding: 5px;
+    }
+
+    .expert_condition_innerleft {
+        width: 150px;
+        float: left;
+        height: auto;
+        overflow: hidden;
+        font-size: 14px;
+        color: rgb(51, 51, 51);
+        padding-bottom: 10px;
+        font-weight: bold;
+        line-height: 30px;
+    }
+
+    .expert_condition_innerright {
+        width: 650px;
+        float: left;
+        font-size: 14px;
+        color: rgb(51, 51, 51);
+        padding-bottom: 10px;
+    }
+
+    .expert_condition_innerrightlist {
+        width: 300px;
+        float: left;
+    }
+
+    .expert_condition_innerrightlist_title {
+        width: 120px;
+        text-align: right;
+        float: left;
+        line-height: 30px;
+        padding-right: 5px;
+    }
+
+    .expert_condition_input {
+        height: 30px;
+        width: 150px;
+        float: left;
+        line-height: 30px;
+        /*margin-right: 60px;*/
+    }
+
+    .expert_condition_button1 {
+        border: 1px solid #f00;
+        color: #f00;
+    }
+
+    .expert_condition_reason {
+        width: 150px;
+        height: 28px;
+        margin: 2px;
+        display: none;
+    }
+
+    .expert_condition_button2 {
+        border: 1px solid #55f;
+        color: #55f;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*可以出席-选中*/
+    .expert_condition_button2_y_sel {
+        border: 1px solid #5f5;
+        background-color: #5f5;
+        color: #fff;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*可以出席-未选中*/
+    .expert_condition_button2_y_unsel {
+        border: 1px solid #f55;
+        color: #55f;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*不能出席-选中*/
+    .expert_condition_button2_n_sel {
+        border: 1px solid #f55;
+        background-color: #f55;
+        color: #fff;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*不能出席-未选中*/
+    .expert_condition_button2_n_unsel {
+        border: 1px solid #5f5;
+        color: #55f;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+
+    .expert_condition_topmenu {
+        width: 910px;
+        height: 30px;
+        background-color: #ccd2b0;
+        color: rgb(51, 51, 51);
+    }
+
+        .expert_condition_topmenu ul {
+            padding: 0;
+            margin: 0;
+        }
+
+        .expert_condition_topmenu li {
+            float: left;
+            list-style-type: none;
+            width: auto;
+            text-align: center;
+            height: 30px;
+            padding: 5px 10px 0 10px;
+            cursor: pointer;
+        }
+
+        .expert_condition_topmenu .cli {
+            background-color: #ffffff;
+            cursor: pointer;
+        }
+
+    #expert_ullist {
+    }
+
+        #expert_ullist ul {
+            display: none;
+            padding-left: 10px;
+        }
+
+        #expert_ullist .fdiv {
+            display: block;
+        }
+</style>
+<div id="expertchoosewaitblock" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>正在抽选，请稍等...</span>
+    </div>
+</div>
+
+@using Gma.QrCodeNet.Encoding.DataEncodation
+@model Go81WebApp.Models.数据模型.专家抽选记录
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">抽取评审专家</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content" style="width: 920px;">
+
+                <div class="expert_condition_inner">
+                    <div class="expert_condition_innerleft">项目信息</div>
+                    <div class="expert_condition_innerright">
+                        <div style="height:auto; overflow:hidden;">
+                            <div class="expert_condition_innerrightlist">
+                                <div class="expert_condition_innerrightlist_title">项目名称：</div><label class="expert_condition_input" style="height:auto; overflow:hidden;">@Model.项目名称</label>
+                            </div>
+                            <div class="expert_condition_innerrightlist">
+                                <div class="expert_condition_innerrightlist_title">
+                                    项目编号：
+                                </div><label class="expert_condition_input" style="height:auto; overflow:hidden;">@Model.项目编号</label>
+                            </div>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            <div class="expert_condition_innerrightlist_title">
+                                评标时间：
+                            </div><label class="expert_condition_input">@Model.评标时间.ToString()</label>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            <div class="expert_condition_innerrightlist_title">
+                                预定抽选总数：
+                            </div><label class="expert_condition_input">@Model.总计预定抽选专家数</label>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            <div class="expert_condition_innerrightlist_title">
+                                经办人：
+                            </div>
+                            @if (Model.经办人.用户ID != -1 && Model.经办人.用户数据 != null && Model.经办人.用户数据.联系方式 != null && !string.IsNullOrWhiteSpace(Model.经办人.用户数据.联系方式.联系人))
+                            {
+                                <label class="expert_condition_input" style="height:auto; overflow:hidden;">@Model.经办人.用户数据.联系方式.联系人</label>
+                            }
+                            else
+                            {
+                                <label class="expert_condition_input">未填写</label>
+                            }
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            <div class="expert_condition_innerrightlist_title">
+                                申请时间：
+                            </div><label class="expert_condition_input">@Model.申请时间.ToString()</label>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            <div class="expert_condition_innerrightlist_title">
+                                操作人姓名：
+                            </div><label class="expert_condition_input">@Model.操作人姓名</label>
+                        </div>
+                        <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                            <div class="expert_condition_innerrightlist_title">
+                                操作人电话：
+                            </div><label class="expert_condition_input">@Model.操作人电话</label>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="expert_condition_inner">
+                    <div class="expert_condition_innerleft">屏蔽列表</div>
+                    <div class="expert_condition_innerright" style="width:900px;">
+                        <table cellpadding="0" cellspacing="0" width="100%">
+                            <tr>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>所在单位</th>
+                                <th>取得现技术职称时间</th>
+                            </tr>
+                            @foreach (var item in Model.回避专家列表)
+                            {
+                                <tr>
+                                    @if (item.用户数据 != null)
+                                    {
+                                        <td>@item.用户数据.身份信息.姓名</td>
+                                        <td>@item.用户数据.身份信息.性别</td>
+                                        <td>@item.用户数据.工作经历信息.工作单位</td>
+                                        if (item.用户数据.学历信息.取得现技术职称时间 != null && item.用户数据.学历信息.取得现技术职称时间 != default(DateTime))
+                                        {
+                                            <td>@item.用户数据.学历信息.取得现技术职称时间.ToString("yyyy-MM-dd")</td>
+                                        }
+                                        else
+                                        {
+                                            <td>未填写</td>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td colspan="5">该评审专家已删除</td>
+                                    }
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+
+
+                <div class="expert_condition_inner">
+                    <div class="expert_condition_innerleft">抽选条件</div>
+                    <div class="expert_condition_innerright" style="width:900px;">
+                        <table cellpadding="0" cellspacing="0" width="100%">
+                            <tr id="result_head">
+                                <th style="width:40%">可评标物质类别</th>
+                                <th style="display:none;">可评标物质类别</th>
+                                <th style="width:30%">所在地域</th>
+                                <th style="display:none;">专业技术职称</th>
+                                <th style="display:none;">专家类别</th>
+                                <th style="display:none;">专家级别</th>
+                                <th style="display:none;">专家类型</th>
+                                <th style="display:none;">学位要求</th>
+                                <th style="display:none;">学历要求</th>
+                                <th style="display:none;">描述</th>
+                                <th style="width:15%">抽取个数</th>
+                                <th style="width:15%">查看详细条件</th>
+                            </tr>
+                            @foreach (var item in Model.专家抽选条件)
+                            {
+                                <tr>
+                                    @if (string.IsNullOrWhiteSpace(item.模糊查询))
+                                    {
+                                        <td>
+                                            大分类：@item.可评标产品类别[0].一级分类
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            关键字：@item.模糊查询
+                                        </td>
+                                    }
+                                    <td style="display:none;">
+                                        @if (string.IsNullOrWhiteSpace(item.模糊查询))
+                                        {
+                                            foreach (var temp in item.可评标产品类别[0].二级分类)
+                                            {
+                                                <span>@temp ,</span>
+                                            }
+                                            <br /><br />
+                                            <span>小类专家个数不足时返回上级分类进行抽选：</span>
+                                            if (item.可评标产品类别[0].二级分类可用专家不足返回一级分类)
+                                            {
+                                                <span>是</span>
+                                            }
+                                            else
+                                            {
+                                                <span>否</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>@item.模糊查询</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrWhiteSpace(item.所在地区.地域))
+                                        {
+                                            <span>@item.所在地区.地域</span>
+                                        }
+                                        else
+                                        {
+                                            <span>不限</span>
+                                        }
+                                    </td>
+                                    <td style="display:none;">
+                                        @if (item.专业技术职称.Any())
+                                        {
+                                            foreach (var temp in item.专业技术职称)
+                                            {
+                                                <span>@temp ,</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>不限</span>
+                                        }
+                                    </td>
+                                    <td style="display:none;">
+                                        @if (item.专家类别.Any())
+                                        {
+                                            foreach (var temp in item.专家类别)
+                                            {
+                                                <span>@temp ,</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>不限</span>
+                                        }
+                                    </td>
+                                    <td style="display:none;">
+                                        @if (item.专家级别.Any())
+                                        {
+                                            foreach (var temp in item.专家级别)
+                                            {
+                                                <span>@temp ,</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>不限</span>
+                                        }
+                                    </td>
+                                    <td style="display:none;">
+                                        @if (item.专家类型.Any())
+                                        {
+                                            foreach (var temp in item.专家类型)
+                                            {
+                                                <span>@temp ,</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>不限</span>
+                                        }
+                                    </td>
+                                    <td style="display:none;">
+                                        @if (item.学位要求.Any())
+                                        {
+                                            foreach (var temp in item.学位要求)
+                                            {
+                                                <span>@temp ,</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>不限</span>
+                                        }
+                                    </td>
+                                    <td style="display:none;">
+                                        @if (item.学历要求.Any())
+                                        {
+                                            foreach (var temp in item.学历要求)
+                                            {
+                                                <span>@temp ,</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>不限</span>
+                                        }
+                                    </td>
+                                    <td style="display:none;">@item.描述</td>
+                                    <td>@item.需要专家数量</td>
+                                    <td><a onclick="showdetailcondition(this);">查看</a></td>
+
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    function showdetailcondition(obj) {
+                        for (var detailid = 1; detailid < 11; detailid++) {
+                            $("#detailconition" + detailid).html($(obj).parent().parent().find("td").eq(detailid).html());
+                        }
+                        $("#modal").show();
+                    }
+                </script>
+                <div id="modal" class="modal fade">
+                    <div class="modal-dialog" style="margin: 5% auto;">
+                        <div class="modal-content" style="height:500px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick='$("#modal").hide();'>×</button>
+                                <h4 style="margin:0;">条件详情</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="outlistdiv" style="height: 380px; overflow-y:scroll;">
+                                    <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                                        <div style="width:150px;text-align:right; float:left; font-weight:bold">可评标物质类别：</div>
+                                        <div id="detailconition1" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                                    </div>
+
+                                    <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                                        <div style="width:150px;text-align:right; float:left; font-weight:bold">所在地域：</div>
+                                        <div id="detailconition2" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                                    </div>
+
+                                    <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                                        <div style="width:150px;text-align:right; float:left; font-weight:bold">专业技术职称：</div>
+                                        <div id="detailconition3" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                                    </div>
+
+                                    <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                                        <div style="width:150px;text-align:right; float:left; font-weight:bold">专家类别：</div>
+                                        <div id="detailconition4" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                                    </div>
+                                    
+                                    <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                                        <div style="width:150px;text-align:right; float:left; font-weight:bold">专家级别：</div>
+                                        <div id="detailconition5" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                                    </div>
+
+                                    <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                                        <div style="width:150px;text-align:right; float:left; font-weight:bold">专家类型：</div>
+                                        <div id="detailconition6" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                                    </div>
+
+                                    <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                                        <div style="width:150px;text-align:right; float:left; font-weight:bold">最高学历：</div>
+                                        <div id="detailconition7" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                                    </div>
+
+                                    <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                                        <div style="width:150px;text-align:right; float:left; font-weight:bold">最高学位：</div>
+                                        <div id="detailconition8" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                                    </div>
+
+                                    <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                                        <div style="width:150px;text-align:right; float:left; font-weight:bold">描述：</div>
+                                        <div id="detailconition9" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                                    </div>
+
+                                    <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                                        <div style="width:150px;text-align:right; float:left; font-weight:bold">抽取个数：</div>
+                                        <div id="detailconition10" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                                    </div>
+
+                                </div>
+                                <div style="width: 700px; margin: 0 auto; text-align: center;"><input type="button" class="index_online_btn" value="关闭" onclick='$("#modal").hide();' /></div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="expert_condition_inner" id="temp_content" style="display: none;">
+                    <div class="expert_condition_innerleft">已抽取专家</div>
+                    <div class="expert_condition_innerright" style="width:900px;">
+                        <table cellpadding="0" cellspacing="0" width="100%" id="tempcontenttable">
+                            <tr id="result_head">
+                                <th>可评标专业</th>
+                                <th>所在地域</th>
+                                <th>专业技术职称</th>
+                                <th>专家类别</th>
+                                <th>专家类型</th>
+                                <th>联系方式</th>
+                                <th>是否出席</th>
+                            </tr>
+                        </table>
+                        <div id="hasselectedtip" style="width: 898px; border: 1px solid rgb(170, 170, 170); border-top: none; height: 30px; color: red; text-align: center;line-height: 30px;">共抽选@(Model.总计预定抽选专家数)个，已确认0个，还剩@(Model.总计预定抽选专家数)个，请点击按钮继续抽取！</div>
+                    </div>
+                </div>
+
+
+                <input id="selectebtn" type="button" value="进行抽取" style="height: 30px;  width: 100px; float: right; margin-top: 10px; margin-right: 10px;" onclick="doselect(this);" />
+
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="条件总数" value="@(Model.专家抽选条件.Count-1)" />
+    <input type="hidden" id="当前抽取的条件数" value="0" />
+    <input type="hidden" id="当前条件已抽取个数" value="0" />
+    <input type="hidden" id="当前条件抽取总数" value="@Model.专家抽选条件[0].需要专家数量" />
+
+    <input type="hidden" id="已抽取的专家列表" value="" />
+}
+
+<script type="text/javascript">
+    var countArray = ("@ViewData["抽取总数列表"].ToString()").split(",");
+
+    //动态获得当前已抽取个数，改变提示文本
+    function getselectedcount() {
+        var tempcount = $("#tempcontenttable .expert_condition_button2_y_sel").length;
+        var thiscount = (@Model.总计预定抽选专家数);
+        var needcount = parseInt(thiscount)-tempcount;
+        if (tempcount < thiscount) {
+            $("#hasselectedtip").html("共抽选"+thiscount+"个，已确认" + tempcount + "个，还剩"+needcount+"个，请点击按钮继续抽取！");
+            $("#selectebtn").val("进行抽取");
+        } else {
+            $("#hasselectedtip").html("共抽选"+thiscount+"个，已确认" + tempcount + "个，已经抽取完毕，请点按钮确认本次抽选结果！");
+            $("#selectebtn").val("确认抽取结果");
+        }
+       
+    }
+
+    function doselect(obj) {
+        if ($("#tempcontenttable .expert_condition_button2").length > 0) {
+            alert("请对是否出席进行确认!");
+            return;
+        }
+
+        //确认新抽取一行结果过，不能再进行更改
+        $("#tempcontenttable").find("tr:last").find("input").attr("disabled", "disabled");
+        $("#tempcontenttable").find("tr:last").find("label").attr("onclick", "function () { return false; }");
+
+        if ($(obj).val() == "确认抽取结果") {
+            var parm_str = "";
+            $("#tempcontenttable").find("tr[id!='result_head']").each(function () {
+                var sure = $(this).attr("sure");
+                var tempstr = $(this).attr("time") + "~" + $(this).attr("id") + "~" + sure;
+                if (sure == "0") {
+                    //不能出席原因
+                    tempstr += "~" + encodeURI($(this).find("input[type='text']").val().replace(new RegExp("~", "g"), ""));
+                }
+                tempstr += "~~";
+                //alert(tempstr);
+                parm_str += tempstr;
+            });
+            //alert($("#tempcontenttable").find("tr").eq(1).attr("time"));
+            //alert(parm_str);
+            $.get("/专家抽选/Expert_Choose_Select?id=@Model.Id&time=" + $("#tempcontenttable").find("tr").eq(1).attr("time") + "&parm_str=" + parm_str, function (response) {
+                if (response == "0") {
+                    alert("储存结果时发生错误，请重新抽取！");
+                    return;
+                }
+                if (confirm("是否打印有效抽取结果？")) {
+                    window.open("/专家抽选/Expert_Choose_Print?id=@Model.Id&c=s");
+                    window.location = "/专家抽选/Expert_Applay_S";
+                } else {
+                    window.location = "/专家抽选/Expert_Applay_S";
+                }
+
+            });
+            return;
+        }
+
+
+        //当前条件抽取个数已经达到预定值
+        if ($("#当前条件已抽取个数").val() == $("#当前条件抽取总数").val()) {
+
+            //已经是最后一个条件，且有效个数已满，则不再进入函数
+            if ($("#条件总数").val() == $("#当前抽取的条件数").val()) {
+                alert("所有评审专家已经抽取完毕，请确认抽取结果！");
+                $(obj).val("确认抽取结果");
+                return;
+            }
+            else {
+
+                //传入的条件序号+1
+                $("#当前抽取的条件数").val(parseInt($("#当前抽取的条件数").val()) + 1);
+                //当前条件抽取总数重新设置
+                $("#当前条件抽取总数").val(countArray[parseInt($("#当前抽取的条件数").val())]);
+                //当前条件已抽取个数设置为0
+                $("#当前条件已抽取个数").val("0");
+
+                //alert("aaaa" + $("#当前抽取的条件数").val());
+                //alert("bbbb" + $("#当前条件抽取总数").val());
+            }
+        }
+        $("#expertchoosewaitblock").show();
+        $.get("/专家抽选/SearchByCondition?id=" + @Model.Id + "&time=" + $("#当前抽取的条件数").val() + "&outlist=" + $("#已抽取的专家列表").val(), function (response) {
+            $("#tempcontenttable").append(response);
+            $("#expertchoosewaitblock").hide();
+            $("#temp_content").show();
+            var thisselectid = $("#tempcontenttable").find("tr:last").attr("id");
+
+            //此次抽取无结果时（满足条件个数为0）
+            if (thisselectid == "thistimeover") {
+                alert("由于当前满足条件的评审专家个数为0，抽取无结果，导致此次抽取无效！请重新申请抽取，经审核后再进行抽取，建议抽取条件尽量放宽！")
+                $(obj).val("此次抽取无效");
+                $(obj).attr("disabled", "disabled");
+            }
+            else {
+                $("#已抽取的专家列表").val($("#已抽取的专家列表").val() + thisselectid + "|");//已抽取的专家列表 加值 传入后台
+            }
+        });
+    }
+
+
+
+
+    function deleteline(a) {
+        $(a).attr("class", "expert_condition_button2_n_sel");//改变当前按钮样式
+        var b = $(a).parent().parent().find("input[type='text']");//显示不能出席原因的文本框
+        $(b).show();
+        $(b).width(90);
+
+        if ($(a).attr("n") == "0") {
+            $("#当前条件已抽取个数").val(parseInt($("#当前条件已抽取个数").val()) - 1)//当前条件已选个数-1
+            $(a).attr("n", "1");//使当前按钮不可用
+            $(a).parent().find("label:first").attr("n", "0");//使可以出席按钮可用
+        }
+        $(a).parent().parent().parent().attr("sure", "0");//使当前行数据无效
+        $(a).parent().find("label:first").attr("class", "expert_condition_button2_y_unsel");//改变能改出席按钮样式
+
+        getselectedcount();
+    }
+
+    function addline(a) {
+        $(a).attr("class", "expert_condition_button2_y_sel");//变换当前按钮样式
+        var b = $(a).parent().parent().find("input[type='text']");//隐藏不能出席原因文本框
+        $(b).hide();
+        $(b).val("请输入原因");
+        $(b).attr("style", "color:#bbb;");
+
+        if ($(a).attr("n") == "0") {
+            $("#当前条件已抽取个数").val(parseInt($("#当前条件已抽取个数").val()) + 1)//当前条件已选个数+1
+            $(a).attr("n", "1");//不能重复选择
+            $(a).parent().find("label:last").attr("n", "0");//使不能出席按钮可用
+        }
+        $(a).parent().parent().parent().attr("sure", "1");//本行为有效数据
+        $(a).parent().find("label:last").attr("class", "expert_condition_button2_n_unsel");//改变不能出席按钮的样式
+        
+        getselectedcount();
+    }
+
+
+
+
+
+    $(function () {
+        $("#我可进行的抽取申请").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#我可进行的抽取申请").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

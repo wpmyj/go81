@@ -1,0 +1,8 @@
+﻿.currentPage {
+    border:1px solid #ff0000;
+}
+.endPage {
+    background-color: rgb(247, 247, 247);
+    color: gray;
+    border: 1px solid gray;
+}

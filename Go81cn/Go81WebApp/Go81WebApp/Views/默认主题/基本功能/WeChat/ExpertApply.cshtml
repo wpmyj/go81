@@ -1,0 +1,104 @@
+﻿@using Go81WebApp.Models.数据模型.项目数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+@model Go81WebApp._Code.Models.数据模型.微信数据模型.入库申请用户
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <script type="text/javascript" language="javascript" src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/JS/provinceandcity_all.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>西南物资采购网评审专家入库申请</title>
+    <link href="~/css/WeChat.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="out_box">
+        <div class="out_box_infirst">
+        </div>
+        <div class="out_box_insecond">
+            <div class="out_box_insecond_child">
+                <div style="width:100%; height:30px;"><a class="close_outbox" title="关闭窗口" onclick="hidebox('.out_box')">×</a></div>
+                <div style="width:100%; height:160px;">
+                    <div>
+                        <h3 style="text-align:center;">联系方式</h3>
+                        @using (Html.BeginForm("Apply", "WeChat", FormMethod.Post))
+                        {
+                            <input type="hidden" value="expert" name="cator" />
+                            <div class="text-item">
+                                姓名：@Html.TextBoxFor(m => m.用户名称, new { placeholder = "请填写你的姓名" })
+                            </div>
+                            <div class="text-item">
+                                电话：@Html.TextBoxFor(m => m.联系电话, new { placeholder = "请填写座机号或移动号码" })
+                            </div>
+                            <div class="text-item">
+                                <input type="submit" value="提交" />
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="conbox">
+        <p class="MsoNormal" align="center" style="margin: 20px -5.25pt 0pt 0cm; line-height: 24pt; text-align: center;  "><span style="font-size:16pt; font-family: Microsoft yahei; margin-top:20px;">评审专家申请人注册须知</span></p>
+        <p class="MsoNormal" align="center" style="margin: 0cm -5.25pt 0pt 0cm; line-height: 24pt; text-align: center;  "><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"><o:p>&nbsp;</o:p></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span style="font-size: 14pt; font-family: 黑体">一、需要准备的资质材料<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">1、申请人照片（4张1寸免冠白色）、身份证原件（军人为军官证或文职干部证）、专业技术职称资格证书原件，最高学历证书原件，各类地方专家证书原件，专家老师必须亲自到采购站提交资料。<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">2、复印件:身份证，专业技术职称资格证书，最高学历证书，各类地方专家证书复印件各三份并装订。每一份申请表与每一份复印件装订成册，共三份。<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">3、四张一寸白底照片3张分别贴表上，携带一张。<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">4、专科以下学历或中级以下技术职称的申请人，还应带上（或刻录光盘）获国家（军队）科技奖证书或专利证书原件，并提交证书原件的复印件。<span lang="EN-US"><o:p></o:p></span></span></p>
+
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span style="font-size: 14pt; font-family: 黑体">二、申请注册程序<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei; color: red;">1、登录西南物资采购网（http://www.go81.cn）,打开“评审专家申请”页面；<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">2、选择受理入库申请的军队物资采购机构；<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">3、按要求填写有关注册信息；<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">4、登录账号后在“专家申请表”栏里选择“下载表格”;<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">5、自行在电脑上填写申请表<span lang="EN-US"><o:p></o:p></span></span></p>
+
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">6、申请表需要一式三份（每份申请表都需要盖单位公章）<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">7、白底免冠照，一寸4张<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;">
+            <span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">
+                8、身份证（军官证）、最高学历证、相关资质证书以上证件的原件，请携带至采购站现场审验。以上证件的复印件，复印三份并装订成册。
+                <span lang="EN-US"><o:p></o:p></span>
+            </span>
+        </p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">9、以上复印件每页需要加盖单位公章（如果已退休或原单位不能盖章，需要附上一份情况说明）<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">10、向军队物资采购机构提交全部资料。<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span style="font-size: 14pt; font-family: 黑体">三、注册咨询电话<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 27pt;"><span style="font-size: 14pt; font-family: Microsoft yahei; mso-hansi-font-family: Microsoft yahei; mso-bidi-font-size: 12.0pt;color: red;"> 对注册内容有疑问的，可拨打咨询电话：028-68308761；4006826181。<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span style="font-size: 14pt; font-family: 黑体">四、用户名和密码查询方法<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">如果忘记注册时使用的用户名和密码,可通过下面方法查询：<span lang="EN-US"></span><span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">1、拟制用户名与密码查询申请，注明联系方式和电子信箱地址（必须提供，否则无法恢复），申请人签字；<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">2、提交本人身份证件的复印件，申请人签字；<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei"><span style="font-weight:bold;color:red;"> 3、将以上文件彩色扫描，通过电子邮件发送至xnjdwzcgw@163.com</span></span><span style="font-size: 14pt; font-family: Microsoft yahei"><span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">4、我们将在收到后的24小时内，以邮件方式将查询到的用户名和密码发送给您；</span><span style="font-size: 14pt; font-family: Microsoft yahei"><span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">5、受理时间：周一至周五上午 8:30-11:30 ，下午 3:00-5:00 ，周六、周日及节假日不受理。</span><span style="font-size: 14pt; font-family: Microsoft yahei"><span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span style="font-size: 14pt; font-family: 黑体">五、注销注册信息<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei"> 评审专家网上注册信息处于暂存、提交但未审核、退回修改状态的，本人可申请注销。注销注册信息按下列程序办理：</span><span style="font-size: 14pt; font-family: Microsoft yahei">。<span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei"> 1、编写注销注册信息申请函，格式自拟，申请函中要注明本人单位、注册采购机构、注销原因，联系方式及电子信箱，申请人本人签字；<span style="font-weight:bold;color:red;">(禁止使用QQ邮箱，推荐使用网易或新浪邮箱、“禁止使用带下划线或者特殊字符的邮箱号（避免退信）”) </span></span><span style="font-size: 14pt; font-family: Microsoft yahei"><span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">2、提交本人有效身份证件复印件，申请人本人签字；</span><span style="font-size: 14pt; font-family: Microsoft yahei"><span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei"><span style="font-weight:bold;color:red;"> 3、将以上文件彩色扫描，通过电子邮件发送至xnjdwzcgw@163.com；</span></span><span style="font-size: 14pt; font-family: Microsoft yahei"><span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei; color: red;"> 4、我们将自收到注销申请函后、于周二和周四集中办理（如遇节假日顺延）核对并注销原注册信息，并以邮件的方式通知您。注销后专家即可在网上重新注册。</span><span style="font-size: 14pt; font-family: Microsoft yahei"><span lang="EN-US"><o:p></o:p></span></span></p>
+        <p class="MsoNormal" style="margin: 0cm -5.25pt 0pt 0cm; text-indent: 32pt; line-height: 24pt;"><span lang="EN-US" style="font-size: 14pt; font-family: Microsoft yahei"></span><span style="font-size: 14pt; font-family: Microsoft yahei">申报时间：周一至周五上午 8:30-11:30 下午 3:00-5:00 周六周日及节假日不受理。</span><span style="font-size: 14pt; font-family: Microsoft yahei"><span lang="EN-US"><o:p></o:p></span></span></p>
+        <div>
+            <a href="###" class="contactBt" onclick="$('.out_box').show();">如需申请请点击此处，以便我们与您联系。</a>
+        </div>
+        @*<div style="height:auto; overflow:hidden; padding-bottom:20px;">
+                <div style="width:100px; font-weight:bold; float:left;color:#423d3d;text-align:right; padding-right:15px;">附件下载：</div>
+                <div style="width:800px; font-weight:bold;float:left;color:#666;">
+             <div><a href="http://go81.cn/App_Uploads/下载/附件/2015/1/8/成都军区物资采购评审专家入库标准.docx" title="成都军区物资采购评审专家入库标准" target="_blank" style="text-decoration:underline;">成都军区物资采购评审专家入库标准</a></div>
+                </div>
+            </div>*@
+    </div>
+    <script type="text/javascript" language="javascript">
+        function hidebox(str) {
+            $(str).hide();
+        }
+    </script>
+</body>
+</html>

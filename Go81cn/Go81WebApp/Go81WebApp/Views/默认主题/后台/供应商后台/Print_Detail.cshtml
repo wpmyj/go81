@@ -1,0 +1,1708 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Microsoft.Ajax.Utilities
+@using PanGu.Framework
+@{
+    ViewBag.Title = "打印详情";
+    Layout = null;
+
+}
+<style>
+    .modal_style {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        position: fixed;
+    }
+
+    .modal_content {
+        width: 500px;
+        height: 250px;
+        border: 5px solid #ccc;
+        border-radius: 5px;
+        background: #fff;
+        margin: 15% auto;
+        min-width: 500px;
+    }
+
+        .modal_content p.p {
+            text-indent: 2em;
+            color: #008080;
+        }
+
+        .modal_content table {
+            margin-left: 30px;
+        }
+
+            .modal_content table tr td {
+                font-size: 14px;
+            }
+
+        .modal_content .lab {
+            text-align: right;
+        }
+
+        .modal_content .lac {
+            color: #008b8b;
+        }
+
+    .modal_p {
+        display: none;
+    }
+
+        .modal_p span {
+            color: #fff;
+            font-size: 30px;
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            cursor: pointer;
+        }
+
+    .modal_agree {
+        width: 50%;
+        min-width: 50%;
+        height: 85%;
+        overflow-y: scroll;
+        margin: 20px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        border: 5px solid #ccc;
+    }
+
+    #modal_organ {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.18);
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        position: fixed;
+        display: none;
+    }
+
+    .organ {
+        width: 820px;
+        margin: 10% auto;
+        background: #fff;
+        padding: 20px;
+        border: 3px solid #ccc;
+        border-radius: 3px;
+    }
+
+    .innertd {
+        border-bottom: none;
+    }
+
+    .catalog {
+        display: inline-block;
+        width: 400px;
+        height: 20px;
+        border-bottom: dashed;
+    }
+
+    ul, ol {
+        list-style-type: none;
+    }
+
+        ol li {
+            text-align: left;
+        }
+
+        ul li {
+            text-align: left;
+            line-height: 50px;
+        }
+</style>
+<div id="f1" style="display:none;">
+    <div style="position:fixed; z-index:5; top:0px; left:0px; text-align:center; right:0; bottom:0px; background-color:black; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50); height:100%; width:100%;border:1px solid green;">
+    </div>
+    <div style="position:fixed; left:0px; top:5%; width:100%;z-index:20;">
+        <div style="width:900px; position:relative; z-index:30; margin:0px auto; height:500px; font-size:18px; text-align:center; line-height:30px; background-color:white;border: 1px solid red;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#f1')">×</a></div>
+            <div style=" overflow:scroll;width:900px; height:500px; background-color:white;">
+                <div style="margin-top:70px;">
+                    <div style="width:80%;margin-left: auto;margin-right: auto;">
+                        <div><h3>入库材料格式规定</h3></div>
+                        <div style="text-align:left;">一、《成都军区物资供应商入库申请表》的相关要求：</div>
+                        <ul>
+                            <li>①一式三份</li>
+                            <li>②法人签名处：<span style="color:red;">法人签名</span></li>
+                            <li>③盖章处：企业公章</li>
+                            <li>④用订书机，<span style="color:red;">左侧上下两钉装订。</span></li>
+                        </ul>
+                        <div style="text-align:left;">二、企业入库申请资料的相关要求</div>
+                        <ul>
+                            <li>①一式三份，正本一份，副本两份（副本的法人委托书，资信证明，完税证明，三年无违法记录等为复印件</li>
+                            <li>②资料以标书的形式硬壳胶装，<span style="color:red;">白色封面</span></li>
+                            <li>③每页材料<span style="color:red;">必须加盖企业公章</span></li>
+                            <li>④封面按标准格式定制</li>
+                            <li>⑤第一页为申请入库资料目录</li>
+                            <li>⑥目录顺序应为法人委托书原件，营业执照副本，组织机构代码证副本，税务登记证，法人身份证，资信证明，三年无违法记录证明，完税证明，社保缴费证明，会计师事务所审计报告，各类资质证书，产品代理销售授权书等。</li>
+                            <li>⑦更具目录顺序，准备好各个材料的复印件。<span style="color:red;">按顺序排列装订。</span></li>
+                            <li>⑧<span style="color:red;">营业执照，组织机构代码证，税务登记证，法人身份证这四个文件资料，务必为彩色打印件。</span></li>
+                            <li>⑨装订完毕后，务必<span style="color:red;">加盖骑缝章。</span></li>
+                            <li>具体格式如下：</li>
+                        </ul>
+                        <ol>
+                            <li>
+                                <h3>二、组织机构代码证</h3>
+                                <ul>
+                                    <li><img src="~/Images/organization.jpg" /></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>三、营业执照副本</h3>
+                                <ul>
+                                    <li><img src="~/Images/license.jpg" /></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>四、法定代表人身份证</h3>
+                                <ul>
+                                    <li><img src="~/Images/idcard_sample.jpg" /></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>五、银行资信证明</h3>
+                                <ul>
+                                    <li>建设银行</li>
+                                    <li>
+                                        <img src="~/Images/bank_sample.jpg" />
+                                        <img src="~/Images/bank_sample1.jpg" />
+                                    </li>
+                                    <li>工商银行</li>
+                                    <li>
+                                        <img src="~/Images/bcic.jpg" />
+                                    </li>
+                                    <li>中国银行</li>
+                                    <li>
+                                        <img src="~/Images/bc.jpg" />
+                                    </li>
+                                    <li>招商银行</li>
+                                    <li>
+                                        <img src="~/Images/cmbc.jpg" />
+                                    </li>
+                                    <li>成都银行</li>
+                                    <li>
+                                        <img src="~/Images/cdbank.jpg" />
+                                    </li>
+                                    <li>华夏银行</li>
+                                    <li>
+                                        <img src="~/Images/huaxia.png" />
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>六、近3年缴纳社会保证金证明</h3>
+                                <ul>
+                                    <li><img src="~/Images/Social security.png" /></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>七、近3年完税证明</h3>
+                                <ul>
+                                    <li><img src="~/Images/tax.jpg" /></li>
+                                    <li><img src="~/Images/statetax.jpg" /></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <h3>八、无犯罪证明</h3>
+                                <ul>
+                                    <li><img src="~/Images/Criminal record.jpg" /></li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+                    <div style="border:1px solid black; width:80%; margin:0px auto; padding-bottom:150px;">
+                        <div style="width:100%;text-align: center;margin-top:100px;"><h2 style="font-size:35px;">成都军区物资供应商<br /><br />申请入库资料<br /><br />（胶装封面）</h2></div>
+                        <div style="width:80%; margin-top:370px;margin-left: auto;margin-right: auto;">
+                            <table style="border: none;width:450px; margin:0px auto;font-size:20px;">
+                                <tr>
+                                    <td align="right" valign="bottom" style="border: none; font-size:20px;"><div>供<span style="display:inline-block; width:13px;"></span>应<span style="display:inline-block; width:13px;"></span>商<span style="display:inline-block; width:12px;"></span>名<span style="display:inline-block; width:12px;"></span>称<span style="display:inline-block; width:0px;"></span>（盖章）：</div></td>
+                                    <td style="border: none;"><div style="display: inline-block; font-size:20px; width:300px; height:35px; line-height:45px;"></div></td>
+                                </tr>
+                                <tr>
+                                    <td valign="bottom" align="right" style="border: none;"><div style="display: inline-block; font-size:21px; height:40px; line-height:48px; width:300px;">地<span style="display:inline-block; width:187px;"></span>址：</div></td>
+                                    <td style="border: none;"><div style="display: inline-block; font-size:20px; height:35px; line-height:48px; width:300px;"></div></td>
+                                </tr>
+                                <tr>
+                                    <td valign="bottom" align="right" style="border: none; font-size:20px;">法定代表人（签字/盖章）：</td>
+                                    <td style="border: none;"><div style="display: inline-block; font-size:21px;width:300px; height:35px; line-height:48px;"></div></td>
+                                </tr>
+                                <tr>
+                                    <td valign="bottom" align="right" style="border: none; height:40px; font-size:21px;">申<span style="display:inline-block; width:48px;"></span>报<span style="display:inline-block; width:48px;"></span>日<span style="display:inline-block; width:48px;"></span>期：</td>
+                                    <td valign="bottom" style="border: none;font-size:21px;"><div style=" height:35px; line-height:48px;"><span style="display:inline-block; width:54px;"></span>年<span style="display:inline-block; width:34px;"></span>月<span style="display:inline-block; width:34px;"></span>日</div></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="width:80%; margin-top:70px; border:1px solid black; padding-bottom:150px; margin-left:auto;margin-right:auto;">
+                        <div style="width:100%;margin:0px auto; margin-top:100px; margin-bottom:60px; text-align: center"><h2 style="font-size:32px;">成都军区物资供应商入库申请目录<br /><br />（第二页）</h2></div>
+                        <ul>
+                            <li>第一页..............................................法人委托书</li>
+                            <li>第二页..............................................营业执照副本</li>
+                            <li>第三页..............................................组织机构代码证副本</li>
+                            <li>第四页..............................................税务登记证副本</li>
+                            <li>第五页..............................................法人身份证</li>
+                            <li>第六页..............................................银行资信证明</li>
+                            <li>第七页..............................................企业近三年无违法记录</li>
+                            <li>第八页..............................................完税证明</li>
+                            <li>第九页..............................................缴纳社保证明</li>
+                            <li>第十页..........................................近三年会计师事务所审计报告</li>
+                            <li>第X页（自行填写页码）..................各类资质证书，产品代理销售授权书等</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal" class="modal_style">
+    <div class="modal_content">
+        <p class="p">采购机构查看</p>
+        <table width="100%" style="border:none;">
+            <tr>
+                <td width="20%" align="right" style="border:none;">初审单位：</td>
+                <td width="70%" style="border:none;">
+                    @if (Model.供应商用户信息.所属管理单位.ToString() != "未选择")
+                    {
+                        <span>@Model.供应商用户信息.所属管理单位</span>
+                    }
+                </td>
+
+            </tr>
+            <tr>
+                <td valign="top" align="right" style="border:none;">联系方式：</td>
+                @if (Model.供应商用户信息.所属管理单位.ToString() == "成都军区物资采购机构_重庆")
+                {
+                    <td valign="top" style="border:none;">重庆市沙坪坝区石井坡216号,400032<br />联系人：丁文元,助理<br />联系电话：023-68778041</td>
+                }
+                else if (Model.供应商用户信息.所属管理单位.ToString() == "成都军区物资采购机构_昆明")
+                {
+                    <td valign="top" style="border:none;">昆明市东郊八公里贵昆路287号,650206<br />联系人：谢渝,助理<br />联系电话：0871-64783672</td>
+                }
+                else if (Model.供应商用户信息.所属管理单位.ToString() == "成都军区物资采购机构_贵阳")
+                {
+                    <td valign="top" style="border:none;">贵州省贵阳市油榨街东新区路1号,550005<br />联系人：姚祖光,助理<br />联系电话：13984817881</td>
+                }
+                else if (Model.供应商用户信息.所属管理单位.ToString() == "西藏军区物资采购中心")
+                {
+                    <td valign="top" style="border:none;">西藏自治区拉萨市<br />联系人：梁助理<br />联系电话：0891-6738571</td>
+                }
+                else
+                {
+                    <td valign="top" style="border:none;">四川省成都市武侯区高攀路38号<br />联系人：张助理<br />联系电话：028-86686673</td>
+                }
+            </tr>
+        </table>
+        <div style="text-align: center;margin-top: 30px; "><input id="modal_close" type="button" value="关闭" /></div>
+    </div>
+</div>
+<div id="contain_box">
+    <style>
+        .print {
+            border: none;
+            width: 100px;
+            margin-top: 20px;
+            display: inline-block;
+            height: 30px;
+            background-color: yellowgreen;
+            text-align: center;
+            line-height: 30px;
+        }
+
+            .print:hover {
+                cursor: pointer;
+                color: white;
+                background-color: #5e6f00;
+            }
+
+        table {
+            border-left: 0.0625em solid black;
+            border-top: 0.0625em solid black;
+        }
+
+            table tr td {
+                padding-left: 5px;
+                line-height: 25px;
+                min-height: 35px;
+                font-size: 18px;
+                border-right: 0.0625em solid black;
+                border-bottom: 0.0625em solid black;
+            }
+
+            table tr th {
+                line-height: 25px;
+                min-height: 35px;
+                font-family: '宋体';
+                font-size: 16px;
+                border-right: 0.0625em solid black;
+                border-bottom: 0.0625em solid black;
+            }
+
+        .innertext {
+            display: inline-block;
+            font-size: 0.85em;
+            font-family: '宋体';
+        }
+
+        .pageNext {
+            margin-top: 10px;
+            page-break-after: always;
+        }
+    </style>
+    <div class="pageNext" style="margin-top:120px;">
+        @*<div style="text-align: right; margin-bottom:50px; margin-top:30px; font-size:20px; padding-right:10px;">
+                供应商编号：<a style="display:inline-block; width:200px; height:40px; border-bottom:1px solid black;"></a>
+            </div>*@
+        <div style="width:100%;text-align: center"><h2 style="font-size:35px;">&nbsp;成&nbsp;都&nbsp;军&nbsp;区&nbsp;物&nbsp;资&nbsp;供&nbsp;应&nbsp;商<br /><br />&nbsp;入&nbsp;库&nbsp;申&nbsp;请&nbsp;表</h2></div>
+        <div style="width:100%; margin-top:370px;">
+            <div>
+                <table style="border: none;width:450px; margin:0px auto;font-size:20px;">
+                    <tr>
+                        <td align="right" valign="bottom" style="border: none; font-size:20px;"><div>供应商名称（全称）：</div></td>
+                        <td style="border: none;"><div style="display: inline-block; font-size:20px; width:330px; height:35px; line-height:45px; border-bottom:1px solid black;">@(Model.企业基本信息.企业名称)</div></td>
+                    </tr>
+                    <tr>
+                        <td valign="bottom" align="right" style="border: none;"><div style="display: inline-block; font-size:21px; height:40px; line-height:48px; width:300px;">地<span style="display:inline-block; width:136px;"></span>址：</div></td>
+                        <td style="border: none;"><div style="display: inline-block; font-size:20px; height:35px; line-height:48px; width:330px; border-bottom:1px dashed black;">@(Model.所属地域.地域)</div></td>
+                    </tr>
+                    <tr>
+                        <td valign="bottom" align="right" style="border: none; font-size:20px;">法<span style="display:inline-block; width:20px;"></span>定<span style="display:inline-block; width:20px;"></span>代<span style="display:inline-block; width:20px;"></span>表<span style="display:inline-block; width:20px;"></span>人：</td>
+                        <td style="border: none;"><div style="display: inline-block; font-size:21px;width:330px; height:35px; line-height:48px; border-bottom:1px dashed black;">@(Model.法定代表人信息.法定代表人姓名)</div></td>
+                    </tr>
+                    <tr>
+                        <td valign="bottom" align="right" style="border: none; height:40px; font-size:21px;">申<span style="display:inline-block; width:32px;"></span>报<span style="display:inline-block; width:32px;"></span>日<span style="display:inline-block; width:32px;"></span>期：</td>
+                        <td valign="bottom" style="border: none;font-size:21px;"><div style=" height:35px; line-height:48px;"><span style="display:inline-block; width:54px;"></span>年<span style="display:inline-block; width:34px;"></span>月<span style="display:inline-block; width:34px;"></span>日</div></td>
+                    </tr>
+                </table>
+            </div>
+            <div style="margin-top:130px; width:100%; text-align: center;"><h3>成&nbsp;都&nbsp;军&nbsp;区&nbsp;联&nbsp;勤&nbsp;部&nbsp;军&nbsp;需&nbsp;物&nbsp;资&nbsp;油&nbsp;料&nbsp;部&nbsp;监&nbsp;制</h3></div>
+        </div>
+    </div>
+    <div class="pageNext">
+        <div style="text-align: center; width:100%; font-size:22px;">
+            <h3 style=" font-size:23px;">成都军区物资供应商入库登记承诺函</h3>
+            <div style="width:680px; text-align: left; text-indent:2em; margin-right: auto; margin-left:auto; line-height:50px;">
+                本供应商自愿申请加入成都军区物资供应商库，并郑重作出如下承诺：
+                <div style="text-indent:2em;">《成都军区物资供应商入库申请表》中登记的信息和注册入库后变更的信息，以及为注册登记和变更所提供的资料，均合法、真实、准确和有效，如有虚假愿承担全部法律责任，并接受军队有关管理部门作出的处理。</div>
+            </div>
+        </div>
+        <div style="margin-top:140px; width:100%; font-size:22px;">
+            <div style="width:90%; margin-right:50px;text-align: right;">供应商名称（盖章）：<a style="display: inline-block; width:100px; height:30px;"></a></div>
+            <div style="width:90%; margin-right:50px;text-align: right;">法定代表人（签字）：<a style="display: inline-block; width:100px; height:30px;"></a></div>
+            <div style="width:90%; margin-right:20px;text-align: right; line-height:50px;">年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日</div>
+        </div>
+    </div>
+    <div class="pageNext">
+        <div style="width: 100%; font-family: '仿宋'; margin-bottom:20px; font-size:23px; font-weight: bold; text-align: center;">成都军区物资供应商基本情况表</div>
+        <div>
+            <table width="100%" cellspacing="0">
+                <tr>
+                    <td valign="middle" width="22%" rowspan="2" colspan="2" align="center"><span class="innertext">供应商名称<br />(全称)</span></td>
+                    <td valign="middle" width="53%" colspan="3">
+                        <span class="innertext">@Html.DisplayFor(m => m.企业基本信息.企业名称)</span>
+                    </td>
+                    <td width="13%" align="center"><span class="innertext">成立时间</span></td>
+                    <td width="12%">
+                        <span class="innertext">@(Model.企业基本信息.成立时间.Year)年@(Model.企业基本信息.成立时间.Month)月</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"><span class="innertext">&nbsp;@Html.DisplayFor(m => m.企业基本信息.英文名称)</span></td>
+                    <td align="center"><span class="innertext">简称</span></td>
+                    <td><span class="innertext">&nbsp;@Html.DisplayFor(mbox => mbox.企业基本信息.简称)</span></td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2"><span class="innertext">注册地址</span></td>
+                    <td colspan="3">
+                        <span class="innertext">@Html.DisplayFor(m => m.企业基本信息.注册地址)</span>
+                    </td>
+                    <td align="center"><span class="innertext">邮政编码</span></td>
+                    <td>
+                        <span class="innertext">@Html.DisplayFor(m => m.企业基本信息.邮政编码)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><span class="innertext">网&nbsp;&nbsp;址</span></td>
+                    <td colspan="3" style="padding:0px;">
+                        <table width="100%" cellpadding="0" cellspacing="0" style="border:none;">
+                            <tr>
+                                <td style="border-bottom:none;" width="70%"><span class="innertext"> &nbsp;@Html.DisplayFor(m => m.企业基本信息.网站网址)</span></td>
+                                <td style="border-bottom:none;border-right:none; text-align:center;"><span class="innertext">组织机构代码</span></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td colspan="2"><span class="innertext">&nbsp;@Html.DisplayFor(m => m.工商注册信息.组织机构代码) </span></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><span class="innertext">经济性质</span></td>
+                    <td colspan="3" style="padding:0px;">
+                        <table width="100%" cellpadding="0" cellspacing="0" style="border:none;">
+                            <tr>
+                                <td style="border-bottom:none;" width="70%"><span class="innertext">&nbsp;@Html.DisplayFor(m => m.企业基本信息.经济性质)</span></td>
+                                <td style="border-bottom:none;border-right:none; text-align:center;"><span class="innertext">供应商类型</span></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td colspan="2">
+                        <span class="innertext">
+                            @Model.企业基本信息.经营类型.ToString()
+                            @if(Model.企业基本信息.供应商类别.ToString()!="未选择")
+                            {
+                                <text>@Model.企业基本信息.供应商类别.ToString()</text>
+                            }
+                        </span>
+                         @*@if (Model.企业基本信息.经营类型 == Go81WebApp.Models.数据模型.用户数据模型.供应商.经营类型.生产型)
+                        {
+                            decimal capital = Model.营业执照信息.营业执照注册资金;
+                            decimal zc = 0;
+                            decimal xs = 0;
+                            double fz = 0;
+                            if (Model.财务状况信息 != null && Model.财务状况信息.Count >= 3)
+                            {
+                                for (int m = 0; m < Model.财务状况信息.Count; m++)
+                                {
+                                    if (m <= 2)
+                                    {
+                                        zc += Model.财务状况信息[m].资产总额;
+                                        xs += Model.财务状况信息[m].销售收入;
+                                        fz += Model.财务状况信息[m].资产负债率;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                            if (Model.企业基本信息.经济性质 == Go81WebApp.Models.数据模型.用户数据模型.供应商.经济性质.国有企业)
+                            {
+                                if (capital >= 5000 && zc / 3 >= 40000 && xs / 3 >= 30000)
+                                {
+                                    <span class="innertext">(一级)</span>
+                                }
+                                else if (capital >= 3000 && zc / 3 >= 20000 && xs / 3 >= 15000)
+                                {
+                                    <span class="innertext">(二级)</span>
+                                }
+                                else if (capital >= 1000 && zc / 3 >= 4000 && xs / 3 >= 3000 && fz / 3 <= 75)
+                                {
+                                    <span class="innertext">(三级)</span>
+                                }
+                                else if (capital >= 500 && zc / 3 >= 2000 && xs / 3 >= 1500 && fz / 3 <= 70)
+                                {
+                                    <span class="innertext">(四级)</span>
+                                }
+                                else if (capital >= 200 && zc / 3 >= 800 && xs / 3 >= 600 && fz / 3 <= 70)
+                                {
+                                    <span class="innertext">(五级)</span>
+                                }
+                            }
+                            else
+                            {
+                                if (capital >= 5000 && zc / 3 >= 40000 && xs / 3 >= 30000 && fz / 3 <= 85)
+                                {
+                                    <span class="innertext">(一级)</span>
+                                }
+                                else if (capital >= 3000 && zc / 3 >= 20000 && xs / 3 >= 15000 && fz / 3 <= 80)
+                                {
+                                    <span class="innertext">(二级)</span>
+                                }
+                                else if (capital >= 1000 && zc / 3 >= 4000 && xs / 3 >= 3000 && fz / 3 <= 75)
+                                {
+                                    <span class="innertext">(三级)</span>
+                                }
+                                else if (capital >= 500 && zc / 3 >= 2000 && xs / 3 >= 1500 && fz / 3 <= 70)
+                                {
+                                    <span class="innertext">(四级)</span>
+                                }
+                                else if (capital >= 200 && zc / 3 >= 800 && xs / 3 >= 600 && fz / 3 <= 70)
+                                {
+                                    <span class="innertext">(五级)</span>
+                                }
+                            }
+                        }
+                        else if (Model.企业基本信息.经营类型 == Go81WebApp.Models.数据模型.用户数据模型.供应商.经营类型.销售型)
+                        {
+                            decimal capital = Model.营业执照信息.营业执照注册资金;
+                            decimal zc = 0;
+                            decimal xs = 0;
+                            double fz = 0;
+                            if (Model.财务状况信息 != null && Model.财务状况信息.Count >= 0)
+                            {
+                                if (Model.财务状况信息.Count >= 3)
+                                {
+                                    for (int m = 0; m < Model.财务状况信息.Count; m++)
+                                    {
+                                        if (m <= 2)
+                                        {
+                                            zc += Model.财务状况信息[m].资产总额;
+                                            xs += Model.财务状况信息[m].销售收入;
+                                            fz += Model.财务状况信息[m].资产负债率;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    if (capital >= 3000 && zc / 3 >= 10000 && xs / 3 >= 30000 && fz / 3 <= 60)
+                                    {
+                                        <span class="innertext">(一级)</span>
+                                    }
+                                    else if (capital >= 500 && zc / 3 >= 1000 && xs / 3 >= 3000 && fz / 3 <= 60)
+                                    {
+                                        <span class="innertext">(二级)</span>
+                                    }
+                                    else if (capital >= 200 && zc / 3 >= 300 && xs / 3 >= 1000 && fz / 3 <= 60)
+                                    {
+                                        <span class="innertext">(三级)</span>
+                                    }
+                                }
+                                else
+                                {
+                                    for (int m = 0; m < Model.财务状况信息.Count; m++)
+                                    {
+                                        zc += Model.财务状况信息[m].资产总额;
+                                        xs += Model.财务状况信息[m].销售收入;
+                                        fz += Model.财务状况信息[m].资产负债率;
+                                    }
+                                    if (Model.财务状况信息.Count == 1)
+                                    {
+                                        if (capital >= 3000 && zc >= 10000 && xs >= 30000 && fz <= 60)
+                                        {
+                                            <span class="innertext">(一级)</span>
+                                        }
+                                        else if (capital >= 500 && zc >= 1000 && xs >= 3000 && fz <= 60)
+                                        {
+                                            <span class="innertext">(二级)</span>
+                                        }
+                                        else if (capital >= 200 && zc >= 300 && xs >= 1000 && fz <= 60)
+                                        {
+                                            <span class="innertext">(三级)</span>
+                                        }
+                                    }
+                                    else if (Model.财务状况信息.Count == 2)
+                                    {
+                                        if (capital >= 3000 && zc / 2 >= 10000 && xs / 2 >= 30000 && fz / 2 <= 60)
+                                        {
+                                            <span class="innertext">(一级)</span>
+                                        }
+                                        else if (capital >= 500 && zc / 2 >= 1000 && xs / 2 >= 3000 && fz / 2 <= 60)
+                                        {
+                                            <span class="innertext">(二级)</span>
+                                        }
+                                        else if (capital >= 200 && zc / 2 >= 300 && xs / 2 >= 1000 && fz / 2 <= 60)
+                                        {
+                                            <span class="innertext">(三级)</span>
+                                        }
+                                    }
+                                }
+                            }
+                        }*@
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><span class="innertext">开户银行</span></td>
+                    <td colspan="3" style="padding:0px;">
+                        <table width="100%" cellpadding="0" cellspacing="0" style="border:none;">
+                            <tr>
+                                <td style="border-bottom:none;" width="70%"><span class="innertext">&nbsp;@Html.DisplayFor(m => m.工商注册信息.基本账户开户银行) </span></td>
+                                <td style="border-bottom:none;border-right:none; text-align:center;"><span class="innertext">银行帐号 &nbsp;</span></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td colspan="2"><span class="innertext">&nbsp;@Html.DisplayFor(m => m.工商注册信息.基本账户银行帐号) </span></td>
+                </tr>
+                @*<tr>
+                        <td colspan="7" style="padding:0px;">
+                            <table width="100%" style="border:none;" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td align="center" width="10%" class="innertd"><span class="innertext">信用等级</span></td>
+                                    <td width="15%" class="innertd">&nbsp;</td>
+                                    <td align="center" width="20%;" class="innertd"><span class="innertext">信用等级评定机构</span></td>
+                                    <td width="22%" class="innertd"></td>
+                                    <td align="center" width="13%" class="innertd"><span class="innertext">评定时间</span></td>
+                                    <td width="13%" class="innertd" style="border-right:none;"><span class="innertext">&nbsp;&nbsp;年&nbsp;&nbsp;月&nbsp;&nbsp;</span></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>*@
+                <tr>
+                    <td width="46%" colspan="3" align="center"><span class="innertext">是否有银行资信证书</span></td>
+                    <td width="7%">
+                        <span class="innertext">
+                            @if (Model.工商注册信息.基本账户开户银行资信证明)
+                            {
+                                <span>有</span>
+                            }
+                            else
+                            {
+                                <span>无</span>
+                            }
+                        </span>
+                    </td>
+                    <td width="37%" colspan="2" align="center"><span class="innertext">是否有完税证明</span></td>
+                    <td width="10%">
+                        <span class="innertext">
+                            @if (Model.税务信息.近3年完税证明)
+                            {
+                                <span>有</span>
+                            }
+                            else
+                            {
+                                <span>无</span>
+                            }
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="46%" colspan="3" align="center"><span class="innertext">是否依法缴纳社会保险费</span></td>
+                    <td width="7%">
+                        <span class="innertext">
+                            @if (Model.工商注册信息.近3年缴纳社会保证金证明)
+                            {      
+                                <span>是</span>
+                            }
+                            else
+                            {
+                                <span>否</span>
+                            }
+                        </span>
+                    </td>
+                    <td width="37%" colspan="2" align="center"><span class="innertext">是否有行贿犯罪档案查询结果告知函</span></td>
+                    <td width="10%">
+                        <span class="innertext">
+                            @if (Model.工商注册信息.近3年有无重大违法记录)
+                            {
+                                <span>有</span>
+                            }
+                            else
+                            {
+                                <span>无</span>
+                            }
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" width="20%" colspan="2"><span class="innertext">法定代表人</span></td>
+                    <td width="10%"><span class="innertext">&nbsp;@Html.DisplayFor(m => m.法定代表人信息.法定代表人姓名) </span></td>
+                    <td align="center" width="20%"><span class="innertext">固定电话</span></td>
+                    <td><span class="innertext">&nbsp;@Html.DisplayFor(m => m.法定代表人信息.法定代表人固定电话) </span></td>
+                    <td align="center"><span class="innertext">手机</span></td>
+                    <td><span class="innertext">&nbsp;@Html.DisplayFor(m => m.法定代表人信息.法定代表人手机) </span></td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2" rowspan="2"><span class="innertext">供应商注册登记<br />联系（经办）人</span></td>
+                    <td rowspan="2"><span class="innertext">&nbsp;@Html.DisplayFor(m => m.企业联系人信息.联系人姓名) </span></td>
+                    <td align="center"><span class="innertext">固定电话</span></td>
+                    <td><span class="innertext">&nbsp;@Html.DisplayFor(m => m.企业联系人信息.联系人固定电话) </span></td>
+                    <td align="center"><span class="innertext">手机</span></td>
+                    <td><span class="innertext">&nbsp;@Html.DisplayFor(m => m.企业联系人信息.联系人手机) </span></td>
+                </tr>
+                <tr>
+                    <td align="center"><span class="innertext">传真电话</span></td>
+                    <td><span class="innertext">&nbsp;@Html.DisplayFor(m => m.企业联系人信息.联系人传真)</span></td>
+                    <td align="center"><span class="innertext">电子邮箱</span></td>
+                    <td><span class="innertext">&nbsp;@Html.DisplayFor(m => m.企业联系人信息.联系人邮箱)</span></td>
+                </tr>
+
+                <tr>
+                    <td align="center" rowspan="5" style="width:50px;"><span class="innertext">营<br />业<br />执<br />照<br />或<br />事<br />业<br />法<br />人<br />证</span></td>
+                    <td align="center"><span class="innertext">注册号</span></td>
+                    <td colspan="2"><span class="innertext">&nbsp;@Model.营业执照信息.营业执照注册号</span></td>
+                    <td align="center"><span class="innertext">发证机关</span></td>
+                    <td colspan="2"><span class="innertext">&nbsp;@Model.营业执照信息.营业执照发证机关</span></td>
+                </tr>
+                <tr>
+                    <td align="center"><span class="innertext">注册资本金</span></td>
+                    <td colspan="2"><span class="innertext">&nbsp;@Model.营业执照信息.营业执照注册资金 万元</span></td>
+                    <td align="center"><span class="innertext">注册所在地</span></td>
+                    <td colspan="2"><span class="innertext">&nbsp;@Model.营业执照信息.营业执照注册地址 </span></td>
+                </tr>
+                <tr>
+                    <td align="center"><span class="innertext">有效期</span></td>
+                    <td colspan="3">
+                        <span class="innertext">
+                            @if (Model.营业执照信息.营业执照有效期起始日期 == default(DateTime))
+                            {
+                                <span>自 &nbsp; &nbsp;年 &nbsp; &nbsp;月至&nbsp; &nbsp;年 &nbsp; &nbsp;月止</span>
+                            }
+                            else
+                            {
+                                <span>
+                                    @Model.营业执照信息.营业执照有效期起始日期.ToString("自yyyy年MM月dd日至")
+                                    @if (Model.营业执照信息.营业执照有效期类型 == Go81WebApp.Models.数据模型.用户数据模型.供应商.有效期类型.长期有效)
+                                    {
+                                        <span>长期有效</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@Model.营业执照信息.营业执照有效期结束日期.ToString("yyyy年MM月dd日止")</span>
+                                    }
+                                </span>
+                            }
+                        </span>
+                    </td>
+                    <td align="center"><span class="innertext">最近年检时间</span></td>
+                    <td>
+                        <span class="innertext">
+                            @if (Model.营业执照信息.营业执照最近年检日期 == default(DateTime))
+                            {
+                                <span>&nbsp;年&nbsp;月&nbsp;日</span>
+                            }
+                            else
+                            {
+                                <span>@(Model.营业执照信息.营业执照最近年检日期.Year)年@(Model.营业执照信息.营业执照最近年检日期.Month)月@(Model.营业执照信息.营业执照最近年检日期.Day)日</span>
+                            }
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="height:100px;"><span class="innertext">经营范围<br />(主营)</span></td>
+                    <td colspan="5" valign="top" align="left">
+                        <span class="innertext">
+                            @if (!string.IsNullOrWhiteSpace(Model.营业执照信息.经营范围))
+                            {
+                                if (Model.营业执照信息.经营范围.Length >= 100)
+                                {
+                                    <span>@Model.营业执照信息.经营范围.Substring(0, 99)</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.营业执照信息.经营范围</span>
+                                }
+                            }
+                            else
+                            {
+                                <span>&nbsp;</span>
+                            }
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="height:100px;"><span class="innertext">经营范围<br />(兼营)</span></td>
+                    <td colspan="5" valign="top" align="left" style="padding:5px;">
+                        @if (!string.IsNullOrWhiteSpace(Model.营业执照信息.兼营范围))
+                        {
+                            if (Model.营业执照信息.兼营范围.Length >= 100)
+                            {
+                                <span style="font-size:0.85em;">@Model.营业执照信息.兼营范围.Substring(0, 99)</span>
+                            }
+                            else
+                            {
+                                <span style="font-size:0.85em;">@Model.营业执照信息.兼营范围</span>
+                            }
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="4" align="center"><span class="innertext">税<br />务<br />登<br />记<br />证</span></td>
+                    <td align="center" rowspan="2"><span class="innertext">登记证号</span></td>
+                    <td colspan="2">
+                        <span class="innertext">(国税)<br />@Model.税务信息.国税税务登记证号 </span>
+                    </td>
+                    <td align="center" rowspan="2"><span class="innertext">发证机关</span></td>
+                    <td colspan="2">
+                        <span class="innertext">(国税)<br />@Model.税务信息.国税税务登记证发证机关 </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="innertext">(地税)<br /> @Model.税务信息.地税税务登记证号</span>
+                    </td>
+                    <td colspan="2">
+                        <span class="innertext">(地税)<br />@Model.税务信息.地税税务登记证发证机关</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" rowspan="2"><span class="innertext">有效期</span></td>
+                    <td colspan="3">
+                        <span class="innertext">
+                            (国税)
+                            @if (Model.税务信息.国税税务登记证有效期起始日期 == default(DateTime))
+                            {
+                                <span>年&nbsp;&nbsp;&nbsp;月至&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;月</span>
+                            }
+                            else
+                            {
+                                if (Model.税务信息.国税税务登记证有效期类型 == Go81WebApp.Models.数据模型.用户数据模型.供应商.有效期类型.长期有效)
+                                {
+                                    <span>@Model.税务信息.国税税务登记证有效期起始日期.ToString("yyyy年MM月至长期有效")</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.税务信息.国税税务登记证有效期起始日期.ToString("yyyy年MM月至")@Model.税务信息.国税税务登记证有效期结束日期.ToString("yyyy年MM月止")</span>
+                                }
+                            }
+                        </span>
+                        <div style="height: 8px; width: 100px;"></div>
+                    </td>
+                    <td align="center" rowspan="2">
+                        <span class="innertext">是否依法<br />缴纳税收</span>
+                    </td>
+                    <td>
+                        <span class="innertext">
+                            @if (Model.税务信息.近3年完税证明)
+                            {
+                                <a>是</a>
+                            }
+                            else
+                            {
+                                <a>否</a>
+                            }
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <span class="innertext">
+                            (地税)
+                            @if (Model.税务信息.地税税务登记证有效期起始日期 == default(DateTime))
+                            {
+                                <span>年&nbsp;&nbsp;&nbsp;月至&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;月</span>
+                            }
+                            else
+                            {
+                                if (Model.税务信息.地税税务登记证有效期类型 == Go81WebApp.Models.数据模型.用户数据模型.供应商.有效期类型.长期有效)
+                                {
+                                    <span>@Model.税务信息.地税税务登记证有效期起始日期.ToString("yyyy年MM月至长期有效")</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.税务信息.地税税务登记证有效期起始日期.ToString("yyyy年MM月至")@Model.税务信息.地税税务登记证有效期结束日期.ToString("yyyy年MM月止")</span>
+                                }
+                            }
+                        </span>
+                    </td>
+                    <td>
+                        <span class="innertext">
+                            @if (Model.税务信息.近3年完税证明)
+                            {
+                                <a>是</a>
+                            }
+                            else
+                            {
+                                <a>否</a>
+                            }
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="pageNext">
+        <div style="width: 100%; font-family: '仿宋'; font-size:23px; margin-bottom:20px; font-weight: bold; text-align: center;">成都军区物资供应商财务状况表</div>
+        <div>
+            <table width="100%" cellspacing="0">
+                @if (Model.财务状况信息 != null && Model.财务状况信息.Count() != 0)
+                {
+                    <tr>
+                        <td align="center"><span class="innertext">会计事务所名称</span></td>
+                        <td colspan="3"><span class="innertext">&nbsp;@Model.财务状况信息[Model.财务状况信息.Count() - 1].会计事务所名称 </span></td>
+                    </tr>
+                    <tr>
+                        <td width="25%" align="center"><span class="innertext">事务所联系电话</span></td>
+                        <td><span class="innertext">&nbsp;@Model.财务状况信息[Model.财务状况信息.Count() - 1].会计事务所联系电话 </span></td>
+                        <td colspan="2" style="padding:0px;">
+                            <table cellpadding="0" cellspacing="0" style="border:none; width:100%;">
+                                <tr>
+
+                                    <td align="center" style="border-bottom:none; width:80%"><span class="innertext">会计报表是否经注册会计师审计</span></td>
+                                    <td style="border-bottom:none; width:20%; border-right:none;">
+                                        @if (Model.财务状况信息[Model.财务状况信息.Count() - 1].会计报表是否经注册会计师审计)
+                                        {
+                                            <span class="innertext">是</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="innertext">否</span>
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">指标</span></td>
+                        @if (Model.财务状况信息.Count >= 3)
+                        {
+                            for (int item = Model.财务状况信息.Count - 3; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td width="25%"><span class="innertext">@Model.财务状况信息[item].年份</span></td>
+                            }
+                        }
+                        else
+                        {
+                            for (int item = 0; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td width="25%"><span class="innertext">@Model.财务状况信息[item].年份</span></td>
+                            }
+                            switch (Model.财务状况信息.Count())
+                            {
+                                case 1:
+                                    <td width="25%" align="center"><span class="innertext">&nbsp;</span></td>
+                                    <td width="25%" align="center"><span class="innertext">&nbsp;</span></td>; break;
+                                case 2:
+                                <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">资产总额</span></td>
+                        @if (Model.财务状况信息.Count >= 3)
+                        {
+                            for (int item = Model.财务状况信息.Count - 3; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].资产总额 万元</span></td>
+                            }
+                        }
+                        else
+                        {
+                            for (int item = 0; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].资产总额 万元</span></td>
+                            }
+                            switch (Model.财务状况信息.Count())
+                            {
+                                case 1:
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                                case 2:
+                                <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">负债总额</span></td>
+                        @if (Model.财务状况信息.Count >= 3)
+                        {
+                            for (int item = Model.财务状况信息.Count - 3; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].负债总额 万元</span></td>
+                            }
+                        }
+                        else
+                        {
+                            for (int item = 0; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].负债总额 万元</span></td>
+                            }
+                            switch (Model.财务状况信息.Count())
+                            {
+                                case 1:
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                                case 2:
+                                <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">所有者权益</span></td>
+                        @if (Model.财务状况信息.Count >= 3)
+                        {
+                            for (int item = Model.财务状况信息.Count - 3; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@(Model.财务状况信息[item].资产总额 - Model.财务状况信息[item].负债总额) 万元</span></td>
+                            }
+                        }
+                        else
+                        {
+                            for (int item = 0; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@(Model.财务状况信息[item].资产总额 - Model.财务状况信息[item].负债总额) 万元</span></td>
+                            }
+                            switch (Model.财务状况信息.Count())
+                            {
+                                case 1:
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                                case 2:
+                                <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">其中：资本金</span></td>
+                        @if (Model.财务状况信息.Count >= 3)
+                        {
+                            for (int item = Model.财务状况信息.Count - 3; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].资本金 万元</span></td>
+                            }
+                        }
+                        else
+                        {
+                            for (int item = 0; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].资本金 万元</span></td>
+                            }
+                            switch (Model.财务状况信息.Count())
+                            {
+                                case 1:
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                                case 2:
+                                <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">资产负债率</span></td>
+                        @if (Model.财务状况信息.Count >= 3)
+                        {
+                            for (int item = Model.财务状况信息.Count - 3; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].资产负债率 %</span></td>
+                            }
+                        }
+                        else
+                        {
+                            for (int item = 0; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].资产负债率 %</span></td>
+                            }
+                            switch (Model.财务状况信息.Count())
+                            {
+                                case 1:
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                                case 2:
+                                <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">销售收入</span></td>
+                        @if (Model.财务状况信息.Count >= 3)
+                        {
+                            for (int item = Model.财务状况信息.Count - 3; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].销售收入 万元</span></td>
+                            }
+                        }
+                        else
+                        {
+                            for (int item = 0; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].销售收入 万元</span></td>
+                            }
+                            switch (Model.财务状况信息.Count())
+                            {
+                                case 1:
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                                case 2:
+                                <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">利润总额</span></td>
+                        @if (Model.财务状况信息.Count >= 3)
+                        {
+                            for (int item = Model.财务状况信息.Count - 3; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].利润总额 万元</span></td>
+                            }
+                        }
+                        else
+                        {
+                            for (int item = 0; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].利润总额 万元</span></td>
+                            }
+                            switch (Model.财务状况信息.Count())
+                            {
+                                case 1:
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                                case 2:
+                                <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">净利润</span></td>
+                        @if (Model.财务状况信息.Count >= 3)
+                        {
+                            for (int item = Model.财务状况信息.Count - 3; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].净利润 万元</span></td>
+                            }
+                        }
+                        else
+                        {
+                            for (int item = 0; item < Model.财务状况信息.Count; item++)
+                            {
+                                <td><span class="innertext">@Model.财务状况信息[item].净利润 万元</span></td>
+                            }
+                            switch (Model.财务状况信息.Count())
+                            {
+                                case 1:
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                                case 2:
+                                <td align="center"><span class="innertext">&nbsp;</span></td>; break;
+                            }
+                        }
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td align="center"><span class="innertext">会计事务所名称</span></td>
+                        <td colspan="3"><span class="innertext">&nbsp;</span></td>
+                    </tr>
+                    <tr>
+                        <td width="25%" align="center"><span class="innertext">事务所联系电话</span></td>
+                        <td><span class="innertext"> &nbsp;</span></td>
+                        <td colspan="2" style="padding:0px;">
+                            <table cellpadding="0" cellspacing="0" style="border:none; width:100%;">
+                                <tr>
+
+                                    <td align="center" style="border-bottom:none; width:80%"><span class="innertext">会计报表是否经注册会计师审计</span></td>
+                                    <td style="border-bottom:none; width:20%; border-right:none;">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">指标</span></td>
+                        @for (int item = 0; item < 3; item++)
+                        {
+                            <td width="25%"><span class="innertext">&nbsp;</span></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">资产总额</span></td>
+                        @for (int item = 0; item < 3; item++)
+                        {
+                            <td width="25%"><span class="innertext">&nbsp;</span></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">负债总额</span></td>
+                        @for (int item = 0; item < 3; item++)
+                        {
+                            <td width="25%"><span class="innertext">&nbsp;</span></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">所有者权益</span></td>
+                        @for (int item = 0; item < 3; item++)
+                        {
+                            <td width="25%"><span class="innertext">&nbsp;</span></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">其中：资本金</span></td>
+                        @for (int item = 0; item < 3; item++)
+                        {
+                            <td width="25%"><span class="innertext">&nbsp;</span></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">资产负债率</span></td>
+                        @for (int item = 0; item < 3; item++)
+                        {
+                            <td width="25%"><span class="innertext">&nbsp;</span></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">销售收入</span></td>
+                        @for (int item = 0; item < 3; item++)
+                        {
+                            <td width="25%"><span class="innertext">&nbsp;</span></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">利润总额</span></td>
+                        @for (int item = 0; item < 3; item++)
+                        {
+                            <td><span class="innertext">&nbsp;</span></td>
+                        }
+                    </tr>
+                    <tr>
+                        <td align="center"><span class="innertext">净利润</span></td>
+                        @for (int item = 0; item < 3; item++)
+                        {
+                            <td width="25%"><span class="innertext">&nbsp;</span></td>
+                        }
+                    </tr>
+                }
+            </table>
+        </div>
+        <div style="width: 100%; font-family: '仿宋'; margin-top:80px; margin-bottom:20px; font-size:23px; font-weight: bold; text-align: center;">成都军区物资供应商特定资质证书登记表</div>
+        <div>
+            <table width="100%" cellspacing="0">
+                <tr><td align="center" width="8%"><span class="innertext">序号</span></td><td align="center" width="19%"><span class="innertext">特定资质证书名称</span></td><td align="center" width="10%"><span class="innertext">资质<br />等级</span></td><td align="center" width="22%"><span class="innertext">认证机构</span></td><td align="center" width="26%"><span class="innertext">有效期(起止时间)</span></td><td align="center" width="10%"><span class="innertext">是否<br />年检</span></td></tr>
+                @{
+                    int j = 1;
+                    int listcount = 0;
+                    if (Model.资质证书列表 != null && Model.资质证书列表.Count() != 0)
+                    {
+                        foreach (var item in Model.资质证书列表)
+                        {
+                            <tr>
+                                <td align="center"><span class="innertext">@(j++) &nbsp;</span></td>
+                                <td width="20%"><span class="innertext">&nbsp;@item.名称</span></td>
+                                <td><span class="innertext">&nbsp;@item.等级</span></td>
+                                <td><span class="innertext">&nbsp;@item.发证机构</span></td>
+                                <td width="18%">
+                                    <span class="innertext">
+                                        @if (item.有效期起始日期 == default(DateTime) && item.有效期结束日期 == default(DateTime))
+                                        {
+                                            <span>&nbsp;年&nbsp;&nbsp;&nbsp;月至&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;月止</span>
+                                        }
+                                        else if (item.有效期起始日期 != default(DateTime) && item.有效期结束日期 == default(DateTime))
+                                        {
+                                            <span>@(item.有效期起始日期.Year)年@(item.有效期起始日期.Month)月至长期有效</span>
+                                        }
+                                        else if (item.有效期起始日期 != default(DateTime) && item.有效期结束日期 != default(DateTime))
+                                        {
+                                            <span>@(item.有效期起始日期.Year)年@(item.有效期起始日期.Month)月至@(item.有效期结束日期.Year)年@(item.有效期结束日期.Month)月止</span>
+                                        }
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="innertext">
+                                        @if (item.年检日期 == default(DateTime))
+                                        {
+                                            <span>&nbsp;年&nbsp;&nbsp;&nbsp;月</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@(item.年检日期.Year)年@(item.年检日期.Month)月</span>
+                                        }
+                                    </span>
+                                </td>
+                            </tr>
+                            if (j == 6)
+                            {
+                                break;
+                            }
+                        }
+                        switch (Model.资质证书列表.Count())
+                        {
+                            case 1: for (listcount = 2; listcount <= 5; listcount++)
+                                {
+                                <tr>
+                                    <td align="center"><span class="innertext">@listcount &nbsp;</span></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                } break;
+                            case 2: for (listcount = 3; listcount <= 5; listcount++)
+                                {
+                                <tr>
+                                    <td align="center"><span class="innertext">@listcount &nbsp;</span></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                } break;
+                            case 3: for (listcount = 4; listcount <= 5; listcount++)
+                                {
+                                <tr>
+                                    <td align="center"><span class="innertext">@listcount &nbsp;</span></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                } break;
+                            case 4: for (listcount = 5; listcount <= 5; listcount++)
+                                {
+                                <tr>
+                                    <td align="center"><span class="innertext">@listcount &nbsp;</span></td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                } break;
+
+                        }
+                    }
+                    else
+                    {
+                        for (listcount = 1; listcount <= 5; listcount++)
+                        {
+                            <tr>
+                                <td align="center"><span class="innertext">@listcount &nbsp;</span></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        }
+                    }
+                }
+            </table>
+        </div>
+    </div>
+    <div class="pageNext">
+        <div style="width: 100%; font-family: '仿宋'; margin-bottom:20px; font-size:23px; font-weight: bold; text-align: center;">成都军区物资供应商出资(或股东)信息表</div>
+        <div>
+            <table width="100%" cellspacing="0">
+                <tr><td align="center" width="8%"><span class="innertext">序号</span></td><td align="center" width="20%"><span class="innertext">出资人名称（或股东姓名）</span></td><td align="center" width="17%"><span class="innertext">出资金额(万元)</span></td><td align="center" width="8%"><span class="innertext">出资比例</span></td><td align="center" width="10%"><span class="innertext">出资时间</span></td></tr>
+                @{
+                    int i = 1;
+                    int lcount = 0;
+                    if (Model.出资人或股东信息 != null && Model.出资人或股东信息.Count() != 0)
+                    {
+                        foreach (var item in Model.出资人或股东信息)
+                        {
+                            <tr>
+                                <td align="center"><span class="innertext">@(i++) &nbsp;</span></td>
+                                <td><span class="innertext">&nbsp;@item.出资人或股东姓名</span></td>
+                                <td><span class="innertext">&nbsp;@item.出资金额</span></td>
+                                <td><span class="innertext">&nbsp;@item.所占比例 %</span></td>
+                                <td>
+                                    <span class="innertext">
+                                        &nbsp;
+                                        @if (item.出资时间 == default(DateTime))
+                                        {
+                                            <span>&nbsp;年&nbsp;&nbsp;&nbsp;月</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.出资时间.ToString("yyyy年MM月")</span>
+                                        }
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                        switch (Model.出资人或股东信息.Count())
+                        {
+                            case 1:
+                                for (lcount = 2; lcount <= 10; lcount++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount &nbsp;</span></td>
+                                        <td><span class="innertext">&nbsp;</span></td>
+                                        <td><span class="innertext">&nbsp;</span></td>
+                                        <td><span class="innertext">&nbsp;</span></td>
+                                        <td><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 2:
+                                for (lcount = 3; lcount <= 10; lcount++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 3:
+                                for (lcount = 4; lcount <= 10; lcount++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 4:
+                                for (lcount = 5; lcount <= 10; lcount++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 5:
+                                for (lcount = 6; lcount <= 10; lcount++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 6:
+                                for (lcount = 7; lcount <= 10; lcount++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 7:
+                                for (lcount = 8; lcount <= 10; lcount++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 8:
+                                for (lcount = 9; lcount <= 10; lcount++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 9:
+                                for (lcount = 10; lcount <= 10; lcount++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                        }
+                    }
+                    else
+                    {
+                        for (lcount = 1; lcount <= 10; lcount++)
+                        {
+                            <tr>
+                                <td align="center"><span class="innertext">@lcount &nbsp;</span></td>
+                                <td align="center"><span class="innertext">&nbsp;</span></td>
+                                <td align="center"><span class="innertext">&nbsp;</span></td>
+                                <td align="center"><span class="innertext">&nbsp;</span></td>
+                                <td align="center"><span class="innertext">&nbsp;</span></td>
+                            </tr>
+                        }
+                    }
+                }
+            </table>
+        </div>
+        <div style="width: 100%; font-family: '仿宋'; margin-bottom:20px; margin-top:80px; font-size:23px; font-weight: bold; text-align: center;">成都军区物资供应商售后服务机构信息表</div>
+        <div>
+            <table width="100%" cellspacing="0">
+                <tr><td align="center" width="8%"><span class="innertext">序号</span></td><td align="center" width="30%"><span class="innertext">分支（或服务）机构名称</span></td><td align="center" width="14%"><span class="innertext">类别</span></td><td align="center" width="20%"><span class="innertext">所在市县</span></td><td align="center" width="10%"><span class="innertext">负责人</span></td><td align="center" width="19%"><span class="innertext">联系电话</span></td></tr>
+                @{
+                    int lcount1 = 0;
+                    int h = 1;
+                    if (Model.售后服务机构列表 != null && Model.售后服务机构列表.Count() != 0)
+                    {
+                        foreach (var item in Model.售后服务机构列表)
+                        {
+                            <tr>
+                                <td align="center"><span class="innertext">@(h++) &nbsp;</span></td>
+                                <td><span class="innertext">&nbsp;@item.售后服务机构名称</span></td>
+                                <td><span class="innertext">&nbsp;@item.售后服务机构类别</span></td>
+                                <td><span class="innertext">&nbsp;@(item.所在地.地域)</span></td>
+                                <td><span class="innertext">&nbsp;@item.负责人联系方式.联系人</span></td>
+                                <td><span class="innertext">&nbsp;@item.负责人联系方式.手机</span></td>
+                            </tr>
+
+                        }
+                        switch (Model.售后服务机构列表.Count())
+                        {
+                            case 1:
+                                for (lcount1 = 2; lcount1 <= 6; lcount1++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount1 &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 2:
+                                for (lcount1 = 3; lcount1 <= 6; lcount1++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount1 &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 3:
+                                for (lcount1 = 4; lcount1 <= 6; lcount1++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount1 &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 4:
+                                for (lcount1 = 5; lcount1 <= 6; lcount1++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount1 &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                            case 5:
+                                for (lcount1 = 6; lcount1 <= 6; lcount1++)
+                                {
+                                    <tr>
+                                        <td align="center"><span class="innertext">@lcount1 &nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                        <td align="center"><span class="innertext">&nbsp;</span></td>
+                                    </tr>
+                                } break;
+                        }
+                    }
+                    else
+                    {
+                        for (lcount1 = 1; lcount1 <= 6; lcount1++)
+                        {
+                            <tr>
+                                <td align="center"><span class="innertext">@lcount1 &nbsp;</span></td>
+                                <td align="center"><span class="innertext">&nbsp;</span></td>
+                                <td align="center"><span class="innertext">&nbsp;</span></td>
+                                <td align="center"><span class="innertext">&nbsp;</span></td>
+                                <td align="center"><span class="innertext">&nbsp;</span></td>
+                                <td align="center"><span class="innertext">&nbsp;</span></td>
+                            </tr>
+                        }
+                    }
+                }
+            </table>
+        </div>
+    </div>
+    <div class="pageNext">
+        <div style="width: 100%; font-family: '仿宋'; margin-bottom:20px; font-size:23px; font-weight: bold; text-align: center;">成都军区物资供应商主要产品信息表</div>
+        <div style="border:1px solid black; height:430px;">
+            <table width="95%" style="margin:10px auto;border:none;" cellspacing="0">
+                <tr><td style="border:none;" align="center" width="20%"><span class="innertext">序号</span></td><td style="border:none;" align="center" width="20%"><span class="innertext">一级分类名称</span></td><td style="border:none;" align="center" width="60%"><span class="innertext">二级分类名称</span></td></tr>
+                @{
+                    int lcount2 = 1;
+                    if (Model.可提供产品类别列表 != null && Model.可提供产品类别列表.Count() != 0)
+                    {
+                        foreach (var item in Model.可提供产品类别列表)
+                        {
+                            <tr>
+                                <td align="center" style="border:none;"><span class="innertext">@(lcount2++) &nbsp;</span></td>
+                                <td style="border:none;" align="center"><span class="innertext">@item.一级分类</span></td>
+                                <td style="border:none;" align="center">
+                                    <span class="innertext">
+                                        @if (item.二级分类 != null && item.二级分类.Count() != 0)
+                                        {
+                                            foreach (var n in item.二级分类)
+                                            {
+                                                <span>@n,</span>
+                                            }
+                                        }
+                                    </span>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td align="center" style="border:none;" colspan="3"><span class="innertext">没有产品信息</span></td></tr>
+                    }
+                }
+            </table>
+        </div>
+        <div style="width: 100%; font-family: '仿宋'; margin-bottom:20px; margin-top:50px; font-size:23px; font-weight: bold; text-align: center;">成都军区物资供应商参加投标经历信息表</div>
+        <div style="border:1px solid black; height:400px;">
+            <table width="100%" style="border:none;" cellspacing="0">
+                <tr><td align="center" style="border:none;" width="8%"><span class="innertext">序号</span></td><td style="border:none;" align="center" width="15%"><span class="innertext">参标时间</span></td><td align="center" style="border:none;" width="47%"><span class="innertext">项目名称</span></td><td align="center" style="border:none;" width="20%"><span class="innertext">招标方</span></td><td align="center" style="border:none;" width="10%"><span class="innertext">参标结果</span></td></tr>
+                @{
+                    int l = 1;
+                    if (Model.历史参标记录 != null && Model.历史参标记录.Count() != 0)
+                    {
+                        foreach (var item in Model.历史参标记录)
+                        {
+                            <tr>
+                                <td align="center" style="border:none;"><span class="innertext">@(l++)</span></td>
+                                <td align="center" style="border:none;"><span class="innertext">&nbsp;@item.参标时间.ToString("yyyy-MM-dd")</span></td>
+                                <td align="center" style="border:none;"><span class="innertext">&nbsp;@item.项目名称</span></td>
+                                <td align="center" style="border:none;"><span class="innertext">&nbsp;@item.招标方</span></td>
+                                <td align="center" style="border:none;"><span class="innertext">&nbsp;@item.参标结果</span></td>
+                            </tr>
+                            if (l == 5)
+                            {
+                                break;
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6" align="center" style="border:none;"><span class="innertext">暂时没有服务机构信息</span></td></tr>
+                    }
+                }
+            </table>
+        </div>
+    </div>
+    <div class="pageNext" style="page-break-after:avoid;">
+        <div style="width: 100%; font-family: '仿宋'; margin-bottom:20px; font-size:23px; font-weight: bold; text-align: center;">成都军区物资供应商简介</div>
+        <div style="text-indent:2em; line-height:25px; font-size:18px; margin:0 auto; border:1px solid black; padding:10px;height:880px;">
+            @Model.企业基本信息.企业简介
+        </div>
+    </div>
+</div>
+<div id="print" style="text-align: center;"><a class="print" onclick="printPage()">打印</a></div>
+<script src="~/Scripts/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" language="javascript">
+    function printPage() {
+        $("div#print").hide();
+        window.print();
+        $("div#print").show();
+    }
+    $("#modal_close").click(function () {
+        $("#modal").fadeOut();
+        $("#f1").show();
+    });
+    function hidebox(th) {
+        $(th).hide();
+    }
+</script>

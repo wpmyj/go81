@@ -1,0 +1,24 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+<tr>
+    <th width="10%"><input type="checkbox" id="selectall" onclick="checkall(this)" />全选 </th>
+    <th width="10%">登录名</th>
+    <th width="10%">联系人姓名</th>
+    <th width="15%">企业名称</th>
+    <th width="15%">所属行业</th>
+    <th width="15%">联系方式</th>
+    <th width="25%">地区</th>
+</tr>
+@foreach (var item in (IEnumerable<供应商>)ViewData["供应商集合"])
+{
+    <tr>
+        <td><input type="checkbox" id="@item.Id" value="@item.Id" name="checkboxid" /> </td>
+        <td><a href="~/单位用户后台/AdListDetail?id=@item.Id" target="_blank">@item.登录信息.登录名</a></td>
+        <td>@item.企业联系人信息.联系人姓名</td>
+        <td>@item.企业基本信息.企业名称</td>
+        <td>@item.企业基本信息.所属行业</td>
+        <td>@item.联系方式.手机<br />@item.联系方式.固定电话</td>
+        <td class="gys_znxx_content_tabletime">
+            @item.所属地域.地域
+        </td>
+    </tr>
+}

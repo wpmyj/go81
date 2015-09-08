@@ -1,0 +1,48 @@
+﻿<link rel="stylesheet" href="~/css/index.css" type="text/css">
+<div class="gys_xttz_topbox">
+    <div class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">系统通知</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_xttz_contentbox">
+        <ul>
+            @foreach (var item in ViewData["通知管理"] as IEnumerable<Go81WebApp.Models.数据模型.内容数据模型.通知>)
+            {
+                <li><span>@item.基本数据.添加时间.ToString("yyyy.MM.dd")</span><a href="~/供应商后台/Gys_News_Show?id=@item.Id">@item.内容主体.标题</a></li>
+            }
+        </ul>
+    </div>
+</div>
+@if(ViewData["listcount"].ToString()!="0")
+{
+    <div class="gys_znxx_content_detailbox">
+        @Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString()))
+       </div>
+}
+else
+{
+    <div class="gys_znxx_content_detailbox">
+        暂无信息
+    </div>
+}
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border","1px solid #ff0000");
+            }
+        });
+        $("#系统通知").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#系统通知").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

@@ -1,0 +1,228 @@
+﻿<link rel="stylesheet" type="text/css" href="~/css/styles.css" />
+<script type="text/javascript" src="~/JS/97zzw.js"></script>
+@*<script type="text/javascript" src="~/JS/Get_ProductClass.js"></script>*@
+@using Go81WebApp.Models.数据模型.商品数据模型
+
+<div id="tmd" class="index_menu_box" style="height:853px;">
+    <div class="index_menu_content_box_index" style="height:853px;">
+        <div id="container" class="content clearfix">
+            <div class="main-classify">
+                <ul style="margin: 0;padding: 0;">
+                    <li>
+                        <i style=" background:url('../Images/bgwz.jpg') no-repeat top center"></i>
+                        <span><a href="/协议采购/Index">办公物资</a></span>
+                    </li>
+                    <li>
+                        <i style="background:url('../Images/yjwz.jpg') no-repeat top center"></i>
+                        <span><a href="/应急采购/Index">应急采购</a></span>
+                    </li>
+                    @*<li>
+                            <i style=" background:url('../Images/gwjp.jpg') no-repeat top center"></i>
+                            <span >公务机票</span>
+                        </li>*@
+                </ul>
+
+            </div>
+
+            <div>
+                <ul style="padding-left:32px;font-family:STSong;font-size:14px;">
+                    <li style="line-height:40px;">
+                        <p style="font-weight:bold;color:#cc6666;padding: 0;margin: 0">货物类</p>
+                    </li>
+                    <li style="margin-left:-32px;">
+                        <div class="sn-subside" id="outboxdiv">
+                            <div class="submenu">
+                                <div id="js-menu" class="submenulist">
+                                    <ul>
+                                        @foreach (var item in (IEnumerable<商品分类>)Model)
+                                        {
+
+                                            if (item.分类性质 == 商品分类性质.通用物资)
+                                            {
+                                                <li>
+                                                    <h3><a name="@item.Id" tag="0">@item.分类名</a></h3>
+                                                    <div class="listbox hided" id="@item.Id">
+                                                        @if (item.子分类 != null && item.子分类.Any())
+                                                        {
+                                                            foreach (var i in item.子分类)
+                                                            {
+                                                                <dl class='procate'>
+                                                                    <dt>@i.分类名</dt>
+                                                                    @if (i.子分类 != null && i.子分类.Any())
+                                                                    {
+                                                                        foreach (var k in i.子分类)
+                                                                        {
+                                                                            <dd><a target='_blank' href='/商品陈列/ProductList?id=@k.Id'>@k.分类名&nbsp;</a></dd>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <label>分类正在完善中...</label>
+                                                                    }
+                                                                </dl>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="isPerfect">分类正在完善中...</div>
+                                                        }
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+                                        <li>
+                                            <h3><a tag="0">专用物资</a></h3>
+                                            <div class="listbox hided">
+                                                @foreach (var m in (IEnumerable<商品分类>)Model)
+                                                {
+                                                    if (m.分类性质 == 商品分类性质.专用物资)
+                                                    {
+                                                        <dl class='procate'>
+                                                            <dt>@m.分类名</dt>
+                                                            @if (m.子分类 != null && m.子分类.Any())
+                                                            {
+                                                                foreach (var j in m.子分类)
+                                                                {
+                                                                    <dd><a target='_blank' href='/商品陈列/ProductList?id=@j.Id'>@j.分类名&nbsp;</a></dd>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <label>分类正在完善中...</label>
+                                                            }
+                                                        </dl>
+                                                    }
+                                                }
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    @*<li style="line-height:30px;">软件类</li>
+                        <li style="line-height:30px;">信息类</li>
+                        <li style="line-height:30px;">空调类</li>
+                        <li style="line-height:30px;">汽车类</li>
+                        <li style="line-height:30px;">办公用品</li>
+                        <li style="line-height:30px;">办公电器</li>
+                        <li style="line-height:30px;">家具类</li>
+                        <li style="line-height:30px;">电梯类</li>
+                        <li style="line-height:30px;">通用耗材</li>*@
+                </ul>
+                @*<ul style="padding-left:32px;font-family:STSong;font-size:14px;margin-top:15px;">
+                        <li style="line-height:40px;">
+                            <p style="font-weight:bold;color:#cc6666">服务类</p>
+                        </li>
+                        <li style="line-height:30px;">机票</li>
+                        <li style="line-height:30px;">医疗</li>
+                        <li style="line-height:30px;">租车</li>
+                    </ul>
+                    <ul style="padding-left:32px;font-family:STSong;font-size:14px;margin-top:15px;">
+                        <li style="line-height:40px;">
+                            <p style="font-weight:bold;color:#cc6666">工程类</p>
+                        </li>
+                        <li style="line-height:30px;">工程定点采购</li>
+                        <li style="line-height:30px;">工程造价定点</li>
+                    </ul>*@
+            </div>
+
+            @*<div>
+                <div style="height:3px;width:90%;border-bottom:1px dashed #ccc;margin:0 auto"></div>
+                <ul style="padding-left:32px;padding-top:10px;font-family:STSong;font-size:14px;">
+                    <li style="line-height:30px;">
+                        <i style="display:inline-block; width:14px;height:12px; background:url('../Images/np.jpg') no-repeat top center"></i>
+                        <span>采购商城</span>
+                    </li>
+                    <li style="line-height:30px;">
+                        <i style="display:inline-block; width:14px;height:12px; background:url('../Images/np.jpg') no-repeat top center"></i>
+                        <span>网上竞价</span>
+                    </li>
+                    <li style="line-height:30px;">
+                        <i style="display:inline-block; width:14px;height:12px; background:url('../Images/np.jpg') no-repeat top center"></i>
+                        <span>协议供货</span>
+                    </li>
+                </ul>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+
+
+@*<div id="tmd" class="index_menu_box">
+    <div class="index_menu_content_box_index">
+        <div id="container" class="content clearfix">
+            <div class="sn-subside" id="outboxdiv">
+                <div class="submenu">
+                    <div id="js-menu" class="submenulist">
+                        <ul>
+                            @foreach (var item in (IEnumerable<商品分类>)Model)
+                            {
+
+                                if (item.分类性质 == 商品分类性质.通用物资)
+                                {
+                                    <li>
+                                        <h3><a name="@item.Id" tag="0">@item.分类名</a></h3>
+                                        <div class="listbox hided" id="@item.Id">
+                                            @if (item.子分类 != null && item.子分类.Any())
+                                            {
+                                                foreach (var i in item.子分类)
+                                                {
+                                                    <dl class='procate'>
+                                                        <dt>@i.分类名</dt>
+                                                        @if (i.子分类 != null && i.子分类.Any())
+                                                        {
+                                                            foreach (var k in i.子分类)
+                                                            {
+                                                                <dd><a target='_blank' href='/商品陈列/ProductList?id=@k.Id'>@k.分类名&nbsp;</a></dd>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <label>分类正在完善中...</label>
+                                                        }
+                                                    </dl>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <div class="isPerfect">分类正在完善中...</div>
+                                            }
+                                        </div>
+                                    </li>
+                                }
+                            }
+                            <li>
+                                <h3><a tag="0">专用物资</a></h3>
+                                <div class="listbox hided">
+                                    @foreach (var m in (IEnumerable<商品分类>)Model)
+                                    {
+                                        if (m.分类性质 == 商品分类性质.专用物资)
+                                        {
+                                            <dl class='procate'>
+                                                <dt>@m.分类名</dt>
+                                                @if (m.子分类 != null && m.子分类.Any())
+                                                {
+                                                    foreach (var j in m.子分类)
+                                                    {
+                                                        <dd><a target='_blank' href='/商品陈列/ProductList?id=@j.Id'>@j.分类名&nbsp;</a></dd>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <label>分类正在完善中...</label>
+                                                }
+                                            </dl>
+                                        }
+                                    }
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>*@
+

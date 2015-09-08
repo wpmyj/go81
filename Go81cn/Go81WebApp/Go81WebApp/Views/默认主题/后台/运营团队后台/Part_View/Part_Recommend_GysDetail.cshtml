@@ -1,0 +1,78 @@
+﻿@model Go81WebApp.Models.数据模型.推荐数据模型.推荐信息
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">处理推荐供应商</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+
+                @if (Model != null)
+                {
+                    <div style="width: 800px; margin: 20px auto; padding: 10px;">
+
+                        <div style="width: 800px; height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">企业名称：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.名称
+                            </div>
+                        </div>
+
+
+
+                        <div style="width: 800px; height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">联系人：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.联系方式.联系人
+                            </div>
+                        </div>
+
+                        <div style="width: 800px; height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">手机：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.联系方式.手机
+                            </div>
+                        </div>
+                        <div style="width: 800px; height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">固定电话：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.联系方式.固定电话
+                            </div>
+                        </div>
+                        <div style="width: 800px; height: 30px; padding: 10px;">
+                            <div style="width: 200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float: left; text-align: right; line-height: 30px; padding-right: 20px;">推荐人：</div>
+                            <div class="procure_selectlistdiv">
+                                @Model.推荐人.用户数据.单位信息.单位代号
+                            </div>
+                        </div>
+                        <div class="procure_adaduditdiv">
+                                <input type="submit" value="推荐通过" name="action" class="front_login_rightbox_button_less">
+                                <input type="submit" value="推荐不通过" name="action" class="front_login_rightbox_button_less">
+                            </div>
+                    </div>
+                }
+                else
+                {
+                    <span>暂无此数据</span>
+                }
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $("#待联系推荐供应商").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#待联系推荐供应商").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+
+
+
+

@@ -1,0 +1,619 @@
+﻿@model Go81WebApp.Models.数据模型.竞标数据模型.网上竞标
+@using Go81WebApp.Models.数据模型.商品数据模型;
+@using Go81WebApp.Models.数据模型.项目数据模型;
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+@*<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery-1.4.2.min.js" charset="gb2312"></script>*@
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript">
+    var attchtextstring = "";
+    $(document).ready(function () {
+        $("#uploadify").uploadify({
+            'uploader': '../../JS/jquery.uploadify-v2.1.4/uploadify.swf',
+            'script': '/单位用户后台/UploadAttachment_OB',
+            'cancelImg': '../../JS/jquery.uploadify-v2.1.4/cancel.png',
+            'folder': 'UploadFile',
+            'sizeLimit': 1024 * 1024 * 5,
+            'queueSizeLimit': 1,
+            'fileDesc': '只允许上传bmp,gif,jpg,jpeg图片',
+            'fileExt': '*.bmp;*.gif;*.jpg;*.jpeg',
+            'method': 'Post',
+            'queueID': 'ShowImage',
+            'buttonImg': '../../JS/jquery.uploadify-v2.1.4/btn.png',
+            'wmode': 'transparent',
+            'auto': false,
+            'multi': false,
+            'onComplete': function (e, q, f, data, d) {
+                attchtextstring = document.getElementById("attachtext").value + data + "|";
+                document.getElementById("attachtext").value = attchtextstring;
+                var Image = "<img width='120px' height='70px' src='" + data + "'/>";
+                var Preview = "<a href='" + data + "' target=\"_blank\">预览</a>&nbsp;&nbsp;";
+                var Original = "<a href=\"" + data + "\" target=\"_blank\">原图</a>&nbsp;&nbsp;";
+                var Delete = "<a href=\"javascript:DeleteAttachment('" + q + "','" + data + "')\">删除</a>";
+                var Div = "<div style='margin-top:5px;text-align:center'>" + Preview + Original + Delete + "</div>";
+                $("#uploadify" + q).html(Image + Div);
+            }
+        });
+        $("#btnBegin").click(function () { $("#uploadify").uploadifyUpload(); return false; });
+    });
+    function DeleteAttachment(q, n) {
+        $.ajax({
+            type: "POST",
+            url: "/单位用户后台/DeleteAttachment?q=" + q + "&n=" + n,
+            success: function (msg) {
+                if (msg != "0") {
+                    document.getElementById("attachtext").value = document.getElementById("attachtext").value.replace(n + "|", "");
+                    jQuery("#uploadify").uploadifyCancel(msg);
+                }
+            }
+        });
+    }
+
+    function checkcontent() {
+        if ($("#product").val() == "" || $("#product").val() == null || $("#product").val() == "请选择行业") {
+            alert("请选择所属行业！");
+            $("#firstClass").focus();
+            return false;
+        }
+    }
+</script>
+<style type="text/css">
+        .out_box {
+        display: none;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 3%;
+    }
+
+    .out_box_insecond_child {
+        width: 680px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+        border: 1px solid red;
+    }
+    
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
+    .procure_formlistdiv {
+        width: 320px;
+    }
+
+        .procure_formlistdiv input {
+            width: 150px;
+            border:1px solid #aaa;
+        }
+
+     .procureinputdiv{
+         width:450px;
+         float:left;
+     }
+    .procureinputdiv_title {
+        width: 130px;
+        text-align: right;
+        padding-right:0;
+    }
+    div#pager
+    {
+        text-align:center;
+    }
+        div#pager a {
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        line-height: 25px;
+        font-size: 12px;
+        height: 25px;
+        border: 1px solid gray;
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+        .span{
+            display: inline-block;
+width: 270px;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+        }
+</style>
+<div id="f" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="hidebox()">×</a></div>
+            <div style="width:655px; height:auto;overflow:hidden;">
+                <div>
+                    <div>
+                        <div style="float:right; width:100%; font-size:12px;">
+                            <form style="margin-left:20px;">
+                                <input type="radio" name="tp" onclick="search_type(this)" checked="checked" value="通用物资" /><span>通用物资</span>
+                                <input type="radio" name="tp" onclick="search_type(this)" value="专用物资" /><span>专用物资</span>
+                                <p />
+                                <span>选择商品：</span>
+                                <select id="firstClass" onchange="searchtype(this)">
+                                    @foreach (var item in ViewData["first"] as IEnumerable<商品分类>)
+                                    {
+                                        if (item.分类性质.ToString() != "专用物资")
+                                        {
+                                            <option value="@item.分类名">@item.分类名</option>
+                                        }
+                                    }
+                                </select>
+                                <select id="twoType" onchange="thirdClass(this)"></select>
+                                <select id="thirdType" onchange="selectGood()"></select>
+                                <div id="cons" style="height:200px;">
+                                </div>
+                                <div id="pager"></div>
+                            </form>
+                        </div>
+                        <div style="clear:both; width:100%; text-align:center;"><input style="margin-left:20px; margin-bottom:10px; display:inline-block; cursor:pointer;" class="front_login_rightbox_button" id="submit_btn" onclick="hidebox()" value="添      加"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("OnlineBidding_Add","单位用户后台",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">添加网上竞价公告</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+
+                @*@{IEnumerable<招标采购项目> needlist = ViewData["招标采购项目列表"] as IEnumerable<招标采购项目>;
+                if (needlist != null && needlist.Any())
+                {
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">项目名称：</div>
+                    <div class="procure_formlistdiv">
+
+                        <select id="zb_contact" name="zb_contact" style="width:304px; height:30px;">
+                            <option value="" id="">请选择所属采购项目</option>
+                            @foreach (var i in needlist)
+                                {
+                            <option class="yjfn" value="@i.Id" id="@i.Id">@i.需求申请来源.需求申请.标题</option>
+                                }
+                        </select>
+
+                    </div>
+                </div>
+                }
+                }*@
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">项目名称：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.项目名称)
+                        <span style="color:red;">@Html.ValidationMessageFor(model => model.项目名称)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">项目编号：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.项目编号)
+                        <span style="color:red;">@Html.ValidationMessageFor(model => model.项目编号)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">项目时间：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.TextBoxFor(model => model.报价结束时间, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd HH:mm:ss'})" })
+                        @*<input id="re_end_time" style="width: 300px;" name="re_end_time" type="text" onfocus="WdatePicker({dateFmt:'yyyy/MM/dd HH:mm:ss'})" />*@
+                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.报价结束时间)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">商品名称：</div>
+                    <div class="procure_formlistdiv">
+                        <div style="border: 1px solid #aaa;width: 152px;float:left;">
+                            @Html.TextBoxFor(model => model.商品名称, new { id = "goodName", style = "border: none;width: 110px;" })
+                            <input type="button" style="display:inline-block; width:31px; height:35px;cursor:pointer; border:none;background:url('../Images/AddDel20x20.png') no-repeat 11px center;vertical-align:middle" onclick="showbox()" />
+                        </div>
+                        <span style="color:red;margin:6px;float:left">*@Html.ValidationMessageFor(model => model.商品名称)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">商品型号：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.TextBoxFor(model => model.商品型号, new { id = "goodType" })
+                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.商品型号)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">所属行业：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.HiddenFor(model => model.所属行业, new { id = "product" })
+
+                        @{IEnumerable<商品分类> goodclass = ViewData["first"] as IEnumerable<商品分类>;
+                        if (goodclass != null && goodclass.Any())
+                        {
+                            <select id="hy" name="hy" style="width:155px; height:30px;" onchange="getLowerClass(this)">
+                                <option value="请选择行业" id="-1">--请选择行业--</option>
+                                @foreach (var i in goodclass)
+                                {
+                                    <option class="yjfn" value="@i.分类名" id="@i.Id">@i.分类名</option>
+                                }
+                            </select>
+                            <span style="color:red;">*@Html.ValidationMessageFor(model => model.所属行业)</span>
+                        }
+                        }
+                        <script type="text/javascript">
+                            $("#hy").change(function () {
+                                var val = $(this).find("option:selected").val();
+                                $("#product").val(val);
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">参考品牌：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.参考品牌)
+                        <span style="color:red;">@Html.ValidationMessageFor(model => model.参考品牌)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">计量单位：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.TextBoxFor(model => model.计量单位)
+                        <span style="color:red;">@Html.ValidationMessageFor(model => model.计量单位)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">商品需求数量：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.TextBoxFor(model => model.商品需求数量)
+                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.商品需求数量)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">预算金额：</div>
+                    <div class="procure_formlistdiv">
+                        <input type="text" name="startPrice" />
+                        <span style="color:red;"></span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">商品参数要求：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.商品描述)
+                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.商品描述)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">售后服务要求：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.售后服务要求)
+                        <span style="color:red;">@Html.ValidationMessageFor(model => model.售后服务要求)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">维保质保要求：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.维保质保要求)
+                        <span style="color:red;">@Html.ValidationMessageFor(model => model.维保质保要求)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">送货地点：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.送货地址)
+                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.送货地址)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">交货时间：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.TextBoxFor(model => model.交货时间, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd HH:mm:ss'})" })
+                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.交货时间)</span>
+                    </div>
+                </div>
+                
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">联系人：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.联系方式.联系人)
+                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.联系方式.联系人)</span>
+                    </div>
+                </div>
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">联系电话：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.联系方式.手机)
+                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.联系方式.手机)</span>
+                    </div>
+                </div>
+                
+                <div class="procureinputdiv">
+                    <div class="procureinputdiv_title">备注：</div>
+                    <div class="procure_formlistdiv">
+                        @Html.EditorFor(model => model.备注)
+                        <span style="color:red;">@Html.ValidationMessageFor(model => model.备注)</span>
+                    </div>
+                </div>
+
+                <div class="gys_ztbsearch_contentbox">
+                    <div class="gyspage_list_content_exp">
+                        <div class="procureinputdiv_title">商品图片：</div>
+                        <div style="text-align:center">
+                            <div></div>
+                            <div id="ShowImage" class="product_add_upimagesbox"></div>
+                            <div class="product_add_upimagesbox_image"></div>
+                            <div style="padding-top:5px">
+                                <input type="file" name="uploadify" id="uploadify" />&nbsp;&nbsp;
+                                <a id="btnBegin" href="javascript:return false"><img alt="开始上传" src="~/js/jquery.uploadify-v2.1.4/btnstart.png" width="120" height="30" style="border:0px" /></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="deleteimg" name="deleteimg" />
+                <input type="hidden" id="attachtext" name="attachtext" />
+                <div style="text-align:center;"><input id="modiibutton" name="submitcontent" type="submit" onclick="return checkcontent();" style="margin-top:20px;" class="front_login_rightbox_button" value="确        定"></div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    function hidebox() {
+        $("div#f").hide();
+    }
+    function showbox() {
+        $("div#f").show();
+    }
+</script>
+<script type="text/javascript" language="javascript">
+    var alltype = "通用物资";
+    var page = 0;
+    var sum = 0;
+    function setPage(pg_count, current_page) {
+        if (pg_count <= 6) {
+            str = '';
+            for (var i = 1; i <= pg_count; i++) {
+                str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (current_page < 6) {
+                if (current_page != 1) {
+                    var str = "<a onclick='pre_page()'>上一页</a>";
+                    for (var i = 1; i < 6; i++) {
+                        str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
+                    $("div#pager").html(str);
+                }
+                else {
+                    var str = "";
+                    for (var i = 1; i < 6; i++) {
+                        str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
+                    $("div#pager").html(str);
+                }
+
+            }
+            else if (current_page >= 6 && current_page < pg_count - 3) {
+                var str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(" + 1 + ")'>1</a>...";
+                for (var i = (current_page - 4 + 1) ; i <= current_page; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
+                $("div#pager").html(str);
+            }
+            else if (current_page >= pg_count - 3) {
+                str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(1)'>1</a>...";
+                for (var i = pg_count - 5 + 1; i < pg_count; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == current_page.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    function setval(data) {
+        if (data != null) {
+            var str = "<table width='100%'>";
+            var row = parseInt(data.length / 2);
+            var maintain = parseInt(data.length % 2);
+            var n = 0;
+            if (row > 0) {
+                var str1 = "";
+                for (var i = 0; i < row; i++) {
+                    var str0 = "<tr>";
+                    for (var j = 0; j < 2; j++) {
+                        str1 += "<td align='left'><input type='radio' name='gd' onclick='Set_Val(this)' value='" + data[n].Name + "|" + data[n].Type + "'/><span class='span' title='" + data[n].Name + "'>" + data[n].Name + "</span><td>";
+                        n++;
+                    }
+                    str0 += "</tr>";
+                    str1 += str0;
+                }
+                str += str1;
+            }
+            if (maintain > 0) {
+                var str1 = "<tr>";
+                for (var i = 0; i < maintain; i++) {
+                    str1 += "<td align='left'><input type='radio' name='gd' onclick='Set_Val(this)' value='" + data[n].Name + "|" + data[n].Type + "'/><span class='span' title='" + data[n].Name + "'>" + data[n].Name + "</span><td>";
+                    n++;
+                }
+                str1 += "</tr>";
+                str += str1;
+            }
+            str += "</table>";
+            $("div#cons").html(str);
+        }
+    }
+    function setValue(data) {
+        var str = "";
+        for (var i = 0; i < data.length; i++) {
+            str += "<option value='" + data[i] + "'>" + data[i] + "</option>";
+        }
+        $("select#twoType").html(str);
+    }
+    var name = '';
+    function search_type(th) {
+        alltype = $(th).val();
+        var str = "";
+        name = $(th).val();
+        $.get('/单位用户后台/Search_Type/',
+            { n: name },
+            function (data) {
+                for (var i = 0; i < data.Data.length; i++) {
+                    str += "<option value='" + data.Data[i] + "'>" + data.Data[i] + "</option>";
+                }
+                $("select#firstClass").html(str);
+                searchtype("select#firstClass");
+            }
+        );
+        if (alltype == "专用物资") {
+            $("select#thirdType").hide();
+        }
+        else {
+            $("select#thirdType").show();
+        }
+    }
+    var s = '';
+    function Set_Val(th) {
+        var name = $(th).val().split('|');
+        $(":input#goodName").val(name[0]);
+        $(":input#goodType").val(name[1]);
+    }
+    function searchtype(th) {
+        var s = $(th).val();
+        $.get('/单位用户后台/TwoClass', { fclass: s, tpy: alltype }, function (data) {
+            var str = "";
+            for (var i = 0; i < data.Data.length; i++) {
+                str += "<option value='" + data.Data[i] + "'>" + data.Data[i] + "</option>";
+            }
+            $("select#twoType").html(str);
+            if (alltype != "专用物资") {
+                thirdClass("select#twoType");
+            }
+            else {
+                selectGood();
+            }
+        });
+    }
+    $(document).ready(function () {
+        searchtype("select#firstClass");
+    });
+    function thirdClass(th) {
+        if (alltype != "专用物资") {
+            $.get('/单位用户后台/ThirdClass', { fclass: $("select#firstClass").val(), twoclass: $(th).val(), tpy: alltype }, function (data) {
+                var str = "";
+                for (var i = 0; i < data.Data.length; i++) {
+                    str += "<option value='" + data.Data[i] + "'>" + data.Data[i] + "</option>";
+                }
+                $("select#thirdType").html(str);
+                selectGood();
+            });
+        }
+        else
+        {
+            selectGood();
+        }
+    }
+    function selectGood() {
+        $.get('/单位用户后台/SelectGood',
+            { tpy: alltype, fname: $("select#firstClass").val(), tn: $("select#twoType").val(), thirdname: $("select#thirdType").val(), skip: 0 },
+            function (data) {
+                setval(data.Data.content);
+                setPage(data.Data.count, 1);
+                sum = data.Data.count;
+                page = 0;
+            });
+    }
+    function current_page(num) {
+        $.get('/单位用户后台/SelectGood',
+                { tpy: alltype, fname: $("select#firstClass").val(), tn: $("select#twoType").val(), thirdname: $("select#thirdType").val(), skip: num },
+                function (data) {
+                    setval(data.Data.content);
+                    setPage(data.Data.count, num);
+                    page = num;
+                });
+    }
+    function pre_page() {
+        if (page > 1) {
+            page--;
+        }
+        $.get('/单位用户后台/SelectGood',
+                { tpy: alltype, fname: $("select#firstClass").val(), tn: $("select#twoType").val(), thirdname: $("select#thirdType").val(), skip: page },
+                function (data) {
+                    setval(data.Data.content);
+                    setPage(data.Data.count, page);
+                });
+    }
+    function next_page() {
+        if (page < sum) {
+            page++;
+        }
+        $.get('/单位用户后台/SelectGood',
+                { tpy: alltype, fname: $("select#firstClass").val(), tn: $("select#twoType").val(), thirdname: $("select#thirdType").val(), skip: page },
+                function (data) {
+                    setval(data.Data.content);
+                    setPage(data.Data.count, page);
+                });
+    }
+    $(function () {
+        $("div.Page5").addClass("on");
+        $("#新增网上竞价").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#新增网上竞价").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

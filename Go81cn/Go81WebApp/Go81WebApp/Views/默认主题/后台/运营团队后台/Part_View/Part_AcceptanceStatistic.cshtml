@@ -1,0 +1,39 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型
+
+@{
+    var ysd_year = ViewData["年度统计"] as List<Tuple<string, string, string>>;
+}
+
+@if (ViewBag.IsGys)
+{
+    <p class="p_statis_month_total" style="font-size:14px;">本年成交总金额 @ViewData["本年成交总金额"] 元</p>
+    <div class="month_statistic">
+
+        @foreach (var mm in ysd_year)
+        {
+            <div class="month_num">
+                <div class="month">@mm.Item1 月</div>
+                <p class="ysd-statistic">成交金额共 <span style="font-size:17px;color:#ff0000">@mm.Item2</span>元</p>
+                <p class="ysd-statistic">占全年比重：<span style="font-size:17px;color:#ff0000">@mm.Item3</span> %</p>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="p_statis_month_total" style="font-size:14px;">本年共新增验收单 @ViewData["本年新增数量"] 张</p>
+    <div class="month_statistic">
+
+        @foreach (var mm in ysd_year)
+        {
+            <div class="month_num">
+                <div class="month">@mm.Item1 月</div>
+                <p class="ysd-statistic">本月新增 <span style="font-size:17px;color:#ff0000">@mm.Item2</span> 张验收单</p>
+                <p class="ysd-statistic">占全年比重：<span style="font-size:17px;color:#ff0000">@mm.Item3</span> %</p>
+            </div>
+        }
+    </div>
+}
+
+

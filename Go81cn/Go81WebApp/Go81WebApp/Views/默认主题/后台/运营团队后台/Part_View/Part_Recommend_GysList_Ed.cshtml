@@ -1,0 +1,65 @@
+﻿@using Go81WebApp.Models.数据模型.推荐数据模型
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">已联系推荐供应商</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="20%">单位名称</th>
+                    <th width="10%">评审专家姓名</th>
+                    <th width="15%">手机</th>
+                    <th width="15%">固定电话</th>
+                    <th width="10%">时间</th>
+                    <th width="10%">状态</th>
+                    <th width="20%">操作</th>
+                </tr>
+                @foreach (var item in (IEnumerable<推荐信息>)ViewData["已联系推荐供应商"])
+                {
+                    <tr>
+                        <td>@item.名称</td>
+                        <td>@item.联系方式.联系人</td>
+                        <td>@item.联系方式.手机</td>
+                        <td>@item.联系方式.固定电话</td>
+                        <td>@item.基本数据.添加时间.ToString("yyyy-MM-dd")</td>
+                        <td>@item.推荐审核数据.推荐状态</td>
+                        <td><a href="/运营团队后台/Delete_Recommend/@item.Id">删除</a></td>
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).addClass("currentPage");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#已联系推荐供应商").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#已联系推荐供应商").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+

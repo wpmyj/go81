@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "我提交的评审专家抽取申请";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">我已完成的评审专家抽取申请<span style="color:red;">若有待批准申请，请联系成都军区联勤部军需物资油料部采购管理处：方助理028-683389。</span></div>
+            </div>
+        </div>
+        <div class="gys_znxx_content">
+            @Html.Action("Part_Expert_Applay_ed", "专家抽选")    
+        </div>
+    </div>
+</div>

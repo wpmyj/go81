@@ -1,0 +1,85 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@{
+    ViewBag.Title = "修改出资人信息";
+    Layout = "_BackLayout.cshtml";
+}
+<style>
+    table tr td span {
+        font-size: 11px;
+        color: red;
+    }
+</style>
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+@{
+    int index = int.Parse(ViewData["index"].ToString());
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div id="title_div" class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">修改出资人信息</div>
+        </div>
+        <div style="border:1px solid green; margin-top:8px;">
+            <form action="/供应商后台/Modify_investor" method="post">
+                <input type="hidden" name="index" value="@index" />
+                <table width="100%" style="margin-left:20px;">
+                    <tr>
+                        <td width="20%" height="30" align="right" class="lab">出资人或股东姓名：</td>
+                        <td width="25%" height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].出资人或股东姓名" type="text" value="@Model.出资人或股东信息[index].出资人或股东姓名"><span>*</span></td>
+                        <td width="20%" height="30" align="right" class="lab">国籍：</td>
+                        <td width="35%" height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].国籍" type="text" value="@Model.出资人或股东信息[index].国籍">@*<div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的国籍,如中国</div></div>*@ <span>*</span></td>
+                    </tr>
+                    <tr>
+                        <td align="right" height="30" class="lab">身份证号：</td>
+                        <td height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].身份证号码" type="text" value="@Model.出资人或股东信息[index].身份证号码"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的18位身份证号,如511352123545670708</div></div> <span>*</span></td>
+                        <td height="30" align="right" class="lab">出资人或股东性质：</td>
+                        <td height="30">
+                            <input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].出资人或股东性质" type="text" value="@Model.出资人或股东信息[index].出资人或股东性质">@*<div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的性质</div></div>*@<span>*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="30" align="right" class="lab">出资时间：</td>
+                        <td height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].出资时间" type="text" onfocus="WdatePicker({dateFmt:'yyyy/MM/dd'})" value="@Model.出资人或股东信息[index].出资时间"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的出资时间,如2012/2/1</div></div><span>*</span></td>
+                        <td height="30" align="right" class="lab">出资金额(万元)：</td>
+                        <td height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" data-val="true" data-val-number="字段 出资金额 必需是一个数字。" data-val-required="出资金额 字段是必需的。" name="出资人或股东信息[0].出资金额" type="text" value="@Model.出资人或股东信息[index].出资金额"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的出资金额,如120</div></div><span>*</span></td>
+                    </tr>
+                    <tr>
+                        <td align="right" class="lab">所占比例(%)：</td>
+                        <td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" data-val="true" data-val-number="字段 所占比例 必需是一个数字。" data-val-required="所占比例 字段是必需的。" name="出资人或股东信息[0].所占比例" type="text" value="@Model.出资人或股东信息[index].所占比例"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资所占比例，如20</div></div><span>*</span></td>
+                    </tr>
+                </table>
+                <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("a.modify").click(function () { $(".company_msg :text,.company_msg :checkbox,.company_msg :file,.company_msg :submit").each(function () { $(this).removeAttr("disabled"); $(".company_msg a.add").show(); }); $(".company_msg :submit").css("background-color", "#2c5735"); });
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+
+        $("#出资人信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#出资人信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function show_tip(t) {
+        $(t).next("div").show();
+        $(t).next("div").css("display", "inline-block");
+    }
+    function hide_tip(t) {
+        $(t).next("div").hide();
+    }
+    function showdiv(th) {
+        $(th).parent().children("div").show();
+        $(th).parent().children("div").css("display", "inline-block");
+    }
+    function hidediv(th) {
+        $(th).parent().children("div").hide();
+    }
+</script>

@@ -1,0 +1,430 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.验收单
+@using Go81WebApp.Models.数据模型.项目数据模型;
+@using Go81WebApp.Models.数据模型.用户数据模型;
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/NTClientJavascript.js"></script>
+<div id="title_div" class="gys_xttz_topbg">
+    <div class="index_bottom_zb_top_title">上传验收单<i style="color:red">请上传格式为jpg或png且大小小于2M的扫描件，可以上传多张。</i></div>
+</div>
+
+<div id="indexpagemodal1" class="modal fade" style="display:none;">
+    <input type="hidden" id="ssid" name="ssid" value="@ViewData["Message"]" style="width:300px;" />
+    <input type="hidden" id="HidIAID" name="HidIAID" style="width:300px;" />
+    <input type="hidden" id="HidDigest" name="HidDigest" style="width:300px;" />
+    <div class="modal-dialog" style="margin: 10% auto;">
+        <div class="modal-content" style="height:230px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal1').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px;">请输入安全证书密码</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 100px; text-align:center; line-height:25px;">
+                    <input type="password" id="password" name="password" style=" height:25px; width:250px; line-height:25px; " /><br />
+                    <span style="color:red;" id="errortips"></span>
+                </div>
+                <div style="width: 100%; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" id="submitpassword" class="gys_ztbsearch_search_botton" style="margin-left:0;" value="确  定" onclick="return OnLogon();" /></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@if (ViewData["是否持有U盾"] != null && ViewData["是否持有U盾"] == "1")
+{
+    <div class="gys_znxx_box">
+        <div id="f1" class="modal_out">
+            <div class="modal_in"></div>
+            <div class="modal_content_loading">
+                <img src="~/Images/ajax-loader.gif" />
+                <span>正在上传，请稍等...</span>
+            </div>
+        </div>
+        @if (ViewBag.Shen)
+        {
+            using (Html.BeginForm("Add_Service_Evaluate", "供应商后台", FormMethod.Post, new { enctype = "multipart/form-data", name = "data" }))
+            {
+                @*@Html.HiddenFor(m => m.验收单扫描件, new { id = "pic" })*@
+                <input type="hidden" name="smj" value="" id="picture" lang="@ViewData["id"]" />
+                <table width="80%">
+                    <tr>
+                        <td width="50%" align="right" valign="top">验收单号：</td>
+                        <td width="50%">
+                            <select style="width:155px;" name="selectSh_unit" id="selectSh_unit">
+                                <option>请选择验收单号</option>
+                                @{
+                                    var sh_unit = (IEnumerable<验收单>)ViewData["验收单号"];
+                                    foreach (var j in sh_unit)
+                                    {
+                                        <option value="@j.Id">@j.验收单号</option>
+                                    }
+                                }
+                            </select>
+                            <div class="out_box">
+                                <div class="arrow"></div>
+                                <div class="con_box">只能选择已经打印的验收单</div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            }
+
+            <form action="/供应商后台/SavePicture" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                <input type="hidden" value="ysd" name="pic1" />
+                <table width="80%">
+                    <tr>
+                        <td width="50%" align="right">&nbsp;验收单电子扫描件：</td>
+                        <td width="50%">
+                            <input type="file" accept="image/jpeg" onchange="fileChange()" name="file1" style="width:72px;" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <div id="framebox" style="display:none;margin-left:150px; width:700px; margin-right: auto;">
+                <iframe name="showPic" id="showPic" frameborder="0" height="150" width="100%"></iframe>
+            </div>
+            <table width="100%">
+                <tr><td align="center"><input type="button" onclick="submitData()" id="submit_btn" value="提交" /></td></tr>
+            </table>
+            <div style="width:720px; margin:0px auto 0px auto; overflow:hidden;">
+                <table>
+                    <tbody>
+                        <tr id="showhc_ysd">
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+    
+            <div id="pBox" style="width:720px; margin:0px auto 0px auto; overflow:hidden;">
+
+            </div>
+        }
+        else
+        {
+            <h1 style="color:gray;text-align:center;">您还未通过审核，暂时无法使用验收单功能。</h1>
+        }
+    </div>
+}
+else
+{
+    <h4 style="color:gray;text-align:center;">您还未持有安全证书或安全证书已过期，为保证数据的安全性，暂时无法使用验收单功能，如有疑问，请联系客服。</h4>
+}
+<script type="text/javascript" language="javascript">
+    function checkUser() {
+        $.get('/供应商后台/Check_User', { id: $("#myid").val() }, function (data) {
+            $("span#check").text(data);
+        });
+    }
+    function submitData() {
+        if ($("#selectSh_unit").val() == "请选择验收单号" || $("#selectSh_unit").val() == "") {
+            alert("还没有验收单号，不能上传！");
+            return false;
+        }
+        //else if ($("#picture").val() == "") {
+        //    alert("您还没有上传扫件！");
+        //    return false;
+        //}
+        else {
+            document.forms["data"].submit();
+        }
+    }
+
+    $("#selectSh_unit").change(function () {
+        var id = $(this).val();
+        if (id != "") {
+            $.ajax({
+                url: '/供应商后台/GetSmj',
+                data: { id: id },
+                dataType: 'json',
+                success: function (data) {
+                    var str = "";
+                    $.each(data, function () {
+                        str += "<td><a title='删除' id='"+this.id+"' href='###' onclick='delPicExist(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='"+this.path+"'>×</a>";
+                        str += "<img style='border:1px solid gray;' src='" + this.path + "' height='80' width='100'><div style='width:100px;color:red'><label style='font-size:13px;word-break:break-word;'>" + this.examine + (this.reason != '' ? ':' + this.reason : '') + "</label></div></td>";
+                    });
+                    $("#showhc_ysd").html(str);
+                },
+                error: function () {
+                    
+                },
+            });
+        }
+    });
+    $(document).ready(function () {
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+        $("#上传验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#上传验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function fileChange() {
+        document.forms["upload"].submit();
+        //$("#framebox").show();
+        $("#f1").show();
+    }
+</script>
+@if (ViewData["是否持有U盾"] == "1" && ViewData["供应商ID"].ToString() != "200000000003")
+{
+    <script type="text/javascript">
+        $(function () {
+            $(".gys_znxx_box").hide();
+            if (!getcheck()) {
+                $(".gys_znxx_box").hide();
+                $("#indexpagemodal1").hide();
+            }
+            else {
+                $("#indexpagemodal1").show();
+            }
+        });
+        function delPicExist(th) {
+            var id = $("#selectSh_unit").val();
+            var path = $(th).attr("lang");
+            $.get('/供应商后台/DelYsdSmj', { n: path, gid: id },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            //var newpath = document.getElementById("picture").value.split('|');
+            //var str = "";
+            //for (j = 0; j < newpath.length - 1; j++) {
+            //    if (path != newpath[j]) {
+            //        str += newpath[j] + "|";
+            //    }
+            //}
+            //document.getElementById("picture").value = str;
+            //setPic("#picture");
+        }
+
+        function delPicExist(th) {
+            var id = $("#selectSh_unit").val();
+            var path = $(th).attr("lang");
+            $.get('/供应商后台/DelYsdSmj', { n: path, gid: id },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            //var newpath = document.getElementById("picture").value.split('|');
+            //var str = "";
+            //for (j = 0; j < newpath.length - 1; j++) {
+            //    if (path != newpath[j]) {
+            //        str += newpath[j] + "|";
+            //    }
+            //}
+            //document.getElementById("picture").value = str;
+            //setPic("#picture");
+        }
+
+
+        function getcheck() {
+            var flage = true;
+
+            var browser = DetectBrowser();
+            if (browser == "Unknown") {
+                alert("不支持该浏览器， 如果您在使用傲游或类似浏览器，请切换到IE模式，建议使用Google浏览器！");
+                flage = false;
+            }
+            createElementNT199();
+            var create = DetectNT199Plugin();
+            if (create == false) {
+                alert("插件未安装,,请直接安装CD区的插件!");
+                flage = false;
+            }
+
+            var Rtn = NT199_Find();
+            if (Rtn < 1) {
+                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                flage = false;
+            }
+
+            if (flage) {
+                $("#indexpagemodal1").show();
+                $("#password").focus();
+            }
+            return flage;
+        }
+        function OnLogon() {
+            var Rtn = NT199_Find();
+            if (Rtn < 1) {
+                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                return false;
+            }
+            var pwd = document.getElementById("password").value;
+            if (pwd == "") {
+                alert("用户密码不能为空");
+                return false;
+            }
+            var retVal = NT199_CheckPassword(pwd);
+            if (retVal != 0) {
+                if (retVal == 1) {
+                    alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+                }
+                else {
+                    alert("ErrorCode:" + NT199_GetLastError() + "   密码不正确");
+                }
+                return false;
+            }
+            var IAID = NT199_GetHardwareId();
+
+            var randomMessageFromServer = "@ViewData["Message"]";
+            var hashVal = NT199_Sha1WithSeed(randomMessageFromServer);
+
+            document.getElementById("HidDigest").value = hashVal;
+            document.getElementById("HidIAID").value = IAID;
+
+            var tempparm = "HidDigest=" + hashVal + "&HidIAID=" + IAID + "&ssid=" + $("#ssid").val();
+
+            $("#indexpagemodal1").hide();
+            $("#errortips").html("");
+            $.ajax({
+                cache: false,
+                async: false,
+                //dataType: 'json', type: 'post',
+                type: 'POST',
+                url: "/供应商后台/CheckUOfYsd",
+                data: tempparm,
+                success: function (data) {
+                    if (data == "1") {
+                        $(".gys_znxx_box").show();
+                        return true;
+                    }
+                    else {
+                        $("#indexpagemodal1").show();
+                        $("#errortips").html(data);
+                    }
+                }
+            });
+            return false;
+        }
+    </script>
+}
+else
+{
+    <script>
+        function setPic(th) {
+            var str = "<table>";
+            var id = $(th).attr("lang");
+            var path = $(th).val();
+            var path1 = path.split('|');
+            var row = parseInt((path1.length - 1) / 4);
+            var maintain = parseInt((path1.length - 1) % 4);
+            var count = 0;
+            if (row > 0) {
+                for (var i = 0; i < row; i++) {
+                    str += "<tr>";
+                    for (var j = 0; j < 4; j++) {
+                        str += "<td><a title='删除' id='" + id + "' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /></a></td>"
+                        count++;
+                    }
+                    str += "</tr>";
+                }
+            }
+            if (maintain > 0) {
+                str += "<tr>";
+                for (var m = 0; m < maintain; m++) {
+                    str += "<td><a title='删除' id='" + id + "' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /></a></td>";
+                    count++;
+                }
+                str += "</tr>";
+            }
+            str += "</table>";
+            document.getElementById("pBox").innerHTML = str;
+            $("#f1").hide();
+        }
+        function delPic(th) {
+            var id = $(th).attr("id");
+            var path = $(th).attr("lang");
+            $.get('/供应商后台/Del_gysPic', { n: path, gid: id },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            var newpath = document.getElementById("picture").value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
+                }
+            }
+            document.getElementById("picture").value = str;
+            setPic("#picture");
+        }
+
+        function delPicExist(th) {
+            var id = $("#selectSh_unit").val();
+            var path = $(th).attr("lang");
+            $.get('/供应商后台/DelYsdSmj', { n: path, gid: id },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            //var newpath = document.getElementById("picture").value.split('|');
+            //var str = "";
+            //for (j = 0; j < newpath.length - 1; j++) {
+            //    if (path != newpath[j]) {
+            //        str += newpath[j] + "|";
+            //    }
+            //}
+            //document.getElementById("picture").value = str;
+            //setPic("#picture");
+        }
+
+        $(function () {
+            $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+            $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+        });
+    </script>
+}
+<script>
+    function setPic(th) {
+        var str = "<table>";
+        var id = $(th).attr("lang");
+        var path = $(th).val();
+        var path1 = path.split('|');
+        var row = parseInt((path1.length - 1) / 4);
+        var maintain = parseInt((path1.length - 1) % 4);
+        var count = 0;
+        if (row > 0) {
+            for (var i = 0; i < row; i++) {
+                str += "<tr>";
+                for (var j = 0; j < 4; j++) {
+                    str += "<td><a title='删除' id='" + id + "' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /></a></td>"
+                    count++;
+                }
+                str += "</tr>";
+            }
+        }
+        if (maintain > 0) {
+            str += "<tr>";
+            for (var m = 0; m < maintain; m++) {
+                str += "<td><a title='删除' id='" + id + "' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /></a></td>";
+                count++;
+            }
+            str += "</tr>";
+        }
+        str += "</table>";
+        document.getElementById("pBox").innerHTML = str;
+        $("#f1").hide();
+    }
+    function delPic(th) {
+        var id = $(th).attr("id");
+        var path = $(th).attr("lang");
+        $.get('/供应商后台/Del_gysPic', { n: path, gid: id },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+        var newpath = document.getElementById("picture").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("picture").value = str;
+        setPic("#picture");
+    }
+</script>

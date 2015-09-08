@@ -1,0 +1,349 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.招标采购预报名
+<style type="text/css">
+    .procure_formlistdiv {
+        width: 510px;
+    }
+
+        .procure_formlistdiv input {
+            width: 500px;
+        }
+
+    .procureinputdiv_title {
+        width: 200px;
+        text-align: right;
+    }
+
+    .procureinputdiv_title {
+        line-height: 30px;
+    }
+
+    .procure_formlistdiv {
+        line-height: 30px;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="gys_znxx_topbox">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">招标采购预报名详情</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+
+                @if (Model != null)
+                {
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">项目名称：</div>
+                        <div class="procure_formlistdiv">
+                            @Model.所属公告链接.公告.项目信息.项目名称
+                        </div>
+                    </div>
+
+
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">项目编号：</div>
+                        <div class="procure_formlistdiv">
+                            @Model.所属公告链接.公告.项目信息.项目编号
+                        </div>
+                    </div>
+
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">报名状态：</div>
+                        <div class="procure_formlistdiv">
+                            @if (Model.预报名已关闭)
+                            {
+                                <span>已关闭</span>
+                            }
+                            else
+                            {
+                                <span>进行中</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">公告名称：</div>
+                        <div class="procure_formlistdiv">
+                            <a style="text-decoration: underline;" target="_blank" href="/公告/AnnounceDetail?id=@Model.所属公告链接.公告.Id">@Model.所属公告链接.公告.内容主体.标题</a>
+                        </div>
+                    </div>
+
+
+                    @*<div class="procureinputdiv" style=" height:auto; overflow:hidden">
+                        <div class="procureinputdiv_title">供应商所需资料：</div>
+                    </div>*@
+
+                    @*<table width="100%" cellpadding="0" cellspacing="0" id="gys_signup_information">
+                        <tr id="tablehead">
+                            <th width="85%">资料名称</th>
+                            <th width="15%">是否需上传复印件</th>
+                        </tr>
+                        @if (Model.供应商所需资料.Any())
+                        {
+                            foreach (var item in Model.供应商所需资料)
+                            {
+                                <tr>
+                                    <td>@item.资料名</td>
+                                    @if (item.图片)
+                                    {
+                                        <td style="text-align:center;"><input type="checkbox" checked="checked" /></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="text-align:center;"><input type="checkbox" /></td>
+                                    }
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="2" style="text-align:center"><a style="color:red" href="/单位用户后台/SignUp_Information?id=@Model.Id" target="_blank">修改供应商所需资料</a></td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2" style="text-align:center">暂未设置<a style="padding-left:20px; color:red" href="/单位用户后台/SignUp_Information?id=@Model.Id" target="_blank">点击进行设置</a></td>
+                            </tr>
+                        }
+                    </table>*@
+
+
+
+                    <div class="procureinputdiv" style="height:auto; overflow:hidden; width:100%">
+                        <div class="procureinputdiv_title">已报名供应商列表：</div><div class="procureinputdiv_title" style="float:right;"><a href="SignUp_Print?id=@Model.Id" style=" color: red; text-decoration:underline;" target="_blank">点击这里打印名单</a></div>
+                    </div>
+
+                    <div id="sinuppagecontent">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th>供应商名称</th>
+                                <th>报名时间</th>
+                                @*<th>状态</th>*@
+                                <th>是否已付款买标书</th>
+                                <th style="display:none;">是否发送邮箱</th>
+                                <th>操作</th>
+                            </tr>
+                            @foreach (var item in (IEnumerable<Go81WebApp.Models.数据模型.项目数据模型.招标采购预报名._供应商预报名信息>)ViewData["预报名供应商列表"])
+                            {
+                                <tr>
+                                    <td>
+                                        <a style="text-decoration: underline;" target="_blank" href="/供应商陈列/Supplier_Destination?id=@item.供应商链接.用户ID">@item.供应商链接.用户数据.企业基本信息.企业名称</a>
+                                    </td>
+                                    <td>
+                                        @item.报名时间.ToString("yyyy-MM-dd HH:mm:ss")
+                                    </td>
+                                    @*@if (item.审核数据.审核状态 != Go81WebApp.Models.数据模型.审核状态.审核未通过)
+                                    {
+                                        <td>
+                                            @item.审核数据.审核状态
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            @item.审核数据.审核状态<span style="color:red">(@item.审核数据.未通过理由)</span>
+                                        </td>
+                                    }*@
+                                    <td style="text-align:center;">
+                                        @if (item.已购买标书)
+                                        {
+                                            <input type="checkbox" name="isbuybs" value="@item.供应商链接.用户ID" flag="1" style=" width:15px; height:15px; line-height:42px;" checked="checked" onclick="bscheckchange(this);" />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" name="isbuybs" value="@item.供应商链接.用户ID" flag="0" style=" width:15px; height:15px; line-height:42px;" onclick="bscheckchange(this)" />
+                                        }
+                                    </td>
+                                    <td style="text-align:center; display:none;">
+                                        @if (item.已发送电子标书)
+                                        {
+                                            <input type="checkbox" name="issendmail" value="@item.供应商链接.用户ID" flag="1" style=" width:15px; height:15px; line-height:42px;" checked="checked" onclick="mailcheckchange(this)" />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" name="issendmail" value="@item.供应商链接.用户ID" flag="0" style=" width:15px; height:15px; line-height:42px;" onclick="mailcheckchange(this)" />
+                                        }
+                                    </td>
+                                    <td>
+                                        <a target="_blank" style="text-decoration: underline;" href="/供应商陈列/Supplier_Destination?id=@item.供应商链接.用户ID">查看资料</a>
+                                        @*<a target="_blank" style="text-decoration: underline;" href="/单位用户后台/SignUp_Detail_Gys?item=@Model.Id&id=@item.供应商链接.用户ID">查看资料</a>*@
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                        @if (ViewData["pagecount"] != null && ViewData["pagecount"].ToString() != "1")
+                        {
+                            <div class="gys_znxx_content_detailbox">
+                                @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+                                {
+                                    <a class="currentPage">首页</a>
+                                }
+                                else
+                                {
+                                    <a id="1" onclick="changeed_page(this)">首页</a>
+                                }
+                                @for (int i = 0; i <= 10; i++)
+                                {                       //一共最多显示10个页码，前面5个，后面5个
+                                    if ((int.Parse(ViewData["currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                                    {
+                                        if (5 == i)
+                                        {                               //当前页处理
+                                            <a class="currentPage">@int.Parse(ViewData["currentPage"].ToString())</a>
+                                        }
+                                        else
+                                        {                               //一般页处理
+                                            <a id="@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)" onclick="changeed_page(this)">@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)</a>
+
+                                        }
+                                    }
+                                }
+                                @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+                                {
+                                    <a class="currentPage">末页</a>
+                                }
+                                else
+                                {
+                                    <a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeed_page(this)">末页</a>
+                                }
+
+                            </div>
+                        }
+                    </div>
+
+                    <input name="isbuybscontent_ed" id="isbuybscontent_ed" type="hidden" value="@ViewData["已购买标书"].ToString()" />
+                    <input name="issendmailcontent_ed" id="issendmailcontent_ed" type="hidden" value="@ViewData["已发送标书"].ToString()" />
+
+                    <input name="isbuybscontent" id="isbuybscontent" type="hidden" value="" />
+                    <input name="issendmailcontent" id="issendmailcontent" type="hidden" value="" />
+
+
+                    <div style="text-align:center;padding-top:20px;">
+                        @if (Model.预报名已关闭)
+                        {
+                            <input type="radio" name="closeybm" value="0" /><span>打开预报名</span>
+                            <input type="radio" name="closeybm" value="1" checked="checked" /><span>关闭预报名</span>
+                        }
+                        else
+                        {
+                            <input type="radio" name="closeybm" value="0" checked="checked" /><span>打开预报名</span>
+                            <input type="radio" name="closeybm" value="1" /><span>关闭预报名</span>
+                        }
+                    </div>
+
+                    <div id="" class="" style="text-align:center;">
+                        <input id="modiibutton" name="submitcontent" type="submit" style="margin-top:20px;" onclick="return setisbuybs();" class="front_login_rightbox_button" value="确定">
+                    </div>
+
+                    <script type="text/javascript">
+                        function changeed_page(obj) {
+                            $.get("/单位用户后台/Part_SignUp_Detail_Page?page=" + encodeURI($(obj).attr("id")) + "&id=" + encodeURIComponent(@Model.Id), function (response) {
+                                $("#sinuppagecontent").html(response);
+                                var bscontent = $("#isbuybscontent").val().split('|');
+                                var mailcontent = $("#issendmailcontent").val().split('|');
+
+                                var bscontent_ed = $("#isbuybscontent_ed").val();
+                                var mailcontent_ed = $("#issendmailcontent_ed").val();
+
+                                $("input[name='isbuybs']").each(function () {
+                                    //判断已绑定字段
+                                    if ($(this).attr("flag") == "1") {
+                                        $(this).prop("checked", false);
+                                        if (bscontent_ed != "" && $.inArray($(this).val(), bscontent_ed.split('|')) != -1) {
+                                            $(this).prop("checked", true);
+                                        }
+                                    }
+                                    else {
+                                        if ($.inArray($(this).val(), bscontent) != -1) {
+                                            $(this).prop("checked", true);
+                                        }
+                                        else {
+                                            $(this).prop("checked", false);
+                                        }
+                                    }
+                                });
+
+                                $("input[name='issendmail']").each(function () {
+                                    //判断已绑定字段
+                                    if ($(this).attr("flag") == "1") {
+                                        $(this).prop("checked", false);
+                                        if (mailcontent_ed != "" && $.inArray($(this).val(), mailcontent_ed.split('|')) != -1) {
+                                            $(this).prop("checked", true);
+                                        }
+                                    }
+                                    else {
+                                        if ($.inArray($(this).val(), mailcontent) != -1) {
+                                            $(this).prop("checked", true);
+                                        }
+                                        else {
+                                            $(this).prop("checked", false);
+                                        }
+                                    }
+                                });
+                            });
+                        }
+                    </script>
+                }
+                else
+                {
+                    <div style="text-align:center;">
+                        无此信息
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+}
+<script type="text/javascript">
+    function setisbuybs() {
+        if (!confirm("确定提交本次数据？")) {
+            return false;
+        }
+    }
+    function bscheckchange(obj) {
+        var oldstr = $("#isbuybscontent").val();
+        var val = $(obj).val();
+        oldstr = oldstr.replace(val + "|", "");
+        if ($(obj).is(":checked")) {
+            oldstr += val + "|";
+        }
+
+        if ($(obj).attr("flag") == "1") {
+            var oldstr_ed = $("#isbuybscontent_ed").val();
+            oldstr_ed = oldstr_ed.replace(val + "|", "");
+            if ($(obj).is(":checked")) {
+                oldstr_ed += val + "|";
+            }
+            $("#isbuybscontent_ed").val(oldstr_ed);
+        }
+
+        $("#isbuybscontent").val(oldstr);
+
+    }
+    function mailcheckchange(obj) {
+        var oldstr = $("#issendmailcontent").val();
+        var val = $(obj).val();
+        oldstr = oldstr.replace(val + "|", "");
+        if ($(obj).is(":checked")) {
+            oldstr += val + "|";
+        }
+
+        if ($(obj).attr("flag") == "1") {
+            var oldstr_ed = $("#issendmailcontent_ed").val();
+            oldstr_ed = oldstr_ed.replace(val + "|", "");
+            if ($(obj).is(":checked")) {
+                oldstr_ed += val + "|";
+            }
+            $("#issendmailcontent_ed").val(oldstr_ed);
+        }
+
+        $("#issendmailcontent").val(oldstr);
+    }
+    $(function () {
+        $("#招标采购预报名列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#招标采购预报名列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+

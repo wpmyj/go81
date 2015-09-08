@@ -1,0 +1,271 @@
+﻿@{
+    Layout = null;
+}
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.管理器
+@using MongoDB.Driver.Builders
+@using Go81WebApp.Models.数据模型
+<html>
+<head>
+    <script type="text/javascript" language="javascript" src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/JS/provinceandcity_all.js"></script>
+    <link rel="stylesheet" href="~/css/WeChat.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>西南物资采购网采购商城-商品</title>
+    <style>
+        ul {
+            list-style: none;
+            padding: 0px;
+        }
+
+            ul li {
+                list-style-type: none;
+            }
+
+        .rightbox {
+            background-color: #F1F1F1;
+            width: 31.5%;
+            height: auto;
+            line-height: 30px;
+            font-size: 12px;
+            margin-left: 5px;
+            overflow: hidden;
+            float: left;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+            .rightbox img {
+                width: 120px;
+                height: 120px;
+            }
+
+        .container {
+            margin-bottom: 5px;
+            border-bottom: 1px solid #F5B3EC;
+        }
+
+        .rightbox .gname {
+            width: 115px;
+            height: 50px;
+            line-height: 25px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+            margin: 0px auto;
+            padding:5px;
+        }
+
+        .rightbox .gprice {
+            width: 120px;
+            margin: 0px auto;
+            color: #ff0000;
+            /*background-color:#ff6a00;*/
+            text-align: left;
+            margin-bottom: 5px;
+            margin: 0px auto;
+        }
+
+        .searchBox {
+            font-size: 13px;
+            margin-left: 10px;
+            width: 100%;
+        }
+
+        #area select, #industry select {
+            width: 20%;
+        }
+
+        #name {
+            width: 77%;
+            height: 27px;
+            display: inline-block;
+            border: none;
+            margin-left: 1px;
+            margin-top: 1px;
+        }
+
+        .goodname {
+            min-width: 100px;
+            max-width: 135px;
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+            height: 30px;
+            line-height: 30px;
+            float: left;
+            background-color: #0094ff;
+            border-top-right-radius: 15px;
+        }
+
+        .more_good {
+            width: 100px;
+            height: 30px;
+            line-height: 30px;
+            float: right;
+            text-align: right;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        .imgbox{
+            width:320px;
+            height:250px;
+            overflow:hidden;
+            position:relative;
+            margin:0px auto;
+        }
+        a{
+            text-decoration:none;
+            color:#ff0000;
+        }
+    </style>
+</head>
+<body>
+    @{
+        IEnumerable<商品分类> gt = ViewData["gt"] as IEnumerable<商品分类>;
+        IEnumerable<商品> gd = 商品管理.查询商品(0, 6);
+    }
+    <div class="outbox">
+        <div class="imgbox">
+            <table id="image" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    @foreach (var item in gd)
+                    {
+                        <td style="width:100%;">
+                            @if (item.商品信息.商品图片.Any())
+                            {
+                                <img src="@item.商品信息.商品图片.First().Replace("original", "150X150")" style="width:320px;height:250px;" />
+                            }
+                            else
+                            {
+                                <img src="~/Images/noimage.jpg" style="width:320px;height:250px;" />
+                            }
+                        </td>
+                    }
+                </tr>
+            </table>
+            <div class="circle">
+                <div id="1">1</div>
+                <div id="2">2</div>
+                <div id="3">3</div>
+                <div id="4">4</div>
+                <div id="5">5</div>
+                <div id="6">6</div>
+            </div>
+        </div>
+        <ul id="goodcontainer">
+            @foreach (var item in gt)
+            {
+                IEnumerable<商品> goods = null;
+                switch (item.分类名)
+                {
+                    case "办公设备": goods = 商品管理.查询分类下商品(3, 0, 3, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过)); break;
+                    case "文体器材": goods = 商品管理.查询分类下商品(166, 0, 3, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过)); break;
+                    case "计算机及通信": goods = 商品管理.查询分类下商品(668, 0, 3, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过)); break;
+                    case "电气设备": goods = 商品管理.查询分类下商品(573, 0, 3, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过)); break;
+                    case "机械设备": goods = 商品管理.查询分类下商品(328, 0, 3, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过)); break;
+                    case "家具": goods = 商品管理.查询分类下商品(91, 0, 3, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过)); break;
+                    case "仪器仪表": goods = 商品管理.查询分类下商品(864, 0, 3, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过)); break;
+                    case "原材料": goods = 商品管理.查询分类下商品(263, 0, 3, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过)); break;
+                    case "建筑装修材料": goods = 商品管理.查询分类下商品(1196, 0, 3, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过)); break;
+                    case "车辆": goods = 商品管理.查询分类下商品(515, 0, 3, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过)); break;
+                    case "技术训练器材": goods = 商品管理.查询分类下商品(1225, 0, 3, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过)); break;
+                    //case "畜牧养殖业": goods = 商品管理.查询分类下商品(1230, 0, 3); break;
+                    //case "其他服务": goods = 商品管理.查询分类下商品(1220, 0, 3); break;
+                }
+                if (item.分类名 == "办公设备" ||
+                    item.分类名 == "文体器材" ||
+                    item.分类名 == "计算机及通信" ||
+                    item.分类名 == "电气设备" ||
+                    item.分类名 == "机械设备" ||
+                    item.分类名 == "家具" ||
+                    item.分类名 == "仪器仪表" ||
+                    item.分类名 == "原材料" ||
+                    item.分类名 == "建筑装修材料" ||
+                    item.分类名 == "车辆" ||
+                    item.分类名 == "技术训练器材")// ||
+                //item.分类名 == "畜牧养殖业" ||
+                //item.分类名 == "其他服务"
+                {
+                    <li>
+                        <div style="border-bottom:1px solid #0094ff;width:100%;">
+                            <div class="goodname">@item.分类名</div>
+                            <div class="more_good">
+                                @switch (item.分类名)
+                                {
+                                    case "办公设备":<a href="/WeChat/GoodlistWithType?id=3">更多>></a>; break;
+                                    case "文体器材":<a href="/WeChat/GoodlistWithType?id=166">更多>></a>; break;
+                                    case "计算机及通信":<a href="/WeChat/GoodlistWithType?id=668">更多>></a>; break;
+                                    case "电气设备":<a href="/WeChat/GoodlistWithType?id=573">更多>></a>; break;
+                                    case "机械设备":<a href="/WeChat/GoodlistWithType?id=328">更多>></a>; break;
+                                    case "家具":<a href="/WeChat/GoodlistWithType?id=91">更多>></a>; break;
+                                    case "仪器仪表":<a href="/WeChat/GoodlistWithType?id=864">更多>></a>; break;
+                                    case "原材料":<a href="/WeChat/GoodlistWithType?id=263">更多>></a>; break;
+                                    case "建筑装修材料":<a href="/WeChat/GoodlistWithType?id=1196">更多>></a>; break;
+                                    case "车辆":<a href="/WeChat/GoodlistWithType?id=515">更多>></a>; break;
+                                    case "技术训练器材":<a href="/WeChat/GoodlistWithType?id=1225">更多>></a>; break;
+                                }
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                        <div style="margin-bottom:10px;">
+                            @if (goods != null)
+                            {
+                                <ul>
+                                    @foreach (var g in goods)
+                                    {
+                                        <li>
+                                            <div class="rightbox">
+                                                <a href="/WeChat/Gooddetail?id=@g.Id">
+                                                    @if (g.商品信息.商品图片.Any())
+                                                    {
+                                                        <img src="@g.商品信息.商品图片.First().Replace("original", "150X150")" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img src="~/Images/noimage.jpg" />
+                                                    }
+                                                </a>
+                                                <div class="gname">
+                                                    @g.商品信息.商品名
+                                                </div>
+                                                <div class="gprice">¥@g.销售信息.价格</div>
+                                                <div class="gprice">
+                                                    <a class="shopCar">加入购物车</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            <div style="clear:both;"></div>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+    <script type="text/javascript" language="javascript">
+        var counter=1;
+        function scrollPicture() {
+            $("table#image").animate({ "margin-left": "-320px" }, 500, function () {
+                $(".circle div").css("background-color", "#fff");
+                counter++;
+                if (counter>6)
+                {
+                    counter = 1;
+                }
+                $("#" + counter).css("background-color", "#17FF33");
+                var html = $("table#image tr:eq(0) td:eq(0)").html();
+                $("table#image tr:eq(0)").append("<td style='width:100%;'>" + html + "</td>");
+                $("table#image tr:eq(0) td:eq(0)").remove();
+                $("table#image").css("margin-left", "0px");
+            });
+        }
+        $(document).ready(function () {
+            $("#" + counter).css("background-color", "#17FF33");
+            setInterval("scrollPicture()", 3000);
+        });
+    </script>
+</body>
+</html>

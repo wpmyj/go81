@@ -1,0 +1,582 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.消息数据模型
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script src="~/JS/provinceandcity_all.js"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript">
+    function search_User(th) {
+        if (event.keyCode == 13) {
+            if (th.value == "") {
+                alert("请输入用户名！");
+            }
+            else {
+                Find_User();
+            }
+        }
+    }
+    function setValue(data,data1) {
+        var str = "";
+        var row = parseInt(data.length / 3);
+        var maintain = data.length % 3;
+        var num = 0;
+        if (row > 0) {
+            for (var i = 0; i < row; i++) {
+                var s0 = "<tr>";
+                for (var j = 0; j < 3; j++) {
+                    s0 += "<td align='left'><input type='checkbox' title='" + data[num] + "' onclick='Set_Val(this)' value='" + data1[num] + "'/>" + data[num] + "</td>";
+                    num++;
+                }
+                s0 += "</tr>";
+                str += s0;
+            }
+        }
+        if (maintain > 0) {
+            var s1 = "<tr>";
+            for (var k = 0; k < maintain; k++) {
+                s1 += "<td align='left'><input type='checkbox' title='" + data[num] + "' onclick='Set_Val(this)' value='" + data1[num] + "'/>" + data[num] + "</td>";
+                num++;
+            }
+            s1 += "</tr>";
+            str += s1;
+        }
+        $("table#cons").html(str);
+    }
+    var number = 1;
+    var list_count = 0;
+    function setPage(pg_count, current_page) {
+        if (pg_count <= 6) {
+            str = '';
+            for (var i = 1; i <= pg_count; i++) {
+                str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (current_page < 6) {
+                if (current_page != 1) {
+                    var str = "<a onclick='pre_page()'>上一页</a>";
+                    for (var i = 1; i < 6; i++) {
+                        str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
+                    $("div#pager").html(str);
+                }
+                else {
+                    var str = "";
+                    for (var i = 1; i < 6; i++) {
+                        str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
+                    $("div#pager").html(str);
+                }
+
+            }
+            else if (current_page >= 6 && current_page < pg_count - 3) {
+                var str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(" + 1 + ")'>1</a>...";
+                for (var i = (current_page - 4 + 1) ; i <= current_page; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
+                $("div#pager").html(str);
+            }
+            else if (current_page >= pg_count - 3) {
+                str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(1)'>1</a>...";
+                for (var i = pg_count - 5 + 1; i < pg_count; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == current_page.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    function Find_User() {
+        var us = $("select#user").val();
+        if (us == "供应商") {
+            $("span.selectIndustry").show();
+            $("span.area").show();
+        }
+        else {
+            $("span.selectIndustry select#industry").val("");
+            $("span.area select#deliverprovince").val("");
+            $("span.area select#delivercity").val("");
+            $("span.area select#deliverarea").val("");
+            $("span.selectIndustry").hide();
+            $("span.area").hide();
+        }
+        var mtype = $("select#user").val();
+        if (mtype == "单位用户") {
+            $("#msgType").show();
+        } else {
+            $("#msgType").hide();
+        }
+        var page = '';
+        $(":text#Riseaver").val("");
+        $(":button#bt").attr("disabled", "disabled");
+        $(":button#bt").addClass("btn_unenable");
+        var province = $("select#deliverprovince").val();
+        var city = $("select#delivercity").val();
+        var area = $("select#deliverarea").val();
+        var catorgray = $("select#user").val();
+        var industry = $("select#industry").val();
+        var username = $(":text#username").val();
+        $.get('/单位用户后台/Find_Users/',
+            { prov: province, cit: city, ar: area, cator: catorgray, indus: industry, p: page, user: username },
+            function (data) {
+                setValue(data.Data.name, data.Data.loginName);
+                number = 1;
+                list_count = data.Data.count;
+                setPage(list_count, number);
+            }
+        );
+        $("div#c").css("display", "block");
+    }
+    function current_page(num) {
+        var province = $("select#deliverprovince").val();
+        var city = $("select#delivercity").val();
+        var area = $("select#deliverarea").val();
+        var catorgray = $("select#user").val();
+        var industry = $("select#industry").val();
+        var username = $(":text#username").val();
+        $.get('/单位用户后台/Find_Users/',
+            { prov: province, cit: city, ar: area, cator: catorgray, indus: industry, p: num, user: username },
+            function (data) {
+                setValue(data.Data.name, data.Data.loginName);
+                setPage(data.Data.count, num);
+            }
+        );
+        number = num;
+    }
+    function pre_page() {
+        var province = $("select#deliverprovince").val();
+        var city = $("select#delivercity").val();
+        var area = $("select#deliverarea").val();
+        var catorgray = $("select#user").val();
+        var industry = $("select#industry").val();
+        var username = $(":text#username").val();
+        if (number > 1) {
+            number--;
+            $.get('/单位用户后台/Find_Users/',
+                { prov: province, cit: city, ar: area, cator: catorgray, indus: industry, p: number, user: username },
+                function (data) {
+                    setValue(data.Data.name, data.Data.loginName);
+                    setPage(data.Data.count, number);
+                }
+            );
+        }
+    }
+    function next_page() {
+        var province = $("select#deliverprovince").val();
+        var city = $("select#delivercity").val();
+        var area = $("select#deliverarea").val();
+        var catorgray = $("select#user").val();
+        var industry = $("select#industry").val();
+        var username = $(":text#username").val();
+        if (number < list_count) {
+            number++;
+            $.get('/单位用户后台/Find_Users/',
+                { prov: province, cit: city, ar: area, cator: catorgray, indus: industry, p: number, user: username },
+                function (data) {
+                    setValue(data.Data.name, data.Data.loginName);
+                    setPage(data.Data.count, number);
+                }
+            );
+        }
+    }
+    var s = '';
+    var s1 = '';
+    function Set_Val() {
+        s = '';
+        s1 = '';
+        $(":checkbox").each(
+            function () {
+                if (this.checked) {
+                    s += $(this).attr("title") + ',';
+                    s1 += $(this).val() + ',';
+                }
+            }
+        );
+        s += "";
+        s1 += "";
+        $(":text#Riseaver").val(s);
+        $(":text#Riseaver1").val(s1);
+        if (s != '') {
+            $(":button#bt").removeAttr("disabled");
+            $(":button#bt").removeClass("btn_unenable").addClass("btn_enable");
+        }
+        else {
+            $(":button#bt").attr("disabled", "disabled");
+            $(":button#bt").removeClass("btn_enable").addClass("btn_unenable");
+        }
+    }
+</script>
+
+<script>
+    var con = "";
+    var title = "";
+    var reasiver;
+    var editor;
+    var level = 0;
+    var mType = "";
+    KindEditor.ready(function (K) {
+        editor = K.create('#content', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true,
+            width: 300,
+            height: 400,
+            items: ['source', '|', 'fullscreen', 'undo', 'redo', 'print', 'cut', 'copy', 'paste',
+ 'plainpaste', 'wordpaste', '|', 'justifyleft', 'justifycenter', 'justifyright',
+ 'justifyfull', 'insertorderedlist', 'insertunorderedlist', 'indent', 'outdent', 'subscript',
+ 'superscript', '|', 'selectall', '-',
+ 'title', 'bold', 'italic', 'underline', 'strikethrough', 'removeformat', '|', 'hr', 'link']
+        });
+        K('input[name=submitcontent]').click(function (e) {
+            //con = editor.html();
+            editor.sync();
+            //con = document.getElementById('editor_id').value; // 原生API
+            //con = K('#content').val(); // KindEditor Node API
+            con = editor.html();
+            title = $(":text#title").val();
+            reasiver = $(":text#Riseaver1").val();
+            level = $("select#level").val();
+            mType = $("select#mType").val();
+            if (con != "" && title != "") {
+                $("#f1").show();
+                $.get('/单位用户后台/ZnxxAdd', { r: reasiver, t: title, c: con, l: level, m: mType }, function (data) {
+                    $("#tips").css("display", "block");
+                    $("#tips img").remove();
+                    $("#tips div#tips1").before("<img style='float:left;' src='/Images/success.png' alt='成功' />");
+                    $("#tips div#tips1").text(data);
+                    $("#f1").hide();
+                    editor.html("");
+                    $(":text#title").val("");
+                });
+            }
+            else {
+                $("#tips").css("display", "block");
+                $("#tips img").remove();
+                $("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+                $("#tips div#tips1").text('请将待发送消息填写完整！');
+            }
+        });
+        K('input[name=xymsg]').click(function (e) {
+            //con = editor.html();
+            editor.sync();
+            //con = document.getElementById('editor_id').value; // 原生API
+            //con = K('#content').val(); // KindEditor Node API
+            con = editor.html();
+            title = $(":text#title").val();
+            reasiver = $(":text#Riseaver1").val();
+            level = $("select#level").val();
+            mType = $("select#mType").val();
+            if (con != "" && title != "") {
+                $("#f1").show();
+                $.get('/单位用户后台/ZnxxAdd_xy', { r: reasiver, t: title, c: con, l: level, m: mType }, function (data) {
+                    $("#tips").css("display", "block");
+                    $("#tips img").remove();
+                    $("#tips div#tips1").before("<img style='float:left;' src='/Images/success.png' alt='成功' />");
+                    $("#tips div#tips1").text(data);
+                    $("#f1").hide();
+                    editor.html("");
+                    $(":text#title").val("");
+                });
+            }
+            else {
+                $("#tips").css("display", "block");
+                $("#tips img").remove();
+                $("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+                $("#tips div#tips1").text('请将待发送消息填写完整！');
+            }
+        });
+
+    });
+    function shutdown() {
+        $("#tips").fadeOut(10);
+    }
+</script>
+<style>
+    table#Search_Result {
+        position: absolute;
+        width: 650px;
+        box-shadow: 2px 2px 5px gray;
+        -webkit-box-shadow: 2px 2px 5px gray;
+        -moz-box-shadow: 2px 2px 5px gray;
+        background-color: white;
+        border: 1px solid WindowFrame;
+    }
+
+    #c table tr td {
+        font-size: 12px;
+    }
+
+    table#Search_Result tr td {
+        background-color: white;
+    }
+
+        table#Search_Result tr td:hover {
+            background-color: rgb(247, 247, 247);
+            cursor: pointer;
+        }
+
+    div#pager a {
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        line-height: 25px;
+        font-size: 12px;
+        height: 25px;
+        border: 1px solid gray;
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+        .out_box {
+        display: none;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 3%;
+    }
+
+    .out_box_insecond_child {
+        width: 680px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+        border: 1px solid red;
+    }
+
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
+</style>
+<div id="f1" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>消息发送中，请稍等...</span>
+    </div>
+</div>
+<div id="person" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="hidebox('#person')">×</a></div>
+            <div style="width:700px; height:auto;overflow:hidden;">
+                <div>
+                    <div>
+                        <table width="100%" style="margin-left:20px;">
+                            <tr>
+                                <td class="align">用户类型：</td>
+                                <td align="left">
+                                    <select onchange="Find_User()" id="user" style="width:150px;">
+                                        @{if (WebApiApplication.IsIntranet)
+                                        {
+                                            <option value="单位用户">单位用户</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="供应商">供应商</option>
+                                            @*<option value="专家">专家</option>*@
+                                        }
+                                        }
+                                    </select>
+                                    <span style="color:red;">*</span>
+                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户名：<input id="username" placeholder="请输入用户名" onkeyup="search_User(this)" type="text" /><button onclick="Find_User()">搜索</button></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%" class="align"><span class="area">选择地区：</span></td>
+                                <td align="left" width="85%">
+                                    <span class="area">
+                                        <select onblur="Find_User()" id="deliverprovince" name="deliverprovince" style="width:150px;"></select>
+                                        
+                                    </span>
+                                    <span class="area">
+                                        <select onblur="Find_User()" id="delivercity" name="delivercity" style="width:150px;"></select>
+                                        
+                                    </span>
+                                    <span class="area">
+                                        <select onchange="Find_User()" id="deliverarea" name="deliverarea" style="width:150px;"></select>
+                                       
+                                    </span>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="align"><span class="selectIndustry">所属行业：</span></td>@{IEnumerable<商品分类> model = ViewData["行业"] as IEnumerable<商品分类>;}
+                                <td align="left">
+                                    <span class="selectIndustry">
+                                        <select onchange="Find_User()" id="industry" style="width:150px;">
+                                            <option value="">请选择行业类型</option>
+                                            @if (model != null && model.Count() != 0)
+                                            {
+                                                foreach (var item in model)
+                                                {
+                                                    <option value="@item.分类名">@item.分类名</option>
+                                                }
+                                            }
+                                        </select>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr id="msgType">
+                                <td>消息类型：</td>
+                                <td align="left">
+                                    <select id="mType" style="width:150px;">
+                                        <option value="@((int)消息类型.普通)">普通</option>
+                                        <option value="@((int)消息类型.推荐专家和供应商)">推荐专家和供应商</option>
+                                        <option value="@((int)消息类型.采购信息)">采购信息</option>
+                                    </select>
+                                    <div class="out_box">
+                                        <div class="arrow"></div>
+                                        <div class="con_box">请选择发给单位用户的消息类型<em style="color: red;">（*注意，此选项只对单位用户有效）</em></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <script>
+                            window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                        </script>
+                        <div id="c" style="margin-left:auto; margin-right:auto;display:none; text-align:center; margin-top:20px;">
+                            <table width="100%" style="height:80px;" id="cons"></table>
+                            <div id="pager"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="text-align:center;color:red; box-shadow:0px 0px 5px black;-webkit-box-shadow:0px 0px 5px black; -moz-box-shadow:0px 0px 5px black;-ms-box-shadow:0px 0px 5px black; position:absolute; background-color:#EFF0E7; margin-top:300px; margin-left:275px; display:none; width:250px; height:100px; border-radius:3px; font-size:12px;" id="tips">
+    <div style="width:auto"><a href="###" onclick="shutdown()" title="关闭窗口" style="cursor:pointer; display:block; float:right; width:15px; height:15px; text-align:center; line-height:15px; background-color:red; color:white;">×</a></div>
+    <div style="clear:both; width:200px;height:30px;margin-left:35px;margin-top:40px;">
+        <div id="tips1" style="color:red; font-size:14px; float:left;margin-left:10px;"></div>
+    </div>
+</div>
+
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">发新消息</div>
+    </div>
+</div>
+<div class="gys_znxx_box" onkeypress="BindEnter(event,'bt');">
+    <input type="text" style="display:none;" id="Riseaver1" />
+    <table style="margin-top:10px;margin-left:50px;">
+        <tr>
+            <td class="align"><span style="text-align:center; height:25px;">收信人：</span></td>
+            <td colspan="2">
+                <input type="text" onclick="showPerson('div#person')" readonly style="width:647px;height:20px;" id="Riseaver" />
+                @*<div class="out_box">
+                        <div class="arrow"></div>
+                        <div class="con_box">此处是您选择地要接收消息的用户</div>
+                    </div>*@
+            </td>
+            <td><span id="tip" style="color:red; text-align:center;"></span></td>
+        </tr>
+        <tr>
+            <td align="right">标题：</td>
+            <td align="left">
+                <select id="level" style="height:25px;width:144px;">
+                    <option value="@((int)重要程度.一般)">重要程度：一般</option>
+                    <option value="@((int)重要程度.重要)">重要程度：重要</option>
+                    <option value="@((int)重要程度.特别重要)">重要程度：特别重要</option>
+                    <option value="@((int)重要程度.必读)">重要程度：必读</option>
+                </select>
+            </td>
+            <td>
+                <input type="text" style="width:354px;height:20px;" id="title" />
+                @*<div class="out_box">
+                        <div class="arrow"></div>
+                        <div class="con_box">请填写发送消息的标题以确保消息的完整性</div>
+                    </div>*@
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" align="right">内容：</td>
+            <td colspan="2">
+                <textarea id="content" name="content" style="width: 880px; height: 550px; visibility: hidden;"></textarea>
+            </td>
+        </tr>
+        <tr>
+        <td></td>
+        <td align="center" colspan="2">
+            @if (long.Parse(ViewData["id"].ToString()) == 10003)
+            {
+                <input type="button" value="发往协议供应商" class="front_login_rightbox_button btn_enable" name="xymsg" onclick="" />
+            }
+            <input type="button" id="bt" class="btn_unenable front_login_rightbox_button" disabled="disabled" name="submitcontent" value="发        送" />
+            </td></tr>
+    </table>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#msgType").hide();
+        //$("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        //$("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+        $("#新增消息").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#新增消息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function hidePerson(th) {
+        $(th).hide();
+    }
+    function showPerson(th) {
+        Find_User();
+        $(th).show();
+    }
+    function hidebox(th) {
+        $(th).hide();
+    }
+</script>

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.需求计划模型.需求计划物资>
+@if (Model.Any())
+{
+    <table class="listdetailtable" style="float: left; width: 94%; margin-left:3%; margin-right: 3%;" cellpadding="0" cellspacing="0">
+<tr>
+            <th>需求部门</th>
+            <th>物资名称</th>
+            <th>规格型号</th>
+            <th>技术指标</th>
+            <th>计量单位</th>
+            <th>采购数量</th>
+            <th>单价</th>
+            <th>预算金额</th>
+            <th>交货期限</th>
+            <th>建议采购方式</th>
+            <th>备注</th>
+            @*<th>操作</th>*@
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr id="smdetail_@(item.Id)">
+                <td>
+                    @if (item.来源合并项.Any())
+                    {
+                        <div name="treepic" flag="1" class="tre_level1" value="@item.Id" onclick='changeshow(this);' style="float: left; margin-top: 0;"></div>
+                    }
+                    @item.所属需求计划.需求计划数据.需求发起单位链接.用户数据.单位信息.单位名称
+                </td>
+                <td>@item.物资名称</td>
+                <td>@item.规格型号</td>
+                <td>@item.技术指标</td>
+                <td>@item.计量单位</td>
+                <td>@item.数量</td>
+                <td>@item.单价</td>
+                <td>@item.预算金额</td>
+                <td>@item.交货期限.ToString("yyyy/MM/dd")</td>
+                <td>@item.建议采购方式</td>
+                <td title="@item.备注"><img src="/Images/notice.png" style="width: 20px; vertical-align: middle;" title="@item.备注"></td>
+                @*<td><input name="checkbox" type="checkbox" alt="" value="@item.Id" onclick="checkthis(this)" />不通过</td>*@
+            </tr>
+        }
+    </table>
+}

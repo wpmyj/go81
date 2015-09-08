@@ -1,0 +1,86 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.招标采购项目
+<link rel="stylesheet" href="~/css/index.css" type="text/css">
+<style type="text/css">
+    .procure_selectlistdiv input {
+        width: 13px;
+        height: 13px;
+        line-height: 25px;
+        margin-left: 0;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="gys_xttz_box">
+        <div class="gys_xttz_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">需求申请详情--审核</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+
+            <div class="gys_znxx_contentbox">
+                <div class="gys_znxx_content">
+                    @if (Model != null)
+                    {
+                        <div class="gys_xttz_contentbox_news_title">@Html.DisplayFor(model => model.需求申请来源.需求申请.标题)</div>
+                        <div class="gys_xttz_contentbox_news_text">
+                            @Html.Raw(Model.需求申请来源.需求申请.正文)
+                        </div>
+
+
+
+
+                        <div class="procureinputdiv">
+                            <div class="procureinputdiv_title">设定项目名称：</div>
+                            <div class="procure_formlistdiv">
+                                @Html.EditorFor(model => model.项目名称)
+                                <span class="tipmessage">@Html.ValidationMessageFor(model => model.项目名称)</span>
+                            </div>
+                        </div>
+                        <div class="procureinputdiv">
+                            <div class="procureinputdiv_title">设定项目编号：</div>
+                            <div class="procure_formlistdiv">
+                                @Html.EditorFor(model => model.项目编号)
+                                <span class="tipmessage">@Html.ValidationMessageFor(model => model.项目编号)</span>
+                            </div>
+                        </div>
+
+                        <div class="procureinputdiv">
+                            <div class="procureinputdiv_title">设定预算金额：</div>
+                            <div class="procure_formlistdiv">
+                                @Html.EditorFor(model => model.预算金额)
+                                <span class="tipmessage">@Html.ValidationMessageFor(model => model.预算金额)</span>
+                            </div>
+                        </div>
+                        <div class="procureinputdiv">
+                            <div class="procureinputdiv_title">选择项目类型：</div>
+                            <div class="procure_selectlistdiv">
+                                <div class="procure_selectlist" style="padding-left:0;">@Html.RadioButtonFor(model => model.项目类型, "普通", new { @class = "procure_radioinput" })普通</div>
+                                <div class="procure_selectlist">@Html.RadioButtonFor(model => model.项目类型, "网上竞标", new { @class = "procure_radioinput" })网上竞标</div>
+                            </div>
+                        </div>
+                        <br />
+
+
+                        <div class="procure_adaduditdiv">
+                            <input type="submit" value="审核通过" name="action" class="front_login_rightbox_button_less">
+                            <input type="submit" value="审核不通过" name="action" class="front_login_rightbox_button_less">
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="gys_xttz_contentbox_news_title">暂无此信息</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    $(function () {
+        $("#审核需求申请").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#审核需求申请").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

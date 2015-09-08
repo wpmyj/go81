@@ -1,0 +1,142 @@
+﻿<link rel="stylesheet" type="text/css" href="~/css/gys_treemenu.css" />
+
+<script type="text/javascript" src="~/js/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="~/js/SimpleTree.js"></script>
+
+
+<link rel="stylesheet" href="~/css/index.css" type="text/css">
+<link href="~/ueditor/themes/default/css/umeditor.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="~/ueditor/third-party/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="~/ueditor/umeditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="~/ueditor/umeditor.min.js"></script>
+<script type="text/javascript" src="~/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".st_tree").SimpleTree({
+            click: function (a) {
+                if (!$(a).attr("hasChild"))
+                    window.location.href = $(a).attr("href");
+            }
+        });
+        if ($("#links").val() != null && $("#links").val() != "") {
+            var dom = $("#" + $("#links").val());
+            $(dom).css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        }
+    });
+</script>
+<style>
+    a{color:black;}
+</style>
+
+<div style="height:auto; width:238px; margin-bottom:10px;">
+    <div class="index_menu_top">
+        <div class="index_menu_top_middle">
+            <div class="index_menu_top_title"><span>@Html.ActionLink("我的控制面板", "Index")</span></div>
+        </div>
+    </div>
+    <div class="st_tree">
+        <ul>
+            <!--<li><a href="#" ref="hyjm">欢迎界面</a></li>-->
+            <li class="st_tree_first_tittle"><span>+</span><a href="#">消息管理</a></li>
+            <ul show="true">
+                <li id="syeteminfo" class="st_tree_second_title"><span>-</span><a href="~/运营团队后台/SystemInfo">系统通知</a></li>
+                <li class="st_tree_second_title"><span>+</span><a href="#">站内消息</a></li>
+                <ul show="true">
+                    <li id="znxxadd" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/ZNXX_Add">发新消息</a></li>
+                    <li id="znxx" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/ZNXX">已收消息</a></li>
+                    <li id="znxxsend" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/ZNXX_Sended">已发消息</a></li>
+                </ul>
+            </ul>
+            <li class="st_tree_first_tittle"><span>+</span><a href="#">商品管理</a></li>
+            <ul show="true">
+                <li id="goodclass" class="st_tree_second_title"><span>-</span><a href="~/运营团队后台/GoodClassify">商品目录管理</a></li>
+                <li class="st_tree_second_title"><span>+</span><a href="#">商品审核</a></li>
+                    <ul show="true">
+                        <li id="goodexamine" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/GoodExamine">待审核</a></li>
+                        @*<li class="st_tree_third_title"><a href="~/运营团队后台/GoodNotPass">未通过</a></li>
+                        <li class="st_tree_third_title"><a href="~/运营团队后台/GoodExaminePass">已通过</a></li>*@
+                    </ul>
+            </ul>
+            <li class="st_tree_first_tittle"><span>+</span><a href="#">投诉建议</a></li>
+            <ul show="true">
+                <li class="st_tree_second_title"><span>+</span><a href="#">投诉</a></li>
+                    <ul show="true">
+                        <li id="suggestion" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Suggestion">已处理</a></li>
+                        <li id="suggestion" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Suggestion_Dealing">处理中</a></li>
+                        <li id="suggestionnopass" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Suggestion_NoPss">未处理</a></li>
+                    </ul>
+                <li class="st_tree_second_title"><span>+</span><a href="#">建议</a></li>
+                    <ul show="true">
+                        <li id="requestionreply" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Requestion_Replied">已处理</a></li>
+                        <li id="suggestion" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Requestion_Dealing">处理中</a></li>
+                        <li id="requestionnoreply" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Requestion_No_Replied">未处理</a></li>
+                    </ul>
+            </ul>
+            <li class="st_tree_first_tittle"><span>+</span><a href="#">供应商信息管理</a></li>
+            <ul show="true">
+                <li id="suppssinfo" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Supplier_PssInfo">已审核</a></li>
+                <li id="supwaitinfo" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Supplier_WaitInfo">未审核</a></li>
+                <li id="supwaitinfo" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Add_Supplier_Info">添加供应商</a></li>
+            </ul>
+
+            <li class="st_tree_first_tittle"><span>+</span><a href="#">推送信息管理</a></li>
+            <ul show="true">
+                <li id="sendmsglist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/SendMessageList">推送信息管理</a></li>
+                <li id="sendmsgauditlist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/SendMessageAuditList">推送信息审核</a></li>
+            </ul>
+            <li class="st_tree_first_tittle"><span>＋</span><a href="#">公告管理</a></li>
+            <ul show="true">
+                <li id="adlist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Procure_AdList">公告列表</a></li>
+                <li id="adadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Procure_AdAdd">发布公告</a></li>
+                <li id="adaudit" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Procure_AdAudit">审核公告</a></li>
+            </ul>
+            <li class="st_tree_first_tittle"><span>＋</span><a href="#">新闻管理</a></li>
+            <ul show="true">
+                <li id="newslist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Procure_NewsList">新闻列表</a></li>
+                <li id="newsadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Procure_NewsAdd">发布新闻</a></li>
+            </ul>
+            <li class="st_tree_first_tittle"><span>＋</span><a href="#">政策法规管理</a></li>
+            <ul show="true">
+                <li id="zcfglist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Procure_ZcfgList">政策法规列表</a></li>
+                <li id="zcfgadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Procure_ZcfgAdd">发布政策法规</a></li>
+            </ul>
+            <li class="st_tree_first_tittle"><span>＋</span><a href="#">通知管理</a></li>
+            <ul show="true">
+                <li id="tzlist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Procure_TzList">通知列表</a></li>
+                <li id="tzadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Procure_TzAdd">发布通知</a></li>
+            </ul>
+            <li class="st_tree_first_tittle"><span>＋</span><a href="#">单位管理</a></li>
+            <ul show="true">
+                <li id="departmentlist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/DepartmentList">单位列表</a></li>
+                <li id="departmentadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/DepartmentAdd">单位添加</a></li>
+                <li id="departmentAuditList" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/DepartmentAuditList">单位审核</a></li>
+            </ul>
+
+            <li class="st_tree_first_tittle"><span>+</span><a href="#">网站用户管理</a></li>
+            <ul show="true">
+                <li id="userinfolist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/User_Info_List">用户列表</a></li>
+                @*<li class="st_tree_second_title"><a href="~/运营团队后台/Ad_User_Info">添加用户</a></li>*@
+            </ul>
+            <li class="st_tree_first_tittle"><span>+</span><a href="#">消息模板管理</a></li>
+            <ul show="true">
+                <li id="msgtempmanage" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Msg_TemplateManage">消息模板</a></li>
+                @*<li class="st_tree_second_title"><a href="~/运营团队后台/Ad_User_Info">添加用户</a></li>*@
+            </ul>
+            <li class="st_tree_first_tittle"><span>+</span><a href="#">下载管理</a></li>
+            <ul show="true">
+                <li id="downloadadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/DownloadAdd">添加下载</a></li>
+                <li id="downloadmanage" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/DownloadManage">下载管理</a></li>
+                @*<li class="st_tree_second_title"><a href="~/运营团队后台/Ad_User_Info">添加用户</a></li>*@
+            </ul>
+            <li class="st_tree_first_tittle"><span>+</span><a href="#">权限管理</a></li>
+            <ul show="true">
+                <li id="usergroupadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Usergroup_Add">添加用户组</a></li>
+                <li id="usergroupmanage" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Usergroup_Mannage">用户组管理</a></li>
+                <li id="roleadd" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Role_Add">添加角色</a></li>
+                <li id="rolemanage" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/运营团队后台/Role_Mannage">角色管理</a></li>
+            </ul>
+        </ul>
+    </div>
+</div>
+

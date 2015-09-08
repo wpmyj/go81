@@ -1,0 +1,1046 @@
+﻿@charset "utf-8";
+/* CSS Document */
+/*机票酒店样式*/
+ul{margin:0;padding:0;}
+a{text-decoration:none}
+li{list-style:none;}
+p,h1,h2,h3,h4,h5,h6{margin:0;}
+
+
+.hotel_ticket{
+	width:1200px;
+	margin:0 auto;
+    float:left;
+}
+.hotel,.ticket{
+	/*width:600px;
+	float:left;*/
+    clear:both;
+}
+
+.hotel_search,.ticket_search{
+	/*width:557px;*/
+    height:140px;
+	/*border:1px solid #393;*/
+	padding:20px;
+}
+.hotel_search_title,.ticket_search_title{
+	height:35px;
+	/*width:500px;*/
+	margin:0 auto;
+	line-height:35px;
+	border-bottom:1px solid #ccc;
+	padding:0 20px;
+	position:relative;
+}
+.hotel_search_title a,.ticket_search_title a{
+    
+}
+.ico_arrow{
+	position:absolute;
+	height:0;
+	width:0;
+	border-top:5px solid #009FBE;
+	border-left:5px solid transparent;
+	border-right:5px solid transparent;
+	left:82px;
+}
+.hidden{
+    display:none;
+}
+.hov{
+    color:#009FBE;
+    border-bottom:2px solid #009FBE;
+}
+.tab_change_menu{
+    text-indent:40px;
+    margin-top:15px;
+    position:relative;
+}
+.tab_change_menu a{
+    cursor:pointer;
+	text-decoration:none;
+	display:inline-block;
+	height:25px;
+    text-indent:0px;
+}
+.tab_change_menu a:hover{
+    color:#009FBE;
+}
+.lta{left:70px;}
+.search_input{
+	padding:15px 17px;
+}
+.search_input .inputbox{
+	width:168px;
+	height:22px;
+}
+.hid{
+    display:none;
+}
+.search_input table tr td.align{
+	text-align:right;
+	font-family:"微软雅黑";
+	color:#5C5C5C;
+	font-size:14px;
+}
+.search_input table tr td button,.direction button{
+	height:30px;
+	width:70px;
+}
+.hot_class{
+	padding:0 20px;
+	font-size:15px;
+}
+.hot_class .class_title{
+	line-height:30px;
+	color:#454545;
+}
+.hot_class table{ 
+	font-size:12px;
+}
+.hot_class table tr td.cla{
+	color:#666;
+}
+.hot_class table tr td a{
+	padding-right:15px;
+	color:#0069CA;
+}
+.go_come{
+	line-height:50px;
+	text-indent:3em;
+}
+.direction{margin:20px 0 0 36px;}
+.direction span{
+	text-align:right;
+	font-family:"微软雅黑";
+	color:#5C5C5C;
+	font-size:14px;
+}
+.direction .align{
+    text-align:right;
+}
+.direction .tic_name{
+    width:180px;
+    height:22px;
+}
+.direction .loc_name{
+    width:60px;
+}
+.marker{
+    border:none;
+    cursor:pointer;
+    width:28px;
+    height:21px;
+    background:url(../Images/marker.png) bottom center no-repeat;
+    background-size:28px 21px;
+}
+/*.search_btn{
+    width:70px;
+}*/
+.top_up{
+    height:0;
+    width:0;
+    border-bottom:18px solid #aaa;
+    border-left:15px solid transparent;
+	border-right:15px solid transparent;
+    position:absolute;
+    left:-1px;
+    display:none;
+}
+.top_up:after{
+    content:'';
+    height:0;
+    width:0;
+    border-bottom:15px solid #fff;
+    border-left:12px solid transparent;
+	border-right:12px solid transparent;
+    position:absolute;
+    left:-12px;
+    top:1px;
+    z-index:999;
+}
+.loc_div_out{
+    width:100%;
+    height:100%;
+    background:rgba(92, 92, 92, 0.92);
+    top:0;
+    left:0;
+    position:fixed;
+    z-index:9999;
+    display:none;
+}
+.close_div{
+    color:#fff;
+    font-size:30px;
+    position:absolute;
+    right:20px;
+    top:10px;
+    cursor:pointer;
+}
+.modal_m{
+    margin:5% auto;
+    position:relative;
+}
+.loc_ing{
+    height: 25px; 
+    width: 220px; 
+    position: absolute; 
+    top: 10px; 
+    background:rgb(255, 255, 255); 
+    right: 10px; 
+    z-index: 999; 
+    font-size: 12px; 
+    text-align: center; 
+    line-height: 25px; 
+    opacity: 0.7;
+}
+.loc_div{
+    width:100%;
+    height:100%;
+    background:#fff;
+    border:1px solid #ccc;
+}
+.hotel_catalog{
+	margin-top:10px;
+	/*width:596px;*/
+	height:209px;
+	/*border:1px solid #ccc;*/ 
+    border-top: 1px solid #ccc;
+}
+.hotel_catalog_class{
+	/*width:596px;*/
+	height:30px;
+	line-height:30px;
+	background:#E6E6E6;
+	border-bottom:1px solid #C6C6C6;
+}
+.separator{
+    width:550px; 
+    border-bottom:1px solid #aaa;
+}
+.hotel_catalog_class span{
+	float:left;
+	color:#696969;
+	font-size:16px;
+	text-indent:10px;
+}
+.hotel_catalog_class ul{
+	margin:0;
+	padding:0;
+	float:right;
+}
+.hotel_catalog_class ul li{
+	list-style:none;
+	float:left;
+	font-size:12px;
+	padding:0 8px;
+	cursor:pointer;
+    position:relative;
+}
+.hotel_catalog_class ul li.hove{
+	border:1px solid #C6C6C6;
+	border-bottom:none;
+	border-top:none;
+	background:#fff;
+	padding-bottom:1px;
+}
+.next_city{
+    /*width:596px;*/
+    width:914px;
+    border:1px solid #ccc;
+    border-top:none;
+    position:absolute;
+    background:#fff;
+    /*left:-396px;*/
+    left:-714px;
+    display:none;
+}
+.gz{/*left:-436px;*/left:-754px;}
+.yn{/*left:-476px;*/left:-794px}
+.xz{/*left:-516px;*/left:-834px;}
+.cq{/*left:-556px;*/left:-874px;}
+.next_city span{font-size:12px;}
+.tab_change{
+    height:179px;
+	display:none;
+}
+.hotel_area_catalog table tr th{
+	width:15px;
+	vertical-align:middle;
+	background:#ECE9E9;
+    padding:0 8px 0 4px;	
+}
+.hotel_area_catalog table tr td ul li{
+
+	list-style:none;
+	float:left;
+}
+.hotel_area_catalog table tr td ul li.fic{
+	padding-top:6px;
+	/*width:186px;*/
+    width:210px;
+	height:40px;
+}
+.hotel_area_catalog table tr td ul li a.fc{
+	font-size:15px;
+	color:#0069CA;
+}
+.hotel_area_catalog table tr td ul li a{
+    font-size:12px;
+    color:#0069CA;
+}
+.hotel_area_catalog table tr td ul li a:hover{
+    color:#ff3131;
+    text-decoration:underline;
+}
+li.fic ul li{
+	padding-right:8px;
+}
+.hotel_list,.ticket_list{
+	margin-top:15px;
+    margin-bottom:15px;
+	border:1px solid #e9e9e9;
+	padding: 10px;
+    /*width: 576px;*/
+}
+.list_hotel{
+	border-bottom:1px solid #aaa;
+	height:130px;
+	padding-top:10px;
+}
+.hotel_pic,.hotel_brief{
+	float:left;
+}
+.hotel_pic img{
+    width:180px;
+    height:120px;
+}
+.hotel_brief{
+	font-size:12px;
+	margin-left:15px;
+}
+.hotel_til{
+    width:380px;
+}
+.hotel_brief .hotel_til a{
+	color:#0084BB;
+	font-size:17px;
+	font-weight:bold;
+	margin-left:5px;
+}
+.hotel_brief .hotel_til a:hover {
+    text-decoration: underline;
+}
+.hotel_brief p{
+	line-height:25px;
+	color:#565656;
+}
+.hotel_brief .tel{
+    color:#616161;
+    float: right;
+    margin-right: 1px;
+}
+.hotel_brief p.indent{
+    text-indent:2em;
+    width:980px;
+    height:70px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.p_indent{
+    width:570px;
+    height:73px;
+    padding:5px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.hotel_brief p a{
+	color:#565656;
+	text-decoration:underline;
+}
+.hotel_brief p a:hover{
+	color:#0084BB;
+}
+.hotel_brief .hotel_til span{
+	display:inline-block;
+	height:18px;
+	width:18px;
+	background:#0084BB;
+	color:#fff;
+	text-align:center;
+	font-size:11px;
+	line-height:19px;
+	margin:0;
+    vertical-align:1px;
+}
+.hotel_brief .hotel_review p a {
+	color:#999;
+	text-decoration:none;
+}
+.hotel_brief .hotel_review p a:hover{
+	color:#0084BB;
+}
+.layout{
+	width:1200px;
+	margin: 20px auto;
+}
+.title_name{
+	width:1100px;
+	margin:0 auto;
+}
+.title_name .name{
+	display:inline-block;
+	border-bottom:3px solid #EDEDED;
+	font-size:30px;
+	width:1088px;
+	position:relative;
+	color:#B2C62B;
+	font-weight:bold;
+	text-indent:1em;
+	font-family:"微软雅黑";
+}
+.title_name .business{
+	font-size:12px;
+	top:5px;
+	right:10px;
+	color:#5C5C5C;
+	font-weight:normal;
+	letter-spacing:normal;
+}
+.title_name .addr{
+	font-size:12px;
+	top:23px;
+	right:10px;
+	color:#5C5C5C;
+	font-weight:normal;
+	letter-spacing:normal;
+}
+.pic_skan{
+	width:1100px;
+	height:240px;
+	padding:0 20px;
+	margin:20px auto;
+}
+.picture{
+	width:605px;
+	float:left;
+	border:1px solid #aaa;
+}
+.pic_skan .spo{
+	float:left;
+}
+.pic_skan .spo img{
+	width:240px;
+	height:240px;
+	border:1px solid #fff;
+	float:left;
+}
+.pic_skan .pic_small{
+	float:left;
+	width:100px;
+}
+.pic_skan .pic_small img{
+	width:119px;
+	height:119px;
+	border:1px solid #fff;
+	float:left;
+}
+.hotel_info{
+	width:475px;
+	height:auto;
+	float:left;
+	margin-left:5px;
+}
+.info_d{
+	width:455px;
+	padding:10px;
+	font-size:13px;
+	padding:10px 10px 10px 0;
+	text-indent:2em;
+	overflow:hidden;
+	text-overflow: ellipsis;
+	line-height:20px;
+	font-family:"微软雅黑";
+	color:#6B6B6B;
+}
+.tra_info_d{
+	height:65px;
+}
+.room_info_d{
+	height:78px;
+}
+.hotel_info table{
+	font-size:13px;
+	margin-top:20px;
+}
+.t_tra_info_d{
+    height:180px;
+}
+.hotel_info .tra_info,.telnum{
+	height:100px;
+	border:1px solid #aaa;
+	padding-left:10px;
+}
+.hotel_info .tra_info h3,.telnum h3,.room_info h3{
+	color:#DB8300;
+	margin-top:10px;
+}
+.hotel_info .room_info{
+	padding-bottom:4px;
+	border:1px solid #ccc;
+	margin-top:5px;
+	padding-left:10px;
+}
+.hotel_base{
+    width:1100px;
+    margin:10px auto;
+}
+.hotel_base table{
+    border:1px solid #ccc;
+    padding-left:20px;
+    padding-right:20px;
+    width:1087px;
+}
+.hotel_base table tr{
+    line-height:30px;
+}
+.hotel_base table tr th{
+    border-bottom:1px solid #ccc;
+    text-align:left;
+    line-height:40px;
+}
+.hotel_base table tr td{
+    font-size:13px;
+    border-bottom:1px solid #ccc;
+}
+.hotel_base table tr td.roomt{
+    font-size:14px;
+    color:#009FBE;
+}
+.hotel_base table tr td.align{
+    text-align:right;
+    width: 100px;
+}
+.hotel_base table tr td.fontSize{
+    font-size:16px;
+    color:#15666C;
+}
+.hotel_base table tr td.algn{
+    text-indent:10px;
+}
+.hotel_base table tr td input[type="checkbox"]{
+    vertical-align:middle;
+    margin-bottom:4px;
+}
+.map_other{
+	width:1100px;
+	height:400px;
+	margin:10px auto;
+	padding:0 20px;
+}
+.map_other .map{
+	width:850px;
+	height:400px;
+	border:1px solid #aaa;
+	float:left;
+}
+.map_other .other{
+	width:230px;
+	height:400px;
+	float:left;
+	margin-left:5px;
+}
+.wifi{
+    display:inline-block;
+    width:18px;
+    height:17px;
+    background:url(../Images/facility.png) -37px 0 no-repeat;
+}
+.stop{
+    display:inline-block;
+    width:18px;
+    height:17px;
+    background:url(../Images/facility.png) -70px 0 no-repeat;
+}
+.map_other .other .other_hotel{
+	width:230px;
+	text-align:center;
+	line-height:30px;
+	background:#FF9225;
+	color:#fff;
+	font-weight:bold;
+}
+.map_other .other .other_hotel .other_hotel_list{
+	width:260px;
+	padding:10px;
+}
+.hotel_list div.list_hotel:last-child{
+    border-bottom:none;
+}
+.other_hotel_list .ls{
+	padding:5px;
+	text-align:center;
+	border:1px solid #ccc;
+	margin-top:4px;
+}
+.other_hotel_list .ls a,.other_hotel_list .ls label{
+	font-size:12px;
+	color:#aaa;
+}
+.other_hotel_list .ls span{
+    /* ReSharper disable once InvalidValue */
+    float:initial;
+}
+.other_hotel_list .ls img{
+    width:180px;
+    height:120px;
+}
+.condition{
+	width:1168px;
+	padding:0 15px;
+	border:1px solid #ccc;
+	font-size:12px;
+    font-family:"宋体";
+}
+.condition .filter_cond,.filter_cond_pos{
+	height:40px;
+	line-height:40px;
+	border-bottom:1px solid #ccc;
+}
+.condition .filter_cond_pos span{
+	float:left;
+	color:#848484;
+	padding-right:15px;
+}
+.condition .filter_cond_pos ul li{
+	float:left;
+	padding-right:30px;
+	color:#484848;
+	position:relative;
+	cursor:pointer;
+}
+.condition .filter_cond_pos ul li:hover {
+	color:#099E93;
+}
+.condition .filter_cond_pos ul li label{
+	height:0;
+	width:0;
+	border-top:7px solid #ccc;
+	border-left:5px solid transparent;
+	border-right:5px solid transparent;	
+	position:absolute;
+	top:18px;
+}
+.condition .filter_cond span{
+	float:left;
+	color:#848484;
+	padding-right:15px;
+}
+.condition .filter_cond.last{
+	border:none;
+}
+.condition .filter_cond ul li{
+	float:left;
+	padding-right:30px;
+	color:#484848;
+	position:relative;
+	cursor:pointer;
+	width:122px;
+	
+}
+.condition .filter_cond ul li.defin{
+	width:140px;
+	padding:0
+}
+.condition .filter_cond ul li.norange{
+	width:35px;
+    color:#099E93;
+}
+.condition .filter_cond ul li input[type="text"]{
+	width:30px;
+}
+.condition .filter_cond ul li input[type="checkbox"]{
+	vertical-align:text-bottom;
+	margin-bottom:1px;
+}
+.h_con {
+    float:left;
+}
+.h_list{
+	width:1200px;
+	margin-top:10px;
+    float:left;
+    padding-bottom:20px;
+}
+.h_list .list_rule{
+	height:30px;
+	line-height:30px;
+	width:800px;
+	background:#F3F3F3;
+	border:1px solid #ccc;
+}
+.h_list .list_rule .sorting{
+	font-size:12px;
+	color:#484848;
+	cursor:pointer;
+	padding:0 5px;
+}
+.h_list .list_rule .desort{
+	font-weight:bold;
+	margin:0 20px;
+	color:#099E93;
+}
+
+.h_list .list_rule .sorting:hover{
+	color:#099E93;
+}
+.fil_list{
+	width:800px;
+}
+.right_con{
+    width:389px;
+    height:267px;
+    border:1px solid #ccc;
+    float:left;
+    margin-left:5px;
+    background:url(../Images/range_otherHotel.png);
+}
+.ali{
+    width:initial;
+}
+/*网上竞标样式*/
+
+.bid{
+    width:1200px;
+}
+
+.good_info{
+    /*width:670px;
+    display:inline-block;*/
+}
+.good_til{
+    /*width: 640px;*/
+    /*height: 36px;*/
+    border-bottom: 2px solid #5EA42E;
+    margin:0 auto;
+    padding:5px 0;
+}
+.alii{
+    /*width:900px;*/
+}
+.good_pic_info{
+    /*width:640px;*/
+    margin:0 auto;
+    padding:10px 0;
+    float:left;
+}
+.acf{
+    /*width:490px;*/
+    /*float:left;*/
+}
+.good_pic{
+    /*display:inline-block;*/
+    float: left;
+    border:1px solid #ccc;
+    padding:5px;
+}
+.good_pic img{ 
+    width:150px;
+    height:150px;
+    border:none;
+}
+.good_info_d{
+    /*display:inline-block;*/
+    width:473px;
+    /*height:150px;*/
+    float:left;
+}
+.good_info_d table tr{
+    line-height:30px;
+}
+.good_info_d table tr td{
+    font-size:12px;
+}
+.good_info_d table tr td.align{
+    width:110px;
+    text-align:right;
+}
+
+.project_info{
+    /*width:900px;*/
+    /*display:inline-block;*/
+}
+
+.auction_info{
+    width:1198px;
+    margin-top:10px;
+}
+.wid{
+    width:1170px;
+    margin:0 auto;
+}
+.auction_info_d{
+    width:1170px;
+    margin: 10px auto;
+    border:1px solid #EDEDED
+}
+.auction_info_d table.table_round_summary{
+    margin:12px auto;
+}
+.auction_info_d table.table_round_summary tr td{
+    background:#F8F8F8;
+    font-size:14px;
+    line-height:25px;
+}
+.auction_info_d table.table_round_summary tr td.align{
+    text-align:right;
+}
+.auction_info_d table.table_round_summary tr td span {
+    display:inline-block;
+    width:150px;
+    text-indent:10px;
+}
+.auction_info_d .round_scroll{
+    height:185px;
+    overflow-y:scroll;
+}
+.auction_info_d table.table_round{
+    width:850px;
+}
+.auction_info_d table.table_round tr{
+    line-height:30px;
+}
+.auction_info_d table.table_round tr th{
+    border-top:2px solid #10A26E;
+    border-bottom:2px solid #10A26E;
+}
+.auction_info_d table.table_round tr td{
+    text-align:center;
+    font-size:14px;
+}
+.auction_info_d table.table_round tr td.start_t{
+    color:RED;
+}
+.auction_info_d table.table_round tr td.first_p{
+    color:#007993;
+}
+.auction_info_d table.table_round tr td.last_p{
+    color:#047809;
+}
+.auction_info_d table.table_round tr td.end_p_time{color:red;}
+
+.auction_opera_record{
+    width:1198px;
+    margin-top:10px;
+}
+.auction_opera{
+    /*width:400px;*/
+    /*height:300px;*/
+    /*display:inline-block;*/
+    /*float:left;*/
+}
+.auction_opera_d{
+    width:1158px;
+    border:1px solid #357D1E;
+    margin:10px auto;
+    padding:10px;
+    display:none;
+}
+.auction_hid{
+    display:block;
+}
+.auction_opera_d p{
+    font-size:20px;
+    line-height:45px;
+    display:inline-block;
+}
+.real_time_bj table{
+    width:92%;
+    margin-left: 20px;
+}
+.real_time_bj table tr td{
+    line-height:34px;
+    border-bottom:1px solid #EDEDED;
+}
+.real_time_bj table tr td.num_bj{
+    text-align:center;
+    width:400px;
+}
+.real_time_bj table tr td.time_bj{
+    text-align:right;
+}
+.dq_bj{
+    margin-top:10px;
+}
+.dq_bj span{
+    color:red;
+}
+.auction_timer{
+    color:red;
+    text-align:center;
+    font-size:22px;
+} 
+
+
+.nid{
+    width:1198px;
+    margin:0 auto;
+}
+.mid{
+    width:1198px;
+    margin:0 auto;
+}
+.auction_record{
+    /*width:789px;
+    display:inline-block;*/
+}
+.auction_record_d{
+    width:1178px;
+    margin:10px auto;
+}
+.round{
+    width:100%;
+    padding:10px;
+    border:1px solid #099E93;
+}
+.round tr.round_num{
+    font-size:21px;
+    line-height:25px;
+}
+.round tr.round_num td.left{
+    font-size: 20px; 
+    color: #0A7E14;
+    font-weight:bold;
+}
+.round tr.round_num td.right{
+    text-indent:24px;
+    text-align:right;
+    color:red;
+}
+.round tr.round_gys{
+    font-size:18px;
+    margin-top:10px;
+}
+.round tr.round_gys td.gys{
+    text-align:left;
+    font-size:18px;
+} 
+ .out_box {
+    width: 1198px;
+    margin: 10px auto 0px auto;
+}
+
+.out_box_intop {
+    width: 100%;
+}
+
+.out_box_intop_left {
+    float: left;
+    width: 60%;
+}
+
+.out_box_intop_right {
+    float: right;
+    width: 39%;
+    font-size: 12px;
+}
+.out_box_intop_rightcon{
+    height:240px;
+    overflow:hidden;
+}
+.out_box_intop_rightcon ul{
+    margin:0;
+    padding:0;
+}
+.out_box_intop_rightcon ul li{
+    padding-left:10px;
+}
+.out_box_intop_rightcon ul li a{
+    display:inline-block;
+    width: 90%;
+    word-break: keep-all; /* 不换行 */
+    white-space: nowrap; /* 不换行 */
+    overflow:hidden;
+    text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+    line-height:26px;
+}
+
+.boxBottom {
+    clear: both;
+    width: 100%;
+    height: auto;
+    margin-top:10px;
+}
+
+.boxBottom table {
+    margin: 0px auto 10px auto;
+}
+
+.boxBottom table tr th{
+    font-size:20px;
+    color:#006400;
+}
+.boxBottom table tr{
+    margin:10px 0;
+    line-height:31px;
+}
+.boxBottom table tr.none_line{
+    line-height:normal;
+}
+.boxBottom table tr td {
+    background-color: white;
+    font-size:14px;
+}
+.boxBottom table tr td.align{
+    width:120px;
+    text-align:right;
+}
+.boxBottom table tr td.start_t{
+    font-size:20px;
+    color:red;
+}
+.boxBottom table tr td.reg_name{
+    text-align:center;
+}
+.boxBottom table tr td.reg_name div{
+    height:100px;
+    border-left:1px solid #ccc;
+    line-height:100px;
+}
+.boxBottom table tr td.reg_name a{
+    display: inline-block; 
+    width: 65px; 
+    line-height: 35px; 
+    border:1px solid #38802D;
+    border-radius: 3px; 
+    font-size: 18px;
+}
+.boxBottom table tr td.reg_name a:hover{
+    background:#758C0E;
+    color:#fff;
+}
+.boxBottom table tr td.bor_bot{
+    border-bottom:1px solid #ccc;
+    padding:10px 0;
+}
+
+
+table tr td table tr td {
+    background-color: white;
+    text-align: left;
+}
+
+.innercontent ul{
+    margin:0;
+    padding:0;
+}
+
+.innercontent div {
+    font-size: 12px;
+    position: absolute;
+    width: 716px;
+    background-color: white;
+    height: 240px;
+}
+

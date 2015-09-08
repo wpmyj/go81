@@ -1,0 +1,47 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.消息数据模型
+@{string name = ViewData["user"].ToString();}
+<div style="width:940px; position:absolute; height:auto; z-index:2;">
+    <div style="font-size:16px;margin-top:30px;">@name，欢迎登录西南物资采购网</div>
+    <div style=" margin-top:20px; " id="tb1">
+        <div style="font-size:14px;">
+            @if (int.Parse(ViewData["msg_count"].ToString()) == 0)
+            {
+                <span>您有@(ViewData["msg_count"])条未读站内消息</span>
+            }
+            else
+            {
+                <span>您有@(ViewData["msg_count"])条未读站内消息，<a href="/运营团队后台/ZNXX" style="text-decoration:underline;">请点击此处查看>></a></span>
+            }
+        </div>
+    </div>
+</div>
+<div id="tip" style="background-color:rgb(117, 117, 85); padding:10px; color:white;position:fixed;right:0px;bottom:-170px; text-align:center; line-height:30px;">
+    @if (ViewData["suplier"].ToString() != "0")
+    {
+        <a style="color:white; display:block; text-decoration:underline;" href="/运营团队后台/Supplier_PssInfo">已有@(int.Parse(ViewData["suplier"].ToString()))家已提交未审核供应商</a>
+    }
+    @if (ViewData["pro_count"].ToString() != "0")
+    {
+        <a style="color: white; display:block;  text-decoration: underline;" href="/运营团队后台/GoodExamine">还有@(int.Parse(ViewData["pro_count"].ToString()))件商品未审核</a>
+    }
+    @if (ViewData["pro_class"].ToString() != "0")
+    {
+        <a style="color: white; display:block;  text-decoration: underline;" href="/运营团队后台/GoodClassify">还有@(int.Parse(ViewData["pro_class"].ToString()))个商品分类未添加属性</a>
+    }
+    @if (ViewData["tickets"].ToString() != "0")
+    {
+        <a style="color: white; display:block;  text-decoration: underline;" href="/运营团队后台/TicketExamine">还有@(int.Parse(ViewData["tickets"].ToString()))个机票代售点未审核</a>
+    }
+    @if (ViewData["hotel"].ToString() != "0")
+    {
+        <a style="color: white; display:block;  text-decoration: underline;" href="/运营团队后台/HotelExamine">还有@(int.Parse(ViewData["hotel"].ToString()))个酒店未审核</a>
+    }
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#欢迎页面").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#欢迎页面").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        $("div#tip").animate({ "bottom": "0px" }, 1000);
+    });
+</script>

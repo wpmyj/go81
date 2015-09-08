@@ -1,0 +1,72 @@
+﻿<style type="text/css">
+    .inputstyle {
+        margin: 10px;
+        width: 200px;
+        height: 50px;
+        line-height: 50px;
+        float: left;
+    }
+</style>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">导出数据</div>
+    </div>
+</div>
+<div class="gys_znxx_box" style="height:auto;overflow:hidden; margin:0 auto;">
+    <div style="padding:20px; height:auto;overflow:hidden;">
+        <input type="button" onclick="DbExport('单位用户')" value="导出单位用户" class="inputstyle" />
+        <input type="button" onclick="DbExport('验收单')" value="导出验收单" class="inputstyle" />
+        <input type="button" onclick="DbExport('公告')" value="导出公告" class="inputstyle" />
+        <input type="button" onclick="DbExport('商品')" value="导出商品" class="inputstyle" />
+        <input type="button" onclick="DbExport('商品分类')" value="导出商品分类" class="inputstyle" />
+        <input type="button" onclick="DbExport('商品历史销售信息')" value="导出商品历史销售信息" class="inputstyle" />
+        <input type="button" onclick="DbExport('供应商')" value="导出供应商" class="inputstyle" />
+        <input type="button" onclick="DbExport('办事指南')" value="导出办事指南" class="inputstyle" />
+        <input type="button" onclick="DbExport('培训资料')" value="导出培训资料" class="inputstyle" />
+        <input type="button" onclick="DbExport('通知')" value="导出通知" class="inputstyle" />
+        <input type="button" onclick="DbExport('政策法规')" value="导出政策法规" class="inputstyle" />
+        <input type="button" onclick="DbExport('登录统计')" value="导出登录统计" class="inputstyle" />
+        <input type="button" onclick="DbExport('广告点击统计')" value="导出广告点击统计" class="inputstyle" />
+        <input type="button" onclick="DbExport('下载')" value="导出下载" class="inputstyle" />
+        <input type="button" onclick="DbExport('用户组')" value="导出用户组" class="inputstyle" />
+        <input type="button" onclick="DbExport('专家')" value="导出专家" class="inputstyle" />
+        <input type="button" onclick="DbExport('专家可评标专业')" value="导出专家可评标专业" class="inputstyle" />
+        @if (WebApiApplication.IsIntranet)
+        {
+            <input type="button" onclick="DbExport('专家抽选记录')" value="导出专家抽选记录" class="inputstyle" />
+            <input type="button" onclick="DbExport('供应商抽选记录')" value="导出供应商抽选记录" class="inputstyle" />
+        }
+        <input type="button" onclick="DbExport('供应商充值记录')" value="导出供应商充值记录" class="inputstyle" />
+        <input type="button" onclick="DbExport('供应商充值余额')" value="导出供应商充值余额" class="inputstyle" />
+        <input type="button" onclick="DbExport('供应商服务记录')" value="导出供应商服务记录" class="inputstyle" />
+        <input type="button" onclick="DbExport('供应商计费项目扣费记录')" value="导出供应商计费项目扣费记录" class="inputstyle" />
+        <input type="button" onclick="DbExport('供应商增值服务申请记录')" value="导出供应商增值服务申请记录" class="inputstyle" />
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+
+        $("#导出数据").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#导出数据").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function DbExport(type) {
+        if (!confirm("确定导出" + type + "？")) {
+            return false;
+        }
+        var parm = "type=" + type;
+        $.ajax({
+            cache: false,
+            async: false,
+            url: "/运营团队后台/doDbExport",
+            data: parm,
+            success: function (data) {
+                if (data != null && data != "") {
+                    window.open(data);
+                }
+                else {
+                    alert("导出失败！")
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,430 @@
+﻿@model Go81WebApp.Models.数据模型.机票代售点
+@{
+    ViewBag.Title = "修改代售点信息";
+    Layout = "_BackLayout.cshtml";
+}
+<style>
+    td span {
+        font-size: 12px;
+        color: red;
+    }
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script src="~/JS/provinceandcity_all.js"></script>
+<div id="f" style="display:none;">
+    <div style="position:fixed; z-index:5; top:0px; left:0px; text-align:center; right:0; bottom:0px; background-color:black; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50); height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="position:fixed; left:0px; top:0%; width:100%;z-index:20;">
+        <div style="width:800px; position:relative; z-index:30; margin:0px auto; height:auto;">
+            <div>
+                <div style="width:100%; height:auto;"><a style="width:30px; display:block; background-color:red; height:30px; font-size:39px; color:white; float:right; text-align:center; line-height:30px;cursor:pointer;" title="关闭窗口" onclick="hidebox()">×</a></div>
+                <div id="dituContent" style="width:800px; position:fixed; height:500px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    string path = "";
+    if (Model.照片 != null && Model.照片.Count != 0)
+    {
+        foreach (var item in Model.照片)
+        {
+            path += item + "|";
+        }
+    }
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div id="title_div" class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">修改机票代售点信息</div>
+        </div>
+        <div style="border:1px solid green; margin-top:8px;">
+            <div style="width:700px;">
+                @using (Html.BeginForm("ModifyTicket", "供应商后台", FormMethod.Post, new { enctype = "multipart/form-data", name = "data" }))
+                {
+                    <input type="hidden" name="point" value=" , " id="point" />
+                    <input type="hidden" id="picture" name="picture" value="@path" />
+                    @Html.HiddenFor(m => m.地理位置)
+                    @Html.HiddenFor(m => m.照片)
+                    @Html.HiddenFor(m => m.所属供应商.用户ID)
+                    @Html.HiddenFor(m => m.Id)
+                    @Html.HiddenFor(m => m.所属地域.省份, new { id = "province" })
+                    @Html.HiddenFor(m => m.所属地域.城市, new { id = "city" })
+                    @Html.HiddenFor(m => m.所属地域.区县, new { id = "area" })
+                    <table style="width:100%; margin-top:20px; margin-bottom:10px; font-size:14px;">
+                        <tr>
+                            <td width="30%" align="right">代售点名称：</td>
+                            <td width="70%">
+                                @Html.TextBoxFor(m => m.代售点名称, new { @style = "height:22px;width: 458px;" })
+                                @Html.ValidationMessageFor(m => m.代售点名称)
+                                <span>*</span>
+                                <br />
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"></td></tr>
+                        <tr>
+                            <td align="right">代售点所在地区：</td>
+                            <td>
+                                <select id="deliverprovince" name="deliverprovince" style="width:150px; height:25px;"></select>
+                                <select id="delivercity" name="delivercity" style="width:154px; height:25px; margin-left:1px;"></select>
+                                <select id="deliverarea" name="deliverarea" style="width:148px; height:25px; margin-left:1px;"></select>
+                                <span>*</span>
+                                <script>
+                                    window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea", "@Model.所属地域.省份", "@Model.所属地域.城市", "@Model.所属地域.区县"); }
+                                </script>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"></td></tr>
+                        <tr>
+                            <td align="right">代售点地址：</td>
+                            <td>
+                                @Html.TextBoxFor(m => m.地址, new { @style = "height:22px;width: 458px;" })
+                                @Html.ValidationMessageFor(m => m.地址)
+                                <span>*</span>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"></td></tr>
+                        <tr>
+                            <td align="right">代售点所在商圈：</td>
+                            <td>
+                                @Html.TextBoxFor(m => m.所属商圈, new { @style = "height:22px;width: 458px;" })
+                                @Html.ValidationMessageFor(m => m.所属商圈)
+                                <span>*</span>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"></td></tr>
+                        <tr>
+                            <td align="right">代售点联系电话：</td>
+                            <td>
+                                @Html.TextBoxFor(m => m.联系电话, new { @style = "height:22px;width: 458px;" })
+                                @Html.ValidationMessageFor(m => m.联系电话)
+                                <span>*</span>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"></td></tr>
+                        <tr>
+                            <td align="right">代售点交通信息：</td>
+                            <td>
+                                @Html.TextBoxFor(m => m.交通信息, new { @style = "height:22px;width: 458px;" })
+                                @Html.ValidationMessageFor(m => m.交通信息)
+                                <span>*</span>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2"></td></tr>
+                        <tr>
+                            <td></td>
+                            <td>@Html.CheckBoxFor(m => m.送票服务)是否提供免费送票服务</td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top">代售点简介：</td>
+                            <td>@Html.TextAreaFor(m => m.简介, new { rows = "8", cols = "62" })</td>
+                        </tr>
+                        <tr><td colspan="2"></td></tr>
+                        <tr>
+                            <td align="right">地理定位：</td>
+                            <td>
+                                <input type="button" onclick="showMap()" value="修改地理位置" />
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请在此处添加代售点地理位置坐标，以在地图上显示</div>
+                                </div>
+                                <span id="position">
+                                    @if (Model.地址 != null)
+                                    {
+                                        <a>当前地理位置：@Model.地址</a>
+                                    }
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                }
+                <table style="width:100%; margin-bottom:10px; font-size:14px;">
+                    <tr>
+                        <td width="30%" align="right">代售点图片：</td>
+                        <td width="70%">
+                            <div id="Uppicture">
+                                <form action="/供应商后台/UploadImages" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                                    <input type="hidden" value="机票" name="pic1" />
+                                    <input type="file" style="width:70px;" accept="image/*" onchange="filechange()" multiple="multiple" name="file1" size="40" />
+                                    <div class="out_box">
+                                        <div class="arrow"></div>
+                                        <div class="con_box">请上传2M一下的图片</div>
+                                    </div>
+                                </form>
+                                <div id="framebox" style="display:none;margin-left:20px; margin-top:10px;width:700px;  margin-right: auto;">
+                                    <iframe name="showPic" id="showPic" frameborder="0" height="150" width="100%"></iframe>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div id="pBox" style="text-align:center; margin-left:200px;">
+                                @if (Model.照片 != null && Model.照片.Count != 0)
+                                {
+                                    int sum = Model.照片.Count;
+                                    int rows = sum / 4;
+                                    int remain = sum % 4;
+                                    int index = 0;
+                                    <table>
+                                        @if (rows > 0)
+                                        {
+                                            for (int i = 0; i < rows; i++)
+                                            {
+                                                <tr>
+                                                    @for (int j = 0; j < 4; j++)
+                                                    {
+                                                        <td>
+                                                            <a title="删除" id="" href="###" onclick="delPic(this)" style="color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;" lang="@Model.照片[index]">×</a>
+                                                            <a href="@Model.照片[index]" target="_blank"><img width="100" height="80" src="@Model.照片[index]" /></a>
+                                                        </td>
+                                                        index++;
+                                                    }
+                                                </tr>
+                                            }
+                                        }
+                                        @if (remain > 0)
+                                        {
+                                            <tr>
+                                                @for (int i = 0; i < remain; i++)
+                                                {
+                                                    <td>
+                                                        <a title="删除" id="" href="###" onclick="delPic(this)" style="color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;" lang="@Model.照片[index]">×</a>
+                                                        <a href="@Model.照片[index]" target="_blank"><img width="100" height="80" src="@Model.照片[index]" /></a>
+                                                    </td>
+                                                    index++;
+                                                }
+                                            </tr>
+                                        }
+                                    </table>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <table width="100%">
+                    <tr>
+                        <td align="center"><input type="button" onclick="saveData()" id="submit_btn" value="保  存" /></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function filechange() {
+        document.forms["upload"].submit();
+        $("#f1").show();
+    }
+    function setPic(th) {
+        var str = "<table>";
+        var path = $(th).val();
+        var path1 = path.split('|');
+        var row = parseInt((path1.length - 1) / 4);
+        var maintain = parseInt((path1.length - 1) % 4);
+        var count = 0;
+        if (row > 0) {
+            for (var i = 0; i < row; i++) {
+                str += "<tr>";
+                for (var j = 0; j < 4; j++) {
+                    str += "<td><a title='删除' id='' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /></td>"
+                    count++;
+                }
+                str += "</tr>";
+            }
+        }
+        if (maintain > 0) {
+            str += "<tr>";
+            for (var m = 0; m < maintain; m++) {
+                str += "<td><a title='删除' id='' href='###' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' /></td>";
+                count++;
+            }
+            str += "</tr>";
+        }
+        str += "</table>";
+        document.getElementById("pBox").innerHTML = str;
+        $("#f1").hide();
+    }
+    function delPic(th) {
+        var id = $(th).attr("id");
+        var path = $(th).attr("lang");
+        $.get('/供应商后台/DeleteImages1', { n: path, gid: id },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+        var newpath = document.getElementById("picture").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("picture").value = str;
+        setPic("#picture");
+    }
+    function saveData()
+    {
+        document.forms["data"].submit();
+    }
+    $(document).ready(function () {
+        $("#代售点列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#代售点列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function showMap() {
+        $("div#f").show();
+    }
+    function hidebox() {
+        $("div#f").hide();
+    }
+    $("#deliverprovince").blur(function () {
+        var val = $("select#deliverprovince").val();
+        $("#province").val(val);
+    });
+    $("#delivercity").blur(function () {
+        var val = $("select#delivercity").val();
+        $("#city").val(val);
+    });
+    $("#deliverarea").change(function () {
+        var val = $("select#deliverarea").val();
+        $("#area").val(val);
+    });
+    $(document).ready(function () {
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+    });
+</script>
+<script type="text/javascript">
+    @{
+        double[] point = new double[2] { 0, 0 };
+        if(Model.地理位置!=null)
+        {
+            point = Model.地理位置;
+        }
+    }
+    //创建和初始化地图函数：
+    function initMap() {
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addMarker();//向地图中添加marker
+    }
+
+    //创建地图函数：
+    function createMap() {
+        var map = new BMap.Map("dituContent", { defaultCursor: 'default' });//在百度地图容器中创建一个地图
+        var point = new BMap.Point(@point[0], @point[1]);//定义一个中心点坐标
+        map.centerAndZoom(point, 17);//设定地图的中心点和坐标并将地图显示在地图容器中
+        map.panBy(400,200);
+        window.map = map;//将map变量存储在全局
+    }
+
+    //地图事件设置函数：
+    function setMapEvent() {
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+
+    //地图控件添加函数：
+    function addMapControl() {
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1 });
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+        map.addControl(ctrl_sca);
+    }
+    //标注点数组
+    var markerArr = [{ title: "", content: "@Model.地址", point: "@point[0]|@point[1]", isOpen: 1, icon: { w: 21, h: 21, l: 0, t: 0, x: 6, lb: 5 } }
+    ];
+    //创建marker
+    function addMarker() {
+        for (var i = 0; i < markerArr.length; i++) {
+            var json = markerArr[i];
+            var p0 = json.point.split("|")[0];
+            var p1 = json.point.split("|")[1];
+            var point = new BMap.Point(p0, p1);
+            var iconImg = createIcon(json.icon);
+            var iconImg = new BMap.Icon("../Images/ditu.png", new BMap.Size(30, 40));
+            var marker = new BMap.Marker(point, { icon: iconImg });
+            var iw = createInfoWindow(i);
+            var label = new BMap.Label(json.title, { "offset": new BMap.Size(json.icon.lb - json.icon.x + 10, -20) });
+            marker.setLabel(label);
+            map.addOverlay(marker);
+            label.setStyle({
+                borderColor: "#808080",
+                color: "#333",
+                cursor: "pointer"
+            });
+
+            (function () {
+                var index = i;
+                var _iw = createInfoWindow(i);
+                var _marker = marker;
+                _marker.addEventListener("click", function () {
+                    this.openInfoWindow(_iw);
+                });
+                _iw.addEventListener("open", function () {
+                    _marker.getLabel().hide();
+                })
+                _iw.addEventListener("close", function () {
+                    _marker.getLabel().show();
+                })
+                label.addEventListener("click", function () {
+                    _marker.openInfoWindow(_iw);
+                })
+                if (!!json.isOpen) {
+                    label.hide();
+                    _marker.openInfoWindow(_iw);
+                }
+            })()
+        }
+    }
+    //创建InfoWindow
+    function createInfoWindow(i) {
+        var json = markerArr[i];
+        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>" + json.content + "</div>");
+        return iw;
+    }
+    //创建一个Icon
+    function createIcon(json) {
+        var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w, json.h), { imageOffset: new BMap.Size(-json.l, -json.t), infoWindowOffset: new BMap.Size(json.lb + 5, 1), offset: new BMap.Size(json.x, json.h) })
+        return icon;
+    }
+    var point = null;
+    initMap();//创建和初始化地图
+    map.addEventListener('click', function (e) {
+        var info = new BMap.InfoWindow('', { width: 260 });
+        var projection = this.getMapType().getProjection();
+        var lngLat = e.point;
+        var lngLatStr;
+        var geoc = new BMap.Geocoder();
+        geoc.getLocation(lngLat, function (rs) {
+            var addComp = rs.addressComponents;
+            lngLatStr = addComp.province + "" + addComp.city + "" + addComp.district + "" + addComp.street + "" + addComp.streetNumber+"<br/><p/><a style='display:block; border-radius:3px; float:right; width:50px; height:30px; text-align:center; line-height:30px;color:white; background-color:#5e6f00;' href='###' onclick='showpoint()'>确定</a>";
+            info.setContent(lngLatStr);
+            map.openInfoWindow(info, lngLat);
+            $("#position").html(addComp.province + "" + addComp.city + "" + addComp.district + "" + addComp.street + "" + addComp.streetNumber);
+        });
+        point = lngLat;
+        //var lngLatStr = "经纬度：" + lngLat.lng + ", " + lngLat.lat + ;
+    });
+    function showpoint() {
+        var p = point.lng + ',' + point.lat;
+        $("#point").val(p);
+        $("div#f").hide();
+        initMap();
+    }
+</script>
+

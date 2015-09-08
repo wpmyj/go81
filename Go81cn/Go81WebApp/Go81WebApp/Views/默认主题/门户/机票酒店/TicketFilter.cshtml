@@ -1,0 +1,139 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.机票代售点>
+<link href="~/css/hotelandticket.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "机票代售点查询";
+}
+<div class="layout">
+    <div class="search">
+
+    </div>
+    <div class="condition">
+        <div class="filter_cond_pos">
+            <span>代售点位置</span>
+            <ul>
+                <li>区域<label></label></li>
+                <li>行政区<label></label></li>
+                <li>地铁线路<label></label></li>
+                <li>车站/机场<label></label></li>
+                <li>观光景点<label></label></li>
+                <li>医院<label></label></li>
+                <li>大学<label></label></li>
+                <li>郊游景点<label></label></li>
+            </ul>
+        </div>
+        @*<div class="filter_cond">
+            <span>价格范围</span>
+            <ul>
+                <li class="norange">不限</li>
+                <li><input type="checkbox" />￥200以下</li>
+                <li><input type="checkbox" />￥200-￥300</li>
+                <li><input type="checkbox" />￥300-￥500</li>
+                <li><input type="checkbox" />￥500以上</li>
+                <li class="defin">自定义<input type="text" /> - <input type="text" /></li>
+                <li><input type="button" value="确定" /></li>
+            </ul>
+        </div>
+        <div class="filter_cond">
+            <span>酒店级别</span>
+            <ul>
+                <li class="norange">不限</li>
+                <li><input type="checkbox" />经济型</li>
+                <li><input type="checkbox" />二星级/其他</li>
+                <li><input type="checkbox" />三星级/舒适</li>
+                <li><input type="checkbox" />四星级/高档</li>
+                <li><input type="checkbox" />五星级/豪华</li>
+            </ul>
+        </div>
+        <div class="filter_cond">
+            <span>连锁品牌</span>
+            <ul>
+                <li class="norange">不限</li>
+                <li><input type="checkbox" />7天连锁</li>
+                <li><input type="checkbox" />如家快捷</li>
+                <li><input type="checkbox" />汉庭酒店</li>
+                <li><input type="checkbox" />99连锁</li>
+                <li><input type="checkbox" />嘉立连锁</li>
+                <li><input type="checkbox" />速8</li>
+            </ul>
+        </div>
+        <div class="filter_cond">
+            <span>酒店类型</span>
+            <ul>
+                <li class="norange">不限</li>
+                <li><input type="checkbox" />客栈</li>
+                <li><input type="checkbox" />商务型酒店</li>
+                <li><input type="checkbox" />连锁品牌</li>
+                <li><input type="checkbox" />招待所</li>
+                <li><input type="checkbox" />酒店式公寓</li>
+                <li><input type="checkbox" />青年旅社</li>
+                <li><input type="checkbox" />家庭旅馆</li>
+            </ul>
+        </div>
+        <div class="filter_cond last">
+            <span>入住要求</span>
+            <ul>
+                <li class="norange">不限</li>
+                <li><input type="checkbox" />免费宽带</li>
+                <li><input type="checkbox" />游泳池</li>
+                <li><input type="checkbox" />新开业/装修</li>
+                <li><input type="checkbox" />餐厅</li>
+                <li><input type="checkbox" />商务中心</li>
+                <li><input type="checkbox" />健身房</li>
+                <li><input type="checkbox" />会议室</li>
+            </ul>
+        </div>*@
+    </div>
+    <div class="h_list">
+        <div class="h_con">
+            <div class="list_rule">
+                <a class="sorting desort">默认排序</a>
+                <a class="sorting">星级</a>
+                <a class="sorting">价格</a>
+                <a class="sorting">评分</a>
+            </div>
+            <div class="fil_list">
+                <div class="hotel_list ali">
+                    @if (Model != null && Model.Any())
+                    {
+                        var m = 0;
+                        var k = "";
+                        foreach (var t in Model)
+                        {
+                            m++;
+                            <div class="list_hotel">
+                                <div class="hotel_pic">
+                                    @{k = t.所属地域 != null ? t.所属地域.地域 : "未填写";}
+                                    @if (t.照片 != null && t.照片.Count > 0)
+                                    {
+                                        <a href="/机票酒店/TicketDetial?id=@t.Id"><img src="@t.照片[0]" title="@t.代售点名称" /></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/机票酒店/TicketDetial?id=@t.Id"><img src="~/Images/ticket1.jpg" title="@t.代售点名称" /></a>
+                                    }
+                                </div>
+                                <div class="hotel_brief">
+                                    <div class="hotel_til"><span>@m</span><a href="/机票酒店/TicketDetial?id=@t.Id">@t.代售点名称</a><label class="tel">联系方式：@t.联系电话</label></div>
+                                    <p>位于<a href="#">@k</a></p>
+                                    <p class="p_indent">@t.简介</p>
+                                    @*<div class="hotel_review">
+                                            <p><a href="#">"环境挺不错，东西都挺新的"</a></p>
+                                            <p><a href="#">"一次性洗漱用品齐全,设施设备非常周到"</a></p>
+                                        </div>*@
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <span>暂无相关数据！</span>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="right_con">
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "个人用户后台";
+}
+@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.消息数据模型
+@{string name = ViewData["user"].ToString();}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div style="width:940px; position:absolute; height:auto;">
+            <div style="font-size:16px;margin-top:30px;">@name，欢迎登录西南物资采购网</div>
+            <div style=" margin-top:20px; " id="tb1">
+                <div style="font-size:14px;">您有 @ViewData["msg_count"].ToString() 条未读站内消息，<a href="/供应商后台/Gys_Znxx" style="text-decoration:underline;">请点击此处查看>></a></div>
+                @*<div style="display:block;margin-top:20px; background-color:rgb(218, 245, 238);font-size:15px; padding-left:5px; height:36px; line-height:36px;">联系我们</div>
+                <div style="display:block; border-style:solid; border-width:1px; border-color:gray; background-color:rgb(243, 246, 246); font-size:13px;">
+                    <table>
+                        <tr><td>客服电话：</td><td>028-68308761</td></tr>
+                        <tr><td>客服QQ：</td><td>2803407183</td></tr>
+                       <tr><td>微信服务平台：</td><td>12345689</td></tr>
+
+
+                    </table>
+                </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#欢迎页面").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#欢迎页面").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>
+
+
+
+
+

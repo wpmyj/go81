@@ -1,0 +1,124 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+<table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <th width="10%">姓名</th>
+        <th width="12%">评审专家类型</th>
+        <th width="12%">专业技术职称</th>
+        <th width="15%">从事专业</th>
+        <th width="15%">所属地区</th>
+        <th width="10%">操作</th>
+    </tr>
+    @{
+        IEnumerable<专家> basedata = ViewData["专家列表"] as IEnumerable<专家>;
+        if (basedata != null && basedata.Any())
+        {
+            foreach (var i in basedata)
+            {
+                <tr>
+                    @if (string.IsNullOrWhiteSpace(i.身份信息.姓名))
+                    {
+                        <td>@Html.ActionLink("匿名用户", "Expert_History_Detail", new { id = i.Id }, new { target = "_blank" })</td>
+                    }
+                    else
+                    {
+                        <td>@Html.ActionLink(i.身份信息.姓名, "Expert_History_Detail", new { id = i.Id }, new { target = "_blank" })</td>
+                    }
+                    <td>@i.身份信息.专家类型</td>
+                    <td>@i.学历信息.专业技术职称</td>
+                    <td>@i.工作经历信息.从事专业</td>
+                    <td>@i.所属地域.地域</td>
+                    <td class="gys_znxx_content_tabletime">
+                        @Html.ActionLink("修改", "Expert_Edit", new { id = i.Id })|@Html.ActionLink("删除", "DeleteExpert", new { id = i.Id })
+                        @*@if (false)
+                            {
+                                @Html.ActionLink("禁用", "Procure_AdForbid", new { })
+                            }
+                            else
+                            {
+                                @Html.ActionLink("解除禁用", "Procure_AdForbid", new { })
+                            }*@
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td>暂无相关评审专家</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+    }
+</table>
+<div class="gys_znxx_content_detailbox">
+    @if (ViewData["currentpage"] != null)
+    {
+        <div class="gys_znxx_content_detailbox">
+            @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+            {
+                <a>首页</a>
+            }
+            else
+            {
+                <a id="1" class="page">首页</a>
+            }
+            @for (int i = 0; i <= 10; i++)
+            {                       //一共最多显示10个页码，前面5个，后面5个
+                if ((int.Parse(ViewData["currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                {
+                    if (5 == i)
+                    {                               //当前页处理
+                        <a>@int.Parse(ViewData["currentPage"].ToString())</a>
+                    }
+                    else
+                    {                               //一般页处理
+                        <a class="page" id="@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)">@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)</a>
+
+                    }
+                }
+            }
+            @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+            {
+                <a>末页</a>
+            }
+            else
+            {
+                <a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+            }
+
+        </div>
+    }
+</div>
+<script type="text/javascript">
+    $("a.page").click(function () {
+        $.ajax({
+            type: "POST",
+            url: "/单位用户后台/Part_Exlist",
+            data: { page: $(this).attr("id") },
+            success: function (data) {
+                $("#acceptlist").html(data);
+            }
+        });
+    });
+    var i = @(int.Parse(ViewData["currentpage"].ToString()));
+    var j=@(int.Parse(ViewData["pagecount"].ToString()));
+    $(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == i) {
+                $(this).addClass("currentPage");
+            }
+            if (i== j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (i == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#评审专家列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#评审专家列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Go81WebApp", "Go81WebApp\Go81WebApp.csproj", "{D9FCD400-8B2E-4312-B228-B38A9048E613}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Go81WebApp.ModuleTester", "Go81WebApp.ModuleTester\Go81WebApp.ModuleTester.csproj", "{85C344D0-F39F-4BBD-9533-B9029C66AD50}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.1.177:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Go81WebApp\\Go81WebApp.csproj
+		SccProjectName1 = Go81WebApp
+		SccLocalPath1 = Go81WebApp
+		SccProjectUniqueName2 = Go81WebApp.ModuleTester\\Go81WebApp.ModuleTester.csproj
+		SccProjectName2 = Go81WebApp.ModuleTester
+		SccLocalPath2 = Go81WebApp.ModuleTester
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Intranet|Any CPU = Debug Intranet|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release Intranet|Any CPU = Release Intranet|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9FCD400-8B2E-4312-B228-B38A9048E613}.Debug Intranet|Any CPU.ActiveCfg = Debug Intranet|Any CPU
+		{D9FCD400-8B2E-4312-B228-B38A9048E613}.Debug Intranet|Any CPU.Build.0 = Debug Intranet|Any CPU
+		{D9FCD400-8B2E-4312-B228-B38A9048E613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9FCD400-8B2E-4312-B228-B38A9048E613}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9FCD400-8B2E-4312-B228-B38A9048E613}.Release Intranet|Any CPU.ActiveCfg = Release Intranet|Any CPU
+		{D9FCD400-8B2E-4312-B228-B38A9048E613}.Release Intranet|Any CPU.Build.0 = Release Intranet|Any CPU
+		{D9FCD400-8B2E-4312-B228-B38A9048E613}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9FCD400-8B2E-4312-B228-B38A9048E613}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85C344D0-F39F-4BBD-9533-B9029C66AD50}.Debug Intranet|Any CPU.ActiveCfg = Debug Intranet|Any CPU
+		{85C344D0-F39F-4BBD-9533-B9029C66AD50}.Debug Intranet|Any CPU.Build.0 = Debug Intranet|Any CPU
+		{85C344D0-F39F-4BBD-9533-B9029C66AD50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85C344D0-F39F-4BBD-9533-B9029C66AD50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85C344D0-F39F-4BBD-9533-B9029C66AD50}.Release Intranet|Any CPU.ActiveCfg = Release Intranet|Any CPU
+		{85C344D0-F39F-4BBD-9533-B9029C66AD50}.Release Intranet|Any CPU.Build.0 = Release Intranet|Any CPU
+		{85C344D0-F39F-4BBD-9533-B9029C66AD50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85C344D0-F39F-4BBD-9533-B9029C66AD50}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,66 @@
+﻿@using Go81WebApp.Models.数据模型.消息数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">未处理投诉</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr><th width="15%" align="center">投诉人</th><th width="38%" align="center">投诉问题</th><th width="32%">投诉时间/处理时间</th><th width="15%" colspan="1">更多操作</th></tr>
+                @{
+                    IEnumerable<投诉> tslist = ViewData["投诉"] as IEnumerable<投诉>;
+                    if (tslist.Count() != 0)
+                    {
+                        foreach (var items in tslist)
+                        {
+                            if (items.发起者.用户数据 != null)
+                            {
+                                <tr>
+                                    <td style="text-align:center;">@items.发起者.用户数据.登录信息.登录名</td>
+                                    @foreach (var i in items.对话消息)
+                                    {
+                                        <td style="text-align:center;">@i.消息主体.标题</td>
+                                        break;
+                                    }
+                                    <td style="text-align:center;">@items.基本数据.添加时间.ToString("yyyy-MM-dd hh:mm") / @items.基本数据.修改时间.ToString("yyyy-MM-dd hh:mm")</td>
+                                    <td style="text-align:center;"><a href="/运营团队后台/Suggestiont_Reply_Page?id=@items.Id">回复</a><a href="/运营团队后台/Suggestion_Del?id=@items.Id">删除</a></td>
+                                </tr>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <tr><td>暂无相关数据！</td><td></td><td></td><td></td></tr>
+                    }
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).addClass("currentPage");
+            }
+        });
+        $("#处理中投诉").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#处理中投诉").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

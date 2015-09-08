@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "商品搜索";
+}
+<div id="contrastdiv" class="product_contrast">
+    <div class="product_contrastlistdiv" id="select_pro1">
+        <div class="product_contrastlistimg">
+            1
+        </div>
+        <div class="product_contrast_name" style="color:red;">
+            您还可以选择商品进行对比
+            <div class="product_contrast_price"></div>
+        </div>
+    </div>
+    <div class="product_contrastlistdiv" id="select_pro2">
+        <div class="product_contrastlistimg">
+            2
+        </div>
+        <div class="product_contrast_name" style="color:red;">
+            您还可以选择商品进行对比
+            <div class="product_contrast_price"></div>
+        </div>
+    </div>
+    <div class="product_contrastlistdiv" id="select_pro3">
+        <div class="product_contrastlistimg">
+            3
+        </div>
+        <div class="product_contrast_name" style="color:red;">
+            您还可以选择商品进行对比
+            <div class="product_contrast_price"></div>
+        </div>
+    </div>
+    <div class="product_contrastlistdiv" id="select_pro4">
+        <div class="product_contrastlistimg">
+            4
+        </div>
+        <div class="product_contrast_name" style="color:red;">
+            您还可以选择商品进行对比
+            <div class="product_contrast_price"></div>
+        </div>
+    </div>
+</div>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("Part_Recommend", "商品陈列")
+    </div>
+    <div class="bg_outdiv_right" style="padding-top: 12px;">
+        @Html.Action("Part_ProductSearch", "商品陈列")
+    </div>
+    
+</div>
+<div id="hidecontrastdiv" onmouseover=" this.style.background = 'rgb(252, 239, 186)'; this.style.color = '#f99'" onmouseout="this.style.background = '#eee'; this.style.color = '#000'" style="cursor:pointer; display: none; width: 100px; text-align: center; height: 20px; right: 50px; bottom: 0px; position: fixed; zoom: 1; z-index: 999; background-color: #eee; border-radius: 5px; border: 1px solid #3C890F; color: #666;" onclick="    document.getElementById('contrastdiv').style.display = 'block'; this.style.display = 'none'">
+    对比栏
+</div>
+

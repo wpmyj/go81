@@ -1,0 +1,121 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型;
+<style type="text/css">
+    .gys_xttz_topbg a {
+        margin-top: 0;
+    }
+
+    .adaddtip {
+        font-weight: normal;
+        font-size: 14px;
+        padding-left: 10px;
+        text-decoration: underline;
+        color: red;
+        padding-top: 5px;
+        font-weight: bold;
+    }
+</style>
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">公告列表<a href="/单位用户后台/Procure_AdAdd" class="adaddtip">【+发布新公告】</a></div>
+        </div>
+    </div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <div style="padding-bottom:5px; width: 900px; margin:0 auto; height: 30px;"><input type="button" value="下载选中公告" style="width: 100px; height: 30px; float: right;" onclick="getDownload()"/></div>
+            <table width="100%" cellpadding="0" cellspacing="0" id="tablecontent">
+                <tr>
+                    <th width="5%">选择</th>
+                    <th width="38%">标题</th>
+                    <th width="10%">公告性质</th>
+                    <th width="12%">公告类别</th>
+                    <th width="13%">公告状态</th>
+                    <th width="12%">时间</th>
+                    <th width="10%">操作</th>
+                </tr>
+                @foreach (var item in (IEnumerable<公告>)ViewData["后台公告列表"])
+                {
+                    <tr>
+                        <td><input type="checkbox" name="download" id="@item.Id"/></td>
+                        <td><a href="~/单位用户后台/AdListDetail?id=@item.Id" target="_blank">@item.内容主体.标题</a></td>
+                        <td>@item.公告信息.公告性质</td>
+                        <td>@item.公告信息.公告类别</td>
+                        <td>@item.审核数据.审核状态</td>
+                        <td>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</td>
+                        <td class="gys_znxx_content_tabletime">
+                            @*@Html.ActionLink("修改", "Procure_AdModify", new { id = item.Id })|*@
+                            @if (item.基本数据.已屏蔽 == false)
+                            {
+                                @Html.ActionLink("禁用", "Procure_AdForbid", new { id = item.Id })
+                            }
+                            else
+                            {
+                                @Html.ActionLink("解除禁用", "Procure_AdForbid", new { id = item.Id })
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border","1px solid #ff0000");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#全部采购公告列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#全部采购公告列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此消息！确定删除吗？"))
+        {
+            window.location="/单位用户后台/Procure_AdDelete?id="+num+"&h=adlist";
+        }
+    }
+    function getDownload(id) {
+        var idstr = "";
+        $("#tablecontent").find("input[name='download']:checked").each(function() {
+            idstr += $(this).attr("id") + "|";
+        });
+        if (idstr == "") {
+            return;
+        }
+
+        $.ajax({
+            cache: false,
+            async: false,   // 太关键了，同步和异步的参数
+            //dataType: 'json', type: 'post',
+            url: "/单位用户后台/getDownload?id=" + idstr,
+            success: function (data) {
+               if (data == "0") {
+                   alert("下载失败!");
+               } else {
+                   window.open(data);
+                   //alert("下载成功，地址为：" + data);
+               }
+            }
+        });
+    }
+</script>

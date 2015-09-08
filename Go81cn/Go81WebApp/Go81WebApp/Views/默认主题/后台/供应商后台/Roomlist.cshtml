@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "供应商后台";
+    Layout = "_BackLayout.cshtml";
+}
+<link href="~/css/css.css" rel="stylesheet" />
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="height:650px;" class="bg_outdiv_right">
+        @Html.Action("Part_Hotellist","供应商后台")
+    </div>
+</div>

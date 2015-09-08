@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "个人会员";
+    Layout = "~/Views/默认主题/_Shared/_Layout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">     
+        @Html.Action("Part_PublicPuRNav", "jct")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div>
+            <div style="color:#bb0202; float:left; width:200px; font-size:24px;">个人频道会员服务</div>
+            <div style="clear:both; padding-top:1px; color:#606060;line-height:25px; font-size:16px;">
+                <h4>服务内容</h4>
+                <p style="text-indent:2em;">军采通会员可享有推荐个人会员的权利，所推荐的个人会员将在网站内享有与部队个人会员同等的权利。</p>
+            </div>
+            <div style="text-align:center; width:330px; height:330px; background-size:cover; margin-top:30px; margin-left:auto; margin-right:auto; background-image:url(/Images/personService.JPG)">
+            </div>
+            <div><h3 style="color:red;"><em>即将上线，敬请期待......</em></h3></div>
+            <div><a href="/jct/Applyvip?sure=true" style="display:block; width:150px ;height:30px; text-align:center; line-height:30px; border:1px solid red; background-color:#E78E8E; color:white; margin:0px auto;">申请加入军采通会员</a></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(".action_link").each(function () {
+        if ($(this).text() == "军采通") {
+            $(this).parent("div").addClass("on");
+        }
+    });
+</script>

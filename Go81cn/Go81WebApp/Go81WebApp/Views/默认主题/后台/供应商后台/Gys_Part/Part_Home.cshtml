@@ -1,0 +1,150 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.消息数据模型
+@{string name = ViewData["user"].ToString();}
+@if (Model.供应商用户信息.协议供应商)
+{
+    <div id="f">
+        <div style="position:fixed; z-index:5; top:0px; left:0px; text-align:center; right:0; bottom:0px; background-color:black; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity=50); height:100%; width:100%;border:1px solid green;">
+        </div>
+        <div style="position:fixed; left:0px; top:20%; width:100%;z-index:20;">
+            <div style="width:735px; position:relative; margin:0px auto; z-index:30;height:340px; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;border: 1px solid red;">
+                <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#f')">×</a></div>
+                <div style="float:right;font-size:16px;">
+                    <div style="font-size:23px; font-weight:bolder; text-align:center;">通知</div>
+                    <div>尊敬的协议供应商用户：</div>
+                    <div style="text-indent:2em;">
+                        您好！
+                    </div>
+                    <div style="text-indent:2em;">
+                        接成都军区联勤部军需物资油料部物资采购管理处通知，请您于２０１５年６月３０日之前将贵单位在本网站打印并经过收货单位签字验收的验收单存根扫描回传网站，以便管理部门随时查询。未完成回传以前将暂停贵单位打印验收单的相关操作。如因遗失验收单导致无法上传，请联系客服。为此给您带来的不便请见谅！
+                    </div>
+                    <div style="text-indent:2em;">
+                        如有疑问，请咨询网站客服。
+                    </div>
+                    <div style="text-align:right; padding-right:20px;">西南物资采购网</div>
+                    <div style="text-align:right; padding-right:20px;">@DateTime.Now.ToString("yyyy年MM月dd日")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div style="width:930px;">
+    <div style="font-size:16px;margin-top:30px;">
+        @name，欢迎登录西南物资采购网
+    @*您目前的认证级别:
+        <a target="_blank" href="###" style="color:red">@Model.供应商用户信息.认证级别</a>*@
+    @*您目前的信用评级是：
+        @if (ViewBag.cls==0)
+        {
+            <span>0</span>
+        }
+        else
+        {
+            for (int i = 0; i < ViewBag.cls;i++ )
+            {
+                <img src="../../Images/star.png" />
+            }
+        }*@
+</div>
+<div style=" margin-top:20px; " id="tb1">
+    <div style="font-size:14px; overflow:hidden;">
+        <ol>
+            @if (ViewData["U_message"] != null)
+            {
+                <li style="color:red;">@Html.Raw(ViewData["U_message"])</li>
+            }
+            @if (int.Parse(ViewData["msg_count"].ToString()) == 0)
+            {
+                <li style="color:red;">您有@(ViewData["msg_count"])条未读站内消息</li>
+            }
+            else
+            {
+                <li style="color:red;">您有@(ViewData["msg_count"])条未读站内消息，<a href="/供应商后台/Gys_Znxx" style="text-decoration:underline;">请点击此处查看>></a></li>
+            }
+            @if (int.Parse(ViewData["可报价数量"].ToString()) == 0)
+            {
+                <li style="color:red;">您有@(ViewData["可报价数量"])个商品可进行网上报价</li>
+            }
+            else
+            {
+                <li style="color:red">您有@(ViewData["可报价数量"])个商品可进行网上报价，<a href="/供应商后台/OnlineBiddingProject" style="text-decoration:underline">请点击此处查看</a></li>
+            }
+           
+            @*<li style="color:red;">您目前可参与的投标数为 <a href="">@(ViewBag.Toubiao)</a></li>*@
+            @if (Model.审核数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核未通过 && !string.IsNullOrWhiteSpace(Model.审核数据.审核不通过原因))
+            {
+                <li style="color:red;"><div style="width:500px; height:auto; word-wrap:break-word;">您还没有通过审核，具体原因是：@Model.审核数据.审核不通过原因</div></li>
+            }
+        </ol>
+    </div>
+    <em>温馨提示：</em>
+    @if (Model.供应商用户信息.已提交)
+    {
+        <em>您已提交过所有信息。如需修改，请联系网站管理员。</em>
+    }
+    @if (ViewBag.BaseInfo == false || ViewBag.VipInfo == false || ViewBag.SalesInfo == false || ViewBag.Busniss == false || ViewBag.TaxInfo == false || ViewBag.LawPerson == false || ViewBag.Financial == false || ViewBag.servicedepart == false || ViewBag.qualify == false || ViewBag.goodType == 0 || ViewBag.GoodCount < 5)
+    {
+        <div style="width:100%; text-indent:20px; border:1px dashed black; margin-top:5px;">
+            <table width="100%">
+                <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="#">@ViewBag.PrintMessage</a></td></tr>
+                @if (ViewBag.VipInfo == false)
+                {
+                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Vip_Manage">联系人信息还不完善，请从这里去完善>></a></td></tr>
+                }
+                @if (ViewBag.BaseInfo == false)
+                {
+                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Manage">基本信息还未完善，请从这里去完善>></a></td></tr>
+                }
+                @if (ViewBag.LawPerson == false)
+                {
+                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Law_Person">法定代表人的信息还不完善，请从这里去完善>></a></td></tr>
+                }
+                @if (ViewBag.SalesInfo == false || ViewBag.Busniss == false)
+                {
+                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Sales_Manage">营业信息还不完善，请从这里去完善>></a></td></tr>
+                }
+                @if (ViewBag.Financial == false)
+                {
+                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Financial_Manage">财务信息还不完善，请从这里去完善>></a></td></tr>
+                }
+                @if (ViewBag.TaxInfo == false)
+                {
+                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Tax_Management">税务信息还不完善，请从这里去完善>></a></td></tr>
+                }
+                @if (ViewBag.qualify == false)
+                {
+                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Qualify_Management">资质证书信息还不完善，请从这里去完善>></a></td></tr>
+                }
+                @if (ViewBag.servicedepart == false)
+                {
+                    <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Service_Management">售后服务机构信息还不完善，请从这里去完善>></a></td></tr>
+                }
+                @if (Model.供应商用户信息.供应商类型.ToString() == "物资供应商")
+                {
+                    if (ViewBag.goodType == 0)
+                    {
+                        <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Product_Type">可供商品类别信息还不完善，请从这里去完善>></a></td></tr>
+                    }
+                }
+                @if (Model.供应商用户信息.供应商类型.ToString() == "物资供应商")
+                {
+                    if (ViewBag.GoodCount < 5)
+                    {
+                        <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Product_AddStep1?id=0">商品少于5个，您可以从这里去添加商品>></a></td></tr>
+                    }
+                }
+            </table>
+        </div>
+    }
+</div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#欢迎页面").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#欢迎页面").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function hidebox(th) {
+        $(th).hide();
+    }
+</script>

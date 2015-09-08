@@ -1,0 +1,296 @@
+﻿@model Go81WebApp.Models.数据模型.机票代售点
+@{
+    ViewBag.Title = "机票代售点详情";
+    Layout = "_BackLayout.cshtml";
+}
+<style>
+    table {
+        background-color: black;
+    }
+
+        table tr td {
+            background-color: white;
+            font-size: 14px;
+        }
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script src="~/JS/provinceandcity_all.js"></script>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div id="title_div" class="title-base-middle">
+                <div class="title-base-inner">机票代售点详情</div>
+            </div>
+        </div>
+        <div style="border:1px solid green; margin-top:8px;">
+            <table width="90%" cellspacing="1" style=" margin-top:20px; margin-left:auto; margin-right:auto; margin-bottom:10px;">
+                <tr>
+                    <td width="15%" align="right">代售点名称：</td>
+                    <td width="35%">
+                        @Html.DisplayFor(m => m.代售点名称)
+                    </td>
+                    <td width="15%" align="right">代售点所在地区：</td>
+                    <td width="35%">
+                        @Model.所属地域.地域
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">代售点地址：</td>
+                    <td>
+                        @Model.地址
+                    </td>
+                    <td align="right">代售点所在商圈：</td>
+                    <td>
+                        @Model.所属商圈
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">代售点联系电话：</td>
+                    <td>
+                        @Model.联系电话
+                    </td>
+                    <td align="right">代售点交通信息：</td>
+                    <td>
+                        @Model.交通信息
+                    </td>
+                </tr>
+                <tr><td align="right" valign="top">代售点简介：</td><td colspan="3">@Model.简介</td></tr>
+                <tr>
+                    <td align="center" colspan="4">
+                        <div style="width:800px; height:400px;" id="dituContent"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        @if (Model.照片 != null && Model.照片.Count() != 0)
+                        {
+                            <div style="width:720px; margin:0px auto 0px auto; overflow:hidden;">
+                                <div>已添加代售点图片如下：</div>
+                                <table cellspacing="0" id="pics">
+                                    <tr>
+                                        @for (int i = 0; i < Model.照片.Count(); i++)
+                                        {
+                                            <td><a target="_blank" href="@(Model.照片[i])"><img height="50" width="100" src="@(Model.照片[i])" /></a></td>
+                                        }
+                                    </tr>
+                                </table>
+                            </div>
+                        }
+                    </td>
+                </tr>
+            </table>
+            <div style="text-align:center;padding-bottom:5px;" id="examine">
+                <input type="button" value="审核通过" name="审核通过" class="front_login_rightbox_button_less">
+                <input type="button" value="审核不通过" name="审核不通过" class="front_login_rightbox_button_less">
+            </div>
+        </div>
+        
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function(){
+        if ($("table#pics tr:first td").length > 7)
+        {
+            setInterval("picScroll()", 2000);
+        }
+    });
+    $("#examine input").click(function(){
+        var exatype=$(this).attr("name");
+        $.ajax({
+            url:'/运营团队后台/Ticket_Examine',
+            data:{id:@Model.Id,type:exatype},
+            success:function(){
+                window.location.href="/运营团队后台/TicketExamine";
+            },
+        });
+    });
+    function picScroll() {
+        $("table#pics").animate({ "margin-left": "-100" },
+                function () {
+                    var s = $("table#pics tr td:first img:first").attr("src");
+                    var h1 = $("table#pics tr td:first a:eq(0)").attr("href");
+                    var h = $("table#pics tr td:first a:eq(1)").attr("href");
+                    $("table#pics tr td:first").remove();
+                    $("table#pics tr").append("<td><a target='_blank' href='" + h1 + "'><img width='100' height='50' src='" + s + "'/></a></td>");
+                    $("table#pics").css("margin-left", "0px");
+                })
+    }
+    function showMap() {
+        $("div#f").show();
+    }
+    function fileChange(target) {
+        var fileSize = 0;
+        /*    if (isIE && !target.files) {
+              var filePath = target.value;
+              var fileSystem = new ActiveXObject("Scripting.FileSystemObject");
+              var file = fileSystem.GetFile (filePath);
+              fileSize = file.Size;
+            }
+            else
+            { */
+        for (var i = 0; i < target.files.length; i++) {
+            var arr = target.files[0].name.split('.');
+            if (arr[arr.length - 1].toLowerCase() != "jpg") {
+                alert('请上传jpg格式的图片！');
+            }
+            fileSize = target.files[i].size;
+            var size = (fileSize / 1024) / 1024;
+            if (size > 2) {
+                alert('您上传的文件大小是' + size + 'M,' + '请上传小于2M的文件');
+            }
+        }
+    }
+    $("#deliverprovince").blur(function () {
+        var val = $("select#deliverprovince").val();
+        $("#province").val(val);
+    });
+    $("#delivercity").blur(function () {
+        var val = $("select#delivercity").val();
+        $("#city").val(val);
+    });
+    $("#deliverarea").change(function () {
+        var val = $("select#deliverarea").val();
+        $("#area").val(val);
+    });
+    $(document).ready(function () {
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+        $("#待审核代售点").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#待审核代售点").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+<script type="text/javascript">
+    @{
+        if (Model.地理位置 == null)
+        {
+            Model.地理位置 = new double[2];
+            Model.地理位置[0] = 0;
+            Model.地理位置[1] = 0;
+        }
+        }
+    var local=@Model.地理位置[0];
+    //创建和初始化地图函数：
+    function initMap() {
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        if(local!=0)
+        {
+            addMarker();
+        }
+        //向地图中添加marker
+    }
+    //创建地图函数：
+    function createMap() {
+        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
+        map.addControl(new BMap.MapTypeControl());
+        if(local==0)
+        {
+            var point = new BMap.Point(111.699735,40.857281);//定义一个中心点坐标
+            map.centerAndZoom(point,4);//设定地图的中心点和坐标并将地图显示在地图容器中
+        }
+        else
+        {
+            var point = new BMap.Point(@Model.地理位置[0], @Model.地理位置[1]);//定义一个中心点坐标
+            map.centerAndZoom(point,17);//设定地图的中心点和坐标并将地图显示在地图容器中
+        }
+        //map.panBy(400,200);
+        window.map = map;//将map变量存储在全局
+    }
+
+    //地图事件设置函数：
+    function setMapEvent() {
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+    //地图控件添加函数：
+    function addMapControl() {
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1 });
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+        map.addControl(ctrl_sca);
+    }
+    var m=@Model.地理位置[0];
+    //标注点数组
+    var markerArr=null;
+    if(m==0)
+    {
+        markerArr = [{ title: "", content:"", point:"0|0", isOpen: 0, icon: { w: 21, h: 21, l: 0, t: 0, x: 6, lb: 5 } }
+        ];
+    }
+    else
+    {
+        markerArr = [{ title: "@Model.代售点名称", content:"(地址：@Model.地址)", point:"@Model.地理位置[0]|@Model.地理位置[1]", isOpen: 1, icon: { w: 21, h: 21, l: 0, t: 0, x: 6, lb: 5 } }
+        ];
+    }
+    //创建marker
+    function addMarker() {
+        for (var i = 0; i < markerArr.length; i++) {
+            var json = markerArr[i];
+            var p0 = json.point.split("|")[0];
+            var p1 = json.point.split("|")[1];
+            var point = new BMap.Point(p0, p1);
+            var iconImg=new BMap.Icon("../Images/ditu.png", new BMap.Size(30, 40));
+            var marker = new BMap.Marker(point, { icon: iconImg });
+            var iw = createInfoWindow(i);
+            var label = new BMap.Label(json.title, { "offset": new BMap.Size(json.icon.lb - json.icon.x + 10, -20) });
+            marker.setLabel(label);
+            map.addOverlay(marker);
+            label.setStyle({
+                borderColor: "#808080",
+                color: "#333",
+                cursor: "pointer"
+            });
+
+            (function() {
+                var index = i;
+                var _iw = createInfoWindow(i);
+                var _marker = marker;
+                _marker.addEventListener("click", function() {
+                    this.openInfoWindow(_iw);
+                });
+                _iw.addEventListener("open", function() {
+                    _marker.getLabel().hide();
+                });
+                _iw.addEventListener("close", function() {
+                    _marker.getLabel().show();
+                });
+                label.addEventListener("click", function() {
+                    _marker.openInfoWindow(_iw);
+                });
+                if (!!json.isOpen) {
+                    label.hide();
+                    _marker.openInfoWindow(_iw);
+                }
+            })();
+        }
+    }
+    //创建InfoWindow
+    function createInfoWindow(i) {
+        var json = markerArr[i];
+        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>" + json.content + "</div>");
+        return iw;
+    }
+    //创建一个Icon
+    function createIcon(json) {
+        var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w, json.h), { imageOffset: new BMap.Size(-json.l, -json.t), infoWindowOffset: new BMap.Size(json.lb + 5, 1), offset: new BMap.Size(json.x, json.h) })
+        return icon;
+    }
+
+    initMap();//创建和初始化地图
+</script>
+
+
+

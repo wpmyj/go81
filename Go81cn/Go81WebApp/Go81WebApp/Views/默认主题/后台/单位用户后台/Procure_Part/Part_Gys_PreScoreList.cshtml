@@ -1,0 +1,67 @@
+﻿@using Go81WebApp.Models.数据模型.项目数据模型;
+@using Go81WebApp.Models.数据模型
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">待评分项目服务列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="30%">所属项目</th>
+                    <th width="30%">供应商名称</th>
+                    <th width="15%">时间</th>
+                    <th width="25%">操作</th>
+                </tr>
+                @foreach (var item in (IEnumerable<项目服务记录>)ViewData["待评分项目服务列表"])
+                {
+                    <tr>
+                        <td>
+                            @if (item.所属项目 != null && item.所属项目.招标采购项目ID != -1)
+                            {
+                                <a href="~/单位用户后台/Gys_SetScore?id=@item.Id" target="_blank">@item.所属项目.招标采购项目.中标公告链接.公告.项目信息.项目名称</a>
+
+                            }
+                        </td>
+                        <td>@item.供应商链接.用户数据.企业基本信息.企业名称</td>
+                        <td>@item.服务信息.验收时间.ToString("yyyy.MM.dd")</td>
+
+                        <td class="gys_znxx_content_tabletime">@Html.ActionLink("查看详情并进行评分", "Gys_SetScore", new { id = item.Id })</td>
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border","1px solid #ff0000");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#待评分项目服务列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#待评分项目服务列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>
+

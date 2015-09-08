@@ -1,0 +1,19 @@
+﻿@model Go81WebApp.Models.数据模型.消息数据模型.站内消息
+<style>
+    #table table tr:hover td {
+        background-color: lightgrey;
+    }
+
+    #table table tr td {
+    }
+</style>
+<div id="table" style="width:700px; font-size:14px; word-break:break-all; height:auto; margin-left:30px; font-size:14px;">
+    <table>
+        @foreach (var item in Model.对话消息)
+        {
+            <tr><td align="left" valign="top">标题：<input type="text" style="width:500px;" value="@item.消息主体.标题" /></td></tr>
+            <tr><td align="left" valign="top">内容：<textarea style="width:500px; height:450px;">@Html.Raw(item.消息主体.内容)</textarea></td></tr>
+            break;
+        }
+    </table>
+</div>

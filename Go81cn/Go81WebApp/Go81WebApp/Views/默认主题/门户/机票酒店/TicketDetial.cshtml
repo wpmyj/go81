@@ -1,0 +1,202 @@
+﻿@model Go81WebApp.Models.数据模型.机票代售点
+@{
+    ViewBag.Title = "机票代售点详情";
+}
+<link href="~/css/hotelandticket.css" rel="stylesheet" />
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+<div class="layout">
+    <div class="title_name">
+        <span class="name">
+            <strong>@Model.代售点名称</strong>
+            <span class="addr">@Model.地址</span>
+        </span>
+        <span class="tel">联系电话： @Model.联系电话</span>
+    </div>
+
+    <div class="pic_skan">
+        <div id="pic_room" class="picture">
+            <div class="spo">
+                <a href="#"><img src="~/Images/ticket2.jpg" /></a>
+                <a href="#"><img src="~/Images/ticket3.jpg" /></a>
+            </div>
+            <div class="pic_small">
+                <a href="#"><img src="~/Images/ticket4.jpg" /></a>
+                <a href="#"><img src="~/Images/ticket5.jpg" /></a>
+            </div>
+        </div>
+        <div class="hotel_info">
+            <div class="tra_info" style="height:242px;">
+                <h3>交通信息</h3>
+                @*<table>
+                <tr>
+                    <td>公交车：</td>
+                    <td>4，16，64，13，212</td>
+                </tr>
+                <tr>
+                    <td>地铁线：</td>
+                    <td>1号线</td>
+                </tr>
+            </table>*@
+                <div class="t_tra_info_d info_d">@Model.交通信息</div>
+            </div>
+            @*<div class="room_info">
+                <h3>房间信息</h3>
+                <table>
+                    <tr>
+                        <td>单人间：</td>
+                        <td>120个</td>
+                        <td>价格：</td>
+                        <td>380~460</td>
+                    </tr>
+                    <tr>
+                        <td>标准间：</td>
+                        <td>100个</td>
+                        <td>价格：</td>
+                        <td>420~460</td>
+                    </tr>
+                    <tr>
+                        <td>豪华间：</td>
+                        <td>60个</td>
+                        <td>价格：</td>
+                        <td>680~1460</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">餐厅供应三餐，可惩戒宴会、会议等。</td>
+                    </tr>
+                </table>
+                <div class="room_info_d info_d">@Model.房间信息</div>
+            </div>*@
+        </div>
+    </div>
+    <div class="map_other">
+        <div id="mapp" class="map">
+            @*<img style="width:850px;height:400px;" src="../无标题.png" />*@
+        </div>
+        <div class="other">
+            <div class="other_hotel">周边其他代售点</div>
+            <div class="other_hotel_list">
+                <div class="ls">
+                    <a href="#"><img src="~/Images/ticket2.jpg" /></a><br>
+                    <a href="#">成都航空票务处</a><br />
+                    <label>电话：352353524</label>
+                </div>
+            </div>
+            <div class="other_hotel_list">
+                <div class="ls">
+                    <a href="#"><img src="~/Images/ticket4.jpg" /></a><br>
+                    <a href="#">南充航空票务处</a><br />
+                    <label>电话：352353524</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    @{
+        if (Model.地理位置 == null)
+        {
+            Model.地理位置 = new double[] {104.067923,30.679943};
+        }
+        }
+    //创建和初始化地图函数：
+    function initMap() {
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+        addMarker();//向地图中添加marker
+    }
+    //创建地图函数：
+    function createMap() {
+        var map = new BMap.Map("mapp");//在百度地图容器中创建一个地图
+        map.addControl(new BMap.MapTypeControl());
+        var point = new BMap.Point(@Model.地理位置[0],@Model.地理位置[1]);//定义一个中心点坐标
+        map.centerAndZoom(point, 17);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+
+    //地图事件设置函数：
+    function setMapEvent() {
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+    //地图控件添加函数：
+    function addMapControl() {
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1 });
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+        map.addControl(ctrl_sca);
+    }
+
+    //标注点数组
+    var markerArr = [{
+        title: "@Model.代售点名称",
+        content: "", //@*(地址：@Model.所属地域.地域)*@
+        point: "@Model.地理位置[0]|@Model.地理位置[1]",
+        isOpen: 0,
+        icon: { w: 21, h: 21, l: 0, t: 0, x: 6, lb: 5 }
+    }];
+    //创建marker
+    function addMarker() {
+        for (var i = 0; i < markerArr.length; i++) {
+            var json = markerArr[i];
+            var p0 = json.point.split("|")[0];
+            var p1 = json.point.split("|")[1];
+            var point = new BMap.Point(p0, p1);
+            //var iconImg = createIcon(json.icon);
+            var iconImg=new BMap.Icon("../Images/marker.png", new BMap.Size(50, 50));
+            var marker = new BMap.Marker(point, { icon: iconImg });
+            var iw = createInfoWindow(i);
+            var label = new BMap.Label(json.title, { "offset": new BMap.Size(json.icon.lb - json.icon.x + 10, -20) });
+            marker.setLabel(label);
+            map.addOverlay(marker);
+            label.setStyle({
+                borderColor: "#808080",
+                color: "#333",
+                cursor: "pointer"
+            });
+
+            (function() {
+                var index = i;
+                var _iw = createInfoWindow(i);
+                var _marker = marker;
+                _marker.addEventListener("click", function() {
+                    this.openInfoWindow(_iw);
+                });
+                _iw.addEventListener("open", function() {
+                    _marker.getLabel().hide();
+                });
+                _iw.addEventListener("close", function() {
+                    _marker.getLabel().show();
+                });
+                label.addEventListener("click", function() {
+                    _marker.openInfoWindow(_iw);
+                });
+                if (!!json.isOpen) {
+                    label.hide();
+                    _marker.openInfoWindow(_iw);
+                }
+            })();
+        }
+    }
+    //创建InfoWindow
+    function createInfoWindow(i) {
+        var json = markerArr[i];
+        var iw = new BMap.InfoWindow("<b class='iw_poi_title' title='" + json.title + "'>" + json.title + "</b><div class='iw_poi_content'>" + json.content + "</div>");
+        return iw;
+    }
+    //创建一个Icon
+    function createIcon(json) {
+        var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w, json.h), { imageOffset: new BMap.Size(-json.l, -json.t), infoWindowOffset: new BMap.Size(json.lb + 5, 1), offset: new BMap.Size(json.x, json.h) })
+        return icon;
+    }
+
+    initMap();//创建和初始化地图
+</script>

@@ -1,0 +1,333 @@
+﻿@model Go81WebApp.Models.数据模型.项目数据模型.招标采购预报名
+<script type="text/javascript" src="~/JS/NTClientJavascript.js"></script>
+<style type="text/css">
+    .procure_formlistdiv {
+        width: 510px;
+    }
+
+        .procure_formlistdiv input {
+            width: 500px;
+        }
+
+    .procureinputdiv_title {
+        width: 200px;
+        text-align: right;
+    }
+
+    .procureinputdiv_title {
+        line-height: 30px;
+    }
+
+    .procure_formlistdiv {
+        line-height: 30px;
+    }
+
+    .wenxintishi {
+        text-indent: 2.0em;
+    }
+
+    .modal {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        position: fixed;
+        display: none;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: 600px;
+        margin: 15% auto;
+    }
+
+    .modal-content {
+        position: relative;
+        background-color: #fff;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, .2);
+        border-radius: 6px;
+        outline: 0;
+        -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    }
+
+    .close {
+        margin-top: -2px;
+        float: right;
+        font-size: 21px;
+        font-weight: bold;
+        line-height: 1;
+        color: #000;
+        text-shadow: 0 1px 0 #fff;
+        filter: alpha(opacity=20);
+        opacity: .2;
+        -webkit-appearance: none;
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+    }
+
+    h4 {
+        font-size: 18px;
+    }
+
+    label {
+        display: inline-block;
+        max-width: 100%;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .modal-header {
+        min-height: 16.42857143px;
+        padding: 15px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .modal-title {
+        margin: 0;
+        line-height: 1.42857143;
+    }
+
+    .modal-body {
+        position: relative;
+        padding: 15px;
+    }
+
+    .modal-footer {
+        padding: 15px;
+        text-align: right;
+        border-top: 1px solid #e5e5e5;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="gys_znxx_topbox">
+        <div class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">标书下载</div>
+        </div>
+    </div>
+
+
+
+
+
+    <div id="indexpagemodal1" class="modal fade" style="display:none;">
+        <div class="modal-dialog" style="margin: 10% auto;">
+            <div class="modal-content" style="height:230px;">
+                <div class="modal-header" style="padding-bottom: 20px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal1').hide(); $('#downloaddiv').show();">×</button>
+                    <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px;">请输入安全证书密码</div>
+                </div>
+                <div class="modal-body" style=" height:auto; overflow:hidden;">
+                    <div id="outlistdiv" style="height: 100px; text-align:center; line-height:25px;">
+                        <input type="password" id="password" name="password" style=" height:25px; width:250px; line-height:25px; " /><br />
+                        <span style="color:red;" id="errortips"></span>
+                    </div>
+                    <div style="width: 100%; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="submit" id="submitpassword" class="gys_ztbsearch_search_botton" style="margin-left:0;" value="确  定" onclick="return OnLogon();" /></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox" id="print_content">
+            <div class="gys_znxx_content">
+                @if (Model != null)
+                {
+                    <input type="hidden" id="Model_id" value="@Model.Id" />
+                    <div style="height:auto; overflow:hidden; margin-bottom:20px; width:100%">
+
+                        <div style="height:auto; overflow:hidden; width:100%">
+                            <div style="width: 450px;height: auto; overflow:hidden; padding: 10px 0 10px 0; float:left;">
+                                <div style="width: 200px;text-align: right;font-size: 16px;font-weight: bold;color: #666666;letter-spacing: 0;float: left;line-height: 30px;padding-right: 20px;">项目名称：</div>
+                                <div style="width: 230px;float: left; line-height:30px;  height:auto;overflow:hidden;">
+                                    @Model.所属公告链接.公告.项目信息.项目名称
+                                </div>
+                            </div>
+                            <div style="width: 450px;height: auto; overflow:hidden;padding: 10px 0 10px 0; float:left;">
+                                <div style="width: 200px;text-align: right;font-size: 16px;font-weight: bold;color: #666666;letter-spacing: 0;float: left;line-height: 30px;padding-right: 20px;">项目编号：</div>
+                                <div style="width: 230px;float: left; line-height:30px;  height:auto;overflow:hidden;">
+                                    @Model.所属公告链接.公告.项目信息.项目编号
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="height:auto; overflow:hidden; width:100%">
+                            <div style="width: 450px;height: 30px;padding: 10px 0 10px 0; float:left;">
+                                <div style="width: 200px;text-align: right;font-size: 16px;font-weight: bold;color: #666666;letter-spacing: 0;float: left;line-height: 30px;padding-right: 20px;">报名状态：</div>
+                                <div style="width: 230px;float: left;position: relative;">
+                                    @if (Model.预报名已关闭)
+                                    {
+                                        <span>已关闭</span>
+                                    }
+                                    else
+                                    {
+                                        <span>进行中</span>
+                                    }
+                                </div>
+                            </div>
+                            <div style="width: 450px;height: 30px;padding: 10px 0 10px 0; float:left;">
+                                <div style="width: 200px;text-align: right;font-size: 16px;font-weight: bold;color: #666666;letter-spacing: 0;float: left;line-height: 30px;padding-right: 20px;">公告名称：</div>
+                                <div style="width: 230px;float: left; line-height:20px; font-size:13px;  height:auto;">
+                                    <a style="text-decoration: underline;" target="_blank" href="/公告/AnnounceDetail?id=@Model.所属公告链接.公告.Id">@Model.所属公告链接.公告.内容主体.标题</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    if (Model.预报名已关闭)
+                    {
+                        <div style="width:800px; margin:0 auto; font-size:18px; font-weight:bold; color:red;">抱歉，该预报名已关闭，不能再下载该项目的标书！</div>
+                    }
+                    else
+                    {
+                        var flage = true;
+                        if (ViewData["已购买U盾"] == null || ViewData["已购买U盾"] != "1")
+                        {
+                            flage = false;
+                            <div style="width:800px; margin:0 auto; font-size:18px; font-weight:bold; color:red;">您还未持有安全证书，为保证安全，暂不能下载标书！如有疑问，请联系客服！</div>
+                        }
+
+                        @*if (ViewData["审核通过"] == null || ViewData["审核通过"] != "1")
+                        {
+                            flage = false;
+                            <div style="width:800px; margin:0 auto; font-size:18px; font-weight:bold; color:red;">您对于当前报名的招标项目所提供的资料未通过审核，还不能下载标书！如有疑问，请联系客服！</div>
+                        }*@
+
+                        if (ViewData["已购买标书"] == null || ViewData["已购买标书"] != "1")
+                        {
+                            flage = false;
+                            <div style="width:800px; margin:0 auto; font-size:18px; font-weight:bold; color:red;">您还未购买该招标项目的标书或状态还未更新，还不能下载标书！如有疑问，请联系客服！</div>
+                        }
+
+                        if (flage)
+                        {
+                            <input type="hidden" id="ssid" name="ssid" value="@ViewData["Message"]" style="width:300px;" />
+                            <input type="hidden" id="HidIAID" name="HidIAID" style="width:300px;" />
+                            <input type="hidden" id="HidDigest" name="HidDigest" style="width:300px;" />
+
+                            <div id="downloaddiv" class="" style="text-align:center;">
+                                <input type="button" id="printbutton" style="margin-top:20px;" onclick="getcheck();" class="front_login_rightbox_button" value="下载标书" />
+                            </div>
+                        }
+
+                        <div id="biaoshucontent" style="height:auto; overflow:hidden; width:620px; margin:0 auto; padding:10px; border:1px solid #3C890F; display:none;"></div>
+                    }
+                }
+                else
+                {
+                    <div style="text-align:center;">
+                        无此信息
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+}
+<script type="text/javascript">
+    function getcheck() {
+        var flage = true;
+
+        var browser = DetectBrowser();
+        if (browser == "Unknown") {
+            alert("不支持该浏览器， 如果您在使用傲游或类似浏览器，请切换到IE模式，建议使用Google浏览器！");
+            flage = false;
+        }
+        createElementNT199();
+        var create = DetectNT199Plugin();
+        if (create == false) {
+            alert("插件未安装,,请直接安装CD区的插件!");
+            flage = false;
+        }
+        var Rtn = NT199_Find();
+        if (Rtn < 1) {
+            alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+            flage = false;
+        }
+
+        if (flage) {
+            $("#downloaddiv").hide();
+            $("#indexpagemodal1").show();
+            $("#password").focus();
+        }
+
+    }
+    function OnLogon() {
+        var Rtn = NT199_Find();
+        if (Rtn < 1) {
+            alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+            return false;
+        }
+        var pwd = document.getElementById("password").value;
+        if (pwd == "") {
+            alert("用户密码不能为空");
+            return false;
+        }
+        var retVal = NT199_CheckPassword(pwd);
+        if (retVal != 0) {
+            if (retVal == 1) {
+                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+            }
+            else {
+                alert("ErrorCode:" + NT199_GetLastError() + "   密码不正确");
+            }
+            return false;
+        }
+        var IAID = NT199_GetHardwareId();
+
+        var randomMessageFromServer = "@ViewData["Message"]";
+        var hashVal = NT199_Sha1WithSeed(randomMessageFromServer);
+
+        document.getElementById("HidDigest").value = hashVal;
+        document.getElementById("HidIAID").value = IAID;
+
+        var tempparm = "HidDigest=" + hashVal + "&HidIAID=" + IAID + "&ssid=" + $("#ssid").val() + "&id=" + $("#Model_id").val();
+
+        $("#indexpagemodal1").hide();
+        $.ajax({
+            cache: false,
+            async: false,
+            //dataType: 'json', type: 'post',
+            type: 'POST',
+            url: "/供应商后台/CheckUOfBiaoShu",
+            data: tempparm,
+            success: function (data) {
+                $("#biaoshucontent").html(data);
+                $("#biaoshucontent").show();
+                return true;
+            }
+        });
+        return false;
+    }
+
+
+
+    $(function () {
+        $("#我的预报名").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#我的预报名").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+
+        //$('#password').bind('keypress', function (event) {
+        //    if (event.keyCode == "13") {
+        //        $("#submitpassword").click();
+        //    }
+        //});
+
+    });
+</script>
+

@@ -1,0 +1,220 @@
+﻿@model Go81WebApp.Controllers.后台.供应商后台Controller.Room
+@{
+    ViewBag.Title = "酒店房间信息";
+    Layout = "_BackLayout.cshtml";
+}
+<link rel="stylesheet" href="~/css/index.css" type="text/css">
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<style type="text/css">
+    .add_room{ margin:30px auto; background:#fff;}
+    .add_room tr td.align{text-align:right;width:150px;font-size:14px;}
+    .add_room tr{ line-height:30px;}
+    .add_room tr td input[type="checkbox"]{ vertical-align:middle;}
+    .add_room tr td textarea{width:635px;height:80px;}
+    .add_room tr td.wid{width:305px; text-align:left;}
+    .add_room tr td.wid span{color:red;font-size:12px;}
+    #piclist{margin:0;padding:0;}
+    #piclist li{ float:left;position:relative;padding:5px;}
+    #piclist li img{ width:118px; height:75px;}
+    #piclist li span{ position:absolute; top:0px;right:5px;line-height:normal}
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="gys_xttz_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">修改房间信息</div>
+            </div>
+        </div>
+        <div class="gys_znxx_box">
+            <div class="modal" id="modal">
+                @using (Html.BeginForm("EditRoom", "供应商后台"))
+                {
+                    Html.AntiForgeryToken();
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <table class="add_room">
+                        <tr>
+                            <td class="align">房型：</td>
+                            <td class="wid">
+                                @Html.EditorFor(model => model.房型)
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写房间类型</div>
+                                </div>
+                                <span style="color:red">*</span>
+                                @Html.ValidationMessageFor(model => model.房型)
+                            </td>
+                            <td class="align">价格：</td>
+                            <td class="wid">
+                                @Html.EditorFor(model => model.价格)
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写房间价格</div>
+                                </div>
+                                <span style="color:red">*</span>
+                                @Html.ValidationMessageFor(model => model.价格)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align">床型：</td>
+                            <td class="wid">
+                                @Html.EditorFor(model => model.床型)
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写床型</div>
+                                </div>
+                                <span style="color:red">*</span>
+                                @Html.ValidationMessageFor(model => model.床型)
+                            </td>
+                            <td class="align">早餐：</td>
+                            <td class="wid">
+                                @Html.EditorFor(model => model.早餐)
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写此房间是否提供并提供什么类型的早餐</div>
+                                </div>
+                                <span style="color:red">*</span>
+                                @Html.ValidationMessageFor(model => model.早餐)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align">房间设施：</td>
+                            <td colspan="3" class="wid" style="font-size:12px;color:black">
+                                @Html.CheckBoxFor(model => model.房间设施.吹风机)吹风机
+                                @Html.CheckBoxFor(model => model.房间设施.宽带上网)宽带上网
+                                @Html.CheckBoxFor(model => model.房间设施.免费市内电话)免费市内电话
+                                @Html.CheckBoxFor(model => model.房间设施.空调)空调
+                                @Html.CheckBoxFor(model => model.房间设施.国际长途通话)国际长途通话
+                                @Html.CheckBoxFor(model => model.房间设施.免费国内长途通话)免费国内长途通话
+                                @Html.CheckBoxFor(model => model.房间设施.暖气)暖气
+                                @Html.CheckBoxFor(model => model.房间设施.二十四小时热水)<small>24小时热水</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align" valign="top">简介：</td>
+                            <td colspan="3" class="wid">
+                                @Html.TextAreaFor(model => model.简介)
+                                <div class="out_box">
+                                    <div class="arrow"></div>
+                                    <div class="con_box">请填写一段话，简要介绍您的酒店</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align" valign="top">房间图片</td>
+                            <td colspan="3">
+                                <ul id="piclist">
+                                    @for (int i = 0; i < Model.图片.Count; i++)
+                                    {
+                                        <li>
+                                            <img src="@Model.图片[i]" style="width:120px;height:100px;" />
+                                            <span value="@Model.Id|@i" style="font-weight:bold;font-size:22px; cursor:pointer;">×</span>
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="align">新增房间图片：</td>
+                            <td colspan="3" class="wid"><label style="font-size:12px;">上传说明：</label><font style="font-size:12px;" color="red">请上传至少1张图片</font></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <div id="attachdiv" class="photo_div">
+                                    <input type="hidden" id="attachtext" name="attachtext" />
+                                    <div style="text-align:center">
+                                        <div></div>
+                                        <div id="ShowImage" class="product_add_upimagesbox"></div>
+                                        <div class="product_add_upimagesbox_image"></div>
+                                        <div style="padding-top:5px">
+                                            <input type="file" name="uploadify" id="uploadify" />&nbsp;&nbsp;
+                                            <a id="btnBegin" href="javascript:return false"><img alt="开始上传" src="~/js/jquery.uploadify-v2.1.4/btn1.jpg" style="border:0px;width:120px;height:30px;" /></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align:center;">
+                                <button class="front_login_rightbox_button" id="btn_sub" type="submit">提交</button>
+                            </td>
+
+                        </tr>
+                    </table>
+                }
+            </div>
+        </div>
+        <link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+        <script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+        <script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+        <script type="text/javascript" language="javascript">
+    var attchtextstring = "";
+    $(document).ready(function () {
+        $("#uploadify").uploadify({
+            'uploader': '../../JS/jquery.uploadify-v2.1.4/uploadify.swf',
+            'script': 'UploadPhoto',
+            'cancelImg': '../../JS/jquery.uploadify-v2.1.4/cancel.png',
+            'folder': 'UploadFile',
+            'sizeLimit': 1024 * 1024 * 100,
+            'queueSizeLimit': 50,
+            //'fileDesc': '只允许上传bmp,gif,jpg,jpeg图片',
+            //'fileExt': '*.bmp;*.gif;*.jpg;*.jpeg',
+            'method': 'Post',
+            'queueID': 'ShowImage',
+            'buttonImg': '../../JS/jquery.uploadify-v2.1.4/btn.jpg',
+            'wmode': 'transparent',
+            'auto': false,
+            'multi': true,
+            'onComplete': function (e, q, f, data, d) {
+                attchtextstring = document.getElementById("attachtext").value + data + "|";
+                document.getElementById("attachtext").value = attchtextstring;
+                var filename = data;
+                var Image = "<img style='width:120px;height:70px;' src='" + data + "'/>";
+                var Preview = "<a href='" + data + "' target=\"_blank\">预览</a>&nbsp;&nbsp;";
+                var Original = "<a href=\"" + data + "\" target=\"_blank\">原图</a>&nbsp;&nbsp;";
+                var Delete = "<a href=\"javascript:DeleteAttachment('" + q + "','" + data + "')\" style='color:red; padding-left:20px;'>删除</a>";
+                var Div = "<div style='margin-top:5px;text-align:center'>" + Preview + Original + Delete + "</div>";
+                $("#uploadify" + q).html(Image + Div);
+            }
+        });
+        $("#btnBegin").click(function () { $("#uploadify").uploadifyUpload(); return false; });
+    });
+    function DeleteAttachment(q, n) {
+        $.ajax({
+            type: "POST",
+            url: "DeleteAttachment?q=" + q + "&n=" + n,
+            success: function (msg) {
+                if (msg != "0") {
+                    document.getElementById("attachtext").value = document.getElementById("attachtext").value.replace(n + "|", "");
+                    jQuery("#uploadify").uploadifyCancel(msg);
+                }
+            }
+        });
+    }
+    function show_tip(t) {
+        $(t).next("div").show();
+        $(t).next("div").css("display", "inline-block");
+    }
+    function hide_tip(t) {
+        $(t).next("div").hide();
+    }
+    $("#piclist li span").click(function () {
+        var d = $(this).attr("value");
+        $.ajax({
+            url: '/供应商后台/DelRoomImg',
+            data: { index: d },
+            success: function () {
+                window.location.reload();
+            },
+        });
+    });
+    $(document).ready(function () {
+        $("#酒店房间管理").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#酒店房间管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+        </script>
+
+    </div>
+</div>

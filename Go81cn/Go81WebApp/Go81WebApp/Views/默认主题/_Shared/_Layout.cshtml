@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="title" content="军采服务平台" />
+    <meta name="keywords" content="物资采购,军队物资,军队采购,西南军区,成都军区,军队,部队,后勤,物资,采购,招标,竞标,中标,西南,西南物资采购网,采购平台,邀请招标,单一来源,竞争性谈判,询价,询价采购,网上采购,电子反拍,网上询价,军采平台,军采网" />
+    <meta name="description" content="西南物资采购网，中国西南地区，成都军区授权的唯一军队物资采购平台，为部队提供办公设备、计算机通信设备、车辆、电气设备、机械设备、文体器材、仪器仪表等物资的采购信息和服务" />
+    <meta name="baidu-site-verification" content="Wja8rikZox" />
+    <meta baidu-gxt-verify-token="5c7656400cc6786ec43f4e37db469c4d" />
+    <title>@ViewBag.Title</title>
+    @Scripts.Render("~/bundles/jquery")
+    @Styles.Render("~/css/css")
+    <link rel="stylesheet" href="~/css/index.css" type="text/css">
+    <link href="~/css/styles.css" rel="stylesheet" />
+
+
+
+    <link href="~/css/pageStyle.css" rel="stylesheet" />
+    <script src="~/JS/Bk_Tbs.js"></script>
+</head>
+<body>
+    @{
+        string controller = ViewContext.RouteData.Values["controller"].ToString();
+        string action = ViewContext.RouteData.Values["action"].ToString();
+        bool IsIntranet = (bool)ViewContext.RouteData.Values["IsIntranet"];
+    }
+    @if (IsIntranet)
+    {
+        <div style="position:relative;z-index:10;">
+            @Html.Action("TopBar", "布局")
+            @Html.Action("Banner", "布局")
+        </div>
+        <div style="position:relative; z-index:100; margin-top:-62px; background-color:white;width:1324px; margin-left:auto; margin-right:auto;">
+            @Html.Action("SearchBar", "布局")
+            @if (controller == "首页" && action == "Index" || action == "Intranet")
+            {
+                @Html.Action("NavigateMenu", "布局")
+            }
+            else
+            {
+                @Html.Action("NavigateMenuWithProductCategory", "布局")
+            }
+            <div class="layout_maincontent_box" style="position: relative">
+                @RenderBody()
+            </div>
+            @Html.Action("Footer", "布局")
+        </div>
+    }
+    else
+    {
+        @Html.Action("TopBar", "布局")
+        @Html.Action("Banner", "布局")
+        @Html.Action("SearchBar", "布局")
+        if (controller == "首页" && action == "Index" || action == "Intranet")
+        {
+            @Html.Action("NavigateMenu", "布局")
+        }
+        else
+        {
+            @Html.Action("NavigateMenuWithProductCategory", "布局")
+        }
+        <div class="layout_maincontent_box" style="position: relative">
+            @RenderBody()
+        </div>
+        @Html.Action("Footer", "布局")
+    }
+</body>
+</html>

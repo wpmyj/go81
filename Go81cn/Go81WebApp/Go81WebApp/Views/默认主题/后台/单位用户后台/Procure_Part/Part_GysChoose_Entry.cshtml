@@ -1,0 +1,42 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@model List<供应商>
+@if (Model != null && Model.Any())
+{
+    <tr id="@Model[0].Id" sure="1" time="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")">
+        <td>@Model[0].企业基本信息.企业名称</td>
+        <td>
+            @foreach (var item in Model[0].可提供产品类别列表)
+            {
+                <div>@item.一级分类</div>
+            }
+        </td>
+        <td>@Model[0].所属地域.地域</td>
+        <td>@Model[0].企业联系人信息.联系人姓名</td>
+        <td>@Model[0].企业联系人信息.联系人固定电话</td>
+        <td>@Model[0].企业联系人信息.联系人手机</td>
+        <td>
+            <div style="display:none; float:left;">
+                <input type="radio" id="@(Model[0].Id)_n" name="@Model[0].Id" />
+                <input type="radio" id="@(Model[0].Id)_y" name="@Model[0].Id" />
+            </div>
+            <div style="padding:5px; float:left;">
+                <label for="@(Model[0].Id)_n" n="0" class="expert_condition_button2" onclick="addline(this)">确定出席</label>
+                <label for="@(Model[0].Id)_y" n="1" class="expert_condition_button2" onclick="deleteline(this)">不能出席</label>
+            </div>
+            <div style=" width: 90px; float: left; margin: 6px;">
+                <input id="@Model[0].Id" type="text" class="expert_condition_reason" style="color:#bbb; width:90px;" value="请输入原因" onfocus="if (this.value = '请输入原因') { this.value = ''; this.style.color = '#000';}" />
+            </div>
+            @*<input type="button" class="expert_condition_button" value="不能出席" onclick="deleteline(this)" />
+                <input type="text" class="expert_condition_reason" />*@
+        </td>
+    </tr>
+
+}
+
+
+else
+{
+    <tr id="thistimeover">
+        <td colspan="8">满足条件的供应商个数不足，本次抽取无数据！</td>
+    </tr>
+}

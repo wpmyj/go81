@@ -1,0 +1,354 @@
+﻿@using Go81WebApp.Models.数据模型.推广业务数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    ViewBag.Title = "推广供应商列表";
+    Layout = "_BackLayout.cshtml";
+}
+<link href="~/css/index.css" rel="stylesheet" />
+<script src="~/JS/provinceandcity_all.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style>
+    div#pager {
+        text-align: center;
+    }
+        div#pager a, .gys_znxx_content_detailbox a {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+            line-height: 25px;
+            font-size: 12px;
+            height: 25px;
+            border: 1px solid rgb(204, 204, 204);
+            margin-top: 10px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+            div#pager a:hover {
+                background-color: rgb(243, 243, 243);
+            }
+</style>
+<style>
+    td span {
+        font-size: 12px;
+        color: red;
+    }
+</style>
+    @{IEnumerable<供应商推广> supplier = ViewData["supplier"] as IEnumerable<供应商推广>;}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="margin-bottom:50px;" class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">推荐供应商列表<a style="color:red;" href="/运营团队后台/Supplier_PssInfo?page=1">【点击添加推广供应商】</a></div>
+            </div>
+        </div>
+        <div style="border:1px solid green; margin-top:8px;">
+            <div class="gys_znxx_contentbox">
+                <table width="70%" style="margin-left:20px; margin-top:10px;">
+                    <tr>
+                        @*<td align="right">供应商名称：</td>
+                        <td>
+                            <input type="text" id="name" />
+                        </td>*@
+                        <td align="right">起始日期：</td>
+                        <td><input type="text" onfocus="WdatePicker({dateFmt:'yyyy/MM/dd HH:mm:ss'})" id="starttime" /></td>
+                        <td align="right">结束日期：</td>
+                        <td><input type="text" onfocus="WdatePicker({dateFmt:'yyyy/MM/dd HH:mm:ss'})" id="endtime" /></td>
+                    </tr>
+                    <tr><td colspan="6" align="left" height="50"><input type="button" id="search" onclick="current_page(1)" style="width:100px; margin-left:250px; border:none; background-color:green; cursor:pointer; color:white; height:30px; font-size:15px;" value="查询" /></td></tr>
+                </table>
+                <a id="pos" style="display:none;">@ViewData["pos"]</a>
+                <div class="gys_znxx_content">
+                    <div style="font-size:12px;" id="tb1">
+                        <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr><td colspan="8" style="text-align:right;"><a href="###" onclick="outPutExcel()">导出EXCEL表格</a></td></tr>
+                            <tr><th>序号</th><th>供应商名称</th><th>显示级别</th><th>起始时间/结束时间</th><th>是否结束</th><th colspan="2">操作</th><th>Excel<input id="allCheck" name="parent" type="checkbox" value="" onclick="selectAll()" /></th></tr>
+                            @if (supplier != null && supplier.Count() != 0)
+                            {
+                                for (int i = 0; i < supplier.Count();i++ )
+                                {
+                                        <tr>
+                                            <td style="text-align: center; width:8%;">@(i + 1)</td>
+                                            <td style="text-align: center; width:15%;">
+                                                <a target="_blank" href="/运营团队后台/Modify_Supplier_Info?id=@supplier.ElementAt(i).供应商.用户数据.Id">@supplier.ElementAt(i).供应商.用户数据.企业基本信息.企业名称</a>
+                                            </td>
+                                            <td style="text-align:center; width:10%;">@supplier.ElementAt(i).显示级别.ToString()</td>
+                                            
+                                            <td style="text-align: center; width:15%;">@supplier.ElementAt(i).显示时间.ToString("yyyy-MM-dd HH:mm:ss")<br />@supplier.ElementAt(i).结束时间.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                            <td width="8%" align="center">
+                                                @if (DateTime.Now < supplier.ElementAt(i).结束时间)
+                                                {
+                                                    <em>进行中...</em>
+                                                }
+                                                else
+                                                {
+                                                    <em style="color:red;">已结束</em>
+                                                }
+                                            </td>
+                                            <td style="text-align: center; width:6%;"><a href="/运营团队后台/Edit_Recommendgys?id=@supplier.ElementAt(i).Id">修改</a></td>
+                                            <td style="text-align: center; width:6%;"><a href="/运营团队后台/Del_Recommendgys?id=@supplier.ElementAt(i).Id">删除</a></td>
+                                            <td style="text-align: center; width:6%;"><input name="item" type="checkbox" value="@supplier.ElementAt(i).供应商.用户数据.Id" onclick="selectThis()" /></td>
+                                        </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="9" align="center">没有需要查看的内容！</td></tr>
+                            }
+                        </table>
+                        <div class="gys_znxx_content_detailbox">
+                            @{
+                                int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                                int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                                if (Pagecount <= 6)
+                                {
+                                    for (int i = 1; i <= Pagecount; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/运营团队后台/Recommendgys_Detail?page=@i&pos=@ViewData["pos"]'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/运营团队后台/Recommendgys_Detail?page=@i&pos=@ViewData["pos"]'>@i</a>
+                                        }
+                                    }
+                                    if (Pagecount != 0)
+                                    {
+                                        <span>@(CurrentPage)/@(Pagecount) 页</span>
+                                    }
+                                }
+                                else
+                                {
+                                    if (CurrentPage < 6)
+                                    {
+                                        if (CurrentPage != 1)
+                                        {
+                                            <a href="/运营团队后台/Recommendgys_Detail?page=@(CurrentPage-1)&pos=@ViewData["pos"]">上一页</a>
+                                            for (int i = 1; i < 7; i++)
+                                            {
+                                                if (CurrentPage == i)
+                                                {
+                                                    <a style="border:1px solid red;" href='/运营团队后台/Recommendgys_Detail?page=@i&pos=@ViewData["pos"]'>@i</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href='/运营团队后台/Recommendgys_Detail?page=@i&pos=@ViewData["pos"]'>@i</a>
+                                                }
+                                            }
+                                            <span>...</span><a href="/运营团队后台/Recommendgys_Detail?page=@(Pagecount)&pos=@ViewData["pos"]">@Pagecount</a><a href="/运营团队后台/Recommendgys_Detail?page=@(CurrentPage+1)&pos=@ViewData["pos"]">下一页</a>
+                                            <span>@(CurrentPage)/@(Pagecount) 页</span>
+                                        }
+                                        else
+                                        {
+                                            for (int i = 1; i < 7; i++)
+                                            {
+                                                if (CurrentPage == i)
+                                                {
+                                                    <a style="border:1px solid red;" href='/运营团队后台/Recommendgys_Detail?page=@i & pos=@ViewData["pos"]'>@i</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href='/运营团队后台/Recommendgys_Detail?page=@i &pos= @ViewData["pos"]'>@i</a>
+                                                }
+                                            }
+                                            <span>...</span><a href="/运营团队后台/Recommendgys_Detail?page=@(Pagecount)&pos=@ViewData["pos"]">@Pagecount</a><a href="/运营团队后台/Recommendgys_Detail?page=@(CurrentPage+1)&pos=@ViewData["pos"]">下一页</a>
+                                            <span>@(CurrentPage)/@(Pagecount) 页</span>
+                                        }
+                                    }
+                                    else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                                    {
+                                        <a href="/运营团队后台/Recommendgys_Detail?page=@(CurrentPage-1)&pos=@ViewData["pos"]">上一页</a><a href="/运营团队后台/Recommendgys_Detail?page=1&pos=@ViewData["pos"]">1</a><span>...</span>
+                                        for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                                        {
+                                            if (CurrentPage == i)
+                                            {
+                                                <a style="border:1px solid red;" href='/运营团队后台/Recommendgys_Detail?page=@i&pos=@ViewData["pos"]'>@i</a>
+                                            }
+                                            else
+                                            {
+                                                <a href='/运营团队后台/Recommendgys_Detail?page=@i&pos=@ViewData["pos"]'>@i</a>
+                                            }
+                                        }
+                                        <span>...</span><a href="/运营团队后台/Recommendgys_Detail?page=@(Pagecount)&pos=@ViewData["pos"]">@Pagecount</a><a href="/运营团队后台/Recommendgys_Detail?page=@(CurrentPage+1)&pos=@ViewData["pos"]">下一页</a>
+                                        <span>@(CurrentPage)/@(Pagecount) 页</span>
+                                    }
+                                    else if (CurrentPage >= Pagecount - 3)
+                                    {
+                                        <a href="/运营团队后台/Recommendgys_Detail?page=@(CurrentPage-1)&pos=@ViewData["pos"]">上一页</a><a href="/运营团队后台/Recommendgys_Detail?page=1&pos=@ViewData["pos"]">1</a><span>...</span>
+                                        for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                                        {
+                                            if (CurrentPage == i)
+                                            {
+                                                <a style="border:1px solid red;" href='/运营团队后台/Recommendgys_Detail?page=@i &pos= @ViewData["pos"]'>@i</a>
+                                            }
+                                            else
+                                            {
+                                                <a href='/运营团队后台/Recommendgys_Detail?page=@i&pos=@ViewData["pos"]'>@i</a>
+                                            }
+                                        }
+                                        <span>@(CurrentPage)/@(Pagecount) 页</span>
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div id="pager"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    var s = "";
+    function setValue(data) {
+        var str = "<table width='100%' cellpadding='0' cellspacing='0'><tr><td colspan='8' style='text-align:right;'><a href='###' onclick='outPutExcel()'>导出EXCEL表格</a></td></tr><tr><th>序号</th><th>供应商名称</th><th>显示级别</th><th>起始时间/结束时间</th><th>是否结束</th><th colspan='2'>操作</th><th>Excel<input id='allCheck' name='parent' type='checkbox' value='' onclick='selectAll()' /></th></tr>";
+        for (var i = 0; i < data.length;i++)
+        {
+            if (data[i].Isend=="已结束")
+            {
+                str += "<tr><td>" + (i + 1) + "</td><td><a href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].sId + "'>" + data[i].name + "</a></td><td>" + data[i].cls + "</td><td>" + data[i].stime + "<br/>" + data[i].etime + "</td><td><em style='color:red;'>" + data[i].Isend + "</em></td><td><a href='/运营团队后台/Edit_Recommendgys?id=" + data[i].Id + "'>修改<a/></td><td><a href='/运营团队后台/Del_Recommendgys?id=" + data[i].Id + "'>删除<a/></td><td><input name='item' type='checkbox' value='" + data[i].sId + "' onclick='selectThis()' /></td></tr>";
+            }
+            else
+            {
+                str += "<tr><td>" + (i + 1) + "</td><td><a href='/运营团队后台/Modify_Supplier_Info?id=" + data[i].sId + "'>" + data[i].name + "</a></td><td>" + data[i].cls + "</td><td>" + data[i].stime + "<br/>" + data[i].etime + "</td><td><em>" + data[i].Isend + "</em></td><td><a href='/运营团队后台/Edit_Recommendgys?id=" + data[i].Id + "'>修改<a/></td><td><a href='/运营团队后台/Del_Recommendgys?id=" + data[i].Id + "'>删除<a/></td><td><input name='item' type='checkbox' value='" + data[i].sId + "' onclick='selectThis()' /></td></tr>";
+            }
+        }
+        str += "</table>";
+        $("#tb1").html(str);
+    }
+    function setPage(pgCount, currentPage) {
+        if (pgCount <= 6) {
+            var str = '';
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+            }
+            if (pgCount != 0) {
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (currentPage < 6) {
+                var str = "<a onclick='current_page(" +(currentPage-1) + ")'>上一页</a>";
+                for (var i = 1; i < 6; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='current_page(" + pgCount + ")'>" + pgCount + "</a><a onclick='current_page(" +(currentPage+1) + ")'>下一页</a>";
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                var str = "<a onclick='current_page(" +(currentPage-1)+ ")'>上一页</a><a onclick='current_page(" + 1 + ")'>1</a>...";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='current_page(" + pgCount + ")'>" + pgCount + "</a><a onclick='current_page(" + (currentPage + 1) + ")'>下一页</a>";
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+            else if (currentPage >= pgCount - 3) {
+                var str = "<a onclick='current_page(" + (currentPage-1) + ")'>上一页</a><a onclick='current_page(1)'>1</a>...";
+                for (var i = pgCount - 5 + 1; i < pgCount; i++) {
+                    str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
+                }
+                str += "<a onclick='current_page(" + pgCount + ")'>" + pgCount + "</a>";
+                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    function current_page(num) {
+        $.get('/运营团队后台/RecmmondGys',
+            {
+                //name: $("#name").val(),
+                stime: $("#starttime").val(),
+                etime: $("#endtime").val(),
+                page: num,
+                pos:$("#pos").text()
+            },
+            function (data) {
+                setValue(data.Data.gys);
+                var pageSize = data.Data.pageSize;
+                var current = data.Data.currentPage;
+                $("div#pager").show();
+                setPage(pageSize,current);
+            }
+        );
+    }
+    $(document).ready(function () {
+        $("select#cls").change(function () { str = $(this).val(); sh(); });
+        $("select#status").change(function () { status = $(this).val(); number = 1; sh(); });
+    });
+    function del(num) {
+        if (confirm("点击确定即将删除此用户！确定删除吗？")) {
+            window.location = "/运营团队后台/Supplier_Delete?id=" + num;
+        }
+    }
+    function selectAll() {
+        s = "";
+        var th = document.getElementsByName('parent').item(0);
+        var items = document.getElementsByName('item');
+        if (th.checked) {
+            for (var i = 0; i < items.length; i++) {
+                items.item(i).checked = true;
+                s += items.item(i).value + ",";
+            }
+        }
+        else {
+            for (var i = 0; i < items.length; i++) {
+                items.item(i).checked = false;
+            }
+            s = "";
+        }
+    }
+    function selectThis() {
+        s = "";
+        var items = document.getElementsByName('item');
+        var th = document.getElementsByName('parent').item(0);
+        for (var i = 0; i < items.length; i++) {
+            if (!items.item(i).checked) {
+                th.checked = false;
+                break;
+            }
+        }
+        for (var i = 0; i < items.length; i++) {
+            if (items.item(i).checked) {
+                s += items.item(i).value + ",";
+            }
+        }
+    }
+    function outPutExcel() {
+        if (s == "") {
+            alert("请选择要导出的数据！");
+        }
+        else {
+            window.location = "/运营团队后台/putOutExcel?id=" + s;
+        }
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#供应商推广列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#供应商推广列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+
+
+
+
+
+
+

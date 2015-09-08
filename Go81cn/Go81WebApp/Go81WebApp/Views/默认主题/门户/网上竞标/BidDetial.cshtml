@@ -1,0 +1,490 @@
+﻿@model Go81WebApp.Models.数据模型.竞标数据模型.网上竞标
+@{
+    ViewBag.Title = "网上竞标详情";
+}
+<link href="~/css/hotelandticket.css" rel="stylesheet" />
+<div class="bid">
+    <div class="good_project_info">
+        <div class="project_info">
+            <div class="good_til alii">
+                <div class="index_menu_top_title">项目信息</div>
+            </div>
+            <div class="good_pic_info acf">
+                @*<div style="height:144px;float:left;padding:6px;"></div>*@
+                <div class="good_info_d">
+                    <table>
+                        <tr>
+                            <td class="align">公告日期：</td>
+                            <td>2015-05-27</td>
+                        </tr>
+                        <tr>
+                            <td class="align">项目名称：</td>
+                            <td>成都军区成都物资采购站重庆分站设备器材邀请招标</td>
+                        </tr>
+                        <tr>
+                            <td class="align">项目编号：</td>
+                            <td>2013-CDCD-2053</td>
+                        </tr>
+                        <tr>
+                            <td class="align">采购单位：</td>
+                            <td>成都军区物资采购站</td>
+                        </tr>
+                        <tr>
+                            <td class="align">送货地点：</td>
+                            <td>河北省秦皇岛市海港区泰山路143号</td>
+                        </tr>
+                        <tr>
+                            <td class="align">联系人：</td>
+                            <td>高磊</td>
+                        </tr>
+                        <tr>
+                            <td class="align">联系电话：</td>
+                            <td>13659845825</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="good_info_d" style="width:690px;">
+                    @if (Model != null)
+                    {
+                        <div class="good_pic">
+                            <img src="@Model.商品图片" />
+                        </div>
+                        <div class="good_info_d">
+                            <table>
+                                <tr>
+                                    <td class="align">商品名称：</td>
+                                    <td>@Model.商品名称</td>
+                                </tr>
+                                <tr>
+                                    <td class="align">型号：</td>
+                                    <td>@Model.商品型号</td>
+                                </tr>
+                                <tr>
+                                    <td class="align">数量：</td>
+                                    <td>5</td>
+                                </tr>
+                                <tr>
+                                    <td class="align">起始价：</td>
+                                    <td style="color:#ff0000;font-size:20px;">￥@Model.起始价格</td>
+                                </tr>
+                                <tr>
+                                    <td class="align">竞标价：</td>
+                                    <td style="color:#2A720A;font-size:20px;">￥@Model.最终价格</td>
+                                </tr>
+                                <tr>
+                                    <td class="align">商品描述：</td>
+                                    <td></td>
+                                </tr>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="auction_info" style="clear:both">
+        @Html.Action("Part_Bidetial","网上竞标")
+    </div>
+    <div class="auction_opera_record">
+        <div class="auction_opera">
+            <div>
+                <div class="index_bottom_spdt_topbox outtab nid">
+                    <div class="index_bottom_zb_top_title">竞拍操作</div>
+                </div>
+                <div id="leave_next_time" style="display:none;border:1px solid #357D1E;margin:10px auto;padding:10px;font-size:48px;color:red;text-align:center;"></div>
+                @if (DateTime.Compare(Model.报价开始时间, DateTime.Now) > 0)
+                {
+                    string dateDiff = null;
+                    TimeSpan ts1 = new TimeSpan(Model.报价开始时间.Ticks);
+                    TimeSpan ts2 = new TimeSpan(DateTime.Now.Ticks);
+                    TimeSpan ts = ts1.Subtract(ts2).Duration();
+
+                    if (ts.Days > 0)
+                    {
+                        dateDiff = ts.Days.ToString() + "天" + (ts.Hours < 10 ? "0" + ts.Hours.ToString() : ts.Hours.ToString()) + "时" + (ts.Minutes < 10 ? "0" + ts.Minutes.ToString() : ts.Minutes.ToString()) + "分" + (ts.Seconds < 10 ? "0" + ts.Seconds.ToString() : ts.Seconds.ToString()) + "秒";
+                    }
+                    else
+                    {
+                        dateDiff = (ts.Hours < 10 ? "0" + ts.Hours.ToString() : ts.Hours.ToString()) + "时" + (ts.Minutes < 10 ? "0" + ts.Minutes.ToString() : ts.Minutes.ToString()) + "分" + (ts.Seconds < 10 ? "0" + ts.Seconds.ToString() : ts.Seconds.ToString()) + "秒";
+                    }
+                    
+                    
+                    <div class="auction_opera_d auction_hid" id="opera0">
+                        <div class="auction_timer"><span style="font-size:48px;">离报价开始还有</span><span style="font-size:48px;">@dateDiff</span></div>
+                    </div>
+                }
+                @if (DateTime.Compare(Model.报价结束时间, DateTime.Now) < 0)
+                {
+                <div class="auction_opera_d auction_hid">
+                    <div class="auction_timer"><span style="font-size:48px;">已结束</span></div>
+                </div>
+                }
+                <div id="end_auction" class="auction_opera_d auction_hid" style="display:none">
+                    <div class="auction_timer"><span style="font-size:48px;">已结束</span></div>
+                </div>
+                <div class="auctionoperate" id="auctionoperate">
+
+                    @for (int i = 0; i < Model.计划报价轮次; i++)
+                    {
+                        <div class="auction_opera_d">
+                            <div class="auction_timer"><span>本轮报价倒计时：00:00:00</span></div>
+                            <div class="dq_bj" style="padding-left:330px;"><span>我的当前报价：尚未报价</span></div>
+                            <div class="bj_input" style="line-height:35px;padding-left:330px;">
+                                <label>新的报价：￥</label>
+                                <input type="text" style="width:215px; height:20px;" />
+                                <input id="@i" style="width:222px;height:30px; margin-left:10px;" onclick="Quote(this)" type="button" value="报    价" />
+                            </div>
+                            @*<div class="bj_btn" style="text-align:center;margin-top:10px;"></div>*@
+                        </div>
+                    }
+                    @*<div class="auction_opera_d" id="opera1">
+                            <div class="auction_timer"><span>本轮报价倒计时：00:00:12</span></div>
+                            <div class="dq_bj"><span>我的当前报价：￥3250</span></div>
+                            <div class="bj_input" style="line-height:35px;">
+                                <label>新的报价：￥</label>
+                                <input type="text" style="width:215px; height:20px;" />
+                            </div>
+                            <div style="text-align:center;margin-top:10px;"><input style="width:222px;height:30px; margin-left:70px;" type="button" value="报价" /></div>
+                        </div>
+
+                        <div class="auction_opera_d" id="opera2">
+                            <div class="auction_timer"><span>本轮报价倒计时：00:00:12</span></div>
+                            <div class="dq_bj"><span>我的当前报价：￥3250</span></div>
+                            <div class="bj_input" style="line-height:35px;">
+                                <label>新的报价：￥</label>
+                                <input type="text" style="width:215px; height:20px;" />
+                            </div>
+                            <div style="text-align:center;margin-top:10px;"><input style="width:219px;height:30px; margin-left:69px;" type="button" value="报价" /></div>
+                        </div>*@
+                </div>
+            </div>
+            <div class="real_time_bj">
+                <div class="index_bottom_spdt_topbox outtab nid">
+                    <div class="index_bottom_zb_top_title">实时报价</div>
+                </div>
+                <table cellpadding="0" cellspacing="0" id="real_time_bj">
+                        <tr>
+                            <td class="num_bj">1</td>
+                            <td class="time_bj">￥3000</td>
+                            <td class="time_bj">2014-11-12 12:25:21</td>
+                        </tr>
+                        <tr>
+                            <td class="num_bj">2</td>
+                            <td class="time_bj">￥3200</td>
+                            <td class="time_bj">2014-11-12 12:23:35</td>
+                        </tr>
+                        <tr>
+                            <td class="num_bj">3</td>
+                            <td class="time_bj">￥3300</td>
+                            <td class="time_bj">2014-11-12 12:18:20</td>
+                        </tr>
+                    </table>
+            </div>
+        </div>
+        <div class="auction_record">
+            <div class="index_bottom_spdt_topbox outtab mid">
+                <div class="index_bottom_zb_top_title">竞拍记录</div>
+            </div>
+            <div class="auction_record_d">
+                    <table class="round">
+                        <tr class="round_num">
+                            <td class="left">第一轮</td>
+                            <td class="right">本轮最终价：</td>
+                            <td class="right" style="text-indent:initial;text-align:initial">￥1800</td>
+                            <td style="font-size:18px;">成都信科信息技术有限责任企业</td>
+                        </tr>
+                        <tr class="round_gys">
+                            <td colspan="2" style="text-align:right;padding-right:25px;">1</td>
+                            <td style="color:#096CB3;text-indent:2px;">￥2300</td>
+                            <td class="gys">成都赛格科技有限责任企业</td>
+                        </tr>
+                        <tr class="round_gys">
+                            <td colspan="2" style="text-align:right;padding-right:25px;">2</td>
+                            <td style="color:#096CB3;text-indent:2px;">￥2400</td>
+                            <td class="gys">云南鲁甸农产品有限责任企业</td>
+                        </tr>
+                    </table>
+                </div>
+                @*<div class="auction_record_d">
+        <table class="round">
+            <tr class="round_num">
+                <td class="left">第一轮</td>
+                <td class="right">本轮最终价：</td>
+                <td class="right" style="text-indent:initial;text-align:initial">￥52356</td>
+                <td style="font-size:18px;">成都信科信息技术有限责任企业</td>
+            </tr>
+            <tr class="round_gys">
+                <td colspan="2" style="text-align:right;padding-right:25px;">1</td>
+                <td style="color:#096CB3;text-indent:2px;">￥2300</td>
+                <td class="gys">成都信科信息技术有限责任企业</td>
+            </tr>
+            <tr class="round_gys">
+                <td colspan="2" style="text-align:right;padding-right:25px;">1</td>
+                <td style="color:#096CB3;text-indent:2px;">￥2300</td>
+                <td class="gys">成都信科信息技术有限责任企业</td>
+            </tr>
+        </table>
+    </div>
+    <div class="auction_record_d">
+        <table class="round">
+            <tr class="round_num">
+                <td class="left">第一轮</td>
+                <td class="right">本轮最终价：</td>
+                <td class="right" style="text-indent:initial;text-align:initial">￥52356</td>
+                <td style="font-size:18px;">成都信科信息技术有限责任企业</td>
+            </tr>
+            <tr class="round_gys">
+                <td colspan="2" style="text-align:right;padding-right:25px;">1</td>
+                <td style="color:#096CB3;text-indent:2px;">￥2300</td>
+                <td class="gys">成都信科信息技术有限责任企业</td>
+            </tr>
+            <tr class="round_gys">
+                <td colspan="2" style="text-align:right;padding-right:25px;">1</td>
+                <td style="color:#096CB3;text-indent:2px;">￥2300</td>
+                <td class="gys">成都信科信息技术有限责任企业</td>
+            </tr>
+        </table>
+    </div>*@
+        </div>
+    </div>
+    <!--报价轮次-->
+    <input type="hidden" id="auction_num" />
+</div>
+<script type="text/javascript">
+    function countDown(year, month, day,hour,minute,second,isnum) {
+        var now = new Date();
+        var endDate = new Date(year, month - 1, day, hour, minute, second);
+        var leftTime = endDate.getTime() - now.getTime();//时间差的毫秒数
+        var leftsecond = parseInt(leftTime / 1000);
+        //var day1=parseInt(leftsecond/(24*60*60*6));
+        var day1 = Math.floor(leftsecond / (60 * 60 * 24));//计算出相差天数
+        var hour = Math.floor((leftsecond - day1 * 24 * 60 * 60) / 3600);//计算相差小时数
+        hour = zeroOccupy(hour);
+        var minute = Math.floor((leftsecond - day1 * 24 * 60 * 60 - hour * 3600) / 60);//计算相差分钟数
+        minute = zeroOccupy(minute);
+        var second = Math.floor(leftsecond - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);//计算相差秒数
+        second = zeroOccupy(second);
+        var time="";
+        if(day1>0){
+            time = isnum ? hour + ":" + minute + ":" + second : day1+ "天" + hour + "时" + minute + "分" + second + "秒";
+        }
+        else{
+            time = isnum ? hour + ":" + minute + ":" + second : hour + "时" + minute + "分" + second + "秒";
+        } 
+        return time;
+    }
+    function zeroOccupy(num) {
+        var number;
+        if (num < 10) {
+            number = "0" + num;
+        }
+        else {
+            number = num;
+        }
+        return number;
+    }
+
+    function cSplit(splittime){
+        var date = splittime.split(" ")[0];
+        var year = date.split("-")[0];
+        var month = date.split("-")[1];
+        var day = date.split("-")[2];
+        var time = splittime.split(" ")[1];
+        var hours = time.split(":")[0];
+        var minute = time.split(":")[1];
+        var second = time.split(":")[2];
+        var arr=new Array(year,month,day,hours,minute,second);
+        return arr;
+    }
+    function GetNowTime(){
+        var myDate = new Date();        //获取当前日期时间
+        var fullyear=myDate.getFullYear();    //获取完整的年份(4位)
+        var month=myDate.getMonth()+1;       //获取当前月份(0-11,0代表1月)
+        var date=myDate.getDate();        //获取当前日(1-31)        //获取当前星期X(0-6,0代表星期天)
+        var hours=myDate.getHours();       //获取当前小时数(0-23)
+        var minutes=myDate.getMinutes();     //获取当前分钟数(0-59)
+        var second=myDate.getSeconds();     //获取当前秒数(0-59)
+        var nowtime=fullyear+"-"+zeroOccupy(month)+"-"+zeroOccupy(date)+" "+zeroOccupy(hours)+":"+zeroOccupy(minutes)+":"+zeroOccupy(second);
+        return nowtime;
+    }
+
+   
+    $(function () {
+        var countSt="@Model.报价开始时间.ToString("yyyy-MM-dd HH:mm:ss")";
+        var countDowntime =cSplit("@Model.报价开始时间.ToString("yyyy-MM-dd HH:mm:ss")");
+        var endtime = "@Model.报价结束时间.ToString("yyyy-MM-dd HH:mm:ss")";
+        var dateTime;
+
+        var d = GetNowTime();
+        dateTime = countDown(countDowntime[0], countDowntime[1],countDowntime[2], countDowntime[3], countDowntime[4], countDowntime[5], false); //离报价开始时间
+        if (countSt >= d) { //如果当前时间早于报价开始时间 则显示报价开始倒计时
+            $("#opera0 .auction_timer").children().eq(1).html(dateTime);
+        }
+       
+        var timer;
+        timer = setInterval(function () {
+            var d = GetNowTime();
+            if(d <= endtime){  //如果当前时间小于结束时间则执行
+                dateTime = countDown(countDowntime[0], countDowntime[1],countDowntime[2], countDowntime[3], countDowntime[4], countDowntime[5], false); //离报价开始时间
+                if (countSt >= d) { //如果当前时间早于报价开始时间 则显示报价开始倒计时
+                    $("#opera0 .auction_timer").children().eq(1).html(dateTime);
+                }
+                if (countSt <= d) {
+                    //clearInterval(timer);
+                    //var auction = $("#auctionoperate").children();
+                    //var tt=setInterval(function(){
+                    var auction = $("#auctionoperate").children();
+                    var auction_number=$("#auction_num").val();
+                    var bj_num=auction_number.split("|")[0]; //当前报价轮次
+
+                    var dt=GetNowTime();//当前时间
+                    var ut=auction_number.split("|")[4]; //上一轮报价结束时间
+                    var nt=auction_number.split("|")[3]; //下一轮报价开始时间
+                    var qt=auction_number.split("|")[1];  //当前轮报价开始时间
+                    var wt=auction_number.split("|")[2];   //当前轮报价结束时间
+                    var qtime=cSplit(qt);//当前轮报价开始时间分割
+                    var g=cSplit(wt);//当前轮报价结束时间分割
+                    var h=cSplit(nt);
+                    dateTimeEnd=countDown(parseInt(g[0]),parseInt(g[1]),parseInt(g[2]),parseInt(g[3]),parseInt(g[4]),parseInt(g[5]),true);   //当前轮报价结束时间倒计时
+                    // dateTimeEnd=countDown(2014,11,11,13,25,0,true);
+                    dateTimeNstart=countDown(parseInt(qtime[0]),parseInt(qtime[1]),parseInt(qtime[2]),parseInt(qtime[3]),parseInt(qtime[4]),parseInt(qtime[5]),true); //下一轮报价开始时间倒计时
+                    dateTimeKst= countDown(parseInt(h[0]),parseInt(h[1]),parseInt(h[2]),parseInt(h[3]),parseInt(h[4]),parseInt(h[5]),true)
+                    $("#opera0").hide();//隐藏报价开始倒计时
+                    if(dt >= qt && dt <= wt){
+                        $("#leave_next_time").hide();
+                        auction.eq(parseInt(bj_num)-1).show(); //显示当前报价轮次的报价操作
+                        auction.eq(parseInt(bj_num)-1).children(".auction_timer").children("span").html("第"+bj_num+"轮剩余报价时间：" + dateTimeEnd);
+                        console.log("aaa");
+                        if(dt >= wt && dt <= nt){
+                            auction.eq(parseInt(bj_num)-1).hide();
+                            $("#leave_next_time").show().html("距离第"+(parseInt(bj_num)+1)+"轮报价开始还有"+dateTimeKst);
+                            //每一轮结束后统计本轮的最终价、本轮最优供应商、下一轮开始价
+                            $.ajax({
+                                url:'/网上竞标/CurrentBidStat',
+                                data:{id:@Model.Id,round:bj_num},
+                            });
+                        }
+                    }
+                    if(dt >= ut && dt <= qt){
+                        auction.eq(parseInt(bj_num)-2).hide();
+                        $("#leave_next_time").show().html("距离第"+bj_num+"轮报价开始还有"+dateTimeNstart);
+                        if(dt >= qt && dt <= wt){
+                            $("#leave_next_time").hide();
+                            auction.eq(parseInt(bj_num)-1).show(); //显示当前报价轮次的报价操作
+                            auction.eq(parseInt(bj_num)-1).children(".auction_timer").children("span").html("第"+bj_num+"轮剩余报价时间：" + dateTimeEnd);
+                        }
+                    }
+                    if(dt >= endtime){
+                        $("#leave_next_time").hide();
+                        auction.hide();
+                        $("#end_auction").show();
+                        //每一轮结束后统计本轮的最终价、本轮最优供应商、下一轮开始价
+                        $.ajax({
+                            url:'/网上竞标/CurrentBidStat',
+                            data:{id:@Model.Id,round:bj_num},
+                        });
+                        //clearInterval(timer);
+                    }
+                    //},1000);
+                }
+            }
+        }, 1000);   
+    });
+    </script>
+<script type="text/javascript" language="javascript">
+    var id=@Model.Id;
+    var endtime = "@Model.报价结束时间.ToString("yyyy-MM-dd HH:mm:ss")";
+    var starttime ="@Model.报价开始时间.ToString("yyyy-MM-dd HH:mm:ss")";
+    //报价操作
+    function Quote(e){
+        var price=$(e).parent().parent().find("input[type='text']").val();//报价
+        if(price=="" || price==null){
+            alert("请输入报价！");
+        }
+        else{
+            var round=$(e).attr("id");
+            $.ajax({
+                url:'/网上竞标/QuoteBid',
+                data:{id:id,price:price,round:round},
+                success:function(data){
+                    if(data.indexOf("成功")>=0){
+                        $(e).parent().parent().find(".dq_bj > span").html("我的当前报价：￥"+price);
+                        $(e).parent().parent().find("input[type='text']").val("");
+                    }
+                    else{
+                        alert(data);
+                    }
+                },
+                error:function(){
+                    alert("报价失败！");
+                },
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        var timeinterval = setInterval(function(){
+            var dt=GetNowTime();//当前时间
+            $.ajax({
+                url:'/网上竞标/GetAuctionNum',
+                data:{id:id},
+                success:function(data){
+                    $("#auction_num").val(data);
+                },
+            });
+            if(dt >= endtime){
+                clearInterval(timeinterval);
+            }
+        },1000);
+        var timeinterval2 = setInterval(function () {
+            var dt=GetNowTime();//当前时间
+            if(dt>=starttime && dt<=endtime){
+                $.ajax({
+                    url:'/网上竞标/Part_Bidetial',
+                    data:{a:id},
+                    success:function(data){
+                        $("#auction_info").html(data);
+                    },
+                });
+            }
+            //if(dt >= endtime){
+            //    //延迟2秒以显示最后一轮最终报价
+            //    //clearInterval(timeinterval2);
+            //}
+        }, 1000);
+
+        //获取实时报价
+        //var timer3 = setInterval(function(){
+        //    var dt=GetNowTime();//当前时间
+        //    if(dt>=starttime && dt<=endtime){
+        //        var round=parseInt($("#auction_num").val().split("|")[0])-1;    //当前报价轮次
+        //        if(round!="" && round!=null){
+        //            $.ajax({
+        //                url:'/网上竞标/GetRealBj',
+        //                dataType:'json',
+        //                data:{id:id,round:round},
+        //                success:function(data){
+        //                    $("#real_time_bj").prepend("<tr></tr>");
+        //                    var tr=$("#real_time_bj").find("tr");
+        //                    tr.eq(0).animate({ 
+        //                        height: "35px", 
+        //                    }, 1500);
+        //                    if(tr.length>5){
+        //                        tr.eq(tr.length-1).fadeOut();
+        //                    }
+        //                },
+        //                //error:function(){
+        //                //    alert("失败");
+        //                //},
+        //            });
+        //        }
+        //    }
+        //    if(dt >= endtime){
+        //        clearInterval(timer1);
+        //    }
+        //},2000);
+        //$("div.Page6").addClass("on");
+    });
+</script>

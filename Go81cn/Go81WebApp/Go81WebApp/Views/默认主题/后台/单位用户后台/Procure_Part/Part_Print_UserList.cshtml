@@ -1,0 +1,190 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+<link href="~/css/index.css" rel="stylesheet" />
+<style type="text/css">
+    .printspan {
+        padding-left: 0;
+    }
+</style>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">全部附属账号列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box" style="width:1042px;" id="gys_znxx_box" onkeypress="BindEnter(event, 'searchbtn')">
+    <div class="gys_znxx_contentbox" id="gys_znxx_contentbox">
+        @*<table width="90%" style="margin-left:20px; margin-top:10px;">
+            <tr>
+                <td style="text-align: right;">开始时间：</td>
+                <td><input id="start_time" style="width: 200px;" name="start_time" type="text" onfocus="WdatePicker({dateFmt:'yyyy/MM/dd HH:mm:ss'})" /></td>
+                <td style="text-align: right;">截止时间：</td>
+                <td><input id="end_time" style="width: 200px;" name="end_time" type="text" onfocus="WdatePicker({dateFmt:'yyyy/MM/dd HH:mm:ss'})" /></td>
+                <td rowspan="2" valign="middle">
+                    <input type="button" style="width:100px; height:30px;" id="searchbtn" class="gys_ztbsearch_search_botton printspan" value="查询" />
+                </td>
+            </tr>
+        </table>*@
+        <div class="gys_znxx_content" id="contentdiv">
+            <table width="100%" id="con" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th align="center" class="printspan">全选<input type="checkbox" name="checkall" onclick="checkall(this);" /></th>
+                    
+                    <th align="center">登录名</th>
+                    <th align="center">所属单位</th>
+                    <th align="center">单位名称</th>
+                    <th align="center">联系人</th>
+                    <th align="center">联系人手机</th>
+                    <th align="center">身份验证</th>
+                </tr>
+                @foreach (var item in ViewData["查询单位列表"] as IEnumerable<单位用户>)
+                {
+                    //var m = item as 单位用户;
+                    <tr id="@item.Id">
+                        <td class="printspan" style="text-align: center;"><input type="checkbox" name="printcheckbox" onclick="changelist(this)" /></td>
+                        
+                        <td>@item.登录信息.登录名</td>
+                        <td>@item.单位信息.所属单位</td>
+                        <td>@item.单位信息.单位名称</td>
+                        <td>@item.联系方式.联系人</td>
+                        <td>@item.联系方式.手机</td>
+                        <td>@item.登录信息.密码</td>
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+                {
+                    <a>首页</a>
+                }
+                else
+                {
+                    <a id="1" onclick="changeing_page(this)">首页</a>
+                }
+                @for (int i = 0; i <= 10; i++)
+                {                       //一共最多显示10个页码，前面5个，后面5个
+                    if ((int.Parse(ViewData["currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                    {
+                        if (5 == i)
+                        {                               //当前页处理
+                            <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentPage"].ToString())</a>
+                        }
+                        else
+                        {                               //一般页处理
+                            <a id="@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)" onclick="changeing_page(this)">@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)</a>
+
+                        }
+                    }
+                }
+                @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+                {
+                    <a>末页</a>
+                }
+                else
+                {
+                    <a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeing_page(this)">末页</a>
+                }
+
+        </div>
+
+            @*<input type="button" style="float: right; width: 100px; height: 30px; margin-top: 10px;" class="gys_ztbsearch_search_botton printspan" value="打印" onclick="printpage()" />*@
+    </div>
+</div>
+</div>
+<input type="hidden" value="" id="hiddenlist"/>
+<input type="hidden" value="" id="hiddennum" />
+<script type="text/javascript" language="javascript">
+    function  changelist(obj) {
+        var html = "<tr>" + $(obj).parent().parent().html() + "</tr>";
+        var list = $("#hiddenlist").val();
+
+        var numlist = $("#hiddennum").val();
+
+        list = list.replace(html, "");
+        numlist = numlist.replace($(obj).parent().parent().attr("id") + "|", "");
+
+        if ($(obj).is(":checked")) {
+            list+=html;
+            numlist += $(obj).parent().parent().attr("id") + "|";
+        }
+        $("#hiddenlist").val(list);
+        $("#hiddennum").val(numlist);
+    }
+
+    $("#searchbtn").click(function () {
+        $.get('/单位用户后台/Search_DepartmentByTime', { starttime: $(":text#start_time").val(), endtime: $(":text#end_time").val(),page:1 }
+            , function (data) { $("#contentdiv").html(data); });
+    });
+    $(function () {
+        //$(".gys_znxx_content_detailbox a").each(function() {
+        //    if ($(this).text() == i) {
+        //        $(this).addClass("currentPage");
+        //    }
+        //    if (i == j) {
+        //        $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+        //    }
+        //    if (i == 1) {
+        //        $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+        //    }
+        //});
+
+        $("#全部附属账号列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#全部附属账号列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function printpage() {
+        var str = "<table width=\"100%\" id=\"con\" cellpadding=\"0\" cellspacing=\"0\">";
+        str+= "<tr><th align=\"center\" class=\"printspan\">全选<input type=\"checkbox\" name=\"checkall\" onclick=\"checkall(this);\" /></th><th align=\"center\">单位编码</th><th align=\"center\">登录名</th><th align=\"center\">单位代号</th><th align=\"center\">单位级别</th><th align=\"center\">身份验证</th></tr>";
+        $("#contentdiv").html(str+$("#hiddenlist").val()+"</table>");
+        $(".printspan").hide();
+        //$("input[name='printcheckbox']").each(function () {
+        //    if (!$(this).is(":checked")) {
+        //        $(this).parent().parent().hide();
+        //    }
+        //});
+        document.body.innerHTML = document.getElementById('gys_znxx_box').innerHTML;
+        window.print();
+    }
+    function checkall(obj) {
+        var list = $("#hiddenlist").val();
+        var numlist = $("#hiddennum").val();
+
+        if ($(obj).is(":checked")) {
+            $("input[name='printcheckbox']").each(function() {
+                var html = "<tr>" + $(this).parent().parent().html() + "</tr>";
+                list = list.replace(html, "");
+                numlist = numlist.replace($(this).parent().parent().attr("id") + "|", "");
+                list+=html;
+                numlist += $(this).parent().parent().attr("id") + "|";
+                $(this).prop("checked", true);
+            });
+        } else {
+            $("input[name='printcheckbox']").each(function () {
+                var html = $(this).parent().parent().html();
+                list = list.replace(html, "");
+                numlist = numlist.replace($(this).parent().parent().attr("id") + "|", "");
+                $(this).prop("checked", false);
+            });
+        }
+        $("#hiddenlist").val(list);
+        $("#hiddennum").val(numlist);
+    }
+    function changeing_page(a) {
+        $.get('/单位用户后台/Search_DepartmentByTime', { starttime: $(":text#start_time").val(), endtime: $(":text#end_time").val(), page: encodeURI(a.getAttribute("id"))}, function(data) {
+            $("#contentdiv").html(data);
+
+            $("#contentdiv").find("tr").each(function() {
+                var numlist = $("#hiddennum").val();
+                if (numlist != "") {
+                    var arr = numlist.substring(0, numlist.length - 1).split("|");
+                    if ($.inArray($(this).attr("id"), arr)>-1) {
+                        $(this).find("input").prop("checked", true);
+                    }
+                }
+         
+            });
+        });
+
+        
+    }
+</script>

@@ -1,0 +1,36 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "图片";
+}
+<script src="~/Scripts/jquery-1.11.1.min.js"></script>
+@{
+    string[] path = ViewData["path"].ToString().Split('|');
+    int length = path.Length-1;
+    <div id="filepath" style="height:400px;">
+        <table>
+                @for (int i = 0; i < length; i++)
+                {
+                    <tr>
+                            <td>
+                                <span>@path[i]</span>
+                                <a href="###" style="color:red;" onclick="delAttach(this)" title="@i" lang="@path[i]">删除</a>
+                            </td>
+                    </tr>
+                }
+
+        </table>
+    </div>
+}
+<input type="hidden" value="@ViewData["path"].ToString()" id="pics" />
+<script type="text/javascript" language="javascript">
+    $(document).ready(
+            function () {
+                var path = document.getElementById("pics").value;
+                window.parent.document.getElementById("path").value+=path;
+                window.parent.document.getElementById("pBox").innerHTML += document.getElementById("filepath").innerHTML;
+                window.parent.document.getElementById("f1").style.display = "none";
+            }
+            );
+</script>
+
+

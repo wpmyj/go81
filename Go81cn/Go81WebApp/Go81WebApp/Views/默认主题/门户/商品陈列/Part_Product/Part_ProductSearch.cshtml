@@ -1,0 +1,526 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+<script src="~/JS/provinceandcity_all.js"></script>
+<script type="text/javascript" src="~/JS/area.js"></script>
+<link rel="stylesheet" href="~/css/area.css" type="text/css" />
+
+<div class="gyspage_detail_rightbox">
+
+    <div id="properttydiv" class="gys_ztbsearch_contentbox" style=" width:918px; border: 1px solid #ccc; display: none;">
+        <div style="width: 918px; height: 25px; background-color: #eee;"><span style="padding-left: 5px; padding-top: 2px; color: #666;">属性筛选</span></div>
+
+        <div class="gys_ztbsearch_classbox" id="selectclass" style="display: none; width: 910px;">
+            <div class="gys_ztbsearch_class" style=" width:100px; color: red;">已选：</div>
+            <div class="gys_ztbsearch_class_list" id="selectlist" style=" width:700px;"></div>
+        </div>
+        @{ var p_list = (IEnumerable<Go81WebApp.Controllers.门户.商品陈列Controller.商品查询>)ViewData["商品搜索显示列表"];
+         var saleprocount = 0;}
+        @if (p_list != null && p_list.Any())
+        {
+            foreach (var arr in (Dictionary<string, Dictionary<string, 商品属性数据>>)ViewData["商品属性模板"])
+            {
+                foreach (var item in arr.Value)
+                {
+                    if (item.Value.销售属性 && item.Value.属性类型 == 属性类型.复选 && item.Value.值.Any())
+                    {
+                        saleprocount++;
+                        if (saleprocount > 3)
+                        {
+                            <div class="gys_ztbsearch_classbox" id="@arr.Key" style="display: none;width: 910px; height: auto; overflow:hidden;">
+                                <div id="@item.Key" name="displaydiv">
+                                    <div class="gys_ztbsearch_class" style="width: 100px;">@item.Key：</div>
+
+                                    <div class="gys_ztbsearch_class_list" style="width: 700px; height: auto; overflow:hidden;">
+                                        @foreach (var listitem in item.Value.值)
+                                        {
+                                            <a name="@item.Key" key="@arr.Key" onclick=" addcondition(this) " style="border: none;">@listitem</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="gys_ztbsearch_classbox" id="@arr.Key" style="width: 910px; height: auto; overflow:hidden;">
+                                <div id="@item.Key" name="displaydiv">
+                                    <div class="gys_ztbsearch_class" style="width: 100px;">@item.Key：</div>
+
+                                    <div class="gys_ztbsearch_class_list" style="width: 700px; height: auto; overflow:hidden;">
+                                        @foreach (var listitem in item.Value.值)
+                                        {
+                                            <a name="@item.Key" key="@arr.Key" onclick=" addcondition(this) " style="border: none;">@listitem</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                }
+
+            }
+        }
+
+        @if (saleprocount > 3)
+        {
+            <div style=" float: right; color: #666; font-size: 12px; padding-right: 10px; cursor: pointer"><a onclick="changeshowstatus(this)">展开更多▼</a></div>
+        }
+    </div>
+    <script type="text/javascript">
+        var displayflag = false;
+        function changeshowstatus(obj) {
+            displayflag = !displayflag;
+            var div = $("div[name='displaydiv']");
+            for (var i = 3; i < div.length; i++) {
+                if (displayflag) {
+                    $(div[i]).parent().show();
+                } else {
+                    $(div[i]).parent().hide();
+                }
+            }
+            if (displayflag) {
+                $(obj).html("收起▲");
+            } else {
+                $(obj).html("更多选项▼");
+            }
+        }
+    </script>
+
+    <input type="hidden" name="hasselect_price" id="hasselect_price" value="" />
+    @if (ViewData["价格分段"] != null)
+    {
+        var x = (List<decimal>)ViewData["价格分段"];
+        if (x.Any())
+        {
+            <div class="area" style=" height:64px;">
+                <div style="width:100%; height:32px;">
+                    <b>价格：</b>
+                    @for (var i = 0; i < x.Count; i += 2)
+                    {
+                        if (x[i + 1] == decimal.MaxValue)
+                        {
+                            <span class="sort_box" style="margin-right:5px;" onclick="prosuct_searchbyprice(this)">
+                                <a class="pricecss">@x[i].ToString("g0")及以上</a>
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="sort_box" style="margin-right:5px;" onclick="prosuct_searchbyprice(this)">
+                                <a class="pricecss">@x[i].ToString("g0")-@x[i + 1].ToString("g0")</a>
+                            </span>
+                        }
+                    }
+                </div>
+                <div style="width:100%; height:32px;">
+                    <b>地区：</b>
+                    <span class="def_box"><a id="hasselectplace">所有地区</a></span>
+                </div>
+                @*<b>排序：</b>
+                    <span class="sort_box">价格</span>
+                    <span class="sort_box">添加时间</span>*@
+            </div>
+        }
+        else
+        {
+            <div class="area" style=" height:32px;">
+                <div style="width:100%; height:32px;">
+                    <b>地区：</b>
+                    <span class="def_box"><a id="hasselectplace">所有地区</a></span>
+                </div>
+                @*<b>排序：</b>
+                    <span class="sort_box">价格</span>
+                    <span class="sort_box">添加时间</span>*@
+            </div>
+        }
+    }
+    <input type="hidden" value="" name="deliverprovince" id="deliverprovince" />
+    <input type="hidden" value="" name="delivercity" id="delivercity" />
+
+    <script type="text/javascript">
+        $(function(){
+            $(".pricecss").hover(function(){
+                $(this).css("color","red");
+            },
+            function(){
+                var fc= $(this).parent().css("borderTopColor");
+                if(fc =="rgb(255, 0, 0)"){
+                    $(this).css("color","#f00");
+                }
+                else{
+                    $(this).css("color","#414141");
+                }
+            });
+        })
+        function prosuct_searchbyplace(obj) {
+            $("#hasselectplace").html("");
+            $("#deliverprovince").val("");
+            $("#delivercity").val("");
+
+            var province = $(obj).attr("p");
+            var city = $(obj).attr("v");
+            $("#deliverprovince").val(province);
+            if(province!=city){
+                $("#delivercity").val(city);
+            }
+            if(province!=""){
+                $("#hasselectplace").html($("#deliverprovince").val()+$("#delivercity").val());
+
+            }
+            else{
+                $("#hasselectplace").html("所有地区");
+            }
+            $(".sw-ui-area-box").hide();
+            var parms = "";
+            a = document.getElementById("selectlist").getElementsByTagName("a");
+            if (a.length > 0) {
+                for (i = 0; i < a.length; i++) {
+                    parms += a[i].getAttribute("key") + "|" + a[i].getAttribute("name") + "|" + a[i].getAttribute("val") + "$";
+                }
+            }
+            $.get("/商品陈列/ChangeProductClassByKeyword?condition=" + encodeURI(parms)+ "&keyword=" + encodeURI($("#keyword").val())+ "&province=" + encodeURI($("#deliverprovince").val())+ "&city=" + encodeURI($("#delivercity").val())+ "&price=" + encodeURI($("#hasselect_price").val()), function (response) {
+                document.getElementById("pro_search_content").innerHTML = response;
+            });
+        }
+
+        function prosuct_searchbyprice(obj){
+
+            $(obj).parent().find("a").each(function(){
+                $(this).css("color","#414141");
+                $(this).parent().css("border-color","#ccc");
+            });
+
+            var a = $(obj).find("a");
+            var price  = $(a).html();
+
+            if($("#hasselect_price").val()!=price){
+                $(a).css("color","red");
+                $(obj).css("border-color","red");
+
+                //$(a).attr("style","color:red");
+                //$(obj).attr("style","border-color:red");
+
+                $("#hasselect_price").val(price)
+            }
+            else{
+                $("#hasselect_price").val("");
+            }
+
+
+            var parms = "";
+            a = document.getElementById("selectlist").getElementsByTagName("a");
+            if (a.length > 0) {
+                for (i = 0; i < a.length; i++) {
+                    parms += a[i].getAttribute("key") + "|" + a[i].getAttribute("name") + "|" + a[i].getAttribute("val") + "$";
+                }
+            }
+            $.get("/商品陈列/ChangeProductClassByKeyword?condition=" + encodeURI(parms)+ "&keyword=" + encodeURI($("#keyword").val())+ "&province=" + encodeURI($("#deliverprovince").val())+ "&city=" + encodeURI($("#delivercity").val())+ "&price=" + encodeURI($("#hasselect_price").val()), function (response) {
+                document.getElementById("pro_search_content").innerHTML = response;
+            });
+
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pro_search_content">
+        <input type="hidden" id="keyword" name="keyword" value='@ViewData["keyword"]' />
+        <input type="hidden" name="select_condition" id="select_condition" value='"@ViewData["筛选条件"]"' />
+        <div class="gys_ztbsearch_contentbox" style="border:none;">
+            @{ var m = (IEnumerable<商品>)ViewData["商品搜索显示列表"]; }
+            @if (m.Any())
+            {
+                foreach (var arr in m)
+                {
+                    <div class="prodtpage_prodtlistdiv">
+                        <div class="prodtpage_prodtlistdiv_imgdiv">
+                            <a href="~/商品陈列/Product_Detail?id=@arr.Id" title="@arr.商品信息.商品名.Replace("<font color=\"red\">", "").Replace("</font>", "")" target="_blank">
+                                @if (arr.商品信息.商品图片.Count > 0)
+                                {
+                                    <img src="@arr.商品信息.商品图片[0]" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/noimage.jpg" />
+                                }
+                            </a>
+                        </div>
+                        <div class="prodtpage_prodtlistdiv_textdiv">
+                            @{ var thisp_name = arr.商品信息.商品名.Replace("<font color=\"red\">", "").Replace("</font>", ""); }
+                            <div style="height:40px;">
+                                <a href="/商品陈列/Product_Detail?id=@arr.Id" title="@thisp_name" class="product_name_twoline" target="_blank">
+                                    @Html.Raw(arr.商品信息.商品名)
+                                </a>
+                            </div>
+                            <div class="prodtpage_prodtlistdiv_price"><a href="/商品陈列/Product_Detail?id=@arr.Id" target="_blank">￥@(string.Format("{0:0.00}", arr.销售信息.价格))</a></div>
+                            <div style="height:20px;">
+                                @try
+                                {
+                                    <a class="product_gysname_oneline" href="/供应商陈列/Supplier_Destination?id=@arr.商品信息.所属供应商.用户数据.Id" title="@arr.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@arr.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
+                                }
+                                catch
+                                {
+                                    <a>供应商未知</a>
+                                }
+                            </div>
+                            <div style="height:20px;">
+                                <span style="color:gray;">外网浏览：@arr.销售信息.点击量</span>
+                            </div>
+                            <div style="height:20px;">
+                                <span style="color:gray;">
+                                    内网浏览：
+                                    @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                                    {
+                                        <a>@arr.销售信息.内网点击量</a>
+                                    }
+                                    else
+                                    {
+                                        <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/商品陈列">登陆查看</a>
+                                    }
+                                </span>
+                            </div>
+                            @{ var GoodName = thisp_name.Length > 15 ? thisp_name.Substring(0, 15) : thisp_name; }
+                            <div>
+                                +对比<input type="checkbox" value="@(arr.销售信息.价格)" id="@arr.Id" name="ck" alt="@GoodName" onclick=" showcontrast(this) " />
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div style="width: 918px; height: 270px; color: lightgray; font-size: 40px; text-align: center; line-height: 220px; font-style: italic;">暂无搜索结果</div>
+            }
+        </div>
+        @if (ViewData["currentpage"] != null && ViewData["pagecount"].ToString() != "1")
+        {
+            <div class="gys_znxx_content_detailbox" id="pagediv" style="float: left; width: 918px;">
+                @if (int.Parse(ViewData["currentpage"].ToString()) == 1)
+                {
+                    <a>首页</a>
+                }
+                else
+                {
+                    <a id="1" onclick="changeAdpage(this)">首页</a>
+                }
+                @for (int i = 0; i <= 10; i++)
+                {                       //一共最多显示10个页码，前面5个，后面5个
+                    if ((int.Parse(ViewData["currentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentpage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                    {
+                        if (5 == i)
+                        {                               //当前页处理
+                            <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentpage"].ToString())</a>
+                        }
+                        else
+                        {                               //一般页处理
+                            <a id="@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)" onclick="changeAdpage(this)">@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)</a>
+
+                        }
+                    }
+                }
+                @if (int.Parse(ViewData["currentpage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+                {
+                    <a>末页</a>
+                }
+                else
+                {
+                    <a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeAdpage(this)">末页</a>
+                }
+
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+    function showcontrast(a) {
+        var topstr = "<div class='product_contrast_title'>对比商品<a style='float:right; margin-right:20px; cursor:pointer;' onclick=\"document.getElementById('contrastdiv').style.display='none';document.getElementById('hidecontrastdiv').style.display='block'\">隐藏</a></div>";
+        var bottom = "<button id='contrastbtn' style='width:100px; cursor:pointer; background-color:#E4393C; height:35px; border:none' onclick='redirect(this)'>进行对比</button>";
+        var count = 0;
+        var product_str = "";
+        var divbox = document.getElementById("contrastdiv");
+        var a = document.getElementById("pro_search_content");
+        var checklist = a.getElementsByTagName("input");
+        for (var i = 0; i < checklist.length; i++) {
+            if (checklist[i].type == "checkbox" && checklist[i].checked) {
+                if (count < 4)
+                {
+                    product_str += "<div class='product_contrastlistdiv' onmouseover='show_Delbt(this)' onmouseout='hide_Delbt(this)'>";
+                    product_str += "<div class='product_contrastlistimg'>";
+                    product_str += "<img src='"+a.getElementsByTagName("img")[i-2].getAttribute("src")+"'/>";
+                    product_str += "</div>";
+                    product_str += "<div class='product_contrast_name'><a target='_blank' href='/商品陈列/Product_Detail?id="+checklist[i].getAttribute("id")+"'>";
+                    product_str += checklist[i].getAttribute("alt")+"</a></div>";
+                    product_str += "<span style='color:red; padding-left:20px; font-size:13px;;' id='" + checklist[i].getAttribute("id") + "'>" + "￥"+checklist[i].getAttribute("value") + "<a href='###' onclick='removeDiv(this,"+(i-2)+")' id='delbt' style='color:blue; padding-left:20px; display:none;'>删除</a></span>";
+                    //product_str += "<div class='product_contrast_price'></div>";
+                    product_str += "</div>";
+                }
+                count++;
+            }
+        }
+        if (count > 4) {
+            divbox.innerHTML = topstr + product_str + bottom+"<div style='color:red'>最多职能选择4个产品就行对比</div>";
+        }
+        else {
+            divbox.innerHTML = topstr + product_str + bottom;
+        }
+        if (count > 0) {
+            divbox.style.display = "block";
+            if (count == 1) {
+                document.getElementById("contrastbtn").disabled = true;
+                document.getElementById("contrastbtn").style.backgroundColor = "#fff";
+            }
+        }
+        else {
+            divbox.style.display = "none";
+        }
+    }
+    function removeDiv(th,n)
+    {
+        document.getElementsByName("ck").item(n).checked=false;
+        $(th).parent("span").parent("div").remove();
+        var len=$("div.product_contrastlistdiv").length;
+        if(len<=1)
+        {
+            $("#contrastbtn").remove();
+        }
+        if(len==0)
+        {
+            $("#contrastdiv").hide();
+        }
+    }
+    function show_Delbt(th)
+    {
+        $(th).children("span").children("a").show();
+    }
+    function hide_Delbt(th)
+    {
+        $(th).children("span").children("a").hide();
+    }
+    function redirect(a) {
+        var parms = "";
+        var divbox = document.getElementById("contrastdiv");
+        var spanlist = divbox.getElementsByTagName("span");
+        for (var i = 0; i < spanlist.length; i++) {
+            parms += spanlist[i].getAttribute("id") + "|";
+        }
+        window.open("/商品陈列/ProductContrast?Contrastparmer=" + encodeURI(parms));
+    }
+
+
+    function addcondition(a) {
+        var parms = "";
+        document.getElementById("selectclass").style.display = 'block';
+        document.getElementById("selectlist").innerHTML += "<a title=\"删除该属性\" name=\"" + a.getAttribute("name") + "\" key=\"" + a.getAttribute("key") + "\" val=\""+a.innerHTML+"\" onclick=\"deletecondition(this)\">" +a.getAttribute("name")+"&nbsp;:&nbsp;"+ a.innerHTML + "<span class='gys_ztbsearch_classboxspan'></span></a>";
+        a.parentNode.parentNode.parentNode.style.display = "none";
+        a = document.getElementById("selectlist").getElementsByTagName("a");
+        if (a.length > 0) {
+            for (var i = 0; i < a.length; i++) {
+                parms += a[i].getAttribute("key") + "|" + a[i].getAttribute("name") + "|" + a[i].getAttribute("val") + "$";
+            }
+        }
+        $.get("/商品陈列/ChangeProductClassByKeyword?condition=" + encodeURI(parms)+ "&keyword=" + encodeURI($("#keyword").val())+ "&province=" + encodeURI($("#deliverprovince").val())+ "&city=" + encodeURI($("#delivercity").val())+ "&price=" + encodeURI($("#hasselect_price").val()), function (response) {
+            document.getElementById("pro_search_content").innerHTML = response;
+        });
+    }
+    function deletecondition(a) {
+        var parms = "";
+        document.getElementById("selectclass").style.display = 'block';
+        var name = $.trim(a.getAttribute("name"));
+        $(a).remove();
+        //document.getElementById("selectlist").innerHTML = document.getElementById("selectlist").innerHTML.replace(("<a name=\"" + a.getAttribute("name") + "\" onclick=\"deletecondition(this)\">" + a.innerHTML + "</a>"), "").replace(("<A onclick=deletecondition(this) name="+a.getAttribute("name")+">"+a.innerHTML+"</A>"), "");
+        //var display = document.getElementsByName("displaydiv");
+        var display = $("div[name='displaydiv']");
+        if (display.length > 0) {
+            for (var i = 0; i < display.length; i++) {
+                if ($.trim(display[i].getAttribute("id")) == name) {
+                    display[i].parentNode.style.display = "block";
+                }
+            }
+        }
+        if (document.getElementById("selectlist").innerHTML == null || document.getElementById("selectlist").innerHTML == "") {
+            document.getElementById("selectclass").style.display = 'none';
+        }
+        a = document.getElementById("selectlist").getElementsByTagName("a");
+        if (a.length > 0) {
+            for (i = 0; i < a.length; i++) {
+                parms += a[i].getAttribute("key") + "|" + a[i].getAttribute("name") + "|" + a[i].getAttribute("val") + "$";
+            }
+        }
+        $.get("/商品陈列/ChangeProductClassByKeyword?condition=" + encodeURI(parms)+ "&keyword=" + encodeURI($("#keyword").val())+ "&province=" + encodeURI($("#deliverprovince").val())+ "&city=" + encodeURI($("#delivercity").val())+ "&price=" + encodeURI($("#hasselect_price").val()), function (response) {
+            document.getElementById("pro_search_content").innerHTML = response;
+        });
+    }
+</script>
+<script type="text/javascript">
+    function changeAdpage(a) {
+        //alert(a.getAttribute("id"))公告翻页ajax
+        $.get("/商品陈列/ChangeProductSearch_pagechange?page=" + encodeURI(a.getAttribute("id")) + "&name=" + encodeURI($("#keyword").val()), function (response) {
+
+            $("#pro_search_content").html(response)
+        });
+    }
+    function changeAdpage_p(a) {
+        //alert(a.getAttribute("id"))公告翻页ajax
+        $.get("/商品陈列/ChangeProductClassByKeyword_p?condition=" + encodeURI($("#select_condition").val())+ "&keyword=" + encodeURI("@ViewData["keyword"].ToString()")+ "&page=" + encodeURI(a.getAttribute("id"))+ "&province=" + encodeURI($("#deliverprovince").val())+ "&city=" + encodeURI($("#delivercity").val())+ "&price=" + encodeURI($("#hasselect_price").val()), function (response) {
+
+            $("#pro_search_content").html(response);
+        });
+    }
+</script>
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        var propertycount =@saleprocount;
+        if (propertycount > 0) {
+            $("#properttydiv").show();
+        }
+        $(".action_link").each(function () {
+            if ($(this).text() == "采购商城") {
+                $(this).parent("div").addClass("on");
+            }
+        });
+        $("#contrastdiv").css({"background-color":"white","border":"1px solid lightgray","box-shadow":"0px 0px 5px lightgray","-webkit-box-shadow":"0px 0px 5px lightgray","-moz-box-shadow":"0px 0px 5px lightgray","height":"auto"});
+    });
+</script>

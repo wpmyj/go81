@@ -1,0 +1,707 @@
+﻿@model Go81WebApp.Models.数据模型.推广业务数据模型.供应商充值余额
+@using Go81WebApp.Models.数据模型.推广业务数据模型
+@{
+    ViewBag.Title = "增值服务订购管理";
+    Layout = "_BackLayout.cshtml";
+}
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style type="text/css">
+        .tabmenu_zb li {
+        margin-left:5px;
+        background:#4AC58D;
+        padding-bottom:1px;
+    }
+    .tabmenu_zb .onhover {
+        background-color: #ffffff;
+        cursor: pointer;
+        padding-bottom: 5px;
+        border: 1px solid #C7C7C7;
+        border-bottom: none;
+    }
+     .account-total {
+        display:none;
+    }
+    .account-total table{
+        width:100%;
+        padding:0 10px;
+        font-size:14px;
+    }
+    .account-total a{
+        letter-spacing: 2px;
+        cursor: pointer;
+        color: #fff;
+        background: #10A64F;
+        text-align: center;
+               padding:0 10px;
+        margin:0 5px;
+        height: 25px;
+        display: inline-block;
+        line-height: 25px;
+    }
+    .account-total span.expire{
+        letter-spacing: 2px;
+        cursor: pointer;
+        color: #FFF;
+        background: none repeat scroll 0% 0% #8C8C8C;
+        text-align: center;
+        padding: 0px 10px;
+        margin: 0px 5px;
+        height: 25px;
+        display: inline-block;
+        line-height: 25px;
+    }
+    .account-total table tr {
+        line-height:30px;
+    }
+    .account-total table tr:nth-child(2n) {
+        background:#F7F7F7;
+    }
+
+    .account-total table tr td.decimal-cost{
+        text-align:center;
+    }
+</style>
+
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div id="title_div" class="title-base-middle">
+                <div class="title-base-inner">增值服务订购管理</div>
+            </div>
+        </div>
+        <div class="gys_xttz_topbox outtab" style="width:940px;margin-top:20px;">
+            <div class="gys_xttz_topbg" style="width:940px;border-bottom:none;">
+                <div class="tabmenu_zb">
+                    <ul>
+                        <li index="0" class="changetab onhover">申请中</li>
+                        <li index="1" class="changetab">可申请</li>
+                        <li index="2" class="changetab">已开通</li>
+                        <li index="3" class="changetab">充值通道</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        @{
+            var 可申请服务 = ViewData["可申请服务"] as List<Tuple<string, decimal, 扣费类型, 通过状态, long>>;
+            var 申请中服务 = ViewData["申请中服务"] as List<Tuple<string, decimal, 扣费类型, 通过状态, long,int>>;
+            var 已开通服务 = ViewData["已开通服务"] as List<Tuple<string, decimal, 扣费类型, 通过状态, long, int,int,Tuple<DateTime>>>;
+            var 是否有企业主页商品展示窗口 = 0;
+            var 企业主页展示窗口名 = "";
+            var 企业主页展示窗口价格 = (decimal)0;
+            var 是否有基础会员 = 0;
+            var 是否有标准会员 = 0;
+            var 是否有商务会员 = 0;
+            var 是否有企业推广服务窗口 = 0;
+            var 企业推广服务窗口名 = "";
+            var 是否已开通商务会员 = false;
+            var 是否已开通标准会员 = false;
+            
+            if (申请中服务 != null && 申请中服务.Count()>0) 
+            { 
+                foreach (var n in 申请中服务)
+                {
+                    if (n.Item1.Contains("企业主页商品展示"))
+                    {
+                        是否有企业主页商品展示窗口 = 1;
+                        企业主页展示窗口名 = n.Item1;
+                    }
+                    if (n.Item1.Contains("企业推广服务B1"))
+                    {
+                        是否有企业推广服务窗口 = 1;
+                        企业推广服务窗口名 = n.Item1;
+                    }
+                    if (n.Item1.Contains("商务会员")) { 是否有商务会员 = 1; }
+                    if (n.Item1.Contains("标准会员")) { 是否有标准会员 = 1; }
+                    if (n.Item1.Contains("基础会员")) { 是否有基础会员 = 1; }
+                }
+            }
+            if (已开通服务 != null && 已开通服务.Count() > 0) 
+            {
+                foreach (var n in 已开通服务)
+                {
+                    if (n.Item1.Contains("企业主页商品展示"))
+                    {
+                        是否有企业主页商品展示窗口 = 1;
+                        企业主页展示窗口名 = n.Item1;
+                        企业主页展示窗口价格 = n.Item2;
+                    }
+                    if (n.Item1.Contains("企业推广服务B1"))
+                    {
+                        是否有企业推广服务窗口 = 1;
+                        企业推广服务窗口名 = n.Item1;
+                    }
+                    if (n.Item1.Contains("商务会员")) { 是否有商务会员 = 1; 是否已开通商务会员 = true; }
+                    if (n.Item1.Contains("标准会员")) { 是否有标准会员 = 1; 是否已开通标准会员 = true; }
+                    if (n.Item1.Contains("基础会员")) { 是否有基础会员 = 1; }
+                }
+            }
+
+        }
+
+        <div class="index_bottom_zb_content_box tabcontent" id="tabcontent_zb" style="width: 937px;overflow-x:scroll;  margin-top: 0; border: 1px solid #C7C7C7;height:auto;padding-bottom:10px;">
+
+            <div class="account-total" style="display:block">
+                <table cellpadding="0" cellspacing="0">
+                    @{
+                        if (申请中服务!=null&&  申请中服务.Count() > 0 && 申请中服务.Any())
+                        {
+                            foreach (var k in 申请中服务)
+                            {
+                                <tr style="line-height:40px;">
+                                    <td style="width:30%">@k.Item1</td>
+                                    @if (k.Item3 == 扣费类型.按年扣费)
+                                    {
+                                        <td>@k.Item2 元/年</td>
+                                    }
+                                    @if (k.Item3 == 扣费类型.按月扣费)
+                                    {
+                                        <td>@k.Item2 元/月</td>
+                                    }
+                                    @if (k.Item3 == 扣费类型.按次扣费)
+                                    {
+                                        <td>@k.Item2 元/次</td>
+                                    }
+                                    <td style="text-align:center;width:5%">@k.Item6 个</td>
+                                    @if (@k.Item4 == 通过状态.通过)
+                                    {
+                                        <td style="text-align:right">签订(开通)时间：<input value="@DateTime.Now" name="signTime" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })" /></td>
+                                    }
+                                    else
+                                    {
+                                        <td style="text-align:right">&nbsp;</td>
+                                    }
+                                    <td style="text-align:center">
+                                        @if (k.Item4 == 通过状态.通过)
+                                        {
+                                            <a style="background:#ccc">已通过</a>
+                                        }
+                                        @if (k.Item4 == 通过状态.未通过)
+                                        {
+                                            <a id="1" name="@k.Item5" onclick="applyapproval(this)">通过</a>
+                                        }
+                                        @if (k.Item4 == 通过状态.通过)
+                                        {
+                                            <a id="2" name="@k.Item5" onclick="applyapproval(this)">开通</a>
+                                        }
+                                        @if (k.Item4 == 通过状态.未通过)
+                                        {
+                                            <a style="background:#ccc">待通过</a>
+                                        }
+                                       
+                                        <a id="3" name="@k.Item5" onclick="applyapproval(this)">撤销申请</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>无申请中的服务！</td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+            <div class="account-total">
+                <table cellpadding="0" cellspacing="0" width="100%">
+                    @if (可申请服务.Count() > 0 && 可申请服务.Any())
+                    {
+                        foreach (var n in 可申请服务)
+                        {
+                            <tr>
+                                <td style="color:#706F6F;" width="38%">
+                                    @if (n.Item1.Contains("企业主页商品展示"))
+                                    {
+                                        if (n.Item2 > 企业主页展示窗口价格)
+                                        {
+                                            <input type="radio" style="margin-bottom: 6px; vertical-align: middle;" alt="0" title="@n.Item2" name="企业主页商品展示" lang="addValueName" id="@n.Item1" value="@n.Item1" />
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" style="margin-bottom: 6px; vertical-align: middle;" disabled="disabled" alt="0" title="@n.Item2" name="企业主页商品展示" lang="addValueName" id="@n.Item1" value="@n.Item1" />
+                                        }
+                                    }
+                                    else if (n.Item1.Contains("企业推广服务B1"))
+                                    {
+                                        <input type="radio" style="margin-bottom: 6px; vertical-align: middle;" alt="1" title="@n.Item2" name="企业推广服务B1" lang="addValueName" id="@n.Item1" value="@n.Item1" />
+                                    }
+                                    else if ((n.Item1.Contains("基础会员") && !是否已开通标准会员 && !是否已开通商务会员) || (n.Item1.Contains("标准会员") && !是否已开通商务会员) || n.Item1.Contains("商务会员"))
+                                    {
+                                        <input type="radio" style="margin-bottom: 6px; vertical-align: middle;" title="@n.Item2" name="会员服务" lang="addValueName" id="@n.Item1" value="@n.Item1" />
+                                    }
+                                    else if ((n.Item1.Contains("标准会员") && 是否已开通商务会员) || (n.Item1.Contains("基础会员") && 是否已开通标准会员) || (n.Item1.Contains("基础会员") && 是否已开通商务会员))
+                                    {
+                                        <input type="radio" style="margin-bottom: 6px; vertical-align: middle;" readonly="readonly" disabled="disabled" title="@n.Item2" name="会员服务" lang="addValueName" id="@n.Item1" value="@n.Item1" />
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" style="margin-bottom: 6px; vertical-align: middle;" title="@n.Item2" lang="addValueName" id="@n.Item1" value="@n.Item1" />
+                                    }
+
+                                    <label for="@n.Item1">@n.Item1</label>
+                                </td>
+                                @if (n.Item3 == 扣费类型.按年扣费)
+                                {
+                                    <td class="decimal-cost" colspan="3">@n.Item2 元/年</td>
+                                }
+                                @if (n.Item3 == 扣费类型.按月扣费)
+                                {
+                                    <td class="decimal-cost" colspan="3">@n.Item2 元/月</td>
+                                }
+                                @if (n.Item3 == 扣费类型.按次扣费)
+                                {
+                                    <td class="decimal-cost" colspan="3">@n.Item2 元/次</td>
+                                }
+                                @if (n.Item3 == 扣费类型.按年扣费)
+                                {
+                                    <td>开通<input name="openTime" onkeyup="checkNum(this)" onchange="checkNum(this)" type="number" min="1" />年</td>
+                                }
+                                @if (n.Item3 == 扣费类型.按月扣费)
+                                {
+                                    <td>开通<input name="openTime" onkeyup="checkNum(this)" onchange="checkNum(this)" type="number" min="1" />月</td>
+                                }
+                                @if (n.Item3 == 扣费类型.按次扣费)
+                                {
+                                    <td>开通<input name="openTime" onkeyup="checkNum(this)" onchange="checkNum(this)" type="number" min="1" />次</td>
+                                }
+                                @if (n.Item1.Contains("商品一级分类") || n.Item1.Contains("商品二级分类"))
+                                {
+                                    <td class="decimal-cost">开通<input type="number" name="theNumber" min="1" onkeyup="checkNum(this)" onchange="checkNum(this)" />个</td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                                
+                            </tr>
+                        }
+                    }
+                    
+                </table>
+                <p style="padding: 0 20px;font-size: 20px;color:#757575">已勾选服务费用总计： <label id="total_cost" style="font-weight:normal;color:red;font-size:28px;">0</label> 元 <label id="total_balance" style="display:none;font-weight:normal;">，余额不足请充值。</label></p>
+                <div style="text-align: center;text-indent: 0;padding:20px 0;">
+                    <input id="applyAddValue" class="btn-base" type="button" value="申请已勾选服务" />
+                </div>
+            </div>
+            <div class="account-total" style="width:1400px;">
+                <table cellpadding="0" cellspacing="0" width="100%">
+                    @{
+                        //var 已开通服务 = ViewData["已开通服务"] as List<Tuple<string, decimal, 扣费类型, 通过状态, long>>;
+                        if (已开通服务!=null && 已开通服务.Count() > 0 && 已开通服务.Any())
+                        {
+                            foreach (var k in 已开通服务)
+                            {
+                                var endtime = DateTime.Now;
+                                var starttime = k.Rest.Item1.ToString("yyyy/MM/dd HH:mm:ss");
+                                <tr style="line-height:40px;">
+                                    <td style="width:20%">@k.Item1</td>
+                                    @if (k.Item3 == 扣费类型.按年扣费)
+                                    {
+                                        endtime = k.Rest.Item1.AddYears(k.Item6);
+                                        <td>@k.Item2 元/年</td>
+                                        <td>开通<input style="width:30px;text-align:center;border:none;background:#fff" disabled="disabled" alt="startOrend" value="@k.Item6" />年</td>
+                                    }
+                                    @if (k.Item3 == 扣费类型.按月扣费)
+                                    {
+                                        endtime = k.Rest.Item1.AddMonths(k.Item6);
+                                        <td>@k.Item2 元/月</td>
+                                        <td>开通<input style="width:30px;text-align:center;border:none;background:#fff" disabled="disabled" alt="startOrend" value="@k.Item6" />月</td>
+                                    }
+                                    @if (k.Item3 == 扣费类型.按次扣费)
+                                    {
+                                        endtime = k.Rest.Item1.AddDays(k.Item6);
+                                        <td>@k.Item2 元/次</td>
+                                        <td>开通<input style="width:30px;text-align:center; border:none;background:#fff" disabled="disabled" alt="startOrend" value="@k.Item6" />次</td>
+                                    }
+                                    <td>@k.Item7 个</td>
+                                    <td style="text-align:center">
+                                        开通时间：<input style="border:none;background:#fff" disabled="disabled" alt="startOrend" value="@starttime" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd HH:mm:ss' })" />
+                                        &nbsp;&nbsp;
+                                        到期时间：<span>@endtime.ToString("yyyy/MM/dd HH:mm:ss")</span>
+                                        @if(DateTime.Parse(endtime.ToString())<DateTime.Now){<span class="expire">已过期</span>}
+                                    </td>
+                                    <td style="text-align:center">
+                                        <a name="@k.Item1" onclick="editApply(this)">修改</a>
+                                        <a name="@k.Item1" onclick="removeExpired(this)">取消开通</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>无已开通服务！</td>
+                            </tr>
+                        }
+}
+                </table>
+            </div>
+
+            <div class="account-total">
+                <div style="text-align:center;margin-top:20px;">充值金额：<input id="amount" type="text" style="height:25px;" /></div>
+                <div style="text-align: center;text-indent: 0;padding:20px 0;">
+                    <input id="recharge" class="btn-base" type="button" value="充    值" />
+                </div> 
+            </div>
+        </div>
+        <input type="hidden" value="@ViewData["供应商ID"]" id="gys_apply_id" />
+    </div>
+</div>
+<script type="text/javascript">
+    @*$("#amountAddVlaue").keyup(function(){
+        var val = $(this).val();
+        var totalFree=@total_fee;
+        $("#amountAddVlaue1").html(val);
+        if(val=="undefined" || val==null || val=="") {val=0;}
+        var total=parseFloat(totalFree)+ parseFloat(val);
+        $("#total_free").html("小写：CNY "+total);
+        $.ajax({
+            url:'/运营团队后台/MoneyToUpperTo',
+            data:{strAmount:total},
+            success:function(returnval){
+                $("#upper_totalfree").html("（大写：人民币 "+returnval+" ）");
+            },
+        });
+
+    });*@
+    $("input[type='radio']").click(function(){
+        var k=@是否有企业主页商品展示窗口;
+        var p="@企业主页展示窗口名";
+        var k1=@是否有企业推广服务窗口;
+        var p1="@企业推广服务窗口名";
+
+        var $this=$(this);
+        var val=$this.attr("alt");
+        if(k==1 && val== 0)
+        {
+            if(!confirm("该供应商已经申请"+p+",如果勾选此选项申请将会将已申请服务更新为当前所选服务，确定要这样做吗？")){
+                $this.prop("checked",false);
+            }
+        }
+        if(k1==1&& val==1){
+            if(!confirm("该供应商已经申请"+p1+",如果勾选此选项申请将会将已申请服务更新为当前所选服务，确定要这样做吗？")){
+                $this.prop("checked",false);
+            }
+        }
+    });
+   //修改已开通服务的开始 、结束时间
+    function editApply(e){
+        var text=$(e).html();
+        if(text=="修改"){
+            $(e).html("保存").parent().parent().find("input[alt='startOrend']").css({"border":"1px solid #ccc"}).removeAttr("disabled");
+        }
+        if(text=="保存"){
+            var id = $("#gys_apply_id").val();//供应商id
+            var name=$(e).attr("name");
+            var times= $(e).parent().parent().find("input[alt='startOrend']").eq(0).val();
+            var signtime=$(e).parent().parent().find("input[alt='startOrend']").eq(1).val();    //签订时间
+            $.ajax({
+                url:'/运营团队后台/EditApplyService',
+                dataType:'json',
+                data:{
+                    gysid:id,
+                    servicename:name,
+                    signtime:signtime,
+                    times:times,
+                },
+                success:function(data){
+                    if(data.Msg=="修改成功！") {
+                        $(e).parent().prev().find("span").html(data.ExpireTime);
+                        $(e).html("修改").parent().parent().find("input[alt='startOrend']").css({"border":"none"}).attr({"disabled":"disabled"});
+                    }
+                    alert(data.Msg);
+                },
+                error:function(data){
+                    alert(data.Msg);
+                },
+            });
+        }
+    }
+
+    //检测输入的开通时长是否合法
+    function checkNum(ev) {
+        var reg = new RegExp("^[1-9]+[0-9]*]*$");
+        if (!reg.test($(ev).val())) {
+            alert("请输入不小于0的整数！");
+            $(ev).val("");
+        }
+        var checklist = $("input[lang='addValueName']"); //找到已勾选的checkbox并计算出费用总金额
+        var c=0;
+        var y=@Model.可用余额;
+        $.each(checklist, function (index, domEle) {
+            if($(domEle).is(":checked")){
+                var b = $(domEle).parents("tr").find("input[name='openTime']").val().trim();//开通时长
+                var f = $(domEle).attr("title");         //单价
+                var h=$(domEle).val();       //服务名
+                if(h == "添加商品一级分类" || h == "添加商品二级分类"){
+                    var v = $(domEle).parents("tr").find("input[name='theNumber']").val().trim();//开通个数
+                    c+=parseFloat(f)*b*v;
+                }
+                else{
+                    c+=parseFloat(f)*b;
+                }
+            };
+        });
+        $("#total_cost").html(c);
+        if(c>y){
+            $("#total_balance").show();
+        }
+        else{
+            $("#total_balance").hide();
+        }
+    }
+    $("input[lang='addValueName']").click(function(){
+        var $this=$(this);
+        if(!$this.is(":checked")){
+            $this.parents("tr").find("input[name='openTime']").val("");
+        }
+        var a = $this.val();//服务项目
+        var jchy=@是否有基础会员;
+        var rzhy=@是否有标准会员;
+        var swhy=@是否有商务会员;
+        if(rzhy==1 && (a=="商务会员" || a=="基础会员")){ //已开通或申请了标准会员的时候又申请开通商务会员或基础会员提示已开通或申请了标准会员
+            if(!confirm("该供应商已申请标准会员，勾选此项申请将会将标准会员更改为当前所选会员，你确定需要这样做吗?")){
+                $this.prop("checked",false);
+            }
+        }
+        if(swhy==1 && (a=="标准会员" || a=="基础会员")){ //已开通或申请了商务会员的时候又申请开通标准会员或基础会员提示已开通或申请了商务会员
+            if(!confirm("该供应商已申请商务会员，勾选此项申请将会将商务会员更改为当前所选会员，你确定需要这样做吗?")){
+                $this.prop("checked",false);
+            }
+        }
+        if(jchy==1 && (a=="标准会员" || a=="商务会员")){ //已开通或申请了基础会员的时候又申请开通标准会员或商务会员提示已开通或申请了基础会员
+            if(!confirm("该供应商已申请基础会员，勾选此项申请将会将基础会员更改为当前所选会员，你确定需要这样做吗?")){
+                $this.prop("checked",false);
+            }
+        }
+
+        var checklist = $("input[lang='addValueName']"); //找到已勾选的checkbox并计算出费用总计额
+        var c=0;
+        var y=@Model.可用余额;
+        $.each(checklist, function (index, domEle) {
+            if($(domEle).is(":checked")){
+                var b = $(domEle).parents("tr").find("input[name='openTime']").val().trim();//开通时长
+                var f = $(domEle).attr("title");   //单价
+                var h=$(domEle).val();       //服务名
+                if(h == "添加商品一级分类" || h == "添加商品二级分类"){
+                     var v = $(domEle).parents("tr").find("input[name='theNumber']").val().trim();//开通个数
+                    c+=parseFloat(f)*b*v;
+                }
+                else{
+                    c+=parseFloat(f)*b;
+                }
+            };
+        });
+        $("#total_cost").html(c);
+        if(c>y){
+            $("#total_balance").show();
+        }
+        else{
+            $("#total_balance").hide();
+        }
+    });
+
+    //取消已开通服务
+    function removeExpired(ev){
+        var id = $("#gys_apply_id").val();//供应商id
+        var name=$(ev).attr("name");  //服务名
+        if(confirm("确认取消服务名为“"+name+"”的服务吗？")){
+            $.ajax({
+                url:'/运营团队后台/RemoveOneExpired',
+                data:{id:id,service:name},
+                success:function(){
+                    $(ev).parents("tr").remove();
+                    alert("取消成功！");
+                },
+                error:function(){
+                    alert("取消失败！");
+                },
+            });
+        }
+    }
+
+    //申请已勾选服务
+    $("#applyAddValue").click(function () {
+        var c = 0,
+            isg= 0;
+        d = "", //待开通服务及开通时长拼接串
+        isTrue=false;  //判断是否存在待开通的服务未输入开通时长
+        var id = $("#gys_apply_id").val();//供应商id
+        var y=@Model.可用余额;
+        var checklist = $("input[lang='addValueName']");
+        $.each(checklist, function (index, domEle) {
+            if($(domEle).is(":checked")){
+                isg++;
+                var a = $(domEle).val();//服务项目
+                var b = $(domEle).parents("tr").find("input[name='openTime']").val().trim();//开通时长
+                
+                if(b != "" && b != null && b != "undefined"){
+                    isTrue=true;
+                }
+                else{
+                    alert("请输入开通时长！");
+                    isTrue=false;
+                    return false;
+                }
+                if(a == "添加商品一级分类" || a == "添加商品二级分类"){
+                    var e=$(domEle).parents("tr").find("input[name='theNumber']").val().trim();//开通个数
+                    d += a + ":" + b +" " + e + ",";
+                }
+                else{
+                    d += a + ":" + b + ",";
+                }
+
+                var f = $(domEle).attr("title");
+                c += parseFloat(f); //总的扣费金额，如果大于余额则提示余额不足
+            }
+        });
+        if(c>y){
+            alert("余额不足！请充值！");
+            return false;
+        }
+        if(isg<=0){alert("请先选择要申请的服务!");return false;}
+        if(isTrue) {
+            $.ajax({
+                url: '/运营团队后台/ApplyAddValue',
+                type:'post',
+                data: {str:d, gysid: id},
+                success: function (data) {
+                    if(data==0){
+                        alert("余额不足，请充值！");
+                    }
+                    else{
+                        alert("申请成功！");
+                        window.location.reload();
+                    }
+                },
+                error: function () {
+                    alert("申请失败！请重新申请。");
+                },
+            });
+        }
+    });
+    
+    //充值
+    $("#recharge").click(function(){
+        var id = $("#gys_apply_id").val();//供应商id
+        var account=$("#amount").val();//充值金额
+        if(account==null || account ==""){
+            alert("请输入金额！");
+            return false;
+        }
+        if(confirm("请确认是否为该供应商充值"+account+"元！")){
+            $.ajax({
+                url:'/运营团队后台/GysRecharge',
+                type:'post',
+                data:{gysid:id,amount:account},
+                success:function(data){
+                    $("#amount").val("");
+                    alert(data);
+                    window.location.reload();
+                },
+                error:function(data){
+                    $("#amount").val("");
+                    alert(data);
+                },
+            });
+        }
+    });
+
+    function applyaddvalue(e) {
+        var id = $("#gys_apply_id").val();//供应商id
+        var fwname = $(e).attr("name");//服务名
+        var times = $(e).parents("tr").find("input[name='openTimes']").val(); //开通时长
+        // var isInt = checkNum(times);
+        if (times != "" && times != null && times != "undefined") {
+            //if (isInt) {
+            $.ajax({
+                url: '/运营团队后台/ApplyAddValue',
+                data: { gysid: id, name: fwname, time: times },
+                type: 'post',
+                success: function (data) {
+                    alert(data);
+                    window.location.reload();
+                },
+                error: function () {
+                    alert("申请失败！");
+                },
+            });
+            //}
+            //else {
+            //    alert("开通时长请输入整数！");
+            //}
+        }
+        else {
+            alert("请填写开通时长");
+        }
+
+    }
+    //批准 开通 撤销服务
+    function applyapproval(e) {
+        var id = $("#gys_apply_id").val();//供应商id
+        var applyid = $(e).attr("name");//服务id
+        var type_operate = $(e).attr("id");     //操作类型 通过/开通/撤销
+        var signtime=0;
+        if(type_operate==2){
+            signtime=$(e).parent().parent().find("input[name='signTime']").val();//签订时间
+        }
+        $.ajax({
+            url: '/运营团队后台/ApplyApproval',
+            type:'post',
+            data: { ApplyContractId: id, ApplyServiceId: applyid, type: type_operate,signtime:signtime },
+            success: function (data) {
+                alert(data);
+                window.location.reload();
+            },
+            error: function () {
+                alert("操作失败！");
+            }
+        });
+    }
+
+    $("#sub_btnvalue").click(function(){
+        var sel=$("input[name='valueService']");
+        var a="";
+        $.each(sel,function(index,domEle){
+            if($(domEle).is(":checked")){
+                a+=$(domEle).val()+"|";
+            }
+        });
+        var id=$("input[name='ApplyContractId']").val();
+        $.ajax({
+            url:'/运营团队后台/ApplyApproval',
+            type:'post',
+            data:{ApplyContractId:id,ApplyList:a},
+            success:function(){
+                alert("申请通过！");
+                window.location.reload();
+            },
+            error:function(){
+                alert("失败！");
+            },
+        });
+    });
+
+    var timer;
+    $(function () {
+        $("li.changetab").hover(function () {
+            var tab = $(this);
+            timer = setTimeout(function () {
+                var index = tab.attr("index");
+                var divs = tab.parents(".outtab").next(".tabcontent");
+                tab.addClass("onhover").siblings().removeClass("onhover");
+                divs.children().hide().eq(index).show();
+            }, 200);
+        }, function () {
+            clearTimeout(timer);
+        });
+        $("#供应商列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#供应商列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

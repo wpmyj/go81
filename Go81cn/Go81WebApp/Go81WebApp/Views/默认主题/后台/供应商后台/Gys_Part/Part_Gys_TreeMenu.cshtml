@@ -1,0 +1,146 @@
+﻿
+<link rel="stylesheet" type="text/css" href="~/css/gys_treemenu.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/index.css" />
+    <script type="text/javascript" src="~/JS/jquery-1.6.min.js"></script>
+    <script type="text/javascript" src="~/JS/SimpleTree.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".st_tree").SimpleTree({
+                click: function (a) {
+                    if (!$(a).attr("hasChild")) {
+                        window.location.href = $(a).attr("href");
+                    }
+                }
+            });
+
+            if ($("#links").val() != null && $("#links").val() != "") {
+                var dom = $("#" + $("#links").val());
+                $(dom).css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            }
+        });
+
+
+    </script>
+
+
+<div class="st_tree">
+    <ul>
+        <li class="st_tree_first_tittle"><span>+</span><a href="#">消息管理</a></li>
+        <ul show="true">
+            <li id="gysxttz" class="st_tree_second_title"><span>-</span><a href="~/供应商后台/Gys_Xttz">系统通知</a></li>
+            <li class="st_tree_second_title"><span>+</span><a href="#">消息管理</a></li>
+            <ul show="true">
+                <li id="znxxadd" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_ZnxxAdd">发新消息</a></li>
+                <li id="msgsent" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Msg_Sent">已发消息</a></li>
+                <li id="gysznxx" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_Znxx">已收消息</a></li>
+            </ul>
+        </ul>
+        <li class="st_tree_first_tittle"><span>+</span><a href="#">账号信息管理</a></li>
+        <ul show="true">
+            <li id="vipmanage" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Vip_Manage">账号基本信息</a></li>
+            <li id="pwdmanage" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Vip_Password_Manage">账号密码管理</a></li>
+        </ul>
+        <li class="st_tree_first_tittle"><span>+</span><a href="#">企业信息管理</a></li>
+        <ul show="true">
+            <li id="gysmanage" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_Manage">企业基本信息管理</a></li>
+            <li id="gyssalesmanage" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_Sales_Manage">营业信息管理</a></li>
+            <li id="gysfinmanage" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_Financial_Manage" onclick="ch_box(3, '.tb4')">税务财务信息管理</a></li>
+            <li id="location" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Location">地理位置</a></li>
+            <li id="location" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Print_Detail">打印资料</a></li>
+        </ul>
+        <li class="st_tree_first_tittle"><span>+</span><a href="#">招投标管理</a></li>
+        <ul show="true">
+            <li class="st_tree_second_title"><span>+</span><a href="#">招投标公告查询</a></li>
+            <ul show="true">
+                <li id="searchzb" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_Ztb_Search_Zb">公开招标</a></li>
+                @*<li id="searchcg" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_Ztb_Search_Cg?link=searchcg">公开采购</a></li>*@
+            </ul>
+            <li id="bookmsg" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Book_Msg">消息订阅</a></li>
+            @*<li class="st_tree_second_title"><a href="#">我的招投标</a></li>
+            <ul show="true">
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">已报名</a></li>
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">已订阅</a></li>
+                <li class="st_tree_third_title"><a href="~/Gys_Main/Gys_Ztb_Dygl">订阅管理</a></li>
+            </ul>
+            <li class="st_tree_second_title"><a href="#">历史项目</a></li>
+            <ul show="true">
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">中标</a></li>
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">未中标</a></li>
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">流标</a></li>
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">废标</a></li>
+            </ul>*@
+        </ul>
+        <li class="st_tree_first_tittle"><span>+</span><a href="#">商品管理</a></li>
+        <ul show="true">
+            <li class="st_tree_second_title"><span>+</span><a href="#">我的商品库</a></li>
+            <ul show="true">
+                <li id="prolist" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_Product_Type">商品类别管理</a></li>
+                <li id="prolist" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_Product_List">商品列表</a></li>
+                <li id="addstep" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_Product_AddStep1">添加新商品</a></li>
+            </ul>
+            @*<li class="st_tree_second_title"><a href="#">商品审核</a></li>
+            <ul show="true">
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">审核中</a></li>
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">未通过</a></li>
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">已通过</a></li>
+            </ul>*@
+        </ul>
+        <li class="st_tree_first_tittle"><span>+</span><a href="#">投诉建议</a></li>
+        <ul show="true">
+            <li class="st_tree_second_title"><span>+</span><a href="#">投诉</a></li>
+            <ul show="true">
+                <li id="complainadd" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_ComplainAdd">发起投诉</a></li>
+                <li id="complainlist" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_ComplainList">我的投诉</a></li>
+            </ul>
+            <li class="st_tree_second_title"><span>+</span><a href="#">建议</a></li>
+            <ul show="true">
+                <li id="suggestadd" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_SuggestAdd">发起建议</a></li>
+                <li id="suggestlist" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/供应商后台/Gys_SuggestList">我的建议</a></li>
+            </ul>
+        </ul>
+        @*<li class="st_tree_first_tittle"><a href="#">咨询服务</a></li>
+        <ul show="true">
+            <li class="st_tree_second_title"><a href="#">咨询</a></li>
+            <ul show="true">
+                <li class="st_tree_third_title"><a href="~/供应商后台/Gys_ConsultAdd">发起咨询</a></li>
+                <li class="st_tree_third_title"><a href="~/供应商后台/Gys_ConsultList">咨询列表</a></li>
+            </ul>
+            <li class="st_tree_second_title"><a href="#">办事指南</a></li>
+            <ul show="true">
+                <li class="st_tree_third_title"><a href="~/供应商后台/Gys_GuideOne">分类1</a></li>
+                <li class="st_tree_third_title"><a href="~/供应商后台/Gys_GuideTwo">分类2</a></li>
+                <li class="st_tree_third_title"><a href="~/供应商后台/Gys_GuideThr">分类3</a></li>
+            </ul>
+        </ul>*@
+        @*<li class="st_tree_first_tittle"><a href="#">供应商信息管理</a></li>
+        <ul show="true">
+            <li class="st_tree_second_title"><a href="#">基本信息</a></li>
+            <li class="st_tree_second_title"><a href="#">资质信息</a></li>
+            <li class="st_tree_second_title"><a href="#">用户评级信息</a></li>
+        </ul>
+        <li class="st_tree_first_tittle"><a href="#">会话管理</a></li>
+        <ul show="true">
+            <li class="st_tree_second_title"><a href="#">安全设置</a></li>
+            <ul show="true">
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">基本设置</a></li>
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">密码保护</a></li>
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">安全验证</a></li>
+                <li class="st_tree_third_title"><a href="http://www.baidu.com">U盾管理</a></li>
+            </ul>
+            <li class="st_tree_second_title"><a href="#">注销登录</a></li>
+        </ul>*@
+    </ul>
+</div>
+<script>
+    function ch_box(num, str)
+    {
+            $(".tb span").each(function () {
+                $(this).css("background-color", "orange");
+            }); $(".tb div").each(function () {
+                $(this).hide();
+            });
+            $(".tb span#sp" + num).css("background-color", "red");
+            $(".tb " + str).show();
+ }
+</script>
+

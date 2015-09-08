@@ -1,0 +1,577 @@
+﻿@model List<Go81WebApp.Models.数据模型.推广业务数据模型.供应商增值服务申请记录>
+@using NPOI.SS.Formula.Functions
+@using Go81WebApp.Controllers.后台
+@using Go81WebApp.Models.数据模型.推广业务数据模型
+@{
+    Layout = null;
+    ViewBag.Title = "西南物资采购网增值类服务订购合同";
+  
+}
+<script src="~/Scripts/jquery-1.11.1.min.js" type="text/javascript"></script>
+<style type="text/css">
+    ul li{ list-style:none}
+</style>
+    <div id="tabcontent_zb">
+    <h2 style="text-align: center">西南物资采购网增值类服务订购合同</h2>
+    <table cellpadding="0" cellspacing="0" style="width:100%">
+        <tr style="height: 25px;">
+            <td style="width: 10%;text-align: right">订购方：</td>
+            <td colspan="2" style="border-bottom: 1px solid #000000"></td>
+            <td></td>
+            <td style="width: 10%;text-align: right">订单号：</td>
+            <td colspan="2" style="border-bottom: 1px solid #000000"></td>
+        </tr>
+        <tr style="height: 25px;">
+            <td style="width: 10%;text-align: right">联系人：</td>
+            <td style="border-bottom: 1px solid #000000"></td>
+            <td style="width:10%;text-align: right">电话：</td>
+            <td style="border-bottom: 1px solid #000000"></td>
+            <td></td>
+            <td style="width:8%;text-align: right">传真：</td>
+            <td style="border-bottom: 1px solid #000000"></td>
+        </tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" style="width: 100%;border-bottom: 1px solid #000;border-right: 1px solid #000;margin-top: 10px;">
+        <tr>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;width: 5%;text-align: center">订购选项</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;width: 10%">服务名称</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;width: 24%">所含内容</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;width: 20%">服务期限</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;width: 15%">服务费用</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;width: 15%">结算金额</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;width: 15%">备注</td>
+        </tr>
+        @{
+            var valueList = ViewData["扣费项目"] as List<Tuple<string, 扣费类型, decimal, 通过状态, int>>;
+            var total_fee = (decimal)0;
+            var isExamine = false;
+            var 基础会员 = valueList.Find(o => o.Item1 == "基础会员");
+            var 标准会员 = valueList.Find(o => o.Item1 == "标准会员");
+            var 商务会员 = valueList.Find(o => o.Item1 == "商务会员");
+            foreach (var k in valueList)
+            {
+                if (k.Item4 == 通过状态.通过) { isExamine = true; }
+                else { isExamine = false; break; }
+            }
+            var dateSign = DateTime.Now;
+       }
+             @if (基础会员 != null)
+             {
+                total_fee += (decimal)基础会员.Item3 * 基础会员.Item5;
+                <tr>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;">
+                        @*@if (认证会员.Item4==通过状态.通过)
+                        {
+
+                            <input name="valueService" checked="checked" disabled="disabled" type="checkbox" />
+                        }
+                        else
+                        {
+                            <input name="valueService" type="checkbox" disabled="disabled" />
+                        }*@
+                        <input name="valueService" checked="checked" disabled="disabled" type="checkbox" />
+                    </td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">军采通基础会员服务</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">基础技术服务（详细服务内容见下表“主要服务项目”）</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">@基础会员.Item5 年，自本订单订购服务正式开通之日起 @基础会员.Item5 年</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY @基础会员.Item3</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY @(基础会员.Item3 * 基础会员.Item5)</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">&nbsp;</td>
+                </tr>
+             }
+            @if (标准会员 != null)
+             {
+                 total_fee += (decimal)标准会员.Item3 * 标准会员.Item5;
+                <tr>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;">
+                        @if (认证会员.Item4==通过状态.通过)
+                        {
+                            
+                            @*<input name="valueService" checked="checked" disabled="disabled" type="checkbox" />*@
+                            <span></span>
+                        }
+                        else
+                        {
+                            <input name="valueService" type="checkbox" disabled="disabled" />
+                        }
+               
+                        @*else
+                        {
+                            <input type="checkbox" disabled="disabled" />
+                        }*@
+                        <input name="valueService" checked="checked" disabled="disabled" type="checkbox" />
+                    </td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">军采通标准会员服务</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">基础技术服务（详细服务内容见下表“主要服务项目”）</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">@标准会员.Item5 年，自本订单订购服务正式开通之日起 @标准会员.Item5 年</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY @标准会员.Item3</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY @(标准会员.Item3 * 标准会员.Item5)</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">&nbsp;</td>
+                </tr>
+             }
+             @if (商务会员 != null)
+             {
+                 total_fee += (decimal)商务会员.Item3 * 商务会员.Item5;
+                <tr>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;">
+                        @*@if (商务会员.Item4 ==通过状态.通过)
+                        {
+                            
+                            @*<input name="valueService" checked="checked" type="checkbox" disabled="disabled" />*@
+                            <span></span>
+                        }
+                        else
+                        {
+                            <input name="valueService" type="checkbox" disabled="disabled" />
+                        }
+               
+                        @*else
+                        {
+                            <input type="checkbox" disabled="disabled" />
+                        }*@
+                        <input name="valueService" checked="checked" type="checkbox" disabled="disabled" />
+                    </td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">军采通商务会员服务</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">基础技术服务(详细服务内容见下表“主要服务项目”)</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">@商务会员.Item5 年，自本订单订购服务正式开通之日起 @商务会员.Item5 年</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY @商务会员.Item3</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY @(商务会员.Item3 * 商务会员.Item5)</td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">&nbsp;</td>
+                </tr>
+             }
+        <tr>
+            @{
+                var a = valueList.Find(o => o.Item1 == "商务会员");
+                var b = valueList.Find(o => o.Item1 == "标准会员");
+                var c = valueList.Find(o => o.Item1 == "基础会员");
+                valueList.Remove(a);
+                valueList.Remove(b);
+                valueList.Remove(c);
+                var rowspan = 1;
+                total_fee += valueList.Sum(o => o.Item3 * o.Item5);
+                if (valueList.Count >= 1)
+                {
+                    rowspan = valueList.Count;
+                }
+            }
+          
+            @if (valueList.Count >= 1)
+            {
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;">
+                    @*@if (valueList.First().Item4==通过状态.通过)
+                    {
+                        @*<input name="valueService" checked="checked" type="checkbox" disabled="disabled" />*@
+                        <span></span>
+                    }
+                    else
+                    {
+                        <input name="valueService" type="checkbox" disabled="disabled" />
+                    }
+                </td>
+                <td rowspan="@rowspan" style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">单项增值服务</td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">@valueList.First().Item1</td>
+                if (valueList.First().Item2 == 扣费类型.按年扣费)
+                {
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">@valueList.First().Item5 年，自本订单订购服务正式开通之日起 @valueList.First().Item5 年</td>
+                }
+                if (valueList.First().Item2 == 扣费类型.按月扣费)
+                {
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">@valueList.First().Item5 个月，自本订单订购服务正式开通之日起 @valueList.First().Item5 个月</td>
+                }
+                if (valueList.First().Item2 == 扣费类型.按次扣费)
+                {
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">@valueList.First().Item5 次，自本订单订购服务正式开通之日起共使用 @valueList.First().Item5 次</td>
+                }
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY @valueList.First().Item3</td>
+
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY @(valueList.First().Item3 * valueList.First().Item5)</td>
+              
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">&nbsp;</td>
+            }
+            @*@if (valueList.Count == 0)
+            {
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;">
+                    @*<input type="checkbox" disabled="disabled" />
+                </td>
+                <td rowspan="@rowspan" style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">单项增值服务</td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;"></td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;"></td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY </td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY </td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">&nbsp;</td>
+            }*@
+
+        </tr>
+        @if (valueList.Count >= 1)
+        {
+            foreach (var mm in valueList.Skip(1))
+            {
+                <tr>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;">
+                        @*@if (mm.Item4==通过状态.通过)
+                        {
+                            @*<input name="valueService" checked="checked" type="checkbox" disabled="disabled" />*@
+                            <span></span>
+                        }
+                        else
+                        {
+                            <input name="valueService" type="checkbox" disabled="disabled" />
+                        }
+                    </td>
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">@mm.Item1</td>
+                    @if (mm.Item2 == 扣费类型.按年扣费)
+                    {
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">@mm.Item5 年，自本订单订购服务正式开通之日起 @mm.Item5 年</td>
+                    }
+                    @if (mm.Item2 == 扣费类型.按月扣费)
+                    {
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">@mm.Item5 个月，自本订单订购服务正式开通之日起 @mm.Item5 个月</td>
+                    }
+                    @if (mm.Item2 == 扣费类型.按次扣费)
+                    {
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">@mm.Item5 订单订购服务正式开通之日起共使用 @mm.Item5 次</td>
+                    }
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY @mm.Item3</td>
+
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY @(mm.Item3 * mm.Item5)</td>
+
+                    <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">&nbsp;</td>
+                </tr>
+            }
+        }
+
+        @if (valueList.Count() == 0)
+        {
+            <tr>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;">
+                @*<input type="checkbox" disabled="disabled" />*@
+                </td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;"></td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;"></td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;"></td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY </td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">CNY </td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000; text-align: center;padding: 3px;">&nbsp;</td>
+            </tr>
+        }
+        <tr>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;">&nbsp;</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">费用总计</td>
+            <td colspan="5" style="border-top:1px solid #000;border-left:1px solid #000;text-align: center;padding: 3px;">
+                <span style="float: left">小写：CNY @total_fee</span>
+                <span style="float: right">（大写：人民币 @供应商后台Controller.MoneyToUpper(total_fee.ToString()) ）</span>
+            </td>
+        </tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" style="width: 100%;margin-top:10px;border-bottom: 1px solid #000;border-right: 1px solid #000;">
+        <tr>
+            <td valign="top" style="padding-top:6px; border-top:1px solid #000;border-left:1px solid #000;width: 18%;text-align: center">订单生效前提</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;line-height:25px;">
+                1.	订购方已在西南物资采购网上注册账号，并通过，为本网站的入网供应商；<br />
+                2.	订购方持有真实、合法、有效的工商营业执照，已通过每年度的企业年检，本订单签署日至服务开通日前无公司变更登记或备案事项。
+            </td>
+        </tr>
+        <tr>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;width: 18%;text-align: center">服务范围</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;line-height:25px;">西南物资采购网中国网站（http://www.go81.cn）</td>
+        </tr>
+        <tr>
+            <td valign="top" style="padding-top:6px; border-top:1px solid #000;border-left:1px solid #000;width: 18%;text-align: center">服务提供条件</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;line-height:25px;">
+                1.	订购方满足本订单生效条件；<br />
+                2.	订购军采通会员服务，必须同意完全遵守在西南物资采购网上公示的军采通会员服务协议（具体参见：http://www.go81.cn 军采通会员板块）。
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" style="padding-top:6px; border-top:1px solid #000;border-left:1px solid #000;width: 18%;text-align: center">主要服务项目</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;line-height:25px;">
+                @if (基础会员 != null)
+                {
+                    <span>[基础会员]主要功能：</span><br />
+                    <ol style="margin:0;font-size:13px;">
+                        <li>安全认证1年（含U盾1个）</li>
+                    </ol>
+                }
+                @if (标准会员 != null)
+                {
+                    <span>[标准会员]主要功能：</span><br />
+                    <ol style="margin:0;font-size:13px;">
+                        <li>安全认证1年（含U盾1个）</li>
+                        <li>批量上传工具1年</li>
+                        <li>供应商列表静态广告1年（含3个商品展示窗口）</li>
+                        <li>供应商详情页面显示企业网址</li>
+                        <li>一对一客服服务</li>
+                    </ol>
+                }
+                @if (商务会员 != null)
+                {
+                    <span>[商务会员]主要功能：</span><br />
+                    <ol style="margin:0;font-size:13px;">
+                        <li>安全认证1年（含U盾1个）</li>
+                        <li>批量上传工具1年</li>
+                        <li>一级商品分类2个（1年）</li>
+                        <li>手机短信推送：招标采购信息类1年</li>
+                        <li>供应商列表动态广告1年（含6个商品展示窗口）</li>
+                        <li>供应商详情页面显示企业网址</li>
+                        <li>一对一客服服务</li>
+                    </ol>
+                }
+                @if (valueList.Count > 0)
+                {
+                    <span>[单项增值服务]主要功能：</span><br />
+                    <ol style="margin:0;font-size:13px;">
+                        @foreach (var k in valueList)
+                        {
+                            <li>@k.Item1</li>
+                        }
+                    </ol>
+                }
+
+            </td>
+        </tr>
+        @if (标准会员 != null || 商务会员 != null || 基础会员!=null)
+        {
+            <tr>
+                <td valign="top" style="padding-top:6px; border-top:1px solid #000;border-left:1px solid #000;width: 18%;text-align: center"></td>
+                <td style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;line-height:25px;">
+                    订购方订购本订单服务，在服务正常使用过程中可以享有以下赠送服务内容：<br />
+                    @if (基础会员 != null)
+                    {
+                        <span>[基础会员]主要赠送功能：</span><br />
+                        <ul style="margin:0;font-size:13px;">
+                            <li>本网信用认证标识1年</li>
+                        </ul>
+                    }
+                    @if (标准会员 != null)
+                    {
+                        <span>[标准会员]主要赠送功能：</span><br />
+                        <ul style="margin:0;font-size:13px;">
+                            <li>① 手机短信推送：招标采购信息类半年</li>
+                            <li>② 企业窗口展示模板F类半年</li>
+                            <li>③ 本网信用认证标识1年</li>
+                        </ul>
+                    }
+                    @if (商务会员 != null)
+                    {
+                        <span>[商务会员]主要赠送功能：</span><br />
+                        <ul style="margin:0;font-size:13px;">
+                            <li>① 手机短信推送：业务对接类半年</li>
+                            <li>② 手机短信推送：动态与提醒类半年</li>
+                            <li>③ 企业窗口展示模板E类半年</li>
+                            <li>④ 本网信用认证标识1年</li>
+                        </ul>
+                    }
+                </td>
+            </tr>
+        }
+      
+        <tr>
+            <td valign="top" style="padding-top:6px; border-top:1px solid #000;border-left:1px solid #000;width: 18%;text-align: center">备注栏</td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;line-height:25px;">
+                1.	如因订购方原因致使服务无法正常提供，成都精睿信息不承担任何责任；订购方订购的服务因任何原因被中止或终止，则上诉免费服务将不再提供。如成都精睿信息原因，造成以上赠送服务非正常中断，则订购方同意成都精睿信息只需继续履行赠送服务至原赠送服务期限届满，而无需承担其他任何责任。
+            </td>
+        </tr>
+    </table>
+    <table cellpadding="0" cellspacing="0" style="width: 100%;margin-top:10px;border-bottom: 1px solid #000;border-right: 1px solid #000;">
+        <tr>
+            <td colspan="4" style="border-top: 1px solid #000; border-left: 1px solid #000;padding: 8px;"><span style="color: red">（必填）</span>以下订购方营业执照信息及被授权人信息将由成都精睿信息员工进行核对认证。</td>
+        </tr>
+        <tr>
+            <td style="border-top: 1px solid #000; border-left: 1px solid #000;width: 30%;padding: 8px;">会员账号（确保在西南物资采购网中文网站已完成此ID注册）</td>
+            <td colspan="3" style="border-top: 1px solid #000; border-left: 1px solid #000;"></td>
+        </tr>
+        <tr>
+            <td style="border-top: 1px solid #000; border-left: 1px solid #000;width: 30%;padding: 8px;">公司全称（确保与营业执照所在公司名称完全一致）</td>
+            <td colspan="3" style="border-top: 1px solid #000; border-left: 1px solid #000;"></td>
+        </tr>
+        <tr>
+            <td style="border-top: 1px solid #000; border-left: 1px solid #000;width: 30%;padding: 8px;">联系电话及手机（供及时沟通联系）</td>
+            <td style="border-top: 1px solid #000; border-left: 1px solid #000;"></td>
+            <td style="border-top: 1px solid #000; border-left: 1px solid #000;text-align: center;width: 10%">传真</td>
+            <td style="border-top: 1px solid #000; border-left: 1px solid #000;"></td>
+        </tr>
+        <tr>
+            <td colspan="4" style="border-top: 1px solid #000; border-left: 1px solid #000;padding: 8px;">授权本公司/厂员工<input type="text" style="border: none;border-bottom: 1px solid #000;width: 115px;" />先生/小姐，<input type="text" style="border: none;border-bottom: 1px solid #000;width: 115px;" />职位向成都精睿信息申请本订购合同内所列服务项目，且作为本公司/厂授权代表出现在西南物资采购网上。</td>
+        </tr>
+    </table>
+
+
+    <table cellpadding="0" cellspacing="0" style="width: 100%;margin-top:10px;border-bottom: 1px solid #000;border-right: 1px solid #000;">
+        <tr>
+            <td colspan="4" style="border-top: 1px solid #000; border-left: 1px solid #000;padding: 8px;line-height: 25px;">
+                付款信息：订购方通过对公账户进行支付。
+                <br />
+                <span style="color: red;">收款方账号信息如下：</span>
+            </td>
+        </tr>
+        <tr>
+            <td rowspan="2" style="text-align: center; border-top: 1px solid #000; border-left: 1px solid #000;width: 15%;padding: 8px;">收款账号</td>
+            <td style="border-top: 1px solid #000; border-left: 1px solid #000;padding: 8px;line-height: 25px;">
+                户名：成都精睿信息技术有限公司 <br />
+                开户行：中国建设银行成都抚琴西路支行<br />
+                账号：5100 1458 2360 5150 4412
+            </td>
+        </tr>
+        <tr>
+            <td style="border-top: 1px solid #000; border-left: 1px solid #000;padding: 8px;line-height: 25px;">
+                户名：成都精睿信息技术有限公司   <br />
+                开户行：中国浦发银行成都蜀汉支行 <br />
+                账号：7308 0154 8000 01859
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center; border-top: 1px solid #000; border-left: 1px solid #000;width: 15%;padding: 8px;">重要说明</td>
+            <td style="border-top: 1px solid #000; border-left: 1px solid #000;padding: 8px;line-height: 25px;">
+                请订购方在汇款后，务必将汇款底单传真至成都精睿信息技术有限公司，并注明您的会员登录ID，购买产品名称。代付款时请注明订购名称；
+                <br />
+                传真：028-83190790  李小姐
+            </td>
+        </tr>
+    </table>
+    <table style="width: 100%;border-bottom: 1px solid #000;padding-bottom: 20px;">
+        <tr>
+            <td style="line-height: 25px;">订购方(盖章)：</td>
+            <td style="line-height: 25px;width:15%"></td>
+            <td style="text-align: right;line-height: 25px;">
+                服务提供方(盖章)：成都精睿信息技术有限公司
+                @if (isExamine)
+                {
+                    <img src="~/Images/jrgz.png" style="position:absolute;right:20px;" width="158" height="158" />
+                }
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3" style="line-height: 25px;">授权代表人(签字)：</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="line-height: 25px;width: 15%;">
+                签订日期：
+                @if (isExamine)
+                {
+                    <label style="letter-spacing: 2px;line-height: 25px;">@dateSign.ToString("yyyy年MM月dd日")</label>
+                }
+                else
+                {
+                    <label style="letter-spacing: 25px;line-height: 25px;">年月日</label>
+                }
+            </td>
+            @if (isExamine)
+            {
+                <td style="letter-spacing: 2px;text-align: right;line-height: 25px;">@dateSign.ToString("yyyy年MM月dd日")</td>
+            }
+            else
+            {
+                <td style="letter-spacing: 22px;text-align: right;line-height: 25px;">年月日</td>
+            }
+        </tr>
+        <tr>
+            <td colspan="3" style="line-height: 25px;"><span style="color: red">注：</span>本订单自订购方在订单签署（或在线确认）之日起3个工作日内付清全款后生效，订购方逾期付款则本订单自动作废。订购方可根据需要自行打印本订单，但订单内容以订购系统记录为准。</td>
+        </tr>
+    </table>
+    <div style="margin-top: 20px;"><span>网站服务热线：028-68308761；028-69908681；400-6826-181 </span><span style="float: right;padding-right: 30px;"> 服务传真：028-83190790</span></div>
+    <p>网站服务投诉热线：4001-028-126</p>
+
+    <h4 style="text-decoration: underline">增值类服务办理须知</h4>
+    <div>“重要”：汇款后请务必在汇款单来源（或用途栏）上注明订单号，如未填写订单号，请在汇款底单上注明订购方的会员登录ID和对应客户服务人员姓名，立即传真汇款凭证至028-83190790</div>
+    <table cellpadding="0" cellspacing="0" style="width: 100%;border-bottom: 1px solid #000;border-right: 1px solid #000">
+        <tr>
+            <td colspan="2" style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;">
+                <p style="text-decoration: underline">1.特别提醒：</p>
+                <ul style="display: block;padding: 0;margin: 0;">
+                    <li style="font-size: 16px;border-bottom: none; background: none;height: auto;line-height: 26px;">1)	西南物资采购网增值类服务项目仅在西南物资采购网中国网站（简体中文）提供。</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;">
+                <p style="text-decoration: underline">2.订单填写及签订要求：</p>
+                <ul style="display: block;padding: 0;margin: 0">
+                    <li style="font-size: 16px;border-bottom: none; background: none;height: auto;line-height: 26px;">1)	会员ID填写要求：订购方所填写的会员ID应先行在西南物资采购网中国网站上注册成功，请务必填写准确，一旦确定，将不能更改。</li>
+                    <li style="font-size: 16px;border-bottom: none; background: none;height: auto;line-height: 26px;">2)	公司名称填写要求：请务必要填写订购方营业执照所载明公司名称，以免认证失败。</li>
+                    <li style="font-size: 16px;border-bottom: none; background: none;height: auto;line-height: 26px;">3)	盖章要求：请加盖公章或合同专用章，且公章或合同专用章所载名称应与订购方所写的公司名称一致。</li>
+                </ul>
+
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;">
+                <p style="text-decoration: underline">3.关于付款：</p>
+                <ul style="display: block;padding: 0;margin: 0">
+                    <li style="font-size: 16px;background: none;border-bottom: none; height: auto;line-height: 26px;">1)	订购方可选择成都精睿信息指定的付款方式付款（参见第5条 付款方式）。</li>
+                    <li style="font-size: 16px;background: none;border-bottom: none; height: auto;line-height: 26px;">2)	订购服务开通后，订购方可在西南物资采购网中国网站（http://www.go81.com）--我的军采通页面填写确认发票寄送地址，成都精睿信息将在订购方确认后寄出发票，邮寄费由订购方承担。</li>
+                    <li style="font-size: 16px;background: none;border-bottom: none; height: auto;line-height: 26px;">
+                        3)	发票的开具：3000元及以下，消费每累积满1000元统一出具一张发票。<br />
+                        <label style="padding-left: 120px;font-weight:normal;display:inline">3000元（不含）以按消费金额一次性出具发票。</label>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;">
+                <p style="text-decoration: underline">4.关于军采通会员服务开通：</p>
+                <ul style="display: block;padding: 0;margin: 0">
+                    <li style="font-size: 16px;border-bottom: none; background: none;height: auto;line-height: 26px;">1)	订购方在支付全部军采通会员服务费用后，成都精睿信息将对您进行身份确认，订购方须在认证过程中传真或在线上传授权书和其他相关资料（具体以成都精睿信息需求为准），请订购方及时配合，以便尽快获得确认结果。若订购方在上一年度军采通会员服务期限届满时间未通过续签认证，则军采会员通服务将自动终止。所以请订购方务必及时配合认证，以免影响军采通会员服务的使用。</li>
+                    <li style="font-size: 16px;border-bottom: none; background: none;height: auto;line-height: 26px;">2)	成都精睿信息在收到您的付款后，认购方款项到达成都精睿信息账户之日起7个工作日内为认证期，您所认购的军采通会员服务，将在军采通会员第一次激活U盾之日起生效；您所订购的推广及单项增值服务，将通过您在注册时提供的电子邮件地址通知您，自您收到该确认邮件之日起生效。</li>
+                    <li style="font-size: 16px;border-bottom: none; background: none;height: auto;line-height: 26px;">
+                        3)	建议订购方通过在银行开立的与订购方名称一致的银行账户汇款： <br />
+                        <label style="padding-left: 20px;font-weight:normal;display:inline"> -	款项更安全：可优先确认订购方的款项是否到达成都精睿信息账户。</label>   <br />
+                        <label style="padding-left: 20px;font-weight:normal;display:inline"> -	开通更方便：可优先将订购信息与您提交的信息进行核对。</label><br />
+                        <label style="padding-left: 20px;font-weight:normal;display:inline"> -	认证更快捷：公司汇款认证流程简捷、方便。</label>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;">
+                <p style="text-decoration: underline">5.付款方式：</p>
+                <p style="margin: 0">订购方可通过以下方式向成都精睿信息支付服务费用</p>
+            </td>
+        </tr>
+        @*<tr>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;"><p style="text-decoration: underline">1)	在线支付</p></td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;line-height: 25px;">3000元及以下金额的订单建议订购方登陆西南物资采购网中文网站（www.go81.cn）军采通会员页面进行在线支付</td>
+        </tr>*@
+        <tr>
+            <td colspan="2" style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;">为了确保您的款项到账更加及时，服务及时开通，成都精睿信息技术有限公司推出了以下专属账号：</td>
+        </tr>
+        <tr>
+            <td rowspan="2" style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;line-height: 25px;">
+                <p style="text-decoration: underline;margin: 0">1)	电汇</p>
+                <p style="text-decoration: underline;margin: 0 0 0 19px;">任何一家银行或信用社都可办理此业务</p>
+                <p style="margin: 0 0 0 19px;">注意汇款时间：一般银行对公柜台的营业时间是：双休日的早上：9:00-11：30；下午：14:00-16:30请确保汇款信息填写准确</p>
+            </td>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;line-height: 25px;">
+                户名：成都精睿信息技术有限公司 <br />
+                开户行：中国建设银行成都抚琴西路支行<br />
+                账号：5100 1458 2360 5150 4412
+            </td>
+        </tr>
+        <tr>
+            <td style="border-top:1px solid #000;border-left:1px solid #000;padding: 8px;line-height: 25px;">
+                户名：成都精睿信息技术有限公司  <br />
+                开户行：中国浦发银行成都蜀汉支行     <br />
+                账号：7308 0154 8000 01859
+            </td>
+        </tr>
+    </table>
+</div>
+
+@if (isExamine)
+{
+    <div style="text-align:center;margin:30px;">
+        <input id="printApply" type="button" style="cursor: pointer;color: #fff;background: #139451;width: 200px;height: 35px;border: 3px solid #19791D;font-size: 20px;" value="打印">
+    </div>
+}
+    
+
+<script type="text/javascript">
+    $("#printApply").click(function () {
+        document.body.innerHTML = $("#tabcontent_zb").html();
+        window.print();
+    });
+    $(function () {
+        $("#增值服务订购管理").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#增值服务订购管理").parent().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

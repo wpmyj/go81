@@ -1,0 +1,96 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@{
+    ViewBag.Title = "修改招投标记录";
+    Layout = "_BackLayout.cshtml";
+}
+<style>
+    table tr td span {
+        font-size: 11px;
+        color: red;
+    }
+</style>
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+@{
+    int index = int.Parse(ViewData["index"].ToString());
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div id="title_div" class="title-base-middle">
+                <div class="title-base-inner">修改招投标经历</div>
+            </div>
+        </div>
+        <div style="border:1px solid green; margin-top:8px;">
+            <form action="/运营团队后台/Modify_Toubiao" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="hidden" name="index" value="@index" />
+                <table width="100%" style="margin-left:10px;">
+                    <tr>
+                        <td width="20%" align="right">项目名称：</td>
+                        <td width="30%"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" value="@Model.历史参标记录[index].项目名称" name="历史参标记录[0].项目名称" /><div class="out_box"><div class="arrow"></div><div class="con_box">请填写项目名称</div></div></td>
+
+                        <td width="20%" align="right">招标方：</td>
+                        <td width="30%"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" value="@Model.历史参标记录[index].招标方" name="历史参标记录[0].招标方" /><div class="out_box"><div class="arrow"></div><div class="con_box">请填写招标方</div></div></td>
+
+                    </tr>
+                    <tr>
+                        <td align="right">参标结果：</td>
+                        <td><select onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="历史参标记录[0].参标结果"><option value="0">请选择参标结果</option><option value="1">中标</option><option value="2">落标</option><option value="3">流标</option><option value="4">废标</option><option value="9999">其他</option></select><div class="out_box"><div class="arrow"></div><div class="con_box">请选择参标结果</div></div></td>
+
+                        <td align="right">参标时间：</td>
+                        <td><input onmouseout="hide_tip(this)" onmouseover="show_tip(this)" onfocus=WdatePicker({dateFmt:"yyyy/MM/dd"}) value="@Model.历史参标记录[index].参标时间" type="text" name="历史参标记录[0].参标时间" /><div class="out_box"><div class="arrow"></div><div class="con_box">请填写参标时间</div></div></td>
+                    </tr>
+                    <tr><td align="right">
+                        @if (Model.历史参标记录[index].本平台项目)
+                        {
+                            <input onclick="setval(this)" onmouseover="show_tip(this)" onmouseout="hide_tip(this)" value="true" checked="checked" type="checkbox" name="历史参标记录[0].本平台项目" />
+                        }
+                        else
+                        {
+                            <input onclick="setval(this)" onmouseover="show_tip(this)" onmouseout="hide_tip(this)" value="false" type="checkbox" name="历史参标记录[0].本平台项目" />
+                        }
+                        <div class="out_box"><div class="arrow"></div><div class="con_box">是本平台项目，请选择，否则，不用选</div></div></td><td>是否是本平台项目</td></tr>
+                </table>
+                <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("a.modify").click(function () { $(".company_msg :text,.company_msg :checkbox,.company_msg :file,.company_msg :submit").each(function () { $(this).removeAttr("disabled"); $(".company_msg a.add").show(); }); $(".company_msg :submit").css("background-color", "#2c5735"); });
+        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
+        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
+        $("#招投标经历").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#招投标经历").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function show_tip(t) {
+        $(t).next("div").show();
+        $(t).next("div").css("display", "inline-block");
+    }
+    function hide_tip(t) {
+        $(t).next("div").hide();
+    }
+    function showdiv(th) {
+        $(th).parent().children("div").show();
+        $(th).parent().children("div").css("display", "inline-block");
+    }
+    function hidediv(th) {
+        $(th).parent().children("div").hide();
+    }
+    function setval(th) {
+        if (th.checked) {
+            th.value = true;
+        }
+        else {
+            th.value = false;
+        }
+    }
+</script>

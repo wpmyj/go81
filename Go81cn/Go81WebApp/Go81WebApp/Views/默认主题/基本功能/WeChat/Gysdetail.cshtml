@@ -1,0 +1,121 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <script type="text/javascript" language="javascript" src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/JS/provinceandcity_all.js"></script>
+    <link rel="stylesheet" href="~/css/WeChat.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>供应商详情</title>
+</head>
+<body>
+    <div class="outbox">
+        <input type="hidden" id="userid" value="@Model.Id" />
+        <div class="imgContainer">
+            <table cellpadding="0" cellspacing="0" id="image">
+                <tr>
+                    @foreach (var item in Model.供应商用户信息.供应商图片)
+                    {
+                        <td><img src="@item" /></td>
+                    }
+                </tr>
+            </table>
+        </div>
+        <div class="tabheader"><a href="###" id="#direct">基本信息</a><a href="###" id="#param"><span class="linespan" style="float:left;"></span>联系方式<span class="linespan" style="float:right;"></span></a><a id="#sale" href="###">企业产品</a></div>
+        <div id="contentContainer">
+            <div id="direct">
+                <p>
+                    企业名称：@Model.企业基本信息.企业名称
+                </p>
+                <p>
+                    企业网址：@Model.企业基本信息.网站网址
+                </p>
+                <p>
+                    注册地址：@Model.营业执照信息.营业执照注册地址
+                </p>
+                <p>
+                    经营类型：@Model.企业基本信息.经营类型/@Model.企业基本信息.经营子类型
+                </p>
+                <p>
+                    企业简介：@Model.企业基本信息.企业简介
+                </p>
+            </div>
+            <div id="param" style="display:none;">
+                <p>联系人：@Model.企业联系人信息.联系人姓名</p>
+                <p>固定电话：@Model.企业联系人信息.联系人固定电话</p>
+                <p>手机：@Model.企业联系人信息.联系人手机</p>
+                <p>联系地址：@Model.企业联系人信息.联系人地址</p>
+            </div>
+            <div id="sale" style="padding-top:5px; display:none;width:100%;">
+                <ul id="goodcontainer"></ul>
+                <div id="pager">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+        $(".tabheader a").click(function () {
+            $(".tabheader a").each(function () {
+                $(this).css({ "border-bottom": "1px solid #b8b4b2", "color": "#b8b4b2" });
+            });
+            $("#contentContainer div").hide();
+            var attr = $(this).attr("id");
+            $(this).css({ "border-bottom": "1px solid #ff0000", "color": "#ff0000" });
+            $(attr).show();
+            if(attr=="#sale")
+            {
+                $(attr+" div").show();
+            }
+        });
+        var imgcount = 1;
+        var uid = 0;
+        function scrollPicture()
+        {
+            $("table#image").animate({ "margin-left": "-320px" },500, function () {
+                var html = $("table#image tr:eq(0) td:eq(0)").html();
+                $("table#image tr:eq(0)").append("<td>" + html + "</td>");
+                $("table#image tr:eq(0) td:eq(0)").remove();
+                $("table#image").css("margin-left", "0px");
+            });
+        }
+        $(document).ready(function () {
+            uid = $("#userid").val();
+            $(".tabheader a:eq(0)").css({ "border-bottom": "1px solid #ff0000", "color": "#ff0000" });
+            imgcount = $(".imgContainer img").length;
+            if (imgcount!=1)
+            {
+                setInterval("scrollPicture()", 3000);
+            }
+            search_good(1);
+        });
+        function setPage(pgCount, currentPage) {
+            if (pgCount>0&&pgCount != 1)
+            {
+                if (currentPage > 1) {
+                    if (pgCount > currentPage) {
+                        $("#pager").html("<a href='###' onclick='search_good(" + (currentPage - 1) + ")'>上一页</a><a href='###' onclick='search_good(" + (currentPage + 1) + ")'>下一页</a><span>" + currentPage + "/" + pgCount + "页</span>");
+                    }
+                    else {
+                        $("#pager").html("<a href='###' onclick='search_good(" + (currentPage - 1) + ")'>上一页</a><a href='###'>下一页</a><span>" + currentPage + "/" + pgCount + "页</span>");
+                    }
+                }
+                else {
+                    $("#pager").html("<a href='###'>上一页</a><a href='###' onclick='search_good(" + (currentPage + 1) + ")'>下一页</a><span>" + currentPage + "/" + pgCount + "页</span>");
+                }
+            }
+        }
+        function search_good(pg) {
+            var str = "";
+            $.get("/WeChat/Search_Gys_Goods", { skip: pg, id:uid }, function (data) {
+                setPage(data.Data.pageSize, pg);
+                for (var i = 0; i < data.Data.Glist.length; i++) {
+                    str += "<li><div class='rightbox' style='padding:0px;width:33%'><a href='/WeChat/Gooddetail?id=" + data.Data.Glist[i].Id + "'><img src='" + data.Data.Glist[i].url + "' /></a><div class='gname' style='height: 40px;width:105px;'>" + data.Data.Glist[i].name + "</div><div class='gprice' style='width:105px;'>¥" + data.Data.Glist[i].price + "</div></div></li>";
+                }
+                $("#goodcontainer").html(str+"<div style='clear:both;'></div>");
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+﻿@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+<link href="~/css/index.css" rel="stylesheet" />
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">待审核单位用户列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" id="con" cellpadding="0" cellspacing="0">
+                <tr><th align="center">用户ID</th><th align="center">登录名</th><th align="center">单位级别</th><th align="center">审核状态</th><th>操作</th></tr>
+                @foreach (var item in ViewData["user"] as IEnumerable<用户基本数据>)
+                {
+                    var m = item as 单位用户;
+                    <tr>
+                        <td align="center">@m.Id</td>
+                        <td align="center"><a href="/运营团队后台/DepartmentAudit?id=@item.Id">@item.登录信息.登录名</a></td>
+                        <td align="center">@m.单位信息.单位级别</td>
+                        <td align="center">@m.审核数据.审核状态</td>
+
+                        <td>
+                            <a href="/运营团队后台/DepartmentAudit?id=@item.Id">审核</a>
+                            <a href="/运营团队后台/Del_Department?id=@item.Id">删除</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+            <div>
+                @Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString()))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#单位审核").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#单位审核").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+
+

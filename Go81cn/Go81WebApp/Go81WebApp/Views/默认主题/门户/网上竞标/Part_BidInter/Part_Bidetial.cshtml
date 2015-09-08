@@ -1,0 +1,235 @@
+﻿@model Go81WebApp.Models.数据模型.竞标数据模型.网上竞标
+<link href="~/css/hotelandticket.css" rel="stylesheet" />
+<div class="auction_info">
+    <div class="index_bottom_spdt_topbox outtab wid">
+        <div class="index_bottom_zb_top_title">竞拍信息</div>
+    </div>
+    <div class="auction_info_d">
+        <table>
+            <tr>
+                <td valign="top" style="width:320px;width: 320px; border: 1px solid rgb(204, 204, 204); border-radius: 3px; background: #F8F8F8">
+                    <table class="table_round_summary">
+                        <tr>
+                            <td class="align">报价开始时间：</td>
+                            <td><span>@Model.报价开始时间.ToString("yyyy-MM-dd HH:mm:ss")</span></td>
+                        </tr>
+                        <tr>
+                            <td class="align">报价结束时间：</td>
+                            <td><span>@Model.报价结束时间.ToString("yyyy-MM-dd HH:mm:ss")</span></td>
+                        </tr>
+                        <tr>
+                            <td class="align">每轮报价投标时间：</td>
+                            <td><span>@Model.每轮报价投标时间 分钟</span></td>
+                        </tr>
+                        <tr>
+                            <td class="align">每轮报价间隔时间：</td>
+                            <td><span>@Model.每轮报价间隔时间 分钟</span></td>
+                        </tr>
+                        <tr>
+                            <td class="align">报价总轮次：</td>
+                            <td><span>@Model.计划报价轮次 次</span></td>
+                        </tr>
+                        <tr>
+                            <td class="align">起始价：</td>
+                            <td><span style="color:red">￥@Model.起始价格</span></td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="width:850px;">
+                    <div class="round_scroll">
+                        <table class="table_round" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th>报价轮次</th>
+                                <th>报价开始时间</th>
+                                <th>报价结束时间</th>
+                                <th>起始价</th>
+                                <th>终止价</th>
+                                <th>我的报价</th>
+                                <th>报价状态</th>
+                            </tr>
+                            @for (int i = 0; i < Model.计划报价轮次; i++)
+                            {
+                                var s = @Model.报价开始时间.AddMinutes(i * (Model.每轮报价间隔时间 + Model.每轮报价投标时间));
+                                <tr>
+                                    <td>第 @(i + 1) 轮</td>
+                                    <td class="start_t">@s.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td>@s.AddMinutes(Model.每轮报价投标时间).ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td class="first_p">
+                                        @if (i == 0)
+                                        {
+                                            <span>￥@Model.起始价格</span>
+                                        }
+                                        else
+                                        {
+                                            var pp = Model.报价轮次.Count - i >= 0 ? "￥"+Model.报价轮次[i - 1].本轮终止价.ToString() : "未定价";
+                                            <span>@pp</span>
+                                        }
+
+                                    </td>
+                                    <td class="last_p">
+                                        @{var p = Model.报价轮次.Count - i > 0 ? "￥"+Model.报价轮次[i].本轮终止价.ToString() : "未定价";} 
+                                        @p
+                                    </td>
+                                    <td>
+                                        @{decimal myprice = 0;}
+                                        @if(Model.报价轮次.Count>0)
+                                        {
+                                             foreach(var k in Model.报价轮次[i].报价记录)
+                                             {
+                                                 if(k.报价供应商链接.用户ID==long.Parse(ViewData["当前用户"].ToString()))
+                                                 {
+                                                     myprice = k.报价;
+                                                 }
+                                             }
+                                        }
+                                        @{var mp = myprice > 0 ? myprice.ToString() : "未报价";}
+                                        @mp
+                                        @*0*@
+                                    </td>
+                                    <td class="end_p_time">
+                                        @if (DateTime.Compare(s.AddMinutes(Model.每轮报价投标时间), DateTime.Now) < 0)
+                                        {
+                                            <span>已结束</span>
+                                        }
+                                        @if (DateTime.Compare(s, DateTime.Now) > 0)
+                                        {
+                                            <span>未开始</span>
+                                        }
+                                        @if (DateTime.Compare(DateTime.Now, s) > 0 && DateTime.Compare(DateTime.Now, s.AddMinutes(Model.每轮报价投标时间)) < 0)
+                                        {
+                                            <span>进行中...</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            @*<tr>
+                                    <td>第一轮</td>
+                                    <td class="start_t">2014/8/23 11:45:23</td>
+                                    <td>2014/8/23 11:50:23</td>
+                                    <td class="first_p">￥2500</td>
+                                    <td class="last_p">￥2300</td>
+                                    <td class="end_p_time">2014/8/23 11:45:23</td>
+                                </tr>*@
+                            @*
+                                <tr>
+                                    <td>第四轮</td>
+                                    <td class="start_t">2014/8/23 11:45:23</td>
+                                    <td>2014/8/23 11:50:23</td>
+                                    <td class="first_p">￥2100</td>
+                                    <td class="last_p">￥2000</td>
+                                    <td>3分钟</td>
+                                </tr>
+                                <tr>
+                                    <td>第五轮</td>
+                                    <td class="start_t">2014/8/23 11:45:23</td>
+                                    <td>2014/8/23 11:50:23</td>
+                                    <td class="first_p">￥2000</td>
+                                    <td class="last_p">￥2000</td>
+                                    <td>3分钟</td>
+                                </tr>
+                                <tr>
+                                    <td>第五轮</td>
+                                    <td class="start_t">2014/8/23 11:45:23</td>
+                                    <td>2014/8/23 11:50:23</td>
+                                    <td class="first_p">￥2000</td>
+                                    <td class="last_p">￥2000</td>
+                                    <td>3分钟</td>
+                                </tr> *@
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+@*<script type="text/javascript">
+    function countDown(year, month, day,hour,minute,second,isnum) {
+        var now = new Date();
+        var endDate = new Date(year, month - 1, day, hour, minute, second);
+        var leftTime = endDate.getTime() - now.getTime();//时间差的毫秒数
+        var leftsecond = parseInt(leftTime / 1000);
+        //var day1=parseInt(leftsecond/(24*60*60*6));
+        var day1 = Math.floor(leftsecond / (60 * 60 * 24));//计算出相差天数
+        var hour = Math.floor((leftsecond - day1 * 24 * 60 * 60) / 3600);//计算相差小时数
+        hour = zeroOccupy(hour);
+        var minute = Math.floor((leftsecond - day1 * 24 * 60 * 60 - hour * 3600) / 60);//计算相差分钟数
+        minute = zeroOccupy(minute);
+        var second = Math.floor(leftsecond - day1 * 24 * 60 * 60 - hour * 3600 - minute * 60);//计算相差秒数
+        second = zeroOccupy(second);
+        var time = isnum ? hour + ":" + minute + ":" + second : hour + "时" + minute + "分" + second + "秒";
+        return time;
+    }
+    function zeroOccupy(num) {
+        var number;
+        if (num < 10) {
+            number = "0" + num;
+        }
+        else {
+            number = num;
+        }
+        return number;
+    }
+
+    function cSplit(splittime){
+        var date = splittime.split(" ")[0];
+        var year = date.split("-")[0];
+        var month = date.split("-")[1];
+        var day = date.split("-")[2];
+        var time = splittime.split(" ")[1];
+        var hours = time.split(":")[0];
+        var minute = time.split(":")[1];
+        var second = time.split(":")[2];
+        var arr=new Array(year,month,day,hours,minute,second);
+        return arr;
+    }
+    $(function () {
+        var auction = $("#auctionoperate").children();
+        var bj_number=@t;
+        auction.eq(bj_number).show(); //显示当前报价轮次的报价操作
+
+
+        var countSt="@Model.报价开始时间.ToString("yyyy-MM-dd HH:mm:ss")";
+        var countDowntime =cSplit("@Model.报价开始时间.ToString("yyyy-MM-dd HH:mm:ss")");
+        var endtime = "@Model.报价结束时间.ToString("yyyy-MM-dd HH:mm:ss")";
+        var dateTime = countDown(countDowntime[0], countDowntime[1],countDowntime[2], countDowntime[3], countDowntime[4], countDowntime[5], false); //离报价开始时间
+        var timer;
+        timer = setInterval(function () {
+            var d = "@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")";
+
+            if (countSt > d) { //如果当前时间早于报价开始时间 则显示报价开始倒计时
+                $("#opera0 .auction_timer").children().eq(1).html(dateTime);
+            }
+            else{
+                clearInterval(timer);
+                //var auction = $("#auctionoperate").children();
+                var bj_num=@t; //当前报价轮次
+                var tt=setInterval(function(){
+                    var dt="@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")";//当前时间
+                    var nt="@ntime.ToString("yyyy-MM-dd HH:mm:ss")"; //下一轮报价开始时间
+                    var qt="@st.ToString("yyyy-MM-dd HH:mm:ss")";  //当前轮报价开始时间
+                    var wt="@e.ToString("yyyy-MM-dd HH:mm:ss")";   //当前轮报价结束时间
+                    var ntime=cSplit(nt);//下一轮报价开始时间分割
+                    var g=cSplit(wt);//当前轮报价结束时间分割
+
+                    dateTimeEnd=countDown(parseInt(g[0]),parseInt(g[1]),parseInt(g[2]),parseInt(g[3]),parseInt(g[4]),parseInt(g[5]),true);   //当前轮报价结束时间倒计时
+                    // dateTimeEnd=countDown(2014,11,11,13,25,0,true);
+                    dateTimeNstart=countDown(parseInt(ntime[0]),parseInt(ntime[1]),parseInt(ntime[2]),parseInt(ntime[3]),parseInt(ntime[4]),parseInt(ntime[5]),true); //下一轮报价开始时间倒计时
+                    if(dt > qt && dt < wt){
+                        auction.eq(bj_num).show(); //显示当前报价轮次的报价操作
+                        auction.eq(bj_num).children(".auction_timer").children("span").html("第"+(bj_num+1)+"轮剩余报价时间：" + dateTimeEnd);
+
+                    }
+                    if(dt > wt && dt < nt){
+                        alert(dateTimeNstart);
+                        //auction.eq(bj_num).children(".auction_timer").children("span").html("离下一轮报价开始还有：" + dateTimeNstart);
+                    }
+                    if(wt == endtime && dt > wt){
+                        clearInterval(tt);
+                        alert("本次竞标结束！");
+                    }
+                },1000);
+            }
+        }, 1000);
+    });
+</script>*@

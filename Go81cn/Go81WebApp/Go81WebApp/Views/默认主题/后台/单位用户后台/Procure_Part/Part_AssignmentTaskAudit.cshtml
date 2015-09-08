@@ -1,0 +1,560 @@
+﻿@using Gma.QrCodeNet.Encoding.DataEncodation
+@model Go81WebApp.Models.数据模型.需求计划模型.需求采购任务
+@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+<style>
+    .out_box {
+        display: none;
+    }
+
+    .icon {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background: url(/Images/tree_icons.png) 0px -5px;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 3%;
+    }
+
+    .out_box_insecond_child {
+        width: 630px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+        border: 1px solid red;
+    }
+
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
+
+    .newbt {
+        width: 150px;
+        height: 30px;
+        border: none;
+        color: #fff;
+        background-color: #207AD6;
+        margin-left: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+    }
+</style>
+@{
+    IEnumerable<单位用户> m = ViewData["user"] as IEnumerable<单位用户>;
+    Dictionary<int, string> way = ViewData["采购方式"] as Dictionary<int, string>;
+}
+<div id="pdf0" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="hidebox('#pdf0')">×</a></div>
+            <div style="width:600px; height:200px;overflow:hidden;">
+                <div>
+                    <div>
+                        <div><div style="text-align:center; line-height:30px;">请填写不通过原因</div></div>
+                        <form action="/单位用户后台/TaskPassOut" method="post" name="rinfo">
+                            <input type="hidden" value="@Model.Id" name="id"/>
+                            <table style="border:none;" id="container" width="99%">
+                                <tr>
+                                    <td style="border:none;" align="right" valign="top">不通过原因：</td>
+                                    <td style="border:none;"><textarea id="reason" name="reason" style="resize:none;width:400px; height:100px;"></textarea> </td>
+                                </tr>
+                            </table>
+                            <div style="text-align:center; margin:0px auto;">
+                                <input class="front_login_rightbox_button" style="width:70px;height:30px;" value="保存" id="save" alt="0" type="button" onclick="saveInfo('rinfo')" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pdf1" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child">
+            <div style="width:100%; height:auto;"><a class="close_outbox" title="关闭窗口" onclick="hidebox('#pdf1')">×</a></div>
+            <div style="width:600px; min-height:115px; max-height:500px; overflow-y:scroll; overflow-x:hidden;">
+                <div>
+                    <form action="/单位用户后台/Task_addChecker" method="post" name="checker">
+                        <input type="hidden" value="@Model.Id" id="did" name="Id" />
+                        <input type="hidden" value="" id="uid" name="uid" />
+                        <input type="hidden" value="" id="topuser" name="topuser" />
+                        <div>
+                            <div>
+                                <div style="text-align:center;"><span style="font-size:16px;font-weight:bold;">请选择审核单位</span><input type="button" class="newbt" id="adduser" value="新增审核单位" /><input type="button" class="newbt" id="addTopuser" value="新增上级助理员" /></div>
+                            </div>
+                            <table class="container" width="99%" cellspacing="5">
+                                <tr><td align="right">接收单位：</td><td>@Model.受理单位.用户数据.单位信息.单位代号</td></tr>
+                                <tr>
+                                    <td align="right">采购方式：</td>
+                                    <td>
+                                        <select name="采购方式" disabled="disabled">
+                                            @foreach (var item in way)
+                                            {
+                                                if ((int)Model.采购方式 == item.Key)
+                                                {
+                                                    <option value="@item.Key" selected="selected">@item.Value</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Key">@item.Value</option>
+                                                }
+                                            }
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr><td align="right">完成时间：</td><td><input type="text" disabled="disabled" name="建议完成时间" value="@Model.建议完成时间" placeholder="请填写建议完成时间" onfocus="WdatePicker({dateFmt:'yyyy/MM/dd'})" style="width:200px;" /></td></tr>
+                                <tr><td align="right">联系人：</td><td><input type="text" disabled="disabled" name="联系人" value="@Model.联系人" placeholder="请填写联系人" style="width:200px;" /></td></tr>
+                                <tr><td align="right">联系电话：</td><td><input type="text" disabled="disabled" value="@Model.联系电话" name="联系电话" placeholder="请填写联系电话" style="width:200px;" /></td></tr>
+                                <tr>
+                                    <td width="40%" align="right" valign="top">需求采购任务审核单位：</td>
+                                    <td>
+                                        <select class="user" style="width:204px;" name="name">
+                                            <option value="-1">请选择审核单位</option>
+                                            @foreach (var item in m)
+                                            {
+                                                if (item.Id == 14)
+                                                {
+                                                    <option selected="selected" value="@item.Id">
+                                                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                        {
+                                                            <text>@item.单位信息.单位代号</text>
+                                                        }
+                                                        else
+                                                        {
+                                                            <text>@item.单位信息.单位名称</text>
+                                                        }
+                                                        ：@item.联系方式.联系人
+                                                    </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Id">
+                                                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                        {
+                                                            <text>@item.单位信息.单位代号</text>
+                                                        }
+                                                        else
+                                                        {
+                                                            <text>@item.单位信息.单位名称</text>
+                                                        }
+                                                        ：@item.联系方式.联系人
+                                                    </option>
+                                                }
+                                            }
+                                        </select>
+                                        <input type="button" value="删除" onclick="debefore(this, '')" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">需求采购任务审核单位：</td>
+                                    <td>
+                                        <select class="user" style="width:204px;" name="name">
+                                            <option value="-1">请选择审核单位</option>
+                                            @foreach (var item in m)
+                                            {
+                                                if (item.Id == 13)
+                                                {
+                                                    <option selected="selected" value="@item.Id">
+                                                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                        {
+                                                            <text>@item.单位信息.单位代号</text>
+                                                        }
+                                                        else
+                                                        {
+                                                            <text>@item.单位信息.单位名称</text>
+                                                        }：
+                                                        @item.联系方式.联系人
+                                                    </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Id">
+                                                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                        {
+                                                            <text>@item.单位信息.单位代号</text>
+                                                        }
+                                                        else
+                                                        {
+                                                            <text>@item.单位信息.单位名称</text>
+                                                        }：
+                                                        @item.联系方式.联系人
+                                                    </option>
+                                                }
+                                            }
+                                        </select>
+                                        <input type="button" value="删除" onclick="debefore(this,'')" />
+                                    </td>
+                                </tr>
+                            </table>
+                            <table id="usertop" width="99%">
+                                    <tr>
+                                        <td width="40%" align="right" valign="top">需求计划上级审核单位：</td>
+                                        <td>
+                                            <select id="monitor" style="width:204px;" name="name">
+                                                <option value="-1">请选择审核单位</option>
+                                                @foreach (var item in m)
+                                                {
+                                                    if (item.Id == 11)
+                                                    {
+                                                        <option selected="selected" value="@item.Id">
+                                                            @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                            {
+                                                                <text>@item.单位信息.单位代号</text>
+                                                            }
+                                                            else
+                                                            {
+                                                                <text>@item.单位信息.单位名称</text>
+                                                            }：
+                                                            @item.联系方式.联系人
+                                                        </option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.Id">
+                                                            @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                            {
+                                                                <text>@item.单位信息.单位代号</text>
+                                                            }
+                                                            else
+                                                            {
+                                                                <text>@item.单位信息.单位名称</text>
+                                                            }：
+                                                            @item.联系方式.联系人
+                                                        </option>
+                                                    }
+                                                }
+                                            </select>
+                                            <input type="button" value="删除" onclick="debefore(this,'#usertop')" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            <div style="text-align:center; margin:0px auto;">
+                                <input class="newbt" id="sbt" value="保存" onclick="subform('checker')" style="margin-bottom:10px;" type="button" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div id="template" style="display:none;">
+        <select class="user" style="width:204px;" name="name">
+            <option value="-1">请选择审核单位</option>
+            @foreach (var item in m)
+            {
+                if (item.Id == 14)
+                {
+                    <option selected="selected" value="@item.Id">
+                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                        {
+                            <text>@item.单位信息.单位代号</text>
+                        }
+                        else
+                        {
+                            <text>@item.单位信息.单位名称</text>
+                        }：@item.联系方式.联系人
+                    </option>
+                }
+                else
+                {
+                    <option value="@item.Id">
+                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                        {
+                            <text>@item.单位信息.单位代号</text>
+                        }
+                        else
+                        {
+                            <text>@item.单位信息.单位名称</text>
+                        }：@item.联系方式.联系人
+                    </option>
+                }
+            }
+        </select>
+        <input type="button" value="删除" onclick="debefore(this,'')" />
+    </div>
+    <div class="title-base-out">
+        <div class="title-base-middle">
+            <div class="title-base-inner">任务详情</div>
+        </div>
+    </div>
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th>管理部门</th>
+                        <th>包含物资项</th>
+                        <th>包含分发项</th>
+                        <th>采购机构</th>
+                        <th>采购方式</th>
+                        <th>下达时间</th>
+                        <th>完成时间</th>
+                        <th>联系人</th>
+                        <th>联系电话</th>
+                        <th style="width: 45px;">描述</th>
+                    </tr>
+                    <tr>
+                        <td>@Model.需求发起单位链接.用户数据.单位信息.单位名称</td>
+                        <td>@Model.物资列表.Count</td>
+                        <td>@Model.分发列表.Count</td>
+                        <td>@Model.当前处理单位链接.用户数据.单位信息.单位名称</td>
+                        <td>@Model.采购方式</td>
+                        <td>@Model.基本数据.添加时间.ToString("yyyy/MM/dd")</td>
+                        <td>@Model.建议完成时间.ToString("yyyy/MM/dd")</td>
+                        <td>@Model.联系人</td>
+                        <td>@Model.联系电话</td>
+                        <td style="text-align: center;">
+                            @if (!string.IsNullOrWhiteSpace(Model.描述))
+                            {
+                                <img title="@Model.描述" style="width: 20px; vertical-align: middle;" src="~/Images/notice.png" />
+                            }
+                    </tr>
+                </table>
+
+                <div style="padding-top: 20px; font-weight: bold;">物资列表</div>
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th>序号</th>
+                        <th>物资名称</th>
+                        <th>规格型号</th>
+                        <th>计量单位</th>
+                        <th>数量</th>
+                        <th>单价</th>
+                        <th>预算金额</th>
+                        <th>质量技术标准</th>
+                        <th>交货期限</th>
+                        <th>采购方式建议</th>
+                        <th>备注</th>
+                        <th>操作</th>
+                    </tr>
+                    @{ var i = 0; }
+                    @foreach (var item in Model.物资列表)
+                    {
+                        if (item.需求计划物资数据 != null)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.需求计划物资数据.物资名称</td>
+                                <td>@item.需求计划物资数据.规格型号</td>
+                                <td>@item.需求计划物资数据.计量单位</td>
+                                <td>@item.需求计划物资数据.数量</td>
+                                <td>@item.需求计划物资数据.单价</td>
+                                <td>@item.需求计划物资数据.预算金额</td>
+                                <td>@item.需求计划物资数据.技术指标</td>
+                                <td>@item.需求计划物资数据.交货期限.ToString("yyyy/MM/dd")</td>
+                                <td>@item.需求计划物资数据.建议采购方式</td>
+                                <td style="cursor: pointer;" bz="@item.需求计划物资数据.备注"><img src="/Images/notice.png" style="width: 20px; vertical-align: middle;" title="@item.需求计划物资数据.备注"></td>
+                                <td><a href="/单位用户后台/OnlineBidding_Add?id=@item.需求计划物资ID" target="_blank">添加网上竞标</a></td>
+                            </tr>
+                        }
+                    }
+                </table>
+
+
+
+                <div style="padding-top: 20px; font-weight: bold;">分发列表</div>
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th>序号</th>
+                        <th>物资名称</th>
+                        <th>规格型号</th>
+                        <th>计量单位</th>
+                        <th>收货单位名称</th>
+                        <th>分配数量</th>
+                        <th>提货方式</th>
+                        <th>运输方式</th>
+                        <th>到站</th>
+                        <th style="width: 45px;">备注</th>
+                    </tr>
+                    @{ i = 0; }
+                    @foreach (var item in Model.分发列表)
+                    {
+                        if (item.需求计划分发数据 != null)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.需求计划分发数据.物资名称</td>
+                                <td>@item.需求计划分发数据.规格型号</td>
+                                <td>@item.需求计划分发数据.计量单位</td>
+                                <td>@item.需求计划分发数据.收货单位名称</td>
+                                <td>@item.需求计划分发数据.分配数量</td>
+                                <td>@item.需求计划分发数据.提货方式</td>
+                                <td>@item.需求计划分发数据.运输方式</td>
+                                <td>@item.需求计划分发数据.到站</td>
+                                <td style="cursor: pointer;" align="center"><img title="@item.需求计划分发数据.备注" src="~/Images/notice.png" style="width: 20px; vertical-align: middle;" /></td>
+                            </tr>
+                        }
+
+                    }
+                </table>
+
+                <div style="width:90%; text-align:center; margin: 0 auto; text-align: center; padding-top: 10px; height: auto; overflow: hidden;">
+                    <input type="button" onclick="passTask(@Model.Id)" class="front_login_rightbox_button" style="float: left; width: 200px;" value="审核通过" />
+                    <input type="button" class="front_login_rightbox_button" onclick="subForm()" id="subbt" disabled="disabled" style="margin-left: 20px; float: left; width: 200px; background-color:gray;" value="提报上级单位" />
+                    <input type="button" class="front_login_rightbox_button" style="margin-left: 20px; float: left; width: 200px;" value="审核不通过" onclick="passOut(@Model.Id)" />
+                    <input type="button" style="margin-left: 20px; float: left; width: 200px;" class="front_login_rightbox_button" value="导出Excel" onclick="exportExcel(@(Model.Id)); " />
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $("#审核采购任务").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+            $("#审核采购任务").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+        function passOut(n)
+        {
+            $("#pdf0").show();
+        }
+        function exportExcel(number) {
+            window.location = "/单位用户后台/ExportExcel?id=" + number;
+        }
+        function passTask(num) {
+            $.get("/单位用户后台/PassTask", { id: num }, function (data) {
+                if (data == 1) {
+                    if(confirm("是否继续提交！"))
+                    {
+                        $("#subbt").removeAttr("disabled").css({ "background-color": "#207AD6" });
+                    }
+                    else
+                    {
+                        window.location = "/单位用户后台/AssignmentTaskAuditList";
+                    }
+                }
+            });
+        }
+        function hidebox(th) {
+            $(th).hide();
+        }
+        function saveInfo(name)
+        {
+            if($("#reason").val()!="")
+            {
+                document.forms[name].submit();
+            }
+            else
+            {
+                alert("请填写不通过原因");
+            }
+        }
+        $("#adduser").click(function () {
+            var str = $("#template").html();
+            $("table.container").append("<tr><td align='right'>需求计划审核单位：</td><td>" + str + "</td></tr>");
+        });
+        var isShow = true;
+        function debefore(th, str) {
+            if (str == "") {
+                $(th).parent("td").parent("tr").remove();
+            }
+            else {
+                $(str).hide();
+                isShow = false;
+            }
+        }
+        $("#addTopuser").click(function () {//添加审核单位
+            if (isShow) {
+                alert("只能添加一个上级助理员！");
+            }
+            else {
+                $("#usertop").show();
+                if ($("#monitor").val() != "-1") {
+                    $("#topuser").val($("#monitor").val());
+                }
+                isShow = true;
+            }
+        });
+        function subform(str) {
+            var userId = "";
+            $("#pdf1 .user").each(function () {
+                var have = false;
+                if ($(this).val() != "-1") {
+                    if (userId != "") {
+                        for (var i = 0; i < userId.split(',').length - 1; i++) {
+                            if (userId.split(',')[i] == $(this).val()) {
+                                have = true;
+                                break;
+                            }
+                        }
+                        if (!have) {
+                            userId += $(this).val() + ",";
+                        }
+                    }
+                    else {
+                        if ($(this).val() != "-1")
+                        {
+                            userId += $(this).val() + ",";
+                        }
+                    }
+                }
+            });
+            if (isShow) {
+                $("#topuser").val($("#monitor").val());
+            }
+            $("#uid").val(userId);
+            document.forms["checker"].submit();
+        }
+        $("select.user").change(function () {
+            var val = $(this).val();
+            $.get("/单位用户后台/ExistChecker", { tid: $("#did").val(), id: val }, function (data) {
+                if(data==true)
+                {
+                    alert('本用户已经审核过本项采购任务！请重新选择');
+                    $(this).children("option:eq(0)").attr("selected", "selected");
+                }
+            });
+        });
+        function subForm()
+        {
+            $("#pdf1").show();
+        }
+    </script>
+}

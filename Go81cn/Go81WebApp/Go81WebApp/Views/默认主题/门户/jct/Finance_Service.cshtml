@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "金融服务";
+    Layout = "~/Views/默认主题/_Shared/_Layout.cshtml";
+}
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("Part_PublicPuRNav", "jct")
+    </div>
+    <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
+        <div>
+            <div style="color:#bb0202; float:left; width:200px; font-size:24px;">金融服务</div>
+            <div style="clear:both; padding-top:20px; color:#606060;line-height:25px; font-size:16px;">
+               <p>
+                   本网站为军采通高级会员提供金融服务，可轻松对接融资贷款平台。
+                   军采通会员在申请第三方企业信用评级服务后可升级为军采通高级会员，并可享受该项服务。
+                   该项服务的收费不包含在军采通会员年度服务费中，需根据实际情况单独收费。
+               </p>
+                <h3><em style="color:red;">即将上线，敬请期待......</em></h3>
+        </div>
+            <div><a href="/jct/Applyvip?sure=true" style="display:block; width:150px ;height:30px; text-align:center; line-height:30px; border:1px solid red; background-color:#E78E8E; color:white; margin:0px auto;">申请加入军采通会员</a></div>
+    </div>
+</div>
+    </div>
+<script type="text/javascript" language="javascript">
+    $(".action_link").each(function () {
+        if ($(this).text() == "军采通") {
+            $(this).parent("div").addClass("on");
+        }
+    });
+</script>

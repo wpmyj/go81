@@ -1,0 +1,98 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "图片";
+}
+<script src="~/Scripts/jquery-1.11.1.min.js"></script>
+@{
+    string[] path = ViewData["path"].ToString().Split('|');
+}
+@if (ViewData["path"].ToString().IndexOf("上传失败") > -1)
+{
+    <script type="text/javascript">
+        alert("上传失败！请检查图片格式是否为jpg或png,图片大小是否小于2M!");
+    </script>
+    
+}
+else
+{
+<table>
+    <tr>
+        @if (path.Length > 0)
+        {
+            if (ViewBag.type == "2")
+            {
+                foreach (var item in path)
+                {
+                    if (!string.IsNullOrWhiteSpace(item))
+                    {
+                        <td>
+                            <a style="position:absolute; display:block; width:15px; height:15px; text-align:center; line-height:15px; background-color:red; color:white; cursor:pointer; text-decoration:none; margin-left:65px;" onclick="delPic(this)" lang="@item">×</a>
+                            <img alt="@item" src="@item" width="80" height="50" />
+                            <br /><input type="radio" name="show" title="点击单选按钮选择在网站首页要显示的公司展示图片" value="@item" onclick="selectPic(this)" />首页展示
+                        </td>
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in path)
+                {
+                    if (!string.IsNullOrWhiteSpace(item))
+                    {
+                        <td>
+                            <a style="position:absolute; display:block; width:15px; height:15px; text-align:center; line-height:15px; background-color:red; color:white; cursor:pointer; text-decoration:none; margin-left:65px;" onclick="delPic(this)" lang="@item">×</a>
+                            <img alt="@item" src="@item" width="80" height="50" />
+                        </td>
+                    }
+                }
+            }
+        }
+    </tr>
+</table>
+}
+<a href="###" lang="" style="display:none;" id="tpy">@ViewBag.type</a>
+<input type="hidden" value="@ViewBag.photo" id="pics" />
+<input type="hidden" value="@ViewData["path"].ToString()" id="result" />
+<script type="text/javascript" language="javascript">
+    $(document).ready(
+            function () {
+                var t = $("#tpy").text();
+                var path = $("#pics").val();
+                if (t == "1") {
+                    window.parent.document.getElementById("f1").style.display = "none";
+                    window.parent.document.getElementById("pic").value = path;
+                }
+                else {
+                    window.parent.document.getElementById("picture").value += document.getElementById("result").value;
+                    window.parent.setPic("#picture");
+                    window.parent.document.getElementById("f1").style.display = "none";
+                }
+            }
+            );
+    function delPic(th) {
+        var t = $("#tpy").text();
+        var path = $(th).attr("lang");
+        $.get('/供应商后台/DeletePic', { uri: path },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                    if (t == "1") {
+                        window.parent.document.getElementById("pic").value = "";
+                        window.parent.document.getElementById("Uppicture").style.display = "none";
+                        window.parent.document.getElementById("p").style.display = "block";
+                    }
+                }
+            });
+        if (t == "2") {
+            var url = window.parent.document.getElementById("showpic").value;
+            if (url == th.lang) {
+                window.parent.document.getElementById("showpic").value = "";
+            }
+        }
+    }
+    function selectPic(th) {
+        window.parent.document.getElementById("showpic").value = th.value;
+    }
+</script>
+
+

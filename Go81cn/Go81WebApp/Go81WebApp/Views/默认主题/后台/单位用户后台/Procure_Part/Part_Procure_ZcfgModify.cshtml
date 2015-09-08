@@ -1,0 +1,270 @@
+﻿@model Go81WebApp.Models.数据模型.内容数据模型.政策法规
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
+<link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
+<script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<script>
+    var editor
+    KindEditor.ready(function (K) {
+        editor = K.create('#content', {
+            cssPath: '../JS/kindeditor-4.1.10/plugins/code/prettify.css',
+            uploadJson: '../JS/kindeditor-4.1.10/asp.net/upload_json.ashx',
+            fileManagerJson: '../JS/kindeditor-4.1.10/asp.net/file_manager_json.ashx',
+            allowFileManager: true
+        });
+        $("#modiibutton").click(function () {
+            var val = del_html_tags(editor.html()).trim();
+            if (val == "" || val == null) {
+                $("#tips").css("display", "block");
+                $("#tips img").remove();
+                $("#tips div#tips1").before("<img style='float:left;' src='/Images/warn.png' alt='警告' />");
+                $("#tips div#tips1").text('请填写政策法规内容！');
+                return false;
+            }
+        });
+        //K('input[name=submitcontent]').click(function (e) {
+        //    alert(editor.html());
+        //});
+    });
+
+    function shutdown() {
+        $("#tips").fadeOut(500);
+    }
+    function del_html_tags(str) {
+        var words = '';
+        words = str.replace(/<[^>]+>/g, "");
+        return words;
+    }
+</script>
+<link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
+@*<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery-1.4.2.min.js" charset="gb2312"></script>*@
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
+<script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/swfobject.js" charset="gb2312"></script>
+<style type="text/css">
+    .uploadifyQueueItem {
+        font: 11px Verdana, Geneva, sans-serif;
+        margin-top: 5px;
+        padding: 5px;
+        width: 650px;
+        height: 30px;
+        margin-right: 5px;
+        float: left;
+        text-align: left;
+    }
+
+    .procure_selectlistdiv input {
+        width: 13px;
+        height: 13px;
+        line-height: 25px;
+        margin-left: 0;
+    }
+</style>
+<div id="f1" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>正在上传，请稍等...</span>
+    </div>
+</div>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">修改政策法规</div>
+    </div>
+</div>
+<div class="gys_znxx_box" onkeypress="BindEnter(event,'btn')">
+    @using (Html.BeginForm("Procure_ZcfgModify", "单位用户后台", FormMethod.Post, new { enctype = "multipart/form-data", name = "Info" }))
+    {
+        @Html.HiddenFor(m => m.Id)
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="gys_znxx_contentbox">
+            <div class="gys_znxx_content">
+                @if (Model != null)
+                {
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">法规标题：</div>
+                        <div class="procure_formlistdiv">
+                            @Html.TextBoxFor(model => model.内容主体.标题, new { id = "checktxt" })
+                            <span style="color:red;">*@Html.ValidationMessageFor(model => model.内容主体.标题)</span>
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">发布机关：</div>
+                        <div class="procure_formlistdiv">
+                            @Html.TextBoxFor(model => model.政策法规信息.发布机关, new { id = "checktxt_g" })
+                            <span style="color:red;">*@Html.ValidationMessageFor(model => model.政策法规信息.发布机关)</span>
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">来源名称：</div>
+                        <div class="procure_formlistdiv">
+                            @Html.EditorFor(model => model.法规来源.来源名称)
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">来源链接：</div>
+                        <div class="procure_formlistdiv">
+                            @Html.EditorFor(model => model.法规来源.来源链接)
+                            <span style="color:red;">@Html.ValidationMessageFor(model => model.法规来源.来源链接)</span>
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">发布时间：</div>
+                        <div class="procure_formlistdiv">
+                            <input id="publishtime" value="@Model.内容主体.发布时间" style="width: 300px;" name="publishtime" type="text" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd HH:mm:ss' })" /><span style="font-size: 14px; padding-left: 10px;">如果是转载的内容，请选择原时间，该时间将显示在页面上(可不填)</span>
+                        </div>
+                    </div>
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">
+                            内容：
+                        </div>
+                    </div>
+                    <div style="position:relative">
+                        @Html.TextAreaFor(model => model.内容主体.内容, new { style = "width: 880px; height: 550px; visibility: hidden;", id = "content" })
+                        <div style="text-align:center;color:red; position:absolute; background-color:#EFF0E7; margin-top:-355px; margin-left:310px; display:none; width:250px; height:100px; border-radius:3px; font-size:12px;" id="tips">
+                            <div style="width:auto"><a href="###" onclick="shutdown()" style="float:right;margin-top:10px; margin-right:10px">关闭</a></div>
+                            <div style="clear:both; width:200px;height:30px;margin-left:35px;margin-top:40px;">
+                                <div id="tips1" style="color:red; font-size:14px; float:left;margin-left:10px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
+                    {
+                        <div class="showattachment">附件列表:</div>
+                        foreach (var item in Model.内容主体.附件)
+                        {
+                            var a = "//";
+                            <div class="showattachment_list">
+                                <a target="_blank" href="@item">@item.Substring(item.IndexOf(a) + 2)</a><a href="###" lang="@item" style="color:red; font-size:12px; display:inline-block; margin-left:10px;" onclick="delAttach1(this)">删除</a>
+                            </div>
+                        }
+                    }
+                }
+            </div>
+        </div>
+                string path = "";
+                if (Model.内容主体.附件 != null && Model.内容主体.附件.Count() != 0)
+                {
+                    foreach (var item in Model.内容主体.附件)
+                    {
+                        path += item + "|";
+                    }
+                }
+                <input type="hidden" name="path" id="path" value="" />
+                <input type="hidden" name="oldPath" id="oldPath" value="@path" />
+                <input type="hidden" id="delPath" name="delPath" value="" />
+    }
+    <div style="margin-left:20px;">
+        <div class="procureinputdiv">
+            <div class="procureinputdiv_title">是否增加附件：</div>
+            <div class="procure_selectlistdiv">
+                <div class="procure_selectlist"><input type="radio" value="1" name="isattach" onclick="showattach(this)" />是</div>
+                <div class="procure_selectlist"><input type="radio" value="0" name="isattach" onclick="showattach(this)" checked="checked" />否</div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            function showattach(a) {
+                if (a.value == "1")
+                    document.getElementById("attachdiv").style.display = "block";
+                else {
+                    document.getElementById("attachdiv").style.display = "none";
+                }
+            }
+        </script>
+        <div id="attachdiv" class="attachdiv">
+            <div class="attachtitle">添加附件</div>
+            <br />上传说明：
+            <font color="red">附件大小不超过100M</font><br />
+            <div style="text-align:center">
+                <div style="padding-top:5px">
+                    <div id="Uppicture">
+                        <form action="/单位用户后台/UploadImages" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                            <input type="hidden" value="zcfg" name="guide" />
+                            <table width="100%" style="font-size:14px;">
+                                <tr>
+                                    <td width="50%" align="right">请选择附件：</td>
+                                    <td width="50%" align="left">
+                                        <input type="file" onchange="fileChange()" accept="application/msword" multiple="multiple" name="file1" style="width: 72px;" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                        <div id="pBox">
+
+                        </div>
+                        <div style="display:none;margin-left:180px;width:700px;  margin-right: auto;">
+                            <iframe name="showPic" id="showPic" frameborder="0" height="150" width="100%"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;"><input onclick="return sendData();" id="btn" value="保          存" style="margin-top:20px; margin-bottom:10px; cursor:pointer; display:block; text-align:center; line-height:40px; color:white; margin-left:auto; margin-right:auto;" class="front_login_rightbox_button"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#我的政策法规列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#我的政策法规列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    function fileChange() {
+        document.forms["upload"].submit();
+        $("#f1").show();
+    }
+    function sendData() {
+        if ($(":input#checktxt").val() == "") {
+            alert("请填写标题");
+            $(":input#checktxt").focus();
+            return false;
+        }
+        if ($(":input#checktxt_g").val() == "") {
+            alert("请填写发布机关");
+            $(":input#checktxt_g").focus();
+            return false;
+        }
+        editor.sync("content");
+        if ($("#content").val() == "") {
+            alert("请填写内容");
+            $("#content").focus();
+            return false;
+        }
+        document.forms["Info"].submit();
+    }
+    function delAttach(th) {
+        var path = $(th).attr("lang");
+        $.get('/单位用户后台/DeleteImages', { uri: path },
+            function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                }
+            });
+        var newpath = document.getElementById("path").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("path").value = str;
+        setPic("#path");
+    }
+    function delAttach1(th) {
+        var path = $(th).attr("lang");
+        $(th).parent().remove();
+        var newpath = document.getElementById("oldPath").value.split('|');
+        var str = "";
+        for (j = 0; j < newpath.length - 1; j++) {
+            if (path != newpath[j]) {
+                str += newpath[j] + "|";
+            }
+        }
+        document.getElementById("oldPath").value = str;
+        document.getElementById("delPath").value += path + "|";
+    }
+</script>

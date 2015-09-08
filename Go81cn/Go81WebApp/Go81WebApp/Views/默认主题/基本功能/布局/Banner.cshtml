@@ -1,0 +1,136 @@
+﻿@model Go81WebApp.Controllers.基本功能.登录Controller.LoginInfo
+<link rel="stylesheet" type="text/css" href="~/css/Sonline.css" />
+<script language="javascript" src="~/JS/jquery.Sonline.js"></script>
+<div class="layout_bannerbox">
+    @if (WebApiApplication.IsIntranet)
+    {
+        @*<div style="background-image:url(/Images/banner_bg.jpg); background-size:contain;height:35px;font-size:14px; width:100%;">
+            <div style="width:1304px; margin:0px auto;">
+                @{
+        if (WebApiApplication.IsIntranet)
+        {
+            <div style="float:left;width:50%; height:35px;color:white; line-height:35px;">成都军区联勤部军需物资油料部</div>
+                        <div style="float:left;width:50%; height:35px;color:white; line-height:35px; text-align:right;">您好，游客（未登录），欢迎来到成都军区采购网！登录<div style="background-image:url(/Images/car.png);display:inline-block;width:20px; height:15px;"></div>购物车</div>
+         
+                    <div style="width:100%; clear:both;"></div>
+        }
+        else
+        {
+            <img src="~/Images/banner.jpg" />
+        }
+                }
+            </div>
+        </div>*@
+    <div class="layout_topbox">
+        <div class="layout_topcontent">
+            <div class="layout_topcontent_left">
+                <font>您好，<span id="topbarLoginName">游客(未登录)</span>，欢迎来到成都军区物资采购网！</font><a href="#" id="bgLink" style="display: none;"></a>
+                @Html.ActionLink("登录", "Login", "登录", null, new { id = "topbarActionLink",style="color:#fff;" })
+                <div style="background:url(/Images/shopcar.jpg) no-repeat left center;vertical-align:middle;margin-bottom:4px; display:inline-block;width:20px; height:17px;"></div>购物车
+            </div>
+            <div class="layout_topcontent_right" style="font-weight:normal"><span style="font-weight:normal" class="layout_topcontent_span">成都军区联勤部军需物资油料部@*<a href="#">手机APP</a></span><span class="layout_topcontent_span"><a href="#">网站导航</a>*@</span></div>
+        </div>
+        @Ajax.ActionLink("dummy", "TopBarLoginInfo", "布局", null, new AjaxOptions()
+        {
+            HttpMethod = "POST",
+            OnSuccess = "$('#topbarLoginName').html(data[0]);if(data[3]=='LogOut'){$('#indexloginform').remove();$('#topbarActionLink').attr('href','/'+data[2]+'/'+data[3]).html(data[1]);$('#bgLink').attr('style','').attr('href','/'+data[4]+'/Index').html('[我的后台]');}",
+        }, new
+        {
+            id = "readLoginInfo",
+            style = "display:none"
+        })
+        <script>$('#readLoginInfo').click();</script>
+        </div>
+        <div style="background-color:rgb(198,0,1);height:210px; width:100%;">
+            <div style="width:1323px; height:150px; margin:0px auto; background-image:url(/Images/bannernew.jpg); background-repeat:no-repeat;"></div>
+        </div>
+    }
+    else
+    {
+        <div class="layout_banner_imgbox">
+            <div>
+            <img src="~/Images/banner.jpg" />
+            </div>
+        </div>
+    }
+</div>
+@if (!WebApiApplication.IsIntranet)
+{
+    <script type="text/javascript">
+        $(function () {
+            var h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            $("body").Sonline({
+                Position: "right",//left或right
+                Top: (h / 2),//顶部距离，默认200px
+                Effect: true, //滚动或者固定两种方式，布尔值：true或false
+                DefaultsOpen: false, //默认展开：true,默认收缩：false
+                Qqlist: "2310390260|客服01,2803407183|客服02,3272332857|客服03" //多个QQ用','隔开，QQ和客服名用'|'隔开
+            });
+        });
+    </script>
+}
+@*<div id="login-box" class="modal_out">
+    <div class="modal_in" style="background:#5C5C5C"></div>
+    <div class="modal_content_loading" style="width:350px;height:356px;margin:7% auto;border:1px solid #CFCFCF">
+        <div style="background:#f2f2f2;line-height:43px;height:43px;">
+            <span style="text-indent:2em;font-size:18px;float:left">用户登录</span>
+            <span style="text-indent:1em;font-size:18px;float:right;margin-right:20px;cursor:pointer" onclick="$('#login-box').hide();">×</span>
+        </div>
+        <div>
+            @using (Html.BeginForm("Login", "登录"))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+                <table class="login_table" cellpadding="0" cellspacing="0" style="padding:0;margin-top:15px;">
+                    <tr class="login_table_tr">
+                        <td class="login_table_tr_td logincli" style="width:84px;text-indent:0; line-height:38px;padding-right:0;">用户名：</td>
+
+                        <td class="login_table_tr_tdtxt" style="width:auto">
+                            <div class="ico_login">
+                                @Html.TextBoxFor(model => model.LoginName, new { @style = "border:none;padding:2px 39px 3px 1px; font-size:14px;", placeholder = "请输入用户名" })
+    
+                                <div style="background:url(../../Images/login-up-bg.png) right center no-repeat; width:35px;height:35px;float:left; position:absolute;right: 7px;"></div>
+                            </div>
+                            <br />
+                            @Html.ValidationMessageFor(model => model.LoginName)
+                        </td>
+                    </tr>
+                    <tr class="login_table_tr">
+                        <td class="login_table_tr_td logincli" style="width:84px;text-indent:0;line-height:38px;padding-right:0;">密码：</td>
+                        <td class="login_table_tr_tdtxt" style="width:auto">
+                            <div class="ico_login">
+                                @Html.PasswordFor(model => model.LoginPwd, new { @style = "border:none; padding:2px 39px 3px 1px; font-size:14px;", placeholder = "请输入密码" })
+                     
+                                <div style="background:url(../../Images/login-up-bg.png) top left no-repeat; width:35px;height:35px;float:left;position:absolute; right: 7px;"></div>
+                            </div>
+                            <br />
+                            @Html.ValidationMessageFor(model => model.LoginPwd)
+                        </td>
+                    </tr>
+                    <tr class="login_table_tr">
+                        <td class="login_table_tr_td logincli" style="width:84px;text-indent:0;line-height:38px;padding-right:0;">验证码：</td>
+                        <td class="login_table_tr_tdtxt" style="width:auto">
+                            <div class="ico_login" style="width:150px;">
+                                @Html.TextBoxFor(model => model.VerifyCode, new { @style = "border:none;width:130px;padding:2px 20px 3px 0; font-size:14px;", placeholder = "请输入验证码" })
+                          
+                                <img id="yzcode" src=@Url.Action("NewVCodeImage", "登录") style="cursor:pointer; position:absolute; margin-left:10px;height:36px; width:82px;" title="看不清，换一张" alt="看不清，换一张" onclick='$(this).attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());' />
+                            </div>
+                        </td>
+                    </tr>
+                    @*<tr class="front_login_rightbox_listdiv" style="line-height:normal;">
+                        <td class="login_checkboxdiv" colspan="2" style="padding-left: 35px">
+                            @Html.CheckBoxFor(model => model.noExpire, new { @class = "front_login_rightbox_checkbox" })
+                            <span>记住登录</span>
+                            <span style="color: red;">@ViewBag.WrongLoginMessage</span>
+                        </td>
+                    </tr>
+                    <tr style="text-indent: 0;text-align: center">
+                        <td class="front_login_rightbox_inputdiv" colspan="2">
+                            <input type="submit" class="front_login_rightbox_button" style="width: 244px; height: 40px;" value="登       录" />
+                        </td>
+                    </tr>
+                </table>
+            }
+        </div>
+    </div>
+</div>*@

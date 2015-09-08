@@ -1,0 +1,91 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型;
+    <input type="hidden" name="deliverprovince_t" id="deliverprovince_t" value="@ViewBag.Provence" />
+    <input type="hidden" name="delivercity_t" id="delivercity_t" value="@ViewBag.City" />
+    <input type="hidden" name="deliverarea_t" id="deliverarea_t" value="@ViewBag.Area" />
+    <input type="hidden" name="hy_t" id="hy_t" value="@ViewBag.Hy" />
+    <input type="hidden" name="adclass_t" id="adclass_t" value="@ViewBag.Adclass" />
+    <input type="hidden" name="keyword_t" id="keyword_t" value="@ViewBag.keyword" />
+    <input type="hidden" name="time_t" id="time_t" value="@ViewBag.time" />
+
+<div style="padding-bottom:5px; width: 900px; margin:0 auto; height: 30px;"><input type="button" value="下载选中公告" style="width: 100px; height: 30px; float: right;" onclick="getDownload()" /></div>
+    <table width="100%" cellpadding="0" cellspacing="0" id="tablecontent">
+        <tr>
+            <th width="5%">选择</th>
+            <th width="5%">序号</th>
+            <th width="25%">标题</th>
+            <th width="10%">公告性质</th>
+            <th width="12%">公告类别</th>
+            <th width="13%">公告状态</th>
+            <th width="12%">时间</th>
+            <th width="18%">操作</th>
+        </tr>
+    @{var sortnum = 0;}
+    @foreach (var item in (IEnumerable<公告>)ViewData["后台公告列表"])
+    {
+        sortnum++;
+        if (!item.公告信息.是否撤回)
+        {
+            <tr>
+                <td><input type="checkbox" name="download" style="width: 15px; height: 15px;" id="@item.Id" /></td>
+                <td>@sortnum</td>
+                <td><a href="~/运营团队后台/AdListDetail?id=@item.Id&link=公告列表" target="_blank">@item.内容主体.标题</a></td>
+                <td>@item.公告信息.公告性质</td>
+                <td>@item.公告信息.公告类别</td>
+                <td>@item.审核数据.审核状态</td>
+                <td>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</td>
+                <td class="gys_znxx_content_tabletime">
+                    @Html.ActionLink("修改", "Procure_AdModify", new { id = item.Id })|<a onclick="del(@item.Id)">删除</a>|
+                    @if (item.基本数据.已屏蔽 == false)
+                    {
+                        @Html.ActionLink("禁用", "Procure_AdForbid", new { id = item.Id })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("解除禁用", "Procure_AdForbid", new { id = item.Id })
+                    }
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+    @if (ViewData["pagecount"] != null && ViewData["pagecount"].ToString() != "1")
+    {
+        <div class="gys_znxx_content_detailbox">
+            @if (int.Parse(ViewData["currentpage"].ToString()) == 1)
+            {
+                <a class="currentPage">首页</a>
+            }
+            else
+            {
+                <a id="1" onclick="changeMesspage(this) ">首页</a>
+            }
+            @for (int i = 0; i <= 10; i++)
+            {
+                //一共最多显示10个页码，前面5个，后面5个
+                if ((int.Parse(ViewData["currentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentpage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                {
+                    if (5 == i)
+                    {
+                        //当前页处理
+                        <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentpage"].ToString())</a>
+                    }
+                    else
+                    {
+                        //一般页处理
+                        <a id="@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)" onclick="changeMesspage(this) ">@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)</a>
+
+                    }
+                }
+            }
+            @if (int.Parse(ViewData["currentpage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+            {
+                <a class="currentPage">末页</a>
+            }
+            else
+            {
+                <a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeMesspage(this) ">末页</a>
+            }
+            @ViewData["currentpage"].ToString()/@ViewData["pagecount"].ToString()
+        </div>
+    }

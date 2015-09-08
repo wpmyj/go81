@@ -1,0 +1,110 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型;
+
+<style type="text/css">
+    .gys_znxx_content table {
+        border-right: none;
+        margin-top: 5px;
+    }
+
+    .gys_znxx_content td, th {
+        border-right: 1px solid #aaa;
+        padding: 5px;
+        letter-spacing: 0px;
+    }
+
+    .gys_znxx_content td {
+        color: #333333;
+    }
+
+    .gys_znxx_content td a {
+        padding: 2px 5px 2px 5px;
+        cursor: pointer;
+        color: #666666;
+    }
+
+    .gys_znxx_content td a:hover {
+        color: #b36e08;
+    }
+
+    .partmentlist_inputrightbox {
+        width: 580px;
+        float: left;
+    }
+</style>
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">新闻列表</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <div class="front_login_rightbox_title" style="color:red; padding-bottom:10px;"> @TempData["AdTempDate"]</div>
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="60%">新闻标题</th>
+                    <th width="15%">状态</th>
+                    <th width="15%">时间</th>
+                    <th width="10%">操作</th>
+                </tr>
+                @foreach (var item in (IEnumerable<新闻>)ViewData["后台新闻列表"])
+                {
+                    <tr>
+                        <td><a href="~/运营团队后台/Procure_NewsDetail?id=@item.Id" target="_blank">@item.内容主体.标题</a></td>
+                        @if (item.审核数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核通过)
+                        {
+                            <td>@item.审核数据.审核状态</td>
+                        }
+                        else if (item.审核数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核未通过)
+                        {
+                            <td style="color:red;">@item.审核数据.审核状态 : @item.审核数据.未通过理由</td>
+                        }
+                        else
+                        {
+                            <td style="color:blue;">@item.审核数据.审核状态</td>
+                        }
+                        <td>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</td>
+                        <td class="gys_znxx_content_tabletime">@Html.ActionLink("修改", "Procure_NewsModify", new { id = item.Id })|<a onclick="del(@item.Id)">删除</a></td>
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    @{
+        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
+        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
+        {
+            pages++;
+        }
+    }
+    var num =@(int.Parse(ViewData["page"].ToString()));
+    var j=@pages
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).css("border","1px solid #ff0000");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+
+        $("#新闻列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#新闻列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此用户！确定删除吗？"))
+        {
+            window.location="/运营团队后台/Procure_NewsDelete/"+num;
+        }
+    }
+</script>

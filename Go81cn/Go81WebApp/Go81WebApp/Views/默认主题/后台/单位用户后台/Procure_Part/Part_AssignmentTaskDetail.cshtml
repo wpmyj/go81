@@ -1,0 +1,136 @@
+﻿@using Gma.QrCodeNet.Encoding.DataEncodation
+@model Go81WebApp.Models.数据模型.需求计划模型.需求采购任务
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">任务详情</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div class="gys_znxx_content">
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th>管理部门</th>
+                    <th>包含物资项</th>
+                    <th>包含分发项</th>
+                    <th>采购机构</th>
+                    <th>采购方式</th>
+                    <th>下达时间</th>
+                    <th>完成时间</th>
+                    <th>联系人</th>
+                    <th>联系电话</th>
+                    <th style="width:45px;">描述</th>
+                </tr>
+                <tr>
+                    <td>@Model.需求发起单位链接.用户数据.单位信息.单位名称</td>
+                    <td>@Model.物资列表.Count</td>
+                    <td>@Model.分发列表.Count</td>
+                    <td>@Model.当前处理单位链接.用户数据.单位信息.单位名称</td>
+                    <td>@Model.采购方式</td>
+                    <td>@Model.基本数据.添加时间.ToString("yyyy/MM/dd")</td>
+                    <td>@Model.建议完成时间.ToString("yyyy/MM/dd")</td>
+                    <td>@Model.联系人</td>
+                    <td>@Model.联系电话</td>
+                    <td style="text-align: center;">
+                        @if (!string.IsNullOrWhiteSpace(Model.描述))
+                        {
+                            <img title="@Model.描述" style="width:20px; vertical-align:middle;" src="~/Images/notice.png" />
+                        }
+</tr>
+            </table>
+            
+            <div style="padding-top: 20px; font-weight: bold;">物资列表</div>
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th>序号</th>
+                    <th>物资名称</th>
+                    <th>规格型号</th>
+                    <th>计量单位</th>
+                    <th>数量</th>
+                    <th>单价</th>
+                    <th>预算金额</th>
+                    <th>质量技术标准</th>
+                    <th>交货期限</th>
+                    <th>采购方式建议</th>
+                    <th>备注</th>
+                    <th>操作</th>
+                </tr>
+                @{ var i = 0; }
+                @foreach (var item in Model.物资列表)
+                {
+                    if (item.需求计划物资数据 != null)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.需求计划物资数据.物资名称</td>
+                            <td>@item.需求计划物资数据.规格型号</td>
+                            <td>@item.需求计划物资数据.计量单位</td>
+                            <td>@item.需求计划物资数据.数量</td>
+                            <td>@item.需求计划物资数据.单价</td>
+                            <td>@item.需求计划物资数据.预算金额</td>
+                            <td>@item.需求计划物资数据.技术指标</td>
+                            <td>@item.需求计划物资数据.交货期限.ToString("yyyy/MM/dd")</td>
+                            <td>@item.需求计划物资数据.建议采购方式</td>
+                            <td style="cursor: pointer;" bz="@item.需求计划物资数据.备注"><img src="/Images/notice.png" style="width: 20px; vertical-align: middle;" title="@item.需求计划物资数据.备注"></td>
+                            <td><a href="/单位用户后台/OnlineBidding_Add?id=@item.需求计划物资ID" target="_blank">添加网上竞标</a></td>
+                        </tr>
+                    }
+
+                }
+            </table>
+            
+            
+            
+            <div style="padding-top: 20px; font-weight: bold;">分发列表</div>
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th>序号</th>
+                    <th>物资名称</th>
+                    <th>规格型号</th>
+                    <th>计量单位</th>
+                    <th>收货单位名称</th>
+                    <th>分配数量</th>
+                    <th>提货方式</th>
+                    <th>运输方式</th>
+                    <th>到站</th>
+                    <th style="width: 45px;">备注</th>
+                </tr>
+                @{ i = 0;}
+                @foreach (var item in Model.分发列表)
+                {
+                    if (item.需求计划分发数据 != null)
+                    {
+                        i++;
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.需求计划分发数据.物资名称</td>
+                            <td>@item.需求计划分发数据.规格型号</td>
+                            <td>@item.需求计划分发数据.计量单位</td>
+                            <td>@item.需求计划分发数据.收货单位名称</td>
+                            <td>@item.需求计划分发数据.分配数量</td>
+                            <td>@item.需求计划分发数据.提货方式</td>
+                            <td>@item.需求计划分发数据.运输方式</td>
+                            <td>@item.需求计划分发数据.到站</td>
+                            <td style="cursor: pointer;" align="center"><img title="@item.需求计划分发数据.备注" src="~/Images/notice.png" style="width: 20px; vertical-align: middle;" /></td>
+                        </tr>
+                    }
+
+                }
+            </table>
+
+            <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="front_login_rightbox_button" value="导出Excel" onclick="exportExcel(@(Model.Id)); " /></div>
+
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#编制采购任务").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#编制采购任务").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function exportExcel(number)
+    {
+        window.location = "/单位用户后台/ExportExcel?id="+number;
+    }
+</script>

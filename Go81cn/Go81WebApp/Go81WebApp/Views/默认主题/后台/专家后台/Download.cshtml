@@ -1,0 +1,23 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.专家
+@{
+    ViewBag.Title = "评审专家后台首页";
+    Layout = "_BackLayout.cshtml";
+}
+<style>
+    table{background-color:green; width:520px;}
+    td{background-color:white;}
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style="height:auto; width:920px;  margin-top:46px; margin-left:18px;  border:1px solid green;" class="bg_outdiv_right">
+        <a style="line-height:30px; color:red; text-decoration:underline;" href="/App_Uploads/下载/附件/2015/1/8/成都军区物资采购评审专家入库申请表.docx">点击下载《成都军区物资采购评审专家入库申请表》</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#下载表格").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#下载表格").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

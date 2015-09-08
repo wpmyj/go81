@@ -1,0 +1,66 @@
+﻿@using Go81WebApp.Models.数据模型.推荐数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    ViewBag.Title = "打印已审核推荐的供应商";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<link href="~/css/css.css" rel=" stylesheet" />
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div id="title_div" class="title-base-middle">
+                <div class="title-base-inner">已审核推荐的供应商</div>
+            </div>
+        </div>
+        @{
+            IEnumerable<推荐信息> model = (IEnumerable<推荐信息>)ViewData["我推荐的供应商"];
+        }
+        <div id="Supplier_table">
+            <div class="gys_znxx_content" style="width:940px;">
+                @if (model != null && model.Count() != 0)
+                {
+                    <table width="100%" style="margin-left:auto; margin-right:auto; border:1px solid black; border-right:none; border-bottom:none;" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <th style="border:1px solid black; font-size:15px;  border-top:none; border-left:none;" width="40%">企业名称</th>
+                            <th style="border:1px solid black; font-size:15px;  border-top:none; border-left:none;" width="20%">联系人姓名</th>
+                            <th style="border:1px solid black; font-size:15px;  border-top:none; border-left:none;" width="20%">手机</th>
+                            <th style="border:1px solid black; font-size:15px;  border-top:none; border-left:none;" width="20%">固定电话</th>
+                        </tr>
+                        @foreach (var item in model)
+                        {
+                            <tr>
+                                <td style="border:1px solid black; font-size:15px;  border-top:none; border-left:none;">@item.名称</td>
+                                <td style="border:1px solid black; font-size:15px;  border-top:none; border-left:none;">@item.联系方式.联系人</td>
+                                <td style="border:1px solid black; font-size:15px;  border-top:none; border-left:none;">@item.联系方式.手机</td>
+                                <td style="border:1px solid black; font-size:15px;  border-top:none; border-left:none;">@item.联系方式.固定电话</td>
+                            </tr>
+                        }
+                    </table>
+                    <div class="gys_znxx_content_detailbox">
+                        @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+                    </div>
+                    <input type="button" class="front_login_rightbox_button" style=" display:block; line-height:40px; border:none; font-size:16px; font-weight:bold; color:white; margin-left:auto; margin-right:auto; margin-top: 10px;" value="打       印" onclick="printpage(this)" />
+                }
+                else
+                {
+                    <div><h2><em style="color:red;">暂时没有审核通过的推荐供应商</em></h2></div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $("#打印已审核推荐的供应商").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#打印已审核推荐的供应商").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+    function printpage(th) {
+        th.style.display = "none";
+        document.body.innerHTML = document.getElementById("Supplier_table").innerHTML;
+        window.print();
+        window.location = '/单位用户后台/Print_Supplier';
+    }
+</script>
