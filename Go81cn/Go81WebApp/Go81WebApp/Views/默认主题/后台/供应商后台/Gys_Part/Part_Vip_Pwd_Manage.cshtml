@@ -27,9 +27,9 @@
                     <td rowspan="4" align="right">
                         @if (System.IO.File.Exists(Server.MapPath(@Model.登录信息.头像)))
                         {
-                            <div style="border:1px solid black; width:100px; height:100px;">
-                                <img style="position:absolute; display:block; z-index:1;" src="@Model.登录信息.头像" width="100" height="100" />
-                                <a id="p" style="cursor:pointer; display:block; width:100px; height:15px; opacity:0.8; -moz-opacity:0.8; filter:alpha(opacity=80); text-align:center; margin-top:85px; text-decoration:underline; background-color:lightgray; position:absolute; z-index:3;" onclick="showUpload(this)">修改</a>
+                            <div style="border:1px solid black; position:relative; width:100px; height:100px;">
+                                <img style="position:absolute; display:block; z-index:1;top:0px;left:0px;" src="@Model.登录信息.头像" width="100" height="100" />
+                                <a id="p" style="cursor:pointer; display:block; width:100px; height:15px;top:0px;left:0px; opacity:0.8; -moz-opacity:0.8; filter:alpha(opacity=80); text-align:center; margin-top:85px; text-decoration:underline; background-color:lightgray; position:absolute; z-index:3;" onclick="showUpload(this)">修改</a>
                             </div>
                         }
                         else

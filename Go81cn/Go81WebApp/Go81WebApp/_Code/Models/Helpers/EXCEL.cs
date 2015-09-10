@@ -127,6 +127,122 @@ namespace Helpers
             rs.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", xls.FileName));
             xls.Save(rs.OutputStream);
         }
+        public static void PutExcelAll(HttpResponseBase rs)//导出供单位用户所有信息
+        {
+            //生成Excel开始
+            XlsDocument xls = new XlsDocument();
+            
+                xls.FileName = "单位用户列表" + DateTime.Now.Second.ToString();
+
+                Worksheet sheet = xls.Workbook.Worksheets.Add("单位用户");
+
+                //设置文档列属性 
+                ColumnInfo cinfo = new ColumnInfo(xls, sheet);
+                cinfo.Collapsed = true;
+                //设置列的范围 如 0列-10列
+                cinfo.ColumnIndexStart = 0;//列开始
+                cinfo.ColumnIndexEnd = 9;//列结束
+                //cinfo.Collapsed = true;
+                cinfo.Width = 100 * 60;//列宽度
+                sheet.AddColumnInfo(cinfo);
+                //设置文档列属性结束
+
+                //创建列样式创建标题列时引用
+                XF cellXF = xls.NewXF();
+                cellXF.VerticalAlignment = VerticalAlignments.Centered;
+                cellXF.HorizontalAlignment = HorizontalAlignments.Centered;
+                cellXF.ShrinkToCell = true;
+                cellXF.TextWrapRight = true;
+                cellXF.UseBorder = true;
+                cellXF.TopLineStyle = 1;
+                cellXF.TopLineColor = Colors.Black;
+                cellXF.BottomLineStyle = 1;
+                cellXF.BottomLineColor = Colors.Black;
+                cellXF.TopLineStyle = 1;
+                cellXF.TopLineColor = Colors.Black;
+                cellXF.LeftLineStyle = 1;
+                cellXF.LeftLineColor = Colors.Black;
+                cellXF.RightLineStyle = 1;
+                cellXF.RightLineColor = Colors.Black;
+                cellXF.Font.Height = 24 * 16;
+                cellXF.Font.Bold = true;
+                cellXF.Pattern = 0;//设定单元格填充风格。如果设定为0，则是纯色填充
+                cellXF.PatternColor = Colors.Red;//设定填充线条的颜色
+                //创建列样式创建内容列时引用
+                XF cellXF1 = xls.NewXF();
+                cellXF1.VerticalAlignment = VerticalAlignments.Centered;
+                cellXF1.HorizontalAlignment = HorizontalAlignments.Left;
+                cellXF1.ShrinkToCell = true;
+                cellXF1.TextWrapRight = true;
+                cellXF1.Font.Height = 24 * 14;
+                cellXF1.UseBorder = true;
+                cellXF1.BottomLineStyle = 1;
+                cellXF1.BottomLineColor = Colors.Black;
+                cellXF1.TopLineStyle = 1;
+                cellXF1.TopLineColor = Colors.Black;
+                cellXF1.LeftLineStyle = 1;
+                cellXF1.LeftLineColor = Colors.Black;
+                cellXF1.RightLineStyle = 1;
+                cellXF1.RightLineColor = Colors.Black;
+                cellXF1.Pattern = 0;//设定单元格填充风格。如果设定为0，则是纯色填充
+                cellXF1.PatternBackgroundColor = Colors.Red;//填充的背景底色
+                cellXF1.PatternColor = Colors.Red;//设定填充线条的颜色
+                //创建列样式结束
+                Cells cells = sheet.Cells; //获得指定工作页列集合
+                for (int i = 1; i <= 10; i++)
+                {            //列操作基本
+                    Cell cell = null;
+                    switch (i)
+                    {
+                        case 1: cell = cells.Add(1, i, "登陆账号", cellXF); break;//添加标题列返回一个列  参数：行 列 名称 样式对象
+                        case 2: cell = cells.Add(1, i, "单位名称", cellXF); break;
+                        case 3: cell = cells.Add(1, i, "单位代号", cellXF); break;
+                        case 4: cell = cells.Add(1, i, "所属管理单位", cellXF); break;
+                        case 5: cell = cells.Add(1, i, "级别", cellXF); break;
+                        case 6: cell = cells.Add(1, i, "联系人", cellXF); break;
+                        case 7: cell = cells.Add(1, i, "联系人职务", cellXF); break;
+                        case 8: cell = cells.Add(1, i, "联系电话", cellXF); break;
+                        case 9: cell = cells.Add(1, i, "手机", cellXF); break;
+                        case 10: cell = cells.Add(1, i, "联系地址", cellXF); break;
+                    }
+                    cell.HorizontalAlignment = HorizontalAlignments.Centered;
+                    cell.VerticalAlignment = VerticalAlignments.Centered;
+                    cell.Font.FontFamily = FontFamilies.Modern;//设置字体 默认为宋体               
+                    //创建列结束  
+                }
+                IEnumerable<单位用户> model = 用户管理.查询用户<单位用户>(0,0);
+                for (int m = 0; m < model.Count(); m++)
+                {
+                    for (int n = 1; n <= 10; n++)
+                    {
+                        Cell cell = null;
+                        switch (n)
+                        {
+                            case 1: cell = cells.Add(m + 2, n, model.ElementAt(m).登录信息.登录名, cellXF1); break;
+                            case 2: cell = cells.Add(m + 2, n, model.ElementAt(m).单位信息.单位名称, cellXF1); break;
+                            case 3: cell = cells.Add(m + 2, n, model.ElementAt(m).单位信息.单位代号, cellXF1); break;
+                            case 4: cell = cells.Add(m + 2, n, model.ElementAt(m).单位信息.所属单位, cellXF1); break;
+                            case 5: cell = cells.Add(m + 2, n, model.ElementAt(m).单位信息.单位级别.ToString(), cellXF1); break;
+                            case 6: cell = cells.Add(m + 2, n, model.ElementAt(m).联系方式.联系人, cellXF1); break;
+                            case 7: cell = cells.Add(m + 2, n, model.ElementAt(m).联系人职务, cellXF1); break;
+                            case 8: cell = cells.Add(m + 2, n, model.ElementAt(m).联系方式.固定电话, cellXF1); break;
+                            case 9: cell = cells.Add(m + 2, n, model.ElementAt(m).联系方式.手机, cellXF1); break;
+                            case 10: cell = cells.Add(m + 2, n, model.ElementAt(m).所属地域.地域, cellXF1); break;
+                        }
+                        //设置XY居中
+                        cell.HorizontalAlignment = HorizontalAlignments.Centered;
+                        cell.VerticalAlignment = VerticalAlignments.Centered;
+                        //设置字体
+                        cell.Font.Bold = false;//设置粗体
+                        cell.Font.ColorIndex = 0;//设置颜色码           
+                        cell.Font.FontFamily = FontFamilies.Default;//设置字体 默认为宋体               
+                        //创建列结束  
+                    }
+                }
+            rs.ContentType = "application/vnd.ms-excel";
+            rs.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", xls.FileName));
+            xls.Save(rs.OutputStream);
+        }
         public static void PutExcel(string type, string strid, HttpResponseBase rs)//导出供应商所有信息
         {
             string idstr = strid;

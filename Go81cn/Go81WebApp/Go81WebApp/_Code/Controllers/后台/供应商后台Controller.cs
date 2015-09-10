@@ -567,14 +567,19 @@ namespace Go81WebApp.Controllers.后台
             try
             {
                 List<Goods> gs = new List<Goods>();
+                string name = "";
                 long id = long.Parse(Request.QueryString["id"]);
                 int CurrentPage = int.Parse(Request.QueryString["p"]);
-                long PageCount = 商品管理.计数供应商商品(id, 0, 0, MongoDB.Driver.Builders.Query.EQ("审核数据.审核状态", 审核状态.审核通过)) / 20;
-                if (商品管理.计数供应商商品(id, 0, 0, MongoDB.Driver.Builders.Query.EQ("审核数据.审核状态", 审核状态.审核通过)) % 20 > 0)
+                if(!string.IsNullOrWhiteSpace(Request.QueryString["name"]))
+                {
+                    name=Request.QueryString["name"];
+                }
+                long PageCount = 商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过))) / 20;
+                if (商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过))) % 20 > 0)
                 {
                     PageCount++;
                 }
-                IEnumerable<商品> goods = 商品管理.查询供应商商品(id, 20 * (CurrentPage - 1), 20, MongoDB.Driver.Builders.Query.EQ("审核数据.审核状态", 审核状态.审核通过));
+                IEnumerable<商品> goods = 商品管理.查询供应商商品(id, 20 * (CurrentPage - 1), 20, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)));
                 if (goods != null)
                 {
                     foreach (var item in goods)
@@ -6517,6 +6522,10 @@ namespace Go81WebApp.Controllers.后台
                             path += filePath1 + "original/" + fileName + "|";
                             //缩略图550(限宽)
                             //UploadPic.MakeThumbnail(string.Format("{0}original\\{1}", filePath, fileName), string.Format("{0}550\\{1}", filePath, fileName), 550, 0, "W");
+                        }
+                        else
+                        {
+                            path = "出错|文件格式或大小不对！";
                         }
                     }
                 }

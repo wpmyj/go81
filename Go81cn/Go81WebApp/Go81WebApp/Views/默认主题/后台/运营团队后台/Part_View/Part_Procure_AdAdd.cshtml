@@ -239,10 +239,6 @@
                     <div class="procureinputdiv_title">公告标题：</div>
                     <div class="procure_formlistdiv">
                         @Html.EditorFor(model => model.内容主体.标题)
-                        <div class="out_box">
-                            <div class="arrow"></div>
-                            <div class="con_box">请填写公告标题</div>
-                        </div>
                         <span style="color:red">*@Html.ValidationMessageFor(model => model.内容主体.标题)</span>
                     </div>
                 </div>
@@ -250,10 +246,6 @@
                     <div class="procureinputdiv_title">发布单位：</div>
                     <div class="procure_formlistdiv">
                         @Html.TextBoxFor(model => model.公告信息.需求单位, new { id = "needunit" })
-                        <div class="out_box">
-                            <div class="arrow"></div>
-                            <div class="con_box">请填写需求单位</div>
-                        </div>
                         <span style="color:red">*</span>
                     </div>
                 </div>
@@ -261,10 +253,6 @@
                     <div class="procureinputdiv_title">来源名称：</div>
                     <div class="procure_formlistdiv">
                         @Html.EditorFor(model => model.公告来源.来源名称)
-                        <div class="out_box">
-                            <div class="arrow"></div>
-                            <div class="con_box">请填写公告来源名称</div>
-                        </div>
                     </div>
                 </div>
 
@@ -272,10 +260,6 @@
                     <div class="procureinputdiv_title">来源链接：</div>
                     <div class="procure_formlistdiv">
                         @Html.EditorFor(model => model.公告来源.来源链接)
-                        <div class="out_box">
-                            <div class="arrow"></div>
-                            <div class="con_box">请填写公告来源链接</div>
-                        </div>
                         <span style="color:red">@Html.ValidationMessageFor(model => model.公告来源.来源链接)</span>
                     </div>
                 </div>
@@ -283,10 +267,6 @@
                     <div class="procureinputdiv_title">发布时间：</div>
                     <div class="procure_formlistdiv">
                         <input id="publishtime" style="width: 300px;" name="publishtime" type="text" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd HH:mm:ss' })" />
-                        <div class="out_box">
-                            <div class="arrow"></div>
-                            <div class="con_box">请填写公告发布时间。<em style="color:red;">如果是转载的内容，请选择原时间，该时间将显示在页面上(可不填)</em></div>
-                        </div>
                     </div>
                 </div>
                 <div class="procureinputdiv">
@@ -366,10 +346,6 @@
                     <div class="procureinputdiv_title">项目名称：</div>
                     <div class="procure_formlistdiv">
                         @Html.EditorFor(model => model.项目信息.项目名称)
-                        <div class="out_box">
-                            <div class="arrow"></div>
-                            <div class="con_box">请填写项目名称</div>
-                        </div>
                         <span style="color:red">*@Html.ValidationMessageFor(model => model.项目信息.项目名称)</span>
                     </div>
 
@@ -378,10 +354,6 @@
                     <div class="procureinputdiv_title">项目编号：</div>
                     <div class="procure_formlistdiv">
                         @Html.EditorFor(model => model.项目信息.项目编号)
-                        <div class="out_box">
-                            <div class="arrow"></div>
-                            <div class="con_box">请填写项目编号</div>
-                        </div>
                         <span style="color:red">*@Html.ValidationMessageFor(model => model.项目信息.项目编号)</span>
                     </div>
                 </div>

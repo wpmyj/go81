@@ -23,7 +23,7 @@
                         <div style=" height:30px; padding:10px;">
                             <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">所属单位：</div>
                             @{
-                                if (Model.所属单位.用户数据 != null)
+                                if (Model.所属单位!=null && Model.所属单位.用户数据 != null)
                                 {
                                     if (!string.IsNullOrWhiteSpace(Model.所属单位.用户数据.单位信息.单位名称))
                                     {
@@ -64,7 +64,7 @@
                                 @Html.EditorFor(model => model.单位信息.单位代号, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">@*@Html.ValidationMessageFor(model => model.u.单位信息.单位代号)*@</span>
                             </div>
                         </div>
-                        <div style="height:30px; padding:10px;">
+                        @*<div style="height:30px; padding:10px;">
                             <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">所属单位：</div>
                             <div class="procure_selectlistdiv">
                                 <input id="admin" type="hidden" value="-1" name="admin" />
@@ -84,9 +84,8 @@
                                         }
                                     </select>
                                 </div>
-                                @*@Html.EditorFor(model => model.u.单位信息.所属单位, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">Html.ValidationMessageFor(model => model.u.单位信息.所属单位)</span>*@
                             </div>
-                        </div>
+                        </div>*@
 
                         <div style=" height:30px; padding:10px;">
                             <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位级别：</div>

@@ -251,7 +251,8 @@ white-space: nowrap;
     <div class="out_box_insecond">
         <div class="out_box_insecond_child">
             <div style="width:100%; height:auto;"><a class="close_outbox" title="关闭窗口" onclick="$('#pdf1').hide()">×</a></div>
-            <div style="width:725px; max-height:440px; overflow-y:scroll; overflow-x:hidden;">
+            <div style="width:725px; max-height:450px; overflow-y:scroll; overflow-x:hidden;">
+                <div style="text-align:center;">商品名称：<input type="text" id="gname" placeholder="请在此处输入你要查询的商品名称" size="40" /><input type="button" onclick="getGoods(1)" value="搜索" /></div>
                 <div id="content" style="padding-left:10px; line-height:30px;" lang="aa"></div>
                 <div id="pager"></div>
             </div>
@@ -811,13 +812,13 @@ else
         }
     }
     function setValue(data) {
-        var str = "";
+        var str = "<table>";
         var row = parseInt(data.length / 2);
         var maintain = data.length % 2;
         var num = 0;
-        if (row > 0) {
+        if (row > 0) {  
             for (var i = 0; i < row; i++) {
-                var s0 = "<table><tr>";
+                var s0 = "<tr>";
                 for (var j = 0; j < 2; j++) {
                     s0 += "<td align='left'><input type='radio' onclick='Set_Val(this)' name='good' value='" + data[num].Id + "'/><span class='gname'  title='" + data[num].name + "'>" + data[num].name + "</span></td>";
                     num++;
@@ -832,7 +833,7 @@ else
                 s1 += "<td align='left'><input type='radio' onclick='Set_Val(this)' name='good' value='" + data[num].Id + "'/><span class='gname'  title='" + data[num].name + "'>" + data[num].name + "</span></td>";
                 num++;
             }
-            s1 += "</table></tr>";
+            s1 += "</tr>";
             str += s1;
         }
         $("#content").html(str);
@@ -841,18 +842,14 @@ else
     function selectGoods(th) {
         ev = $(th).prev("select");
         $("#pdf1").show();
-        if($("#content").attr("lang")=="aa")
-        {
-            $("#content").attr("lang","ab");
-            $.get("/供应商后台/GoodList", { p: 1, id: $("#uid").val() }, function (data) {
+            $.get("/供应商后台/GoodList", { p: 1, id: $("#uid").val(), name: $("#gname").val() }, function (data) {
                 setPage(data.Data.Pcount, 1);
                 setValue(data.Data.Newgood);
             });
-        }
         getChecked();
     }
     function getGoods(cp) {
-        $.get("/供应商后台/GoodList", { p: cp, id: $("#uid").val() }, function (data) {
+        $.get("/供应商后台/GoodList", { p: cp, id: $("#uid").val(),name:$("#gname").val() }, function (data) {
             setPage(data.Data.Pcount, cp);
             setValue(data.Data.Newgood);
         });

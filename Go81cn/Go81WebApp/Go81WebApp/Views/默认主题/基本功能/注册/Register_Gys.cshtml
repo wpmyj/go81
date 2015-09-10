@@ -5,7 +5,7 @@
 @using Go81WebApp.Models.数据模型.商品数据模型
 @using Go81WebApp.Models.数据模型.用户数据模型
 <script src="~/JS/provinceandcity_all.js"></script>
-<script src="~/JS/jquery-1.6.min.js"></script>
+@*<script src="~/JS/jquery-1.6.min.js"></script>*@
 <link href="~/css/Msg_Tips.css" rel="stylesheet" />
 @using (Html.BeginForm("Register_Gys", "注册", FormMethod.Post))
 {
@@ -32,9 +32,9 @@
             <table class="front_login_rightbox">
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">账户名：</td>
-                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                    <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
                         @Html.TextBoxFor(model => model.loginName, new { autocomplete = "off" })
-                        *
+                        <span style="position:absolute;left:310px;top:5px;">*</span>
                         <div class="out_box">
                             <div class="arrow"></div>
                             <div class="con_box">6-30字符,以字母开头(可用字母、数字或下划线),不能包括汉字</div>
@@ -44,9 +44,9 @@
                 </tr>
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">请设置密码：</td>
-                    <td style="color:red;" class="front_login_rightbox_inputdiv">
-                        @Html.PasswordFor(model => model.Pwd, new { autocomplete = "off" })
-                        *
+                    <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
+                        @Html.PasswordFor(model => model.Pwd, new { autocomplete = "off"})
+                        <span style="position:absolute;left:310px;top:5px;">*</span>
                         <div class="out_box">
                             <div class="arrow"></div>
                             <div class="con_box">6-30字符,不建议使用纯字母、数字</div>
@@ -56,9 +56,9 @@
                 </tr>
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">请确认密码：</td>
-                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                    <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
                         @Html.PasswordFor(model => model.PwdConfirm)
-                       *
+                        <span style="position:absolute;left:310px;top:5px;">*</span>
                         <div class="out_box">
                             <div class="arrow"></div>
                             <div class="con_box">请再次确认密码</div>
@@ -74,9 +74,9 @@
             <table class="front_login_rightbox">
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">联系人姓名：</td>
-                    <td style="color:red;" class="front_login_rightbox_inputdiv">
-                        @Html.EditorFor(model => model.Name)
-                        *
+                    <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
+                        @Html.TextBoxFor(model => model.Name)
+                        <span style="position:absolute;left:310px;top:5px;">*</span>
                         <div class="out_box">
                             <div class="arrow"></div>
                             <div class="con_box">输入联系人姓名，如：张晓东</div>
@@ -86,9 +86,9 @@
                 </tr>
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">联系人性别：</td>
-                    <td style="color:red;" class="front_login_rightbox_inputdiv">
-                        @Html.EnumDropDownListFor(model => model.Sex, new { @style = "width:304px;height:36px;" })
-                        *
+                    <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
+                        @Html.EnumDropDownListFor(model => model.Sex, new { @style = "width:304px;height:36px" })
+                        <span style="position:absolute;left:310px;top:5px;">*</span>
                         <div class="out_box">
                             <div class="arrow"></div>
                             <div class="con_box">您可以选择联系人的性别</div>
@@ -98,12 +98,12 @@
                 </tr>
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">固定电话：</td>
-                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                    <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
                         @Html.HiddenFor(model => model.Phone, new { @id="modelPhone"})
                          <input type="text" id="phone_area" placeholder="区号" style="width:70px;" />
-                         - 
-                        <input type="text" id="phone_num" placeholder="电话号码" style="width:208px;" />
-                        *
+                         <span style="display: inline-block;position: absolute;left: 80px;top:5px;">-</span> 
+                        <input type="text" id="phone_num" placeholder="电话号码" style="width:208px;margin-left:12px;" />
+                        <span style="position:absolute;left:310px;top:5px;">*</span>
                         <div class="out_box">
                             <div class="arrow"></div>
                             <div class="con_box">区号-电话号码，如：028-76817981或者0816-8245876</div>
@@ -114,9 +114,9 @@
                 </tr>
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">手机：</td>
-                    <td style="color:red;" class="front_login_rightbox_inputdiv">
-                        @Html.EditorFor(model => model.Tel_Phone)
-                        *
+                    <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
+                        @Html.TextBoxFor(model => model.Tel_Phone)
+                        <span style="position:absolute;left:310px;top:5px;">*</span>
                         <div class="out_box">
                             <div class="arrow"></div>
                             <div class="con_box">请输入手机号码,如13587669876，请注意格式</div>
@@ -126,9 +126,9 @@
                 </tr>
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">联系人邮箱：</td>
-                    <td style="color:red;" class="front_login_rightbox_inputdiv">
-                        @Html.EditorFor(model => model.Mail)
-                        *
+                    <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
+                        @Html.TextBoxFor(model => model.Mail)
+                        <span style="position:absolute;left:310px;top:5px;">*</span>
                         <div class="out_box">
                             <div class="arrow"></div>
                             <div class="con_box">您可以填写QQ邮箱等如：1487578912@qq.com</div>
@@ -144,9 +144,9 @@
             <table class="front_login_rightbox">
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">企业名称：</td>
-                    <td style="color:red;" class="front_login_rightbox_inputdiv">
-                        @Html.TextBoxFor(model => model.company_Name, new { id = "companyName" })<span id="tip" style="color:red;"></span>
-                       *
+                    <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
+                        @Html.TextBoxFor(model => model.company_Name, new { id = "companyName"})<span id="tip" style="color:red;"></span>
+                        <span style="position:absolute;left:310px;top:5px;">*</span>
                         <div class="out_box">
                             <div class="arrow"></div>
                             <div class="con_box"><span style="color:red;">注：企业名称只能是营业执照上面的企业名称，如果不统一，企业将通不过审核！</span></div>
@@ -157,10 +157,10 @@
 
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">供应商类型：</td>
-                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                    <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
                             @Html.DropDownListFor(model => model.gystype, new  SelectList(Enum.GetValues(typeof(供应商.供应商类型))), new { id = "gystype", @style = "width:150px" })
                             @Html.DropDownListFor(model => model.gystypename, new SelectList(Enum.GetValues(typeof(供应商.供应商细分类型))), new { id = "gystypename", @style = "width:150px;display:none" })
-                        *
+                        <span style="position:absolute;left:310px;top:5px;">*</span>
                             <div class="out_box">
                                 <div class="arrow"></div>
                                 <div class="con_box">请选择供应商类型</div>
@@ -169,7 +169,7 @@
                 </tr>
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">所在地域：</td>
-                    <td style="color:red;" class="front_login_rightbox_inputdiv">
+                    <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
                         @Html.HiddenFor(model => model.Province, new { id = "province" })
                         @Html.HiddenFor(model => model.City, new { id = "city" })
                         @Html.HiddenFor(model => model.Area, new { id = "area" })
@@ -184,7 +184,7 @@
                             <div class="con_box">请选择城市</div>
                         </div>*@
                         <select id="deliverarea" onblur="hidetip(this)" onclick="showtip(this)" name="deliverarea" style=" width:98px;"></select>
-                        *
+                        <span style="position:absolute;left:310px;top:5px;">*</span>
                         <div class="out_box">
                             <div class="arrow"></div>
                             <div class="con_box">地域用来生成供应商编码的，选择后不能再做修改，请认真选择。</div>
@@ -228,7 +228,7 @@
                 </tr>*@
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">验证码：</td>
-                    <td style="color:red;" id="Veryfy_Code" class="front_login_rightbox_inputdiv">
+                    <td style="color:red;position:relative;" id="Veryfy_Code" class="front_login_rightbox_inputdiv">
                         @Html.TextBoxFor(m => m.verifyCode)
                         <div class="out_box">
                             <div class="arrow" style="margin-left: 90px;"></div>

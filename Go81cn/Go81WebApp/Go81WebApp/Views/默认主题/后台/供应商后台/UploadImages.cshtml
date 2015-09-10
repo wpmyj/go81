@@ -16,6 +16,11 @@
                     window.parent.document.getElementById("picture").value += path;
                     window.parent.setPic("#picture");
                 }
+                else
+                {
+                    alert(path.split('|')[1]);
+                    window.parent.document.getElementById("f1").style.display = "none";
+                }
             }
             );
     function delPic(th) {

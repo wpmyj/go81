@@ -5997,7 +5997,7 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult Part_Procure_AdSendList_S(int? page)
         {
-            IMongoQuery q = Query<公告>.EQ(o => o.内容基本信息.所有者.用户ID, currentUser.Id);
+            IMongoQuery q = Query<公告>.Where(o => o.内容基本信息.所有者.用户ID == currentUser.Id);
 
             int listcount = (int)(公告管理.计数公告(0, 0, q));
             int maxpage = Math.Max((listcount + 15 - 1) / TZ_PAGESIZE, 1);

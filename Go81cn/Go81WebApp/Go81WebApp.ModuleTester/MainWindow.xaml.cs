@@ -770,7 +770,12 @@ namespace Go81WebApp.ModuleTester
             //    }
 
             //}
-            #endregion
+            #endregion  
+            var classify = 商品分类管理.查询商品分类(0, 0, Query<商品分类>.Where(o => o.父分类.商品分类ID == -1));
+            foreach (var item in classify)
+            {
+               
+            }
             MessageBox.Show("OK");
         }
         private void ButtonExpColl_Click(object sender, RoutedEventArgs e)

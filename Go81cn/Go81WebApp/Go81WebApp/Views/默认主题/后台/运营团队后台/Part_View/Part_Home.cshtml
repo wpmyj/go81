@@ -2,7 +2,10 @@
 @using Go81WebApp.Models.数据模型.消息数据模型
 @{string name = ViewData["user"].ToString();}
 <div style="width:940px; position:absolute; height:auto; z-index:2;">
-    <div style="font-size:16px;margin-top:30px;">@name，欢迎登录西南物资采购网</div>
+    @if (WebApiApplication.IsIntranet)
+        { <div style="font-size:16px;margin-top:30px;">@name，欢迎登录西南军区物资采购网</div> }
+    else
+        { <div style="font-size:16px;margin-top:30px;">@name，欢迎登录西南物资采购网</div>}
     <div style=" margin-top:20px; " id="tb1">
         <div style="font-size:14px;">
             @if (int.Parse(ViewData["msg_count"].ToString()) == 0)

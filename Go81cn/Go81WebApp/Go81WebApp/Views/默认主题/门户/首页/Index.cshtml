@@ -93,7 +93,7 @@
     <div class="modal-dialog" style="margin: 3% auto;">
         <div class="modal-content" style="height:500px;">
             <div class="modal-header" style="padding-bottom: 20px;">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal0').hide();">×</button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal0').hide(); $('#indexpagemodal1').show();">×</button>
                 <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">物资采购管理处关于验收单规范开取的通知
 </div>
             </div>
@@ -127,7 +127,40 @@
         </div>
     </div>
 </div>
+<div id="indexpagemodal1" class="modal fade">
+    <div class="modal-dialog" style="margin: 3% auto;">
+        <div class="modal-content" style="height:460px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal1').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">通知</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 330px; overflow-y: scroll; line-height:25px;">
+                    <p class="wenxintishi">为了进一步争取优质资源为广大官兵谋福利，优化部队官兵的个人生活，成都军区将与国美电器联合举行“917超级福利日-----国美&合作伙伴   9月17日内购福利闭店专场”活动，凡在活动当日执入场券进场的官兵在购买相关电器产品时均可享受国美电器专门为部队官兵订制的超低价优惠。因入场券数量有限，如有需要的同志可以前往成都军区联勤部军需物资油料部采购管理处领取。</p>
+                    <p class="wenxintishi">
+                        活动时间：2015年9月17日 10：00-24：00
+                    </p>
+                    <p class="wenxintishi">
+                        活动地点：成都国美全川72家门店
+                    </p>
+                    <p class="wenxintishi">
+                        领取联系人：邹助理   028-86683373
+                    </p>
+                    <p class="wenxintishi" style="padding-left:95px;">
+                        曾助理   028-86683369
+                    </p>
+                    <p class="wenxintishi"><a href="/App_Uploads/通知/附件/2015/9/10/b275c7ae-fb96-417b-acc0-dd83abb945a8917国美内购会介绍.pdf" style="text-decoration:underline;" target="_blank">活动详情及优惠商品资料可登录西南物资采购网下载。</a></p>
+                    <p class="wenxintishi" style="text-align:right; padding-right:20px;">成都军区联勤部军需物资油料部采购管理处
+                                  
+</p>
+                    <p class="wenxintishi" style="text-align:right; padding-right:183px;"> 二O一五年九月九日</p>
+                </div>
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="已阅读" onclick="$('#indexpagemodal1').hide();" /></div>
 
+            </div>
+        </div>
+    </div>
+</div>
 <div class="main_content">
     <div class="main_content_topbox">                  
         <div class="left_menu">@Html.Action("Part_Index_LeftMenu", "首页")</div>

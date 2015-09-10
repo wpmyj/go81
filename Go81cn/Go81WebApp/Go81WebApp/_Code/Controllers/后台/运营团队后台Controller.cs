@@ -139,6 +139,11 @@ namespace Go81WebApp.Controllers.后台
             HttpResponseBase rs = Response;
             ExcelHelper.PutExcel(type, sid, rs);
         }
+        public void putOutExcelAll()
+        {
+            HttpResponseBase rs = Response;
+            ExcelHelper.PutExcelAll(rs);
+        }
         public void putOutExcel_phone()
         {
             string sid = Request.QueryString["id"];
@@ -1232,15 +1237,22 @@ namespace Go81WebApp.Controllers.后台
         }
         public JsonResult Search_Department()
         {
-            string id = Request.QueryString["num"];
+            long id = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["num"]))
+            {
+                id = long.Parse(Request.QueryString["num"]);
+            }
             string name = Request.QueryString["name"];
+            string user = Request.QueryString["u"];
+            int cpage =int.Parse(Request.QueryString["cp"]);
+            int pageCount = 0;
             // int pro = int.Parse(Request.QueryString["pro"]);
             int catorgray = int.Parse(Request.QueryString["catorgray"]);
             IMongoQuery q = null;
             List<Department> deplist = new List<Department>();
-            if (!string.IsNullOrWhiteSpace(id))
+            if(id!=0)
             {
-                q = q.And(MQ.EQ("单位信息.单位编码", id));
+                q = q.And(MQ.EQ("_id", id));
             }
             if (!string.IsNullOrWhiteSpace(name))
             {
@@ -1250,10 +1262,20 @@ namespace Go81WebApp.Controllers.后台
             {
                 q = q.And(MQ.EQ("单位信息.单位级别", new BsonRegularExpression(string.Format("/{0}/i", catorgray))));
             }
-            IEnumerable<单位用户> depart = 用户管理.查询用户<单位用户>(0, 0, q);
+            if(!string.IsNullOrWhiteSpace(user))
+            {
+                q = q.And(MQ.EQ("联系方式.联系人", new BsonRegularExpression(string.Format("/{0}/i", user))));
+            }
+            pageCount = 用户管理.查询用户<单位用户>(0,0,q).Count()/20;
+            if (用户管理.查询用户<单位用户>(0, 0,q).Count() % 20>0)
+            {
+                pageCount++;
+            }
+            IEnumerable<单位用户> depart = 用户管理.查询用户<单位用户>(20*(cpage-1), 20, q);
             foreach (var item in depart)
             {
                 item.单位信息.单位编码 = item.单位信息.单位编码.IsEmpty() ? "" : item.单位信息.单位编码;
+                item.单位信息.所属单位=item.单位信息.所属单位.IsNullOrWhiteSpace()?"未填写":item.单位信息.所属单位;
                 deplist.Add(new Department()
                 {
                     Id = item.Id,
@@ -1263,9 +1285,8 @@ namespace Go81WebApp.Controllers.后台
                     contactuser = item.联系方式.联系人,
                     status = item.审核数据.审核状态.ToString(),
                 });
-
             }
-            JsonResult json = new JsonResult() { Data = deplist };
+            JsonResult json = new JsonResult() { Data = new { deplist, PageCount = pageCount }};
             return Json(json, JsonRequestBehavior.AllowGet);
         }
 
