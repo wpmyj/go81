@@ -898,10 +898,11 @@ namespace Go81WebApp.Controllers.门户
                         }
                     }
                 }
+                Recommend_Good = Recommend_Good.OrderBy(m => m.销售信息.价格).ToList();
             }
             catch
             {
-                Recommend_Good = 商品管理.查询商品(0, 5, MongoDB.Driver.Builders.Query.EQ("审核数据.审核状态", 审核状态.审核通过), false, SortBy<商品>.Descending(o => o.销售信息.点击量), false).ToList();
+                Recommend_Good = 商品管理.查询商品(0, 5, MongoDB.Driver.Builders.Query.EQ("审核数据.审核状态", 审核状态.审核通过), false, SortBy<商品>.Descending(o => o.销售信息.点击量), false).OrderBy(m => m.销售信息.价格).ToList();
             }
             return PartialView("Part_Product/Part_Recommend", Recommend_Good);
         }

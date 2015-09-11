@@ -3484,7 +3484,7 @@ namespace Go81WebApp.Controllers.后台
             var ysd_number = 验收单管理.查询验收单(0, 0, Query<验收单>.Where(o => o.是否已经打印 && !o.是否作废 && o.供应商链接.用户ID == currentUser.Id));
             foreach (var k in ysd_number)
             {
-                if ((k.打印信息.Count > 0 && k.打印信息.Last().打印时间.AddDays(10) > DateTime.Now) || k.扫描件审核状态=="审核未通过")
+                if ((k.打印信息.Count > 0 && k.打印信息.Last().打印时间.AddDays(20) > DateTime.Now) || k.扫描件审核状态=="审核未通过")
                 {
                     Iysd.Add(k);
                 }
@@ -3771,7 +3771,7 @@ namespace Go81WebApp.Controllers.后台
             var cc = 验收单管理.查询验收单(0, 0, Query<验收单>.Where(o => o.供应商链接.用户ID == currentUser.Id && o.是否已经打印 && !o.是否作废 && o.验收单扫描件.Count<=0));
             foreach (var k in cc)
             {
-                if (k.打印信息.Count > 0 && k.打印信息.Last().打印时间.AddDays(10) < DateTime.Now)
+                if (k.打印信息.Count > 0 && k.打印信息.Last().打印时间.AddDays(20) < DateTime.Now)
                 {
                     是否有未上传验收单 = true;
                     break;

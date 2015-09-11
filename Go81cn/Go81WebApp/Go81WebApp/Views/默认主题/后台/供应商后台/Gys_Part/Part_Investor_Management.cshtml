@@ -67,6 +67,14 @@
         float: right;
         cursor: pointer;
     }
+    td {
+        position: relative;
+    }
+
+    div.out_box {
+        width: 135px;
+        left: initial;
+    }
 </style>
 
 <div id="f" class="out_box">
@@ -78,7 +86,7 @@
             <div style="width:830px; height:270px; overflow:hidden;">
                 <h3 style="text-align:center;">新增出资人信息</h3>
                 <form action="/供应商后台/Investor_Manage" method="post">
-                    <table width="100%" style="margin-left:20px;">
+                    <table width="90%" style="margin-left:20px;">
                         <tr>
                             <td width="20%" height="30" align="right" class="lab">出资人或股东姓名：</td>
                             <td width="25%" height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].出资人或股东姓名" type="text" value=""><span>*</span></td>

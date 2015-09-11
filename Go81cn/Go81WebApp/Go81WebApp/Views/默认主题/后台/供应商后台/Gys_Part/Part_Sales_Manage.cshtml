@@ -1,4 +1,10 @@
 ﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<script src="~/JS/provinceandcity_all.js"></script>
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<link href="~/css/css.css" rel=" stylesheet" />
 <style>
     table tr td span {
         background-color: #ffebeb;
@@ -6,16 +12,20 @@
         color: red;
     }
 
+    table tr td span {
+        color: red;
+        font-size: 12px;
+    }
+
     td {
-        width: 260px;
+        position: relative;
+    }
+
+    div.out_box {
+        width: 135px;
+        left: initial;
     }
 </style>
-<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
-<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
-<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
-<script src="~/JS/provinceandcity_all.js"></script>
-<link href="~/css/Msg_Tips.css" rel="stylesheet" />
-<link href="~/css/css.css" rel=" stylesheet" />
 <div id="f1" class="modal_out">
     <div class="modal_in"></div>
     <div class="modal_content_loading">

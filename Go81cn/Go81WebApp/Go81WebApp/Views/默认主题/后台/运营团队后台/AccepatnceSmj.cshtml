@@ -57,8 +57,8 @@
                             @foreach (var item in Model.验收单扫描件)
                             {
                                 <td>
-                                    <a title="删除" id="@Model.Id" href="###" onclick='delPicExist(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='@item'>×</a>
-                                    <a href="@item" target="_blank"><img style='border:1px solid gray;' src='@item' height='80' width='100'></a>
+                                    <a title="删除" id="@Model.Id" href="###" onclick='delPicExist(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='@item.回传单路径'>×</a>
+                                    <a href="@item.回传单路径" target="_blank"><img style='border:1px solid gray;' src='@item.回传单路径' height='80' width='100'></a>
                                 </td>
                             }
                         </tr>

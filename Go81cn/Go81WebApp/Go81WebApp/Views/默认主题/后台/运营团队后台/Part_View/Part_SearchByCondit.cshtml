@@ -142,7 +142,7 @@
                         <td style="color:red">未验收</td>
                     }
                     <td>
-                        <a href="/运营团队后台/AcceptancedDetail?id=@k.Id">查看</a><br />
+                        <a href="/运营团队后台/AcceptancedDetail?id=@k.Id" target="_blank">查看</a><br />
                         <a style="font-size:12px;cursor:pointer" id="@k.Id" onclick="ConfirmCancel(this)">撤销审核</a>
                     </td>
                 </tr>
@@ -207,7 +207,7 @@
         $(function(){
             $(".gys_znxx_content_detailbox a").each(function () {
                 if ($(this).text() == i) {
-                    $(this).addClass("currentPage");
+                    $(this).css("border","1px solid #ff0000");
                 }
                 if (i== j) {
                     $(".gys_znxx_content_detailbox a:last").addClass("endPage");

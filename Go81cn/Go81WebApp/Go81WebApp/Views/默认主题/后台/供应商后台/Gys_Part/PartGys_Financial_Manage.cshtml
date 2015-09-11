@@ -66,6 +66,14 @@
         float: right;
         cursor: pointer;
     }
+    td {
+        position: relative;
+    }
+
+    div.out_box {
+        width: 135px;
+        left: initial;
+    }
 </style>
 <div id="f" class="out_box">
     <div class="out_box_infirst">
@@ -76,7 +84,7 @@
             <div style="width:830px; height:380px; overflow:hidden;">
                 <h3 style="text-align:center;">新增财务信息</h3>
                 <form action="/供应商后台/Financial_Manage" method="post">
-                    <table width="100%">
+                    <table width="92%">
                         <tr>
                             <td height="30" width="20%" align="right">年份：</td>
                             <td height="30" width="25%"><input onfocus="WdatePicker({dateFmt:'yyyy'})" onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="财务状况信息[0].年份" type="text" value="0"><span>*</span></td>

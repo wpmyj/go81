@@ -170,7 +170,11 @@
                                     else
                                     {
                                         <td title="@k.管理单位审核人.用户数据.单位信息.单位名称">@k.管理单位审核人.用户数据.单位信息.单位名称</td>
-                                    }    
+                                    }
+                                }
+                                else
+                                {
+                                    <td>审核单位不存在</td>
                                 }       
                                 @if (k.是否作废)
                                 {
@@ -392,7 +396,7 @@
     $(function () {
         $(".gys_znxx_content_detailbox a").each(function () {
             if ($(this).text() == i) {
-                $(this).addClass("currentPage");
+                $(this).css("border","1px solid #ff0000");
             }
             if (i== j) {
                 $(".gys_znxx_content_detailbox a:last").addClass("endPage");

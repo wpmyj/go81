@@ -660,10 +660,12 @@ namespace Go81WebApp.ModuleTester
             //      Update.Unset("中标项目编号"))
             //      );
 
-                //Mongo.Coll<商品>().Update(
-                //   Query.EQ("_id", item["_id"]),
-                //   Update.Set("中标信息", new BsonArray(KP)));
+            //    Mongo.Coll<商品>().Update(
+            //       Query.EQ("_id", item["_id"]),
+            //       Update.Set("中标信息", new BsonArray(KP)));
+            //}
             #endregion
+           
 
             #region 修改验收单回传字段类型
             //var ysd = Mongo.Coll<验收单>().FindAs<BsonDocument>(Query.Exists("验收单扫描件"));
@@ -771,10 +773,12 @@ namespace Go81WebApp.ModuleTester
 
             //}
             #endregion  
-            var classify = 商品分类管理.查询商品分类(0, 0, Query<商品分类>.Where(o => o.父分类.商品分类ID == -1));
-            foreach (var item in classify)
+            var ysd = 验收单管理.查询验收单(0, 0);
+            var yd=ysd.Where(o => o.供应商链接.用户数据 == null);
+            var arr = new List<long>();
+            foreach (var item in yd)
             {
-               
+                arr.Add(item.Id);
             }
             MessageBox.Show("OK");
         }

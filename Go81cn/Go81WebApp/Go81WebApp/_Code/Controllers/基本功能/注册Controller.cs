@@ -468,7 +468,7 @@ namespace Go81WebApp.Controllers.基本功能
                 var p = Request.Form["deliverprovince"];
                 var c = Request.Form["delivercity"];
                 var a = Request.Form["deliverarea"];
-                long admin_id =long.Parse(Request.Form["admin"]);
+                //long admin_id =long.Parse(Request.Form["admin"]);
                 switch (p)
                 {
                     case "重庆市":
@@ -516,7 +516,7 @@ namespace Go81WebApp.Controllers.基本功能
                         unitRegisterModel.U.用户组.Add(_f[i]);
                     }
                 }
-                unitRegisterModel.U.所属单位.用户ID = admin_id;
+                //unitRegisterModel.U.所属单位.用户ID = admin_id;
                 用户管理.添加用户(unitRegisterModel.U);
                 //TempData["RegisterMessage"] = "注册成功";
                 return Content("<script>window.location='/注册/Successe_Regist?id=1';</script>");

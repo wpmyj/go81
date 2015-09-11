@@ -10120,7 +10120,8 @@ namespace Go81WebApp.Controllers.后台
             if (!string.IsNullOrWhiteSpace(gys_name))
             {
                 某供应商全年成交总金额 = ysdlist.Where(
-                    o => o.供应商链接.用户数据.企业基本信息.企业名称.Contains(gys_name)
+                    o => o.供应商链接.用户数据!=null 
+                        && o.供应商链接.用户数据.企业基本信息.企业名称.Contains(gys_name)
                         && o.基本数据.添加时间.Year == int.Parse(year)
                         && o.审核数据.审核状态 == 审核状态.审核通过
                         && o.是否已经打印 == true
@@ -10130,7 +10131,8 @@ namespace Go81WebApp.Controllers.后台
                 for (int i = 0; i < 12; i++)
                 {
                     var 本月成交总金额 = ysdlist.Where(
-                        o => o.供应商链接.用户数据.企业基本信息.企业名称.Contains(gys_name)
+                        o => o.供应商链接.用户数据!=null 
+                            && o.供应商链接.用户数据.企业基本信息.企业名称.Contains(gys_name)
                             && o.基本数据.添加时间.Year == int.Parse(year)
                             && o.基本数据.添加时间.Month == i + 1
                             && o.审核数据.审核状态 == 审核状态.审核通过
