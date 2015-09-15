@@ -129,7 +129,23 @@
     $(function () {
         var x = $("#firstclass").find("ul li:first-child");
         x.css({ background: "rgb(83, 126, 43)", color: "black" });
-        $("#新增中标商品").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#新增中标商品").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
 </script>
+@if (ViewData["是否中标商品"].ToString() == "0")
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#新增商品信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#新增商品信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+    </script>
+}
+else
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#新增中标商品").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#新增中标商品").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        });
+    </script>
+}

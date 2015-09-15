@@ -2462,6 +2462,15 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult Part_Vip_Manage()
         {
+            var comes = Request.Params["comes"];
+            if (comes == "x")
+            {
+                ViewData["comes"] = "联系人信息";
+            }
+            if (comes == "z")
+            {
+                ViewData["comes"] = "修改注册人信息";
+            }
             供应商 model = 用户管理.查找用户<供应商>(currentUser.Id);
             return PartialView("Gys_Part/Part_Vip_Manage", model);
         }
@@ -3477,7 +3486,7 @@ namespace Go81WebApp.Controllers.后台
             ViewData["行业列表"] = 商品分类管理.查找子分类();
             IEnumerable<招标采购项目> l = 招标采购项目管理.查询招标采购项目(0, 0, MongoDB.Driver.Builders.Query.EQ("审核数据.审核状态", 审核状态.审核通过).And(MongoDB.Driver.Builders.Query.NE("中标公告链接.公告ID", -1)));
             ViewData["需求列表"] = l;
-            验收单 item = new 验收单();
+            验收单 item = new 验收单();  
 
 
             var Iysd = new List<验收单>();
@@ -4015,7 +4024,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 throw new Exception("信息不完善！");
             }
-            return RedirectToAction("AddAcceptanceForm?comes=w");
+            return Redirect("/供应商后台/AddAcceptanceForm?comes=w");
 
         }
         public void EditPrint()

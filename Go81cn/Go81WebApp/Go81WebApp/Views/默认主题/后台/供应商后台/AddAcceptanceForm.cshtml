@@ -489,69 +489,69 @@
 {
     <script type="text/javascript">
     $(function () {
-        $("#新增及打印验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#新增及打印验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
-            $(".bg_outdiv_right").hide();
-            if (!getcheck()) {
-                $(".bg_outdiv_right").hide();
-                $("#indexpagemodal1").hide();
+        $("#@ViewData["comes"]").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#@ViewData["comes"]").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    $(".bg_outdiv_right").hide();
+    if (!getcheck()) {
+        $(".bg_outdiv_right").hide();
+        $("#indexpagemodal1").hide();
+    }
+    else {
+        $("#indexpagemodal1").show();
+    }
+    });
+
+    function getcheck() {
+        var flage = true;
+
+        var browser = DetectBrowser();
+        if (browser == "Unknown") {
+            alert("不支持该浏览器， 如果您在使用傲游或类似浏览器，请切换到IE模式，建议使用Google浏览器！");
+            flage = false;
+        }
+        createElementNT199();
+        var create = DetectNT199Plugin();
+        if (create == false) {
+            alert("插件未安装,,请直接安装CD区的插件!");
+            flage = false;
+        }
+
+        var Rtn = NT199_Find();
+        if (Rtn < 1) {
+            alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+            flage = false;
+        }
+
+        if (flage) {
+            $("#indexpagemodal1").show();
+            $("#password").focus();
+        }
+        return flage;
+    }
+    function OnLogon() {
+        var Rtn = NT199_Find();
+        if (Rtn < 1) {
+            alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
+            return false;
+        }
+        var pwd = document.getElementById("password").value;
+        if (pwd == "") {
+            alert("用户密码不能为空");
+            return false;
+        }
+        var retVal = NT199_CheckPassword(pwd);
+        if (retVal != 0) {
+            if (retVal == 1) {
+                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
             }
             else {
-                $("#indexpagemodal1").show();
+                alert("ErrorCode:" + NT199_GetLastError() + "   密码不正确");
             }
-        });
-
-        function getcheck() {
-            var flage = true;
-
-            var browser = DetectBrowser();
-            if (browser == "Unknown") {
-                alert("不支持该浏览器， 如果您在使用傲游或类似浏览器，请切换到IE模式，建议使用Google浏览器！");
-                flage = false;
-            }
-            createElementNT199();
-            var create = DetectNT199Plugin();
-            if (create == false) {
-                alert("插件未安装,,请直接安装CD区的插件!");
-                flage = false;
-            }
-
-            var Rtn = NT199_Find();
-            if (Rtn < 1) {
-                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
-                flage = false;
-            }
-
-            if (flage) {
-                $("#indexpagemodal1").show();
-                $("#password").focus();
-            }
-            return flage;
+            return false;
         }
-        function OnLogon() {
-            var Rtn = NT199_Find();
-            if (Rtn < 1) {
-                alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
-                return false;
-            }
-            var pwd = document.getElementById("password").value;
-            if (pwd == "") {
-                alert("用户密码不能为空");
-                return false;
-            }
-            var retVal = NT199_CheckPassword(pwd);
-            if (retVal != 0) {
-                if (retVal == 1) {
-                    alert("ErrorCode:" + NT199_GetLastError() + "   请插入安全证书");
-                }
-                else {
-                    alert("ErrorCode:" + NT199_GetLastError() + "   密码不正确");
-                }
-                return false;
-            }
-            var IAID = NT199_GetHardwareId();
+        var IAID = NT199_GetHardwareId();
 
-            var randomMessageFromServer = "@ViewData["Message"]";
+        var randomMessageFromServer = "@ViewData["Message"]";
         var hashVal = NT199_Sha1WithSeed(randomMessageFromServer);
 
         document.getElementById("HidDigest").value = hashVal;
@@ -611,8 +611,8 @@ else
                     $(".gys_znxx_content_detailbox a:first").addClass("endPage");
                 }
             });
-        $("#新增及打印验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#新增及打印验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+            $("#@ViewData["comes"]").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+            $("#@ViewData["comes"]").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
         });
     </script>
 }

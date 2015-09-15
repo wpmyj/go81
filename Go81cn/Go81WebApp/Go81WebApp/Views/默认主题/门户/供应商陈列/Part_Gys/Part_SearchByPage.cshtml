@@ -694,7 +694,7 @@ else
         }
         else
         {
-            <a onclick=" changeMesspage(this) " id="1" class="page">首页</a>
+            <a onclick=" changeMesspage(this) " id="1" class="page">首页</a><a onclick="changeMesspage(this)" style="margin-left:5px;" id="@(int.Parse(ViewData["currentpage"].ToString())-1)">上一页</a>
         }
         @for (int i = 0; i <= 10; i++)
         {
@@ -704,7 +704,7 @@ else
                 if (5 == i)
                 {
                     //当前页处理
-                    <a>@int.Parse(ViewData["currentPage"].ToString())</a>
+                    <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentPage"].ToString())</a>
                 }
                 else
                 {
@@ -720,27 +720,12 @@ else
         }
         else
         {
-            <a onclick=" changeMesspage(this) " id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+            <a onclick="changeMesspage(this)" style="margin-right:5px;" id="@(int.Parse(ViewData["currentpage"].ToString())+1)">下一页</a><a onclick=" changeMesspage(this) " id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
         }
-        @ViewData["currentPage"].ToString()/@ViewData["pagecount"].ToString()
+        第 @ViewData["currentPage"].ToString() 页/共 @ViewData["pagecount"].ToString() 页
     </div>
 }
 <script type="text/javascript" language="javascript">
-    var i = @(int.Parse(ViewData["currentPage"].ToString()));
-    var j=@(int.Parse(ViewData["pagecount"].ToString()))
-    $(document).ready(function () {
-        $(".gys_znxx_content_detailbox a").each(function () {
-            if ($(this).text() == i) {
-                $(this).css("border","1px solid #ff0000");
-            }
-            if (i== j) {
-                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
-            }
-            if (i == 1) {
-                $(".gys_znxx_content_detailbox a:first").addClass("endPage");;
-            }
-        });
-    });
     //function showChild(th,num)
     //{
     //    if($(th).children("div.childbox").html()!="")

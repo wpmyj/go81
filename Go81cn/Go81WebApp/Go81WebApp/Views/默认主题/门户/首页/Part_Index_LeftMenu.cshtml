@@ -40,14 +40,14 @@
                                             if (item.分类性质 == 商品分类性质.通用物资)
                                             {
                                                 <li>
-                                                    <h3><a name="@item.Id" tag="0">@item.分类名</a></h3>
+                                                    <h3><a name="@item.Id" tag="0" href="/商品陈列/ProductAllList?id=@item.Id">@item.分类名</a></h3>
                                                     <div class="listbox hided" id="@item.Id">
                                                         @if (item.子分类 != null && item.子分类.Any())
                                                         {
                                                             foreach (var i in item.子分类)
                                                             {
                                                                 <dl class='procate'>
-                                                                    <dt>@i.分类名</dt>
+                                                                    <dt><a href="/商品陈列/ProductAllList?id=@i.Id">@i.分类名</a></dt>
                                                                     @if (i.子分类 != null && i.子分类.Any())
                                                                     {
                                                                         foreach (var k in i.子分类)

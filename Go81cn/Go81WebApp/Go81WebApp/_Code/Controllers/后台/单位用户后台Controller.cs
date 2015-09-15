@@ -5812,10 +5812,10 @@ namespace Go81WebApp.Controllers.后台
                         model.u.用户组.Add(_f[i]);
                     }
                 }
-                if (Request.Form["admin"]!="-1")
-                {
-                    model.u.所属单位.用户ID = long.Parse(Request.Form["admin"]);
-                }
+                //if (Request.Form["admin"]!="-1")
+                //{
+                //    model.u.所属单位.用户ID = long.Parse(Request.Form["admin"]);
+                //}
                 用户管理.添加单位用户(model.u,currentUser);
             }
             return Content("<script>alert('添加成功！');location.href='/单位用户后台/departmentadd';</script>");

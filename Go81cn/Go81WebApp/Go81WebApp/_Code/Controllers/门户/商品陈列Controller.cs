@@ -938,6 +938,135 @@ namespace Go81WebApp.Controllers.门户
         {
             return PartialView("Part_Product/Part_ProductCondition");
         }
+        public ActionResult ProductAllList()
+        {
+            try
+            {
+                if (-1 != HttpContext.检查登录())
+                {
+                    ViewData["已登录"] = "1";
+                }
+                else
+                {
+                    ViewData["已登录"] = "0";
+                }
+                long id = 0;
+                if (!string.IsNullOrWhiteSpace(Request.QueryString["id"]))
+                {
+                    id = long.Parse(Request.QueryString["id"]);
+                }
+                
+                IMongoQuery proQ = MongoDB.Driver.Builders.Query.EQ("审核数据.审核状态", 审核状态.审核通过);
+
+                var sjfn = 商品分类管理.查找三级分类(id);
+                var arrId = new List<long>();
+                foreach (var k in sjfn)
+                {
+                    arrId.Add(k.Id);
+                }
+
+                var q1 = proQ.And(Query<商品>.In(o => o.商品信息.所属商品分类.商品分类ID, arrId));
+                var listcount = 商品管理.计数商品(0, 0, q1, includeDisabled: false);
+                var maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+
+                ViewData["listcount"] = listcount;
+                ViewData["pagesize"] = PAGESIZE;
+                ViewData["currentpage"] = 1;
+                ViewData["pagecount"] = maxpage;
+                int length = PAGESIZE;
+                if (1 == maxpage)
+                {
+                    length = (int)listcount;
+                }
+
+                ViewData["商品筛选列表"] = 商品管理.查询商品(0, length, q1, false, SortBy.Ascending("商品信息.商品名"), includeDisabled: false);
+                ViewData["classid"] = id;
+                
+                ViewData["商品分类ID"] = id;
+                ViewData["筛选条件"] = proQ.ToJson();
+
+                ViewData["价格分段"] = 商品分类管理.查找分类((long)id).价格分段;
+
+                return View();
+            }
+            catch
+            {
+                return Content("<script>window.location='/商品陈列/';</script>");
+            }
+        }
+
+        public ActionResult AllListChangePage(int? page)
+        {
+            if (-1 != HttpContext.检查登录())
+            {
+                ViewData["已登录"] = "1";
+            }
+            else
+            {
+                ViewData["已登录"] = "0";
+            }
+
+            long classid = long.Parse(Request.Params["classid"]);
+            IMongoQuery proQ = MongoDB.Driver.Builders.Query.EQ("审核数据.审核状态", 审核状态.审核通过);
+
+            var sjfn = 商品分类管理.查找三级分类(classid);
+            var arrId = new List<long>();
+            foreach (var k in sjfn)
+            {
+                arrId.Add(k.Id);
+            }
+            var q1 = proQ.And(Query<商品>.In(o => o.商品信息.所属商品分类.商品分类ID, arrId));
+
+            //////////////////////////////////////////////////////////////////////新增按地域查询
+            var province = Request.QueryString["province"];
+            var city = Request.QueryString["city"];
+
+            IEnumerable<BsonValue> gysidlist = null;
+            if (!string.IsNullOrWhiteSpace(province))
+            {
+                var q_gys = Query<供应商>.EQ(o => o.所属地域.省份, province);
+                if (!string.IsNullOrWhiteSpace(city))
+                {
+                    q_gys = q_gys.And(Query<供应商>.EQ(o => o.所属地域.城市, city));
+                }
+                gysidlist = 用户管理.列表用户<供应商>(0, 0,
+                    Fields<供应商>.Include(o => o.Id),
+                    Query<供应商>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过).And(q_gys)
+                ).Select(o => o["_id"]);
+            }
+
+            if (gysidlist != null)
+            {
+                q1 = q1.And(Query<商品>.In(o => o.商品信息.所属供应商.用户ID, gysidlist));
+            }
+            //////////////////////////////////////////////////////////////////////新增按地域查询
+
+
+
+            var LISTCOUNT = (int)商品管理.计数商品(0, 0, q1, includeDisabled: false);
+
+            int MAXPAGE = (int)Math.Max((LISTCOUNT + PAGESIZE - 1) / PAGESIZE, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > MAXPAGE)
+            {
+                page = 1;
+            }
+            ViewData["listcount"] = LISTCOUNT;
+            ViewData["pagesize"] = PAGESIZE;
+            ViewData["currentpage"] = page;
+            ViewData["pagecount"] = MAXPAGE;
+
+            int length = PAGESIZE;
+            if (page == MAXPAGE && LISTCOUNT % PAGESIZE != 0)
+            {
+                length = LISTCOUNT % PAGESIZE;
+            }
+
+            ViewData["商品筛选列表"] = 商品管理.查询商品(((int)page - 1) * PAGESIZE, length, q1, false, SortBy.Ascending("商品信息.商品名"), includeDisabled: false);
+
+            ViewData["商品分类ID"] = classid;
+
+            return PartialView("Part_Product/Part_ProductByPage");
+        }
 
         public ActionResult ChangeProductClass_pagechange(int? page)
         {

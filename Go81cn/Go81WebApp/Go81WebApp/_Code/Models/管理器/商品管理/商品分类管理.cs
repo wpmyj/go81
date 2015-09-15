@@ -101,6 +101,27 @@ namespace Go81WebApp.Models.管理器
         {
             return Mongo.查询<商品分类>(0, 0, Query.EQ("父分类.商品分类ID", parentCatID), false, SortBy.Ascending("序号"));
         }
+        public static IEnumerable<商品分类> 查找三级分类(long parentCatID = -1)
+        {
+            var sonClassify = 查找子分类(parentCatID);
+            List<商品分类> grandClassify = new List<商品分类>();
+            foreach (var item in sonClassify)
+            {
+                var fn = 查找子分类(item.Id);
+                if (fn!=null && fn.Count()>0)
+                {
+                    foreach (var k in fn)
+                    {
+                        grandClassify.Add(k);
+                    }
+                }
+                else
+                {
+                    grandClassify.Add(item);
+                }
+            }
+            return grandClassify as IEnumerable<商品分类>;
+        }
         public static IEnumerable<商品分类> 查询商品分类(int skip, int limit, IMongoQuery conditions = null, bool modifiedDescending = true, IMongoSortBy sorting = null, bool includeDisabled = true, bool includeDeleted = false)
         {
             return Mongo.查询<商品分类>(skip, limit, conditions, modifiedDescending, sorting, includeDisabled, includeDeleted);

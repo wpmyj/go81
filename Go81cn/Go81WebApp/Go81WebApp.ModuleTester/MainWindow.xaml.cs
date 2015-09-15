@@ -773,13 +773,27 @@ namespace Go81WebApp.ModuleTester
 
             //}
             #endregion  
-            var ysd = 验收单管理.查询验收单(0, 0);
-            var yd=ysd.Where(o => o.供应商链接.用户数据 == null);
-            var arr = new List<long>();
-            foreach (var item in yd)
+            
+            #region 查找一级分类下的所有商品
+            var spfl = 商品分类管理.查找子分类();
+
+
+            var df = 商品管理.查询商品(0, 0);
+            int jk = 0;
+            foreach (var item in spfl)
             {
-                arr.Add(item.Id);
+                var erji = 商品分类管理.查询商品分类(0, 0, Query<商品分类>.Where(o => o.父分类.商品分类ID == item.Id));
+                foreach (var k in erji)
+                {
+                    jk += df.Where(o => o.商品信息.所属商品分类.商品分类.父分类.商品分类ID == k.Id).Count();
+                }
+
+                var pg = df.Where(o => o.商品信息.所属商品分类.商品分类.父分类.商品分类.父分类.商品分类ID == item.Id);
             }
+            #endregion
+
+
+
             MessageBox.Show("OK");
         }
         private void ButtonExpColl_Click(object sender, RoutedEventArgs e)

@@ -390,8 +390,8 @@ namespace Go81WebApp.Controllers.基本功能
 
             m.Add("企业信息管理", k = new Dictionary<string, object>
                     {
-                {"入库须知", "供应商后台/Notice"},
-                        {"联系人信息", "供应商后台/Vip_Manage"},
+                        {"入库须知", "供应商后台/Notice"},
+                        {"联系人信息", "供应商后台/Vip_Manage?comes=x"},
                         {"企业基本信息", "供应商后台/Gys_Manage"},
                         {"法定代表人信息", "供应商后台/Law_Person"},
                         {"营业信息", "供应商后台/Gys_Sales_Manage"},
@@ -417,7 +417,7 @@ namespace Go81WebApp.Controllers.基本功能
             m.Add("本账号信息维护", new Dictionary<string, object>
                 {
                 {"修改登录密码", "供应商后台/Vip_Password_Manage"},
-                {"修改注册人信息", "供应商后台/Vip_Manage"},
+                {"修改注册人信息", "供应商后台/Vip_Manage?comes=z"},
                 });
             m.Add("站内消息", new Dictionary<string, object>
             {

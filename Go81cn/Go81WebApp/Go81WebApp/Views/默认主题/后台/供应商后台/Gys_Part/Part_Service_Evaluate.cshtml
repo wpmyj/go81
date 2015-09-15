@@ -153,8 +153,8 @@ else
     $(document).ready(function () {
         $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
         $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
-        $("#上传验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#上传验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        $("#回传验收单存根联").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#回传验收单存根联").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
     function fileChange() {
         document.forms["upload"].submit();

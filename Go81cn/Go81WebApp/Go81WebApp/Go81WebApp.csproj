@@ -2152,6 +2152,8 @@
     <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_GysList_Inlib.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\_BackLayout.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_BackHead.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\ProductAllList.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_ProductByPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

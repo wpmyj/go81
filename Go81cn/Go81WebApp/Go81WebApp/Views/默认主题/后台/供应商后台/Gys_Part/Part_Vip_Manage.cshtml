@@ -281,8 +281,8 @@
         $("a.modify").click(function(){$(".company_msg :text,.company_msg select,.company_msg textarea,.company_msg :checkbox,.company_msg :file,.company_msg :submit").each(function(){$(this).removeAttr("disabled");});$(".company_msg a.add").show();$(".company_msg :submit").css("background-color","#2c5735");});
         $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
         $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
-        $("#联系人信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#联系人信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#@ViewData["comes"]").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#@ViewData["comes"]").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
     });
     function show_tip(th) {
         $(th).next("div").show();

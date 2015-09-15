@@ -1,0 +1,483 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    ViewBag.Title = "商品列表";
+
+}
+<script src="~/JS/provinceandcity_all.js"></script>
+<script type="text/javascript" src="~/JS/area.js"></script>
+<link rel="stylesheet" href="~/css/area.css" type="text/css" />
+<div id="contrastdiv" class="product_contrast">
+    <div class="product_contrastlistdiv" id="select_pro1">
+        <div class="product_contrastlistimg">
+            1
+        </div>
+        <div class="product_contrast_name" style="color:red;">
+            您还可以选择商品进行对比
+            <div class="product_contrast_price"></div>
+        </div>
+    </div>
+    <div class="product_contrastlistdiv" id="select_pro2">
+        <div class="product_contrastlistimg">
+            2
+        </div>
+        <div class="product_contrast_name" style="color:red;">
+            您还可以选择商品进行对比
+            <div class="product_contrast_price"></div>
+        </div>
+    </div>
+    <div class="product_contrastlistdiv" id="select_pro3">
+        <div class="product_contrastlistimg">
+            3
+        </div>
+        <div class="product_contrast_name" style="color:red;">
+            您还可以选择商品进行对比
+            <div class="product_contrast_price"></div>
+        </div>
+    </div>
+    <div class="product_contrastlistdiv" id="select_pro4">
+        <div class="product_contrastlistimg">
+            4
+        </div>
+        <div class="product_contrast_name" style="color:red;">
+            您还可以选择商品进行对比
+            <div class="product_contrast_price"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="bg_outdiv">
+    <div style="width: 1200px;height: 40px;">
+        @Html.Action("Part_ProductNav", "商品陈列")
+    </div>
+
+    <div class="bg_outdiv_left" style="width:240px;">
+        @Html.Action("Part_Recent", "商品陈列")
+    </div>
+    <div class="bg_outdiv_right">
+        <!--筛选条件开始-->
+        @{
+            var p_list = (IEnumerable<商品>)ViewData["商品筛选列表"];
+        }
+        <input type="hidden" name="hasselect_price" id="hasselect_price" value="" />
+        @if (ViewData["价格分段"] != null)
+        {
+            var x = (List<decimal>)ViewData["价格分段"];
+            if (x.Any())
+            {
+                <div class="area" style=" height:64px;">
+                    <div style="width:100%; height:32px;">
+                        <b>价格：</b>
+                        @for (var i = 0; i < x.Count; i += 2)
+                        {
+                            if (x[i + 1] == decimal.MaxValue)
+                            {
+                                <span class="sort_box" style="margin-right:5px;" onclick="prosuct_searchbyprice(this)">
+                                    <a class="pricecss">@x[i].ToString("g0")及以上</a>
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="sort_box" style="margin-right:5px;" onclick="prosuct_searchbyprice(this)">
+                                    <a class="pricecss">@x[i].ToString("g0")-@x[i + 1].ToString("g0")</a>
+                                </span>
+                            }
+                        }
+                    </div>
+                    <div style="width:100%; height:32px;">
+                        <b>地区：</b>
+                        <span class="def_box"><a id="hasselectplace">所有地区</a></span>
+                    </div>
+                    @*<b>排序：</b>
+                    <span class="sort_box">价格</span>
+                    <span class="sort_box">添加时间</span>*@
+                </div>
+            }
+            else
+            {
+                <div class="area" style=" height:32px;">
+                    <div style="width:100%; height:32px;">
+                        <b>地区：</b>
+                        <span class="def_box"><a id="hasselectplace">所有地区</a></span>
+                    </div>
+                    @*<b>排序：</b>
+                    <span class="sort_box">价格</span>
+                    <span class="sort_box">添加时间</span>*@
+                </div>
+            }
+        }
+        <input type="hidden" value="" name="deliverprovince" id="deliverprovince" />
+        <input type="hidden" value="" name="delivercity" id="delivercity" />
+        <script type="text/javascript">
+            $(function () {
+                $(".pricecss").hover(function () {
+                    $(this).css("color", "red");
+                },
+                function () {
+                    var fc = $(this).parent().css("borderTopColor");
+                    if (fc == "rgb(255, 0, 0)") {
+                        $(this).css("color", "#f00");
+                    }
+                    else {
+                        $(this).css("color", "#414141");
+                    }
+                });
+            })
+            function prosuct_searchbyplace(obj) {
+                $("#hasselectplace").html("");
+                $("#deliverprovince").val("");
+                $("#delivercity").val("");
+
+                var province = $(obj).attr("p");
+                var city = $(obj).attr("v");
+                $("#deliverprovince").val(province);
+                if (province != city) {
+                    $("#delivercity").val(city);
+                }
+                if (province != "") {
+                    $("#hasselectplace").html($("#deliverprovince").val() + $("#delivercity").val());
+
+                }
+                else {
+                    $("#hasselectplace").html("所有地区");
+                }
+                $(".sw-ui-area-box").hide();
+                //var parms = "";
+                //a = document.getElementById("selectlist").getElementsByTagName("a");
+                //if (a.length > 0) {
+                //    for (i = 0; i < a.length; i++) {
+                //        parms += a[i].getAttribute("key") + "|" + a[i].getAttribute("name") + "|" + a[i].getAttribute("val") + "$";
+                //    }
+                //}
+                $.get("/商品陈列/AllListChangePage?classid=@ViewData["classid"].ToString()" + "&province=" + encodeURI($("#deliverprovince").val()) + "&city=" + encodeURI($("#delivercity").val()) + "&price=" + encodeURI($("#hasselect_price").val()), function (response) {
+                    document.getElementById("pro_search_content").innerHTML = response;
+                    //document.getElementById("pagediv").style.display = "none";
+                });
+            }
+
+            function prosuct_searchbyprice(obj) {
+
+                $(obj).parent().find("a").each(function () {
+                    $(this).css("color", "#414141");
+                    $(this).parent().css("border-color", "#ccc");
+                });
+
+                var a = $(obj).find("a");
+                var price = $(a).html();
+
+                if ($("#hasselect_price").val() != price) {
+                    $(a).css("color", "red");
+                    $(obj).css("border-color", "red");
+
+                    //$(a).attr("style","color:red");
+                    //$(obj).attr("style","border-color:red");
+
+                    $("#hasselect_price").val(price)
+                }
+                else {
+                    $("#hasselect_price").val("");
+                }
+
+
+                //var parms = "";
+                //a = document.getElementById("selectlist").getElementsByTagName("a");
+                //if (a.length > 0) {
+                //    for (i = 0; i < a.length; i++) {
+                //        parms += a[i].getAttribute("key") + "|" + a[i].getAttribute("name") + "|" + a[i].getAttribute("val") + "$";
+                //    }
+                //}
+                $.get("/商品陈列/AllListChangePage?classname=" + encodeURI(parms) + "&classid=@ViewData["classid"].ToString()" + "&province=" + encodeURI($("#deliverprovince").val()) + "&city=" + encodeURI($("#delivercity").val()) + "&price=" + encodeURI($("#hasselect_price").val()), function (response) {
+                    document.getElementById("pro_search_content").innerHTML = response;
+                    //document.getElementById("pagediv").style.display = "none";
+                });
+
+            }
+        </script>
+        <!--筛选条件结束-->
+
+        <div class="gys_ztbsearch_contentbox" style=" width:918px; margin-bottom:10px;" id="pro_search_content">
+            <input type="hidden" name="select_classid" id="select_classid" value="@ViewData["商品分类ID"]" />
+            @if (p_list.Any())
+            {
+                foreach (var item in p_list)
+                {
+                    <div class="prodtpage_prodtlistdiv">
+                        <div class="prodtpage_prodtlistdiv_imgdiv">
+                            <a href="/商品陈列/Product_Detail?id=@item.Id" title="@item.商品信息.商品名" target="_blank">
+                                @if (item.商品信息.商品图片.Count > 0)
+                                {
+                                    <img src="@item.商品信息.商品图片[0]" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/noimage.jpg" />
+                                }
+                            </a>
+                        </div>
+                        <div class="prodtpage_prodtlistdiv_textdiv">
+                            @{ var thisp_name = item.商品信息.商品名.Replace("<font color=\"red\">", "").Replace("</font>", ""); }
+                            <div style="height:40px;">
+                                <a href="/商品陈列/Product_Detail?id=@item.Id" title="@thisp_name" class="product_name_twoline" target="_blank">
+                                    @Html.Raw(item.商品信息.商品名)
+                                </a>
+                            </div>
+                            <div class="prodtpage_prodtlistdiv_price"><a href="/商品陈列/Product_Detail?id=@item.Id" target="_blank">￥@(string.Format("{0:0.00}", item.销售信息.价格))</a><span style="padding-left:20px; color:#999; cursor:pointer;" title="报价时间">(@item.销售信息.价格修改日期.ToString("yyyy-MM-dd"))</span></div>
+                            <div style="height:20px;">
+                                @try
+                                {
+                                    <a class="product_gysname_oneline" href="/供应商陈列/Supplier_Destination?id=@item.商品信息.所属供应商.用户数据.Id" title="@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
+                                }
+                                catch
+                                {
+                                    <a>供应商未知</a>
+                                }
+                            </div>
+                            <div style="height:20px;">
+                                <span style="color:gray;">外网浏览：@item.销售信息.点击量</span>
+                            </div>
+                            <div style="height:20px;">
+                                <span style="color:gray;">
+                                    内网浏览：
+                                    @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
+                                    {
+                                        <a>@item.销售信息.内网点击量</a>
+                                    }
+                                    else
+                                    {
+                                        <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/商品陈列">登陆查看</a>
+                                    }
+                                </span>
+                            </div>
+                            @{ var GoodName = thisp_name.Length > 15 ? thisp_name.Substring(0, 15) : thisp_name; }
+                            <div>
+                                +对比<input type="checkbox" value="@(item.销售信息.价格)" id="@item.Id" name="ck" alt="@GoodName" onclick="showcontrast(this) " />
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div style="width: 918px; height: 270px; color: lightgray; font-size: 40px; text-align: center; line-height: 220px; font-style: italic;">暂无该类商品</div>
+            }
+
+
+            @if (ViewData["listcount"].ToString() != "0" && ViewData["pagecount"].ToString() != "1")
+            {
+                <div class="gys_znxx_content_detailbox" id="pagediv" style="float: left; width: 918px;">
+                    @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+                    {
+                        <a>首页</a>
+                    }
+                    else
+                    {
+                        <a id="1" onclick="changeAdpage(this)">首页</a><a style="margin-left:5px;" id="@(int.Parse(ViewData["currentPage"].ToString()) - 1)" onclick="    changeAdpage(this)">上一页</a>
+                    }
+                    @for (int i = 0; i <= 10; i++)
+                    {                       //一共最多显示10个页码，前面5个，后面5个
+                        if ((int.Parse(ViewData["currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
+                        {
+                            if (5 == i)
+                            {                               //当前页处理
+                                <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentPage"].ToString())</a>
+                            }
+                            else
+                            {                               //一般页处理
+                                <a id="@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)" onclick="changeAdpage(this)">@(int.Parse(ViewData["currentPage"].ToString()) + i - 5)</a>
+
+                            }
+                        }
+                    }
+                    @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+                    {
+                        <a>末页</a>
+                    }
+                    else
+                    {
+                        <a style="margin-right:5px;" id="@(int.Parse(ViewData["currentPage"].ToString()) + 1)" onclick="changeAdpage(this)">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="    changeAdpage(this)">末页</a>
+                    }
+                    第 @ViewData["currentPage"].ToString() 页/共 @ViewData["pagecount"].ToString() 页
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div id="hidecontrastdiv" onmouseover=" this.style.background = 'rgb(252, 239, 186)'; this.style.color = '#f99'" onmouseout="this.style.background = '#eee'; this.style.color = '#000'" style="cursor:pointer; display: none; width: 100px; text-align: center; height: 20px; right: 50px; bottom: 0px; position: fixed; zoom: 1; z-index: 999; background-color: #eee; border-radius: 5px; border: 1px solid #C2C2C2; color: #F00;" onclick="    document.getElementById('contrastdiv').style.display = 'block'; this.style.display = 'none'">
+    对比栏
+</div>
+
+<script type="text/javascript">
+    function showcontrast(a) {
+        var topstr = "<div class='product_contrast_title'>对比商品<a style='float:right; margin-right:20px; cursor:pointer;' onclick=\"document.getElementById('contrastdiv').style.display='none';document.getElementById('hidecontrastdiv').style.display='block'\">隐藏</a></div>";
+        var bottom = "<button id='contrastbtn' style='width:100px; cursor:pointer; background-color:#E4393C; height:35px; border:none' onclick='redirect(this)'>进行对比</button>";
+        var count = 0;
+        var product_str = "";
+        var divbox = document.getElementById("contrastdiv");
+        var a = document.getElementById("pro_search_content");
+        var checklist = a.getElementsByTagName("input");
+        for (var i = 0; i < checklist.length; i++) {
+            if (checklist[i].type == "checkbox" && checklist[i].checked) {
+                if (count < 4)
+                {
+                    product_str += "<div class='product_contrastlistdiv' onmouseover='show_Delbt(this)' >";
+                    product_str += "<div class='product_contrastlistimg'>";
+                    product_str += "<img src='"+a.getElementsByTagName("img")[i-2].getAttribute("src")+"'/>";
+                    product_str += "</div>";
+                    product_str += "<div class='product_contrast_name'><a target='_blank' href='/商品陈列/Product_Detail?id="+checklist[i].getAttribute("id")+"'>";
+                    product_str += checklist[i].getAttribute("alt")+"</a></div>";
+                    product_str += "<span style='color:red; padding-left:20px; font-size:13px;;' id='" + checklist[i].getAttribute("id") + "'>" + "￥"+checklist[i].getAttribute("value") + "<a href='###' onclick='removeDiv(this,"+(i-2)+")' id='delbt' style='color:blue; padding-left:20px;'>删除</a></span>";
+                    //product_str += "<div class='product_contrast_price'></div>";
+                    product_str += "</div>";
+                }
+                count++;
+            }
+        }
+        if (count > 4) {
+            divbox.innerHTML = topstr + product_str + bottom+"<div style='color:red'>最多职能选择4个产品就行对比</div>";
+        }
+        else {
+            divbox.innerHTML = topstr + product_str + bottom;
+        }
+        if (count > 0) {
+            divbox.style.display = "block";
+            if (count == 1) {
+                document.getElementById("contrastbtn").disabled = true;
+                document.getElementById("contrastbtn").style.backgroundColor = "#fff";
+            }
+        }
+        else {
+            divbox.style.display = "none";
+        }
+    }
+    function removeDiv(th,n)
+    {
+        document.getElementsByName("ck").item(n).checked=false;
+        $(th).parent("span").parent("div").remove();
+        var len=$("div.product_contrastlistdiv").length;
+        if(len<=1)
+        {
+            $("#contrastbtn").remove();
+        }
+        if(len==0)
+        {
+            $("#contrastdiv").hide();
+        }
+    }
+    function show_Delbt(th)
+    {
+        $(th).children("span").children("a").show();
+    }
+    //function hide_Delbt(th)
+    //{
+    //    $(th).children("span").children("a").hide();
+    //}
+    function redirect(a) {
+        var parms = "";
+        var divbox = document.getElementById("contrastdiv");
+        var spanlist = divbox.getElementsByTagName("span");
+        for (var i = 0; i < spanlist.length; i++) {
+            parms += spanlist[i].getAttribute("id") + "|";
+        }
+        window.open("/商品陈列/ProductContrast?Contrastparmer=" + encodeURI(parms));
+    }
+    function addcondition(a) {
+        var parms = "";
+        document.getElementById("selectclass").style.display = 'block';
+        document.getElementById("selectlist").innerHTML += "<a title=\"删除该属性\" name=\"" + a.getAttribute("name") + "\" key=\"" + a.getAttribute("key") + "\" val=\""+a.innerHTML+"\" onclick=\"deletecondition(this)\">" +a.getAttribute("name")+"&nbsp;:&nbsp;"+ a.innerHTML + "<span class='gys_ztbsearch_classboxspan'></span></a>";
+        a.parentNode.parentNode.parentNode.style.display = "none";
+        a = document.getElementById("selectlist").getElementsByTagName("a");
+        if (a.length > 0) {
+            for (var i = 0; i < a.length; i++) {
+                parms += a[i].getAttribute("key") + "|" + a[i].getAttribute("name") + "|" + a[i].getAttribute("val") + "$";
+            }
+        }
+        $.get("/商品陈列/ChangeProductClass?classname=" + encodeURI(parms) + "&classid=" + @ViewData["classid"].ToString()+ "&province=" + encodeURI($("#deliverprovince").val())+ "&city=" + encodeURI($("#delivercity").val())+ "&price=" + encodeURI($("#hasselect_price").val()), function (response) {
+            document.getElementById("pro_search_content").innerHTML = response;
+            //document.getElementById("pagediv").style.display = "none";
+        });
+    }
+    function deletecondition(a) {
+        var parms = "";
+        document.getElementById("selectclass").style.display = 'block';
+        var name = $.trim(a.getAttribute("name"));
+        $(a).remove();
+        //document.getElementById("selectlist").innerHTML = document.getElementById("selectlist").innerHTML.replace(("<a title=\"删除该属性\" name=\"" + a.getAttribute("name") + "\" key=\"" + a.getAttribute("key") + "\" val=\""+a.innerHTML+"\" onclick=\"deletecondition(this)\">" +a.getAttribute("name")+"&nbsp;:&nbsp;"+ a.innerHTML + "<span></span></a>"), "").replace(("<A onclick=deletecondition(this) name="+a.getAttribute("name")+">"+a.innerHTML+"</A>"), "");
+        //var display = document.getElementsByName("displaydiv");
+        var display = $("div[name='displaydiv']");
+        if (display.length > 0) {
+            for (var i = 0; i < display.length; i++) {
+                if ($.trim(display[i].getAttribute("id")) == name) {
+                    display[i].parentNode.style.display = "block";
+                }
+            }
+        }
+        if (document.getElementById("selectlist").innerHTML == null || document.getElementById("selectlist").innerHTML == "") {
+            document.getElementById("selectclass").style.display = 'none';
+        }
+        a = document.getElementById("selectlist").getElementsByTagName("a");
+        if (a.length > 0) {
+            for (i = 0; i < a.length; i++) {
+                parms += a[i].getAttribute("key") + "|" + a[i].getAttribute("name") + "|" + a[i].getAttribute("val") + "$";
+            }
+        }
+        $.get("/商品陈列/ChangeProductClass?classname=" + encodeURI(parms)+ "&classid=@ViewData["classid"].ToString()"+ "&province=" + encodeURI($("#deliverprovince").val())+ "&city=" + encodeURI($("#delivercity").val())+ "&price=" + encodeURI($("#hasselect_price").val()), function (response) {
+            document.getElementById("pro_search_content").innerHTML = response;
+            //document.getElementById("pagediv").style.display = "none";
+        });
+    }
+</script>
+<script type="text/javascript">
+    function changeAdpage(a) {
+        var tempparm = "page=" + encodeURI(a.getAttribute("id"))+"&classid="+encodeURI($("#select_classid").val());
+        $.ajax({
+            cache: false,
+            async: false,   // 太关键了，同步和异步的参数
+            //dataType: 'json', type: 'post',
+            type: 'POST',
+            //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
+            url: "/商品陈列/AllListChangePage",
+            data: tempparm,
+            success: function (data) {
+                $("#pro_search_content").html(data)
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $(".action_link").each(function () {
+            if ($(this).text() == "采购商城") {
+                $(this).parent("div").addClass("on");
+            }
+        });
+    });
+</script>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        
+        var i = @(int.Parse(ViewData["currentPage"].ToString()));
+        var j=@(int.Parse(ViewData["pagecount"].ToString()))
+        $(document).ready(function () {
+            $(".gys_znxx_content_detailbox a").each(function () {
+                if ($(this).text() == i) {
+                    $(this).css("border","1px solid #ff0000");
+                }
+                if (i== j) {
+                    $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+                }
+                if (i == 1) {
+                    $(".gys_znxx_content_detailbox a:first").addClass("endPage");;
+                }
+            });
+        });
+
+
+
+        //$("div.Page2").css("background-color", "#990808")
+        $("#contrastdiv").css({"background-color":"white","border":"2px solid #4AA154","box-shadow":"0px 0px 5px lightgray","-webkit-box-shadow":"0px 0px 5px lightgray","-moz-box-shadow":"0px 0px 5px lightgray","height":"auto"});
+    });
+</script>

@@ -537,57 +537,66 @@
 <input type="hidden" id="currentPage" name="currentPage" value="@ViewData["CurrentPage"]" />
 <script type="text/javascript" language="javascript">
     var userId="";
-    function setPage(pgCount, currentPage) {
+    function setPage(pgCount,currentPage) {
+        var str = '';
+        if(pgCount>0)
+        {
+            if (currentPage == 1) {
+                str += "<a>首页</a>";
+            }
+            else {
+                str += "<a onclick='getGoods(1)'>首页</a><a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a>";
+            }
+        }
         if (pgCount <= 6) {
-            var str = '';
             for (var i = 1; i <= pgCount; i++) {
                 str += "<a onclick='getGoods("+i+")'>" + i + "</a>";
             }
-            if (pgCount!=0)
-            {
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-            }
-            $("div#pager").html(str);
         }
         else {
             if (currentPage < 6) {
                 if (currentPage != 1) {
-                    var str = "<a onclick='getGoods("+(currentPage-1)+")'>上一页</a>";
+                    str = "<a onclick='getGoods("+(currentPage-1)+")'>上一页</a>";
                     for (var i = 1; i < 7; i++) {
                         str += "<a onclick='getGoods("+i+")'>" + i + "</a>";
                     }
                     str += "...<a  onclick='getGoods("+pgCount+")'>" + pgCount + "</a><a onclick='getGoods("+(currentPage+1)+")'>下一页</a>";
-                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                    $("div#pager").html(str);
                 }
                 else {
-                    var str = "";
+                    str = "";
                     for (var i = 1; i < 7; i++) {
                         str += "<a  onclick='getGoods("+i+")'>" + i + "</a>";
                     }
                     str += "...<a onclick='getGoods("+pgCount+")'>" + pgCount + "</a><a onclick='getGoods("+(currentPage+1)+")'>下一页</a>";
-                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                    $("div#pager").html(str);
                 }
             }
             else if (currentPage >= 6 && currentPage < pgCount - 3) {
-                var str = "<a onclick='getGoods("+(currentPage-1)+")'>上一页</a><a onclick='getGoods("+(1)+")'>1</a>...";
+                str = "<a onclick='getGoods("+(currentPage-1)+")'>上一页</a><a onclick='getGoods("+(1)+")'>1</a>...";
                 for (var i = (currentPage - 4 + 1) ; i <= currentPage+1; i++) {
                     str += "<a onclick='getGoods("+i+")'>" + i + "</a>";
                 }
                 str += "...<a onclick='getGoods("+pgCount+")'>" + pgCount + "</a><a onclick='getGoods("+(currentPage+1)+")'>下一页</a>";
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                $("div#pager").html(str);
             }
             else if (currentPage >= pgCount - 3) {
-                var str = "<a onclick='getGoods("+(currentPage-1)+")'>上一页</a><a onclick='getGoods("+1+")'>1</a>...";
+                str = "<a onclick='getGoods("+(currentPage-1)+")'>上一页</a><a onclick='getGoods("+1+")'>1</a>...";
                 for (var i = pgCount - 6 + 1; i <=pgCount; i++) {
                     str += "<a onclick='getGoods("+i+")'>" + i + "</a>";
                 }
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                $("div#pager").html(str);
             }
         }
+        if (pgCount > 0)
+        {
+            if (currentPage == pgCount) {
+                str += "<a>末页</a>";
+            }
+            else {
+                str += "<a onclick='getGoods("+(currentPage+1)+")'>下一页</a><a onclick='getGoods("+pgCount+")'>末页</a>";
+            }
+            if (pgCount != 0) {
+                str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
+            }
+        }
+        $("div#pager").html(str);
         $("div#pager a").each(
             function () {
                 if ($(this).text() == currentPage.toString()) {
@@ -598,8 +607,8 @@
     }
     $(document).ready(function (e) {
         userId=$("#user").val();
-        var pgCount=$("#pageCount").val();
-        var current=$("#currentPage").val();
+        var pgCount=parseInt($("#pageCount").val());
+        var current=parseInt($("#currentPage").val());
         setPage(pgCount,current);
         $(".tb2,.tb3,.tb4,.tb6").css({"border-style":"none"});
         $("#dituContent").show();

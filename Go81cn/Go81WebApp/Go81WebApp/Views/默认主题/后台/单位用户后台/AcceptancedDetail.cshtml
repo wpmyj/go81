@@ -4,7 +4,7 @@
 @using Go81WebApp.Controllers.后台
 @{
     ViewBag.Title = "验收单详情";
-    //Layout = "_Back_IntranetLayout.cshtml";
+    Layout = "_Back_IntranetLayout.cshtml";
 }
 <style type="text/css">
     #accept_con table tr td.align {
@@ -1041,14 +1041,14 @@
         $("#good_list").fadeOut();
     });
 </script>
-<script>
+@*<script>
     $(function () {
         $("#我的验收单列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
         $("#我的验收单列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
-</script>
+</script>*@
 
-@*@if (ViewData["comes"].ToString() == "已审核")
+@if (ViewData["comes"].ToString() == "已审核")
 {
     <script>
         $(function () {
@@ -1065,4 +1065,4 @@
             $("#我的验收单列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
         });
     </script>
-}*@
+}

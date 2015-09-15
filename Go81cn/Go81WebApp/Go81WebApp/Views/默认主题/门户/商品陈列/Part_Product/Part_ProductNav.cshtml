@@ -9,35 +9,41 @@
      .pronav{font-size: 12px; color: rgb(107, 107, 107); text-indent: 20px;}
 </style>
 <div class="pronav">
-    @if (WebApiApplication.IsIntranet)
-    {
+    @{
         if (Model != null && Model.分类性质 == 商品分类性质.通用物资)
         {
-            <label style="font-size: 22px;">@Model.父分类.商品分类.父分类.商品分类.分类名</label><label>&nbsp; &gt; &nbsp;</label> @Model.父分类.商品分类.分类名 <label>&nbsp; &gt; &nbsp;</label> @Model.分类名
+            if (Model.父分类.商品分类 != null)
+            {
+                if (Model.父分类.商品分类.父分类.商品分类 != null)
+                {
+                    <label style="font-size: 22px;"><a href="/商品陈列/ProductAllList?id=@Model.父分类.商品分类.父分类.商品分类ID">@Model.父分类.商品分类.父分类.商品分类.分类名</a></label><label>&nbsp; &gt; &nbsp;</label> <a href="/商品陈列/ProductAllList?id=@Model.父分类.商品分类ID">@Model.父分类.商品分类.分类名</a> <label>&nbsp; &gt; &nbsp;</label><a href="/商品陈列/ProductAllList?id=@Model.Id"></a>@Model.分类名
+                }
+                else
+                {
+                    <label style="font-size: 22px;"><a href="/商品陈列/ProductAllList?id=@Model.父分类.商品分类ID">@Model.父分类.商品分类.分类名</a></label><label>&nbsp; &gt; &nbsp;</label><a href="/商品陈列/ProductAllList?id=@Model.Id">@Model.分类名</a> <label>&nbsp; &gt; &nbsp;</label>
+                }
+            }
+            else
+            {
+                <label style="font-size: 22px;"><a href="/商品陈列/ProductAllList?id=@Model.Id">@Model.分类名</a></label><label>&nbsp; &gt; &nbsp;</label>
+            }
+
         }
         else if (Model != null && Model.分类性质 == 商品分类性质.专用物资)
         {
-            <label style="font-size: 22px;">专用物资</label><label>&nbsp; &gt; &nbsp;</label> @Model.父分类.商品分类.分类名 <label>&nbsp; &gt; &nbsp;</label> @Model.分类名
+            if (Model.父分类.商品分类 != null)
+            {
+                <label style="font-size: 22px;">专用物资</label><label>&nbsp; &gt; &nbsp;</label><a href="/商品陈列/ProductAllList?id=@Model.父分类.商品分类ID">@Model.父分类.商品分类.分类名</a> <label>&nbsp; &gt; &nbsp;</label><a href="/商品陈列/ProductAllList?id=@Model.Id">@Model.分类名</a>
+            }
+            else
+            {
+                <label style="font-size: 22px;">专用物资</label><label>&nbsp; &gt; &nbsp;</label><a href="/商品陈列/ProductAllList?id=@Model.Id">@Model.分类名</a><label>&nbsp; &gt; &nbsp;</label>
+            }
         }
         else
         {
             <label>不好意思，出错了！</label>
         }
-    }
-    else
-    {
-        if (Model != null && Model.分类性质 == 商品分类性质.通用物资)
-        {
-            <label style="font-size: 22px;">@Model.父分类.商品分类.父分类.商品分类.分类名</label><label>&nbsp; &gt; &nbsp;</label> @Model.父分类.商品分类.分类名 <label>&nbsp; &gt; &nbsp;</label> @Model.分类名
-        }
-        else if (Model != null && Model.分类性质 == 商品分类性质.专用物资)
-        {
-            <label style="font-size: 22px;">专用物资</label><label>&nbsp; &gt; &nbsp;</label> @Model.父分类.商品分类.分类名 <label>&nbsp; &gt; &nbsp;</label> @Model.分类名
-        }
-        else
-        {
-            <label>不好意思，出错了！</label>
-        }
-    }
+}
         
 </div>

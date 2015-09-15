@@ -1445,10 +1445,10 @@ namespace Go81WebApp.Controllers.后台
                         model.管理单位.用户ID = 16;
                         break;
                 }
-                if (Request.Form["admin"] != "-1")
-                {
-                    model.所属单位.用户ID = long.Parse(Request.Form["admin"]);
-                }
+                //if (Request.Form["admin"] != "-1")
+                //{
+                //    model.所属单位.用户ID = long.Parse(Request.Form["admin"]);
+                //}
 
                 var dwuser = 用户管理.查找用户<单位用户>(model.Id);
                 dwuser.管理单位 = model.管理单位;
@@ -3606,10 +3606,10 @@ namespace Go81WebApp.Controllers.后台
                         model.u.管理单位.用户ID = 16;
                         break;
                 }
-                if (Request.Form["admin"] != "-1")
-                {
-                    model.u.所属单位.用户ID = long.Parse(Request.Form["admin"]);
-                }
+                //if (Request.Form["admin"] != "-1")
+                //{
+                //    model.u.所属单位.用户ID = long.Parse(Request.Form["admin"]);
+                //}
                 model.u.审核数据.审核状态 = 审核状态.审核通过;
                 model.u.登录信息.登录名 = model.loginName;
                 model.u.单位信息.单位编码 = model.unitCode;
