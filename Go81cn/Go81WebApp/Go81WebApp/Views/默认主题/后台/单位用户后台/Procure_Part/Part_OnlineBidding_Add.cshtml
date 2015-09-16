@@ -63,101 +63,101 @@
     }
 </script>
 <style type="text/css">
-        .out_box {
-        display: none;
-    }
-
-    .out_box_infirst {
-        position: fixed;
-        z-index: 5;
-        top: 0px;
-        left: 0px;
-        text-align: center;
-        right: 0;
-        bottom: 0px;
-        background-color: black;
-        opacity: 0.5;
-        -moz-opacity: 0.5;
-        filter: alpha(opacity=50);
-        height: 100%;
-        width: 100%;
-        border: 1px solid green;
-        box-shadow: 0px 0px 10px gray;
-        -webkit-box-shadow: 0px 0px 10px gray;
-        -moz-box-shadow: 0px 0px 10px gray;
-    }
-
-    .out_box_insecond {
-        position: fixed;
-        width: 100%;
-        height: 80%;
-        left: 0px;
-        z-index: 20;
-        top: 3%;
-    }
-
-    .out_box_insecond_child {
-        width: 680px;
-        position: relative;
-        margin: 0px auto;
-        z-index: 100;
-        background-color: white;
-        border: 1px solid red;
-    }
-    
-    .close_outbox {
-        width: 30px;
-        height: 30px;
-        line-height: 30px;
-        text-align: center;
-        background-color: red;
-        font-size: 30px;
-        color: white;
-        float: right;
-        cursor: pointer;
-    }
-    .procure_formlistdiv {
-        width: 320px;
-    }
-
-        .procure_formlistdiv input {
-            width: 150px;
-            border:1px solid #aaa;
+            .out_box {
+            display: none;
         }
 
-     .procureinputdiv{
-         width:450px;
-         float:left;
-     }
-    .procureinputdiv_title {
-        width: 130px;
-        text-align: right;
-        padding-right:0;
-    }
-    div#pager
-    {
-        text-align:center;
-    }
-        div#pager a {
-        display: inline-block;
-        width: 50px;
-        text-align: center;
-        line-height: 25px;
-        font-size: 12px;
-        height: 25px;
-        border: 1px solid gray;
-        margin-top: 10px;
-        margin-left: 5px;
-        margin-bottom: 5px;
-        cursor: pointer;
-    }
-        .span{
+        .out_box_infirst {
+            position: fixed;
+            z-index: 5;
+            top: 0px;
+            left: 0px;
+            text-align: center;
+            right: 0;
+            bottom: 0px;
+            background-color: black;
+            opacity: 0.5;
+            -moz-opacity: 0.5;
+            filter: alpha(opacity=50);
+            height: 100%;
+            width: 100%;
+            border: 1px solid green;
+            box-shadow: 0px 0px 10px gray;
+            -webkit-box-shadow: 0px 0px 10px gray;
+            -moz-box-shadow: 0px 0px 10px gray;
+        }
+
+        .out_box_insecond {
+            position: fixed;
+            width: 100%;
+            height: 80%;
+            left: 0px;
+            z-index: 20;
+            top: 3%;
+        }
+
+        .out_box_insecond_child {
+            width: 680px;
+            position: relative;
+            margin: 0px auto;
+            z-index: 100;
+            background-color: white;
+            border: 1px solid red;
+        }
+
+        .close_outbox {
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background-color: red;
+            font-size: 30px;
+            color: white;
+            float: right;
+            cursor: pointer;
+        }
+        .procure_formlistdiv {
+            width: 320px;
+        }
+
+            .procure_formlistdiv input {
+                width: 150px;
+                border:1px solid #aaa;
+            }
+
+         .procureinputdiv{
+             width:450px;
+             float:left;
+         }
+        .procureinputdiv_title {
+            width: 130px;
+            text-align: right;
+            padding-right:0;
+        }
+        div#pager
+        {
+            text-align:center;
+        }
+            div#pager a {
             display: inline-block;
-width: 270px;
-overflow: hidden;
-text-overflow: ellipsis;
-white-space: nowrap;
+            width: 50px;
+            text-align: center;
+            line-height: 25px;
+            font-size: 12px;
+            height: 25px;
+            border: 1px solid gray;
+            margin-top: 10px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
         }
+            .span{
+                display: inline-block;
+    width: 270px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+            }
 </style>
 <div id="f" class="out_box">
     <div class="out_box_infirst">
@@ -184,7 +184,7 @@ white-space: nowrap;
                                     }
                                 </select>
                                 <select id="twoType" onchange="thirdClass(this)"></select>
-                                <select id="thirdType" onchange="selectGood()"></select>
+                                <select id="thirdType" onchange="current_page(1)"></select>
                                 <div id="cons" style="height:200px;">
                                 </div>
                                 <div id="pager"></div>
@@ -198,7 +198,7 @@ white-space: nowrap;
     </div>
 </div>
 
-@using (Html.BeginForm("OnlineBidding_Add","单位用户后台",FormMethod.Post))
+@using (Html.BeginForm("OnlineBidding_Add", "单位用户后台", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
@@ -212,24 +212,24 @@ white-space: nowrap;
             <div class="gys_znxx_content">
 
                 @*@{IEnumerable<招标采购项目> needlist = ViewData["招标采购项目列表"] as IEnumerable<招标采购项目>;
-                if (needlist != null && needlist.Any())
-                {
-                <div class="procureinputdiv">
-                    <div class="procureinputdiv_title">项目名称：</div>
-                    <div class="procure_formlistdiv">
+                    if (needlist != null && needlist.Any())
+                    {
+                    <div class="procureinputdiv">
+                        <div class="procureinputdiv_title">项目名称：</div>
+                        <div class="procure_formlistdiv">
 
-                        <select id="zb_contact" name="zb_contact" style="width:304px; height:30px;">
-                            <option value="" id="">请选择所属采购项目</option>
-                            @foreach (var i in needlist)
-                                {
-                            <option class="yjfn" value="@i.Id" id="@i.Id">@i.需求申请来源.需求申请.标题</option>
-                                }
-                        </select>
+                            <select id="zb_contact" name="zb_contact" style="width:304px; height:30px;">
+                                <option value="" id="">请选择所属采购项目</option>
+                                @foreach (var i in needlist)
+                                    {
+                                <option class="yjfn" value="@i.Id" id="@i.Id">@i.需求申请来源.需求申请.标题</option>
+                                    }
+                            </select>
 
+                        </div>
                     </div>
-                </div>
-                }
-                }*@
+                    }
+                    }*@
                 <div class="procureinputdiv">
                     <div class="procureinputdiv_title">项目名称：</div>
                     <div class="procure_formlistdiv">
@@ -277,14 +277,14 @@ white-space: nowrap;
                         @{IEnumerable<商品分类> goodclass = ViewData["first"] as IEnumerable<商品分类>;
                         if (goodclass != null && goodclass.Any())
                         {
-                            <select id="hy" name="hy" style="width:155px; height:30px;" onchange="getLowerClass(this)">
-                                <option value="请选择行业" id="-1">--请选择行业--</option>
-                                @foreach (var i in goodclass)
+                        <select id="hy" name="hy" style="width:155px; height:30px;" onchange="getLowerClass(this)">
+                            <option value="请选择行业" id="-1">--请选择行业--</option>
+                            @foreach (var i in goodclass)
                                 {
-                                    <option class="yjfn" value="@i.分类名" id="@i.Id">@i.分类名</option>
+                                <option class="yjfn" value="@i.分类名" id="@i.Id">@i.分类名</option>
                                 }
-                            </select>
-                            <span style="color:red;">*@Html.ValidationMessageFor(model => model.所属行业)</span>
+                        </select>
+                        <span style="color:red;">*@Html.ValidationMessageFor(model => model.所属行业)</span>
                         }
                         }
                         <script type="text/javascript">
@@ -358,7 +358,7 @@ white-space: nowrap;
                         <span style="color:red;">*@Html.ValidationMessageFor(model => model.交货时间)</span>
                     </div>
                 </div>
-                
+
                 <div class="procureinputdiv">
                     <div class="procureinputdiv_title">联系人：</div>
                     <div class="procure_formlistdiv">
@@ -373,7 +373,7 @@ white-space: nowrap;
                         <span style="color:red;">*@Html.ValidationMessageFor(model => model.联系方式.手机)</span>
                     </div>
                 </div>
-                
+
                 <div class="procureinputdiv">
                     <div class="procureinputdiv_title">备注：</div>
                     <div class="procure_formlistdiv">
@@ -416,50 +416,55 @@ white-space: nowrap;
     var page = 0;
     var sum = 0;
     function setPage(pg_count, current_page) {
+        var str = '';
+        if (current_page != 1) {
+            str += "<a onclick='current_page(1)'>首页</a><a onclick='current_page(" + (current_page - 1) + ")'>上一页</a>";
+        }
         if (pg_count <= 6) {
-            str = '';
+
             for (var i = 1; i <= pg_count; i++) {
                 str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
             }
-            $("div#pager").html(str);
         }
         else {
-            if (current_page < 6) {
+            if (current_page < 5) {
                 if (current_page != 1) {
-                    var str = "<a onclick='pre_page()'>上一页</a>";
-                    for (var i = 1; i < 6; i++) {
+                    for (var i = 1; i < 5; i++) {
                         str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
                     }
-                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
-                    $("div#pager").html(str);
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a>";
                 }
                 else {
-                    var str = "";
-                    for (var i = 1; i < 6; i++) {
+                    for (var i = 1; i < 5; i++) {
                         str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
                     }
-                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
-                    $("div#pager").html(str);
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a>";
                 }
 
             }
-            else if (current_page >= 6 && current_page < pg_count - 3) {
-                var str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(" + 1 + ")'>1</a>...";
-                for (var i = (current_page - 4 + 1) ; i <= current_page; i++) {
+            else if (current_page >= 5 && current_page < pg_count - 2) {
+                str += "<a onclick='current_page(" + 1 + ")'>1</a>...";
+                for (var i = (current_page - 3 + 1) ; i <= current_page; i++) {
                     str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
                 }
-                str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
-                $("div#pager").html(str);
+                str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a>";
             }
-            else if (current_page >= pg_count - 3) {
-                str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(1)'>1</a>...";
-                for (var i = pg_count - 5 + 1; i < pg_count; i++) {
+            else if (current_page >= pg_count - 2) {
+                str += "<a onclick='current_page(1)'>1</a>...";
+                for (var i = pg_count - 3 + 1; i < pg_count; i++) {
                     str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
                 }
                 str += "<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a>";
-                $("div#pager").html(str);
+
             }
         }
+        if (pg_count != 0) {
+            if (current_page != pg_count) {
+                str += "<a onclick='current_page(" + (current_page + 1) + ")'>下一页</a><a onclick='current_page(" + pg_count + ")'>末页</a>";
+            }
+            str += "第" + current_page + "页/共" + pg_count + "页";
+        }
+        $("div#pager").html(str);
         $("div#pager a").each(
             function () {
                 if ($(this).text() == current_page.toString()) {
@@ -547,7 +552,7 @@ white-space: nowrap;
                 thirdClass("select#twoType");
             }
             else {
-                selectGood();
+                current_page(1);
             }
         });
     }
@@ -562,23 +567,12 @@ white-space: nowrap;
                     str += "<option value='" + data.Data[i] + "'>" + data.Data[i] + "</option>";
                 }
                 $("select#thirdType").html(str);
-                selectGood();
+                current_page(1);
             });
         }
-        else
-        {
-            selectGood();
+        else {
+            current_page(1);
         }
-    }
-    function selectGood() {
-        $.get('/单位用户后台/SelectGood',
-            { tpy: alltype, fname: $("select#firstClass").val(), tn: $("select#twoType").val(), thirdname: $("select#thirdType").val(), skip: 0 },
-            function (data) {
-                setval(data.Data.content);
-                setPage(data.Data.count, 1);
-                sum = data.Data.count;
-                page = 0;
-            });
     }
     function current_page(num) {
         $.get('/单位用户后台/SelectGood',
@@ -586,29 +580,6 @@ white-space: nowrap;
                 function (data) {
                     setval(data.Data.content);
                     setPage(data.Data.count, num);
-                    page = num;
-                });
-    }
-    function pre_page() {
-        if (page > 1) {
-            page--;
-        }
-        $.get('/单位用户后台/SelectGood',
-                { tpy: alltype, fname: $("select#firstClass").val(), tn: $("select#twoType").val(), thirdname: $("select#thirdType").val(), skip: page },
-                function (data) {
-                    setval(data.Data.content);
-                    setPage(data.Data.count, page);
-                });
-    }
-    function next_page() {
-        if (page < sum) {
-            page++;
-        }
-        $.get('/单位用户后台/SelectGood',
-                { tpy: alltype, fname: $("select#firstClass").val(), tn: $("select#twoType").val(), thirdname: $("select#thirdType").val(), skip: page },
-                function (data) {
-                    setval(data.Data.content);
-                    setPage(data.Data.count, page);
                 });
     }
     $(function () {

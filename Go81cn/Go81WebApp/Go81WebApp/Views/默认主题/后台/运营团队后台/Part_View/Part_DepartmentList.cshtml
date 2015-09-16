@@ -65,9 +65,12 @@
         </table>
         <div class="gys_znxx_content">
             <table width="100%" id="con" cellpadding="0" cellspacing="0">
-                <tr><td colspan="8" style="text-align:right;"><a href="###" onclick="outPutExcelAll()">导出所有用户信息</a><a href="###" onclick="outPutExcel(this)">导出EXCEL表格</a></td></tr>
-                <tr><th align="center">用户ID</th><th align="center">登录名</th><th align="center">所属单位</th><th align="center">单位名称</th><th>联系人</th><th>审核状态</th><th>操作</th><th>EXCEL<input id="allCheck" name="parent" type="checkbox" value="" onclick="selectAll()" /></th></tr>
-                @foreach (var item in ViewData["user"] as IEnumerable<用户基本数据>)
+                <tr><td colspan="7" style="text-align:right;"><a href="###" onclick="outPutExcelAll()">导出所有用户信息</a>@*<a href="###" onclick="outPutExcel(this)">导出EXCEL表格</a>*@</td></tr>
+                <tr><th align="center">用户ID</th><th align="center">登录名</th><th align="center">所属单位</th><th align="center">单位名称</th><th>联系人</th><th>审核状态</th><th>操作</th>@*<th>EXCEL<input id="allCheck" name="parent" type="checkbox" value="" onclick="selectAll()" /></th>*@</tr>
+                @{
+                    IEnumerable<单位用户> model=ViewData["user"] as IEnumerable<单位用户>;
+                }
+                @foreach (var item in  model)
                 {
                     var m = item as 单位用户;
                     <tr>
@@ -103,13 +106,113 @@
                 }
             </table>
             <div class="gys_znxx_content_detailbox">
-                @Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString()))
+                @{
+                    if (model.Count() != 0)
+                    {
+                        int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                        int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                        if (Pagecount > 0 && CurrentPage != 1)
+                        {
+                            <a href='/运营团队后台/DepartmentList?page=1'>首页</a><a href='/运营团队后台/DepartmentList?page=@(CurrentPage-1)'>上一页</a>
+                        }
+                        if (Pagecount <= 6)
+                        {
+                            for (int i = 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/运营团队后台/DepartmentList?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/运营团队后台/DepartmentList?page=@i'>@i</a>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (CurrentPage < 6)
+                            {
+                                if (CurrentPage != 1)
+                                {
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/运营团队后台/DepartmentList?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/运营团队后台/DepartmentList?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/运营团队后台/DepartmentList?page=@(Pagecount)">@Pagecount</a>
+                                }
+                                else
+                                {
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/运营团队后台/DepartmentList?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/运营团队后台/DepartmentList?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/运营团队后台/DepartmentList?page=@(Pagecount)">@Pagecount</a>
+                                }
+                            }
+                            else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                            {
+                                <a href="/运营团队后台/DepartmentList?page=1">1</a><span>...</span>
+                                for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/运营团队后台/DepartmentList?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/运营团队后台/DepartmentList?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/运营团队后台/DepartmentList?page=@(Pagecount)">@Pagecount</a>
+                            }
+                            else if (CurrentPage >= Pagecount - 3)
+                            {
+                                <a href="/运营团队后台/DepartmentList?page=1">1</a><span>...</span>
+                                for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/运营团队后台/DepartmentList?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/运营团队后台/DepartmentList?page=@i'>@i</a>
+                                    }
+                                }
+                            }
+                        }
+                        if (Pagecount > 0)
+                        {
+                            if (CurrentPage < Pagecount)
+                            {
+                                <a href="/运营团队后台/DepartmentList?page=@(CurrentPage+1)">下一页</a><a href="/运营团队后台/DepartmentList?page=@Pagecount">末页</a>
+                            }
+                            <span>第 @(CurrentPage) 页/共 @(Pagecount) 页</span>
+                        }
+                    }
+                }
             </div>
+
             <div id="pager">
 
+            </div>
         </div>
     </div>
-</div>
 </div>
 <script type="text/javascript" language="javascript">
     $(":button").click(function () {
@@ -129,7 +232,7 @@
             data: { name: $(":text#name").val(), num: $(":text#number").val(),/* pro: str,*/ catorgray: $("select").val(),cp:p,u:$("#user").val() },
             dataType: 'json',
             success: function (data) {
-                var result = "<table width='100%' cellspacing='0' cellpadding='0'><tr><th align='center;' style='width:7%'>用户ID</th><th align='center;' style='width:11%'>登录名</th><th align='center'>所属单位</th><th align='center'>单位名称</th><th>联系人</th><th style='width:9%'>审核状态</th><th style='width:10%'>操作</th></tr>";
+                var result = "<table width='100%' cellspacing='0' cellpadding='0'><tr><td colspan='7' style='text-align:right;'><a href='###' onclick='outPutExcelAll()'>导出所有用户信息</a></td></tr><tr><th align='center'>用户ID</th><th align='center'>登录名</th><th align='center'>所属单位</th><th align='center'>单位名称</th><th>联系人</th><th>审核状态</th><th>操作</th></tr>";
                 $.each(data.Data.deplist, function (index, item) {
                     result += "<tr><td>" + item.Id + "</td><td><a href='/运营团队后台/Department_Detail?id=" + item.Id + "'>" + item.loginame + "</a></td><td>" + item.ssdw + "</td><td>"+item.unitname+"</td><td>"+item.contactuser+"</td><td>"+item.status+"</td><td><a onclick='del("+item.Id+")'>删除</a>|<a target='_blank' href='/运营团队后台/DepartmentModify?id=" + item.Id + "'>修改</a></td></tr>";
                 });
@@ -143,15 +246,6 @@
             },
         });
     }
-    @{
-        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
-        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
-        {
-            pages++;
-        }
-    }
-    var num =@(int.Parse(ViewData["page"].ToString()));
-    var j=@pages
     $(document).ready(function () {
         $(".gys_znxx_content_detailbox a").each(function () {
             if ($(this).text() == num) {
@@ -168,56 +262,59 @@
         $("#单位列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
     function setPage(pgCount, currentPage) {
+        var str = '';
+        if (pgCount>0)
+        {
+            if (currentPage!=1)
+            {
+                str += "<a onclick='Search_Department(1)'>首页</a><a onclick='Search_Department(" + (currentPage-1) + ")'>上一页</a>";
+            }
+        }
         if (pgCount <= 6) {
-            var str = '';
             for (var i = 1; i <= pgCount; i++) {
                 str += "<a onclick='Search_Department("+i+")'>" + i + "</a>";
             }
-            if (pgCount!=0)
-            {
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-            }
-            $("div#pager").html(str);
         }
         else {
             if (currentPage < 6) {
                 if (currentPage != 1) {
-                    var str = "<a onclick='Search_Department("+(currentPage-1)+")'>上一页</a>";
                     for (var i = 1; i < 7; i++) {
                         str += "<a onclick='Search_Department("+i+")'>" + i + "</a>";
                     }
-                    str += "...<a  onclick='Search_Department("+pgCount+")'>" + pgCount + "</a><a onclick='Search_Department("+(currentPage+1)+")'>下一页</a>";
-                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                    $("div#pager").html(str);
+                    str += "...<a  onclick='Search_Department("+pgCount+")'>" + pgCount + "</a>";
                 }
                 else {
-                    var str = "";
                     for (var i = 1; i < 7; i++) {
                         str += "<a  onclick='Search_Department("+i+")'>" + i + "</a>";
                     }
-                    str += "...<a onclick='Search_Department("+pgCount+")'>" + pgCount + "</a><a onclick='Search_Department("+(currentPage+1)+")'>下一页</a>";
-                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                    $("div#pager").html(str);
+                    str += "...<a onclick='Search_Department("+pgCount+")'>" + pgCount + "</a>";
                 }
             }
             else if (currentPage >= 6 && currentPage < pgCount - 3) {
-                var str = "<a onclick='Search_Department("+(currentPage-1)+")'>上一页</a><a onclick='Search_Department("+(1)+")'>1</a>...";
+                str += "<a onclick='Search_Department("+(1)+")'>1</a>...";
                 for (var i = (currentPage - 4 + 1) ; i <= currentPage+1; i++) {
                     str += "<a onclick='Search_Department("+i+")'>" + i + "</a>";
                 }
-                str += "...<a onclick='Search_Department("+pgCount+")'>" + pgCount + "</a><a onclick='Search_Department("+(currentPage+1)+")'>下一页</a>";
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                $("div#pager").html(str);
+                str += "...<a onclick='Search_Department("+pgCount+")'>" + pgCount + "</a>";
             }
             else if (currentPage >= pgCount - 3) {
-                var str = "<a onclick='Search_Department("+(currentPage-1)+")'>上一页</a><a onclick='Search_Department("+1+")'>1</a>...";
+                str+= "<a onclick='Search_Department("+1+")'>1</a>...";
                 for (var i = pgCount - 6 + 1; i <=pgCount; i++) {
                     str += "<a onclick='Search_Department("+i+")'>" + i + "</a>";
                 }
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                $("div#pager").html(str);
+                
+                
             }
         }
+        if(pgCount>0)
+        {
+            if (pgCount != currentPage) {
+                str += "<a onclick='Search_Department(" + (currentPage + 1) + ")'>下一页</a><a onclick='Search_Department(" + pgCount + ")'>末页</a>";
+
+            }
+            str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
+        }
+        $("div#pager").html(str);
         $("div#pager a").each(
             function () {
                 if ($(this).text() == currentPage.toString()) {

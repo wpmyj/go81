@@ -165,19 +165,18 @@
         {
             <a id="@(int.Parse(ViewData["currentpage"].ToString()) + 1)" class="page">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
         }
-
+        第 @ViewData["currentpage"].ToString() 页/共 @ViewData["pagecount"].ToString() 页
     </div>
 }
 
 <script type="text/javascript">
 
     $("a.page").click(function () {
-        var is_examine=$("#isexamine").find("option:selected").text();
         var is_void=$("#isviod").find("option:selected").text();
         $.ajax({
             type: "POST",
             url: "/单位用户后台/Part_AcceptanceGood",
-            data: { page: $(this).attr("id"),isvoid:is_void,isexamine:is_examine},
+            data: { page: $(this).attr("id"), isvoid: is_void, isexamine: "未审核" },
             success: function (data) {
                 $("#acceptlist").html(data);
             }

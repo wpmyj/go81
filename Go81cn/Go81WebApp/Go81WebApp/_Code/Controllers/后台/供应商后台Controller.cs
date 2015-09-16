@@ -574,12 +574,12 @@ namespace Go81WebApp.Controllers.后台
                 {
                     name=Request.QueryString["name"];
                 }
-                long PageCount = 商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过))) / 20;
-                if (商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过))) % 20 > 0)
+                long PageCount = 商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled :false) / 20;
+                if (商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled :false) % 20 > 0)
                 {
                     PageCount++;
                 }
-                IEnumerable<商品> goods = 商品管理.查询供应商商品(id, 20 * (CurrentPage - 1), 20, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)));
+                IEnumerable<商品> goods = 商品管理.查询供应商商品(id, 20 * (CurrentPage - 1), 20, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled : false);
                 if (goods != null)
                 {
                     foreach (var item in goods)

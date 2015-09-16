@@ -182,9 +182,16 @@
                                         }
                                         else
                                         {*@
-                                            <span>
-                                                @item.结束时间.ToString("yyyy/MM/dd  HH:mm:ss")
-                                            </span>
+                                            @if (item.结束时间 < DateTime.Now)
+                                            {
+                                                <span>该服务已过期</span>
+                                            }
+                                            else
+                                            {
+                                                <span>
+                                                    @item.结束时间.ToString("yyyy/MM/dd  HH:mm:ss")
+                                                </span>
+                                            }
                                         @*}*@
                                     </td>
                                     <td>

@@ -587,7 +587,58 @@ namespace Go81WebApp.Controllers.门户
             }
 
         }
-
+        public class SupplierInfo
+        {
+            public long Id { get; set; }
+            public string Sname { get; set; }
+            public string Price { get; set; }
+        }
+        public ActionResult SameTypeResult()
+        {
+            try
+            {
+                int cpage = 1;
+                int pgCount = 0;
+                if(!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+                {
+                    cpage = int.Parse(Request.QueryString["page"]);
+                }
+                string type = Request.QueryString["tp"];
+                List<SupplierInfo> sp = new List<SupplierInfo>();
+                IEnumerable<商品> goods = 商品管理.查询商品(0,0,Query<商品>.Where(m=>m.商品信息.精确型号==type)).OrderBy(m=>m.销售信息.价格);
+                foreach(var item in goods)
+                {
+                   if(item.商品信息!=null)
+                   {
+                       SupplierInfo s = new SupplierInfo();
+                       s.Id = item.商品信息.所属供应商.用户ID;
+                       s.Price =item.销售信息.价格.ToString("0.00");
+                       if(item.商品信息.所属供应商.用户数据!=null)
+                       {
+                           s.Sname = item.商品信息.所属供应商.用户数据.企业基本信息.企业名称;
+                       }
+                       else
+                       {
+                           s.Sname = "信息未完善的供应商";
+                       }
+                       sp.Add(s);
+                   }
+                }
+                pgCount = sp.Count / 5;
+                if(sp.Count%5>0)
+                {
+                    pgCount++;
+                }
+                sp = sp.Skip((cpage-1)*5).Take(5).ToList();
+                JsonResult json = new JsonResult() { Data = new { supplier = sp, pCount = pgCount } };
+                return Json(json,JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                JsonResult json = new JsonResult() { Data = new { supplier = new List<SupplierInfo>(), pCount = 0 } };
+                return Json(json,JsonRequestBehavior.AllowGet);
+            }
+        }
         public ActionResult showOtherGys()
         {
             var n = Request.Params["n"];
@@ -606,7 +657,6 @@ namespace Go81WebApp.Controllers.门户
             {
                 q = q.And(Query<商品>.NE(o => o.商品信息.所属供应商.用户ID, long.Parse(id)));
             }
-
             //按照精确型号查出其他供应商的集合（商品ID，商品价格，供应商ID）
             var l = 商品管理.列表商品(0, 0,
                         Fields<商品>.Include(o => o.Id, o => o.销售信息.价格, o => o.商品信息.所属供应商.用户ID),
@@ -869,12 +919,16 @@ namespace Go81WebApp.Controllers.门户
                                     {
                                         foreach (var h in n.Value)
                                         {
-                                            Recommend_Good.Add(h.商品.商品);
-                                            ids.Add(h.商品.商品ID);
-                                            if (!gid.Contains(h.商品.商品.商品信息.所属供应商.用户ID))
+                                            if (!h.商品.商品.基本数据.已删除 && h.商品.商品.审核数据.审核状态== 审核状态.审核通过 && !h.商品.商品.基本数据.已屏蔽)
                                             {
-                                                gid.Add(h.商品.商品.商品信息.所属供应商.用户ID);
+                                                Recommend_Good.Add(h.商品.商品);
+                                                ids.Add(h.商品.商品ID);
+                                                if (!gid.Contains(h.商品.商品.商品信息.所属供应商.用户ID))
+                                                {
+                                                    gid.Add(h.商品.商品.商品信息.所属供应商.用户ID);
+                                                }
                                             }
+                                            
                                         }
                                     }
                                 }

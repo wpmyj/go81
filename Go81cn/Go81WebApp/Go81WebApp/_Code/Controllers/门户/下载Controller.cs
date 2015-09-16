@@ -90,7 +90,7 @@ namespace Go81WebApp.Controllers.门户
             {
                 pagesize++;
             }
-            IEnumerable<下载> files = 下载管理.查询下载(20 * (page - 1), 20, Query<下载>.Where(m => (int)m.下载类型 == type),includeDisabled:false);
+            IEnumerable<下载> files = 下载管理.查询下载(20 * (page - 1),20, Query<下载>.Where(m => (int)m.下载类型 == type),includeDisabled:false);
             if (files != null)
             {
                 foreach (var item in files)

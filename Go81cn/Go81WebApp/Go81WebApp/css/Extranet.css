@@ -66,14 +66,13 @@ body{
     min-width:1200px;
 }
 .pay_gys_info {
-    width: 99%;
     border: 1px solid #ddd;
 }
 .lefts {
     width: 440px;
 }
 .rights{
-    width: 468px;
+    width: 470px;
 }
 .p_area .tig{
     top:18px;
@@ -475,7 +474,7 @@ li {
     color: #666666;
 }
 .layout_banner_imgbox {
-    height:100px;
+    height:190px;
 }
 .layout_topcontent_left{
     float:left;

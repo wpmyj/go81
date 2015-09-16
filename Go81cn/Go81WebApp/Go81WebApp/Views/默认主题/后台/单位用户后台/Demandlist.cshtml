@@ -688,79 +688,61 @@ else
         $(th).parentsUntil("div").remove();
     }
     function setPage(pgCount, currentPage, type) {
+        var str = '';
+        if (pgCount>0)
+        {
+            if (currentPage!=1)
+            {
+                str += "<a onclick='getItems(" + 1 + "," + type + ")'>首页</a><a onclick='getItems(" + (currentPage-1) +","+type+ ")'>上一页</a>";
+            }
+        }
         if (pgCount <= 6) {
-            var str = '';
             for (var i = 1; i <= pgCount; i++) {
                 str += "<a onclick='getItems(" + i + "," + type + ")'>" + i + "</a>";
-            }
-            if (pgCount != 0) {
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-            }
-            if (type == 1) {
-                $("div#pager").html(str);
-            }
-            else {
-                $("div#pager1").html(str);
             }
         }
         else {
             if (currentPage < 6) {
                 if (currentPage != 1) {
-                    var str = "<a onclick='getItems(" + (currentPage - 1) + "," + type + ")'>上一页</a>";
                     for (var i = 1; i < 7; i++) {
                         str += "<a onclick='getItems(" + i + "," + type + ")'>" + i + "</a>";
                     }
-                    str += "...<a  onclick='getItems(" + pgCount + "," + type + ")'>" + pgCount + "</a><a onclick='getItems(" + (currentPage + 1) + "," + type + ")'>下一页</a>";
-                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                    if (type == 1) {
-                        $("div#pager").html(str);
-                    }
-                    else {
-                        $("div#pager1").html(str);
-                    }
+                    str += "...<a  onclick='getItems(" + pgCount + "," + type + ")'>" + pgCount + "</a>";
                 }
                 else {
-                    var str = "";
+                    str = "";
                     for (var i = 1; i < 7; i++) {
                         str += "<a  onclick='getItems(" + i + "," + type + ")'>" + i + "</a>";
                     }
-                    str += "...<a onclick='getItems(" + pgCount + "," + type + ")'>" + pgCount + "</a><a onclick='getItems(" + (currentPage + 1) + "," + type + ")'>下一页</a>";
-                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                    if (type == 1) {
-                        $("div#pager").html(str);
-                    }
-                    else {
-                        $("div#pager1").html(str);
-                    }
+                    str += "...<a onclick='getItems(" + pgCount + "," + type + ")'>" + pgCount + "</a>";
                 }
             }
             else if (currentPage >= 6 && currentPage < pgCount - 3) {
-                var str = "<a onclick='getItems(" + (currentPage - 1) + "," + type + ")'>上一页</a><a onclick='getItems(" + (1) + "," + type + ")'>1</a>...";
+                str+= "<a onclick='getItems(" + (1) + "," + type + ")'>1</a>...";
                 for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
                     str += "<a onclick='getItems(" + i + "," + type + ")'>" + i + "</a>";
                 }
-                str += "...<a onclick='getItems(" + pgCount + "," + type + ")'>" + pgCount + "</a><a onclick='getItems(" + (currentPage + 1) + "," + type + ")'>下一页</a>";
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                if (type == 1) {
-                    $("div#pager").html(str);
-                }
-                else {
-                    $("div#pager1").html(str);
-                }
+                str += "...<a onclick='getItems(" + pgCount + "," + type + ")'>" + pgCount + "</a>";
             }
             else if (currentPage >= pgCount - 3) {
-                var str = "<a onclick='getItems(" + (currentPage - 1) + "," + type + ")'>上一页</a><a onclick='getItems(" + 1 + "," + type + ")'>1</a>...";
+                str+= "<a onclick='getItems(" + 1 + "," + type + ")'>1</a>...";
                 for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
                     str += "<a onclick='getItems(" + i + "," + type + ")'>" + i + "</a>";
                 }
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
-                if (type == 1) {
-                    $("div#pager").html(str);
-                }
-                else {
-                    $("div#pager1").html(str);
-                }
             }
+        }
+        if (pgCount != 0) {
+            if (currentPage<pgCount)
+            {
+                str += "<a onclick='getItems(" + (currentPage+1) + "," + type + ")'>" + i + "</a>";
+            }
+            str += "<span>第" + currentPage + "页/共" + pgCount + "页</span>";
+        }
+        if (type == 1) {
+            $("div#pager").html(str);
+        }
+        else {
+            $("div#pager1").html(str);
         }
         $("div#pager a").each(
             function () {

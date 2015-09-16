@@ -2,20 +2,26 @@
 @using Go81WebApp.Models.数据模型
 <link href="~/css/index.css" rel="stylesheet" />
 <style>
-    div#pager{ width:100%; text-align:center;}
-    div#pager a {
+    div#pager {
+        text-align: center;
+    }
+
+        div#pager a, .gys_znxx_content_detailbox a {
         display: inline-block;
         width: 50px;
         text-align: center;
         line-height: 25px;
         font-size: 12px;
         height: 25px;
-        border: 1px solid gray;
+            border: 1px solid rgb(204, 204, 204);
         margin-top: 10px;
         margin-left: 5px;
         margin-bottom: 5px;
         cursor: pointer;
     }
+            div#pager a:hover {
+                background-color: rgb(243, 243, 243);
+            }
         .gys_xttz_topbg a {
         margin-top: 0;
     }
@@ -79,7 +85,10 @@
                     <th align="center">审核状态</th>
                     <th>操作</th>
                 </tr>
-                @foreach (var item in ViewData["user"] as IEnumerable<用户基本数据>)
+                @{
+                    var model=ViewData["user"] as IEnumerable<用户基本数据>;
+                }
+                @foreach (var item in model)
                 {
                     var m = item as 单位用户;
                     <tr>
@@ -162,7 +171,106 @@
                 }
             </div>*@
             <div class="gys_znxx_content_detailbox">
-                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+                @{
+                    if (model.Count() != 0)
+                    {
+                        int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                        int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                        if (Pagecount > 0 && CurrentPage != 1)
+                        {
+                            <a href='/单位用户后台/DepartmentList?page=1'>首页</a><a href='/单位用户后台/DepartmentList?page=@(CurrentPage-1)'>上一页</a>
+                        }
+                        if (Pagecount <= 6)
+                        {
+                            for (int i = 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/单位用户后台/DepartmentList?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/单位用户后台/DepartmentList?page=@i'>@i</a>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (CurrentPage < 6)
+                            {
+                                if (CurrentPage != 1)
+                                {
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/单位用户后台/DepartmentList?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/单位用户后台/DepartmentList?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/单位用户后台/DepartmentList?page=@(Pagecount)">@Pagecount</a>
+                                }
+                                else
+                                {
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/单位用户后台/DepartmentList?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/单位用户后台/DepartmentList?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/单位用户后台/DepartmentList?page=@(Pagecount)">@Pagecount</a>
+                                }
+                            }
+                            else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                            {
+                                <a href="/单位用户后台/DepartmentList?page=1">1</a><span>...</span>
+                                for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/单位用户后台/DepartmentList?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/单位用户后台/DepartmentList?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/单位用户后台/DepartmentList?page=@(Pagecount)">@Pagecount</a>
+                            }
+                            else if (CurrentPage >= Pagecount - 3)
+                            {
+                                <a href="/单位用户后台/DepartmentList?page=1">1</a><span>...</span>
+                                for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/单位用户后台/DepartmentList?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/单位用户后台/DepartmentList?page=@i'>@i</a>
+                                    }
+                                }
+                            }
+                        }
+                        if (Pagecount > 0)
+                        {
+                            if (CurrentPage < Pagecount)
+                            {
+                                <a href="/单位用户后台/DepartmentList?page=@(CurrentPage+1)">下一页</a><a href="/单位用户后台/DepartmentList?page=@Pagecount">末页</a>
+                            }
+                            <span>第 @(CurrentPage) 页/共 @(Pagecount) 页</span>
+                        }
+                    }
+                }
             </div>
         </div>
         <div id="pager"></div>
@@ -178,22 +286,9 @@
             }
         );
     }
-    var num =@(int.Parse(ViewData["currentpage"].ToString()));
-    var j=@(int.Parse(ViewData["pagecount"].ToString()));
     $(document).ready(function () {
-        $(".gys_znxx_content_detailbox a").each(function () {
-            if ($(this).text() == num) {
-                $(this).addClass("currentPage");
-            }
-            if (num == j) {
-                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
-            }
-            if (num == 1) {
-                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
-            }
-        });
-        $("#已审核的附属账号").addClass("left_menu_select").children("a").css({ "color": "#fff" });
-        $("#已审核的附属账号").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#单位用户列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#单位用户列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
     });
     function del(num)
     {

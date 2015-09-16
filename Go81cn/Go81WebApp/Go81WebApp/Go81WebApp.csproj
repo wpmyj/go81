@@ -540,7 +540,6 @@
     <Content Include="Images\index_ullibg_exp.jpg" />
     <Content Include="Images\index_zc_tab_bg.jpg" />
     <Content Include="Images\jc.png" />
-    <Content Include="Images\jct.png" />
     <Content Include="Images\jdwzcg.png" />
     <Content Include="Images\jrgz.png" />
     <Content Include="Images\left.gif" />
@@ -582,7 +581,7 @@
     <Content Include="Images\notebook.png" />
     <Content Include="Images\notice.png" />
     <Content Include="Images\np.jpg" />
-    <Content Include="Images\onlinesever.png" />
+    <Content Include="Images\onlineserver.png" />
     <Content Include="Images\openTrigger.jpg" />
     <Content Include="Images\organization.jpg" />
     <Content Include="Images\otherh1.jpg" />

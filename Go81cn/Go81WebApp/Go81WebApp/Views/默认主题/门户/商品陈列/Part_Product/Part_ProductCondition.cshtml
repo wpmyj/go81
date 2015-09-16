@@ -69,11 +69,7 @@ else
 @if (ViewData["currentpage"] != null && ViewData["pagecount"].ToString() != "1")
 {
     <div class="gys_znxx_content_detailbox" style="float: left; width: 918px;">
-        @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
-        {
-            <a>首页</a>
-        }
-        else
+        @if (int.Parse(ViewData["currentPage"].ToString()) != 1)
         {
             <a id="1" onclick="changeAdpage(this)">首页</a><a style="margin-left:5px;" id="@(int.Parse(ViewData["currentPage"].ToString()) - 1)" onclick="changeAdpage(this)">上一页</a>
         }
@@ -92,11 +88,7 @@ else
                 }
             }
         }
-        @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
-        {
-            <a>末页</a>
-        }
-        else
+        @if (int.Parse(ViewData["currentPage"].ToString()) != int.Parse(ViewData["pagecount"].ToString()))
         {
             <a style="margin-right:5px;" id="@(int.Parse(ViewData["currentPage"].ToString()) + 1)" onclick="changeAdpage(this)">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeAdpage(this)">末页</a>
         }

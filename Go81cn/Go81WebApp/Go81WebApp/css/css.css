@@ -1600,3 +1600,10 @@ label {
             #pager a:hover {
                 background-color: rgb(243, 243, 243);
             }
+.samegys_name{
+    display: inline-block;
+width: 160px;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}

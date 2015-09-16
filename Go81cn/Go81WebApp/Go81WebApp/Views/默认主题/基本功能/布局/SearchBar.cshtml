@@ -221,23 +221,23 @@
         }
         else
         {
-            <div class="layout_logo_imgbox" style="width:240px;">
-                <div style="width:240px;">
-                    <a href="http://www.go81.cn"><img src="~/Images/logo_O.png" /></a>
+            <div class="layout_qrcode" style="width:240px;float:left;">
+                <div style="width:240px; text-align:center;">
+                    <img src="~/Images/qrcode.png" />
                 </div>
             </div>
         }
         @if (!WebApiApplication.IsIntranet)
         {
-            <div class="layout_search_box">
+            <div class="layout_search_box" style="width:660px;">
 
-                <div class="a_box" style="padding-top:10px;">
+                <div class="a_box" style="padding-top:10px;width:100%;">
 
                     <ul class="serchbar_ul" id="serchbar_ul">
                         <li style="width:50px;" class="serchbar_li_selecte_y" onclick="barchangeserachtype(this);">商品</li>
                         <li style="width:65px;" class="serchbar_li_selecte_n" onclick="barchangeserachtype(this);">供应商</li>
                     </ul>
-                    <input type="text" id="produserchtext" name="produserchtext" value="在这里输入商品名称" /><span></span>
+                    <input type="text" id="produserchtext" name="produserchtext" style="width:565px;" value="在这里输入商品名称" /><span></span>
                     <input onclick="searchProduct()" type="button" value="搜 索" id="search_bt" />
                 </div>
                 <div class="b_box">
@@ -253,13 +253,7 @@
             <div class="layout_qrcode">
                 <div>
                     <a class="a_qrcode" href="/jct/" target="_blank" >
-                        <img src="~/Images/jct.png" style="width:100px;" />
-                    </a>
-                    <a class="b_qrcode" style="margin-left :25px;">
-                        <img src="~/Images/onlinesever.png" style="width:100px;" />
-                    </a>
-                    <a class="c_qrcode" style="display:inline-block; margin-left:25px;">
-                        <img src="~/Images/qrcode.png" style="width:100px;" />
+                        <img src="~/Images/onlineserver.png" style="width:260px;" />
                     </a>
                 </div>
             </div>

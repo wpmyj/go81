@@ -1290,17 +1290,27 @@ namespace Go81WebApp.Controllers.后台
             return Json(json, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Part_DepartmentList(int? page)
+        public ActionResult Part_DepartmentList()
         {
-
-            if (string.IsNullOrEmpty(page.ToString()))
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["listcount"] = (int)用户管理.计数用户<单位用户>(0, 0);
-            ViewData["pagesize"] = 20;
-            ViewData["page"] = page;
-            ViewData["user"] = 用户管理.查询用户<单位用户>(20 * (int.Parse(page.ToString()) - 1), 20);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 用户管理.计数用户<单位用户>(0,0);
+            pgCount = pc / 20;
+            if (pc %20 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["user"] = 用户管理.查询用户<单位用户>(20 * (cpg - 1), 20);
             return PartialView("Part_View/Part_DepartmentList");
         }
         public ActionResult Part_DepartmentAuditList(int? page)
@@ -10064,22 +10074,26 @@ namespace Go81WebApp.Controllers.后台
         public ActionResult AcceptanceStatistic()
         {
             var year = DateTime.Now.Year;
-            var ysdlist = 验收单管理.查询验收单(0, 0);
+            //设置每一年的起始时间与结束时间
+            var startDate = new DateTime(year, 1, 1, 0, 0, 0);
+            var endDate = new DateTime(year, 12, 31, 23, 59, 59);
+
             var dic = new List<Tuple<string, int, string>>();  // 月份，本月新增验收单数量，本月新增占全年新增的百分比
             //var 各个供应商验收单数量 = new List<Tuple<string, int, int, int>>();//供应商名,验收单总数,已作废数量,未作废数量
-            var 本年新增数量 = ysdlist.Where(o => o.基本数据.添加时间.Year == year).Count();
+            var 本年新增验收单 = 验收单管理.查询验收单(0, 0, Query<验收单>.Where(o => o.基本数据.添加时间 > startDate && o.基本数据.添加时间 < endDate));
+            var 本年新增数量 = 验收单管理.计数验收单(0, 0, Query<验收单>.Where(o => o.基本数据.添加时间 > startDate && o.基本数据.添加时间 < endDate));
 
             //统计每年各个月份新增验收单数量及占全年的百分比
             for (int i = 0; i < 12; i++)
             {
-                var 本月新增数量 = ysdlist.Where(o => o.基本数据.添加时间.Year == year && o.基本数据.添加时间.Month == i + 1).Count();
+                var 本月新增数量 = 本年新增验收单.Where(o => o.基本数据.添加时间.Month == i + 1).Count();
                 if (本年新增数量 <= 0 || 本月新增数量 <= 0)
                 {
                     dic.Add(Tuple.Create((i + 1).ToString(), 0, "0"));
                 }
                 else
                 {
-                    dic.Add(Tuple.Create((i + 1).ToString(), 本月新增数量, Math.Round((float)本月新增数量 / 本年新增数量 * 100).ToString()));
+                    dic.Add(Tuple.Create((i + 1).ToString(), (int)本月新增数量, Math.Round((float)本月新增数量 / 本年新增数量 * 100).ToString()));
                 }
             }
             //统计各个供应商所添加验收单数量
@@ -10106,7 +10120,7 @@ namespace Go81WebApp.Controllers.后台
             ViewData["年度统计"] = dic;
             ViewData["本年新增数量"] = 本年新增数量;
             //ViewData["各个供应商验收单数量"] = 各个供应商验收单数量.OrderByDescending(o => o.Item2).Take(10);
-            ViewData["所有验收单数量"] = ysdlist.Count();
+            ViewData["所有验收单数量"] = 验收单管理.计数验收单(0, 0);
             return View();
         }
 

@@ -154,13 +154,9 @@
 @if (ViewData["currentPage"] != null)
 {
     <div class="gys_znxx_content_detailbox">
-        @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+        @if (int.Parse(ViewData["currentPage"].ToString()) != 1)
         {
-            <a>首页</a>
-        }
-        else
-        {
-            <a id="1" class="page">首页</a><a id="@(int.Parse(ViewData["currentpage"].ToString()) - 1)" class="page">上一页</a>
+            <a id="1" class="page">首页</a><a id="@(int.Parse(ViewData["currentPage"].ToString()) - 1)" class="page">上一页</a>
         }
         @for (int i = 0; i <= 10; i++)
         {                       //一共最多显示10个页码，前面5个，后面5个
@@ -177,15 +173,11 @@
                 }
             }
         }
-        @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+        @if (int.Parse(ViewData["currentPage"].ToString()) != int.Parse(ViewData["pagecount"].ToString()))
         {
-            <a>末页</a>
+            <a id="@(int.Parse(ViewData["currentPage"].ToString()) + 1)" class="page">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
         }
-        else
-        {
-            <a id="@(int.Parse(ViewData["currentpage"].ToString()) + 1)" class="page">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
-        }
-
+        第 @ViewData["currentPage"].ToString() 页/共 @ViewData["pagecount"].ToString() 页
     </div>
 }
 <script type="text/javascript">

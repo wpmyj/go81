@@ -80,8 +80,7 @@
                     var timer;
                     $("li.changetab").hover(function () {
                         var tab = $(this);
-                        timer = setTimeout(function ()
-                        {
+                        timer = setTimeout(function () {
                             var index = tab.attr("index");
                             var divs = tab.parents(".outtab").next(".tabcontent");
                             tab.addClass("cli").siblings().removeClass("cli");
@@ -171,7 +170,7 @@
                         <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/商品陈列/ProductList">登陆查看</a>
                     }
                 </div>
-                @if (Model.销售信息 != null && Model.销售信息.价格属性组合 != null && Model.销售信息.价格属性组合.组合列表.Count>0)
+                @if (Model.销售信息 != null && Model.销售信息.价格属性组合 != null && Model.销售信息.价格属性组合.组合列表.Count > 0)
                 {
                     <div class="prodtpage_detail_topbox_right_contentlist">
                         <div class="prodtpage_detail_topbox_right_contentleft" style="text-align:left; width: 70px; color: #000;">可选配置：</div>
@@ -239,38 +238,29 @@
                     } <a style="display:inline-block; height:30px; color:black; text-decoration:underline; margin-top:-10px;" href="###">查看积分</a>
                 </div>
             </div>
-        </div>                                                           
-        <div class="product_list_gys">
+        </div>                         @*270*@
+        <div style="float:right;width:270px; line-height:25px; font-size:14px; border: 1px solid rgb(219, 219, 219); min-height:392px;">
+            <form>
+                <input type="hidden" name="p_type" id="p_type" value="@Model.商品信息.精确型号" />
+            </form>
             <table width="100%;">
-                <tr><th colspan="2"><h2>其他商家</h2></th></tr>
+                <tr><th colspan="2">其他商家</th></tr>
                 <tr>
-                    <td align="right" valign="top" width="30%">所在省份：</td>
-                    <td width="70%">
-                        <select id="deliverprovince" name="deliverprovince" style="height: 25px; line-height: 25px;"></select>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right" valign="top">所在城市：</td>
                     <td>
-                        <select id="delivercity" name="delivercity" style="height: 25px; line-height: 25px;"></select>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="right" valign="top">所在区县：</td>
-                    <td>
-                        <select id="deliverarea" name="deliverarea" style="height: 25px; line-height: 25px;"></select>
+                        <select id="deliverprovince" name="deliverprovince" style="height: 25px;width:80px; line-height: 25px;"></select>
+                        <select id="delivercity" name="delivercity" style="height: 25px;width:80px;  line-height: 25px;"></select>
+                        <select id="deliverarea" name="deliverarea" style="height: 25px;width:80px;  line-height: 25px;"></select>
                         <script>
                             window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea", "@Model.商品信息.所属供应商.用户数据.所属地域.省份", "@Model.商品信息.所属供应商.用户数据.所属地域.城市", "@Model.商品信息.所属供应商.用户数据.所属地域.区县"); }
                         </script>
                     </td>
                 </tr>
-                
-                
                 <tr>
                     <td colspan="2" align="center" valign="top"><input type="button" class="gys_ztbsearch_search_botton" style="margin-top: 10px;width:155px;margin-left:54px;" value="查询" onclick='showothergys()' /></td>
                 </tr>
             </table>
-
+            <div id="result"></div>
+            <div id="pager"></div>
 
             @*<table width="100%;">
                 <tr>
@@ -313,7 +303,7 @@
     function showothergys() {
         $("#othergysdiv").html("");
         $("#modal0").show();
-        $.get('/商品陈列/showOtherGys', {page:1, id:encodeURI("@Model.商品信息.所属供应商.用户ID"),n: "@Model.商品信息.精确型号", p: $("#deliverprovince").val(), c: $("#delivercity").val(), a: $("#deliverarea").val() }, function (data) {
+        $.get('/商品陈列/showOtherGys', { page: 1, id: encodeURI("@Model.商品信息.所属供应商.用户ID"), n: "@Model.商品信息.精确型号", p: $("#deliverprovince").val(), c: $("#delivercity").val(), a: $("#deliverarea").val() }, function (data) {
             $("#othergysdiv").html(data);
         });
     }
@@ -425,4 +415,36 @@
 
         document.getElementById("product_price").innerHTML = parseFloat(a.getAttribute("id")).toFixed(2);
     }
+    function setPage(currentPg, pgCount) {
+        var str = "";
+        if (currentPg < pgCount) {
+            if (currentPg > 1) {
+                str += "<a onclick='searchSameType(" + (currentPg - 1) + ")'>上一页</a><a onclick='searchSameType(" + (currentPg + 1) + ")'>下一页</a><span style='margin-left:5px;'>第" + currentPg + "页/共" + pgCount + "页</span>";
+            }
+            else {
+                str += "<a onclick='searchSameType(1)'>上一页</a><a onclick='searchSameType(" + (currentPg + 1) + ")'>下一页</a><span style='margin-left:5px;'>第" + currentPg + "页/共" + pgCount + "页</span>";
+            }
+        }
+        else {
+            str += "<a onclick='searchSameType(1)'>上一页</a><a onclick='searchSameType(1)'>下一页</a><span style='margin-left:5px;'>第" + currentPg + "页/共" + pgCount + "页</span>";
+        }
+        $("#pager").html(str);
+    }
+    function searchSameType(num) {
+        var str = "";
+        var type = $("#p_type").val();
+        $.get("/商品陈列/SameTypeResult", { tp: type, page: num }, function (data) {
+            if (data.Data.supplier.length != 0) {
+                for (var i = 0; i < data.Data.supplier.length; i++) {
+                    str += "<div><span class='samegys_name' style='padding-left:5px;'><a title='" + data.Data.supplier[i].Sname + "' href='/供应商陈列/Supplier_Destination?id=" + data.Data.supplier[i].Id + "'>" + data.Data.supplier[i].Sname + "</a></span><span  class='samegys_name' style='width:70px;color:#ff0000;'>￥" + data.Data.supplier[i].Price + "</span><div>";
+                }
+                $("#result").html(str);
+                setPage(num, data.Data.pCount);
+            }
+            else {
+                $("#result").html("暂时没有相同型号商品的供应商！");
+            }
+        });
+    }
+    searchSameType(1);
 </script>

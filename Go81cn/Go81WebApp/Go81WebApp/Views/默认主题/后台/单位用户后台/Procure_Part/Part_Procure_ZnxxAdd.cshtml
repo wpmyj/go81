@@ -22,7 +22,7 @@
             }
         }
     }
-    function setValue(data,data1) {
+    function setValue(data) {
         var str = "";
         var row = parseInt(data.length / 3);
         var maintain = data.length % 3;
@@ -31,7 +31,7 @@
             for (var i = 0; i < row; i++) {
                 var s0 = "<tr>";
                 for (var j = 0; j < 3; j++) {
-                    s0 += "<td align='left'><input type='checkbox' title='" + data[num] + "' onclick='Set_Val(this)' value='" + data1[num] + "'/>" + data[num] + "</td>";
+                    s0 += "<td align='left'><input type='checkbox' title='" + data[num].name + "' onclick='Set_Val(this)' value='" + data[num].loginName + "'/><span class='uname'>" + data[num].name + "</span></td>";
                     num++;
                 }
                 s0 += "</tr>";
@@ -41,7 +41,7 @@
         if (maintain > 0) {
             var s1 = "<tr>";
             for (var k = 0; k < maintain; k++) {
-                s1 += "<td align='left'><input type='checkbox' title='" + data[num] + "' onclick='Set_Val(this)' value='" + data1[num] + "'/>" + data[num] + "</td>";
+                s1 += "<td align='left'><input type='checkbox' title='" + data[num].name + "' onclick='Set_Val(this)' value='" + data[num].loginName + "'/><span class='uname'>" + data[num].name + "</span></td>";
                 num++;
             }
             s1 += "</tr>";
@@ -52,50 +52,52 @@
     var number = 1;
     var list_count = 0;
     function setPage(pg_count, current_page) {
+        var str = '';
+        if (current_page!=1)
+        {
+            str += "<a onclick='current_page(1)'>首页</a><a  onclick='current_page("+(current_page-1)+")'>上一页</a>";
+        }
         if (pg_count <= 6) {
-            str = '';
             for (var i = 1; i <= pg_count; i++) {
                 str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
             }
-            $("div#pager").html(str);
         }
         else {
             if (current_page < 6) {
                 if (current_page != 1) {
-                    var str = "<a onclick='pre_page()'>上一页</a>";
                     for (var i = 1; i < 6; i++) {
                         str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
                     }
-                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
-                    $("div#pager").html(str);
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a>";
                 }
                 else {
-                    var str = "";
                     for (var i = 1; i < 6; i++) {
                         str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
                     }
-                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
-                    $("div#pager").html(str);
+                    str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a>";
                 }
 
             }
             else if (current_page >= 6 && current_page < pg_count - 3) {
-                var str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(" + 1 + ")'>1</a>...";
+                str+= "<a onclick='current_page(" + 1 + ")'>1</a>...";
                 for (var i = (current_page - 4 + 1) ; i <= current_page; i++) {
                     str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
                 }
-                str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a><a onclick='next_page()'>下一页</a>";
-                $("div#pager").html(str);
+                str += "...<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a>";
             }
             else if (current_page >= pg_count - 3) {
-                str = "<a onclick='pre_page()'>上一页</a><a onclick='current_page(1)'>1</a>...";
+                str+= "<a onclick='current_page(1)'>1</a>...";
                 for (var i = pg_count - 5 + 1; i < pg_count; i++) {
                     str += "<a onclick='current_page(" + i + ")'>" + i + "</a>";
                 }
                 str += "<a onclick='current_page(" + pg_count + ")'>" + pg_count + "</a>";
-                $("div#pager").html(str);
+                
             }
         }
+        if (current_page != pg_count) {
+            str += "<a onclick='current_page("+(current_page+1)+")'>下一页</a><a onclick='current_page("+pg_count+")'>末页</a>";
+        }
+        $("div#pager").html(str);
         $("div#pager a").each(
             function () {
                 if ($(this).text() == current_page.toString()) {
@@ -104,48 +106,8 @@
             }
         );
     }
-    function Find_User() {
-        var us = $("select#user").val();
-        if (us == "供应商") {
-            $("span.selectIndustry").show();
-            $("span.area").show();
-        }
-        else {
-            $("span.selectIndustry select#industry").val("");
-            $("span.area select#deliverprovince").val("");
-            $("span.area select#delivercity").val("");
-            $("span.area select#deliverarea").val("");
-            $("span.selectIndustry").hide();
-            $("span.area").hide();
-        }
-        var mtype = $("select#user").val();
-        if (mtype == "单位用户") {
-            $("#msgType").show();
-        } else {
-            $("#msgType").hide();
-        }
-        var page = '';
-        $(":text#Riseaver").val("");
-        $(":button#bt").attr("disabled", "disabled");
-        $(":button#bt").addClass("btn_unenable");
-        var province = $("select#deliverprovince").val();
-        var city = $("select#delivercity").val();
-        var area = $("select#deliverarea").val();
-        var catorgray = $("select#user").val();
-        var industry = $("select#industry").val();
-        var username = $(":text#username").val();
-        $.get('/单位用户后台/Find_Users/',
-            { prov: province, cit: city, ar: area, cator: catorgray, indus: industry, p: page, user: username },
-            function (data) {
-                setValue(data.Data.name, data.Data.loginName);
-                number = 1;
-                list_count = data.Data.count;
-                setPage(list_count, number);
-            }
-        );
-        $("div#c").css("display", "block");
-    }
     function current_page(num) {
+        $("#person").show();
         var province = $("select#deliverprovince").val();
         var city = $("select#delivercity").val();
         var area = $("select#deliverarea").val();
@@ -155,47 +117,10 @@
         $.get('/单位用户后台/Find_Users/',
             { prov: province, cit: city, ar: area, cator: catorgray, indus: industry, p: num, user: username },
             function (data) {
-                setValue(data.Data.name, data.Data.loginName);
-                setPage(data.Data.count, num);
+                setValue(data.Data.name);
+                setPage(data.Data.pageCount, num);
             }
         );
-        number = num;
-    }
-    function pre_page() {
-        var province = $("select#deliverprovince").val();
-        var city = $("select#delivercity").val();
-        var area = $("select#deliverarea").val();
-        var catorgray = $("select#user").val();
-        var industry = $("select#industry").val();
-        var username = $(":text#username").val();
-        if (number > 1) {
-            number--;
-            $.get('/单位用户后台/Find_Users/',
-                { prov: province, cit: city, ar: area, cator: catorgray, indus: industry, p: number, user: username },
-                function (data) {
-                    setValue(data.Data.name, data.Data.loginName);
-                    setPage(data.Data.count, number);
-                }
-            );
-        }
-    }
-    function next_page() {
-        var province = $("select#deliverprovince").val();
-        var city = $("select#delivercity").val();
-        var area = $("select#deliverarea").val();
-        var catorgray = $("select#user").val();
-        var industry = $("select#industry").val();
-        var username = $(":text#username").val();
-        if (number < list_count) {
-            number++;
-            $.get('/单位用户后台/Find_Users/',
-                { prov: province, cit: city, ar: area, cator: catorgray, indus: industry, p: number, user: username },
-                function (data) {
-                    setValue(data.Data.name, data.Data.loginName);
-                    setPage(data.Data.count, number);
-                }
-            );
-        }
     }
     var s = '';
     var s1 = '';
@@ -347,7 +272,8 @@
         margin-bottom: 5px;
         cursor: pointer;
     }
-        .out_box {
+
+    .out_box {
         display: none;
     }
 
@@ -421,7 +347,7 @@
                             <tr>
                                 <td class="align">用户类型：</td>
                                 <td align="left">
-                                    <select onchange="Find_User()" id="user" style="width:150px;">
+                                    <select onchange="current_page(1)" id="user" style="width:150px;">
                                         @{if (WebApiApplication.IsIntranet)
                                         {
                                             <option value="单位用户">单位用户</option>
@@ -434,7 +360,7 @@
                                         }
                                     </select>
                                     <span style="color:red;">*</span>
-                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户名：<input id="username" placeholder="请输入用户名" onkeyup="search_User(this)" type="text" /><button onclick="Find_User()">搜索</button></span>
+                                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户名：<input id="username" placeholder="请输入用户名" onkeyup="search_User(this)" type="text" /><button onclick="current_page(1)">搜索</button></span>
                                 </td>
                             </tr>
                             <tr>
@@ -442,15 +368,15 @@
                                 <td align="left" width="85%">
                                     <span class="area">
                                         <select onblur="Find_User()" id="deliverprovince" name="deliverprovince" style="width:150px;"></select>
-                                        
+
                                     </span>
                                     <span class="area">
                                         <select onblur="Find_User()" id="delivercity" name="delivercity" style="width:150px;"></select>
-                                        
+
                                     </span>
                                     <span class="area">
                                         <select onchange="Find_User()" id="deliverarea" name="deliverarea" style="width:150px;"></select>
-                                       
+
                                     </span>
 
                                 </td>
@@ -490,7 +416,7 @@
                         <script>
                             window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
                         </script>
-                        <div id="c" style="margin-left:auto; margin-right:auto;display:none; text-align:center; margin-top:20px;">
+                        <div id="c" style="margin-left:auto; margin-right:auto; text-align:center; margin-top:20px;">
                             <table width="100%" style="height:80px;" id="cons"></table>
                             <div id="pager"></div>
                         </div>
@@ -551,14 +477,15 @@
             </td>
         </tr>
         <tr>
-        <td></td>
-        <td align="center" colspan="2">
-            @if (long.Parse(ViewData["id"].ToString()) == 10003)
-            {
-                <input type="button" value="发往协议供应商" class="front_login_rightbox_button btn_enable" name="xymsg" onclick="" />
-            }
-            <input type="button" id="bt" class="btn_unenable front_login_rightbox_button" disabled="disabled" name="submitcontent" value="发        送" />
-            </td></tr>
+            <td></td>
+            <td align="center" colspan="2">
+                @if (long.Parse(ViewData["id"].ToString()) == 10003)
+                {
+                    <input type="button" value="发往协议供应商" class="front_login_rightbox_button btn_enable" name="xymsg" onclick="" />
+                }
+                <input type="button" id="bt" class="btn_unenable front_login_rightbox_button" disabled="disabled" name="submitcontent" value="发        送" />
+            </td>
+        </tr>
     </table>
 </div>
 <script type="text/javascript" language="javascript">
@@ -573,7 +500,7 @@
         $(th).hide();
     }
     function showPerson(th) {
-        Find_User();
+        current_page(1);
         $(th).show();
     }
     function hidebox(th) {

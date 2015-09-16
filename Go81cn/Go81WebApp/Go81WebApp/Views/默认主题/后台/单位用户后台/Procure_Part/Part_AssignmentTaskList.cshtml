@@ -175,31 +175,31 @@
                                             {
                                                 if (item.Id == 14)
                                                 {
-                                            <option selected="selected" value="@item.Id">
-                                                @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                    <option selected="selected" value="@item.Id">
+                                                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
                                                         {
-                                                        <text>@item.单位信息.单位代号</text>
+                                                            <text>@item.单位信息.单位代号</text>
                                                         }
                                                         else
                                                         {
-                                                        <text>@item.单位信息.单位名称</text>
+                                                            <text>@item.单位信息.单位名称</text>
                                                         }
-                                                ：@item.联系方式.联系人
-                                            </option>
+                                                        ：@item.联系方式.联系人
+                                                    </option>
                                                 }
                                                 else
                                                 {
-                                            <option value="@item.Id">
-                                                @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                    <option value="@item.Id">
+                                                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
                                                         {
-                                                        <text>@item.单位信息.单位代号</text>
+                                                            <text>@item.单位信息.单位代号</text>
                                                         }
                                                         else
                                                         {
-                                                        <text>@item.单位信息.单位名称</text>
+                                                            <text>@item.单位信息.单位名称</text>
                                                         }
-                                                ：@item.联系方式.联系人
-                                            </option>
+                                                        ：@item.联系方式.联系人
+                                                    </option>
                                                 }
                                             }
                                         </select>
@@ -215,31 +215,31 @@
                                             {
                                                 if (item.Id == 13)
                                                 {
-                                            <option selected="selected" value="@item.Id">
-                                                @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                    <option selected="selected" value="@item.Id">
+                                                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
                                                         {
-                                                        <text>@item.单位信息.单位代号</text>
+                                                            <text>@item.单位信息.单位代号</text>
                                                         }
                                                         else
                                                         {
-                                                        <text>@item.单位信息.单位名称</text>
+                                                            <text>@item.单位信息.单位名称</text>
                                                         }：
-                                                @item.联系方式.联系人
-                                            </option>
+                                                        @item.联系方式.联系人
+                                                    </option>
                                                 }
                                                 else
                                                 {
-                                            <option value="@item.Id">
-                                                @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                    <option value="@item.Id">
+                                                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
                                                         {
-                                                        <text>@item.单位信息.单位代号</text>
+                                                            <text>@item.单位信息.单位代号</text>
                                                         }
                                                         else
                                                         {
-                                                        <text>@item.单位信息.单位名称</text>
+                                                            <text>@item.单位信息.单位名称</text>
                                                         }：
-                                                @item.联系方式.联系人
-                                            </option>
+                                                        @item.联系方式.联系人
+                                                    </option>
                                                 }
                                             }
                                         </select>
@@ -257,31 +257,31 @@
                                             {
                                                 if (item.Id == 11)
                                                 {
-                                            <option selected="selected" value="@item.Id">
-                                                @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                    <option selected="selected" value="@item.Id">
+                                                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
                                                         {
-                                                        <text>@item.单位信息.单位代号</text>
+                                                            <text>@item.单位信息.单位代号</text>
                                                         }
                                                         else
                                                         {
-                                                        <text>@item.单位信息.单位名称</text>
+                                                            <text>@item.单位信息.单位名称</text>
                                                         }：
-                                                @item.联系方式.联系人
-                                            </option>
+                                                        @item.联系方式.联系人
+                                                    </option>
                                                 }
                                                 else
                                                 {
-                                            <option value="@item.Id">
-                                                @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
+                                                    <option value="@item.Id">
+                                                        @if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
                                                         {
-                                                        <text>@item.单位信息.单位代号</text>
+                                                            <text>@item.单位信息.单位代号</text>
                                                         }
                                                         else
                                                         {
-                                                        <text>@item.单位信息.单位名称</text>
+                                                            <text>@item.单位信息.单位名称</text>
                                                         }：
-                                                @item.联系方式.联系人
-                                            </option>
+                                                        @item.联系方式.联系人
+                                                    </option>
                                                 }
                                             }
                                         </select>
@@ -352,15 +352,17 @@
                     }
                 </table>
                 <div class="gys_znxx_content_detailbox">
-                    @if (int.Parse(ViewData["pre_currentPage"].ToString()) == 1)
+                    @if (AssignmentTaskList.Count()!=0)
                     {
-                    <a class="currentPage">首页</a>
+                       if (int.Parse(ViewData["pre_currentPage"].ToString()) == 1)
+                    {
+                        <a class="currentPage">首页</a>
                     }
                     else
                     {
-                    <a id="1" onclick=" changepre_page(this) ">首页</a>
+                        <a id="1" onclick="changepre_page(this)">首页</a><a onclick="changepre_page(this)" id="@(int.Parse(ViewData["pre_currentPage"].ToString())-1)">上一页</a>
                     }
-                    @for (int i = 0; i <= 10; i++)
+                    for (int i = 0; i <= 10; i++)
                     {
                         //一共最多显示10个页码，前面5个，后面5个
                         if ((int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pre_pagecount"].ToString()))
@@ -373,17 +375,19 @@
                             else
                             {
                                 //一般页处理
-                    <a id="@(int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5)" onclick=" changepre_page(this) ">@(int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5)</a>
+                                <a id="@(int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5)" onclick=" changepre_page(this) ">@(int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5)</a>
                             }
                         }
                     }
-                    @if (int.Parse(ViewData["pre_currentPage"].ToString()) == int.Parse(ViewData["pre_pagecount"].ToString()))
+                    if (int.Parse(ViewData["pre_currentPage"].ToString()) == int.Parse(ViewData["pre_pagecount"].ToString()))
                     {
-                    <a class="currentPage">末页</a>
+                        <a class="currentPage">末页</a>
                     }
                     else
                     {
-                    <a id="@int.Parse(ViewData["pre_pagecount"].ToString())" onclick=" changepre_page(this) ">末页</a>
+                        <a onclick="changepre_page(this)" id="@(int.Parse(ViewData["pre_currentPage"].ToString())+1)">上一页</a><a id="@int.Parse(ViewData["pre_pagecount"].ToString())" onclick=" changepre_page(this) ">末页</a>
+                    }
+                    <span>第 @ViewData["pre_currentPage"].ToString() 页/共 @ViewData["pre_pagecount"].ToString() 页</span>
                     }
                 </div>
             </div>
@@ -449,15 +453,17 @@
                     }
                 </table>
                 <div class="gys_znxx_content_detailbox">
-                    @if (int.Parse(ViewData["ed_currentPage"].ToString()) == 1)
+                    @if(ed_AssignmentTaskList.Count()!=0)
                     {
-                    <a class="currentPage">首页</a>
+                      if (int.Parse(ViewData["ed_currentPage"].ToString()) == 1)
+                    {
+                        <a class="currentPage">首页</a>
                     }
                     else
                     {
-                    <a id="1" onclick=" changepre_ed(this) ">首页</a>
+                        <a id="1" onclick="changepre_ed(this) ">首页</a><a onclick="changepre_ed(this)" id="@(int.Parse(ViewData["ed_currentPage"].ToString())-1)">上一页</a>
                     }
-                    @for (int i = 0; i <= 10; i++)
+                    for (int i = 0; i <= 10; i++)
                     {
                         //一共最多显示10个页码，前面5个，后面5个
                         if ((int.Parse(ViewData["ed_currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["ed_currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["ed_pagecount"].ToString()))
@@ -470,17 +476,19 @@
                             else
                             {
                                 //一般页处理
-                    <a id="@(int.Parse(ViewData["ed_currentPage"].ToString()) + i - 5)" onclick=" changepre_ed(this) ">@(int.Parse(ViewData["ed_currentPage"].ToString()) + i - 5)</a>
+                                <a id="@(int.Parse(ViewData["ed_currentPage"].ToString()) + i - 5)" onclick=" changepre_ed(this) ">@(int.Parse(ViewData["ed_currentPage"].ToString()) + i - 5)</a>
                             }
                         }
                     }
-                    @if (int.Parse(ViewData["ed_currentPage"].ToString()) == int.Parse(ViewData["ed_pagecount"].ToString()))
+                    if (int.Parse(ViewData["ed_currentPage"].ToString()) == int.Parse(ViewData["ed_pagecount"].ToString()))
                     {
-                    <a class="currentPage">末页</a>
+                        <a class="currentPage">末页</a>
                     }
                     else
                     {
-                    <a id="@int.Parse(ViewData["ed_pagecount"].ToString())" onclick=" changepre_ed(this) ">末页</a>
+                        <a onclick="changepre_ed(this)" id="@(int.Parse(ViewData["ed_currentPage"].ToString()) + 1)">下一页</a><a id="@int.Parse(ViewData["ed_pagecount"].ToString())" onclick="changepre_ed(this) ">末页</a>
+                    }
+                    <span>第 @ViewData["ed_currentPage"].ToString() 页/共 @ViewData["ed_pagecount"].ToString() 页</span>
                     }
                 </div>
             </div>
@@ -596,36 +604,29 @@
     }
     $("#pdf1 .user").change(function () {
         var number = 0;
-        var len=$("#pdf1 .user").length;
-        for (var i = 0; i <len ; i++)
-        {
+        var len = $("#pdf1 .user").length;
+        for (var i = 0; i < len ; i++) {
             var eleval = $("#pdf1 .user:eq(" + i + ")").val();
-            var thsival=$(this).val();
-            if (eleval == thsival)
-            {
+            var thsival = $(this).val();
+            if (eleval == thsival) {
                 number++;
-                if (number == 2)
-                {
+                if (number == 2) {
                     break;
                 }
             }
         }
-        if (number == 2)
-        {
+        if (number == 2) {
             alert("您已经选择了这个单位，请重新选择。");
             $(this).children("option:eq(0)").attr("selected", "selected");
         }
     });
-    function Reason(th)
-    {
-        $.get("/单位用户后台/noPasReason",{id:$(th).attr("lang")},function(data){
-            $(th).parentsUntil("td").append("<div style='position:absolute; background-color:#fff;width:150px; height:auto;padding:5px; border:1px solid red;'>"+data+"</div>");
+    function Reason(th) {
+        $.get("/单位用户后台/noPasReason", { id: $(th).attr("lang") }, function (data) {
+            $(th).parentsUntil("td").append("<div style='position:absolute; background-color:#fff;width:150px; height:auto;padding:5px; border:1px solid red;'>" + data + "</div>");
         });
     }
-    function removeTip(th)
-    {
-        if($(th).parentsUntil("td").children("div")!=undefined)
-        {
+    function removeTip(th) {
+        if ($(th).parentsUntil("td").children("div") != undefined) {
             $(th).parentsUntil("td").children("div").remove();
         }
     }

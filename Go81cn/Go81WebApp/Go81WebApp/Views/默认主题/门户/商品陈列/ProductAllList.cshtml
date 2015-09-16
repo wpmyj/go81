@@ -431,19 +431,25 @@
 </script>
 <script type="text/javascript">
     function changeAdpage(a) {
-        var tempparm = "page=" + encodeURI(a.getAttribute("id"))+"&classid="+encodeURI($("#select_classid").val());
-        $.ajax({
-            cache: false,
-            async: false,   // 太关键了，同步和异步的参数
-            //dataType: 'json', type: 'post',
-            type: 'POST',
-            //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
-            url: "/商品陈列/AllListChangePage",
-            data: tempparm,
-            success: function (data) {
-                $("#pro_search_content").html(data)
-            }
+        $.get("/商品陈列/AllListChangePage?page=" + encodeURI(a.getAttribute("id"))+"&classid="+encodeURI($("#select_classid").val()) + "&province=" + encodeURI($("#deliverprovince").val()) + "&city=" + encodeURI($("#delivercity").val()) + "&price=" + encodeURI($("#hasselect_price").val()), function (response) {
+            document.getElementById("pro_search_content").innerHTML = response;
+            //document.getElementById("pagediv").style.display = "none";
         });
+
+
+        //var tempparm = "page=" + encodeURI(a.getAttribute("id"))+"&classid="+encodeURI($("#select_classid").val())+"&province="+encodeURI($("#deliverprovince").val()) + "&city=" + encodeURI($("#delivercity").val());
+        //$.ajax({
+        //    cache: false,
+        //    async: false,   // 太关键了，同步和异步的参数
+        //    //dataType: 'json', type: 'post',
+        //    type: 'POST',
+        //    //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
+        //    url: "/商品陈列/AllListChangePage",
+        //    data: tempparm,
+        //    success: function (data) {
+        //        $("#pro_search_content").html(data)
+        //    }
+        //});
     }
 </script>
 

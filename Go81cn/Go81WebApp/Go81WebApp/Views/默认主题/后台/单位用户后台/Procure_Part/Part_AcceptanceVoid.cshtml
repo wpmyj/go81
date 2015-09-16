@@ -129,13 +129,9 @@
 @if (ViewData["currentPage"] != null)
 {
     <div class="gys_znxx_content_detailbox">
-        @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
+        @if (int.Parse(ViewData["currentPage"].ToString())!= 1)
         {
-            <a>首页</a>
-        }
-        else
-        {
-            <a id="1" class="page">首页</a><a id="@(int.Parse(ViewData["currentpage"].ToString()) - 1)" class="page">上一页</a>
+            <a id="1" class="page">首页</a><a id="@(int.Parse(ViewData["currentPage"].ToString()) - 1)" class="page">上一页</a>
         }
         @for (int i = 0; i <= 10; i++)
         {                       //一共最多显示10个页码，前面5个，后面5个
@@ -152,15 +148,11 @@
                 }
             }
         }
-        @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+        @if (int.Parse(ViewData["currentPage"].ToString()) != int.Parse(ViewData["pagecount"].ToString()))
         {
-            <a>末页</a>
+            <a id="@(int.Parse(ViewData["currentPage"].ToString()) + 1)" class="page">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
         }
-        else
-        {
-            <a id="@(int.Parse(ViewData["currentpage"].ToString()) + 1)" class="page">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
-        }
-
+        第 @ViewData["currentPage"].ToString() 页/共 @ViewData["pagecount"].ToString() 页
     </div>
 }
 
@@ -177,20 +169,7 @@
             }
         });
     });
-    var i = @(int.Parse(ViewData["currentPage"].ToString()));
-    var j=@(int.Parse(ViewData["pagecount"].ToString()));
     $(function () {
-        $(".gys_znxx_content_detailbox a").each(function () {
-            if ($(this).text() == i) {
-                $(this).addClass("currentPage");
-            }
-            if (i== j) {
-                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
-            }
-            if (i == 1) {
-                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
-            }
-        });
         $("#验收单管理").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
         $("#验收单管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
     });

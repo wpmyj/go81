@@ -95,6 +95,20 @@
             #pager a:hover {
                 background-color: rgb(243, 243, 243);
             }
+            table.img_box{
+                margin-left:40px;
+            }
+                table.img_box tr td {
+                    width: 202px;
+                    height: auto;
+                    border: 5px solid #fff;
+                }
+                table.img_box tr td:hover
+                {
+                    border:5px solid #ff0000;
+                    box-shadow:2px 2px 2px #808080;
+                }
+
 </style>
 <script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
 @{
@@ -456,7 +470,7 @@
                         </div>
                         <div class="tab tb6">
                             <div id="good">
-                                <table style="margin-left:40px;" cellspacing="20">
+                                <table class="img_box" cellspacing="10">
                                     @{
                                         int rows = Goods.Count() / 4;
                                         int maintain = Goods.Count() % 4;
@@ -467,7 +481,7 @@
                                                 <tr>
                                                     @for (int j = 0; j < 4; j++)
                                                     {
-                                                        <td style="width:202px; height:auto; border-style:solid; border-width:1px; border-color:#CCC;">
+                                                        <td>
                                                             <span style="text-align:center; margin-top:5px; display:block;">
                                                                 <a target="_blank" title="@Goods.ElementAt(number).商品信息.商品名" href="/商品陈列/Product_Detail?id=@Goods.ElementAt(number).Id">
                                                                     @if (Goods.ElementAt(number).商品信息.商品图片.Count > 0)
@@ -495,7 +509,7 @@
                                             <tr>
                                                 @for (int k = 0; k < maintain; k++)
                                                 {
-                                                    <td style="width:202px; height:auto; border-style:solid; border-width:1px; border-color:#CCC;">
+                                                    <td>
                                                         @if (Goods.ElementAt(number).商品信息.商品图片 != null && Goods.ElementAt(number).商品信息.商品图片.Count() != 0)
                                                         {
                                                             <span style="text-align:center; margin-top:5px; display:block;"><a title="@Goods.ElementAt(number).商品信息.商品名" target="_blank" href="/商品陈列/Product_Detail?id=@Goods.ElementAt(number).Id"><img src="@Goods.ElementAt(number).商品信息.商品图片.First()" height="170" width="150" /></a></span>
@@ -541,10 +555,7 @@
         var str = '';
         if(pgCount>0)
         {
-            if (currentPage == 1) {
-                str += "<a>首页</a>";
-            }
-            else {
+            if (currentPage!= 1) {
                 str += "<a onclick='getGoods(1)'>首页</a><a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a>";
             }
         }
@@ -556,29 +567,27 @@
         else {
             if (currentPage < 6) {
                 if (currentPage != 1) {
-                    str = "<a onclick='getGoods("+(currentPage-1)+")'>上一页</a>";
                     for (var i = 1; i < 7; i++) {
                         str += "<a onclick='getGoods("+i+")'>" + i + "</a>";
                     }
-                    str += "...<a  onclick='getGoods("+pgCount+")'>" + pgCount + "</a><a onclick='getGoods("+(currentPage+1)+")'>下一页</a>";
+                    str += "...<a  onclick='getGoods("+pgCount+")'>" + pgCount + "</a>";
                 }
                 else {
-                    str = "";
                     for (var i = 1; i < 7; i++) {
                         str += "<a  onclick='getGoods("+i+")'>" + i + "</a>";
                     }
-                    str += "...<a onclick='getGoods("+pgCount+")'>" + pgCount + "</a><a onclick='getGoods("+(currentPage+1)+")'>下一页</a>";
+                    str += "...<a onclick='getGoods("+pgCount+")'>" + pgCount + "</a>";
                 }
             }
             else if (currentPage >= 6 && currentPage < pgCount - 3) {
-                str = "<a onclick='getGoods("+(currentPage-1)+")'>上一页</a><a onclick='getGoods("+(1)+")'>1</a>...";
+                str += "<a onclick='getGoods("+(1)+")'>1</a>...";
                 for (var i = (currentPage - 4 + 1) ; i <= currentPage+1; i++) {
                     str += "<a onclick='getGoods("+i+")'>" + i + "</a>";
                 }
-                str += "...<a onclick='getGoods("+pgCount+")'>" + pgCount + "</a><a onclick='getGoods("+(currentPage+1)+")'>下一页</a>";
+                str += "...<a onclick='getGoods("+pgCount+")'>" + pgCount + "</a>";
             }
             else if (currentPage >= pgCount - 3) {
-                str = "<a onclick='getGoods("+(currentPage-1)+")'>上一页</a><a onclick='getGoods("+1+")'>1</a>...";
+                str += "<a onclick='getGoods("+1+")'>1</a>...";
                 for (var i = pgCount - 6 + 1; i <=pgCount; i++) {
                     str += "<a onclick='getGoods("+i+")'>" + i + "</a>";
                 }
@@ -586,10 +595,7 @@
         }
         if (pgCount > 0)
         {
-            if (currentPage == pgCount) {
-                str += "<a>末页</a>";
-            }
-            else {
+            if (currentPage != pgCount) {
                 str += "<a onclick='getGoods("+(currentPage+1)+")'>下一页</a><a onclick='getGoods("+pgCount+")'>末页</a>";
             }
             if (pgCount != 0) {
@@ -623,7 +629,7 @@
             var row=parseInt(data.Data.Newgood.length/4);
             var left=parseInt(data.Data.Newgood.length%4);
             var number=0;
-            var str="<table style='margin-left:40px;' cellspacing='20'>";
+            var str="<table class='img_box' cellspacing='10'>";
             if (row > 0)
             {
                 for (var i = 0; i < row; i++)
@@ -631,7 +637,7 @@
                     str+="<tr>";
                     for (var j = 0; j < 4; j++)
                     {
-                        str+="<td style='width:202px; height:auto; border-style:solid; border-width:1px; border-color:#CCC;'>"
+                        str+="<td>"
                             +"<span style='text-align:center; margin-top:5px; display:block;'>"
                             +"<a target='_blank' title='"+data.Data.Newgood[number].name+"' href='/商品陈列/Product_Detail?id="+data.Data.Newgood[number].Id+"'>"
                         if(data.Data.Newgood[number].Picture!="")
@@ -655,7 +661,7 @@
                 str+="<tr>";
                 for (var k = 0; k < left; k++)
                 {
-                    str+="<td style='width:202px; height:auto; border-style:solid; border-width:1px; border-color:#CCC;'>";
+                    str+="<td>";
                     if (data.Data.Newgood[number].Picture!="")
                     {
                         str+="<span style='text-align:center; margin-top:5px; display:block;'><a target='_blank' title='"+data.Data.Newgood[number].name+"' href='/商品陈列/Product_Detail?id="+data.Data.Newgood[number].Id+"'><img src='"+data.Data.Newgood[number].Picture+"' height='170' width='150' /></a></span>";

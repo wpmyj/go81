@@ -214,7 +214,6 @@ namespace Go81WebApp.ApiControllers
             var name = prs["name"];
 
             var retlist = new List<outlistmodel>();
-            var pagesize = 12;
             var q = Query<专家>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过);
             if (!string.IsNullOrWhiteSpace(name))
             {
