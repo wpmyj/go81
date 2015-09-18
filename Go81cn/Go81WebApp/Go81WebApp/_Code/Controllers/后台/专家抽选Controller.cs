@@ -209,20 +209,27 @@ namespace Go81WebApp.Controllers.后台
         {
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_TreeMenu.cshtml");
         }
-        public ActionResult Part_Expert_list(int? page)
-        {
-            int pagesize = 15;
-            long listcount = 用户管理.计数用户<专家>(0, 0);
-            long maxpagesize = Math.Max((listcount + pagesize - 1) / pagesize, 1);
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpagesize)
-            {
-                page = 1;
-            }
-            ViewData["page"] = page;
-            ViewData["listcount"] = listcount;
-            ViewData["pagesize"] = pagesize;
-            ViewData["maxpagesize"] = maxpagesize;
-            ViewData["专家列表"] = 用户管理.查询用户<专家>(pagesize * (int.Parse(page.ToString()) - 1), pagesize);
+        public ActionResult Part_Expert_list()
+        { 
+            long pgCount = 0;
+                int cpg = 0;
+                if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+                {
+                    cpg = int.Parse(Request.QueryString["page"]);
+                }
+                if (cpg <= 0)
+                {
+                    cpg = 1;
+                }
+                long pc = 用户管理.计数用户<专家>(0, 0);
+                pgCount = pc / 10;
+                if (pc % 10 > 0)
+                {
+                    pgCount++;
+                }
+                ViewData["Pagecount"] = pgCount;
+                ViewData["CurrentPage"] = cpg;
+            ViewData["专家列表"] = 用户管理.查询用户<专家>(10 * (cpg- 1), 10);
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_list.cshtml");
         }
         public ActionResult Part_Expert_Edit()
@@ -2195,21 +2202,26 @@ namespace Go81WebApp.Controllers.后台
         {
             return View("/Views/默认主题/后台/单位用户后台/GysChoose_HistoryList.cshtml");
         }
-        public ActionResult Part_GysChoose_HistoryList(int? page)
+        public ActionResult Part_GysChoose_HistoryList()
         {
             IEnumerable<供应商抽选记录> hisrecord = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选));
-            int listcount = hisrecord.Count();
-            int pagesize = 15;
-            int maxpagesize = Math.Max((listcount + pagesize - 1) / pagesize, 1);
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpagesize)
+            int page = 0;
+            if (string.IsNullOrEmpty(Request.QueryString["page"]))
             {
                 page = 1;
             }
-
-            ViewData["page"] = page;
-            ViewData["listcount"] = listcount;
-            ViewData["pagesize"] = pagesize;
-            ViewData["历史抽选供应商列表"] = 供应商抽选管理.查询供应商抽选历史记录(pagesize * (int.Parse(page.ToString()) - 1), pagesize, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选));
+            else
+            {
+                page = int.Parse(Request.QueryString["page"]);
+            }
+            int PageCount = hisrecord.Count() / 10;
+            if (hisrecord.Count() % 10 > 0)
+            {
+                PageCount++;
+            }
+            ViewData["CurrentPage"] = page;
+            ViewData["Pagecount"] = PageCount;
+            ViewData["历史抽选供应商列表"] = 供应商抽选管理.查询供应商抽选历史记录(10 * (page- 1), 10, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选));
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_HistoryList.cshtml");
         }
         public ActionResult Part_GysChoose_HistoryDetail(int? id)

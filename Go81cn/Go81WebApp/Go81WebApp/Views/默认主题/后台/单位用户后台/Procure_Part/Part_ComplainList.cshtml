@@ -63,6 +63,10 @@
                     int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
                     if (Pagecount <= 6)
                     {
+                        if(CurrentPage!=1)
+                        {
+                            <a style="border:1px solid red;" href='/单位用户后台/ComplainList?page=1'>首页</a><a style="border:1px solid red;" href='/单位用户后台/ComplainList?page=@(CurrentPage-1)'>上一页</a>
+                        }
                         for (int i = 1; i <= Pagecount; i++)
                         {
                             if (CurrentPage == i)
@@ -79,36 +83,24 @@
                     {
                         if (CurrentPage < 6)
                         {
-                            if (CurrentPage != 1)
-                            {
-                                <a href="/单位用户后台/ComplainList?page=@(CurrentPage-1)">上一页</a>
                                 for (int i = 1; i < 6; i++)
                                 {
                                     <a href="/单位用户后台/ComplainList?page=@(i)">@i</a>
                                 }
                                 <span>...</span><a href="/单位用户后台/ComplainList?page=@(Pagecount)">@Pagecount</a><a href="/单位用户后台/ComplainList?page=@(CurrentPage+1)">下一页</a>
-                            }
-                            else
-                            {
-                                for (int i = 1; i < 6; i++)
-                                {
-                                    <a href="/单位用户后台/ComplainList?page=@(i)">@i</a>
-                                }
-                                <span>...</span><a href="/单位用户后台/ComplainList?page=@(Pagecount)">@Pagecount</a><a href="/单位用户后台/ComplainList?page=@(CurrentPage+1)">下一页</a>
-                            }
                         }
                         else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
                         {
-                            <a href="/单位用户后台/ComplainList?page=@(CurrentPage-1)">上一页</a><span><a>1</a>...</span>
+                            <span><a href="/单位用户后台/ComplainList?page=1">1</a>...</span>
                             for (int i = (CurrentPage - 4 + 1); i <= CurrentPage; i++)
                             {
                                 <a href="/单位用户后台/ComplainList?page=@(i)">i</a>
                             }
-                            <span>...</span><a href="/单位用户后台/ComplainList?page=@(Pagecount)">@Pagecount</a><a href="/单位用户后台/ComplainList?page=@(CurrentPage+1)">下一页</a>
+                            <span>...</span><a href="/单位用户后台/ComplainList?page=@(Pagecount)">@Pagecount</a>
                         }
                         else if (CurrentPage >= Pagecount - 3)
                         {
-                            <span><a href="/单位用户后台/ComplainList?page=@(CurrentPage-1)">上一页</a><a>1</a>...</span>
+                            <span><a href="/单位用户后台/ComplainList?page=1">1</a>...</span>
                             for (int i = Pagecount - 5 + 1; i <= Pagecount; i++)
                             {
                                 if (CurrentPage == i)
@@ -120,8 +112,15 @@
                                     <a href="/单位用户后台/ComplainList?page=@(i)">@i</a>
                                 }
                             }
-                            //<a href="/单位用户后台/ComplainList?page=@(Pagecount)">@Pagecount</a>
                         }
+                    }
+                    if(Pagecount>0)
+                    {
+                        if(CurrentPage<Pagecount)
+                        {
+                            <a href="/单位用户后台/ComplainList?page=@(CurrentPage+1)">下一页</a><a href="/单位用户后台/ComplainList?page=@(Pagecount)">末页</a>
+                        }
+                        <span>第@(CurrentPage)页/共@(Pagecount)页</span>
                     }
                 }
             </div>
@@ -157,7 +156,6 @@
 <script type="text/javascript" language="javascript">
     $(document).ready(function () {
         $("#投诉列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
-        $("#投诉列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#投诉列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
 </script>
-

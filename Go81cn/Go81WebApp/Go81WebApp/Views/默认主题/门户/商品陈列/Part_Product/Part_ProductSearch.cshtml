@@ -356,7 +356,7 @@
                 {
                     <a style="margin-right:5px;" id="@(int.Parse(ViewData["currentPage"].ToString()) + 1)" onclick="changeAdpage(this)">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeAdpage(this)">末页</a>
                 }
-                第 @ViewData["currentpage"].ToString() 页/共 @ViewData["pagecount"].ToString() 页
+                <span style="font-size:12px;">第@(ViewData["currentpage"])页/共@(ViewData["pagecount"])页</span>
             </div>
         }
     </div>

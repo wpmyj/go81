@@ -605,7 +605,7 @@ namespace Go81WebApp.Controllers.门户
                 }
                 string type = Request.QueryString["tp"];
                 List<SupplierInfo> sp = new List<SupplierInfo>();
-                IEnumerable<商品> goods = 商品管理.查询商品(0,0,Query<商品>.Where(m=>m.商品信息.精确型号==type)).OrderBy(m=>m.销售信息.价格);
+                IEnumerable<商品> goods = 商品管理.查询商品(0,0,Query<商品>.Where(m=>m.商品信息.精确型号==type&&m.审核数据.审核状态== 审核状态.审核通过)).OrderBy(m=>m.销售信息.价格);
                 foreach(var item in goods)
                 {
                    if(item.商品信息!=null)

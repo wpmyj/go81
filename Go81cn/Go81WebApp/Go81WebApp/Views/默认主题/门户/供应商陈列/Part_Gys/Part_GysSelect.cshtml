@@ -715,7 +715,7 @@
             {
                 <a onclick="changeMesspage(this)" style="margin-right:5px;" id="@(int.Parse(ViewData["currentpage"].ToString())+1)">下一页</a><a onclick="changeMesspage_s(this)" id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
             }
-            第 @ViewData["currentPage"].ToString() 页/共 @ViewData["pagecount"].ToString() 页
+            <span style="font-size:12px;">第@(ViewData["currentPage"])页/共@(ViewData["pagecount"])页</span>
         </div>
     }
 </div>

@@ -10583,6 +10583,7 @@ namespace Go81WebApp.Controllers.后台
             try
             {
                 //商品 Pro_Model = new 商品();
+
                 商品 Pro_Model = 商品管理.查找商品(model.Id);
                 if (Pro_Model.中标商品)
                 {

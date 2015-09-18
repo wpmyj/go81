@@ -596,7 +596,12 @@ else
             str += "<tr><td><a style='font-size:13px;' target='_blank' href='" + path1[i] + "'>" + path_t + "</a>&nbsp&nbsp&nbsp&nbsp总金额" + sum[i] + "元<a href='###' title='删除' onclick='delPic(this)' style='color:white; margin-left:10px; display:inline-block; background-color:red; width:20px; height:20px; line-height:20px; text-align:center;' lang='" + path1[i] + "'>×</a></td></tr>";
         }
         str += "</table>";
-        document.getElementById("pBox").innerHTML = str;
+        if (path1.length - 1 < 1) {
+            document.getElementById("pBox").innerHTML = "";
+        }
+        else {
+            document.getElementById("pBox").innerHTML = str;
+        }
         document.getElementById("uploadimg").innerHTML = str;
     }
     function delPic(th) {
@@ -1187,25 +1192,29 @@ else
         }
 
         var listattach = $("#pBox").html();
-        if (listattach == "") {
+        if (listattach == "") {  //未上传附件
             $(list).each(function (index, domEle) {    //判断物资列表商品是否选择
 
                 $(domEle).prev().val($(domEle).find("option:selected").attr("id"));
                 var a = $(domEle).prev().val();
                 if (a == "") {
                     isnull = true;
+                    return false;
                 }
             });
             var d = $("#good_list").find("input:visible");  //物资列表信息是否完善
-            //if (d.length <= 0) {
-            //    isnull = true;
-            //}
+            if (d.length <= 0) {
+                isnull = true;
+            }
             $(d).each(function (index, domEle) {
                 var v = $(domEle).val();
                 var mm = $(domEle).attr("name");
-                var ff = mm.split(".");
-                if (ff[ff.length - 1] != "采购合同号" && ff[ff.length - 1] != "file1" && v == "") {
-                    isnull = true;
+                if (mm != "undefined" && mm != null) {
+                    var ff = mm.split(".");
+                    if (ff[ff.length - 1] != "采购合同号" && ff[ff.length - 1] != "file1" && v == "") {
+                        isnull = true;
+                        return false;
+                    }
                 }
             });
         } else {

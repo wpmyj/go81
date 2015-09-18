@@ -1,57 +1,54 @@
 ﻿@using Go81WebApp.Models.数据模型
-    <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-            <th width="16%">申请人</th>
-            <th width="16%">项目名称</th>
-            <th width="10%">项目编号</th>
-            <th width="17%">评标时间</th>
-            <th width="17%">申请时间</th>
-            <th width="12%">申请状态</th>
-            <th width="12%">操作</th>
-        </tr>
-        @{
-            IEnumerable<供应商抽选记录> basedata = ViewData["供应商抽取待批准列表"] as IEnumerable<供应商抽选记录>;
-            if (basedata != null && basedata.Any())
-            {
-                foreach (var i in basedata)
-                {
-                    <tr>
-                        @if (i.经办人 != null && i.经办人.用户数据 != null && i.经办人.用户数据.联系方式 != null && !string.IsNullOrWhiteSpace(i.经办人.用户数据.联系方式.联系人))
-                        {
-                            <td>@i.经办人.用户数据.联系方式.联系人</td>
-                        }
-                        else
-                        {
-                            <td>未填写</td>
-                        }
-                        <td>@i.项目名称</td>
-                        <td>@i.项目编号</td>
-                        <td>@i.评标时间.ToString()</td>
-                        <td>@i.申请时间.ToString()</td>
-                        <td>@i.申请抽选状态</td>
-                        <td class="gys_znxx_content_tabletime">
-                            @Html.ActionLink("查看", "GysChoose_ApplayAudit", new { id = i.Id })|@Html.ActionLink("审核", "GysChoose_ApplayAudit", new { id = i.Id })
-                        </td>
-                    </tr>
-                }
-            }
-            else
+<table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <th width="16%">申请人</th>
+        <th width="16%">项目名称</th>
+        <th width="10%">项目编号</th>
+        <th width="17%">评标时间</th>
+        <th width="17%">申请时间</th>
+        <th width="12%">申请状态</th>
+        <th width="12%">操作</th>
+    </tr>
+    @{
+        IEnumerable<供应商抽选记录> basedata = ViewData["供应商抽取待批准列表"] as IEnumerable<供应商抽选记录>;
+        if (basedata != null && basedata.Any())
+        {
+            foreach (var i in basedata)
             {
                 <tr>
-                    <td colspan="7">暂无相关列表</td>
+                    @if (i.经办人 != null && i.经办人.用户数据 != null && i.经办人.用户数据.联系方式 != null && !string.IsNullOrWhiteSpace(i.经办人.用户数据.联系方式.联系人))
+                    {
+                        <td>@i.经办人.用户数据.联系方式.联系人</td>
+                    }
+                    else
+                    {
+                        <td>未填写</td>
+                    }
+                    <td>@i.项目名称</td>
+                    <td>@i.项目编号</td>
+                    <td>@i.评标时间.ToString()</td>
+                    <td>@i.申请时间.ToString()</td>
+                    <td>@i.申请抽选状态</td>
+                    <td class="gys_znxx_content_tabletime">
+                        @Html.ActionLink("查看", "GysChoose_ApplayAudit", new { id = i.Id })|@Html.ActionLink("审核", "GysChoose_ApplayAudit", new { id = i.Id })
+                    </td>
                 </tr>
             }
         }
-    </table>
-
-    <div class="gys_znxx_content_detailbox">
-        @if (int.Parse(ViewData["pre_currentPage"].ToString()) == 1)
-        {
-            <span>首页</span>
-        }
         else
         {
-            <a id="1" onclick="changepre_page(this)">首页</a>
+            <tr>
+                <td colspan="7">暂无相关列表</td>
+            </tr>
+        }
+    }
+</table>
+@if (basedata.Any())
+{
+    <div class="gys_znxx_content_detailbox">
+        @if (int.Parse(ViewData["pre_currentPage"].ToString()) != 1)
+        {
+            <a id="1" onclick="changepre_page(this)">首页</a><a id="@(int.Parse(ViewData["pre_currentPage"].ToString())-1)" onclick="changepre_page(this)">上一页</a>
         }
         @for (int i = 0; i <= 10; i++)
         {                       //一共最多显示10个页码，前面5个，后面5个
@@ -68,30 +65,10 @@
                 }
             }
         }
-        @if (int.Parse(ViewData["pre_currentPage"].ToString()) == int.Parse(ViewData["pre_pagecount"].ToString()))
+        @if (int.Parse(ViewData["pre_currentPage"].ToString()) != int.Parse(ViewData["pre_pagecount"].ToString()))
         {
-            <span>末页</span>
+            <a id="@(int.Parse(ViewData["pre_currentPage"].ToString())+1)" onclick="changepre_page(this)">下一页</a><a id="@int.Parse(ViewData["pre_pagecount"].ToString())" onclick="changepre_page(this)">末页</a>
         }
-        else
-        {
-            <a id="@int.Parse(ViewData["pre_pagecount"].ToString())" onclick="changepre_page(this)">末页</a>
-        }
-
+        <span style="font-size:12px;">第@(ViewData["pre_currentPage"])页/共@(ViewData["pre_pagecount"])页</span>
     </div>
-<script type="text/javascript" language="javascript">
-    var i = @(int.Parse(ViewData["pre_currentPage"].ToString()));
-    var j=@(int.Parse(ViewData["pre_pagecount"].ToString()))
-    $(document).ready(function () {
-        $(".gys_znxx_content_detailbox a").each(function () {
-            if ($(this).text() == i) {
-                $(this).addClass("pre_currentPage");
-            }
-            if (i== j) {
-                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
-            }
-            if (i == 1) {
-                $(".gys_znxx_content_detailbox a:first").addClass("endPage");;
-            }
-        });
-    });
-</script>
+}

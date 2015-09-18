@@ -354,11 +354,7 @@
                 <div class="gys_znxx_content_detailbox">
                     @if (AssignmentTaskList.Count()!=0)
                     {
-                       if (int.Parse(ViewData["pre_currentPage"].ToString()) == 1)
-                    {
-                        <a class="currentPage">首页</a>
-                    }
-                    else
+                       if (int.Parse(ViewData["pre_currentPage"].ToString()) != 1)
                     {
                         <a id="1" onclick="changepre_page(this)">首页</a><a onclick="changepre_page(this)" id="@(int.Parse(ViewData["pre_currentPage"].ToString())-1)">上一页</a>
                     }
@@ -379,15 +375,11 @@
                             }
                         }
                     }
-                    if (int.Parse(ViewData["pre_currentPage"].ToString()) == int.Parse(ViewData["pre_pagecount"].ToString()))
-                    {
-                        <a class="currentPage">末页</a>
-                    }
-                    else
+                    if (int.Parse(ViewData["pre_currentPage"].ToString()) != int.Parse(ViewData["pre_pagecount"].ToString()))
                     {
                         <a onclick="changepre_page(this)" id="@(int.Parse(ViewData["pre_currentPage"].ToString())+1)">上一页</a><a id="@int.Parse(ViewData["pre_pagecount"].ToString())" onclick=" changepre_page(this) ">末页</a>
                     }
-                    <span>第 @ViewData["pre_currentPage"].ToString() 页/共 @ViewData["pre_pagecount"].ToString() 页</span>
+                    <span style="font-size:12px;">第@(ViewData["pre_currentPage"].ToString())页/共@(ViewData["pre_pagecount"].ToString())页</span>
                     }
                 </div>
             </div>
@@ -488,7 +480,7 @@
                     {
                         <a onclick="changepre_ed(this)" id="@(int.Parse(ViewData["ed_currentPage"].ToString()) + 1)">下一页</a><a id="@int.Parse(ViewData["ed_pagecount"].ToString())" onclick="changepre_ed(this) ">末页</a>
                     }
-                    <span>第 @ViewData["ed_currentPage"].ToString() 页/共 @ViewData["ed_pagecount"].ToString() 页</span>
+                    <span>第@(ViewData["ed_currentPage"].ToString())页/共@(ViewData["ed_pagecount"].ToString())页</span>
                     }
                 </div>
             </div>

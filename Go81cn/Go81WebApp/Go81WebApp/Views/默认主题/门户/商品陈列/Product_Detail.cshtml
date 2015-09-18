@@ -137,22 +137,22 @@
                 <span>@Model.商品信息.商品名</span>
             </div>
             <div class="prodtpage_detail_topbox_right_contentbox" style="padding-top:10px; padding-left:0px; font-size:14px; width: 550px;">
-                    <div class="prodtpage_detail_topbox_right_contentlist" style="line-height: 25px;">
-                        军采价格：
-                        ￥
-                        @try
-                        {
-                            <span id="product_price" style="font-weight: bold; font-size: 18px; line-height: 25px;">@(string.Format("{0:0.00}", Model.销售信息.价格))</span>
-                        }
-                        catch
-                        {
-                            <span>未填写</span>
-                        }
-                        @if (Model.销售信息 != null && Model.销售信息.价格修改日期 != null)
-                        {
-                            <span style="color:#999;">（报价日期：@Model.销售信息.价格修改日期.ToString("yyyy-MM-dd")）</span>
-                        }
-                    </div>
+                <div class="prodtpage_detail_topbox_right_contentlist" style="line-height: 25px;">
+                    军采价格：
+                    ￥
+                    @try
+                    {
+                        <span id="product_price" style="font-weight: bold; font-size: 18px; line-height: 25px;">@(string.Format("{0:0.00}", Model.销售信息.价格))</span>
+                    }
+                    catch
+                    {
+                        <span>未填写</span>
+                    }
+                    @if (Model.销售信息 != null && Model.销售信息.价格修改日期 != null)
+                    {
+                        <span style="color:#999;">（报价日期：@Model.销售信息.价格修改日期.ToString("yyyy-MM-dd")）</span>
+                    }
+                </div>
                 <div class="price_sd">此价格为商品价格，运费、服务费、维修费等请与该供应商联系</div>
 
                 <div class="prodtpage_detail_topbox_right_contentlist">
@@ -201,7 +201,7 @@
                     }
                 </div>
                 <div class="prodtpage_detail_topbox_right_contentlist">
-                    
+
                     所在地区：
                     @try
                     {
@@ -259,46 +259,50 @@
                     <td colspan="2" align="center" valign="top"><input type="button" class="gys_ztbsearch_search_botton" style="margin-top: 10px;width:155px;margin-left:54px;" value="查询" onclick='showothergys()' /></td>
                 </tr>
             </table>
-            <div id="result"></div>
+            <div style="text-align:center;border-top:1px solid #9B9B9B;">
+                <span class="samegys_name">同型号商品报价企业列表</span><div>
+                    <div id="result" style="height:230px;overflow-y:scroll;overflow-x:hidden;"></div>
             <div id="pager"></div>
 
             @*<table width="100%;">
-                <tr>
-                    <th colspan="2">同类商品供应商报价</th>
-                </tr>
-            <tr>
-                <td align="right" valign="top" width="70%">四川大爱科技有限公司：</td>
-                <td width="30%">￥1530.00</td>
-            </tr>
-            <tr>
-                <td align="right" valign="top">上海康盟保健用品有限公司：</td>
-                <td>￥1452.00</td>
-            </tr>
-            <tr>
-                <td align="right" valign="top">重庆雨禾医疗器械有限公司：</td>
-                <td>¥ 2280.00</td>
-            </tr>
-            <tr>
-                <td align="right" valign="top">湖南泰瑞医疗科技有限公司：</td>
-                <td>¥ 2100.00</td>
-            </tr>
-            <tr>
-                <td align="right" valign="top">北京中成航宇空分设备有限公司：</td>
-                <td>¥ 1950.00</td>
-            </tr>
-            <tr>
-                <td align="right" valign="top">北京世纪信达科技：</td>
-                <td>¥ 1800.00</td>
-            </tr>
-            <tr>
-                <td align="right" valign="top">日照爱德医疗设备工程有限公司：</td>
-                <td>¥ 1750.00</td>
-            </tr>
-        </table>*@
+                        <tr>
+                            <th colspan="2">同类商品供应商报价</th>
+                        </tr>
+                    <tr>
+                        <td align="right" valign="top" width="70%">四川大爱科技有限公司：</td>
+                        <td width="30%">￥1530.00</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">上海康盟保健用品有限公司：</td>
+                        <td>￥1452.00</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">重庆雨禾医疗器械有限公司：</td>
+                        <td>¥ 2280.00</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">湖南泰瑞医疗科技有限公司：</td>
+                        <td>¥ 2100.00</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">北京中成航宇空分设备有限公司：</td>
+                        <td>¥ 1950.00</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">北京世纪信达科技：</td>
+                        <td>¥ 1800.00</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">日照爱德医疗设备工程有限公司：</td>
+                        <td>¥ 1750.00</td>
+                    </tr>
+                </table>*@
 
         </div>
     </div>
 </div>
+        </div>
+    </div>
 <script type="text/javascript">
     function showothergys() {
         $("#othergysdiv").html("");
@@ -360,25 +364,25 @@
                         <div class="product_detaildiv">
                             @foreach (var arr in Model.商品数据.商品属性)
                             {
-                            <table cellspacing="0" cellpadding="0" width="100%">
-                                <tr>
-                                    <th colspan="2" align="center">@arr.Key</th>
-                                </tr>
-                                @foreach (var proname in arr.Value)
-                                    {
+                                <table cellspacing="0" cellpadding="0" width="100%">
                                     <tr>
-                                        <td width="15%" style="text-align:center;">@proname.Key</td>
-                                        <td width="85%">
-                                            @foreach (var list in proname.Value)
+                                        <th colspan="2" align="center">@arr.Key</th>
+                                    </tr>
+                                    @foreach (var proname in arr.Value)
+                                    {
+                                        <tr>
+                                            <td width="15%" style="text-align:center;">@proname.Key</td>
+                                            <td width="85%">
+                                                @foreach (var list in proname.Value)
                                                 {
-                                                @list
+                                                    @list
                                                     if (list != proname.Value[proname.Value.Count - 1])
                                                     {<span>、</span>}
                                                 }
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
                                     }
-                            </table>
+                                </table>
                             }
                         </div>
                     </li>
@@ -410,8 +414,7 @@
                 alist[i].style.border = " 1px solid #aaa";
             }
         }
-
-        a.style.border = " 1px solid #f00";
+        a.style.border = "1px solid #f00";
 
         document.getElementById("product_price").innerHTML = parseFloat(a.getAttribute("id")).toFixed(2);
     }
@@ -442,7 +445,7 @@
                 setPage(num, data.Data.pCount);
             }
             else {
-                $("#result").html("暂时没有相同型号商品的供应商！");
+                $("#result").html("暂时没有相同型号商品的企业！");
             }
         });
     }

@@ -3,7 +3,7 @@
 @model Go81WebApp.Models.数据模型.用户数据模型.供应商
 @{
     ViewBag.Title = "供应商后台管理";
-    Layout = "_BackLayout.cshtml";
+   // Layout = "_BackLayout.cshtml";
 }
     <div class="bg_outdiv">
         <div class="bg_outdiv_left">
@@ -93,7 +93,7 @@
                                 {
                                     if (ViewBag.GoodCount < 5)
                                     {
-                                        <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Product_AddStep1">商品少于5个，您可以从这里去添加商品>></a></td></tr>
+                                        <tr><td align="left"><a style="color:red; line-height:40px; text-decoration:underline;" href="/供应商后台/Gys_Product_AddStep1?id=0">商品少于5个，您可以从这里去添加商品>></a></td></tr>
                                     }
                                 }
                             </table>

@@ -745,11 +745,11 @@ namespace Go81WebApp.Controllers.基本功能
 
                     {"修改登录密码", new Tuple<权限[], bool>(new[]{权限.修改登录密码}, false)}, 
                     {"修改联系人信息", new Tuple<权限[], bool>(new[]{权限.修改联系人信息}, false)}, 
-
+                    
                     {"新增消息", new Tuple<权限[], bool>(new[]{权限.新增消息}, false)}, 
                     {"已收消息", new Tuple<权限[], bool>(new[]{权限.已收消息}, false)}, 
                     {"已发消息", new Tuple<权限[], bool>(new[]{权限.已发消息}, false)}, 
-            };
+                };
                 #endregion
                 HttpContext.批量权限验证(ref p);
                 Dictionary<string, object> dg;
@@ -778,36 +778,36 @@ namespace Go81WebApp.Controllers.基本功能
                     });
                     return PartialView(m_nocontact);
                 }
-            var m = new Dictionary<string, object>
-            {
+                var m = new Dictionary<string, object>
                 {
-                        "采购公告管理", new Dictionary<string, object>
                     {
+                        "采购公告管理", new Dictionary<string, object>
+                        {
                             {"新增采购公告", "单位用户后台/Procure_AdAdd"},
                             {"我的采购公告", "单位用户后台/Procure_AdSendList_S"},
                             //{"审核采购公告", "单位用户后台/Procure_AdSendList"},
                             //{"全部采购公告列表", "单位用户后台/Procure_AdList"},
-                    }
-                },
-                {
-                        "验收单管理", new Dictionary<string, object>
+                        }
+                    },
                     {
+                        "验收单管理", new Dictionary<string, object>
+                        {
                             {"验收单管理流程", "通知/NoticeDetail?id=32"},
                             {"未审核的验收单", "单位用户后台/AcceptanceList"},
                             {"已审核的验收单", "单位用户后台/Acceptance_checked"},
                             {"已作废的验收单", "单位用户后台/AcceptanceList_Avoid"},
                             {"我的验收单列表", "单位用户后台/Acceptanced_List"},
                         }
-                     },
-                    #if INTRANET
-                        {
+                    },
+#if INTRANET
+                      {
                         "采购需求管理", new Dictionary<string, object>
-                            {
+                        {
                             {"编制需求计划","单位用户后台/Add_Demand"},
                             {"审核需求计划","单位用户后台/DemandCheck?page=1"},
                             {"我的需求计划列表","单位用户后台/Demandlist?page=1"},
-                            }
-                        },
+                        }
+                    },
                     {
                         "采购任务管理", new Dictionary<string, object>
                         {
@@ -815,17 +815,17 @@ namespace Go81WebApp.Controllers.基本功能
                              {"审核采购任务","单位用户后台/AssignmentTaskAuditList"},
                              {"受理采购任务","单位用户后台/AssignmentTaskList_p"},
                              //{"我的采购任务列表","单位用户后台/AssignmentTaskList"},
-                    }
-                },
+                        }
+                    },
 #endif
                     {
                         "网上竞价管理", new Dictionary<string, object>
-            {
+                        {
                             {"新增网上竞价", "单位用户后台/OnlineBidding_Add"},
                             {"未完成的网上竞价", "单位用户后台/OnlineBidding_List"},
                             {"已完成的网上竞价", "单位用户后台/OnlineBidding_List_Ed"},
-                            }
-                        },
+                        }
+                    },
 
                     //{
                     //    "电子标书管理", new Dictionary<string, object>
@@ -836,7 +836,7 @@ namespace Go81WebApp.Controllers.基本功能
                     //},
 
 
-                        //{
+                    //{
                     //    "中标商品查询系统, new Dictionary<string, object>
                     //    {
 
@@ -853,15 +853,15 @@ namespace Go81WebApp.Controllers.基本功能
                 };
 #if INTRANET
                 m.Add("评审专家抽取系统", new Dictionary<string, object>
-                {
-
-                    //{"评审专家列表", "专家抽选/Expert_list"},
-                    {"新增抽取申请", "专家抽选/Expert_Applay"},
-                    {"我可进行的抽取申请", "专家抽选/Expert_Applay_S"},//包含历史我的历史抽取记录
-                    {"我已完成的抽取申请", "专家抽选/Expert_Applay_ed"},//包含历史我的历史抽取记录
-                    {"我可审核的抽取申请", "专家抽选/Expert_ApplayAuditList"},//包含历史我的历史抽取记录
-                    {"全部抽取记录列表", "专家抽选/Expert_History"},
-                });
+                        {
+                            
+                            //{"评审专家列表", "专家抽选/Expert_list"},
+                            {"新增抽取申请", "专家抽选/Expert_Applay"},
+                            {"我可进行的抽取申请", "专家抽选/Expert_Applay_S"},//包含历史我的历史抽取记录
+                            {"我已完成的抽取申请", "专家抽选/Expert_Applay_ed"},//包含历史我的历史抽取记录
+                            {"我可审核的抽取申请", "专家抽选/Expert_ApplayAuditList"},//包含历史我的历史抽取记录
+                            {"全部抽取记录列表", "专家抽选/Expert_History"},
+                        });
 #endif
                 //m.Add("在库供应商抽取系统", new Dictionary<string, object>
                 //{
@@ -873,7 +873,7 @@ namespace Go81WebApp.Controllers.基本功能
                 //});
 
                 //m.Add("评审专家入库管理", new Dictionary<string, object>
-            //{
+                //{
                 //     {"我可审核的入库申请", "专家抽选/Expert_Add"},
                 //     {"我已审核的入库申请", "专家抽选/Expert_Add"},
                 //     {"全部入库申请列表", "专家抽选/Expert_Add"},
@@ -881,7 +881,7 @@ namespace Go81WebApp.Controllers.基本功能
                 //});
 
                 //m.Add("供应商入库管理", new Dictionary<string, object>
-            //{
+                //{
                 //      {"我可审核的入库申请", "单位用户后台/Gys_Examine"},
                 //      {"我已审核的入库申请", "单位用户后台/Gys_Examined"},
                 //      {"全部入库申请列表", "单位用户后台/Gys_Examined"},
@@ -937,12 +937,12 @@ namespace Go81WebApp.Controllers.基本功能
                 //    });
                 var l = m.Keys.ToArray();
                 foreach (var sm in l)
-                        {
+                {
                     if (m[sm] is string && !p[sm].Item2) { m.Remove(sm); continue; }
                     var m1 = m[sm] as Dictionary<string, object>;
                     var l1 = m1.Keys.ToArray();
                     foreach (var sm1 in l1)
-                            {
+                    {
                         if (m1[sm1] is string && !p[sm1].Item2) { m1.Remove(sm1); continue; }
                         if (m1[sm1] is Dictionary<string, object>)
                         {
@@ -956,10 +956,10 @@ namespace Go81WebApp.Controllers.基本功能
                         }
                     }
                     if (m1.Keys.Count <= 0) { m.Remove(sm); }
-                            }
+                }
 
-            return PartialView(m);
-        }
+                return PartialView(m);
+            }
             else
             {
                 ViewData["单位状态"] = HttpContext.获取当前用户<单位用户>().审核数据.审核状态.ToString();
@@ -1213,7 +1213,7 @@ namespace Go81WebApp.Controllers.基本功能
 //                        //{"角色管理", "单位用户后台/Role_Mannage"},
 //                    });
 //#endif
-               
+
 //                m.Add("验收单管理", new Dictionary<string, object>
 //                        {
 //                            {"审核验收单", "单位用户后台/AcceptanceList"},
@@ -1248,7 +1248,7 @@ namespace Go81WebApp.Controllers.基本功能
 //                        {"审核推荐的评审专家", "单位用户后台/Recommend_ExpertList_Audit"},
 //                        {"打印已审核推荐的评审专家", "单位用户后台/Print_Expert"},
 //                    });
-
+                
 //                //m.Add("投诉管理", new Dictionary<string, object>
 //                //    {
 //                //       {"投诉列表", "单位用户后台/ComplainList"},

@@ -1870,7 +1870,7 @@ namespace Go81WebApp.Controllers.后台
                 需求计划 model = 需求计划管理.查找需求计划(id);
                 foreach (var item in model.分发列表)
                 {
-                    if(!ids.Contains(item.需求计划分发ID))
+                    if (!ids.Contains(item.需求计划分发ID))
                     {
                     需求计划分发管理.删除需求计划分发(item.需求计划分发ID);
                         ids.Add(item.需求计划分发ID);
@@ -4406,7 +4406,7 @@ namespace Go81WebApp.Controllers.后台
         [HttpPost]
         [ValidateInput(false)]
 
-        public ActionResult Procure_AdAdd(Models.数据模型.内容数据模型.公告 model)
+        public ActionResult Procure_AdAdd(公告 model)
         {
             //var firstclass = Request.Form["hy"];
             //var secondclass = Request.Form["secondclass"];
@@ -4481,6 +4481,7 @@ namespace Go81WebApp.Controllers.后台
                     //model.审核数据2.审核时间 = DateTime.Now;
                     //model.审核数据2.审核者.用户ID = currentUser.Id;
                     model.内容主体.标题 = model.项目信息.项目名称 + "(" + model.项目信息.项目编号 + ")";
+                    model.内容主体.发布时间 = DateTime.Now;
                     公告管理.添加公告(model);
                     GG_CreateIndex(model, "/Lucene.Net/IndexDic/GongGao");
                 }
@@ -4542,6 +4543,7 @@ namespace Go81WebApp.Controllers.后台
                         }
                     }
                     model.内容主体.标题 = model.项目信息.项目名称 + "(" + model.项目信息.项目编号 + ")";
+                    model.内容主体.发布时间 = DateTime.Now;
                     公告管理.添加公告(model);
                     站内消息管理.添加站内消息(Msg, currentUser.Id, sendid);
                     对话消息管理.添加对话消息(Talk, Msg);
@@ -4549,6 +4551,7 @@ namespace Go81WebApp.Controllers.后台
 #else
                 model.审核数据.审核状态 = 审核状态.未审核;
                 model.内容主体.标题 = model.项目信息.项目名称 + "(" + model.项目信息.项目编号 + ")";
+                model.内容主体.发布时间 = DateTime.Now;
                 公告管理.添加公告(model);
 #endif
                 //if (!string.IsNullOrEmpty(zb_contact))
@@ -4932,7 +4935,7 @@ namespace Go81WebApp.Controllers.后台
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
 
-        public ActionResult Procure_AdModify(Models.数据模型.内容数据模型.公告 model)
+        public ActionResult Procure_AdModify(公告 model)
         {
             //对未绑定字段赋值
             var m = 公告管理.查找公告(model.Id);
@@ -4943,6 +4946,7 @@ namespace Go81WebApp.Controllers.后台
             model.点击次数 = m.点击次数;
             model.内容基本信息 = m.内容基本信息;
             model.公告信息.是否撤回 = false;
+           // model.基本数据.修改时间 = DateTime.Now;
             //var firstclass = Request.Form["hy"];
             //var secondclass = Request.Form["secondclass"];
             //var thirdclass = Request.Form["thirdclass"];
@@ -4956,19 +4960,19 @@ namespace Go81WebApp.Controllers.后台
             //    }
             //}
 
-            var time = Request.Form["publishtime"];
-            if (!string.IsNullOrEmpty(time))
-            {
-                try
-                {
-                    model.内容主体.发布时间 = Convert.ToDateTime(time);
+            //var time = Request.Form["publishtime"];
+            //if (!string.IsNullOrEmpty(time))
+            //{
+            //    try
+            //    {
+            //        model.内容主体.发布时间 = Convert.ToDateTime(time);
 
-                }
-                catch
-                {
+            //    }
+            //    catch
+            //    {
 
-                }
-            }
+            //    }
+            //}
 
             try
             {
@@ -6063,7 +6067,7 @@ namespace Go81WebApp.Controllers.后台
                     cpg = int.Parse(Request.QueryString["page"]);
                 }
                 if (cpg <= 0)
-        {
+                {
                     cpg = 1;
                 }
                 long pc = 公告管理.计数公告(0, 0, q);
@@ -7682,22 +7686,25 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
-        public ActionResult Part_Gys_PreScoreList(int? page)
+        public ActionResult Part_Gys_PreScoreList()
         {
-
-            int pro_listcount = (int)(项目服务记录管理.计数项目服务记录(0, 0, MongoDB.Driver.Builders.Query.EQ("服务评价.服务评级", 项目服务记录.服务评级.未填写).And(MongoDB.Driver.Builders.Query.EQ("验收单位链接.用户ID", currentUser.Id))));
-            int pro_maxpage = Math.Max((pro_listcount + ZBCGXM_PAGESIZE - 1) / ZBCGXM_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > pro_maxpage)
+            int page = 0;
+            if (string.IsNullOrEmpty(Request.QueryString["page"]))
             {
                 page = 1;
             }
-
-            ViewData["listcount"] = pro_listcount;
-            ViewData["page"] = page;
-            ViewData["pagesize"] = ZBCGXM_PAGESIZE;
-
-            ViewData["待评分项目服务列表"] = 项目服务记录管理.查询项目服务记录(ZBCGXM_PAGESIZE * (int.Parse(page.ToString()) - 1), ZBCGXM_PAGESIZE, MongoDB.Driver.Builders.Query.EQ("服务评价.服务评级", 项目服务记录.服务评级.未填写).And(MongoDB.Driver.Builders.Query.EQ("验收单位链接.用户ID", currentUser.Id)));
+            else
+            {
+                page = int.Parse(Request.QueryString["page"]);
+            }
+            int PageCount = (int)(项目服务记录管理.计数项目服务记录(0, 0, MongoDB.Driver.Builders.Query.NE("服务评价.服务评级", 项目服务记录.服务评级.未填写).And(MongoDB.Driver.Builders.Query.EQ("验收单位链接.用户ID", currentUser.Id)))) / 10;
+            if ((int)(项目服务记录管理.计数项目服务记录(0, 0, MongoDB.Driver.Builders.Query.NE("服务评价.服务评级", 项目服务记录.服务评级.未填写).And(MongoDB.Driver.Builders.Query.EQ("验收单位链接.用户ID", currentUser.Id)))) % 10 > 0)
+            {
+                PageCount++;
+            }
+            ViewData["CurrentPage"] = page;
+            ViewData["Pagecount"] = PageCount;
+            ViewData["待评分项目服务列表"] = 项目服务记录管理.查询项目服务记录(10 * (page - 1), 10, MongoDB.Driver.Builders.Query.EQ("服务评价.服务评级", 项目服务记录.服务评级.未填写).And(MongoDB.Driver.Builders.Query.EQ("验收单位链接.用户ID", currentUser.Id)));
             return PartialView("Procure_Part/Part_Gys_PreScoreList");
         }
 
@@ -7736,22 +7743,25 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
-        public ActionResult Part_Gys_AfScoreList(int? page)
+        public ActionResult Part_Gys_AfScoreList()
         {
-
-            int pro_listcount = (int)(项目服务记录管理.计数项目服务记录(0, 0, MongoDB.Driver.Builders.Query.NE("服务评价.服务评级", 项目服务记录.服务评级.未填写).And(MongoDB.Driver.Builders.Query.EQ("验收单位链接.用户ID", currentUser.Id))));
-            int pro_maxpage = Math.Max((pro_listcount + ZBCGXM_PAGESIZE - 1) / ZBCGXM_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > pro_maxpage)
+            int page = 0;
+            if (string.IsNullOrEmpty(Request.QueryString["page"]))
             {
                 page = 1;
             }
-
-            ViewData["listcount"] = pro_listcount;
-            ViewData["page"] = page;
-            ViewData["pagesize"] = ZBCGXM_PAGESIZE;
-
-            ViewData["已评分项目服务列表"] = 项目服务记录管理.查询项目服务记录(ZBCGXM_PAGESIZE * (int.Parse(page.ToString()) - 1), ZBCGXM_PAGESIZE, MongoDB.Driver.Builders.Query.NE("服务评价.服务评级", 项目服务记录.服务评级.未填写).And(MongoDB.Driver.Builders.Query.EQ("验收单位链接.用户ID", currentUser.Id)));
+            else
+            {
+                page = int.Parse(Request.QueryString["page"]);
+            }
+            int PageCount = (int)(项目服务记录管理.计数项目服务记录(0, 0, MongoDB.Driver.Builders.Query.NE("服务评价.服务评级", 项目服务记录.服务评级.未填写).And(MongoDB.Driver.Builders.Query.EQ("验收单位链接.用户ID", currentUser.Id))))/10;
+            if ((int)(项目服务记录管理.计数项目服务记录(0, 0, MongoDB.Driver.Builders.Query.NE("服务评价.服务评级", 项目服务记录.服务评级.未填写).And(MongoDB.Driver.Builders.Query.EQ("验收单位链接.用户ID", currentUser.Id)))) %10> 0)
+            {
+                PageCount++;
+            }
+            ViewData["CurrentPage"] = page;
+            ViewData["Pagecount"] = PageCount;
+            ViewData["已评分项目服务列表"] = 项目服务记录管理.查询项目服务记录(10 * (page- 1), 10, MongoDB.Driver.Builders.Query.NE("服务评价.服务评级", 项目服务记录.服务评级.未填写).And(MongoDB.Driver.Builders.Query.EQ("验收单位链接.用户ID", currentUser.Id)));
             return PartialView("Procure_Part/Part_Gys_AfScoreList");
         }
 
@@ -8120,7 +8130,7 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            ViewData["网上竞标列表"] = 网上竞标管理.查询网上竞标(10 * (cpg- 1), 10, Query<网上竞标>.Where(o => o.报价结束时间 > DateTime.Now));
+            ViewData["网上竞标列表"] = 网上竞标管理.查询网上竞标(10 * (cpg - 1), 10, Query<网上竞标>.Where(o => o.报价结束时间 > DateTime.Now));
 
             return PartialView("Procure_Part/Part_OnlineBidding_List");
         }
@@ -8142,7 +8152,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 cpg = 1;
             }
-            long pc =(int)(网上竞标管理.计数网上竞标(0, 0, Query<网上竞标>.Where(o => o.报价结束时间 < DateTime.Now)));
+            long pc = (int)(网上竞标管理.计数网上竞标(0, 0, Query<网上竞标>.Where(o => o.报价结束时间 < DateTime.Now)));
             pgCount = pc / 10;
             if (pc % 10 > 0)
             {
@@ -8150,7 +8160,7 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            ViewData["网上竞标列表"] = 网上竞标管理.查询网上竞标(10 * (cpg- 1), 10, Query<网上竞标>.Where(o => o.报价结束时间 < DateTime.Now));
+            ViewData["网上竞标列表"] = 网上竞标管理.查询网上竞标(10 * (cpg - 1), 10, Query<网上竞标>.Where(o => o.报价结束时间 < DateTime.Now));
 
             return PartialView("Procure_Part/Part_OnlineBidding_List_Ed");
         }
@@ -9196,7 +9206,7 @@ namespace Go81WebApp.Controllers.后台
                 PageCount++;
             }
             ViewData["Pagecount"] = PageCount;
-            ViewData["投诉列表"] = 投诉管理.查询投诉(20 * (int.Parse(page.ToString()) - 1), 20, Query.EQ("受理单位.用户ID", currentUser.Id)).OrderByDescending(m => m.基本数据.修改时间);
+            ViewData["投诉列表"] = 投诉管理.查询投诉(20 * (page - 1), 20, Query.EQ("受理单位.用户ID", currentUser.Id)).OrderByDescending(m => m.基本数据.修改时间);
             return PartialView("Procure_Part/Part_ComplainList");
         }
         public ActionResult TrainingAdd()
