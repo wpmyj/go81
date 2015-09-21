@@ -585,16 +585,19 @@
 
     //删除某专家的可评标类别
     function delthis(e){
-        $this=$(e);
-        var t=$this.attr("name");
-        if(t==1){
-            $this.parent().next().remove().end().remove();
-        }
-        else{
-            var parent=$this.parent();
-            $this.remove();
-            if(parent.children().length<=0){
-                parent.prev().remove().end().remove();
+        if(confirm("确定删除吗？"))
+        {
+            $this=$(e);
+            var t=$this.attr("name");
+            if(t==1){
+                $this.parent().next().remove().end().remove();
+            }
+            else{
+                var parent=$this.parent();
+                $this.remove();
+                if(parent.children().length<=0){
+                    parent.prev().remove().end().remove();
+                }
             }
         }
     }

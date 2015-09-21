@@ -201,21 +201,25 @@
         document.getElementById("pBox1").innerHTML = str;
     }
     function delPic(th) {
-        var path = $(th).attr("lang");
-        $.get('/单位用户后台/DeleteImages', { uri: path },
-            function (data) {
-                if (data == 1) {
-                    $(th).parent().remove();
+        if(confirm("确定删除吗？"))
+        {
+            var path = $(th).attr("lang");
+            $.get('/单位用户后台/DeleteImages', { uri: path },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            var newpath = document.getElementById("attachtext_s").value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
                 }
-            });
-        var newpath = document.getElementById("attachtext_s").value.split('|');
-        var str = "";
-        for (j = 0; j < newpath.length - 1; j++) {
-            if (path != newpath[j]) {
-                str += newpath[j] + "|";
             }
+            document.getElementById("attachtext_s").value = str;
+            setPic("#attachtext_s");
         }
-        document.getElementById("attachtext_s").value = str;
-        setPic("#attachtext_s");
+        
     }
 </script>

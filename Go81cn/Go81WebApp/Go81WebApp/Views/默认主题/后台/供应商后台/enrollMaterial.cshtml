@@ -173,25 +173,28 @@
             //document.getElementById("pBox").innerHTML= str;
         }
         function delPic(th, which) {
-            var path = $(th).attr("lang");
-            $.get('/供应商后台/DeleteAttach_ysd', { n: path },
-                function (data) {
-                    if (data == 1) {
-                        $(th).parent().remove();
+            if(confirm("确定删除吗？"))
+            {
+                var path = $(th).attr("lang");
+                $.get('/供应商后台/DeleteAttach_ysd', { n: path },
+                    function (data) {
+                        if (data == 1) {
+                            $(th).parent().remove();
+                        }
+                    });
+                var newpath = document.getElementById("picture" + which).value.split('|');
+                var str = "";
+                for (j = 0; j < newpath.length - 1; j++) {
+                    if (path != newpath[j]) {
+                        str += newpath[j] + "|";
                     }
-                });
-            var newpath = document.getElementById("picture" + which).value.split('|');
-            var str = "";
-            for (j = 0; j < newpath.length - 1; j++) {
-                if (path != newpath[j]) {
-                    str += newpath[j] + "|";
+                    else {
+                        index = j;
+                    }
                 }
-                else {
-                    index = j;
-                }
+                document.getElementById("picture" + which).value = str;
+                setPic("picture" + which, which);
             }
-            document.getElementById("picture" + which).value = str;
-            setPic("picture" + which, which);
         }
         $("#data").click(function () {
             var already = true;

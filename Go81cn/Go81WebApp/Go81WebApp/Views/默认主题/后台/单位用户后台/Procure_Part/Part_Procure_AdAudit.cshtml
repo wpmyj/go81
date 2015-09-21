@@ -16,7 +16,10 @@
                     <th width="15%">时间</th>
                     <th width="23%">操作</th>
                 </tr>
-                @foreach (var item in (IEnumerable<公告>)ViewData["未审核公告列表"])
+                @{
+                    IEnumerable<公告> model=ViewData["未审核公告列表"] as IEnumerable<公告>;
+                }
+                @foreach (var item in model)
                 {
                     <tr>
                         <td><a href="~/单位用户后台/AdListDetail?id=@item.Id" target="_blank">@item.内容主体.标题</a></td>
@@ -24,7 +27,7 @@
                         <td>@item.公告信息.公告类别</td>
                         <td>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</td>
                         <td class="gys_znxx_content_tabletime">
-                            @Html.ActionLink("查看", "Procure_AdDetail", new { id = item.Id })|@Html.ActionLink("删除", "Procure_AdDelete", new { id = item.Id,h="adaudit" })|
+                            @Html.ActionLink("查看", "Procure_AdDetail", new { id = item.Id })|<a onclick="del1(@item.Id,'adaudit')">删除</a>|
                             @if (item.基本数据.已屏蔽 == false)
                             {
                                 @Html.ActionLink("禁用", "Procure_AdForbid", new { id = item.Id })
@@ -38,8 +41,116 @@
                 }
             </table>
             <div class="gys_znxx_content_detailbox">
-                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+                @{
+                    if (model.Count() != 0)
+                    {
+                        int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                        int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                        if (Pagecount > 0 && CurrentPage != 1)
+                        {
+                            <a href='/单位用户后台/Procure_AdAudit?page=1'>首页</a><a href='/单位用户后台/Procure_AdAudit?page=@(CurrentPage-1)'>上一页</a>
+                        }
+                        if (Pagecount <= 6)
+                        {
+                            for (int i = 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/单位用户后台/Procure_AdAudit?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/单位用户后台/Procure_AdAudit?page=@i'>@i</a>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (CurrentPage < 6)
+                            {
+                                if (CurrentPage != 1)
+                                {
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/单位用户后台/Procure_AdAudit?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/单位用户后台/Procure_AdAudit?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/单位用户后台/Procure_AdAudit?page=@(Pagecount)">@Pagecount</a>
+                                }
+                                else
+                                {
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/单位用户后台/Procure_AdAudit?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/单位用户后台/Procure_AdAudit?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/单位用户后台/Procure_AdAudit?page=@(Pagecount)">@Pagecount</a>
+                                }
+                            }
+                            else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                            {
+                                <a href="/单位用户后台/Procure_AdAudit?page=1">1</a><span>...</span>
+                                for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/单位用户后台/Procure_AdAudit?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/单位用户后台/Procure_AdAudit?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/单位用户后台/Procure_AdAudit?page=@(Pagecount)">@Pagecount</a>
+                            }
+                            else if (CurrentPage >= Pagecount - 3)
+                            {
+                                <a href="/单位用户后台/Procure_AdAudit?page=1">1</a><span>...</span>
+                                for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/单位用户后台/Procure_AdAudit?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/单位用户后台/Procure_AdAudit?page=@i'>@i</a>
+                                    }
+                                }
+                            }
+                        }
+                        if (Pagecount > 0)
+                        {
+                            if (CurrentPage < Pagecount)
+                            {
+                                <a href="/单位用户后台/Procure_AdAudit?page=@(CurrentPage+1)">下一页</a><a href="/单位用户后台/Procure_AdAudit?page=@Pagecount">末页</a>
+                            }
+                            <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                        }
+                    }
+                }
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript" language="javascript">
+    function del1(id,s)
+    {
+    if(confirm("确定删除吗？"))
+    {
+        window.location = "/单位用户后台/Procure_AdDelete?id="+id+"&h="+s;
+    }
+    }
+</script>

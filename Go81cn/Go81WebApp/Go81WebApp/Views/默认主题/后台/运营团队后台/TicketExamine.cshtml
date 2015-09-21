@@ -16,9 +16,16 @@
                 <div class="title-base-inner">未审核代售点列表</div>
             </div>
         </div>
+        @{
+            IEnumerable<机票代售点> model=ViewData["代售点列表"] as IEnumerable<机票代售点>;
+        }
         <div class="gys_znxx_box">
             <div class="gys_ztbsearch_contentbox">
-                @foreach (var item in (IEnumerable<机票代售点>)ViewData["代售点列表"])
+                @if(model.Count()==0)
+                {
+                   <div style="text-align:center;">暂时没有待审核的代售点信息</div> 
+                }
+                @foreach (var item in model)
                 {
                     <div class="gyspage_list_content">
                         <div class="gyspage_list_content_imgdiv">
@@ -55,29 +62,112 @@
                         </div>
                     </div>
                 }
-                @if (ViewData["listcount"].ToString() != "0")
-                {
-                    <div class="gys_znxx_content_detailbox">
-                        @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
-                    </div>
-                }
-                else
-                {
-                    <div class="gys_znxx_content_detailbox">
-                        暂无信息
-                    </div>
-
-                }
+                <div class="gys_znxx_content_detailbox">
+                    @{
+                        if (model.Count() != 0)
+                        {
+                            int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                            int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                            if (Pagecount > 0 && CurrentPage != 1)
+                            {
+                                <a href='/运营团队后台/TicketExamine?page=1'>首页</a><a href='/运营团队后台/TicketExamine?page=@(CurrentPage-1)'>上一页</a>
+                            }
+                            if (Pagecount <= 6)
+                            {
+                                for (int i = 1; i <= Pagecount; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/运营团队后台/TicketExamine?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/运营团队后台/TicketExamine?page=@i'>@i</a>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (CurrentPage < 6)
+                                {
+                                    if (CurrentPage != 1)
+                                    {
+                                        for (int i = 1; i < 7; i++)
+                                        {
+                                            if (CurrentPage == i)
+                                            {
+                                                <a style="border:1px solid red;" href='/运营团队后台/TicketExamine?page=@i'>@i</a>
+                                            }
+                                            else
+                                            {
+                                                <a href='/运营团队后台/TicketExamine?page=@i'>@i</a>
+                                            }
+                                        }
+                                        <span>...</span><a href="/运营团队后台/TicketExamine?page=@(Pagecount)">@Pagecount</a>
+                                    }
+                                    else
+                                    {
+                                        for (int i = 1; i < 7; i++)
+                                        {
+                                            if (CurrentPage == i)
+                                            {
+                                                <a style="border:1px solid red;" href='/运营团队后台/TicketExamine?page=@i'>@i</a>
+                                            }
+                                            else
+                                            {
+                                                <a href='/运营团队后台/TicketExamine?page=@i'>@i</a>
+                                            }
+                                        }
+                                        <span>...</span><a href="/运营团队后台/TicketExamine?page=@(Pagecount)">@Pagecount</a>
+                                    }
+                                }
+                                else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                                {
+                                    <a href="/运营团队后台/TicketExamine?page=1">1</a><span>...</span>
+                                    for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/运营团队后台/TicketExamine?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/运营团队后台/TicketExamine?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/运营团队后台/TicketExamine?page=@(Pagecount)">@Pagecount</a>
+                                }
+                                else if (CurrentPage >= Pagecount - 3)
+                                {
+                                    <a href="/运营团队后台/TicketExamine?page=1">1</a><span>...</span>
+                                    for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/运营团队后台/TicketExamine?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/运营团队后台/TicketExamine?page=@i'>@i</a>
+                                        }
+                                    }
+                                }
+                            }
+                            if (Pagecount > 0)
+                            {
+                                if (CurrentPage < Pagecount)
+                                {
+                                    <a href="/运营团队后台/TicketExamine?page=@(CurrentPage+1)">下一页</a><a href="/运营团队后台/TicketExamine?page=@Pagecount">末页</a>
+                                }
+                                <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                            }
+                        }
+                    }
+                </div>
             </div>
         </div>
         <script type="text/javascript" language="javascript">
-    var num =@(int.Parse(ViewData["page"].ToString()))
     $(document).ready(function () {
-        $(".gys_znxx_content_detailbox a").each(function () {
-            if ($(this).text() == num) {
-                $(this).addClass("currentPage");
-            }
-        });
         $("#待审核代售点").addClass("left_menu_select").children("a").css({ "color": "#fff" });
         $("#待审核代售点").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });

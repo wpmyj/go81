@@ -36,7 +36,7 @@
 
                         <td style="text-align:center;">
                             <a href="/运营团队后台/Requst_Reply?id=@item.Id" class="op">回复</a>
-                            <a href="/运营团队后台/Requstion_Del?id=@item.Id">删除</a>
+                            <a onclick="del(@items.Id)">删除</a>
                         </td>
                     </tr>
                     }
@@ -68,6 +68,13 @@
         $("#未处理建议").addClass("left_menu_select").children("a").css({ "color": "#fff" });
         $("#未处理建议").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此消息！确定删除吗？"))
+        {
+            window.location="/运营团队后台/Requstion_Del?id="+num;
+        }
+    }
 </script>
 
 

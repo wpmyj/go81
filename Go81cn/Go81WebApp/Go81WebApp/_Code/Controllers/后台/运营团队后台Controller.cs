@@ -1313,16 +1313,27 @@ namespace Go81WebApp.Controllers.后台
             ViewData["user"] = 用户管理.查询用户<单位用户>(20 * (cpg - 1), 20);
             return PartialView("Part_View/Part_DepartmentList");
         }
-        public ActionResult Part_DepartmentAuditList(int? page)
+        public ActionResult Part_DepartmentAuditList()
         {
-
-            if (string.IsNullOrEmpty(page.ToString()))
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["listcount"] = (int)用户管理.计数用户<单位用户>(0, 0, Query.EQ("审核数据.审核状态", 审核状态.未审核));
-            ViewData["pagesize"] = 20;
-            ViewData["user"] = 用户管理.查询用户<单位用户>(20 * (int.Parse(page.ToString()) - 1), 20, Query.EQ("审核数据.审核状态", 审核状态.未审核));
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =用户管理.计数用户<单位用户>(0, 0, Query.EQ("审核数据.审核状态", 审核状态.未审核));
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["user"] = 用户管理.查询用户<单位用户>(15 * (cpg- 1),15, Query.EQ("审核数据.审核状态", 审核状态.未审核));
             return PartialView("Part_View/Part_DepartmentAuditList");
         }
         public ActionResult Part_DepartmentAudit(int? id)
@@ -1763,20 +1774,27 @@ namespace Go81WebApp.Controllers.后台
         }
 
 
-        public ActionResult Part_Procure_AdAudit(int? page)
+        public ActionResult Part_Procure_AdAudit()
         {
-
-            int GG_ING_LISTCOUNT = (int)(公告管理.计数公告(0, -1, Query.EQ("审核数据.审核状态", 审核状态.未审核).And(Query<公告>.Where(o => o.公告信息.是否撤回 == false))));
-            int GG_ING_MAXPAGE = Math.Max((GG_ING_LISTCOUNT + 20 - 1) / 20, 1);
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > GG_ING_MAXPAGE)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = GG_ING_LISTCOUNT;
-            ViewData["pagesize"] = 20;
-
-            ViewData["未审核公告列表"] = 公告管理.查询公告(20 * (int.Parse(page.ToString()) - 1), 20, Query.EQ("审核数据.审核状态", 审核状态.未审核).And(Query<公告>.Where(o => o.公告信息.是否撤回 == false)));
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =(公告管理.计数公告(0, -1, Query.EQ("审核数据.审核状态", 审核状态.未审核).And(Query<公告>.Where(o => o.公告信息.是否撤回 == false))));
+            pgCount = pc / 20;
+            if (pc % 20 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["未审核公告列表"] = 公告管理.查询公告(20 * (cpg- 1), 20, Query.EQ("审核数据.审核状态", 审核状态.未审核).And(Query<公告>.Where(o => o.公告信息.是否撤回 == false)));
 
             return PartialView("Part_View/Part_Procure_AdAudit");
         }
@@ -1829,22 +1847,27 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
-        public ActionResult Part_Procure_NewsList(int? page)
+        public ActionResult Part_Procure_NewsList()
         {
-
-            int NEWS_LISTCOUNT = (int)(新闻管理.计数新闻(0, 0));
-            int NEWS_MAXPAGE = Math.Max((NEWS_LISTCOUNT + NEWS_PAGESIZE - 1) / NEWS_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > NEWS_MAXPAGE)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = NEWS_LISTCOUNT;
-
-            ViewData["pagesize"] = NEWS_PAGESIZE;
-
-            ViewData["后台新闻列表"] = 新闻管理.查询新闻(NEWS_PAGESIZE * (int.Parse(page.ToString()) - 1), NEWS_PAGESIZE);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =新闻管理.计数新闻(0, 0);
+            pgCount = pc / 20;
+            if (pc % 20 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["后台新闻列表"] = 新闻管理.查询新闻(20 * (cpg- 1), 20);
 
             return PartialView("Part_View/Part_Procure_NewsList");
         }
@@ -1921,22 +1944,27 @@ namespace Go81WebApp.Controllers.后台
             }
             return PartialView("Part_View/Part_Procure_TzDetail", g);
         }
-        public ActionResult Part_Procure_TzList(int? page)
+        public ActionResult Part_Procure_TzList()
         {
-
-            int listcount = (int)(通知管理.计数通知(0, 0));
-            int maxpage = Math.Max((listcount + TZ_PAGESIZE - 1) / TZ_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = listcount;
-
-            ViewData["pagesize"] = TZ_PAGESIZE;
-
-            ViewData["后台通知列表"] = 通知管理.查询通知(TZ_PAGESIZE * (int.Parse(page.ToString()) - 1), TZ_PAGESIZE);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =通知管理.计数通知(0, 0);
+            pgCount = pc / 20;
+            if (pc % 20 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["后台通知列表"] = 通知管理.查询通知(20 * (cpg- 1), 20);
 
             return PartialView("Part_View/Part_Procure_TzList");
         }
@@ -1967,17 +1995,27 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("Part_View/Part_Procure_ZcfgDetail", g);
         }
-        public ActionResult Part_Procure_ZcfgList(int? page)
+        public ActionResult Part_Procure_ZcfgList()
         {
-
-            if (string.IsNullOrEmpty(page.ToString()))
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = (int)(政策法规管理.计数政策法规(0, 0));
-            ViewData["pagesize"] = 15;
-            ViewData["后台政策法规列表"] = 政策法规管理.查询政策法规(15 * (int.Parse(page.ToString()) - 1), 15);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =政策法规管理.计数政策法规(0, 0);
+            pgCount = pc / 20;
+            if (pc % 20 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["后台政策法规列表"] = 政策法规管理.查询政策法规(20 * (cpg- 1),20);
 
             return PartialView("Part_View/Part_Procure_ZcfgList");
         }
@@ -2229,7 +2267,25 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult TrainingList()
         {
-            IEnumerable<培训资料> model = 培训资料管理.查询培训资料(0, 0);
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+            {
+                cpg = int.Parse(Request.QueryString["page"]);
+            }
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 培训资料管理.计数培训资料(0, 0);
+            pgCount = pc / 20;
+            if (pc % 20 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            IEnumerable<培训资料> model = 培训资料管理.查询培训资料(20*(cpg-1), 20);
             return View(model);
         }
         public ActionResult TrainDetail()
@@ -2358,7 +2414,25 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult GuideList()
         {
-            IEnumerable<办事指南> model = 办事指南管理.查询办事指南(0, 0);
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+            {
+                cpg = int.Parse(Request.QueryString["page"]);
+            }
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 办事指南管理.计数办事指南(0, 0);
+            pgCount = pc / 20;
+            if (pc % 20 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            IEnumerable<办事指南> model = 办事指南管理.查询办事指南(20*(cpg-1),20);
             return View(model);
         }
         public ActionResult guideDetail()
@@ -5022,18 +5096,28 @@ namespace Go81WebApp.Controllers.后台
             }
 
         }
-        public ActionResult Part_ZNXX(int? page) //站内消息
+        public ActionResult Part_ZNXX() //站内消息
         { //SortBy.Ascending
 
-            if (string.IsNullOrEmpty(page.ToString()))
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            long c = 站内消息管理.计数站内消息(0, 0, Query<站内消息>.Where(m => m.收信人.用户ID == currentUser.Id));
-            ViewData["listcount"] = 站内消息管理.计数站内消息(0, 0, Query<站内消息>.Where(m => m.收信人.用户ID == currentUser.Id));
-            ViewData["pagesize"] = 20;
-            ViewData["站内消息列表"] = 站内消息管理.查询收信人的站内消息(20 * (int.Parse(page.ToString()) - 1), 20, currentUser.Id).OrderByDescending(m => m.重要程度).OrderByDescending(m => m.基本数据.修改时间);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 站内消息管理.计数站内消息(0, 0, Query<站内消息>.Where(m => m.收信人.用户ID == currentUser.Id));
+            pgCount = pc /20;
+            if (pc %20 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["站内消息列表"] = 站内消息管理.查询收信人的站内消息(20 * (cpg- 1), 20, currentUser.Id).OrderByDescending(m => m.重要程度).OrderByDescending(m => m.基本数据.修改时间);
             return PartialView("Part_View/Part_ZNXX");
         }
         [ValidateInput(false)]
@@ -5259,17 +5343,27 @@ namespace Go81WebApp.Controllers.后台
             return Content("<script>window.location='/运营团队后台/ZNXX_Sended';</script>");
         }
 
-        public ActionResult Part_ZNXX_Sended(int? page)//站内消息_已发消息
+        public ActionResult Part_ZNXX_Sended()//站内消息_已发消息
         {
-
-            if (string.IsNullOrEmpty(page.ToString()))
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = 站内消息管理.计数站内消息(0, 0, Query.EQ("发起者.用户ID", currentUser.Id));
-            ViewData["pagesize"] = 20;
-            ViewData["已发送站内消息"] = 站内消息管理.查询发起者的站内消息(20 * (int.Parse(page.ToString()) - 1), 20, currentUser.Id).OrderByDescending(m => m.重要程度).OrderByDescending(m => m.基本数据.修改时间);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 站内消息管理.计数站内消息(0, 0, Query.EQ("发起者.用户ID", currentUser.Id));
+            pgCount = pc / 20;
+            if (pc % 20 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["已发送站内消息"] = 站内消息管理.查询发起者的站内消息(20 * (cpg- 1), 20, currentUser.Id).OrderByDescending(m => m.重要程度).OrderByDescending(m => m.基本数据.修改时间);
             return PartialView("Part_View/Part_ZNXX_Sended");
         }
         public ActionResult 查找站内消息(long xxid)
@@ -5344,7 +5438,7 @@ namespace Go81WebApp.Controllers.后台
             tog.商品属性模板 = g.商品属性模板;
             商品分类管理.更新分类(tog);
         }
-        public ActionResult Part_GoodExamine(int? page)//商品审核_待审核
+        public ActionResult Part_GoodExamine()//商品审核_待审核
         {
 
             var l = 用户管理.列表用户<供应商>(0, 0,
@@ -5362,19 +5456,26 @@ namespace Go81WebApp.Controllers.后台
                 name = Request.QueryString["name"];
             }
             ViewData["name"] = name;
-            int count = (int)商品管理.计数商品(0, 0, q);
-            int maxpage = Math.Max((count + PRO_PAGESIZE - 1) / PRO_PAGESIZE, 1);
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            
+             long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["currentpage"] = page;
-            ViewData["pagecount"] = maxpage;
-
-            ViewData["listcount"] = count;
-            ViewData["pagesize"] = PRO_PAGESIZE;
-            ViewData["商品信息"] = 商品管理.查询商品(PRO_PAGESIZE * ((int)page - 1), PRO_PAGESIZE, q);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =商品管理.计数商品(0, 0, q);
+            pgCount = pc /10;
+            if (pc %10 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["商品信息"] = 商品管理.查询商品(10 * (cpg - 1),10, q);
 
             return PartialView("Part_View/Part_GoodExamine");
         }
@@ -5619,18 +5720,14 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult Part_Supplier_PssInfo()//已审核供应商右侧列表
         {
-            int page = 0;
-            if (string.IsNullOrEmpty(Request.QueryString["page"]))
+            int page = 1;
+            if (!string.IsNullOrEmpty(Request.QueryString["page"]))
             {
-                page = 1;
-            }
-            else
-            {
-                page = int.Parse(Request.QueryString["page"]);
+                page =int.Parse(Request.QueryString["page"]);
             }
             ViewData["CurrentPage"] = page;
-            int PageCount = (int)用户管理.计数用户<供应商>(0, 0) / 20;
-            if ((用户管理.计数用户<供应商>(0, 0) % 20) > 0)
+            int PageCount = (int)用户管理.计数用户<供应商>(0, 0) /15;
+            if ((用户管理.计数用户<供应商>(0, 0) %15) > 0)
             {
                 PageCount++;
             }
@@ -5639,7 +5736,7 @@ namespace Go81WebApp.Controllers.后台
             ViewData["waitSupplier"] = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(m => m.审核数据.审核状态 == 审核状态.未审核));
             ViewData["nopassSupplier"] = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(m => m.审核数据.审核状态 == 审核状态.审核未通过));
             ViewData["Pagecount"] = PageCount;
-            ViewData["supplier"] = 用户管理.查询用户<供应商>(20 * (int.Parse(page.ToString()) - 1), 20).OrderBy(m => m.基本数据.添加时间);
+            ViewData["supplier"] = 用户管理.查询用户<供应商>(15 * (int.Parse(page.ToString()) - 1), 15).OrderBy(m => m.基本数据.添加时间);
             ViewData["gys"] = 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.审核数据.审核状态 == 审核状态.未审核 && o.供应商用户信息.已提交));
             return PartialView("Part_View/Supplier_Info_List");
         }
@@ -5700,16 +5797,16 @@ namespace Go81WebApp.Controllers.后台
                 page = int.Parse(Request.QueryString["page"]);
             }
             ViewData["CurrentPage"] = page;
-            int PageCount = (int)用户管理.计数用户<专家>(0, 0) / 20;
-            if ((用户管理.计数用户<专家>(0, 0) % 20) > 0)
+            int PageCount = (int)用户管理.计数用户<专家>(0, 0) / 15;
+            if ((用户管理.计数用户<专家>(0, 0) % 15) > 0)
             {
                 PageCount++;
             }
             ViewData["expert"] = 用户管理.计数用户<专家>(0, 0);
-            ViewData["checked"] = 用户管理.计数用户<专家>(0, 0, Query<专家>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过));
-            ViewData["wait"] = 用户管理.计数用户<专家>(0, 0, Query<专家>.Where(m => m.审核数据.审核状态 == 审核状态.未审核));
+            //ViewData["checked"] = 用户管理.计数用户<专家>(0, 0, Query<专家>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过));
+            // ViewData["wait"] = 用户管理.计数用户<专家>(0, 0, Query<专家>.Where(m => m.审核数据.审核状态 == 审核状态.未审核));
             ViewData["Pagecount"] = PageCount;
-            ViewData["supplier"] = 用户管理.查询用户<专家>(20 * (int.Parse(page.ToString()) - 1), 20);
+            ViewData["supplier"] = 用户管理.查询用户<专家>(15 * (int.Parse(page.ToString()) - 1), 15);
             return View();
         }
         public ActionResult Delete_User(long id)
@@ -8235,22 +8332,27 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
-        public ActionResult Part_DownloadManage(int? page)
+        public ActionResult Part_DownloadManage()
         {
-
-            int listcount = (int)(下载管理.计数下载(0, -1));
-            int maxpage = Math.Max((listcount + DOWNLOAD_PAGESIZE - 1) / DOWNLOAD_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["listcount"] = listcount;
-
-            ViewData["pagesize"] = DOWNLOAD_PAGESIZE;
-
-            ViewData["后台下载列表"] = 下载管理.查询下载(DOWNLOAD_PAGESIZE * (int.Parse(page.ToString()) - 1), DOWNLOAD_PAGESIZE);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =下载管理.计数下载(0, -1);
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["后台下载列表"] = 下载管理.查询下载(15 * (cpg- 1),15);
 
             return PartialView("Part_View/Part_DownloadManage");
         }
@@ -8398,22 +8500,27 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
-        public ActionResult Part_SignUp_List(int? page)
+        public ActionResult Part_SignUp_List()
         {
-
-            int signup_listcount = (int)(招标采购预报名管理.计数招标采购预报名(0, 0));
-            int signup_maxpage = Math.Max((signup_listcount + 15 - 1) / 15, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > signup_maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["listcount"] = signup_listcount;
-            ViewData["page"] = page;
-            ViewData["pagesize"] = 15;
-
-            ViewData["预报名列表"] = 招标采购预报名管理.查询招标采购预报名(15 * (int.Parse(page.ToString()) - 1), 15);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =招标采购预报名管理.计数招标采购预报名(0, 0);
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["预报名列表"] = 招标采购预报名管理.查询招标采购预报名(15 * (cpg- 1), 15);
 
             return PartialView("Part_View/Part_SignUp_List");
         }
@@ -9379,22 +9486,27 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
-        public ActionResult Part_ProjectService_List(int? page)
+        public ActionResult Part_ProjectService_List()
         {
-
-            int pro_listcount = (int)(项目服务记录管理.计数项目服务记录(0, 0));
-            int pro_maxpage = Math.Max((pro_listcount + 15 - 1) / 15, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > pro_maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["listcount"] = pro_listcount;
-            ViewData["page"] = page;
-            ViewData["pagesize"] = 15;
-
-            ViewData["待评分项目服务列表"] = 项目服务记录管理.查询项目服务记录(15 * (int.Parse(page.ToString()) - 1), 15);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 项目服务记录管理.计数项目服务记录(0, 0);
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["待评分项目服务列表"] = 项目服务记录管理.查询项目服务记录(15 * (cpg- 1), 15);
             return PartialView("Part_View/Part_ProjectService_List");
         }
         public ActionResult ProjectService_Detail()
@@ -9444,21 +9556,27 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
-        public ActionResult Part_Recommend_ExpertList_Ed(int? page)
+        public ActionResult Part_Recommend_ExpertList_Ed()
         {
-            int rec_listcount = (int)(推荐管理.计数推荐信息(0, 0, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.专家 && o.推荐审核数据.推荐状态 != 推荐状态.待联系)));
-            int rec_maxpage = Math.Max((rec_listcount + ZBCGXM_PAGESIZE - 1) / ZBCGXM_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > rec_maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["listcount"] = rec_listcount;
-            ViewData["page"] = page;
-            ViewData["pagesize"] = ZBCGXM_PAGESIZE;
-
-            ViewData["已联系推荐专家"] = 推荐管理.查询推荐信息(ZBCGXM_PAGESIZE * (int.Parse(page.ToString()) - 1), ZBCGXM_PAGESIZE, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.专家 && o.推荐审核数据.推荐状态 != 推荐状态.待联系));
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =推荐管理.计数推荐信息(0, 0, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.专家 && o.推荐审核数据.推荐状态 != 推荐状态.待联系));
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["已联系推荐专家"] = 推荐管理.查询推荐信息(15 * (cpg- 1), 15, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.专家 && o.推荐审核数据.推荐状态 != 推荐状态.待联系));
             return PartialView("Part_View/Part_Recommend_ExpertList_Ed");
         }
         public ActionResult Recommend_ExpertList_Pre()
@@ -9467,40 +9585,52 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult Part_Recommend_ExpertList_Pre(int? page)
         {
-            int rec_listcount = (int)(推荐管理.计数推荐信息(0, 0, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.专家 && o.推荐审核数据.推荐状态 == 推荐状态.待联系)));
-            int rec_maxpage = Math.Max((rec_listcount + ZBCGXM_PAGESIZE - 1) / ZBCGXM_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > rec_maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["listcount"] = rec_listcount;
-            ViewData["page"] = page;
-            ViewData["pagesize"] = ZBCGXM_PAGESIZE;
-
-            ViewData["待联系推荐专家"] = 推荐管理.查询推荐信息(ZBCGXM_PAGESIZE * (int.Parse(page.ToString()) - 1), ZBCGXM_PAGESIZE, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.专家 && o.推荐审核数据.推荐状态 == 推荐状态.待联系));
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 推荐管理.计数推荐信息(0, 0, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.专家 && o.推荐审核数据.推荐状态 == 推荐状态.待联系));
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["待联系推荐专家"] = 推荐管理.查询推荐信息(15 * (cpg- 1), 15, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.专家 && o.推荐审核数据.推荐状态 == 推荐状态.待联系));
             return PartialView("Part_View/Part_Recommend_ExpertList_Pre");
         }
         public ActionResult Recommend_GysList_Ed()
         {
             return View();
         }
-        public ActionResult Part_Recommend_GysList_Ed(int? page)
+        public ActionResult Part_Recommend_GysList_Ed()
         {
-            int rec_listcount = (int)(推荐管理.计数推荐信息(0, 0, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.供应商 && o.推荐审核数据.推荐状态 != 推荐状态.待联系)));
-            int rec_maxpage = Math.Max((rec_listcount + ZBCGXM_PAGESIZE - 1) / ZBCGXM_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > rec_maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["listcount"] = rec_listcount;
-            ViewData["page"] = page;
-            ViewData["pagesize"] = ZBCGXM_PAGESIZE;
-
-            ViewData["已联系推荐供应商"] = 推荐管理.查询推荐信息(ZBCGXM_PAGESIZE * (int.Parse(page.ToString()) - 1), ZBCGXM_PAGESIZE, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.供应商 && o.推荐审核数据.推荐状态 != 推荐状态.待联系));
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =推荐管理.计数推荐信息(0, 0, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.供应商 && o.推荐审核数据.推荐状态 != 推荐状态.待联系));
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["已联系推荐供应商"] = 推荐管理.查询推荐信息(15 * (cpg- 1), 15, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.供应商 && o.推荐审核数据.推荐状态 != 推荐状态.待联系));
             return PartialView("Part_View/Part_Recommend_GysList_Ed");
         }
         public ActionResult Recommend_GysList_Pre()
@@ -9509,19 +9639,25 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult Part_Recommend_GysList_Pre(int? page)
         {
-            int rec_listcount = (int)(推荐管理.计数推荐信息(0, 0, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.供应商 && o.推荐审核数据.推荐状态 == 推荐状态.待联系)));
-            int rec_maxpage = Math.Max((rec_listcount + ZBCGXM_PAGESIZE - 1) / ZBCGXM_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > rec_maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["listcount"] = rec_listcount;
-            ViewData["page"] = page;
-            ViewData["pagesize"] = ZBCGXM_PAGESIZE;
-
-            ViewData["待联系推荐供应商"] = 推荐管理.查询推荐信息(ZBCGXM_PAGESIZE * (int.Parse(page.ToString()) - 1), ZBCGXM_PAGESIZE, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.供应商 && o.推荐审核数据.推荐状态 == 推荐状态.待联系));
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =推荐管理.计数推荐信息(0, 0, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.供应商 && o.推荐审核数据.推荐状态 == 推荐状态.待联系));
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["待联系推荐供应商"] = 推荐管理.查询推荐信息(15 * (cpg- 1), 15, Query<推荐信息>.Where(o => o.推荐类型 == 推荐类型.供应商 && o.推荐审核数据.推荐状态 == 推荐状态.待联系));
 
             return PartialView("Part_View/Part_Recommend_GysList_Pre");
         }
@@ -9641,7 +9777,7 @@ namespace Go81WebApp.Controllers.后台
             }
         }
 
-        public ActionResult TicketExamine(int? page)
+        public ActionResult TicketExamine()
         {
             var l = 用户管理.列表用户<供应商>(0, 0,
                 Fields<供应商>.Include(o => o.Id),
@@ -9651,32 +9787,49 @@ namespace Go81WebApp.Controllers.后台
                     Query.In("所属供应商.用户ID", l.Select(o => o["_id"])),
                     Query.EQ("审核数据.审核状态", 审核状态.未审核)
                 );
-
-            int count = (int)机票代售点管理.计数机票代售点(0, 0, q);
-            int maxpage = Math.Max((count + 15 - 1) / 15, 1);
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = count;
-            ViewData["pagesize"] = 15;
-            ViewData["代售点列表"] = 机票代售点管理.查询机票代售点(15 * (int.Parse(page.ToString()) - 1), 15, q);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =机票代售点管理.计数机票代售点(0, 0, q);
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["代售点列表"] = 机票代售点管理.查询机票代售点(15 * (cpg- 1), 15, q);
             return View();
         }
-        public ActionResult TicketExamined(int? page)
+        public ActionResult TicketExamined()
         {
             var q = Query.EQ("审核数据.审核状态", 审核状态.审核通过);
-            int count = (int)机票代售点管理.计数机票代售点(0, 0, q);
-            int maxpage = Math.Max((count + 15 - 1) / 15, 1);
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = count;
-            ViewData["pagesize"] = 15;
-            ViewData["代售点列表"] = 机票代售点管理.查询机票代售点(15 * (int.Parse(page.ToString()) - 1), 15, q);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =机票代售点管理.计数机票代售点(0, 0, q);
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["代售点列表"] = 机票代售点管理.查询机票代售点(15 * (cpg- 1), 15, q);
             return View();
         }
         public ActionResult TicketDetail()
@@ -9685,7 +9838,7 @@ namespace Go81WebApp.Controllers.后台
             机票代售点 k = 机票代售点管理.查找机票代售点(long.Parse(id));
             return View(k);
         }
-        public ActionResult HotelExamine(int? page)
+        public ActionResult HotelExamine()
         {
             var l = 用户管理.列表用户<供应商>(0, 0,
                 Fields<供应商>.Include(o => o.Id),
@@ -9695,34 +9848,49 @@ namespace Go81WebApp.Controllers.后台
                     Query.In("所属供应商.用户ID", l.Select(o => o["_id"])),
                     Query.EQ("审核数据.审核状态", 审核状态.未审核)
                 );
-
-            int count = (int)酒店管理.计数酒店(0, 0, q);
-            int maxpage = Math.Max((count + 15 - 1) / 15, 1);
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = count;
-            ViewData["pagesize"] = 15;
-            ViewData["酒店列表"] = 酒店管理.查询酒店(15 * (int.Parse(page.ToString()) - 1), 15, q);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =酒店管理.计数酒店(0, 0, q);
+            pgCount = pc /15;
+            if (pc %15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["酒店列表"] = 酒店管理.查询酒店(15 * (cpg- 1), 15, q);
             return View();
         }
-        public ActionResult HotelExamined(int? page)
+        public ActionResult HotelExamined()
         {
             var q = Query.EQ("审核数据.审核状态", 审核状态.审核通过);
-
-
-            int count = (int)酒店管理.计数酒店(0, 0, q);
-            int maxpage = Math.Max((count + 15 - 1) / 15, 1);
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = count;
-            ViewData["pagesize"] = 15;
-            ViewData["酒店列表"] = 酒店管理.查询酒店(15 * (int.Parse(page.ToString()) - 1), 15, q);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =酒店管理.计数酒店(0, 0, q);
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["酒店列表"] = 酒店管理.查询酒店(15 * (cpg- 1), 15, q);
             return View();
         }
         public ActionResult HotelDetail()
@@ -10430,21 +10598,27 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
-        public ActionResult Part_RegistrationManange(int? page)
+        public ActionResult Part_RegistrationManange()
         {
-            int listcount = (int)(招标采购预报名管理.计数招标采购预报名(0, 0));
-            int maxpage = Math.Max((listcount + 15 - 1) / 15, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = listcount;
-
-            ViewData["pagesize"] = 15;
-
-            ViewData["预报名列表"] = 招标采购预报名管理.查询招标采购预报名(15 * (int.Parse(page.ToString()) - 1), 15);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =招标采购预报名管理.计数招标采购预报名(0, 0);
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["预报名列表"] = 招标采购预报名管理.查询招标采购预报名(15 * (cpg- 1), 15);
             return PartialView("Part_View/Part_RegistrationManange");
         }
         public ActionResult RegistrationDetail()
@@ -12716,36 +12890,48 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult Part_OnlineBidding_List_Ed(int? page)
         {
-            int pro_listcount = (int)(网上竞标管理.计数网上竞标(0, 0, Query<网上竞标>.Where(o => o.报价结束时间 < DateTime.Now)));
-            int pro_maxpage = Math.Max((pro_listcount + ZBCGXM_PAGESIZE - 1) / ZBCGXM_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > pro_maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["listcount"] = pro_listcount;
-            ViewData["page"] = page;
-            ViewData["pagesize"] = ZBCGXM_PAGESIZE;
-
-            ViewData["网上竞标列表"] = 网上竞标管理.查询网上竞标(ZBCGXM_PAGESIZE * (int.Parse(page.ToString()) - 1), ZBCGXM_PAGESIZE, Query<网上竞标>.Where(o => o.报价结束时间 < DateTime.Now));
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =网上竞标管理.计数网上竞标(0, 0, Query<网上竞标>.Where(o => o.报价结束时间 < DateTime.Now));
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["网上竞标列表"] = 网上竞标管理.查询网上竞标(15 * (cpg- 1), 15, Query<网上竞标>.Where(o => o.报价结束时间 < DateTime.Now));
             return PartialView("Part_View/Part_OnlineBidding_List_Ed");
         }
-        public ActionResult Part_OnlineBidding_List(int? page)
+        public ActionResult Part_OnlineBidding_List()
         {
-            int pro_listcount = (int)(网上竞标管理.计数网上竞标(0, 0, Query<网上竞标>.Where(o => o.报价结束时间 > DateTime.Now)));
-            int pro_maxpage = Math.Max((pro_listcount + ZBCGXM_PAGESIZE - 1) / ZBCGXM_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > pro_maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["listcount"] = pro_listcount;
-            ViewData["page"] = page;
-            ViewData["pagesize"] = ZBCGXM_PAGESIZE;
-
-            ViewData["网上竞标列表"] = 网上竞标管理.查询网上竞标(ZBCGXM_PAGESIZE * (int.Parse(page.ToString()) - 1), ZBCGXM_PAGESIZE, Query<网上竞标>.Where(o => o.报价结束时间 > DateTime.Now));
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 网上竞标管理.计数网上竞标(0, 0, Query<网上竞标>.Where(o => o.报价结束时间 > DateTime.Now));
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["网上竞标列表"] = 网上竞标管理.查询网上竞标(15 * (cpg- 1), 15, Query<网上竞标>.Where(o => o.报价结束时间 > DateTime.Now));
             return PartialView("Part_View/Part_OnlineBidding_List");
         }
         public ActionResult Part_OnlineBidding_Detail(long? id)
@@ -13283,21 +13469,35 @@ namespace Go81WebApp.Controllers.后台
             return PartialView("Part_View/Part_SearchByCondit");
         }
 
-
+        public class LoginRecord
+        {
+            public string IpAddr { get; set; }
+            public string Result { get; set; }
+            public long UserId { get; set; }
+            public string LoginTime { get; set; }
+            public string InOrEx { get; set; }
+        }
         public ActionResult StatisticsLogin()
         {
             return View();
         }
         public ActionResult Part_StatisticsLogin()
         {
-            var now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-            var loginlist = 登录统计管理.查询登录统计(0, 0, Query<登录统计>.Where(o => o.登录时间 >= now));
-            ViewData["登录统计"] = loginlist;
-            ViewData["统计总数"] = loginlist.Count();
+            //var now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            //var loginlist = 登录统计管理.查询登录统计(0, 0, Query<登录统计>.Where(o => o.登录时间 >= now));
+            //ViewData["登录统计"] = loginlist.Take(20);
+            //ViewData["统计总数"] = loginlist.Count();
             return PartialView("Part_View/Part_StatisticsLogin");
         }
         public ActionResult Part_StatisticsLoginSearch()
         {
+            int page = 1;
+            long pageCount=0;
+            List<LoginRecord> Lr = new List<LoginRecord>();
+            if(!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+            {
+                page = int.Parse(Request.QueryString["page"]);
+            }
             var loginuser = Request.Params["loginuser"];
             var loginresult = Request.Params["loginresult"];
             var time = Request.Params["time"];
@@ -13361,10 +13561,32 @@ namespace Go81WebApp.Controllers.后台
                     q = q.And(Query<登录统计>.Where(o => o.登录时间 > date.AddDays(0 - int.Parse(time))));
                 }
             }
-            var loginlist = 登录统计管理.查询登录统计(0, 0, q);
-            ViewData["登录统计"] = loginlist;
-            ViewData["统计总数"] = loginlist.Count();
-            return PartialView("Part_View/Part_StatisticsLoginSearch");
+            IEnumerable<登录统计> loginlist = 登录统计管理.查询登录统计(20*(page-1),20, q);
+            foreach(var item in loginlist)
+            {
+                LoginRecord r = new LoginRecord();
+                if(item.内网访问)
+                {
+                    r.InOrEx = "内网";
+                }
+                else
+                {
+                    r.InOrEx = "外网";
+                }
+                r.IpAddr = item.登录IP;
+                r.LoginTime = item.登录时间.ToString("yyyy/MM/dd hh:mm:ss");
+                r.Result = item.登录结果.ToString();
+                r.UserId = item.用户数据.用户ID;
+                Lr.Add(r);
+            }
+            long pc=登录统计管理.计数登录统计(0, 0,q);
+            pageCount=pc/20;
+            if(pc%20>0)
+            {
+                pageCount++;
+            }
+            JsonResult json = new JsonResult() { Data = new { loginuser=Lr,pCount=pageCount,sum=pc} };
+            return Json(json,JsonRequestBehavior.AllowGet);
         }
         public ActionResult StatisticsClick()
         {

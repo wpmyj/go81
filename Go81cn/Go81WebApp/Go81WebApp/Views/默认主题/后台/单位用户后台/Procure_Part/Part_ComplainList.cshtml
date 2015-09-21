@@ -41,7 +41,7 @@
                                     <td align="center">@items.基本数据.添加时间.ToString("yyyy-MM-dd hh:mm") / @items.基本数据.修改时间.ToString("yyyy-MM-dd hh:mm")</td>
                                     <td align="center">
                                         <a href="/单位用户后台/Suggestiont_Reply_Page?id=@items.Id" target="_blank">回复</a>
-                                        <a href="/单位用户后台/Suggestion_Del?id=@items.Id">删除</a>
+                                        <a onclick="del(@items.Id)">删除</a>
                                     </td>
                                 </tr>
                                 break;
@@ -152,6 +152,13 @@
 
         });
     });
+    function del(id)
+    {
+        if(confirm("确定要删除吗？"))
+        {
+            window.location="/单位用户后台/Suggestion_Del?id="+id;
+        }
+    }
 </script>
 <script type="text/javascript" language="javascript">
     $(document).ready(function () {

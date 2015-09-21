@@ -605,34 +605,37 @@ else
         document.getElementById("uploadimg").innerHTML = str;
     }
     function delPic(th) {
-        var path = $(th).attr("lang");
-        $.get('/供应商后台/DeleteAttach_ysd', { n: path },
-            function (data) {
-                if (data == 1) {
-                    $(th).parent().remove();
+        if(confirm("确定删除吗？"))
+        {
+            var path = $(th).attr("lang");
+            $.get('/供应商后台/DeleteAttach_ysd', { n: path },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            var newpath = document.getElementById("picture").value.split('|');
+            var index = 0;
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
                 }
-            });
-        var newpath = document.getElementById("picture").value.split('|');
-        var index = 0;
-        var str = "";
-        for (j = 0; j < newpath.length - 1; j++) {
-            if (path != newpath[j]) {
-                str += newpath[j] + "|";
+                else {
+                    index = j;
+                }
             }
-            else {
-                index = j;
+            var arrNum = $("#attachSum").val().split(',');
+            var newArrNum = "";
+            for (var n = 0; n < arrNum.length - 1; n++) {
+                if (n != index) {
+                    newArrNum += arrNum[n] + ",";
+                }
             }
+            $("#attachSum").val(newArrNum);
+            document.getElementById("picture").value = str;
+            setPic("#picture");
         }
-        var arrNum = $("#attachSum").val().split(',');
-        var newArrNum = "";
-        for (var n = 0; n < arrNum.length - 1; n++) {
-            if (n != index) {
-                newArrNum += arrNum[n] + ",";
-            }
-        }
-        $("#attachSum").val(newArrNum);
-        document.getElementById("picture").value = str;
-        setPic("#picture");
     }
     $(document).ready(function () {
         $("#unit_user_sh").val($("#selectSh_unit").val());

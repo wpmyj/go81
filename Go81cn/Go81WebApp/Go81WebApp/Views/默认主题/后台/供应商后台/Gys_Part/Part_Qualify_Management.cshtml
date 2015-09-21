@@ -144,7 +144,16 @@
                         <td>@Model.资质证书列表[i].名称</td>
                         <td>@Model.资质证书列表[i].等级</td>
                         <td>@Model.资质证书列表[i].发证机构</td>
-                        <td>@Model.资质证书列表[i].年检日期.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            @if (Model.资质证书列表[i].年检日期==default(DateTime))
+                            {
+                                <span>无需年检</span>
+                            }
+                            else
+                            {
+                                <span>@Model.资质证书列表[i].年检日期.ToString("yyyy-MM-dd")</span>
+                            }
+                        </td>
                         
                             @if (!Model.供应商用户信息.已提交)
                             {
@@ -179,7 +188,7 @@ else
     'style="display:inline-block; width:200px;" class="form-control" value="" name="资质证书列表[0].等级"/></td></tr>' + '<tr><td' +
     ' height="50"  style="text-align:right;">发证机构名称：</td><td><input type="text"  placeholder="发证机构名称" style="display:inline-block;width:200px;"' +
     ' class="form-control" value="" name="资质证书列表[0].发证机构"/></td><td height="50" style="text-align:right;">年检日期：</td><td>' +
-    '<input onfocus = WdatePicker({dateFmt:"yyyy/MM/dd"})  placeholder="年检日期" type="text"' +
+    '<input onfocus =\'WdatePicker({dateFmt:"yyyy/MM/dd"})\'  placeholder="如果没有则不填" type="text"' +
     ' style="display:inline-block; width:200px;" class="form-control" value="" name="资质证书列表[0].年检日期"/></td>' +
     '</tr>' +
    '<tr><td height="50" style="text-align:right;">有效起始日期：</td><td><input onfocus = WdatePicker({dateFmt:"yyyy/MM/dd"})  placeholder="证书有效起始日期" type="text" style="display:inline-block; width:200px;"' +

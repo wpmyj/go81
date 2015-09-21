@@ -71,7 +71,7 @@
                                 <div class="procureinputdiv">
                                     <div class="procureinputdiv_title">指南标题：</div>
                                     <div class="procure_formlistdiv">
-                                        @Html.TextBoxFor(model => model.内容主体.标题, new { style = "width:450px;",id="container1" })
+                                        @Html.TextBoxFor(model => model.内容主体.标题, new { style = "width:450px;", id = "container1" })
                                         <span style="color:red;">*@Html.ValidationMessageFor(model => model.内容主体.标题)</span>
                                     </div>
                                 </div>
@@ -174,26 +174,28 @@
     </div>
 </div>
 <script type="text/javascript">
-    function filechange()
-    {
+    function filechange() {
         document.forms["upload"].submit();
     }
     function delAttach(th) {
-        var path = $(th).attr("lang");
-        $.get('/单位用户后台/DeleteImages', { uri: path },
-            function (data) {
-                if (data == 1) {
-                    $(th).parent().remove();
+        if (confirm("确定删除吗？")) {
+            var path = $(th).attr("lang");
+            $.get('/单位用户后台/DeleteImages', { uri: path },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            var newpath = document.getElementById("path").value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
                 }
-            });
-        var newpath = document.getElementById("path").value.split('|');
-        var str = "";
-        for (j = 0; j < newpath.length - 1; j++) {
-            if (path != newpath[j]) {
-                str += newpath[j] + "|";
             }
+            document.getElementById("path").value = str;
         }
-        document.getElementById("path").value = str;
+
     }
     function checkcontent() {
         editor.sync("content");
@@ -226,15 +228,15 @@
         }
         $("form[name='formdata']").submit();
     }
-    function delpic(th)
-    {
-        $.get('/单位用户后台/DelPic', { name: $(th).attr("title"), path: $(th).attr("lang"), id: $(th).attr("rel") }, function (data) {
-            if(data==1)
-            {
-                $(th).parent().remove();
-                alert("删除成功!");
-            }
-        });
+    function delpic(th) {
+        if (confirm("确定删除吗？")) {
+            $.get('/单位用户后台/DelPic', { name: $(th).attr("title"), path: $(th).attr("lang"), id: $(th).attr("rel") }, function (data) {
+                if (data == 1) {
+                    $(th).parent().remove();
+                    alert("删除成功!");
+                }
+            });
+        }
     }
     $(function () {
         $("#培训资料列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });

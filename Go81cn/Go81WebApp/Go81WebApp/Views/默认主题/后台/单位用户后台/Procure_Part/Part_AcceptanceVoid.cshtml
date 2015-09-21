@@ -126,7 +126,7 @@
     }
 </table>
 
-@if (ViewData["currentPage"] != null)
+@if (gd.Any())
 {
     <div class="gys_znxx_content_detailbox">
         @if (int.Parse(ViewData["currentPage"].ToString())!= 1)

@@ -201,39 +201,115 @@
                 </div>
             }
         }
-        @if (ViewData["listcount"].ToString() != "0")
-        {
-            <div class="gys_znxx_content_detailbox">
-                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
-            </div>
-        }
-        else
-        {
-            <div class="gys_znxx_content_detailbox">
-                暂无信息
-            </div>
-
-        }
+        <div class="gys_znxx_content_detailbox">
+            @{
+                if (SP.Count() != 0)
+                {
+                    int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                    int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                    if (Pagecount > 0 && CurrentPage != 1)
+                    {
+                        <a href='/运营团队后台/GoodExamine?page=1'>首页</a><a href='/运营团队后台/GoodExamine?page=@(CurrentPage-1)'>上一页</a>
+                    }
+                    if (Pagecount <= 6)
+                    {
+                        for (int i = 1; i <= Pagecount; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/运营团队后台/GoodExamine?page=@i'>@i</a>
+                            }
+                            else
+                            {
+                                <a href='/运营团队后台/GoodExamine?page=@i'>@i</a>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (CurrentPage < 6)
+                        {
+                            if (CurrentPage != 1)
+                            {
+                                for (int i = 1; i < 7; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/运营团队后台/GoodExamine?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/运营团队后台/GoodExamine?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/运营团队后台/GoodExamine?page=@(Pagecount)">@Pagecount</a>
+                            }
+                            else
+                            {
+                                for (int i = 1; i < 7; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/运营团队后台/GoodExamine?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/运营团队后台/GoodExamine?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/运营团队后台/GoodExamine?page=@(Pagecount)">@Pagecount</a>
+                            }
+                        }
+                        else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                        {
+                            <a href="/运营团队后台/GoodExamine?page=1">1</a><span>...</span>
+                            for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/运营团队后台/GoodExamine?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/运营团队后台/GoodExamine?page=@i'>@i</a>
+                                }
+                            }
+                            <span>...</span><a href="/运营团队后台/GoodExamine?page=@(Pagecount)">@Pagecount</a>
+                        }
+                        else if (CurrentPage >= Pagecount - 3)
+                        {
+                            <a href="/运营团队后台/GoodExamine?page=1">1</a><span>...</span>
+                            for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/运营团队后台/GoodExamine?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/运营团队后台/GoodExamine?page=@i'>@i</a>
+                                }
+                            }
+                        }
+                    }
+                    if (Pagecount > 0)
+                    {
+                        if (CurrentPage < Pagecount)
+                        {
+                            <a href="/运营团队后台/GoodExamine?page=@(CurrentPage+1)">下一页</a><a href="/运营团队后台/GoodExamine?page=@Pagecount">末页</a>
+                        }
+                        <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                    }
+                }
+                <span>跳转到第：<input type="text" value="" id="" size="10" />页<input type="button" onclick="jumpto(this)" value="搜索" /></span>
+            }
+        </div>
     </div>
 </div>
 <script type="text/javascript" language="javascript">
-    var i = @(int.Parse(ViewData["currentPage"].ToString()));
-    var j=@(int.Parse(ViewData["pagecount"].ToString()))
     $(document).ready(function () {
-        var name=$("#gysval").val();
-        $(".gys_znxx_content_detailbox a").each(function () {
-            if ($(this).text() == i) {
-                $(this).css("border","1px solid #ff0000");
-            }
-            if (i== j) {
-                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
-            }
-            if (i == 1) {
-                $(".gys_znxx_content_detailbox a:first").addClass("endPage");;
-            }
-        });
-        if(name!="")
-        {
+        var name = $("#gysval").val();
+        if (name != "") {
             getSearchPro();
         }
         $("#商品列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
@@ -247,11 +323,11 @@
         var gys_auditval = $.trim($("#gys_auditval").val());
         var iszhongbiao = $.trim($("#iszhongbiao").val());
 
-        $.get("getSearchPro?gys=" + encodeURI(gys) + "&name=" + encodeURI(name) + "&auditval=" + encodeURI(auditval)  + "&gys_auditval=" + encodeURI(gys_auditval) + "&page=1&isdelete="+isdelete+ "&iszhongbiao=" + encodeURI(iszhongbiao), function (response) {
+        $.get("getSearchPro?gys=" + encodeURI(gys) + "&name=" + encodeURI(name) + "&auditval=" + encodeURI(auditval) + "&gys_auditval=" + encodeURI(gys_auditval) + "&page=1&isdelete=" + isdelete + "&iszhongbiao=" + encodeURI(iszhongbiao), function (response) {
             if (response == "0") {
                 window.location.href = "/运营团队后台/GoodExamine";
             }
-            else{
+            else {
                 $("#serchcontent").html(response);
             }
         });
@@ -265,49 +341,52 @@
         var gys_auditval = $.trim($("#gys_auditval").val());
         var iszhongbiao = $.trim($("#iszhongbiao").val());
 
-        $.get("getSearchPro?gys=" + encodeURI(gys) + "&name=" + encodeURI(name) + "&auditval=" + encodeURI(auditval)  + "&gys_auditval=" + encodeURI(gys_auditval)+ "&page="+page+"&isdelete="+isdelete+ "&iszhongbiao=" + encodeURI(iszhongbiao), function (response) {
+        $.get("getSearchPro?gys=" + encodeURI(gys) + "&name=" + encodeURI(name) + "&auditval=" + encodeURI(auditval) + "&gys_auditval=" + encodeURI(gys_auditval) + "&page=" + page + "&isdelete=" + isdelete + "&iszhongbiao=" + encodeURI(iszhongbiao), function (response) {
             if (response == "0") {
                 window.location.href = "/运营团队后台/GoodExamine";
             }
-            else{
+            else {
                 $("#serchcontent").html(response);
             }
         });
     }
-    function changePage1(th)
-    {
-        var val=$(th).prev(":input").val();
-        var obj=$(th).prev(":input");
-        $(th).prev(":input").attr("id",val);
+    function changePage1(th) {
+        var val = $(th).prev(":input").val();
+        var obj = $(th).prev(":input");
+        $(th).prev(":input").attr("id", val);
         changePage(obj);
     }
-
-    function doShelves(obj){
-        if(!confirm("确定此项操作无误？")){
+    function jumpto(th)
+    {
+        var val = $(th).prev(":input").val();
+        window.location = "/运营团队后台/GoodExamine?page="+val;
+    }
+    function doShelves(obj) {
+        if (!confirm("确定此项操作无误？")) {
             return false;
         }
         var id = $(obj).val();
         var status = "0";
-        if(id=="上架当页所有商品" || id=="上架所有商品"|| $(obj).is(':checked')){
-            status="1";
+        if (id == "上架当页所有商品" || id == "上架所有商品" || $(obj).is(':checked')) {
+            status = "1";
         }
         //改变的类型，选一个或选当前页为1，选择所有商品为2
-        var changetype="1";
+        var changetype = "1";
         //全选当前页
-        if(id=="上架当页所有商品" || id=="下架当页所有商品"){
+        if (id == "上架当页所有商品" || id == "下架当页所有商品") {
             var idstr = "";
-            $(".gyspage_list_content").each(function (){
+            $(".gyspage_list_content").each(function () {
                 var keyid = $(this).attr("key");
-                if(keyid!="-2"){
-                    idstr+=$(this).attr("key")+"|";
+                if (keyid != "-2") {
+                    idstr += $(this).attr("key") + "|";
                 }
             });
-            id=idstr;
+            id = idstr;
         }
-        else if(id == "上架所有商品" || id == "下架所有商品"){
+        else if (id == "上架所有商品" || id == "下架所有商品") {
             //全选所有商品
             id = $("#gysid").val();
-            changetype="2";
+            changetype = "2";
         }
 
 
@@ -318,32 +397,32 @@
             type: 'POST',
             //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
             url: "/运营团队后台/doProductShelves",
-            data: "id="+id+"&status="+status+"&changetype="+changetype,
+            data: "id=" + id + "&status=" + status + "&changetype=" + changetype,
             success: function (data) {
-                if(data!="0"){
-                    if(data=="overflow"){
+                if (data != "0") {
+                    if (data == "overflow") {
                         alert("上架商品数已达到上限");
                     }
-                    else{
+                    else {
                         alert(data);
                     }
-                    window.location='/供应商后台/Gys_Product_List';
+                    window.location = '/供应商后台/Gys_Product_List';
                 }
-                else{
+                else {
                     //所有商品
-                    if(changetype=="2"){
-                        window.location='/供应商后台/Gys_Product_List';
+                    if (changetype == "2") {
+                        window.location = '/供应商后台/Gys_Product_List';
                     }
-                    else{
-                        if(id.indexOf("|")>-1){
-                            window.location='/供应商后台/Gys_Product_List';
+                    else {
+                        if (id.indexOf("|") > -1) {
+                            window.location = '/供应商后台/Gys_Product_List';
                         }
-                        else{
-                            if(status=="0"){
-                                $("#sjShelves__"+id).html("上架：<font color='red'>未上架</font>");
+                        else {
+                            if (status == "0") {
+                                $("#sjShelves__" + id).html("上架：<font color='red'>未上架</font>");
                             }
-                            else{
-                                $("#sjShelves__"+id).html("上架：<font color='green'>已上架</font>");
+                            else {
+                                $("#sjShelves__" + id).html("上架：<font color='green'>已上架</font>");
                             }
                         }
                     }

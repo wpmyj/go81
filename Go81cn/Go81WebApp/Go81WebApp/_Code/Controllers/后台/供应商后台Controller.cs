@@ -1315,17 +1315,27 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
-        public ActionResult Part_Gys_Znxx(int? page)
+        public ActionResult Part_Gys_Znxx()
         {
-
-            if (string.IsNullOrEmpty(page.ToString()))
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = 站内消息管理.计数站内消息(0, 0, MongoDB.Driver.Builders.Query.EQ("收信人.用户ID", currentUser.Id));
-            ViewData["pagesize"] = 20;
-            ViewData["站内消息列表"] = 站内消息管理.查询收信人的站内消息(20 * (int.Parse(page.ToString()) - 1), 20, currentUser.Id).OrderByDescending(m => m.重要程度);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 站内消息管理.计数站内消息(0, 0, MongoDB.Driver.Builders.Query.EQ("收信人.用户ID", currentUser.Id));
+            pgCount = pc / 10;
+            if (pc % 10 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["站内消息列表"] = 站内消息管理.查询收信人的站内消息(10 * (cpg- 1), 10, currentUser.Id).OrderByDescending(m => m.重要程度);
             return PartialView("Gys_Part/Part_Gys_Znxx");
         }
         [ValidateInput(false)]
@@ -1388,17 +1398,28 @@ namespace Go81WebApp.Controllers.后台
             ViewData["行业"] = 商品分类管理.查找子分类();
             return PartialView("Gys_Part/Part_Gys_ZnxxAdd");
         }
-        public ActionResult Part_Msg_Sent(int? page)
+        public ActionResult Part_Msg_Sent()
         {
 
-            if (string.IsNullOrEmpty(page.ToString()))
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = 站内消息管理.计数站内消息(0, 0, MongoDB.Driver.Builders.Query.EQ("发起者.用户ID", currentUser.Id));
-            ViewData["pagesize"] = 20;
-            ViewData["站内消息列表"] = 站内消息管理.查询发起者的站内消息(20 * (int.Parse(page.ToString()) - 1), 20, currentUser.Id).OrderByDescending(m => m.重要程度).OrderByDescending(m => m.基本数据.修改时间);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 站内消息管理.计数站内消息(0, 0, MongoDB.Driver.Builders.Query.EQ("发起者.用户ID", currentUser.Id));
+            pgCount = pc / 10;
+            if (pc % 10 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["站内消息列表"] = 站内消息管理.查询发起者的站内消息(10 * (cpg- 1),10, currentUser.Id).OrderByDescending(m => m.重要程度).OrderByDescending(m => m.基本数据.修改时间);
             return PartialView("Gys_Part/Part_Msg_Sent");
         }
         public ActionResult Part_Zb_Detail(int? id)
@@ -1693,6 +1714,7 @@ namespace Go81WebApp.Controllers.后台
             ViewData["page"] = page;
             ViewData["listcount"] = listcount;
             ViewData["pagesize"] = PRO_PAGESIZE;
+
             ViewData["供应商商品信息"] = 商品管理.查询供应商商品(this.currentUser.Id, PRO_PAGESIZE * (int.Parse(page.ToString()) - 1), PRO_PAGESIZE,q);
 
             //判断是否能使用批量上传工具
@@ -1760,22 +1782,29 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
-        public ActionResult Part_Gys_Product_Listed(int? page)
+        public ActionResult Part_Gys_Product_Listed()
         {
-            ViewData["sum"] = 商品管理.计数供应商商品(currentUser.Id, 0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过));
             var q = Query<商品>.Where(o => o.审核数据.审核状态 != 审核状态.未审核);
             供应商 model = 用户管理.查找用户<供应商>(currentUser.Id);
-            int listcount = (int)商品管理.计数供应商商品(this.currentUser.Id, 0, 0, q);
-            int maxpage = Math.Max((listcount + PRO_PAGESIZE - 1) / PRO_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = listcount;
-            ViewData["pagesize"] = PRO_PAGESIZE;
-            ViewData["供应商商品信息"] = 商品管理.查询供应商商品(this.currentUser.Id, PRO_PAGESIZE * (int.Parse(page.ToString()) - 1), PRO_PAGESIZE, q);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =商品管理.计数供应商商品(this.currentUser.Id, 0, 0, q);
+            pgCount = pc / 10;
+            if (pc % 10 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["供应商商品信息"] = 商品管理.查询供应商商品(this.currentUser.Id, 10 * (cpg- 1), 10, q);
 
             //判断是否能使用批量上传工具
             ViewData["批量上传"] = "0";
@@ -2107,17 +2136,28 @@ namespace Go81WebApp.Controllers.后台
             return PartialView("Gys_Part/Part_Gys_ComplainAdd");
         }
 
-        public ActionResult Part_Gys_ComplainList(int? page)
+        public ActionResult Part_Gys_ComplainList()
         {
 
-            if (string.IsNullOrEmpty(page.ToString()))
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = 投诉管理.计数投诉(0, 0, Query.EQ("发起者.用户ID", currentUser.Id));
-            ViewData["pagesize"] = 20;
-            ViewData["投诉管理"] = 投诉管理.查询发起者的投诉(20 * (int.Parse(page.ToString()) - 1), 20, currentUser.Id, 处理状态.全部).OrderByDescending(m => m.基本数据.修改时间);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =投诉管理.计数投诉(0, 0, Query.EQ("发起者.用户ID", currentUser.Id));
+            pgCount = pc / 10;
+            if (pc % 10 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["投诉管理"] = 投诉管理.查询发起者的投诉(10 * (cpg- 1), 10, currentUser.Id, 处理状态.全部).OrderByDescending(m => m.基本数据.修改时间);
             return PartialView("Gys_Part/Part_Gys_ComplainList");
         }
 
@@ -3540,8 +3580,9 @@ namespace Go81WebApp.Controllers.后台
 
         public ActionResult AddAcceptForm()
         {
-            var q = Query.Or(Query<单位用户>.In(o => o.Id, new long[] { 10001,20292, 10003, 10004, 10005, 10007, 10008, 10009, 10011, 10012, 10013, 10014, 10015, 20057, 20151, 20150, 20145, 20146, 20137, 20138, 20139, 20140, 20141, 20142, 20143, 20144, 20152, 20149, 20147, 20148, 20261,20254 }));
+            var q = Query.Or(Query<单位用户>.In(o => o.Id, 验收单单位列表信息.验收单单位列表.Select(o=>o.Id)));
             ViewData["审核单位列表"] = 用户管理.查询用户<单位用户>(0, 0, q);
+
             ViewData["商品列表"] = 商品管理.查询供应商商品(currentUser.Id, 0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过));
             ViewBag.user = currentUser.企业联系人信息.联系人姓名;
 
@@ -3734,7 +3775,7 @@ namespace Go81WebApp.Controllers.后台
                 ViewData["comes"] = "全部验收单列表";
             }
             //var q = Query.Or(Query.EQ("单位信息.单位名称", "采购处"), Query.EQ("单位信息.单位名称", "13军"), Query.EQ("单位信息.单位名称", "14军"), Query.EQ("单位信息.单位名称", "云南省军区"));
-            var q = Query.Or(Query<单位用户>.In(o => o.Id, new long[] { 10003, 10013, 10008, 10011, 10004, 10005, 10015, 10007, 10012, 10014, 10009,20261 }));
+            var q = Query.Or(Query<单位用户>.In(o => o.Id, 验收单单位列表信息.验收单单位列表.Select(o=>o.Id)));
             long p = 用户管理.计数用户<单位用户>(0, 0);
             ViewData["商品列表"] = 商品管理.查询供应商商品(currentUser.Id, 0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过));
             ViewData["审核单位列表"] = 用户管理.查询用户<单位用户>(0, 0, q);
@@ -4189,7 +4230,7 @@ namespace Go81WebApp.Controllers.后台
         {
             try
             {
-                var q = Query.Or(Query<单位用户>.In(o => o.Id, new long[] { 10003, 10011, 10004, 10005, 10015, 10007, 10012, 10014, 10009 }));
+                var q = Query.Or(Query<单位用户>.In(o => o.Id, 验收单单位列表信息.验收单单位列表.Select(o=>o.Id)));
                 ViewData["审核单位列表"] = 用户管理.查询用户<单位用户>(0, 0, q);
                 ViewData["商品列表"] = 商品管理.查询供应商商品(currentUser.Id);
                 ViewData["收货单位列表"] = 用户管理.查询用户<单位用户>(0, 0);

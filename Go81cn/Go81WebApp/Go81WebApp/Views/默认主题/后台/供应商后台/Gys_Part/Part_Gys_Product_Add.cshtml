@@ -903,22 +903,25 @@
             $("#f1").hide();
         }
         function delPic(th) {
-            var path = $(th).attr("lang");
-            $.get('/供应商后台/DeleteImages', { n: path },
-                function (data) {
-                    if (data == 1) {
-                        $(th).parent().remove();
+            if(confirm("确定删除吗？"))
+            {
+                var path = $(th).attr("lang");
+                $.get('/供应商后台/DeleteImages', { n: path },
+                    function (data) {
+                        if (data == 1) {
+                            $(th).parent().remove();
+                        }
+                    });
+                var newpath = document.getElementById("picture").value.split('|');
+                var str = "";
+                for (j = 0; j < newpath.length - 1; j++) {
+                    if (path != newpath[j]) {
+                        str += newpath[j] + "|";
                     }
-                });
-            var newpath = document.getElementById("picture").value.split('|');
-            var str = "";
-            for (j = 0; j < newpath.length - 1; j++) {
-                if (path != newpath[j]) {
-                    str += newpath[j] + "|";
                 }
+                document.getElementById("picture").value = str;
+                setPic("#picture");
             }
-            document.getElementById("picture").value = str;
-            setPic("#picture");
         }
         function hidebox() {
             $("div#f").hide(500);

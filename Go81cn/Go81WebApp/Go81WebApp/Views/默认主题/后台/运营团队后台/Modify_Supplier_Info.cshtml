@@ -675,7 +675,16 @@
                                                                 <td width="20%">@Model.资质证书列表[i].名称</td>
                                                                 <td width="20%">@Model.资质证书列表[i].等级</td>
                                                                 <td width="20%">@Model.资质证书列表[i].发证机构</td>
-                                                                <td width="20%">@Model.资质证书列表[i].年检日期.ToString("yyyy-MM-dd")</td>
+                                                                <td width="20%">
+                                                                    @if (Model.资质证书列表[i].年检日期==default(DateTime))
+                                                                    {
+                                                                        <span>无需年检</span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span>@Model.资质证书列表[i].年检日期.ToString("yyyy-MM-dd")</span>
+                                                                    }
+                                                                </td>
                                                                 <td width="20%">
                                                                     <a href="@Model.资质证书列表[i].资质证书电子扫描件[0].路径" target="_blank">查看</a>
                                                                     <a href="/运营团队后台/Qualify_Detail?index=@i&id=@Model.Id" style="margin-right:10px;margin-left:10px;">修改</a><a href="###" onclick="del_qualify(@i)">删除</a>
@@ -688,7 +697,16 @@
                                                                 <td width="20%">@Model.资质证书列表[i].名称</td>
                                                                 <td width="20%">@Model.资质证书列表[i].等级</td>
                                                                 <td width="20%">@Model.资质证书列表[i].发证机构</td>
-                                                                <td width="20%">@Model.资质证书列表[i].年检日期.ToString("yyyy-MM-dd")</td>
+                                                                <td width="20%">
+                                                                @if (Model.资质证书列表[i].年检日期 == default(DateTime))
+                                                                {
+                                                                    <span>无需年检</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>@Model.资质证书列表[i].年检日期.ToString("yyyy-MM-dd")</span>
+                                                                }
+                                                                </td>
                                                                 <td width="20%">
                                                                     <a href="/运营团队后台/Qualify_Detail?index=@i&id=@Model.Id" class="btn btn-primary btn-sm" style="margin-right:10px;">修改</a><a class="btn btn-danger btn-sm" onclick="del_qualify(@i)">删除</a>
                                                                 </td>

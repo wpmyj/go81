@@ -240,34 +240,41 @@
         document.forms["Info"].submit();
     }
     function delAttach(th) {
-        var path = $(th).attr("lang");
-        $.get('/单位用户后台/DeleteImages', { uri: path },
-            function (data) {
-                if (data == 1) {
-                    $(th).parent().remove();
+        if(confirm("确定删除吗？"))
+        {
+            var path = $(th).attr("lang");
+            $.get('/单位用户后台/DeleteImages', { uri: path },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            var newpath = document.getElementById("path").value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
                 }
-            });
-        var newpath = document.getElementById("path").value.split('|');
-        var str = "";
-        for (j = 0; j < newpath.length - 1; j++) {
-            if (path != newpath[j]) {
-                str += newpath[j] + "|";
             }
+            document.getElementById("path").value = str;
+            setPic("#path");
         }
-        document.getElementById("path").value = str;
-        setPic("#path");
+        
     }
     function delAttach1(th) {
-        var path = $(th).attr("lang");
-        $(th).parent().remove();
-        var newpath = document.getElementById("oldPath").value.split('|');
-        var str = "";
-        for (j = 0; j < newpath.length - 1; j++) {
-            if (path != newpath[j]) {
-                str += newpath[j] + "|";
+        if(confirm("确定删除吗？"))
+        {
+            var path = $(th).attr("lang");
+            $(th).parent().remove();
+            var newpath = document.getElementById("oldPath").value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
+                }
             }
+            document.getElementById("oldPath").value = str;
+            document.getElementById("delPath").value += path + "|";
         }
-        document.getElementById("oldPath").value = str;
-        document.getElementById("delPath").value += path + "|";
     }
 </script>

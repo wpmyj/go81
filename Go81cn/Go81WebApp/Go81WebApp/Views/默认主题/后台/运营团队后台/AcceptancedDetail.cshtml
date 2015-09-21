@@ -11,6 +11,10 @@
         text-align: right;
     }
 </style>
+@{
+    var ysduserlist = 验收单单位列表信息.验收单单位列表;
+    var ysduser = ysduserlist.Where(o => o.Id == Model.审核数据.审核者.用户ID);
+}
 <div class="bg_outdiv">
     <div class="bg_outdiv_left">
         @Html.Action("LeftMenu", "布局")
@@ -158,25 +162,17 @@
                                                         {
                                                             if (Model.审核数据.审核状态 == 审核状态.审核通过)
                                                             {
-                                                                if (Model.审核数据.审核者.用户ID == 10015)
+                                                                if (ysduser.Any())
                                                                 {
-                                                                    <img src="~/Images/seal/昆明民族干部学院章.png" width="240" />
-                                                                }
-                                                                else if (Model.审核数据.审核者.用户ID == 20057)
-                                                                {
-                                                                    <img src="~/Images/seal/贵州省军区章.png" width="240" />
-                                                                }
-                                                                else if (Model.审核数据.审核者.用户ID == 20261)
-                                                                {
-                                                                    <img src="~/Images/xzwz.png" width="240" />
-                                                                }
-                                                                else if (Model.审核数据.审核者.用户ID == 20292)
-                                                                {
-                                                                    <img src="~/Images/seal/zjrwb.png" width="240" />
-                                                                }
-                                                                else
-                                                                {
-                                                                    <img src="/运营团队后台/SealWithText?txt=@Model.审核数据.审核者.用户数据.验收单名称&base=@Model.审核数据.审核者.用户数据.印章底部文本&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
+                                                                    var user = ysduser.First();
+                                                                    if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
+                                                                    {
+                                                                        <img src="@user.盖章图片链接" width="240" />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <img src="/运营团队后台/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -256,67 +252,12 @@
                                                 管理部门审核人：
                                                 @if (Model.审核数据.审核状态 == 审核状态.审核通过)
                                                 {
-                                                    if (Model.审核数据.审核者.用户ID == 10015)
+                                                    if (ysduser.Any())
                                                     {
-                                                        <img src="~/Images/seal/昆明民族干部学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10008)
-                                                    {
-                                                        <img src="~/Images/seal/77100签名.png" style="position:absolute; width:120px; height:80px; margin-top:-25px;" />
-                                                    }
-                                                    @*else if (Model.审核数据.审核者.用户ID == 10003)
+                                                        var user = ysduser.First();
+                                                        if (user.Id != 10003)
                                                         {
-                                                            <img src="~/Images/seal/采购处签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                        }*@
-                                                    else if (Model.审核数据.审核者.用户ID == 10007)
-                                                    {
-                                                        <img src="~/Images/seal/成都军区总医院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10004)
-                                                    {
-                                                        <img src="~/Images/seal/78006签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10005)
-                                                    {
-                                                        <img src="~/Images/seal/四川省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10011)
-                                                    {
-                                                        <img src="~/Images/seal/后勤工程学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10012)
-                                                    {
-                                                        <img src="~/Images/seal/324医院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10014)
-                                                    {
-                                                        <img src="~/Images/seal/云南省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10009)
-                                                    {
-                                                        <img src="~/Images/seal/重庆警备区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 20057)
-                                                    {
-                                                        <img src="~/Images/seal/贵州省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 20261)
-                                                    {
-                                                        <img src="~/Images/seal/xz.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 20292)
-                                                    {
-                                                        <img src="~/Images/seal/gzzj.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10001)
-                                                    {
-                                                        <img src="~/Images/seal/采购处签名1.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
-                                                    }
-                                                    else
-                                                    {
-                                                        if (Model.审核数据.审核者.用户数据 != null)
-                                                        {
-                                                            <img src="~/Images/seal/@(Model.审核数据.审核者.用户数据.单位信息.单位代号)签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                                            <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                                         }
                                                     }
                                                 }
@@ -437,25 +378,17 @@
                                                 {
                                                     if (Model.审核数据.审核状态 == 审核状态.审核通过)
                                                     {
-                                                        if (Model.审核数据.审核者.用户ID == 10015)
+                                                        if (ysduser.Any())
                                                         {
-                                                            <img src="~/Images/seal/昆明民族干部学院章.png" width="240" />
-                                                        }
-                                                        else if (Model.审核数据.审核者.用户ID == 20057)
-                                                        {
-                                                            <img src="~/Images/seal/贵州省军区章.png" width="240" />
-                                                        }
-                                                        else if (Model.审核数据.审核者.用户ID == 20261)
-                                                        {
-                                                            <img src="~/Images/xzwz.png" width="240" />
-                                                        }
-                                                        else if (Model.审核数据.审核者.用户ID == 20292)
-                                                        {
-                                                            <img src="~/Images/seal/zjrwb.png" width="240" />
-                                                        }
-                                                        else
-                                                        {
-                                                            <img src="/运营团队后台/SealWithText?txt=@Model.审核数据.审核者.用户数据.验收单名称&base=@Model.审核数据.审核者.用户数据.印章底部文本&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
+                                                            var user = ysduser.First();
+                                                            if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
+                                                            {
+                                                                <img src="@user.盖章图片链接" width="240" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="/运营团队后台/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -533,67 +466,12 @@
                                                 管理部门审核人：
                                                 @if (Model.审核数据.审核状态 == 审核状态.审核通过)
                                                 {
-                                                    if (Model.审核数据.审核者.用户ID == 10015)
+                                                    if (ysduser.Any())
                                                     {
-                                                        <img src="~/Images/seal/昆明民族干部学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10008)
-                                                    {
-                                                        <img src="~/Images/seal/77100签名.png" style="position:absolute; width:120px; height:80px; margin-top:-25px;" />
-                                                    }
-                                                    @*else if (Model.审核数据.审核者.用户ID == 10003)
+                                                        var user = ysduser.First();
+                                                        if (user.Id != 10003)
                                                         {
-                                                            <img src="~/Images/seal/采购处签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                        }*@
-                                                    else if (Model.审核数据.审核者.用户ID == 10007)
-                                                    {
-                                                        <img src="~/Images/seal/成都军区总医院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10004)
-                                                    {
-                                                        <img src="~/Images/seal/78006签名.png" style="position:absolute; width:100px; height:80px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10005)
-                                                    {
-                                                        <img src="~/Images/seal/四川省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10011)
-                                                    {
-                                                        <img src="~/Images/seal/后勤工程学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10012)
-                                                    {
-                                                        <img src="~/Images/seal/324医院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10014)
-                                                    {
-                                                        <img src="~/Images/seal/云南省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10009)
-                                                    {
-                                                        <img src="~/Images/seal/重庆警备区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 20057)
-                                                    {
-                                                        <img src="~/Images/seal/贵州省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 20261)
-                                                    {
-                                                        <img src="~/Images/seal/xz.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 20292)
-                                                    {
-                                                        <img src="~/Images/seal/gzzj.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
-                                                    }
-                                                    else if (Model.审核数据.审核者.用户ID == 10001)
-                                                    {
-                                                        <img src="~/Images/seal/采购处签名1.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
-                                                    }
-                                                    else
-                                                    {
-                                                        if (Model.审核数据.审核者.用户数据 != null)
-                                                        {
-                                                            <img src="~/Images/seal/@(Model.审核数据.审核者.用户数据.单位信息.单位代号)签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                                            <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                                         }
                                                     }
                                                 }
@@ -694,63 +572,12 @@
             <tr>
                 <td colspan="2" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">
                     管理部门审核人：
-                    @if (Model.审核数据.审核者.用户ID == 10015)
+                    @if (ysduser.Any())
                     {
-                        <img src="~/Images/seal/昆明民族干部学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10003)
-                    {
-                        <img src="~/Images/seal/采购处签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10011)
-                    {
-                        <img src="~/Images/seal/后勤工程学院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10004)
-                    {
-                        <img src="~/Images/seal/78006签名.png" style="position:absolute; width:100px; height:80px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10007)
-                    {
-                        <img src="~/Images/seal/成都军区总医院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10005)
-                    {
-                        <img src="~/Images/seal/四川省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10012)
-                    {
-                        <img src="~/Images/seal/324医院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10014)
-                    {
-                        <img src="~/Images/seal/云南省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10009)
-                    {
-                        <img src="~/Images/seal/重庆警备区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 20057)
-                    {
-                        <img src="~/Images/seal/贵州省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 20261)
-                    {
-                        <img src="~/Images/seal/xz.png" style="position:absolute; width:100px; height:90px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 20292)
-                    {
-                        <img src="~/Images/seal/gzzj.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10001)
-                    {
-                        <img src="~/Images/seal/采购处签名1.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
-                    }
-                    else
-                    {
-                        if (Model.审核数据.审核者.用户数据 != null)
+                        var user = ysduser.First();
+                        if (user.Id != 10003)
                         {
-                            <img src="~/Images/seal/@(Model.审核数据.审核者.用户数据.单位信息.单位代号)签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
                         }
                     }
                 </td>
@@ -824,67 +651,15 @@
             <tr>
                 <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">
                     管理部门审核人：
-                    @if (Model.审核数据.审核者.用户ID == 10015)
+                    @if (Model.审核数据.审核状态 == 审核状态.审核通过)
                     {
-                        <img src="~/Images/seal/昆明民族干部学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10003)
-                    {
-                        <img src="~/Images/seal/采购处签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10004)
-                    {
-                        <img src="~/Images/seal/78006签名.png" style="position:absolute; width:100px; height:80px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10007)
-                    {
-                        <img src="~/Images/seal/成都军区总医院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10005)
-                    {
-                        <img src="~/Images/seal/四川省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10008)
-                    {
-                        <img src="~/Images/seal/77100签名.png" style="position:absolute; width:120px; height:80px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10011)
-                    {
-                        <img src="~/Images/seal/后勤工程学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10012)
-                    {
-                        <img src="~/Images/seal/324医院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10014)
-                    {
-                        <img src="~/Images/seal/云南省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10009)
-                    {
-                        <img src="~/Images/seal/重庆警备区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 20057)
-                    {
-                        <img src="~/Images/seal/贵州省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 20261)
-                    {
-                        <img src="~/Images/seal/xz.png" style="position:absolute; width:100px; height:90px; margin-top:-15px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 20292)
-                    {
-                        <img src="~/Images/seal/gzzj.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
-                    }
-                    else if (Model.审核数据.审核者.用户ID == 10001)
-                    {
-                        <img src="~/Images/seal/采购处签名1.png" style="position:absolute; width:100px; height:90px; margin-top:-25px;" />
-                    }
-                    else
-                    {
-                        if (Model.审核数据.审核者.用户数据 != null)
+                        if (ysduser.Any())
                         {
-                            <img src="~/Images/seal/@(Model.审核数据.审核者.用户数据.单位信息.单位代号)签名.png" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            var user = ysduser.First();
+                            if (user.Id != 10003)
+                            {
+                                <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            }
                         }
                     }
                 </td>

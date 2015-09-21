@@ -83,7 +83,7 @@
     });
 
     function submitData() {
-       document.forms["data"].submit();
+        document.forms["data"].submit();
     }
 
     //$("#selectSh_unit").change(function () {
@@ -165,13 +165,16 @@
     }
 
     function delPicExist(th) {
-        var id = @Model.Id;
-        var path = $(th).attr("lang");
-        $.get('/运营团队后台/DelYsdSmj', { n: path, gid: id },
-            function (data) {
-                if (data == 1) {
-                    $(th).parent().remove();
-                }
-            });
+        if(confirm("确定删除吗？"))
+        {
+            var id = @Model.Id;
+            var path = $(th).attr("lang");
+            $.get('/运营团队后台/DelYsdSmj', { n: path, gid: id },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+        }
     }
 </script>

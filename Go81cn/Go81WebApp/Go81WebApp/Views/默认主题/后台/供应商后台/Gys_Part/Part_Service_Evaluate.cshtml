@@ -52,11 +52,11 @@
                             <select style="width:155px;" name="selectSh_unit" id="selectSh_unit">
                                 <option>请选择验收单号</option>
                                 @{
-                                    var sh_unit = (IEnumerable<验收单>)ViewData["验收单号"];
-                                    foreach (var j in sh_unit)
-                                    {
-                                        <option value="@j.Id">@j.验收单号</option>
-                                    }
+                var sh_unit = (IEnumerable<验收单>)ViewData["验收单号"];
+                foreach (var j in sh_unit)
+                {
+                    <option value="@j.Id">@j.验收单号</option>
+                }
                                 }
                             </select>
                             <div class="out_box">
@@ -88,13 +88,11 @@
             <div style="width:720px; margin:0px auto 0px auto; overflow:hidden;">
                 <table>
                     <tbody>
-                        <tr id="showhc_ysd">
-                            
-                        </tr>
+                        <tr id="showhc_ysd"></tr>
                     </tbody>
                 </table>
             </div>
-    
+
             <div id="pBox" style="width:720px; margin:0px auto 0px auto; overflow:hidden;">
 
             </div>
@@ -120,10 +118,10 @@ else
             alert("还没有验收单号，不能上传！");
             return false;
         }
-        //else if ($("#picture").val() == "") {
-        //    alert("您还没有上传扫件！");
-        //    return false;
-        //}
+            //else if ($("#picture").val() == "") {
+            //    alert("您还没有上传扫件！");
+            //    return false;
+            //}
         else {
             document.forms["data"].submit();
         }
@@ -139,13 +137,13 @@ else
                 success: function (data) {
                     var str = "";
                     $.each(data, function () {
-                        str += "<td><a title='删除' id='"+this.id+"' href='###' onclick='delPicExist(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='"+this.path+"'>×</a>";
+                        str += "<td><a title='删除' id='" + this.id + "' href='###' onclick='delPicExist(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + this.path + "'>×</a>";
                         str += "<img style='border:1px solid gray;' src='" + this.path + "' height='80' width='100'><div style='width:100px;color:red'><label style='font-size:13px;word-break:break-word;'>" + this.examine + (this.reason != '' ? ':' + this.reason : '') + "</label></div></td>";
                     });
                     $("#showhc_ysd").html(str);
                 },
                 error: function () {
-                    
+
                 },
             });
         }
@@ -176,14 +174,16 @@ else
             }
         });
         function delPicExist(th) {
-            var id = $("#selectSh_unit").val();
-            var path = $(th).attr("lang");
-            $.get('/供应商后台/DelYsdSmj', { n: path, gid: id },
-                function (data) {
-                    if (data == 1) {
-                        $(th).parent().remove();
-                    }
-                });
+            if (confirm("确定删除吗？")) {
+                var id = $("#selectSh_unit").val();
+                var path = $(th).attr("lang");
+                $.get('/供应商后台/DelYsdSmj', { n: path, gid: id },
+                    function (data) {
+                        if (data == 1) {
+                            $(th).parent().remove();
+                        }
+                    });
+            }
             //var newpath = document.getElementById("picture").value.split('|');
             //var str = "";
             //for (j = 0; j < newpath.length - 1; j++) {
@@ -332,34 +332,41 @@ else
             $("#f1").hide();
         }
         function delPic(th) {
-            var id = $(th).attr("id");
-            var path = $(th).attr("lang");
-            $.get('/供应商后台/Del_gysPic', { n: path, gid: id },
-                function (data) {
-                    if (data == 1) {
-                        $(th).parent().remove();
+            if(confirm("确定删除吗？"))
+            {
+                var id = $(th).attr("id");
+                var path = $(th).attr("lang");
+                $.get('/供应商后台/Del_gysPic', { n: path, gid: id },
+                    function (data) {
+                        if (data == 1) {
+                            $(th).parent().remove();
+                        }
+                    });
+                var newpath = document.getElementById("picture").value.split('|');
+                var str = "";
+                for (j = 0; j < newpath.length - 1; j++) {
+                    if (path != newpath[j]) {
+                        str += newpath[j] + "|";
                     }
-                });
-            var newpath = document.getElementById("picture").value.split('|');
-            var str = "";
-            for (j = 0; j < newpath.length - 1; j++) {
-                if (path != newpath[j]) {
-                    str += newpath[j] + "|";
                 }
+                document.getElementById("picture").value = str;
+                setPic("#picture");
             }
-            document.getElementById("picture").value = str;
-            setPic("#picture");
         }
 
         function delPicExist(th) {
-            var id = $("#selectSh_unit").val();
-            var path = $(th).attr("lang");
-            $.get('/供应商后台/DelYsdSmj', { n: path, gid: id },
-                function (data) {
-                    if (data == 1) {
-                        $(th).parent().remove();
-                    }
-                });
+            if(confirm("确定删除吗？"))
+            {
+                var id = $("#selectSh_unit").val();
+                var path = $(th).attr("lang");
+                $.get('/供应商后台/DelYsdSmj', { n: path, gid: id },
+                    function (data) {
+                        if (data == 1) {
+                            $(th).parent().remove();
+                        }
+                    });
+            }
+            
             //var newpath = document.getElementById("picture").value.split('|');
             //var str = "";
             //for (j = 0; j < newpath.length - 1; j++) {

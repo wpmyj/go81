@@ -65,8 +65,8 @@
         </table>
         <div class="gys_znxx_content">
             <table width="100%" id="con" cellpadding="0" cellspacing="0">
-                <tr><td colspan="7" style="text-align:right;"><a href="###" onclick="outPutExcelAll()">导出所有用户信息</a>@*<a href="###" onclick="outPutExcel(this)">导出EXCEL表格</a>*@</td></tr>
-                <tr><th align="center">用户ID</th><th align="center">登录名</th><th align="center">所属单位</th><th align="center">单位名称</th><th>联系人</th><th>审核状态</th><th>操作</th>@*<th>EXCEL<input id="allCheck" name="parent" type="checkbox" value="" onclick="selectAll()" /></th>*@</tr>
+                <tr><td colspan="8" style="text-align:right;"><a href="###" onclick="outPutExcelAll()">导出所有用户信息</a>@*<a href="###" onclick="outPutExcel(this)">导出EXCEL表格</a>*@</td></tr>
+                <tr><th align="center" width="8%">用户ID</th><th align="center">登录名</th><th align="center" width="20%">所属单位</th><th align="center" width="20%">单位名称</th><th>联系人</th><th>审核状态</th><th width="10%">操作</th><th></th>@*<th>EXCEL<input id="allCheck" name="parent" type="checkbox" value="" onclick="selectAll()" /></th>*@</tr>
                 @{
                     IEnumerable<单位用户> model=ViewData["user"] as IEnumerable<单位用户>;
                 }
@@ -247,6 +247,9 @@
         });
     }
     $(document).ready(function () {
+        $("#单位列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#单位列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+
         $(".gys_znxx_content_detailbox a").each(function () {
             if ($(this).text() == num) {
                 $(this).css("border","1px solid #ff0000");
@@ -258,8 +261,6 @@
                 $(".gys_znxx_content_detailbox a:first").addClass("endPage");
             }
         });
-        $("#单位列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
-        $("#单位列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
     function setPage(pgCount, currentPage) {
         var str = '';

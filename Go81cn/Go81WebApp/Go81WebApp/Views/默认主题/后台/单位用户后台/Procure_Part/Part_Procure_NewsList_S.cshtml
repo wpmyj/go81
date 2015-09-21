@@ -82,10 +82,14 @@
                 @{
                     IEnumerable<新闻> model=ViewData["后台新闻列表"] as IEnumerable<新闻>;
                 }
+                @if(!model.Any())
+                {
+                    <tr><td>暂时没有新闻</td></tr>
+                }
                 @foreach (var item in model)
                 {
                     <tr>
-                        <td><a href="~/单位用户后台/Procure_NewsDetail?id=@item.Id&come=s" target="_blank">@item.内容主体.标题</a></td>
+                        <td><a href="/单位用户后台/Procure_NewsDetail?id=@item.Id&come=s" target="_blank">@item.内容主体.标题</a></td>
                         @if (item.审核数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核通过)
                         {
                             <td>@item.审核数据.审核状态</td>

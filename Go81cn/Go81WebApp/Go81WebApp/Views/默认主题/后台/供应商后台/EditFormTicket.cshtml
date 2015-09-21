@@ -78,7 +78,7 @@
                                     <td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center">@Html.TextBoxFor(m => m.服务列表[k].行程单号)</td>
                                     <td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center">@Html.TextBoxFor(m => m.服务列表[k].客户姓名, new { @style = "width:80px;" })</td>
                                     <td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center">@Html.TextBoxFor(m => m.服务列表[k].单价, new { @style = "width:80px;" })</td>
-                                    <td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center"><a href="/供应商后台/DelAccepTicketlist?index=@k&id=@Model.Id">删除</a></td>
+                                    <td style="font-size:13px;line-height: 25px; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;" align="center"><a onclick="del(@k,@Model.Id)" href="###">删除</a></td>
                                 </tr>
                             }
 
@@ -158,4 +158,9 @@
         $("#新增机票验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
         $("#新增机票验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
+    function del(index, id) {
+        if (confirm("确定删除吗？")) {
+            window.location = "/供应商后台/DelAccepTicketlist?index=" + index + "&id=" + id;
+        }
+    }
 </script>

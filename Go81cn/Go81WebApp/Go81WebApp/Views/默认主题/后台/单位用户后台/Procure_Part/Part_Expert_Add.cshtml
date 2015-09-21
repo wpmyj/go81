@@ -769,16 +769,17 @@
     }
     function delgt(number,num,th)
     {
-        $.get('/单位用户后台/delgt', { index: number, id: num }, function (data) {
-            if(data==1)
-            {
-                alert("删除成功！");
-                $(th).parent().parent().remove();
-            }
-            else
-            {
-                alert("出错！");
-            }
-        });
+        if(confirm("确定删除吗？"))
+        {
+            $.get('/单位用户后台/delgt', { index: number, id: num }, function (data) {
+                if (data == 1) {
+                    alert("删除成功！");
+                    $(th).parent().parent().remove();
+                }
+                else {
+                    alert("出错！");
+                }
+            });
+        }
     }
 </script> 

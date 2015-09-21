@@ -156,7 +156,7 @@
                                 <td width="7%">@Model.财务状况信息[i].净利润</td>
                                 @if(!Model.供应商用户信息.已提交)
                                 {
-                                    <td width="11%"><a href="/供应商后台/Modify_Finance?index=@i">修改</a><a href="/供应商后台/Delete_Finance?index=@i">删除</a></td>
+                                    <td width="11%"><a href="/供应商后台/Modify_Finance?index=@i">修改</a><a onclick="del(@i)" href="###">删除</a></td>
                                 }
                             </tr>
                         }
@@ -199,6 +199,13 @@
     }
     function hidediv(th) {
         $(th).parent().children("div").hide();
+    }
+    function del(index)
+    {
+        if(confirm("确定删除吗？"))
+        {
+            window.location="/供应商后台/Delete_Finance?index="+index;
+        }
     }
 </script>
 <script type="text/javascript" language="javascript">

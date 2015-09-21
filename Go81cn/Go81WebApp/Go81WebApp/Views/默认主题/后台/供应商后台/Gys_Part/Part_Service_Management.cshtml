@@ -181,7 +181,7 @@
                                 <td>@Model.售后服务机构列表[i].负责人联系方式.手机</td>
                                 @if(!Model.供应商用户信息.已提交)
                                 {
-                                    <td><a href="/供应商后台/Modify_Servicdepartment?index=@i">修改</a><a href="/供应商后台/Delete_Servicdepartment?index=@i">删除</a></td>
+                                    <td><a href="/供应商后台/Modify_Servicdepartment?index=@i">修改</a><a onclick="del(@i)" href="###">删除</a></td>
                                 }
                             </tr>
                         }
@@ -236,5 +236,12 @@
             $(".company_msg a.add").hide();
         }
     });
+    function del(index)
+    {
+        if(confirm("确定删除吗？"))
+        {
+            window.location = "/供应商后台/Delete_Servicdepartment?index="+index;
+        }
+    }
     $(".company_msg :text,.company_msg select,.company_msg textarea,.company_msg :checkbox,.company_msg :file,.company_msg :submit").each(function () { $(this).attr("disabled", "disabled"); $(this).css("background-color", "white"); });
 </script>

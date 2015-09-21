@@ -135,7 +135,7 @@
                         <a href="~/供应商后台/Gys_Product_Detail?id=@item.Id" style="padding:0 10px 0 0;">预览</a>
                         <a href="~/供应商后台/Gys_Product_Modify_Price?id=@item.Id&comes=s" style="padding:0 10px 0 0;">修改价格</a>
                         <a href="~/供应商后台/Gys_Product_Modify?id=@item.Id&comes=s" style="padding:0 10px 0 10px;">修改商品信息</a>
-                        <a href="~/供应商后台/Gys_Product_Delete?id=@item.Id" style="padding:0 10px 0 10px;">删除</a>
+                        <a onclick="del(@item.Id)" style="padding:0 10px 0 10px;">删除</a>
                     </div>
 
                     <div class="gyspage_list_content_list">
@@ -281,5 +281,12 @@
             }
         });
         $("#expertchoosewaitblock").hide();
+    }
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此消息！确定删除吗？"))
+        {
+            window.location="/供应商后台/Gys_Product_Delete?id="+num;
+        }
     }
 </script>

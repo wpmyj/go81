@@ -240,11 +240,7 @@
                     <div class="gys_znxx_content_detailbox">
                         @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
                         {
-                            <a>首页</a>
-                        }
-                        else
-                        {
-                            <a id="1" class="page">首页</a>
+                            <a id="1" class="page">首页</a><a id="@(int.Parse(ViewData["currentPage"].ToString())-1)" class="page">上一页</a>
                         }
                         @for (int i = 0; i <= 10; i++)
                         {                       //一共最多显示10个页码，前面5个，后面5个
@@ -252,7 +248,7 @@
                             {
                                 if (5 == i)
                                 {                               //当前页处理
-                                    <a>@int.Parse(ViewData["currentPage"].ToString())</a>
+                                    <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentPage"].ToString())</a>
                                 }
                                 else
                                 {                               //一般页处理
@@ -261,30 +257,15 @@
                                 }
                             }
                         }
-                        @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
+                        @if (int.Parse(ViewData["currentPage"].ToString()) != int.Parse(ViewData["pagecount"].ToString()))
                         {
-                            <a>末页</a>
+                            <a id="@(int.Parse(ViewData["currentPage"].ToString())+1)" class="page">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
                         }
-                        else
-                        {
-                            <a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
-                        }
+                        <span>第@(int.Parse(ViewData["currentPage"].ToString()))页/共@(int.Parse(ViewData["pagecount"].ToString()))页</span>
                     </div>
                 }
             </div>
-      
-      
-        @*}
-        else
-        {
-            <h1 style="color:gray;text-align:center;">您还未通过审核，暂时无法使用验收单功能。</h1>
-        }*@
     </div>
-@*}
-    else
-    {
-        <h4 style="color:gray;text-align:center;">您还未持有安全证书或安全证书已过期，为保证数据的安全性，暂时无法使用验收单功能，如有疑问，请联系客服。</h4>
-    }*@
 </div>
 
 <!--机票验真详情查看-->

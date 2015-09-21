@@ -86,16 +86,19 @@
                     });
                 }
                 function deleteusergroup(ev) {
-                    var id = ev.getAttribute("id");
-                    $.get("/单位用户后台/Role_Delete?id=" + encodeURI(id), function (response) {
-                        if (response == "success") {
-                            alert("删除成功！");
-                            window.top.location = "/单位用户后台/Role_Mannage";
-                        }
-                        else {
-                            alert(response);
-                        }
-                    });
+                    if(confirm("确定删除吗？"))
+                    {
+                        var id = ev.getAttribute("id");
+                        $.get("/单位用户后台/Role_Delete?id=" + encodeURI(id), function (response) {
+                            if (response == "success") {
+                                alert("删除成功！");
+                                window.top.location = "/单位用户后台/Role_Mannage";
+                            }
+                            else {
+                                alert(response);
+                            }
+                        });
+                    }
                 }
                 $(function () {
                     $("#角色管理").addClass("left_menu_select").children("a").css({ "color": "#fff" });

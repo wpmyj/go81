@@ -17,7 +17,14 @@
                     <th width="13%">最后修改时间</th>
                     <th width="27%">操作</th>
                 </tr>
-                @foreach (var item in (IEnumerable<招标采购项目>)ViewData["招标项目列表"])
+                @{
+                    IEnumerable<招标采购项目> model=ViewData["招标项目列表"] as IEnumerable<招标采购项目>;
+                }
+                @if(!model.Any())
+                {
+                    <tr><td colspan="6">暂时没有招标项目信息</td></tr>
+                }
+                @foreach (var item in model)
                 {
                     <tr>
                         @if (!string.IsNullOrEmpty(item.项目名称))
@@ -52,45 +59,127 @@
                         <td>@item.基本数据.修改时间.ToString("yyyy.MM.dd")</td>
                         @if (item.审核数据.审核状态 == 审核状态.审核通过)
                         {
-                            <td class="gys_znxx_content_tabletime">@Html.ActionLink("查看进度", "Project_ViewProgress", new { id = item.Id })|@Html.ActionLink("详情", "Project_Detail", new { id = item.Id })|@Html.ActionLink("修改", "Project_ZbModify", new { id = item.Id })|@Html.ActionLink("删除", "Project_Delete", new { id = item.Id })</td>
+                            <td class="gys_znxx_content_tabletime">@Html.ActionLink("查看进度", "Project_ViewProgress", new { id = item.Id })|@Html.ActionLink("详情", "Project_Detail", new { id = item.Id })|@Html.ActionLink("修改", "Project_ZbModify", new { id = item.Id })|<a onclick="del(@item.Id,'')">删除</a></td>
                         }
                         else
                         {
-                            <td class="gys_znxx_content_tabletime">@Html.ActionLink("查看进度", "Project_ViewProgress", new { id = item.Id })|@Html.ActionLink("详情", "Project_Detail", new { id = item.Id })|@Html.ActionLink("删除", "Project_Delete", new { id = item.Id, link ="zblist" })</td>
+                            <td class="gys_znxx_content_tabletime">@Html.ActionLink("查看进度", "Project_ViewProgress", new { id = item.Id })|@Html.ActionLink("详情", "Project_Detail", new { id = item.Id })|<a onclick="del(@item.Id,'zblist')"></a></td>
                         }
                     </tr>
                 }
             </table>
             <div class="gys_znxx_content_detailbox">
-                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
+                @{
+                    if (model.Count() != 0)
+                    {
+                        int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                        int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                        if (Pagecount > 0 && CurrentPage != 1)
+                        {
+                            <a href='/单位用户后台/Project_AuditList?page=1'>首页</a><a href='/单位用户后台/Project_AuditList?page=@(CurrentPage-1)'>上一页</a>
+                        }
+                        if (Pagecount <= 6)
+                        {
+                            for (int i = 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/单位用户后台/Project_AuditList?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/单位用户后台/Project_AuditList?page=@i'>@i</a>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (CurrentPage < 6)
+                            {
+                                if (CurrentPage != 1)
+                                {
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/单位用户后台/Project_AuditList?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/单位用户后台/Project_AuditList?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/单位用户后台/Project_AuditList?page=@(Pagecount)">@Pagecount</a>
+                                }
+                                else
+                                {
+                                    for (int i = 1; i < 7; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/单位用户后台/Project_AuditList?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/单位用户后台/Project_AuditList?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/单位用户后台/Project_AuditList?page=@(Pagecount)">@Pagecount</a>
+                                }
+                            }
+                            else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                            {
+                                <a href="/单位用户后台/Project_AuditList?page=1">1</a><span>...</span>
+                                for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/单位用户后台/Project_AuditList?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/单位用户后台/Project_AuditList?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/单位用户后台/Project_AuditList?page=@(Pagecount)">@Pagecount</a>
+                            }
+                            else if (CurrentPage >= Pagecount - 3)
+                            {
+                                <a href="/单位用户后台/Project_AuditList?page=1">1</a><span>...</span>
+                                for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/单位用户后台/Project_AuditList?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/单位用户后台/Project_AuditList?page=@i'>@i</a>
+                                    }
+                                }
+                            }
+                        }
+                        if (Pagecount > 0)
+                        {
+                            if (CurrentPage < Pagecount)
+                            {
+                                <a href="/单位用户后台/Project_AuditList?page=@(CurrentPage+1)">下一页</a><a href="/单位用户后台/Project_AuditList?page=@Pagecount">末页</a>
+                            }
+                            <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                        }
+                    }
+                }
             </div>
         </div>
     </div>
 </div>
 <script type="text/javascript" language="javascript">
-    @{
-        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
-        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
-        {
-            pages++;
-        }
-    }
-    var num =@(int.Parse(ViewData["page"].ToString()));
-    var j=@pages
     $(document).ready(function () {
-        $(".gys_znxx_content_detailbox a").each(function () {
-            if ($(this).text() == num) {
-                $(this).css("border","1px solid #ff0000");
-            }
-            if (num == j) {
-                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
-            }
-            if (num == 1) {
-                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
-            }
-        });
         $("#招标采购项目列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
         $("#招标采购项目列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
     });
+    function del(id,s) {
+        if (confirm('确定删除吗？')) { window.location = '/单位用户后台/Project_Delete?id=' + id+"&link="+s; }
+    }
 </script>
 

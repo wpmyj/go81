@@ -36,7 +36,7 @@
                                 <td>@i.工作经历信息.从事专业</td>
                                 <td>@i.所属地域.地域</td>
                                 <td class="gys_znxx_content_tabletime">
-                                    <a target="_blank" href="/单位用户后台/Print?id=@i.Id">打印</a><a target="_blank" href="/专家抽选/Expert_Edit?id=@i.Id">修改</a>|<a target="_blank" href="/专家抽选/DeleteExpert?id=@i.Id">删除</a>
+                                    <a target="_blank" href="/单位用户后台/Print?id=@i.Id">打印</a><a target="_blank" href="/专家抽选/Expert_Edit?id=@i.Id">修改</a>|<a target="_blank" onclick="del(@i.Id)">删除</a>
                                     @*@if (false)
                                         {
                                             @Html.ActionLink("禁用", "Procure_AdForbid", new { })
@@ -167,4 +167,11 @@
         $("#评审专家列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
         $("#评审专家列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
     });
+    function del(id)
+    {
+        if(confirm("确定删除吗？"))
+        {
+            window.location="/专家抽选/DeleteExpert?id="+id;
+        }
+    }
 </script>

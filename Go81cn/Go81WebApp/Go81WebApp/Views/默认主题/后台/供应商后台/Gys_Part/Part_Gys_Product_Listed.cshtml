@@ -70,7 +70,7 @@
             }
         }
         <span>（注：商品处于上架状态时才会出现在前台页面中！）</span>
-</div>
+    </div>
     <div style="text-align:left; line-height:37px; padding-right:10px; color:purple; padding-top:10px;">
         <input type="button" value="上架当页所有商品" class="index_online_btn" style="margin-right:10px; width:auto; overflow:hidden;" onclick="return doShelves(this);" />
         <input type="button" value="下架当页所有商品" class="index_online_btn" style="margin-right:10px; width:auto; overflow:hidden;" onclick="return doShelves(this);" />
@@ -82,7 +82,10 @@
     <p style="color:red;font-size:12px;margin-top:0;">注：1、修改价格与修改商品信息的区别在于，修改价格不会影响商品的状态，修改商品信息会将会使商品置为未审核状态！&nbsp;&nbsp;&nbsp;2、商品是上架状态才会显示在前台页面上！</p>
 
     <div class="gys_znxx_box">
-        @foreach (var item in (IEnumerable<商品>)ViewData["供应商商品信息"])
+        @{
+            IEnumerable<商品> model = ViewData["供应商商品信息"] as IEnumerable<商品>;
+        }
+        @foreach (var item in model)
         {
             var kk = (long)-2;
             if (item.审核数据.审核状态 == 审核状态.审核通过)
@@ -118,7 +121,8 @@
                         <a href="~/供应商后台/Gys_Product_Detail?id=@item.Id" style="padding:0 10px 0 0;">预览</a>
                         <a href="~/供应商后台/Gys_Product_Modify_Price?id=@item.Id&comes=d" style="padding:0 10px 0 0;">修改价格</a>
                         <a href="~/供应商后台/Gys_Product_Modify?id=@item.Id&comes=d" style="padding:0 10px 0 10px;">修改商品信息</a>
-                        <a href="~/供应商后台/Gys_Product_Delete?id=@item.Id" style="padding:0 10px 0 10px;">删除</a>
+
+                        <a onclick="del(@item.Id)" style="padding:0 10px 0 10px;">删除</a>
                     </div>
 
                     <div class="gyspage_list_content_list">
@@ -143,86 +147,152 @@
             </div>
         }
 
-        @if (ViewData["listcount"] != null && ViewData["listcount"].ToString() != "0")
-        {
-            <div class="gys_znxx_content_detailbox">
-                @(Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString())))
-                <div style="padding-top:10px;">
-                    跳转到<input id="jumpagetext" type="text" style="width:50px; height:20px; line-height:20px;" />页<input style="width:50px; height:25px; line-height:25px;" type="button" onclick="return Jumppage();" value="确定" />
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="gys_znxx_content_detailbox">
-                暂无信息
-            </div>
-
-        }
+        <div class="gys_znxx_content_detailbox">
+            @{
+                if (model.Count() != 0)
+                {
+                    int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                    int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                    if (Pagecount > 0 && CurrentPage != 1)
+                    {
+                        <a href='/供应商后台/Gys_Product_Listed?page=1'>首页</a><a href='/供应商后台/Gys_Product_Listed?page=@(CurrentPage-1)'>上一页</a>
+                    }
+                    if (Pagecount <= 6)
+                    {
+                        for (int i = 1; i <= Pagecount; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/供应商后台/Gys_Product_Listed?page=@i'>@i</a>
+                            }
+                            else
+                            {
+                                <a href='/供应商后台/Gys_Product_Listed?page=@i'>@i</a>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (CurrentPage < 6)
+                        {
+                            if (CurrentPage != 1)
+                            {
+                                for (int i = 1; i < 7; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/供应商后台/Gys_Product_Listed?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/供应商后台/Gys_Product_Listed?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/供应商后台/Gys_Product_Listed?page=@(Pagecount)">@Pagecount</a>
+                            }
+                            else
+                            {
+                                for (int i = 1; i < 7; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/供应商后台/Gys_Product_Listed?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/供应商后台/Gys_Product_Listed?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/供应商后台/Gys_Product_Listed?page=@(Pagecount)">@Pagecount</a>
+                            }
+                        }
+                        else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                        {
+                            <a href="/供应商后台/Gys_Product_Listed?page=1">1</a><span>...</span>
+                            for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/供应商后台/Gys_Product_Listed?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/供应商后台/Gys_Product_Listed?page=@i'>@i</a>
+                                }
+                            }
+                            <span>...</span><a href="/供应商后台/Gys_Product_Listed?page=@(Pagecount)">@Pagecount</a>
+                        }
+                        else if (CurrentPage >= Pagecount - 3)
+                        {
+                            <a href="/供应商后台/Gys_Product_Listed?page=1">1</a><span>...</span>
+                            for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/供应商后台/Gys_Product_Listed?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/供应商后台/Gys_Product_Listed?page=@i'>@i</a>
+                                }
+                            }
+                        }
+                    }
+                    if (Pagecount > 0)
+                    {
+                        if (CurrentPage < Pagecount)
+                        {
+                            <a href="/供应商后台/Gys_Product_Listed?page=@(CurrentPage+1)">下一页</a><a href="/供应商后台/Gys_Product_Listed?page=@Pagecount">末页</a>
+                        }
+                        <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                <span>跳转到<input id="jumpagetext" type="text" style="width:50px; height:20px; line-height:20px;" />页<input style="width:50px; height:25px; line-height:25px;" type="button" onclick="return Jumppage();" value="确定" /></span>
+                    }
+                }
+            }
+        </div>
     </div>
 </div>
 <script type="text/javascript" language="javascript">
-    @{
-        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
-        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
-        {
-            pages++;
-        }
-    }
-    var num =@(int.Parse(ViewData["page"].ToString()));
-    var j=@pages
     $(document).ready(function () {
-        $(".gys_znxx_content_detailbox a").each(function () {
-            if ($(this).text() == num) {
-                $(this).css("border","1px solid #ff0000");
-            }
-            if (num == j) {
-                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
-            }
-            if (num == 1) {
-                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
-            }
-        });
-
         $("#已审核的商品信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#已审核的商品信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#已审核的商品信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
-    function Jumppage(){
-        var jumpage =  $("#jumpagetext").val();
-        if(jumpage==""){
+    function Jumppage() {
+        var jumpage = $("#jumpagetext").val();
+        if (jumpage == "") {
             return false;
         }
-        window.location='/供应商后台/Gys_Product_Listed?page='+jumpage;
+        window.location = '/供应商后台/Gys_Product_Listed?page=' + jumpage;
     }
-    function doShelves(obj){
-        if(!confirm("确定此项操作无误？")){
+    function doShelves(obj) {
+        if (!confirm("确定此项操作无误？")) {
             return false;
         }
         $("#expertchoosewaitblock").show();
         var id = $(obj).val();
-        var status ="0"
-        if(id=="上架当页所有商品" || id=="上架所有商品"|| $(obj).is(':checked')){
-            status="1";
+        var status = "0"
+        if (id == "上架当页所有商品" || id == "上架所有商品" || $(obj).is(':checked')) {
+            status = "1";
         }
         //改变的类型，选一个或选当前页为1，选择所有商品为2
-        var changetype="1"
+        var changetype = "1"
         //全选当前页
-        if(id=="上架当页所有商品" || id=="下架当页所有商品"){
+        if (id == "上架当页所有商品" || id == "下架当页所有商品") {
             var idstr = "";
-            $(".gyspage_list_content").each(function (){
+            $(".gyspage_list_content").each(function () {
                 var keyid = $(this).attr("key");
-                if(keyid!="-2"){
-                    idstr+=$(this).attr("key")+"|";
+                if (keyid != "-2") {
+                    idstr += $(this).attr("key") + "|";
                 }
             });
-            id=idstr;
+            id = idstr;
         }
-        else if(id == "上架所有商品" || id == "下架所有商品"){
+        else if (id == "上架所有商品" || id == "下架所有商品") {
             //全选所有商品
             id = $("#gysid").val();
-            changetype="2";
+            changetype = "2";
         }
-        
+
 
         $.ajax({
             cache: false,
@@ -231,32 +301,32 @@
             type: 'POST',
             //url: "/专家抽选/SearchByCondition_Temp?" + tempparm,
             url: "/供应商后台/doProductShelves",
-            data: "id="+id+"&status="+status+"&changetype="+changetype,
+            data: "id=" + id + "&status=" + status + "&changetype=" + changetype,
             success: function (data) {
-                if(data!="0"){
-                    if(data=="overflow"){
+                if (data != "0") {
+                    if (data == "overflow") {
                         alert("上架商品数已达到上限");
                     }
-                    else{
+                    else {
                         alert(data);
                     }
-                    window.location='/供应商后台/Gys_Product_Listed';
+                    window.location = '/供应商后台/Gys_Product_Listed';
                 }
-                else{
+                else {
                     //所有商品
-                    if(changetype=="2"){
-                        window.location='/供应商后台/Gys_Product_Listed';
+                    if (changetype == "2") {
+                        window.location = '/供应商后台/Gys_Product_Listed';
                     }
-                    else{
-                        if(id.indexOf("|")>-1){
-                            window.location='/供应商后台/Gys_Product_Listed';
+                    else {
+                        if (id.indexOf("|") > -1) {
+                            window.location = '/供应商后台/Gys_Product_Listed';
                         }
-                        else{
-                            if(status=="0"){
-                                $("#sjShelves__"+id).html("上架：<font color='red'>未上架</font>");
+                        else {
+                            if (status == "0") {
+                                $("#sjShelves__" + id).html("上架：<font color='red'>未上架</font>");
                             }
-                            else{
-                                $("#sjShelves__"+id).html("上架：<font color='green'>已上架</font>");
+                            else {
+                                $("#sjShelves__" + id).html("上架：<font color='green'>已上架</font>");
                             }
                         }
                     }
@@ -264,5 +334,13 @@
             }
         });
         $("#expertchoosewaitblock").hide();
+    }
+
+    function del(num)
+    {
+        if(confirm("点击确定即将删除此消息！确定删除吗？"))
+        {
+            window.location="/供应商后台/Gys_Product_Delete?id="+num;
+        }
     }
 </script>

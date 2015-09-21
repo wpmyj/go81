@@ -733,22 +733,25 @@ if (Model.企业基本信息.地图坐标 != null)
         $("#f1").hide();
     }
     function delPic(th) {
-        var id = $(th).attr("id");
-        var path = $(th).attr("lang");
-        $.get('/供应商后台/Del_gysPic', { n: path,gid:id },
-            function (data) {
-                if (data == 1) {
-                    $(th).parent().remove();
+        if(confirm("确定删除吗？"))
+        {
+            var id = $(th).attr("id");
+            var path = $(th).attr("lang");
+            $.get('/供应商后台/Del_gysPic', { n: path,gid:id },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            var newpath = document.getElementById("picture").value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
                 }
-            });
-        var newpath = document.getElementById("picture").value.split('|');
-        var str = "";
-        for (j = 0; j < newpath.length - 1; j++) {
-            if (path != newpath[j]) {
-                str += newpath[j] + "|";
             }
+            document.getElementById("picture").value = str;
+            setPic("#picture");
         }
-        document.getElementById("picture").value = str;
-        setPic("#picture");
     }
 </script>

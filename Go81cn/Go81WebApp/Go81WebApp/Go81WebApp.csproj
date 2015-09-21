@@ -1401,14 +1401,12 @@
     <Content Include="Views\默认主题\后台\运营团队后台\PushMessageDetail.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Msg_TemplateManage.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_MsgTemplate.cshtml" />
-    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_gys_info.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_depart_info.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_single_info.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_manage_info.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_manage_info1.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_single_info1.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_depart_info1.cshtml" />
-    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_gys_info1.cshtml" />
     <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_GysSelect.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Add.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Edit.cshtml" />
@@ -1912,8 +1910,6 @@
     <Content Include="Views\默认主题\门户\jct\JcContract.cshtml" />
     <Content Include="Views\默认主题\门户\协议采购\Part_Agreement\Part_Agreement_Good_Page.cshtml" />
     <Content Include="Views\默认主题\后台\专家后台\Download.cshtml" />
-    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_expert_info.cshtml" />
-    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_expert_info1.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Usergroup_Mannage_My.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Procure_TzList_S.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\Procure_TzList_S.cshtml" />
@@ -2024,7 +2020,6 @@
     <Content Include="Views\默认主题\后台\供应商后台\Gys_Part\Part_AcceptSkan.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\StatisticsLogin.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_StatisticsLogin.cshtml" />
-    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_StatisticsLoginSearch.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\StatisticsClick.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_StatisticsClick.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_StatisticsClickSearch.cshtml" />

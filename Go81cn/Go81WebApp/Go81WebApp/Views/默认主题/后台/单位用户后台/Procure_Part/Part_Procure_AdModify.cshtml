@@ -559,65 +559,80 @@
         document.getElementById("pBox1").innerHTML = str;
     }
     function delPic(th) {
-        var path = $(th).attr("lang");
-        $.get('/单位用户后台/DeleteImages', { uri: path },
-            function (data) {
-                if (data == 1) {
-                    $(th).parent().remove();
+        if(confirm("确定删除吗？"))
+        {
+            var path = $(th).attr("lang");
+            $.get('/单位用户后台/DeleteImages', { uri: path },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            var newpath = document.getElementById("attachtext_s").value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
                 }
-            });
-        var newpath = document.getElementById("attachtext_s").value.split('|');
-        var str = "";
-        for (j = 0; j < newpath.length - 1; j++) {
-            if (path != newpath[j]) {
-                str += newpath[j] + "|";
             }
+            document.getElementById("attachtext_s").value = str;
+            setPic("#attachtext_s");
         }
-        document.getElementById("attachtext_s").value = str;
-        setPic("#attachtext_s");
     }
     function delAttach(th) {
-        var path = $(th).attr("lang");
-        $.get('/单位用户后台/DeleteImages', { uri: path },
-            function (data) {
-                if (data == 1) {
-                    $(th).parent().remove();
+        if(confirm("确定删除吗？"))
+        {
+            var path = $(th).attr("lang");
+            $.get('/单位用户后台/DeleteImages', { uri: path },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+            var newpath = document.getElementById("path").value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
                 }
-            });
-        var newpath = document.getElementById("path").value.split('|');
-        var str = "";
-        for (j = 0; j < newpath.length - 1; j++) {
-            if (path != newpath[j]) {
-                str += newpath[j] + "|";
             }
+            document.getElementById("path").value = str;
         }
-        document.getElementById("path").value = str;
+        
     }
     function delPic1(th) {
-        var path = $(th).attr("lang");
-        $(th).parent().remove();
-        var newpath = document.getElementById("smPath").value.split('|');
-        var str = "";
-        for (j = 0; j < newpath.length - 1; j++) {
-            if (path != newpath[j]) {
-                str += newpath[j] + "|";
+        if(confirm("确定删除吗？"))
+        {
+            var path = $(th).attr("lang");
+            $(th).parent().remove();
+            var newpath = document.getElementById("smPath").value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
+                }
             }
+            document.getElementById("smPath").value = str;
+            document.getElementById("delPath").value += path + "|";
         }
-        document.getElementById("smPath").value = str;
-        document.getElementById("delPath").value += path + "|";
+        
     }
     function delAttach1(th) {
-        var path = $(th).attr("lang");
-        $(th).parent().remove();
-        var newpath = document.getElementById("attachpath").value.split('|');
-        var str = "";
-        for (j = 0; j < newpath.length - 1; j++) {
-            if (path != newpath[j]) {
-                str += newpath[j] + "|";
+        if(confirm("确定删除吗？"))
+        {
+            var path = $(th).attr("lang");
+            $(th).parent().remove();
+            var newpath = document.getElementById("attachpath").value.split('|');
+            var str = "";
+            for (j = 0; j < newpath.length - 1; j++) {
+                if (path != newpath[j]) {
+                    str += newpath[j] + "|";
+                }
             }
+            document.getElementById("attachpath").value = str;
+            document.getElementById("delPath").value += path + "|";
         }
-        document.getElementById("attachpath").value = str;
-        document.getElementById("delPath").value += path + "|";
+        
     }
     $("#mainSelect .procure_radioinput").click(function () {
         $(".hiddenbox").hide();
