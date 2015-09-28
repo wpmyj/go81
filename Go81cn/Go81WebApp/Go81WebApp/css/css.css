@@ -1,4 +1,24 @@
-﻿
+﻿/*简约表格样式*/
+.table-brief{
+    border-bottom:1px solid #ccc;
+    border-right:1px solid #ccc;
+    width:100%;
+}
+.table-brief caption{
+    line-height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+}
+.table-brief tr th,.table-brief tr td{
+    border-top:1px solid #ccc;
+    border-left:1px solid #ccc;
+    line-height:30px;
+}
+.table-brief tr td{
+    text-indent:10px;
+}
+
+
 /*select样式*/
 select {
     width: 155px;
@@ -11,61 +31,66 @@ select {
     text-align: center;
     width: 348px;
 }
-    .cover {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background-color: black;
-        opacity: 0.5;
-        -moz-opacity: 0.5;
-        fill-opacity: 0.5;
-        filter: alpha(opacity=50);
-        z-index: 10;
+
+.cover {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.5;
+    -moz-opacity: 0.5;
+    fill-opacity: 0.5;
+    filter: alpha(opacity=50);
+    z-index: 10;
+}
+
+.cover-child {
+    position: fixed;
+    left: 27%;
+    top: 10px;
+    width: 600px;
+    min-height: 200px;
+    max-height: 550px;
+    overflow: auto;
+    background-color: white;
+    border: 1px solid red;
+    z-index: 12;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.closebt {
+    display: block;
+    float: right;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    color: white;
+    margin-right: 3px;
+    margin-top: -7px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.mbt {
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-weight: normal;
+    background-color: #B3B3B3;
+    color: white;
+    border: 1px solid #8A6C6C;
+}
+
+    .mbt:hover {
+        background-color: #8A8A8A;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
     }
 
-    .cover-child {
-        position: fixed;
-        left: 27%;
-        top: 10px;
-        width:600px;
-        min-height:200px;
-        max-height:550px;
-        overflow:auto;
-        background-color: white;
-        border: 1px solid red;
-        z-index: 12;
-        padding-top:10px;
-        padding-left:10px;
-    }
-    .closebt{
-        display:block;
-        float:right;
-        width:20px;
-        height:20px;
-        background-color:red;
-        color:white;
-        margin-right:3px;
-        margin-top:-7px;
-        line-height:20px;
-        text-align:center;
-    }
-    .mbt{
-        display:inline-block;
-        width:100px;
-        height:30px;
-        line-height:30px;
-        text-align:center;
-        font-weight:normal;
-        background-color:#B3B3B3;
-        color:white;
-        border:1px solid #8A6C6C;
-    }
-        .mbt:hover {
-            background-color:#8A8A8A;
-            border-radius:3px;
-            -webkit-border-radius:3px;
-            -moz-border-radius:3px;
-        }
 .jqzoom {
     width: 344px;
     padding: 2px;
@@ -215,41 +240,42 @@ select {
     /*width: 947px;*/
     height: auto;
 }
-.goodclass_ejfn table{
-    width:100%;
-}
 
-    .goodclass_ejfn table tr td.ejfn_name {
-        width: 90px;
-        height: auto;
-        border-bottom: 1px solid #ccc;
-        text-indent: 2px;
-        font-family: "微软雅黑";
-        font-weight: bold;
-        font-size: 14px;
-        text-align: left;
+    .goodclass_ejfn table {
+        width: 100%;
     }
 
-    .goodclass_ejfn table tr td.sjfn_name {
-        width: 796px;
-        height: auto;
-        border-bottom: 1px solid #ccc;
-        font-size: 12px;
-    }
-
-        .goodclass_ejfn table tr td.sjfn_name a {
-            padding-right: 12px;
-            font-size: 12px;
-            color: #3C3C3C;
-            line-height: 20px;
-            white-space: nowrap;
-            margin-left: 10px;
+        .goodclass_ejfn table tr td.ejfn_name {
+            width: 90px;
+            height: auto;
+            border-bottom: 1px solid #ccc;
+            text-indent: 2px;
+            font-family: "微软雅黑";
+            font-weight: bold;
+            font-size: 14px;
+            text-align: left;
         }
 
-            .goodclass_ejfn table tr td.sjfn_name a:hover {
-                color: #d92f2f;
-                text-decoration: underline;
+        .goodclass_ejfn table tr td.sjfn_name {
+            width: 796px;
+            height: auto;
+            border-bottom: 1px solid #ccc;
+            font-size: 12px;
+        }
+
+            .goodclass_ejfn table tr td.sjfn_name a {
+                padding-right: 12px;
+                font-size: 12px;
+                color: #3C3C3C;
+                line-height: 20px;
+                white-space: nowrap;
+                margin-left: 10px;
             }
+
+                .goodclass_ejfn table tr td.sjfn_name a:hover {
+                    color: #d92f2f;
+                    text-decoration: underline;
+                }
 
 /*商品陈列OtherClass*/
 .class_tree ul {
@@ -654,7 +680,7 @@ select {
     padding: 10px;
 }
 
-.expert{
+.expert {
     height: auto;
     overflow: hidden;
     margin-top: 10px;
@@ -1222,28 +1248,38 @@ select {
     }
 
 /*供应商陈列页面样式*/
-.wrap,.box{margin-bottom:10px;}
-.wrap ul,.wrap .ul{overflow:hidden;clear:both;*zoom:1;}
-.wrap li,.wrap .li{list-style:none;}
+.wrap, .box {
+    margin-bottom: 10px;
+}
 
-    .gys_ztbsearch_contentbox table tr th {
-        height: 35px;
+    .wrap ul, .wrap .ul {
+        overflow: hidden;
+        clear: both;
+        *zoom: 1;
     }
 
-    .gys_ztbsearch_contentbox table tr td {
-        text-align: center;
-        height: 30px;
-        line-height: 30px;
-        font-size: 14px;
+    .wrap li, .wrap .li {
+        list-style: none;
     }
 
-    .gys_ztbsearch_contentbox table tr:nth-child(2n) {
-        background: #EEF8F0;
-    }
+.gys_ztbsearch_contentbox table tr th {
+    height: 35px;
+}
 
-    .gys_ztbsearch_contentbox table tr:hover {
-        background: #C3FFC8;
-    }
+.gys_ztbsearch_contentbox table tr td {
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+}
+
+.gys_ztbsearch_contentbox table tr:nth-child(2n) {
+    background: #EEF8F0;
+}
+
+.gys_ztbsearch_contentbox table tr:hover {
+    background: #C3FFC8;
+}
 
 .pay_gys_info {
     height: auto;
@@ -1273,7 +1309,7 @@ select {
 .rights_productname {
     font-size: 12px;
     width: 140px;
-    display:block;
+    display: block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1388,7 +1424,7 @@ select {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
-    filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
+    filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
     z-index: 9999;
     left: 0;
     top: 0;
@@ -1578,32 +1614,291 @@ label {
     line-height: 35px;
 }
 /*分页控件*/
-    #pager {
+#pager {
+    text-align: center;
+}
+
+    #pager a {
+        display: inline-block;
+        width: 45px;
         text-align: center;
+        line-height: 25px;
+        font-size: 12px;
+        height: 25px;
+        border: 1px solid rgb(204, 204, 204);
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-right: auto;
+        margin-bottom: 5px;
+        cursor: pointer;
     }
 
-        #pager a {
-            display: inline-block;
-            width: 45px;
-            text-align: center;
-            line-height: 25px;
-            font-size: 12px;
-            height: 25px;
-            border: 1px solid rgb(204, 204, 204);
-            margin-top: 10px;
-            margin-left: 5px;
-            margin-right: auto;
-            margin-bottom: 5px;
-            cursor: pointer;
+        #pager a:hover {
+            background-color: rgb(243, 243, 243);
         }
 
-            #pager a:hover {
-                background-color: rgb(243, 243, 243);
-            }
-.samegys_name{
+.samegys_name {
     display: inline-block;
-width: 160px;
-overflow: hidden;
-text-overflow: ellipsis;
-white-space: nowrap;
+    width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
+.purchase {
+    display: inline-block;
+    width: 50px;
+    height: 35px;
+    border: 1px solid #aaa;
+    position: relative;
+}
+
+#purchase_num {
+    width: 30px;
+    height: 33px;
+    text-align: center;
+    border: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+.purchase_bt {
+    display: block;
+    width: 19px;
+    height: 18px;
+    text-align: center;
+    line-height: 17px;
+    background-color: #eaeeee;
+    position: absolute;
+    top: 0px;
+    left: 30px;
+    border-left: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    cursor: pointer;
+}
+
+#car {
+    width: 136px;
+    height: 37px;
+    display: block;
+    background-image: url(/Images/purchaseCar1.png);
+    cursor: pointer;
+}
+
+.goodlist {
+    padding-top: 10px;
+    margin-top: 10px;
+    background-color: #fff4e8;
+    border: 1px solid #E1E1E1;
+    border-top: 1px solid #aaa;
+}
+
+.goodlist_img {
+    text-align: center;
+    width: 100px;
+    height: 85px;
+    float: left;
+}
+
+.goodlist_introduce {
+    width: 600px;
+    height: 85px;
+    overflow-y: hidden;
+    float: left;
+}
+
+.goodlist_price {
+    text-align: center;
+    width: 100px;
+    height: 85px;
+    float: left;
+}
+
+.goodlist_count {
+    text-align: center;
+    width: 100px;
+    height: 85px;
+    float: left;
+}
+
+.goodlist_sum {
+    text-align: center;
+    width: 150px;
+    height: 85px;
+    float: left;
+}
+
+.header_name {
+    float: left;
+    width: 700px;
+    text-align: center;
+    height: 100%;
+}
+
+.header_price {
+    float: left;
+    width: 100px;
+    height: 100%;
+    text-align: center;
+}
+
+.header_count {
+    float: left;
+    width: 100px;
+    height: 100%;
+    text-align: center;
+}
+
+.header_sum {
+    float: left;
+    width: 150px;
+    text-align: center;
+    height: 100%;
+}
+
+.header_operate {
+    float: left;
+    width: 50px;
+    height: 100%;
+    text-align: center;
+}
+
+.changebt {
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 20px;
+    height: 25px;
+    text-align: center;
+    line-height: 25px;
+    border-right: 1px solid #aaa;
+    background-color: #eaeeee;
+    cursor: pointer;
+}
+
+.gnumber {
+    position: absolute;
+    left: 21px;
+    top: 0px;
+    width: 50px;
+    height: 23px;
+    text-align: center;
+    border: none;
+}
+
+#sub_bt {
+    width: 90px;
+    height: 45px;
+    display: block;
+    margin: 0px auto;
+    font-size: 25px;
+    background-image: url(/Images/countor.png);
+    color: #fff;
+    border: none;
+    cursor:pointer;
+}
+ #tip {
+        padding-top: 10px;
+        color: red;
+        text-align: center;
+        text-decoration:underline;
+    }
+    .out_box {
+       display: none;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 3%;
+    }
+
+    .out_box_insecond_child {
+        width: 400px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+    }
+
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
+    .login{
+        position:relative;
+        width:350px;
+        height:30px;
+        margin:10px auto;
+        border:1px solid #aaa;
+    }
+    .img{
+        position:absolute;
+        left:0px;
+        top:0px;
+        height:30px;
+        width:30px;
+        text-align:center;
+        background-color:#f3f3f3;
+    }
+    .img img{
+        width:20px;
+        height:20px;
+        vertical-align:middle;
+    }
+    .text{
+        position:absolute;
+        left:30px;
+        top:0px;
+        height:30px;
+        width:320px;
+    }
+    .text input
+    {
+        width:100%;
+        border:none;
+        height:28px;
+    }
+    #submitbt
+    {
+        height:30px;
+        width:100px;
+        border:none;
+        background-color:#37a8fc;
+        border-radius:3px;
+        color:#fff;
+        font-weight:bold;
+        cursor:pointer;
+    }

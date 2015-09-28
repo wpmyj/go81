@@ -4,6 +4,8 @@ using MongoDB.Driver.Builders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using NPOI.OpenXml4Net.OPC.Internal;
+
 namespace Go81WebApp.Models.数据模型.用户数据模型
 {
     public class 单位用户 : 用户基本数据
@@ -38,7 +40,7 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
         }
         public class _单位信息
         {
-            [Required(ErrorMessage="请填写单位名称")]
+            [Required(ErrorMessage = "请填写单位名称")]
             public string 单位名称 { get; set; }
             public string 单位编码 { get; set; }
             //[Required(ErrorMessage = "请填写单位代号")]
@@ -71,7 +73,7 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
         }
         public long 计数管辖单位(int skip = 0, int limit = 0)
         {
-            return 用户管理.计数用户<单位用户>(skip, limit, Query<单位用户>.EQ(o=>o.管理单位.用户ID, Id));
+            return 用户管理.计数用户<单位用户>(skip, limit, Query<单位用户>.EQ(o => o.管理单位.用户ID, Id));
         }
         public IEnumerable<单位用户> 获取管辖单位(int skip, int limit)
         {
@@ -97,6 +99,42 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
             return 用户管理.查询用户<单位用户>(skip, limit,
                 Query.And(Query<单位用户>.EQ(o => o.管理单位.用户ID, Id), Query<单位用户>.Where(o => o.审核数据.审核状态 != 审核状态.未审核)));
         }
+        public class 单位级别模型
+        {
+            public long id;
+            public string name;
+            public List<单位级别模型> 下级单位列表;
 
+            public 单位级别模型()
+            {
+                this.下级单位列表 =new List<单位级别模型>();
+            }
+        }
+
+        public static readonly List<单位级别模型> 单位级别列表 = new List<单位级别模型>
+        {
+            new 单位级别模型
+            {
+                id = 100,
+                name = "成都军区司令部",
+                下级单位列表 = new List<单位级别模型>
+                {
+                    new 单位级别模型
+                    {
+                        id=110,
+                        name = "二级部",
+                        下级单位列表 = new List<单位级别模型>
+                        {
+                            new 单位级别模型
+                            {
+                                id=111,
+                                name="处",
+                                下级单位列表 = new List<单位级别模型>()
+                            }
+                        }
+                    },
+                }
+            }
+        };
     }
 }

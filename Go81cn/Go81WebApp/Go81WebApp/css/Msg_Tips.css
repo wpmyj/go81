@@ -46,7 +46,7 @@ div.out_box {
 
 .uname {
     display: inline-block;
-    width:200px;
+    width: 200px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -140,4 +140,18 @@ span, font {
     padding: 20px;
     border: 3px solid #ccc;
     border-radius: 3px;
+}
+
+.deletebt {
+    color: white;
+    position: absolute;
+    top: 1px;
+    left:86px;
+    display: block;
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+    background-color: red;
+    text-align: center;
+    font-size: 12px;
 }

@@ -48,6 +48,8 @@ using Go81WebApp.Models.管理器.需求计划管理;
 using System.Collections.Specialized;
 using Go81WebApp.Models.Helpers;
 using Go81WebApp.Models.管理器.抽选管理;
+using Go81WebApp.Models.数据模型.统计数据模型;
+using Go81WebApp.Models.管理器.统计管理;
 
 namespace Go81WebApp.Controllers.后台
 {
@@ -2418,6 +2420,885 @@ namespace Go81WebApp.Controllers.后台
                 return 0;
             }
         }
+
+        public class LoginRecord
+        {
+            public string IpAddr { get; set; }
+            public string Result { get; set; }
+            public long UserId { get; set; }
+            public string LoginTime { get; set; }
+            public string InOrEx { get; set; }
+        }
+        public ActionResult LoginStatistic()
+        {
+            return View();
+        }
+        public ActionResult Part_LoginStastic()
+        {
+            //var now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            //var loginlist = 登录统计管理.查询登录统计(0, 0, Query<登录统计>.Where(o => o.登录时间 >= now));
+            //ViewData["登录统计"] = loginlist.Take(20);
+            //ViewData["统计总数"] = loginlist.Count();
+            return PartialView("Procure_Part/Part_LoginStastic");
+        }
+        public ActionResult Part_StatisticsLoginSearch()
+        {
+            int page = 1;
+            long pageCount = 0;
+            List<LoginRecord> Lr = new List<LoginRecord>();
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+            {
+                page = int.Parse(Request.QueryString["page"]);
+            }
+            var loginuser = Request.Params["loginuser"];
+            var loginresult = Request.Params["loginresult"];
+            var time = Request.Params["time"];
+            var nettype = Request.Params["nettype"];
+            var q = Query.Null;
+
+            if (!string.IsNullOrWhiteSpace(nettype))
+            {
+                if (nettype == "内网")
+                {
+                    q = q.And(Query<登录统计>.Where(o => o.内网访问));
+                }
+                else
+                {
+                    q = q.And(Query<登录统计>.Where(o => !o.内网访问));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(loginresult))
+            {
+                if (loginresult == "登录成功")
+                {
+                    q = q.And(Query<登录统计>.Where(o => o.登录结果 == 登录结果.登录成功));
+                }
+                else
+                {
+                    q = q.And(Query<登录统计>.Where(o => o.登录结果 != 登录结果.登录成功));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(loginuser))
+            {
+                if (loginuser == "供应商")
+                {
+                    q = q.And(Query<登录统计>.Where(o => o.用户数据.用户ID >= 200000000000 && o.用户数据.用户ID < 300000000000));
+                }
+                else if (loginuser == "单位用户")
+                {
+                    q = q.And(Query<登录统计>.Where(o => o.用户数据.用户ID >= 0 && o.用户数据.用户ID < 100000000000));
+                }
+                else if (loginuser == "专家")
+                {
+                    q = q.And(Query<登录统计>.Where(o => o.用户数据.用户ID >= 300000000000 && o.用户数据.用户ID < 400000000000));
+                }
+                else if (loginuser == "运营团队")
+                {
+                    q = q.And(Query<登录统计>.Where(o => o.用户数据.用户ID >= 100000000000 && o.用户数据.用户ID < 200000000000));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(time))
+            {
+                var date = DateTime.Now;
+                if (time == "1")
+                {
+                    var now = new DateTime(date.Year, date.Month, date.Day);
+                    q = q.And(Query<登录统计>.Where(o => o.登录时间 >= now));
+                }
+                else
+                {
+                    q = q.And(Query<登录统计>.Where(o => o.登录时间 > date.AddDays(0 - int.Parse(time))));
+                }
+            }
+            IEnumerable<登录统计> loginlist = 登录统计管理.查询登录统计(20 * (page - 1), 20, q);
+            foreach (var item in loginlist)
+            {
+                LoginRecord r = new LoginRecord();
+                if (item.内网访问)
+                {
+                    r.InOrEx = "内网";
+                }
+                else
+                {
+                    r.InOrEx = "外网";
+                }
+                r.IpAddr = item.登录IP;
+                r.LoginTime = item.登录时间.ToString("yyyy/MM/dd hh:mm:ss");
+                r.Result = item.登录结果.ToString();
+                r.UserId = item.用户数据.用户ID;
+                Lr.Add(r);
+            }
+            long pc = 登录统计管理.计数登录统计(0, 0, q);
+            pageCount = pc / 20;
+            if (pc % 20 > 0)
+            {
+                pageCount++;
+            }
+            JsonResult json = new JsonResult() { Data = new { loginuser = Lr, pCount = pageCount, sum = pc } };
+            return Json(json, JsonRequestBehavior.AllowGet);
+        }
+
+
+        public ActionResult AdvertiseStatistic()
+        {
+            return View();
+        }
+        public ActionResult Part_AdvertiseStastic()
+        {
+            var now = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            var loginlist = 广告点击统计管理.查询广告点击统计(0, 0, Query<广告点击统计>.Where(o => o.基本数据.添加时间 > now));
+            ViewData["广告点击统计"] = loginlist;
+            ViewData["统计总数"] = loginlist.Count();
+
+            return PartialView("Procure_Part/Part_AdvertiseStastic");
+        }
+        public ActionResult Part_AdvertiseClickSearch()
+        {
+            var position = Request.Params["position"];
+            var type = Request.Params["type"];
+            var time = Request.Params["time"];
+            var nettype = Request.Params["nettype"];
+            var q = Query.Null;
+
+            if (!string.IsNullOrWhiteSpace(nettype))
+            {
+                if (nettype == "内网")
+                {
+                    q = q.And(Query<广告点击统计>.Where(o => o.内网访问));
+                }
+                else
+                {
+                    q = q.And(Query<广告点击统计>.Where(o => !o.内网访问));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(position))
+            {
+                q = q.And(Query<广告点击统计>.Where(o => o.广告位置 == position));
+            }
+
+            if (!string.IsNullOrWhiteSpace(type))
+            {
+                if (type == "商品广告")
+                {
+                    q = q.And(Query<广告点击统计>.Where(o => o.广告类型 == 广告类型.商品广告));
+                }
+                else if (type == "供应商广告")
+                {
+                    q = q.And(Query<广告点击统计>.Where(o => o.广告类型 == 广告类型.供应商广告));
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(time))
+            {
+                var date = DateTime.Now;
+                if (time == "1")
+                {
+                    var now = new DateTime(date.Year, date.Month, date.Day);
+                    q = q.And(Query<广告点击统计>.Where(o => o.基本数据.添加时间 >= now));
+                }
+                else
+                {
+                    q = q.And(Query<广告点击统计>.Where(o => o.基本数据.添加时间 > date.AddDays(0 - int.Parse(time))));
+                }
+            }
+            var loginlist = 广告点击统计管理.查询广告点击统计(0, 0, q);
+            ViewData["广告点击统计"] = loginlist;
+            ViewData["统计总数"] = loginlist.Count();
+            return PartialView("Procure_Part/Part_AdvertiseClickSearch");
+        }
+
+        public class goodStatistic
+        {
+            public string name { get; set; }
+            public long count { get; set; }
+            public int clickNumber { get; set; }
+        }
+        public ActionResult GoodStatistic()
+        {
+            IEnumerable<商品分类> types = 商品分类管理.查找子分类();
+            Dictionary<long, Dictionary<string, int>> commonCount = new Dictionary<long, Dictionary<string, int>>();
+            List<Tuple<string, string, long>> goodCount = new List<Tuple<string, string, long>>();
+            foreach (var item in types)
+            {
+                if (item.分类性质 == 商品分类性质.通用物资)
+                {
+                    foreach (var son in item.子分类)
+                    {
+                        foreach (var child in son.子分类)
+                        {
+                            goodCount.Add(Tuple.Create(son.分类名, child.分类名, 商品管理.计数分类下商品(child.Id, 0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过), false)));
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var son in item.子分类)
+                    {
+                        goodCount.Add(Tuple.Create(item.分类名, son.分类名, 商品管理.计数分类下商品(son.Id, 0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过), false)));
+                    }
+                }
+            }
+
+            IEnumerable<商品> commongood = 商品管理.查询商品(0, 1000, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过));
+
+            if (commongood != null && commongood.Count() != 0)
+            {
+                foreach (var item in commongood)
+                {
+                    if (!string.IsNullOrWhiteSpace(item.商品信息.品牌))
+                    {
+                        if (commonCount.ContainsKey(item.商品信息.所属商品分类.商品分类.Id))
+                        {
+                            if (commonCount[item.商品信息.所属商品分类.商品分类.Id].ContainsKey(item.商品信息.品牌))
+                            {
+                                commonCount[item.商品信息.所属商品分类.商品分类.Id][item.商品信息.品牌]++;
+                            }
+                            else
+                            {
+                                commonCount[item.商品信息.所属商品分类.商品分类.Id].Add(item.商品信息.品牌, 1);
+                            }
+                        }
+                        else
+                        {
+                            Dictionary<string, int> m = new Dictionary<string, int>();
+                            m.Add(item.商品信息.品牌, 1);
+                            commonCount.Add(item.商品信息.所属商品分类.商品分类.Id, m);
+                        }
+                    }
+                    else
+                    {
+                        if (item.商品信息.所属商品分类.商品分类 != null)
+                        {
+                            if (commonCount.ContainsKey(item.商品信息.所属商品分类.商品分类.Id))
+                            {
+                                if (commonCount[item.商品信息.所属商品分类.商品分类.Id].ContainsKey("无品牌名称"))
+                                {
+                                    commonCount[item.商品信息.所属商品分类.商品分类.Id]["无品牌名称"]++;
+                                }
+                                else
+                                {
+                                    commonCount[item.商品信息.所属商品分类.商品分类.Id].Add("无品牌名称", 1);
+                                }
+                            }
+                            else
+                            {
+                                Dictionary<string, int> m = new Dictionary<string, int>();
+                                m.Add("无品牌名称", 1);
+                                commonCount.Add(item.商品信息.所属商品分类.商品分类.Id, m);
+                            }
+                        }
+                    }
+                }
+            }
+            ViewData["commonCount"] = commonCount;
+            ViewData["gtype"] = types;
+            ViewData["statistic"] = goodCount;
+            List<goodStatistic> list = new List<goodStatistic>();
+            List<goodStatistic> glist = new List<goodStatistic>();
+            long sum = 商品管理.计数商品(0, 0);
+            List<goodStatistic> Ulist = new List<goodStatistic>();
+            goodStatistic gd = new goodStatistic();
+            DateTime date = DateTime.Now;
+            IEnumerable<商品> good = null;
+            int clicksnumber = 0;
+            ViewData["区间查询数"] = 商品管理.计数商品(0, 0, Query<商品>.Where(m => m.基本数据.添加时间 >= date.AddMonths(-1) && m.基本数据.添加时间 <= date));
+            ViewData["商品总数"] = 商品管理.计数商品(0, 0);
+            good = 商品管理.查询商品(0, 0, Query<商品>.Where(m => m.基本数据.添加时间 >= date.AddMonths(-1) && m.基本数据.添加时间 <= date));
+            foreach (var item in good)
+            {
+                clicksnumber += item.销售信息.点击量;
+            }
+            gd.name = "已审核商品总数";
+            gd.count = 商品管理.计数商品(0, 0, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过));
+            gd.clickNumber = clicksnumber;
+            list.Add(gd);
+            clicksnumber = 0;
+            gd = new goodStatistic();
+            good = 商品管理.查询商品(0, 0, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过));
+            foreach (var item in good)
+            {
+                clicksnumber += item.销售信息.点击量;
+            }
+            gd.name = "审核未通过商品总数";
+            gd.count = 商品管理.计数商品(0, 0, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核未通过));
+            gd.clickNumber = clicksnumber;
+            list.Add(gd);
+            clicksnumber = 0;
+            gd = new goodStatistic();
+            good = 商品管理.查询商品(0, 0, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核未通过));
+            foreach (var item in good)
+            {
+                clicksnumber += item.销售信息.点击量;
+            }
+            gd.name = "未审核商品总数";
+            gd.count = 商品管理.计数商品(0, 0, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.未审核));
+            gd.clickNumber = clicksnumber;
+            list.Add(gd);
+            clicksnumber = 0;
+            gd = new goodStatistic();
+            good = 商品管理.查询商品(0, 0, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.未审核));
+            foreach (var item in good)
+            {
+                clicksnumber += item.销售信息.点击量;
+            }
+            gd.name = date.AddMonths(-1).ToString("yyyy/MM/dd") + "-" + date.ToString("yyyy/MM/dd");
+            gd.count = 商品管理.计数商品(0, 0, Query<商品>.Where(m => m.基本数据.添加时间 >= date.AddMonths(-1) && m.基本数据.添加时间 <= date));
+            gd.clickNumber = clicksnumber;
+            Ulist.Add(gd);
+            clicksnumber = 0;
+            gd = new goodStatistic();
+            good = 商品管理.查询商品(0, 0, Query<商品>.Where(m => m.基本数据.添加时间 >= date.AddMonths(-2) && m.基本数据.添加时间 <= date.AddMonths(-1)));
+            foreach (var item in good)
+            {
+                clicksnumber += item.销售信息.点击量;
+            }
+            gd.name = date.AddMonths(-2).ToString("yyyy/MM/dd") + "-" + date.AddMonths(-1).ToString("yyyy/MM/dd");
+            gd.count = 商品管理.计数商品(0, 0, Query<商品>.Where(m => m.基本数据.添加时间 >= date.AddMonths(-2) && m.基本数据.添加时间 <= date.AddMonths(-1)));
+            gd.clickNumber = clicksnumber;
+            Ulist.Add(gd);
+            clicksnumber = 0;
+            gd = new goodStatistic();
+            good = 商品管理.查询商品(0, 0, Query<商品>.Where(m => m.基本数据.添加时间 >= date.AddMonths(-3) && m.基本数据.添加时间 <= date.AddMonths(-2)));
+            foreach (var item in good)
+            {
+                clicksnumber += item.销售信息.点击量;
+            }
+            gd.name = date.AddMonths(-3).ToString("yyyy/MM/dd") + "-" + date.AddMonths(-2).ToString("yyyy/MM/dd");
+            gd.count = 商品管理.计数商品(0, 0, Query<商品>.Where(m => m.基本数据.添加时间 >= date.AddMonths(-3) && m.基本数据.添加时间 <= date.AddMonths(-2)));
+            gd.clickNumber = clicksnumber;
+            Ulist.Add(gd);
+            clicksnumber = 0;
+            gd = new goodStatistic();
+            good = 商品管理.查询商品(0, 0, Query<商品>.Where(m => m.采购信息.参与普通采购 == true));
+            foreach (var item in good)
+            {
+                clicksnumber += item.销售信息.点击量;
+            }
+            gd.name = "普通商品";
+            gd.count = 商品管理.计数商品(0, 0, Query<商品>.Where(m => m.采购信息.参与普通采购 == true));
+            gd.clickNumber = clicksnumber;
+            glist.Add(gd);
+            clicksnumber = 0;
+            gd = new goodStatistic();
+            good = 商品管理.查询商品(0, 0, Query<商品>.Where(m => m.采购信息.参与协议采购 == true));
+            foreach (var item in good)
+            {
+                clicksnumber += item.销售信息.点击量;
+            }
+            gd.name = "协议采购";
+            gd.count = 商品管理.计数商品(0, 0, Query<商品>.Where(m => m.采购信息.参与协议采购 == true));
+            gd.clickNumber = clicksnumber;
+            glist.Add(gd);
+            clicksnumber = 0;
+            gd = new goodStatistic();
+            good = 商品管理.查询商品(0, 0, Query<商品>.Where(m => m.采购信息.参与应急采购 == true));
+            foreach (var item in good)
+            {
+                clicksnumber += item.销售信息.点击量;
+            }
+            gd.name = "应急采购";
+            gd.count = 商品管理.计数商品(0, 0, Query<商品>.Where(m => m.采购信息.参与应急采购 == true));
+            gd.clickNumber = clicksnumber;
+            glist.Add(gd);
+            clicksnumber = 0;
+            gd = new goodStatistic();
+            good = 商品管理.查询商品(0, 0, Query<商品>.Where(m => m.采购信息.参与应急采购 == false && m.采购信息.参与普通采购 == false && m.采购信息.参与协议采购 == false));
+            foreach (var item in good)
+            {
+                clicksnumber += item.销售信息.点击量;
+            }
+            gd.name = "未设置类型";
+            gd.count = 商品管理.计数商品(0, 0, Query<商品>.Where(m => m.采购信息.参与应急采购 == false && m.采购信息.参与普通采购 == false && m.采购信息.参与协议采购 == false));
+            gd.clickNumber = clicksnumber;
+            glist.Add(gd);
+            clicksnumber = 0;
+
+            ViewData["三月数据列表"] = Ulist;
+            ViewData["审核状况列表"] = list;
+            ViewData["采购类型列表"] = glist;
+            return View();
+        }
+        public ActionResult GysStatistic()
+        {
+            string startdate = DateTime.Now.Year + "/" + (DateTime.Now.Month != 1 ? DateTime.Now.Month - 1 : DateTime.Now.Month) + "/1";
+            string enddate = DateTime.Now.Year + "/" + (DateTime.Now.Month != 1 ? DateTime.Now.Month - 1 : DateTime.Now.Month) + "/" + DateTime.DaysInMonth(DateTime.Now.Year, (DateTime.Now.Month != 1 ? DateTime.Now.Month - 1 : DateTime.Now.Month));
+
+            IMongoQuery q = null;
+            q = Query<供应商>.Where(O => O.基本数据.添加时间 >= Convert.ToDateTime(startdate) && O.基本数据.添加时间 <= Convert.ToDateTime(enddate));
+            long listcount = (int)用户管理.计数用户<供应商>(0, 0, q);
+            long maxpagesize = Math.Max((listcount + 10 - 1) / 10, 1);//10，每页显示10条记录
+            int page = 1;
+
+            ViewData["currentpage"] = page;
+            ViewData["pagecount"] = maxpagesize;
+
+            var gys = 用户管理.查询用户<供应商>(0, 0);
+            ViewData["供应商总数"] = gys.Count();
+            var gys_num = new Dictionary<string, int>();
+            var gys_num1 = new Dictionary<string, int>();
+            var gys_num2 = new Dictionary<string, int>();
+            var gys_num3 = new Dictionary<string, int>();
+
+            gys_num.Add("未预审", gys.Where(o => o.审核数据.审核状态 == 审核状态.未审核).Count());
+            gys_num.Add("预审未通过", gys.Where(o => o.审核数据.审核状态 == 审核状态.审核未通过).Count());
+            gys_num.Add("预审通过", gys.Where(o => o.审核数据.审核状态 == 审核状态.审核通过).Count());
+            gys_num1.Add("应急供应商", gys.Where(o => o.供应商用户信息.应急供应商).Count());
+            gys_num1.Add("协议供应商", gys.Where(o => o.供应商用户信息.协议供应商).Count());
+            gys_num1.Add("普通供应商", gys.Where(o => o.供应商用户信息.普通供应商).Count());
+            gys_num2.Add("同时为应急/普通", gys.Where(o => o.供应商用户信息.应急供应商 && o.供应商用户信息.普通供应商).Count());
+            gys_num2.Add("同时为应急/协议", gys.Where(o => o.供应商用户信息.应急供应商 && o.供应商用户信息.协议供应商).Count());
+            gys_num2.Add("同时为普通/协议", gys.Where(o => o.供应商用户信息.普通供应商 && o.供应商用户信息.协议供应商).Count());
+            gys_num2.Add("同时为普通/协议/应急", gys.Where(o => o.供应商用户信息.普通供应商 && o.供应商用户信息.协议供应商 && o.供应商用户信息.应急供应商).Count());
+            gys_num3.Add("未设置认证级别", gys.Where(o => o.供应商用户信息.认证级别 == 供应商.认证级别.未设置).Count());
+            gys_num3.Add("一级供应商", gys.Where(o => o.供应商用户信息.认证级别 == 供应商.认证级别.一级供应商).Count());
+            gys_num3.Add("二级供应商", gys.Where(o => o.供应商用户信息.认证级别 == 供应商.认证级别.二级供应商).Count());
+            gys_num3.Add("军采通会员", gys.Where(o => o.供应商用户信息.认证级别 == 供应商.认证级别.军采通标准会员).Count());
+            gys_num3.Add("军采通标准会员", gys.Where(o => o.供应商用户信息.认证级别 == 供应商.认证级别.军采通标准会员).Count());
+            gys_num3.Add("军采通高级会员", gys.Where(o => o.供应商用户信息.认证级别 == 供应商.认证级别.军采通商务会员).Count());
+
+            ViewData["按审核状态统计"] = gys_num;
+            ViewData["按供应商类型统计"] = gys_num1;
+            ViewData["按供应商类型同时存在统计"] = gys_num2;
+            ViewData["按认证级别统计"] = gys_num3;
+
+            ViewData["startTime"] = startdate;
+            ViewData["endTime"] = enddate;
+            ViewData["区间查询数"] = listcount;
+            ViewData["所有供应商"] = 用户管理.查询用户<供应商>(10 * (page - 1), 10, q, false, SortBy.Descending("基本数据.添加时间"));
+            return View();
+        }
+        public ActionResult AdStatistic()
+        {
+            string startdate = DateTime.Now.Year.ToString() + "/"
+                + (DateTime.Now.Month != 1 ? DateTime.Now.Month - 1 : DateTime.Now.Month).ToString()
+                + "/1";
+            string enddate = DateTime.Now.Year.ToString() + "/"
+                + (DateTime.Now.Month != 1 ? DateTime.Now.Month - 1 : DateTime.Now.Month).ToString()
+                + "/" + DateTime.DaysInMonth(DateTime.Now.Year, (DateTime.Now.Month != 1 ? DateTime.Now.Month - 1 : DateTime.Now.Month));
+
+            IMongoQuery q = null;
+            q = Query<公告>.Where(O => O.内容主体.发布时间 >= Convert.ToDateTime(startdate) && O.内容主体.发布时间 <= Convert.ToDateTime(enddate));
+
+            var a = q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.采购公告));
+            var b = q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.废标公告));
+            var c = q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.技术公告));
+            var d = q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.流标公告));
+            var e = q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.预公告));
+            var f = q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.中标结果公示));
+            long listcount = (int)公告管理.计数公告(0, 0, q);
+            long maxpagesize = Math.Max((listcount + 5 - 1) / 5, 1);//10，每页显示10条记录
+
+            var Ggs = 公告管理.查询公告(0, 0);
+            var g = new Dictionary<string, string>();
+            var gnum1 = new Dictionary<string, string>();
+            var gnum2 = new Dictionary<string, string>();
+            var gnum3 = new Dictionary<string, string>();
+            var lv = Ggs.Sum(o => o.点击次数);//所有公告点击次数之和
+            g.Add("必读", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.内容基本信息.重要程度 == 重要程度.必读)).ToString());
+            g.Add("特别重要", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.内容基本信息.重要程度 == 重要程度.特别重要)).ToString());
+            g.Add("未指定", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.内容基本信息.重要程度 == 重要程度.未指定)).ToString());
+            g.Add("一般", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.内容基本信息.重要程度 == 重要程度.一般)).ToString());
+            g.Add("重要", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.内容基本信息.重要程度 == 重要程度.重要)).ToString());
+
+            gnum1.Add("发标公告", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告性质 == 公告.公告性质.采购公告)).ToString());
+            gnum1.Add("废标公告", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告性质 == 公告.公告性质.废标公告)).ToString());
+            gnum1.Add("技术公告", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告性质 == 公告.公告性质.技术公告)).ToString());
+            gnum1.Add("流标公告", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告性质 == 公告.公告性质.流标公告)).ToString());
+            gnum1.Add("预公告", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告性质 == 公告.公告性质.预公告)).ToString());
+            gnum1.Add("中标公告", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告性质 == 公告.公告性质.中标结果公示)).ToString());
+
+            long ff = Ggs.Where(o => o.公告信息.公告性质 == 公告.公告性质.采购公告).Sum(o => o.点击次数);
+            gnum2.Add("发标公告", (Math.Round((float)ff / lv * 100, 2)).ToString());
+
+            ff = Ggs.Where(o => o.公告信息.公告性质 == 公告.公告性质.废标公告).Sum(o => o.点击次数);
+            gnum2.Add("废标公告", (Math.Round((float)ff / lv * 100, 2)).ToString());
+
+            ff = Ggs.Where(o => o.公告信息.公告性质 == 公告.公告性质.技术公告).Sum(o => o.点击次数);
+            gnum2.Add("技术公告", (Math.Round((float)ff / lv * 100, 2)).ToString());
+
+            ff = Ggs.Where(o => o.公告信息.公告性质 == 公告.公告性质.流标公告).Sum(o => o.点击次数);
+            gnum2.Add("流标公告", (Math.Round((float)ff / lv * 100, 2)).ToString());
+
+            ff = Ggs.Where(o => o.公告信息.公告性质 == 公告.公告性质.预公告).Sum(o => o.点击次数);
+            gnum2.Add("预公告", (Math.Round((float)ff / lv * 100, 2)).ToString());
+
+            ff = Ggs.Where(o => o.公告信息.公告性质 == 公告.公告性质.中标结果公示).Sum(o => o.点击次数);
+            gnum2.Add("中标公告", (Math.Round((float)ff / lv * 100, 2)).ToString());
+
+            gnum3.Add("单一来源", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.单一来源)).ToString());
+            gnum3.Add("公开招标", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.公开招标)).ToString());
+            gnum3.Add("竞争性谈判", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.竞争性谈判)).ToString());
+            gnum3.Add("其他", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.其他)).ToString());
+            gnum3.Add("网上竞标", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.网上竞标)).ToString());
+            gnum3.Add("未设置", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.未设置)).ToString());
+            gnum3.Add("协议采购", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.协议采购)).ToString());
+            gnum3.Add("询价采购", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.询价采购)).ToString());
+            gnum3.Add("邀请招标", 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.邀请招标)).ToString());
+
+            int page = 1;
+            int.TryParse(Request.Params["page"], out page);
+            ViewData["currentpage"] = page;
+            ViewData["pagecount"] = maxpagesize;
+
+            ViewData["按重要程度统计"] = g;
+            ViewData["按公告性质统计"] = gnum1;
+            ViewData["按公告性质点击率统计"] = gnum2;
+            ViewData["按公告类别统计"] = gnum3;
+
+            ViewData["startTime"] = startdate;
+            ViewData["endTime"] = enddate;
+            ViewData["公告总数"] = 公告管理.计数公告(0, 0);
+            ViewData["预公告"] = 公告管理.计数公告(0, 0, e);
+            ViewData["发标公告"] = 公告管理.计数公告(0, 0, a);
+            ViewData["废标公告"] = 公告管理.计数公告(0, 0, b);
+            ViewData["技术公告"] = 公告管理.计数公告(0, 0, c);
+            ViewData["流标公告"] = 公告管理.计数公告(0, 0, d);
+            ViewData["中标公告"] = 公告管理.计数公告(0, 0, f);
+            ViewData["区间查询数"] = listcount;
+
+            ViewData["本月所发公告"] = 公告管理.查询公告(5 * (page - 1), 5, q, false, SortBy.Descending("内容主体.发布时间"));
+            return View();
+        }
+
+        public ActionResult Part_AdStatistic_ByType()
+        {
+            var area = Request.Params["area"];//地区，如四川
+            var year = Request.Params["year"];
+            var type = Request.Params["type"];//公告性质
+            var val = 0;
+            switch (type)
+            {
+                case "未设置":
+                    val = 0;
+                    break;
+                case "预公告":
+                    val = 1;
+                    break;
+                case "技术公告":
+                    val = 2;
+                    break;
+                case "发标公告":
+                    val = 3;
+                    break;
+                case "中标公告":
+                    val = 4;
+                    break;
+                case "废标公告":
+                    val = 5;
+                    break;
+                case "流标公告":
+                    val = 6;
+                    break;
+            }
+
+            var ad = 公告管理.查询公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 != 公告.公告类别.其他));
+            var units = ad.Where(o => o.公告信息.所属地域.省份 != null && o.公告信息.所属地域.省份.Contains(area))
+                .Select(o => o.公告信息.需求单位 != null ? o.公告信息.需求单位.Trim() : o.公告信息.需求单位)
+                .Distinct();
+
+            var adlist = new Dictionary<string, List<int>>();
+
+            switch (area)
+            {
+                case "四川":
+                    foreach (var k in units)
+                    {
+                        var 本年各月发布公告数量集合 = new List<int>();
+                        for (int i = 1; i <= 12; i++)
+                        {
+                            var count = ad.Where(o => o.公告信息.需求单位 == k &&
+                                                            o.内容主体.发布时间.Month == i &&
+                                                            (int)o.公告信息.公告性质 == val &&
+                                                            o.公告信息.所属地域.省份 != null &&
+                                                            o.公告信息.所属地域.省份.Contains(area) &&
+                                                            o.内容主体.发布时间.Year == int.Parse(year)).Count();
+                            本年各月发布公告数量集合.Add(count);
+                        }
+                        if (k == null)
+                        {
+                            adlist.Add("未填写需求单位", 本年各月发布公告数量集合);
+                        }
+                        else
+                        {
+                            adlist.Add(k, 本年各月发布公告数量集合);
+                        }
+                    }
+                    break;
+                case "重庆":
+                    foreach (var k in units)
+                    {
+                        var 本年各月发布公告数量集合 = new List<int>();
+                        for (int i = 1; i <= 12; i++)
+                        {
+                            var count = ad.Where(o => o.公告信息.需求单位 == k &&
+                                                            o.内容主体.发布时间.Month == i &&
+                                                            (int)o.公告信息.公告性质 == val &&
+                                                            o.公告信息.所属地域.省份 != null &&
+                                                            o.公告信息.所属地域.省份.Contains(area) &&
+                                                            o.内容主体.发布时间.Year == int.Parse(year)).Count();
+                            本年各月发布公告数量集合.Add(count);
+                        }
+                        if (k == null)
+                        {
+                            adlist.Add("未填写需求单位", 本年各月发布公告数量集合);
+                        }
+                        else
+                        {
+                            adlist.Add(k, 本年各月发布公告数量集合);
+                        }
+                    }
+                    break;
+                case "贵州":
+                    foreach (var k in units)
+                    {
+                        var 本年各月发布公告数量集合 = new List<int>();
+                        for (int i = 1; i <= 12; i++)
+                        {
+                            var count = ad.Where(o => o.公告信息.需求单位 == k &&
+                                                            o.内容主体.发布时间.Month == i &&
+                                                            (int)o.公告信息.公告性质 == val &&
+                                                            o.公告信息.所属地域.省份 != null &&
+                                                            o.公告信息.所属地域.省份.Contains(area) &&
+                                                            o.内容主体.发布时间.Year == int.Parse(year)).Count();
+                            本年各月发布公告数量集合.Add(count);
+                        }
+                        if (k == null)
+                        {
+                            adlist.Add("未填写需求单位", 本年各月发布公告数量集合);
+                        }
+                        else
+                        {
+                            adlist.Add(k, 本年各月发布公告数量集合);
+                        }
+                    }
+                    break;
+                case "云南":
+                    foreach (var k in units)
+                    {
+                        var 本年各月发布公告数量集合 = new List<int>();
+                        for (int i = 1; i <= 12; i++)
+                        {
+                            var count = ad.Where(o => o.公告信息.需求单位 == k &&
+                                                            o.内容主体.发布时间.Month == i &&
+                                                            (int)o.公告信息.公告性质 == val &&
+                                                            o.公告信息.所属地域.省份 != null &&
+                                                            o.公告信息.所属地域.省份.Contains(area) &&
+                                                            o.内容主体.发布时间.Year == int.Parse(year)).Count();
+                            本年各月发布公告数量集合.Add(count);
+                        }
+                        if (k == null)
+                        {
+                            adlist.Add("未填写需求单位", 本年各月发布公告数量集合);
+                        }
+                        else
+                        {
+                            adlist.Add(k, 本年各月发布公告数量集合);
+                        }
+                    }
+                    break;
+                case "西藏":
+                    foreach (var k in units)
+                    {
+                        var 本年各月发布公告数量集合 = new List<int>();
+                        for (int i = 1; i <= 12; i++)
+                        {
+                            var count = ad.Where(o => o.公告信息.需求单位 == k &&
+                                                            o.内容主体.发布时间.Month == i &&
+                                                            (int)o.公告信息.公告性质 == val &&
+                                                            o.公告信息.所属地域.省份 != null &&
+                                                            o.公告信息.所属地域.省份.Contains(area) &&
+                                                            o.内容主体.发布时间.Year == int.Parse(year)).Count();
+                            本年各月发布公告数量集合.Add(count);
+                        }
+                        if (k == null)
+                        {
+                            adlist.Add("未填写需求单位", 本年各月发布公告数量集合);
+                        }
+                        else
+                        {
+                            adlist.Add(k, 本年各月发布公告数量集合);
+                        }
+                    }
+                    break;
+            }
+            ViewData["地区"] = area;
+            ViewData["区域公告"] = adlist;
+            return PartialView("Procure_Part/Part_AdStatistic_ByType");
+        }
+
+
+        public ActionResult OperationInfo()
+        {
+            var _gys = 用户管理.查询用户<供应商>(0, 0);
+            string[] _area = { "成都", "贵阳", "重庆", "昆明" };
+
+            var newdic = new Dictionary<string, int>();
+            var newdic1 = new Dictionary<string, int>();
+
+            //供应商入网数量
+            var dic = new Dictionary<string, Dictionary<string, int>>();
+            var _qjrk = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.入库级别 == 供应商.入库级别.全军库));
+            newdic.Add("全军入库", (int)_qjrk);
+
+            var _cdrk = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.入库级别 == 供应商.入库级别.成都军区库));
+            newdic.Add("成都军区入库", (int)_cdrk);
+            dic.Add("入网供应商总数", newdic);
+
+            newdic = new Dictionary<string, int>();
+            foreach (var item in _area)
+            {
+                var _agreegys = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.协议供应商 && o.所属地域.城市 != null && o.所属地域.城市.Contains(item)));
+                newdic.Add(item, (int)_agreegys);
+                var _emergys = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.所属地域.城市 != null && o.所属地域.城市.Contains(item) && o.供应商用户信息.应急供应商));
+                newdic1.Add(item, (int)_emergys);
+            }
+            dic.Add("入网协议供应商总数", newdic);
+            dic.Add("入网应急供应商总数", newdic1);
+            ViewData["供应商入网数量"] = dic;
+
+            //各行业供应商入网数量
+            var dic1 = new Dictionary<string, Dictionary<string, int>>();
+            newdic = new Dictionary<string, int>();
+            newdic1 = new Dictionary<string, int>();
+
+            //获取商品分类 并按分类通用与专用物资
+            var _tywz = new List<string>();
+            var _zywz = new List<string>();
+            var _classify = 商品分类管理.查找子分类(-1);
+            foreach (var item in _classify)
+            {
+                if (item.分类性质 == 商品分类性质.通用物资) { _tywz.Add(item.分类名); }
+                else { _zywz.Add(item.分类名); }
+            }
+
+            foreach (var item in _tywz)
+            {
+                //var _hy = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.可提供产品类别列表.Count > 0 && o.可提供产品类别列表.Exists(p => p.一级分类.Contains(item))));
+                var _hy = _gys.Where(o => o.可提供产品类别列表.Count > 0 && o.可提供产品类别列表.Exists(p => p.一级分类.Contains(item))).Count();
+                newdic.Add(item, (int)_hy);
+            }
+            dic1.Add("通用物资", newdic);
+            foreach (var items in _zywz)
+            {
+                //var _hy = 用户管理.计数用户<供应商>(0,0, Query<供应商>.Where(o => o.可提供产品类别列表.Count > 0 && o.可提供产品类别列表.Exists(p => p.一级分类.Contains(items))));
+                var _hy = _gys.Where(o => o.可提供产品类别列表.Count > 0 && o.可提供产品类别列表.Exists(p => p.一级分类.Contains(items))).Count();
+                newdic1.Add(items, (int)_hy);
+            }
+            dic1.Add("专用物资", newdic1);
+            ViewData["各行业供应商入网数量"] = dic1;
+
+            return View();
+        }
+
+        public ActionResult Part_UnitOrAdStatics()
+        {
+            string[] _area = { "成都", "贵阳", "重庆", "昆明" };
+            var newdic = new Dictionary<string, int>();
+
+            //部队单位用户
+            var dic = new Dictionary<string, Dictionary<string, int>>();
+            foreach (var item in _area)
+            {
+                var _allaccount = 用户管理.计数用户<单位用户>(0, 0, Query<单位用户>.Where(o => o.所属地域.城市 != null && o.所属地域.城市.Contains(item)));
+                newdic.Add(item, (int)_allaccount);
+            }
+            dic.Add("单位用户账号申请总数", newdic);
+
+            //公告
+            var _ad = 公告管理.查询公告(0, 0);
+
+            //公告月发布数量
+            var jk = new List<Tuple<string, string, string>>(); //统计月份，每月数量，某月每天数量
+
+            ////每一年的开始时间与结束时间
+            //var _yearStart = new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0);
+            //var _yearEnd = new DateTime(DateTime.Now.Year, 12, 31, 23, 59, 59);
+            //某一年每月的开始时间与结束时间
+            var _monthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
+            var _monthEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month), 0, 0, 0);
+
+            var _month = DateTime.Now.Month;
+            var _year = DateTime.Now.Year;
+            for (int i = 1; i <= 7; i++)
+            {
+                _monthStart.AddMonths(-1);
+                _monthEnd.AddMonths(-1);
+                _month--;
+                //当月份倒数到前一年12月时年份减去一年，月份设为12月
+                if (_month <= 0)
+                {
+                    _monthStart = new DateTime(DateTime.Now.Year - 1, 12, 1, 0, 0, 0);
+                    _monthEnd = new DateTime(DateTime.Now.Year - 1, 12, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month), 0, 0, 0);
+                    _year -= 1;
+                    _month = 12;
+                }
+
+                var _monthnum = 公告管理.计数公告(0, 0, Query<公告>.GTE(o => o.基本数据.添加时间, _monthStart).And(Query<公告>.LTE(o => o.基本数据.添加时间, _monthEnd)));
+                var _perday = Math.Round(_monthnum / 30.0, 1);
+                jk.Add(Tuple.Create(_month + "月", _monthnum + "条", _perday + "条"));
+            }
+            jk.Reverse();
+            ViewData["公告月发布数量"] = jk;
+
+            //公告发布类型
+            var typs = new Dictionary<string, Dictionary<string, int>>();
+
+            newdic = new Dictionary<string, int>();
+            newdic.Add("", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.公开招标 &&
+                                        (o.公告信息.公告性质 == 公告.公告性质.采购公告 ||
+                                        o.公告信息.公告性质 == 公告.公告性质.预公告 ||
+                                        o.公告信息.公告性质 == 公告.公告性质.技术公告))));
+            typs.Add("公开招标类", newdic);
+
+            newdic = new Dictionary<string, int>();
+            newdic.Add("", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.公开招标 &&
+                                          (o.公告信息.公告性质 == 公告.公告性质.中标结果公示 ||
+                                          o.公告信息.公告性质 == 公告.公告性质.流标公告 ||
+                                          o.公告信息.公告性质 == 公告.公告性质.废标公告))));
+            typs.Add("结果公示类", newdic);
+
+            newdic = new Dictionary<string, int>();
+            newdic.Add("邀请招标类", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.邀请招标)));
+            newdic.Add("询价类", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.询价采购)));
+            newdic.Add("竞争性谈判类", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.竞争性谈判)));
+            newdic.Add("协议采购类", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.协议采购)));
+            newdic.Add("单一来源类", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.单一来源)));
+            newdic.Add("网上竞标类", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.网上竞标)));
+            typs.Add("采购类", newdic);
+            ViewData["公告发布类型"] = typs;
+
+            //公告发布单位
+            //var _units = 公告管理.查询公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 != 公告.公告类别.其他))
+            //                .Select(o => o.公告信息.需求单位 != null ? o.公告信息.需求单位.Trim() : o.公告信息.需求单位)
+            //                .Distinct();
+            var _units = 公告管理.查询公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 != 公告.公告类别.其他))
+                            .Select(o => o.公告信息.需求单位)
+                            .Distinct();
+            var unitgg = new List<Tuple<string, int, int>>();
+            foreach (var item in _units)
+            {
+                //某单位招投标类公告数量
+                var _zbl = 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.需求单位 != null && o.公告信息.需求单位 == item &&
+                                          o.公告信息.公告类别 == 公告.公告类别.公开招标 &&
+                                          o.公告信息.公告性质 != 公告.公告性质.未设置));
+                //某单位采购类公告数量
+                var _cgl = 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.需求单位 != null && o.公告信息.需求单位 == item &&
+                                          (o.公告信息.公告类别 == 公告.公告类别.单一来源 ||
+                                          o.公告信息.公告类别 == 公告.公告类别.竞争性谈判 ||
+                                          o.公告信息.公告类别 == 公告.公告类别.网上竞标 ||
+                                          o.公告信息.公告类别 == 公告.公告类别.协议采购 ||
+                                          o.公告信息.公告类别 == 公告.公告类别.询价采购 ||
+                                          o.公告信息.公告类别 == 公告.公告类别.邀请招标)));
+                unitgg.Add(Tuple.Create(item, (int)_zbl, (int)_cgl));
+            }
+            ViewData["公告发布单位"] = unitgg;
+            return PartialView("Procure_Part/Part_UnitOrAdStatics");
+        }
+
         public ActionResult Part_Procure_TreeMenu()
         {
             if (用户管理.查找用户<单位用户>(currentUser.Id).审核数据.审核状态 == 审核状态.未审核)

@@ -1,0 +1,196 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型
+@{
+    ViewBag.Title = "供应商统计";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<link href="~/css/css.css" rel="stylesheet" />
+<link href="~/css/stylesheet.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style type="text/css">
+    .statis_month_title {
+        margin-top: 20px;
+        font-size: 18px;
+        text-indent: 20px;
+    }
+
+        .statis_month_title label {
+            font-size: 12px;
+        }
+
+    .p_statis_month_total {
+        text-indent: 2em;
+        font-size: 18px;
+        color: red;
+    }
+
+    .gys_statistic {
+        width: 100%;
+    }
+
+        .gys_statistic tr td {
+            height: 30px;
+            line-height: 30px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .gys_statistic tr:nth-child(2n+1) {
+            background: #EEF8F0;
+        }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">统计详情</div>
+                @*<a style="position:absolute;top:8px;right:20px;" class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>*@
+            </div>
+        </div>
+        <div>
+            <div class="static-info">
+                <p style="color: #228b22"><strong>所有供应商总数为： <span> @ViewData["供应商总数"] 家</span></strong></p>
+            </div>
+            <!--基础分类统计-->
+            <div class="statistic_title" show="true">
+                <div class="color_dot" style=" background: #10BB12;"></div>
+                <div class="statistic_title_type">基础分类统计</div>
+                <div class="statistic_title_derect " style="transform: rotate(90deg);"></div>
+            </div>
+
+            <div class="statistic_content">
+                <div class="statistic_content_container" style="margin-bottom:30px;">
+                    <ul>
+                        @{
+                            var 审核情况 = ViewData["按审核状态统计"] as Dictionary<string, int>;
+                            foreach (var k in 审核情况)
+                            {
+                                <li style=" margin: 15px 75px;border: 1px solid #713286;">
+                                    <span>@k.Value</span>家
+                                    <p>@k.Key</p>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <p style="font-size:14px;">按审核状态统计</p>
+                </div>
+
+                <div class="statistic_content_container" style="margin-bottom:30px;">
+                    <ul>
+                        @{
+                            var 供应商类型 = ViewData["按供应商类型统计"] as Dictionary<string, int>;
+                            foreach (var j in 供应商类型)
+                            {
+                                <li style="border: 1px solid #3ACDCD;margin: 15px 75px;">
+                                    <span>@j.Value</span>家
+                                    <p>@j.Key</p>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <p style="font-size:14px;">按供应商类型统计</p>
+                </div>
+
+                <div class="statistic_content_container" style="margin-bottom:30px;">
+                    <ul>
+                        @{
+                            var 供应商类型同时存在 = ViewData["按供应商类型同时存在统计"] as Dictionary<string, int>;
+                            foreach (var k in 供应商类型同时存在)
+                            {
+                                <li style=" margin: 15px 40px;border: 1px solid #49CD3A;">
+                                    <span>@k.Value</span>家
+                                    <p>@k.Key</p>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <p style="font-size:14px;">按供应商类型同时存在统计</p>
+                </div>
+
+                <div class="statistic_content_container">
+                    <ul>
+                        @{
+                            var 认证级别 = ViewData["按认证级别统计"] as Dictionary<string, int>;
+                            foreach (var k in 认证级别)
+                            {
+                                <li style="border: 1px solid #E4DB31;margin: 15px 5px;">
+                                    <span>@k.Value</span>家
+                                    <p>@k.Key</p>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <p style="font-size:14px;">按认证级别统计</p>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(".statistic_title").click(function(){
+        var isShow=$(this).attr("show");
+        var $this=$(this);
+        if(isShow=="false"){
+            $this.attr({"show":"true"}).next().fadeIn().end()
+                .children(".color_dot")
+                .css({"background":"#10BB12"}).end()
+                .children(".statistic_title_derect")
+                .css({"transform":"rotate(90deg)"});
+        }
+        else{
+            $this.attr({"show":"false"}).next().fadeOut().end()
+              .children(".color_dot")
+              .css({"background":"#DF7E2D"}).end()
+              .children(".statistic_title_derect")
+              .css({"transform":"rotate(0deg)"});
+        }
+    });
+
+    $("#select_status").change(function(){
+        var sl=$(this).find("option:selected").html();
+        var a=$("#startdate").val();
+        var b=$("#enddate").val();
+        $.ajax({
+            url: '/运营团队后台/Part_GysStatisticNum',
+            data: {state:sl,startdate:a,enddate:b},
+            success:function(data){
+                $("#gysstatislist").html(data);
+            },
+            error:function(){
+                alert("查找失败！");
+            } ,
+        });
+    });
+
+
+
+    //$("#select_status").change(function(){
+    //    var sl=$(this).find("option:selected").html();
+    //    var a=$("#startdate").val();
+    //    var b=$("#enddate").val();
+    //    $.ajax({
+    //        url:'/运营团队后台/Part_GysStatisticNum',
+    //        data: { state: sl,startdate:a,enddate:b },
+    //        success:function(data){
+    //            $("#gysstatislist").html(data);
+    //        },
+    //        error:function(){
+    //            alert("查找失败！");
+    //        } ,
+    //    });
+    //});
+    
+    $(function () {
+        $("#供应商统计").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#供应商统计").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

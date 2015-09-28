@@ -1,0 +1,294 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Controllers.后台
+@{
+    ViewBag.Title = "商品统计";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<link href="~/css/css.css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<style type="text/css">
+    .statis_month_title {
+        margin-top: 20px;
+        font-size: 18px;
+        text-indent: 20px;
+    }
+
+        .statis_month_title label {
+            font-size: 12px;
+        }
+
+    .p_statis_month_total {
+        text-indent: 2em;
+        font-size: 14px;
+        color: red;
+    }
+
+    div#pager a, .gys_znxx_content_detailbox a {
+        display: inline-block;
+        width: 50px;
+        text-align: center;
+        line-height: 25px;
+        font-size: 12px;
+        height: 25px;
+        border: 1px solid rgb(204, 204, 204);
+        margin-top: 10px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+        div#pager a:hover {
+            background-color: rgb(243, 243, 243);
+        }
+
+    .tbutton {
+        display: inline-block;
+        width: 120px;
+        height: 30px;
+        color: white;
+        text-align: center;
+        line-height: 30px;
+        border-right: 1px solid white;
+    }
+
+    .tbout {
+        width: 100%;
+        height: 30px;
+        background-color: #758C0E;
+    }
+
+    #tab2 table, #tab3 table {
+        border: 1px solid black;
+        border-right: none;
+        border-bottom: none;
+    }
+
+        #tab2 table tr td, #tab3 table tr td {
+            border: 1px solid black;
+            border-top: none;
+            border-left: none;
+        }
+
+        #tab2 table tr:last-child, #tab3 table tr:last-child {
+            border-right: none;
+            border-bottom: none;
+        }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">统计详情</div>
+                @*<a style="position:absolute;top:8px;right:20px;" class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>*@
+            </div>
+        </div>
+        <div class="statis_month_title">目前商品总数为：@ViewData["商品总数"] 个</div>
+        @{
+            Dictionary<long, Dictionary<string, int>> commonCount = ViewData["commonCount"] as Dictionary<long, Dictionary<string, int>>;
+            IEnumerable<商品分类> types = ViewData["gtype"] as IEnumerable<商品分类>;
+            var statistic = ViewData["statistic"] as List<Tuple<string, string, long>>;
+            var glist = ViewData["审核状况列表"] as List<单位用户后台Controller.goodStatistic>;
+            List<单位用户后台Controller.goodStatistic> ulist = ViewData["三月数据列表"] as List<单位用户后台Controller.goodStatistic>;
+            List<单位用户后台Controller.goodStatistic> blist = ViewData["采购类型列表"] as List<单位用户后台Controller.goodStatistic>;
+            DateTime start = new DateTime(DateTime.Now.Year, DateTime.Now.Month - 1, DateTime.Now.Day);
+            DateTime end = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+        }
+        <div class="tbout"><a class="tbutton" href="###" style="background-color:#D4FFCA;color:#000;" onclick="changebox(this,'#tab1')">商品汇总</a><a class="tbutton" href="###" onclick="changebox(this,'#tab2')">商品分类汇总</a><a class="tbutton" href="###" onclick="changebox(this,'#tab3')">商品品牌汇总</a></div>
+        <div id="tabs">
+            <div id="tab1">
+                <div style="padding-left:20px;padding-right:20px;padding-top:10px;"><input id="startdate" value="@start" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd' })" /> - <input id="enddate" value="@end" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd' })" /><button id="btn_date_search">查询</button></div>
+                <div id="printContent">
+                    <div id="gysstatislist">
+                        <p class="p_statis_month_total" id="ad_statistic_total">@start.ToString("yyyy/MM/dd")起—@end.ToString("yyyy/MM/dd")止新增商品：@ViewData["区间查询数"]个</p>
+                        <table class="table-brief"cellpadding="0" cellspacing="0">
+                            <caption>近三月新增商品情况</caption>
+                            <tr><th width="50%">期间</th><th width="20%">新增商品数(个)</th><th width="30%">总点击量</th></tr>
+                            @foreach (var item in ulist)
+                            {
+                                <tr><td>@item.name</td><td>@item.count</td><td>@item.clickNumber</td></tr>
+                            }
+                        </table>
+                        <br />
+                        <table class="table-brief" cellpadding="0" cellspacing="0">
+                            <caption>按审核情况统计数据</caption>
+                            <tr><th width="50%">审核状态</th><th width="20%">商品数(个)</th><th width="30%">总点击量</th></tr>
+                            @foreach (var item in glist)
+                            {
+                                <tr><td>@item.name</td><td>@item.count</td><td>@item.clickNumber</td></tr>
+                            }
+                        </table>
+                        <br />
+                        <table class="table-brief" cellpadding="0" cellspacing="0">
+                            <caption>按采购类型统计数据</caption>
+                            <tr><th width="50%">采购类型</th><th width="20%">商品数(个)</th><th width="30%">总点击量</th></tr>
+                            @foreach (var item in blist)
+                            {
+                                <tr><td>@item.name</td><td>@item.count</td><td>@item.clickNumber</td></tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="tab2" style="display:none;">
+                <table class="table-brief" cellpadding="0" cellspacing="0">
+                    @foreach (var item in types)
+                    {
+                        <tr>
+                            <td align="center" width="25%" style="line-height:50px; font-size:18px;">@item.分类名</td>
+                            <td width="75%">
+                                <table class="innertable" width="100%" cellpadding="0" cellspacing="0" style="border:none;">
+                                    @foreach (var item1 in item.子分类)
+                                    {
+                                        <tr>
+                                            @if (item.分类性质 == 商品分类性质.专用物资)
+                                            {
+                                                <td width="70%" align="center" style="border-right:none;">@item1.分类名</td>
+                                            }
+                                            else
+                                            {
+                                                <td width="70%" align="center">@item1.分类名</td>
+                                            }
+                                            <td width="30%" style="border-right:none;">
+                                                @if (item.分类性质 == 商品分类性质.通用物资)
+                                                {
+                                                    <table class="innertable" width="100%" cellpadding="0" cellspacing="0" style="border:none;">
+                                                        @foreach (var item2 in item1.子分类)
+                                                        {
+                                                            <tr>
+                                                                <td width="75%" align="center" style="border-right:none;">@item2.分类名</td>
+                                                                <td align="center" width="25%" style="border-right:none; border-left:1px solid black">
+                                                                    @foreach (var m in statistic)
+                                                                    {
+                                                                        if (item2.分类名 == m.Item2 && m.Item1 == item1.分类名)
+                                                                        {
+                                                                            <span>@m.Item3</span>
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </table>
+                                                }
+                                                else
+                                                {
+                                                    <table class="innertable" width="100%" cellpadding="0" cellspacing="0" style="border:none;">
+                                                        <tr>
+                                                            <td width="75%" align="center" style="border-right:none; border-left:1px solid black; border-bottom:none;">
+                                                                @foreach (var m in statistic)
+                                                                {
+                                                                    if (item1.分类名 == m.Item2)
+                                                                    {
+                                                                        <span>@m.Item3</span>
+                                                                    }
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div id="tab3" style="display:none;">
+                <table class="table-brief" cellpadding="0" cellspacing="0">
+                    @foreach (var first in types)
+                    {
+                        if (first.分类性质 == 商品分类性质.通用物资)
+                        {
+                            <tr><td colspan="2" align="center" style="font-size:18px; line-height:50px;">@first.分类名</td></tr>
+                            foreach (var second in first.子分类)
+                            {
+                                foreach (var third in second.子分类)
+                                {
+                                    foreach (var t in commonCount)
+                                    {
+                                        if (t.Key == third.Id)
+                                        {
+                                            <tr>
+                                                <td align="center">@second.分类名==>@third.分类名</td>
+                                                <td>
+                                                    <table class="innertable" width="100%" cellpadding="0" cellspacing="0" style="border-left:none; border-top:none;">
+                                                        @foreach (var item in t.Value)
+                                                        {
+                                                            <tr><td width="70%">@item.Key</td><td width="30%" style="border-right:none;">@item.Value</td></tr>
+                                                        }
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="2" align="center">@first.分类名</td></tr>
+                            foreach (var second in first.子分类)
+                            {
+                                foreach (var t in commonCount)
+                                {
+                                    if (t.Key == second.Id)
+                                    {
+                                        <tr>
+                                            <td align="center">@first.分类名==>@second.分类名</td>
+                                            <td>
+                                                <table class="innertable" width="100%" cellpadding="0" cellspacing="0" style="border-left:none; border-top:none;">
+                                                    @foreach (var item in t.Value)
+                                                    {
+                                                        <tr>
+                                                            <td width="70%" style="border-right:none;">@item.Key</td>
+                                                            <td width="30%" style="border-right:none;">@item.Value</td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        }
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#btn_date_search").click(function () {
+        var a = $("#startdate").val();
+        var b = $("#enddate").val();
+        $.ajax({
+            url: '/单位用户后台/GoodStatisticNum',
+            data: { startdate: a, enddate: b },
+            success: function (data) {
+                $("#ad_statistic_total").html(a + "起—" + b + "止新增商品：" + data + "个");
+            },
+            error: function () {
+                alert("请求失败！");
+            },
+        });
+    });
+    $(function () {
+        $("table.innertable").each(function () { $(this).find("tr:last").find("td").css("border-bottom", "none"); });
+        $("#商品统计").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#商品统计").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function changebox(th, id) {
+        $("a.tbutton").each(function () {
+            $(this).css({ "background-color": "#758C0E", "color": "#fff" });
+        });
+        $(th).css({ "background-color": "#D4FFCA", "color": "#000" });
+        $("#tab1,#tab2,#tab3").hide();
+        $(id).show();
+    }
+</script>

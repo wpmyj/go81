@@ -36,14 +36,10 @@
     });
 </script>
 <script type="text/javascript">
-    function nextStep(num) {
+    function nextStep(num,num1) {
         //价格验证正则表达式
         var pricerg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
-        if (num == 1 || num == 2) {
-            $("div#Uppicture").css({ "display": "none" });
-            $("div#product_tabmenu_content").css({ "height": "auto" });
-        }
-        if (num == 0) {
+        if (num ==1) {
             //验证项目编号
             if ($("#proliststr").length >= 1) {
                 var pronamelist = $("#proliststr").val().substring(0, $("#proliststr").val().length - 1).split('|');
@@ -59,16 +55,16 @@
                         //$("#p_number___" + pronamelist[proindex]).show();
                         alert("请填写中标数量");
                         return false;
-                    }
+                }
                     if ($.trim($("#proprice___" + pronamelist[proindex]).val()) == "") {
                         $("#proprice___" + pronamelist[proindex]).focus();
                         //$("#p_number___" + pronamelist[proindex]).show();
                         alert("请填写中标金额");
                         return false;
-                    }
+            }
                 }
             }
-            
+
 
 
 
@@ -80,8 +76,6 @@
                 return false;
             }
             else {
-                //$("#Uppicture").css({ "display": "inline", "height": "20px" });
-                //$("#product_tabmenu_content").css({ "height": "250px" });
                 $("#p_name").hide();
 
             }
@@ -137,8 +131,6 @@
                 return false;
             }
             else {
-                //$("#Uppicture").css({ "display": "inline", "height": "20px" });
-                //$("#product_tabmenu_content").css({ "height": "250px" });
                 $("#p_price").hide();
             }
 
@@ -149,8 +141,6 @@
                 $(stepcheckparm).focus();
                 return false;
             } else {
-                //$("#Uppicture").css({ "display": "inline", "height": "20px" });
-                //$("#product_tabmenu_content").css({ "height": "250px" });
                 $("#p_des").hide();
             }
 
@@ -163,12 +153,8 @@
                 return false;
             }
             else {
-                //$("#Uppicture").css({ "display": "inline", "height": "20px" });
-                //$("#product_tabmenu_content").css({ "height": "250px" });
                 $("#p_detaildes").hide();
             }
-            $("#Uppicture").css({ "display": "inline", "height": "20px" });
-            $("#product_tabmenu_content").css({ "height": "250px" });
         }
 
         //验证价格组合处的价格格式
@@ -193,29 +179,26 @@
             }
         }
 
-
-        $("#listdiv").find("li").eq(num).removeClass("cli");
-        $("#listdiv").find("li").eq(num + 1).attr("class", "cli");
-
-        $("#product_tabmenu_content").find("ul").eq(num).removeClass("fdiv");
-        $("#product_tabmenu_content").find("ul").eq(num + 1).attr("class", "fdiv");
+        $("div#listdiv ul li").each(function () {
+            $(this).removeClass("cli");
+        });
+        $("div#listdiv ul li:eq(" + num + ")").addClass("cli");
+        $("div#product_tabmenu_content ul").each(function () {
+            $(this).hide();
+        });
+        $("div#product_tabmenu_content ul:eq(" + num1 + ")").show();
     }
 
-    function preStep(num) {
-        if (num == 2) {
-            $("#Uppicture").css({ "display": "inline", "height": "20px" });
-            $("#product_tabmenu_content").css({ "height": "250px" });
+    function preStep(num,num1) {
+        $("div#listdiv ul li").each(function () {
+            $(this).removeClass("cli");
+        });
+        $("div#listdiv ul li:eq(" + num + ")").addClass("cli");
+        $("div#product_tabmenu_content ul").each(function () {
+            $(this).hide();
+        });
+        $("div#product_tabmenu_content ul:eq(" + num1 + ")").show();
         }
-        else {
-            $("#Uppicture").css({ "display": "none", "height": "auto" });
-            $("#product_tabmenu_content").css({ "height": "auto" });
-        }
-        $("#listdiv").find("li").eq(num).removeClass("cli");
-        $("#listdiv").find("li").eq(num - 1).attr("class", "cli");
-
-        $("#product_tabmenu_content").find("ul").eq(num).removeClass("fdiv");
-        $("#product_tabmenu_content").find("ul").eq(num - 1).attr("class", "fdiv");
-    }
 </script>
 <div id="f1" class="modal_out">
     <div class="modal_in"></div>
@@ -224,31 +207,12 @@
         <span>正在上传，请稍等...</span>
     </div>
 </div>
-<div id="Uppicture" style="display:none; position:absolute; width:50%; margin-top:50px;">
-    <form action="/供应商后台/UploadImages" method="post" name="upload" enctype="multipart/form-data" target="showPic">
-        <input type="hidden" value="showPic" name="pic1" />
-        <table width="100%" style="font-size:14px; margin-left:20px;">
-            <tr>
-                <td>请选择商品图片<em style="color:red;">（注：请上传2M以下的jpg格式图片）</em></td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="file" accept="image/jpeg" onchange="filechange()" style="width:70px;" multiple="multiple" name="file1" />
-                    @*<input type="submit" onclick="fileChange()" value="上传图片" />*@
-                </td>
-            </tr>
-        </table>
-    </form>
-    <div id="framebox" style="margin-left:20px; visibility:hidden; margin-top:10px;width:700px; height:auto;  margin-right: auto;">
-        <iframe name="showPic" scrolling="no" id="showPic" frameborder="0" style="height:auto; width:100%;"></iframe>
-    </div>
-</div>
 @if (ViewData["是否中标商品"].ToString() == "1")
 {
 <div id="pro_numdiv" style="display: none;">
     <div class="product_add_textarabox">
         <div style="float:left;padding-right:5px;">
-            <div class="product_add_toptitle">项目编号：</div>
+        <div class="product_add_toptitle">项目编号：</div>
             <input type="text" id="pronum___a" name="pronum___a" style="width: 130px;" />
             <span style="float: left;">*</span>
             <span id="p_number___a" style="display: none; float: left;">请输入项目编号</span>
@@ -283,26 +247,71 @@
     }
 </script>
 }
-
-@using (Html.BeginForm("Gys_Product_Add", "供应商后台"))
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
     <div class="product_add_tabmenu_box">
         <div class="title-base-out">
             <div class="title-base-middle">
                 <div class="title-base-inner" style="float:left">商品信息</div>
                 <div class="product_tabmenu_tabmenu" id="listdiv">
                     <ul>
-                        <li onclick="change_tbl(this)" class="cli">商品描述</li>
-                        <li onclick="change_tbl(this)" id="1">商品图片</li>
-                        <li onclick="change_tbl(this)">商品属性</li>
-                        <li onclick="change_tbl(this)">售后服务</li>
+                    <li onclick="change_tbl(this,1)" class="cli">商品描述</li>
+                    <li onclick="change_tbl(this,0)">商品图片</li>
+                    <li onclick="change_tbl(this,2)">商品属性</li>
+                    <li onclick="change_tbl(this,3)">售后服务</li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="product_tabmenu_content_box gys_znxx_box" id="product_tabmenu_content" style="height:auto;">
+        <ul style="display:none;">
+            <li>
+                <div id="Uppicture" style="width:80%;">
+                    <form action="/供应商后台/UploadImages" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                        <input type="hidden" value="showPic" name="pic1" />
+                        <table width="100%" style="font-size:14px; margin-left:20px;">
+                            <tr>
+                                <td>
+                                    <input type="file" accept="image/jpeg" onchange="filechange(0)" style="width:70px;" multiple="multiple" name="file1" />请选择商品图片<em style="color:red;">（注：请上传2M以下的jpg格式图片）</em>
+                                </td>
+                            </tr>
+                            <tr></tr>
+                        </table>
+                    </form>
+                    <div id="framebox" style="margin-left:20px;display:none;width:700px; height:auto;  margin-right: auto;">
+                        <iframe name="showPic" scrolling="no" id="showPic" frameborder="0" style="height:auto; width:100%;"></iframe>
+                    </div>
+                    <div id="pBox" style="width:100%; height:auto; margin-right:auto; margin-left:auto;">
+
+                    </div>
+                </div>
+                <div id="Uppicture1" style="width:80%;">
+                    <form action="/供应商后台/UploadImages" method="post" name="upload1" enctype="multipart/form-data" target="showPic">
+                        <input type="hidden" value="gtype" name="pic1" />
+                        <table width="100%" style="font-size:14px; margin-left:20px;">
+                            <tr>
+                                <td>
+                                    <input type="file" accept="image/jpeg" onchange="filechange(1)" style="width:70px;" multiple="multiple" name="file1" />请选择商品型号图片<em style="color:red;">（注：请上传2M以下的jpg格式图片）</em>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                    <div id="framebox" style="margin-left:20px;display:none;width:700px; height:auto;  margin-right: auto;">
+                        <iframe name="showPic" scrolling="no" id="showPic" frameborder="0" style="height:auto; width:100%;"></iframe>
+                    </div>
+                    <div id="pBox1" style="width:100%; height:auto; margin-right:auto; margin-left:auto;">
+
+                    </div>
+                </div>
+                <div style="width: 300px; float: right;padding:20px 0 20px 0;">
+                    <input type="button" value="上一步" class="index_online_btn" onclick="preStep(0,1)">
+                    <input type="button" value="下一步" class="index_online_btn" onclick="return nextStep(2,2)">
+                </div>
+            </li>
+
+        </ul>
+        @using (Html.BeginForm("Gys_Product_Add", "供应商后台"))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
             <ul class="fdiv">
                 <li>
                     @if (ViewData["是否中标商品"].ToString() == "1")
@@ -310,7 +319,7 @@
                         <input type="hidden" id="proliststr" name="proliststr" value="0|" />
                         <div class="product_add_textarabox">
                             <div style="float:left;padding-right:5px;">
-                                <div class="product_add_toptitle">项目编号：</div>
+                            <div class="product_add_toptitle">项目编号：</div>
                                 <input type="text" id="pronum___0" name="pronum___0" style="width: 130px;" /><span style="float: left;">*</span><span id="p_number___0" style="display: none; float: left;">请输入项目编号</span>
                             </div>
                             <div style="float:left;padding-right:5px;">
@@ -364,24 +373,9 @@
                     </div>
 
                     <div style="width: 300px; float: right;padding:20px 0 20px 0;">
-                        <input type="button" value="下一步" class="index_online_btn" onclick='nextStep(0)'>
+                        <input type="button" value="下一步" class="index_online_btn" onclick='nextStep(1,0)'>
                     </div>
                 </li>
-
-
-
-            </ul>
-            <ul>
-                <li>
-                    <div id="pBox" style="width:80%; height:auto; margin-right:auto; margin-left:auto; margin-top:50px;">
-
-                    </div>
-                    <div style="width: 300px; float: right;padding:20px 0 20px 0;">
-                        <input type="button" value="上一步" class="index_online_btn" onclick="preStep(1)">
-                        <input type="button" value="下一步" class="index_online_btn" onclick="return nextStep(1)">
-                    </div>
-                </li>
-
             </ul>
             <ul style="padding:10px 0;">
                 <li>
@@ -756,15 +750,13 @@
                                     document.getElementById("pricesttrsrr").value = pricestr;
                                 }
                             }
-
                         </script>
                     </div>
                     <div style="width: 300px; float: right;padding:20px 0 20px 0;">
-                        <input type="button" value="上一步" class="index_online_btn" onclick="preStep(2)">
-                        <input type="button" value="下一步" class="index_online_btn" onclick="nextStep(2)">
+                        <input type="button" value="上一步" class="index_online_btn" onclick="preStep(1,0)">
+                        <input type="button" value="下一步" class="index_online_btn" onclick="nextStep(3,3)">
                     </div>
                 </li>
-
             </ul>
             <ul>
                 <li>
@@ -778,7 +770,7 @@
                         </div>
 
                         <div style="width: 300px; float: left">
-                            <input type="button" value="上一步" class="index_online_btn" onclick="preStep(3)">
+                            <input type="button" value="上一步" class="index_online_btn" onclick="preStep(2,2)">
                             <input type="submit" name="submitcontent" class="index_online_btn" value="完成" onclick="return getatt();" @*onclick="getpropertystr();"*@ />
                             @*<input type="button" value="完成" class="index_online_btn" onclick="">*@
                             <br />
@@ -787,12 +779,22 @@
                     </div>
                 </li>
             </ul>
+            <input id="picture" type="hidden" name="pro_imgstr" value="" />
+            <input id="picture1" type="hidden" name="pro_typeimgstr" value="" />
+        }
         </div>
-        <input id="picture" type="hidden" name="pro_imgstr" value="" style="width:500px; height:100px;" />
     </div>
+
     <script type="text/javascript">
-        function filechange() {
+        function filechange(number) {
+            if (number==0)
+            {
             document.forms["upload"].submit();
+            }
+            else
+            {
+                document.forms["upload1"].submit();
+            }
             $("#product_tabmenu_content").css({ "height": "auto" });
             $("#f").show();
             $("#f1").show();
@@ -827,28 +829,15 @@
             var tablecontent = document.getElementById("pricelist");
             setTableInnerHTML(tablecontent, retstr);
         }
-        function change_tbl(obj) {
-            var tabs = obj.parentNode.getElementsByTagName("li");
-            //var tabs = document.getElementById("tab").getElementsByTagName("li");
-            var divs = document.getElementById("product_tabmenu_content").getElementsByTagName("ul");
-            for (var i = 0; i < tabs.length; i++) {
-                if (tabs[i] == obj) {
-                    tabs[i].className = "cli";
-                    divs[i].className = "fdiv";
-                }
-                else {
-                    tabs[i].className = "";
-                    divs[i].className = "";
-                }
-            }
-            if (obj.id == "1") {
-                $("#Uppicture").css({ "display": "inline", "height": "20px" });
-                $("#product_tabmenu_content").css({ "height": "250px" });
-            }
-            else {
-                $("#Uppicture").css({ "display": "none", "height": "20px" });
-                $("#product_tabmenu_content").css({ "height": "auto" });
-            }
+        function change_tbl(obj,num) {
+            $("div#listdiv ul li").each(function () {
+                $(this).removeClass("cli");
+            });
+            $(obj).attr("class", "cli");
+            $("div#product_tabmenu_content ul").each(function () {
+                $(this).hide();
+            });
+            $("div#product_tabmenu_content ul:eq(" + num + ")").show();
         }
         $(function () {
             $('input[name="销售信息.价格"]').blur(function () {
@@ -881,8 +870,16 @@
                 for (var i = 0; i < row; i++) {
                     str += "<tr>";
                     for (var j = 0; j < 4; j++) {
-                        str += "<td><a href='###' title='删除' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; background-color:red; width:15px; height:15px; line-height:15px; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />" +
+                        if (th == "#picture")
+                        {
+                            str += "<td><a href='###' title='删除' onclick='delPic(this,0)' style='color:white; position:absolute; margin-left:85px; display:block; background-color:red; width:15px; height:15px; line-height:15px; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />" +
                             "</td>"
+                        }
+                        else
+                        {
+                            str += "<td><a href='###' title='删除' onclick='delPic(this,1)' style='color:white; position:absolute; margin-left:85px; display:block; background-color:red; width:15px; height:15px; line-height:15px; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />" +
+                            "</td>"
+                        }
                         count++;
                     }
                     str += "</tr>";
@@ -891,18 +888,32 @@
             if (maintain > 0) {
                 str += "<tr>";
                 for (var m = 0; m < maintain; m++) {
-                    str += "<td><a href='###' title='删除' onclick='delPic(this)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />"
+                    if (th == "#picture")
+                    {
+                        str += "<td><a href='###' title='删除' onclick='delPic(this,0)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />"
                         + "</td>";
+                    }
+                    else
+                    {
+                        str += "<td><a href='###' title='删除' onclick='delPic(this,1)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />"
+                        + "</td>";
+                    }
                     count++;
                 }
                 str += "</tr>";
             }
             str += "</table>";
+            if (th == "#picture1")
+            {
+                document.getElementById("pBox1").innerHTML = str;
+            }
+            else
+            {
             document.getElementById("pBox").innerHTML = str;
-            $("#f").hide();
+            }
             $("#f1").hide();
         }
-        function delPic(th) {
+        function delPic(th,number) {
             if(confirm("确定删除吗？"))
             {
                 var path = $(th).attr("lang");
@@ -912,6 +923,8 @@
                             $(th).parent().remove();
                         }
                     });
+                if(number==0)
+                {
                 var newpath = document.getElementById("picture").value.split('|');
                 var str = "";
                 for (j = 0; j < newpath.length - 1; j++) {
@@ -921,6 +934,19 @@
                 }
                 document.getElementById("picture").value = str;
                 setPic("#picture");
+            }
+                else
+                {
+                    var newpath = document.getElementById("picture1").value.split('|');
+                    var str = "";
+                    for (j = 0; j < newpath.length - 1; j++) {
+                        if (path != newpath[j]) {
+                            str += newpath[j] + "|";
+                        }
+                    }
+                    document.getElementById("picture1").value = str;
+                    setPic("#picture1");
+                }
             }
         }
         function hidebox() {
@@ -946,4 +972,3 @@ else
             $("#新增商品信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
         });
     </script>
-}

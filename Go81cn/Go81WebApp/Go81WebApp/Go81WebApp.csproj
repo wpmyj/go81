@@ -429,6 +429,7 @@
     <Content Include="Images\car1.png" />
     <Content Include="Images\cglc.png" />
     <Content Include="Images\contact_way.jpg" />
+    <Content Include="Images\countor.png" />
     <Content Include="Images\cover1.jpg" />
     <Content Include="Images\cover10.jpg" />
     <Content Include="Images\cover2.jpg" />
@@ -600,6 +601,7 @@
     <Content Include="Images\purchaseInfo.png" />
     <Content Include="Images\purchaseOnline.JPG" />
     <Content Include="Images\pushmsg.png" />
+    <Content Include="Images\purchaseCar1.png" />
     <Content Include="Images\p_1.png" />
     <Content Include="Images\p_2.png" />
     <Content Include="Images\qrcode.png" />
@@ -2144,10 +2146,23 @@
     <Content Include="Views\默认主题\后台\专家后台\NoticeAboutApply.cshtml" />
     <Content Include="Views\默认主题\门户\供应商陈列\GysList_Inlib.cshtml" />
     <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_GysList_Inlib.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\PurchaseInfo.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\_BackLayout.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_BackHead.cshtml" />
     <Content Include="Views\默认主题\门户\商品陈列\ProductAllList.cshtml" />
     <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_ProductByPage.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\LoginStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AdvertiseStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GoodStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\GysStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AdStatistic.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_LoginStastic.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_StatisticsLoginSearch.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AdvertiseClickSearch.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AdvertiseStastic.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\OperationInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_UnitOrAdStatics.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AdStatistic_ByType.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

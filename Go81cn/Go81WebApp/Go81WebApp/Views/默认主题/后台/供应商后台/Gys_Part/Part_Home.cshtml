@@ -50,10 +50,10 @@
 <div style=" margin-top:20px; " id="tb1">
     <div style="font-size:14px; overflow:hidden;">
         <ol>
-            @if (ViewData["U_message"] != null)
+            @*@if (ViewData["U_message"] != null)
             {
                 <li style="color:red;">@Html.Raw(ViewData["U_message"])</li>
-            }
+            }*@
             @if (int.Parse(ViewData["msg_count"].ToString()) == 0)
             {
                 <li style="color:red;">您有@(ViewData["msg_count"])条未读站内消息</li>

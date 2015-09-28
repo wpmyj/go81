@@ -64,6 +64,7 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
         public class _学历信息
         {
             public string 毕业院校 { get; set; }
+            public string 毕业证书扫描件 { get; set; }
             [Required(ErrorMessage = "请填写专业技术职称！")]
             public 专业技术职称 专业技术职称 { get; set; }
             [Required(ErrorMessage = "请填写时间！")]

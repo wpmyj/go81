@@ -227,7 +227,7 @@ namespace Go81WebApp.Controllers.基本功能
                 "专家申请表", new Dictionary<string, object>
                 {
                     {"打印须知","专家后台/NoticeAboutApply"},
-                    //{"在线申请","专家后台/Notice"},
+                    {"在线申请","专家后台/Notice"},
                     {"在线打印","专家后台/Print"},
                     {"下载表格","专家后台/Download"}
                   }
@@ -749,6 +749,14 @@ namespace Go81WebApp.Controllers.基本功能
                     {"新增消息", new Tuple<权限[], bool>(new[]{权限.新增消息}, false)}, 
                     {"已收消息", new Tuple<权限[], bool>(new[]{权限.已收消息}, false)}, 
                     {"已发消息", new Tuple<权限[], bool>(new[]{权限.已发消息}, false)}, 
+
+                    {"专家统计", new Tuple<权限[], bool>(new[]{权限.已发消息}, false)}, 
+                    {"登陆统计", new Tuple<权限[], bool>(new[]{权限.已发消息}, false)}, 
+                    {"广告点击统计", new Tuple<权限[], bool>(new[]{权限.已发消息}, false)}, 
+                    {"商品统计", new Tuple<权限[], bool>(new[]{权限.已发消息}, false)}, 
+                    {"供应商统计", new Tuple<权限[], bool>(new[]{权限.已发消息}, false)}, 
+                    {"公告统计", new Tuple<权限[], bool>(new[]{权限.已发消息}, false)}, 
+                    {"总体统计", new Tuple<权限[], bool>(new[]{权限.已发消息}, false)}, 
                 };
                 #endregion
                 HttpContext.批量权限验证(ref p);
@@ -935,6 +943,18 @@ namespace Go81WebApp.Controllers.基本功能
                 //        {"添加培训资料", "单位用户后台/TrainingAdd"},
                 //        {"培训资料列表", "单位用户后台/TrainingList"},
                 //    });
+#if DEBUG 
+                m.Add("统计管理", new Dictionary<string, object>
+                {
+                    {"专家统计", "单位用户后台/ExpertStatistic"},
+                    {"登陆统计", "单位用户后台/LoginStatistic"}, 
+                    {"广告点击统计", "单位用户后台/AdvertiseStatistic"}, 
+                    {"商品统计","单位用户后台/GoodStatistic"}, 
+                    {"供应商统计", "单位用户后台/GysStatistic"}, 
+                    {"公告统计", "单位用户后台/AdStatistic"},
+                    {"总体统计", "单位用户后台/OperationInfo"},
+                });
+#endif
                 var l = m.Keys.ToArray();
                 foreach (var sm in l)
                 {

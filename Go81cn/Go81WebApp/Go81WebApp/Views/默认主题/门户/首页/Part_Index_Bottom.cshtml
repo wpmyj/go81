@@ -753,7 +753,7 @@
         var exist = $(this).attr("exist");
         if (exist != "false") {
             timer = setTimeout(function () {
-                $this.next().show().next().show();
+                $this.next().fadeIn().next().fadeIn();
             }, 100);
         }
         else {

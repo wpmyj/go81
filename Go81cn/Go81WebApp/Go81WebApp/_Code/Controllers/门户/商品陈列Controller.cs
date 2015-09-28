@@ -356,7 +356,119 @@ namespace Go81WebApp.Controllers.门户
                 return Content("<script>alert('暂无搜索结果，将前往商品库进行查找！');window.location='/商品陈列/';</script>");
             }
         }
-
+        public int AddGoodInfo()
+        {
+            try
+            {
+                string count=Request.QueryString["num"];
+                string id = Request.QueryString["id"];
+                if (Session["Ginfo"]!=null)
+                {
+                    string ginfo = Session["Ginfo"].ToString();
+                    if(!ginfo.Contains(id))
+                    {
+                        Session["Ginfo"] += id + "," + count + "|";
+                    }
+                }
+                else
+                {
+                    Session["Ginfo"] += id + "," + count + "|";
+                }
+                return 1;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+        public int DelPurchaseInfo()
+        {
+            try
+            {
+                string str = "";
+                if (Session["Ginfo"]!=null)
+                {
+                    string id = Request.QueryString["id"];
+                    string ginfo = Session["Ginfo"].ToString();
+                    string[] infos = ginfo.Split('|');
+                    for (int i = 0; i < infos.Length-1;i++ )
+                    {
+                        if(!infos[i].Contains(id))
+                        {
+                            str += infos[i] + "|";
+                        }
+                    }
+                    Session["Ginfo"] = str;
+                }
+                return 1;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+        public long AddPurchaseInfo()
+        {
+            long id=HttpContext.检查登录();
+            if(id!=-1)
+            {
+                购物车 shopCar = new 购物车();
+                List<购物车.选购商品> good=new List<购物车.选购商品>();
+                string str = Request.QueryString["info"];
+                string[] info = str.Split('|');
+                shopCar.所属用户.用户ID = id;
+                for (int i = 0; i < info.Length - 1;i++ )
+                {
+                    购物车.选购商品 g = new 购物车.选购商品();
+                    g.商品.商品ID = long.Parse(info[i].Split(',')[1]);
+                    g.数量 = int.Parse(info[i].Split(',')[0]);
+                    good.Add(g);
+                }
+                shopCar.选购商品列表 = good;
+                购物车管理.添加购物车(shopCar);
+                Session["Ginfo"] = "";
+                return id;
+            }
+            else
+            {
+                return id;
+            }
+        }
+        public ActionResult Login()
+        {
+            string temp_session = Session["Ginfo"].ToString();
+            string uname = Request.Form["uname"];
+            string upwd = Request.Form["upwd"];
+            var u=this.HttpContext.登录(uname,upwd,false);
+            if(u!=null)
+            {
+                Session["Ginfo"] = temp_session;
+                return Redirect("/商品陈列/PurchaseInfo");
+            }
+            else
+            {
+                Session["Ginfo"] = temp_session;
+                return Redirect("/登录/Login");
+            }
+        }
+        public  ActionResult PurchaseInfo()
+        {
+            Dictionary<long,int> ninfo=new Dictionary<long,int>();
+            if (Session["Ginfo"]!=null)
+            {
+                string ginfo = Session["Ginfo"].ToString();
+                string[] info = ginfo.Split('|');
+                for (int i = 0; i < info.Length - 1; i++)
+                {
+                    ninfo.Add(long.Parse(info[i].Split(',')[0]), int.Parse(info[i].Split(',')[1]));
+                }
+                return View(ninfo);
+            }
+            else
+            {
+                return View(ninfo);
+            }
+        }
         /// <summary>
         /// 输入商品关键词，并选择筛选条件后的方法，page=1
         /// </summary>

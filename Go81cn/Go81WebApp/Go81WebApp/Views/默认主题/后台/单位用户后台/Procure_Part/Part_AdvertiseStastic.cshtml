@@ -1,0 +1,148 @@
+﻿@using Go81WebApp.Models.数据模型.统计数据模型
+
+<div class="title-base-out">
+    <div class="title-base-middle">
+        <div class="title-base-inner">广告点击统计</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div style="width: 800px; height: auto; padding: 20px; margin: 0 auto; padding-bottom:0;">
+            <div style="width: 750px; height: 35px; ">
+                <div style="float: left; width: 100px; text-align: left; line-height: 30px; text-align: right; color: #666;">筛选条件：</div>
+                <div style="float: left;">
+                    <select id="position" name="position" style="width:150px; height:30px;" onchange="getloginstatistic();">
+                        <option value="" selected="selected">不限位置</option>
+                        <option value="A1">A1</option>
+                        <option value="A2">A2</option>
+                        <option value="A3">A3</option>
+                        <option value="B1-1">B1-1</option>
+                        <option value="B1-2">B1-2</option>
+                        <option value="B2">B2</option>
+                        <option value="B3">B3</option>
+                        <option value="C1">C1</option>
+                        <option value="C2">C2</option>
+                    </select>
+                </div>
+
+                @*<div style="float: left; text-align: left; line-height: 30px; text-align: right; color: #666;">行业：</div>*@
+                <div style="float: left;">
+                    <select id="type" name="type" style="width:150px; height:30px; margin: 0 5px 0 5px;" onchange="getloginstatistic();">
+                        <option value="">不限广告类型</option>
+                        <option value="商品广告">商品广告</option>
+                        <option value="供应商广告">供应商广告</option>
+                    </select>
+
+                </div>
+                <div style="float: left;">
+                    <select id="nettype" name="nettype" style="width:150px; height:30px; margin-right:5px;" onchange="getloginstatistic();">
+                        <option value="" selected="selected">不限网络</option>
+                        <option value="外网">外网</option>
+                        <option value="内网">内网</option>
+                    </select>
+                </div>
+                <div style="float: left;">
+                    <select id="time" name="time" style="width:150px; height:30px;" onchange="getloginstatistic();">
+                        <option value="">不限时间</option>
+                        <option value="1" selected="selected">今天</option>
+                        <option value="7">近一周</option>
+                        <option value="30">近一月</option>
+                        <option value="90">近三月</option>
+                        <option value="180">近半年</option>
+                        <option value="365">近一年</option>
+                    </select>
+                </div>
+            </div>
+            <hr />
+        </div>
+        <div class="gys_znxx_content" id="textcontent">
+            共@(ViewData["统计总数"].ToString())条数据
+            <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <th width="8%">广告位置</th>
+                    <th width="21%">广告所属供应商</th>
+                    <th width="15%">点击用户</th>
+                    <th width="8%">广告类型</th>
+                    <th width="8%">商品链接</th>
+                    <th width="13%">点击IP地址</th>
+                    <th width="17%">点击时间</th>
+                    <th width="10%">访问网络</th>
+                </tr>
+                @foreach (var item in (IEnumerable<广告点击统计>)ViewData["广告点击统计"])
+                {
+                    <tr>
+                        <td>@item.广告位置</td>
+                        @if (item.广告所属供应商.用户数据 != null)
+                        {
+                            <td>@item.广告所属供应商.用户数据.企业基本信息.企业名称</td>
+                        }
+                        else
+                        {
+                            <td>@item.广告所属供应商.用户ID</td>
+                        }
+
+                        @if (item.游客点击)
+                        {
+                            <td>游客</td>
+                        }
+                        else
+                        {
+                            <td>@item.点击用户.用户ID</td>
+                        }
+                        <td>@item.广告类型 </td>
+                        <td>@item.商品链接.商品ID </td>
+                        <td>@item.点击IP</td>
+                        <td>@item.点击时间.ToString()</td>
+                        @if (item.内网访问)
+                        {
+                            <td>内网</td>
+                        }
+                        else
+                        {
+                            <td>外网</td>
+                        }
+                    </tr>
+                }
+            </table>
+            <div class="gys_znxx_content_detailbox">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == num) {
+                $(this).addClass("currentPage");
+            }
+            if (num == j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (num == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+        $("#广告点击统计").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#广告点击统计").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function getloginstatistic() {
+        var position = $("#position").val();
+        var type = $("#type").val();
+        var time = $("#time").val();
+        var nettype = $("#nettype").val();
+        var parm = "position=" + position + "&type=" + type + "&time=" + time + "&nettype=" + nettype;
+        $.ajax({
+            cache: false,
+            async: true,
+            url: "/单位用户后台/Part_AdvertiseClickSearch",
+            data: parm,
+            beforeSend:function(){
+                $("#textcontent").html("<div style='position:absolute; z-index:100; width:800px; height:200px; text-align:center; line-height:300px;'><img src='../Images/ajax-loader.gif' width='50px' height='50px' /></div>");                
+            },
+            success: function (data) {
+                $("#textcontent").html(data);
+            }
+        });
+    }
+</script>

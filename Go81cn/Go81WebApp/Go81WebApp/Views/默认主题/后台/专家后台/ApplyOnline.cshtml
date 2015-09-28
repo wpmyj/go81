@@ -83,9 +83,9 @@
                 <div style="margin:0; width:250px; float:left; font-size:16px; font-weight:bold; line-height:28px;">请选择评审专家可评标物质类别</div>
                 <div style=" width:340px; float:left;">
                     关键字：<input id="dfzyml" class="checkboxclass2" type="text" name="（地方政府专家库评审专业目录）" onkeyup="do_kpbwzlbserch($(this).val());" style="line-height: 21px;" />
-                    <input id="adddfzy" type="button" class="btn-pri" style="width:95px;" value="未找到？添加" />
+                    @*<input id="adddfzy" type="button" class="btn-pri" style="width:95px;" value="未找到？添加" />*@
                 </div>
-                <div style="clear:both;font-size:14px;">注：所添加的分类只能添加到 <u>地方政府专家库评审专业目录</u> 分类下</div>
+                @*<div style="clear:both;font-size:14px;">注：所添加的分类只能添加到 <u>地方政府专家库评审专业目录</u> 分类下</div>*@
             </div>
             <div class="modal-body" id="othergysdiv">
                 <div style="width: 390px; height:350px; overflow-y: scroll; float: left;" id="selectconditionbox">
@@ -384,7 +384,7 @@
                         {
                             Html.AntiForgeryToken();
                         <!--第一步-->
-                        <div class="expert_identity">
+                        <div index="0" class="expert_identity">
                             <table width="100%">
                                 <tr>
                                     <td><span style="font-size: 16px;">基本信息</span></td>
@@ -393,48 +393,55 @@
                                     @Html.HiddenFor(model => model.Id)
                                     <td class="lab">姓名：</td>
                                     <td valign="top">
-                                        @Html.EditorFor(model => model.身份信息.姓名)@*<span style="color:red">*</span>*@
+                                        @Html.EditorFor(model => model.身份信息.姓名)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.身份信息.姓名)
                                     </td>
                                     <td class="lab">性别：</td>
                                     <td valign="top">
-                                        @Html.DropDownListFor(model => model.身份信息.性别, new SelectList(Enum.GetValues(typeof(性别))))
+                                        @Html.DropDownListFor(model => model.身份信息.性别, new SelectList(Enum.GetValues(typeof(性别))))<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.身份信息.性别)
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="lab">出生年月：</td>
                                     <td valign="top">
-                                        @Html.TextBoxFor(model => model.身份信息.出生年月, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })@*<span style="color:red">*</span>*@
+                                        @Html.TextBoxFor(model => model.身份信息.出生年月, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.身份信息.出生年月)
                                     </td>
                                     <td class="lab">政治面貌：</td>
                                     <td valign="top">
-                                        @Html.DropDownListFor(model => model.身份信息.政治面貌, new SelectList(Enum.GetValues(typeof(政治面貌))))@*<span style="color:red">*</span>*@
+                                        @Html.DropDownListFor(model => model.身份信息.政治面貌, new SelectList(Enum.GetValues(typeof(政治面貌))))<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.身份信息.政治面貌)
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="lab">固定电话：</td>
                                     <td valign="top">
-                                        @Html.TextBoxFor(model => model.联系方式.固定电话)@*<span style="color:red">*</span>*@
+                                        @Html.TextBoxFor(model => model.联系方式.固定电话)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.联系方式.固定电话)
                                     </td>
                                     <td class="lab">传真电话：</td>
                                     <td valign="top">
-                                        @Html.TextBoxFor(model => model.联系方式.传真)@*<span style="color:red">*</span>*@
+                                        @Html.TextBoxFor(model => model.联系方式.传真)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.联系方式.传真)
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="lab">移动电话：</td>
                                     <td valign="top">
-                                        @Html.TextBoxFor(model => model.联系方式.手机)@*<span style="color:red">*</span>*@
+                                        @Html.TextBoxFor(model => model.联系方式.手机)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.联系方式.手机)
                                     </td>
+                                    <td class="lab">邮箱号：</td>
+                                    <td valign="top">
+                                        @Html.EditorFor(m => m.联系方式.电子邮件)<span style="color:red">*</span>
+                                        @Html.ValidationMessageFor(m => m.联系方式.电子邮件)
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="lab">初审单位：</td>
                                     <td valign="top">
-                                        @Html.EnumDropDownListFor(m => m.所属管理单位)@*<span style="color:red">*</span>*@
+                                        @Html.EnumDropDownListFor(m => m.所属管理单位)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(m => m.所属管理单位)
                                     </td>
                                 </tr>
@@ -444,7 +451,7 @@
                                 <tr>
                                     <td class="lab">民族：</td>
                                     <td valign="top">
-                                        @Html.EnumDropDownListFor(model => model.身份信息.民族)@*<span style="color:red">*</span>*@
+                                        @Html.EnumDropDownListFor(model => model.身份信息.民族)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.身份信息.民族)
                                     </td>
                                     <td class="lab">邮编：</td>
@@ -456,7 +463,7 @@
                                 <tr>
                                     <td class="lab">证件类型：</td>
                                     <td valign="top">
-                                        @Html.EnumDropDownListFor(model => model.身份信息.证件类型, new { @id = "paperstype" })<span id="ptype" style="color:red"></span>
+                                        @Html.EnumDropDownListFor(model => model.身份信息.证件类型, new { @id = "paperstype" })<span id="ptype" style="color:red"></span><span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.身份信息.证件类型)
                                     </td>
                                     @if (Model.身份信息.证件类型 == 证件类型.军官证)
@@ -472,14 +479,14 @@
                                         <td class="lab"  id="papersnumber">证件号：</td>
                                     }
                                     <td valign="top">
-                                        @Html.EditorFor(model => model.身份信息.证件号)<span id="pnum" style="color:red"></span>
+                                        @Html.EditorFor(model => model.身份信息.证件号)<span style="color:red">*</span><span id="pnum" style="color:red"></span>
                                         @Html.ValidationMessageFor(model => model.身份信息.证件号)
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="lab" >评审专家类型：</td>
                                     <td valign="top">
-                                        @Html.DropDownListFor(model => model.身份信息.专家类型, new SelectList(Enum.GetValues(typeof(专家类型))))@*<span style="color:red">*</span>*@
+                                        @Html.DropDownListFor(model => model.身份信息.专家类型, new SelectList(Enum.GetValues(typeof(专家类型))))<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.身份信息.专家类型)
                                     </td>
                                     <td class="lab">评审专家类别：</td>
@@ -502,14 +509,14 @@
                                     </td>
                                     <td class="lab" >毕业院校：</td>
                                     <td valign="top">
-                                        @Html.EditorFor(model => model.学历信息.毕业院校)@*<span style="color:red">*</span>*@
+                                        @Html.EditorFor(model => model.学历信息.毕业院校)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.学历信息.毕业院校)
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="lab" >专业技术职称：</td>
                                     <td valign="top">
-                                        @Html.DropDownListFor(model => model.学历信息.专业技术职称, new SelectList(Enum.GetValues(typeof(专业技术职称))))@*<span style="color:red">*</span>*@
+                                        @Html.DropDownListFor(model => model.学历信息.专业技术职称, new SelectList(Enum.GetValues(typeof(专业技术职称))))<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.学历信息.专业技术职称)
                                     </td>
                                     <td class="lab">取得现技术职称时间：</td>
@@ -521,12 +528,12 @@
                                 <tr>
                                     <td class="lab">最高学位：</td>
                                     <td valign="top">
-                                        @Html.EnumDropDownListFor(model => model.学历信息.最高学位)@*<span style="color:red">*</span>*@
+                                        @Html.EnumDropDownListFor(model => model.学历信息.最高学位)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.学历信息.最高学位)
                                     </td>
                                     <td class="lab">最高学历：</td>
                                     <td valign="top">
-                                        @Html.EnumDropDownListFor(model => model.学历信息.最高学历)@*<span style="color:red">*</span>*@
+                                        @Html.EnumDropDownListFor(model => model.学历信息.最高学历)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.学历信息.最高学历)
                                     </td>
                                 </tr>
@@ -538,19 +545,19 @@
                                     </td>
                                     <td align="right">工作单位：</td>
                                     <td>
-                                        @Html.EditorFor(model => model.工作经历信息.工作单位)@*<span style="color:red">*</span>*@
+                                        @Html.EditorFor(model => model.工作经历信息.工作单位)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.工作经历信息.工作单位)
                                     </td>
                                 </tr>
                                 <tr>
                                     <td align="right">从事专业起始年度：</td>
                                     <td>
-                                        @Html.TextBoxFor(model => model.工作经历信息.从事专业起始年度) @*<span style="color:red">*</span>*@
+                                        @Html.TextBoxFor(model => model.工作经历信息.从事专业起始年度)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.工作经历信息.从事专业起始年度)
                                     </td>
                                     <td style="width:10%;" align="right">从事专业：</td>
                                     <td style="width:35%;">
-                                        @Html.EditorFor(model => model.工作经历信息.从事专业) @*<span style="color:red">*</span>*@
+                                        @Html.EditorFor(model => model.工作经历信息.从事专业)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.工作经历信息.从事专业)
                                     </td>
                                 </tr>
@@ -569,7 +576,7 @@
                                     </td>
                                     <td align="right">现任职务：</td>
                                     <td>
-                                        @Html.EditorFor(model => model.工作经历信息.现任职务)@*<span style="color:red">*</span>*@
+                                        @Html.EditorFor(model => model.工作经历信息.现任职务)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.工作经历信息.现任职务)
                                     </td>
                                 </tr>
@@ -583,7 +590,7 @@
                                 <tr>
                                     <td class="lab" valign="top">本人参加过何种项目招标及评标：</td>
                                     <td colspan="3">
-                                        @Html.TextAreaFor(model => model.工作经历信息.本人参加过何种项目招标及评标)@*<span style="color:red">*</span>*@
+                                        @Html.TextAreaFor(model => model.工作经历信息.本人参加过何种项目招标及评标)<span style="color:red">*</span>
                                         @Html.ValidationMessageFor(model => model.工作经历信息.本人参加过何种项目招标及评标)
                                     </td>
                                 </tr>
@@ -611,9 +618,9 @@
                             </table>
                         </div>
                         <!--第二步-->
-                        <div class="expert_identity" style="display:none;">
+                        <div index="0" class="expert_identity" style="display:none;">
                             <table width="100%" style="margin-left:10px;">
-                               
+
                                 <tr>
                                     <td colspan="4" align="center"><h3>单位地址</h3></td>
                                 </tr>
@@ -622,10 +629,10 @@
                                         <table class="tabletable" style="border:1px solid gray;margin-left:auto; margin-right:auto;width: 95%">
                                             <tr>
                                                 @*<td align="right" valign="top">地址类型：</td>
-                                                <td class="lad" valign="top">
-                                                    @Html.EnumDropDownListFor(model => model.工作经历信息.单位地址.地址类型)<span style="color:red">*</span>
-                                                    @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.地址类型)
-                                                </td>*@
+                                                    <td class="lad" valign="top">
+                                                        @Html.EnumDropDownListFor(model => model.工作经历信息.单位地址.地址类型)<span style="color:red">*</span>
+                                                        @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.地址类型)
+                                                    </td>*@
                                                 <td align="right" valign="top">联系人：</td>
                                                 <td class="lad" valign="top">
                                                     @Html.EditorFor(model => model.工作经历信息.单位地址.联系人)@*<span style="color:red">*</span>*@
@@ -642,9 +649,9 @@
                                                 <td class="lad" valign="top">
                                                     @Html.EditorFor(model => model.工作经历信息.单位地址.固定电话, new { id = "modelPhone" })
                                                     @*<input type="text" id="phone_area" placeholder="区号" style="width:50px;" />
-                                                    -
-                                                    <input type="text" id="phone_num" placeholder="电话号码" style="width:111px;" />*@
-                                                    <span style="color:red">*</span>
+                                                        -
+                                                        <input type="text" id="phone_num" placeholder="电话号码" style="width:111px;" />*@
+                                                    @*<span style="color:red">*</span>*@
                                                     @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.固定电话)
                                                     <span id="moelphone_error" style="color:red; display:none">请填写固定电话！</span>
                                                 </td>
@@ -652,44 +659,44 @@
                                                 <td>@Html.TextBoxFor(m => m.工作经历信息.单位地址.传真电话)@*<span style="color:red">*</span>*@</td>
                                             </tr>
                                             <tr>
-                                                
+
                                                 @*<td align="right" valign="top">电子邮件：</td>
-                                                <td class="lad" valign="top">
-                                                    @Html.EditorFor(model => model.工作经历信息.单位地址.电子邮件)<span style="color:red">*</span>
-                                                    @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.电子邮件)
-                                                </td>*@
+                                                    <td class="lad" valign="top">
+                                                        @Html.EditorFor(model => model.工作经历信息.单位地址.电子邮件)<span style="color:red">*</span>
+                                                        @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.电子邮件)
+                                                    </td>*@
                                             </tr>
                                             <tr>
                                                 <td align="right" valign="top">省份：</td>
                                                 <td class="lad" valign="top">
-                                                    @Html.EditorFor(model => model.工作经历信息.单位地址.省份)@*<span style="color:red">*</span>*@
+                                                    @Html.EditorFor(model => model.工作经历信息.单位地址.省份)<span style="color:red">*</span>
                                                     @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.省份)
                                                 </td>
                                                 <td align="right" valign="top">城市：</td>
                                                 <td class="lad" valign="top">
-                                                    @Html.EditorFor(model => model.工作经历信息.单位地址.城市)@*<span style="color:red">*</span>*@
+                                                    @Html.EditorFor(model => model.工作经历信息.单位地址.城市)<span style="color:red">*</span>
                                                     @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.城市)
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td align="right" valign="top">区县：</td>
                                                 <td class="lad" valign="top">
-                                                    @Html.EditorFor(model => model.工作经历信息.单位地址.区县)@*<span style="color:red">*</span>*@
+                                                    @Html.EditorFor(model => model.工作经历信息.单位地址.区县)<span style="color:red">*</span>
                                                     @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.区县)
                                                 </td>
                                                 <td align="right" valign="top">街道：</td>
                                                 <td class="lad" valign="top">
-                                                    @Html.EditorFor(model => model.工作经历信息.单位地址.街道)@*<span style="color:red">*</span>*@
+                                                    @Html.EditorFor(model => model.工作经历信息.单位地址.街道)<span style="color:red">*</span>
                                                     @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.街道)
                                                 </td>
                                             </tr>
                                             @*<tr>
-                                                <td align="right" valign="top">邮政编码：</td>
-                                                <td class="lad" valign="top" colspan="3">
-                                                    @Html.EditorFor(model => model.工作经历信息.单位地址.邮政编码)<span style="color:red">*</span>
-                                                    @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.邮政编码)
-                                                </td>
-                                            </tr>*@
+                                                    <td align="right" valign="top">邮政编码：</td>
+                                                    <td class="lad" valign="top" colspan="3">
+                                                        @Html.EditorFor(model => model.工作经历信息.单位地址.邮政编码)<span style="color:red">*</span>
+                                                        @Html.ValidationMessageFor(model => model.工作经历信息.单位地址.邮政编码)
+                                                    </td>
+                                                </tr>*@
                                         </table>
                                     </td>
                                 </tr>
@@ -709,18 +716,18 @@
                                                 }
                                             </p>
                                         }
-                                        <a class="kpbedit" href="javascript:;" >新增</a>
+                                        <a class="kpbedit" href="javascript:;">新增</a>
                                     </td>
                                 </tr>
 
-                                
+
 
                                 <tr>
                                     <td colspan="4">
                                         <table cellspacing="1" style="background-color:gray;" id="showtable" width="100%"></table>
                                     </td>
                                 </tr>
-                                
+
                                 <tr>
                                     <td colspan="4" style="text-align: center">
                                         <input class="front_login_rightbox_button" style="width: 120px;" type="button" onclick="showContent(0)" value="上一步" />
@@ -729,11 +736,18 @@
                                 </tr>
                             </table>
                         </div>
+                            <!--存储第三步上传的图片-->
+                            @*<input type="hidden" name="zjzgz" />
+                            <input type="hidden" name="zczs" />
+                            <input type="hidden" name="zjsmj" />
+                            <input type="hidden" name="txz" />
+                            <input type="hidden" name="byzs" />
+                            <input type="hidden" name="zgxwz" />*@
                         }
                         <!--第三步-->
-                        <div class="expert_identity" style="display:none;">
-                            <input type="hidden" id="databack"/>
-                            <input type="hidden" id="picture" name="pro_imgstr"/>
+                        <div index="0" class="expert_identity" style="display:none;">
+                            <input type="hidden" id="databack" />
+                            <input type="hidden" id="picture" name="pro_imgstr" />
                             <table width="100%">
                                 <!--专家资格证书-->
                                 <tr>
@@ -741,7 +755,7 @@
                                     <td>
                                         <form action="/专家后台/SavePicture" method="post" name="upload" enctype="multipart/form-data" target="showPic">
                                             <input type="hidden" value="zjzgz" name="pic1" />
-                                            <input type="file" accept="image/jpeg" onchange="fileChange(this)" multiple="multiple" name="file1" style="width:72px;" />
+                                            <input type="file" accept="image/jpeg" onchange="fileChange(this)" multiple="multiple" name="file1" style="width:69px;" />
                                             <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片，资格证可上传多张。</em>
                                         </form>
 
@@ -756,40 +770,40 @@
                                             {
                                                 if (!string.IsNullOrWhiteSpace(item))
                                                 {
-                                                    <li style="float: left">
-                                                        <a style="position: absolute; display: block; width: 15px; height: 15px; text-align: center; line-height: 15px; background-color: red; color: white; cursor: pointer; text-decoration: none; margin-left: 65px;" type="zjzgz" onclick=" delPic(this) " lang="@item">×</a>
-                                                        <a href="@item" target="_blank"> <img alt="@item" src="@item" style="width: 80px;height: 50px;" /></a>
-                                                    </li>
+                                            <li style="float: left">
+                                                <a style="position: absolute; display: block; width: 15px; height: 15px; text-align: center; line-height: 15px; background-color: red; color: white; cursor: pointer; text-decoration: none; margin-left: 65px;" type="zjzgz" onclick=" delPic(this) " lang="@item">×</a>
+                                                <a href="@item" target="_blank"> <img alt="@item" src="@item" style="width: 80px;height: 50px;" /></a>
+                                            </li>
                                                 }
                                             }
                                         </ul>
-                                            <iframe name="showPic" id="showPic" frameborder="0" height="0" width="100%"></iframe>
-                                            </td>
-                                        </tr>
+                                        <iframe name="showPic" id="showPic" frameborder="0" height="0" width="100%"></iframe>
+                                    </td>
+                                </tr>
 
                                 <!--证件扫描件-->
                                 <tr>
                                     @if (Model.身份信息.证件类型 == 证件类型.军官证)
                                     {
-                                        <td class="lab">军官证电子扫描件：</td>
+                                    <td class="lab">军官证电子扫描件：</td>
                                     }
                                     else if (Model.身份信息.证件类型 == 证件类型.身份证)
                                     {
-                                        <td class="lab">身份证电子扫描件：</td>
+                                    <td class="lab">身份证电子扫描件：</td>
                                     }
                                     else
                                     {
-                                        <td class="lab">证件电子扫描件：</td>
+                                    <td class="lab">证件电子扫描件：</td>
                                     }
                                     <td>
                                         <form action="/专家后台/SavePicture" method="post" name="upload" enctype="multipart/form-data" target="ZJSMJ">
                                             <input type="hidden" value="zjsmj" name="pic1" />
-                                            <input type="file" accept="image/jpeg" onchange="fileChange(this)" name="file1" style="width:72px;" />
+                                            <input type="file" accept="image/jpeg" onchange="fileChange(this)" name="file1" style="width:69px;" />
                                             <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片，该扫描件只能上传一张，若需上传正反面，请保证件正反面在一张图片上。</em>
                                         </form>
 
                                         @*@Html.TextBoxFor(model => model.身份信息.证件电子扫描件, new { @type = "file", @name = "file" })<span style="color:red">*</span>
-                                        @Html.ValidationMessageFor(model => model.身份信息.证件电子扫描件)*@
+                        @Html.ValidationMessageFor(model => model.身份信息.证件电子扫描件)*@
                                     </td>
                                 </tr>
                                 <tr>
@@ -797,10 +811,10 @@
                                         <ul name="zjsmj">
                                             @if (!string.IsNullOrWhiteSpace(Model.身份信息.证件电子扫描件))
                                             {
-                                                <li style="float:left">
-                                                    <a style="position: absolute; display: block; width: 15px; height: 15px; text-align: center; line-height: 15px; background-color: red; color: white; cursor: pointer; text-decoration: none; margin-left: 65px;" type="zjsmj" onclick=" delPic(this) " lang="@Model.身份信息.证件电子扫描件">×</a>
-                                                    <a href="@Model.身份信息.证件电子扫描件" target="_blank"> <img alt="@Model.身份信息.证件电子扫描件" src="@Model.身份信息.证件电子扫描件" style="width: 80px;height: 50px;" /></a>
-                                                </li>
+                                            <li style="float:left">
+                                                <a style="position: absolute; display: block; width: 15px; height: 15px; text-align: center; line-height: 15px; background-color: red; color: white; cursor: pointer; text-decoration: none; margin-left: 65px;" type="zjsmj" onclick=" delPic(this) " lang="@Model.身份信息.证件电子扫描件">×</a>
+                                                <a href="@Model.身份信息.证件电子扫描件" target="_blank"> <img alt="@Model.身份信息.证件电子扫描件" src="@Model.身份信息.证件电子扫描件" style="width: 80px;height: 50px;" /></a>
+                                            </li>
                                             }
                                         </ul>
                                         <iframe name="ZJSMJ" id="ZJSMJ" frameborder="0" height="0" width="100%"></iframe>
@@ -808,26 +822,26 @@
                                 </tr>
 
                                 @*<tr>
-                                    <td class="lab">本人照片电子扫描件：</td>
-                                    <td>
-                                        @Html.TextBoxFor(model => model.身份信息.本人照片电子扫描件, new { @type = "file", @name = "file" })<span style="color:red">*</span>
-                                        @Html.ValidationMessageFor(model => model.身份信息.本人照片电子扫描件)
-                                    </td>
-                                    <td>
-                                        <a href="@Model.身份信息.本人照片电子扫描件" target="_blank"><img style="width: 150px;height:90px;" src="@Model.身份信息.本人照片电子扫描件" /></a>
-                                    </td>
-                                </tr>*@
+                    <td class="lab">本人照片电子扫描件：</td>
+                    <td>
+                        @Html.TextBoxFor(model => model.身份信息.本人照片电子扫描件, new { @type = "file", @name = "file" })<span style="color:red">*</span>
+                        @Html.ValidationMessageFor(model => model.身份信息.本人照片电子扫描件)
+                    </td>
+                    <td>
+                        <a href="@Model.身份信息.本人照片电子扫描件" target="_blank"><img style="width: 150px;height:90px;" src="@Model.身份信息.本人照片电子扫描件" /></a>
+                    </td>
+                </tr>*@
                                 <!---职称证书-->
                                 <tr>
                                     <td class="lab">职称证书电子扫描件：</td>
                                     <td>
                                         <form action="/专家后台/SavePicture" method="post" name="upload" enctype="multipart/form-data" target="ZCZS">
                                             <input type="hidden" value="zczs" name="pic1" />
-                                            <input type="file" accept="image/jpeg" onchange="fileChange(this)" multiple="multiple" name="file1" style="width:72px;" />
+                                            <input type="file" accept="image/jpeg" onchange="fileChange(this)" multiple="multiple" name="file1" style="width:69px;" />
                                             <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片，职称证书可上传多张</em>
                                         </form>
                                         @*@Html.TextBoxFor(model => model.学历信息.职称证书电子扫描件, new { @type = "file", @name = "file" })<span style="color:red">*</span>
-                                        @Html.ValidationMessageFor(model => model.学历信息.职称证书电子扫描件)*@
+                        @Html.ValidationMessageFor(model => model.学历信息.职称证书电子扫描件)*@
                                     </td>
                                 </tr>
                                 <tr>
@@ -847,14 +861,40 @@
                                         <iframe name="ZCZS" id="ZCZS" frameborder="0" height="0" width="100%"></iframe>
                                     </td>
                                 </tr>
-                                
+                                <!--毕业证书-->
+                                <tr>
+                                    <td class="lab">毕业证书扫描件：</td>
+                                    <td>
+                                        <form action="/专家后台/SavePicture" method="post" name="upload" enctype="multipart/form-data" target="BYZS">
+                                            <input type="hidden" value="byzs" name="pic1" />
+                                            <input type="file" accept="image/jpeg" onchange="fileChange(this)" name="file1" style="width:69px;" />
+                                            <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片，该扫描件只能上传一张，若需上传正反面，请保证件正反面在一张图片上。</em>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <ul name="byzs">
+                                            @if (!string.IsNullOrWhiteSpace(Model.学历信息.毕业证书扫描件))
+                                            {
+                                                <li>
+                                                    <a style="position: absolute; display: block; width: 15px; height: 15px; text-align: center; line-height: 15px; background-color: red; color: white; cursor: pointer; text-decoration: none; margin-left: 65px;" type="byzs" onclick=" delPic(this) " lang="@Model.学历信息.毕业证书扫描件">×</a>
+                                                    <a href="@Model.学历信息.毕业证书扫描件" target="_blank"> <img alt="@Model.学历信息.毕业证书扫描件" src="@Model.学历信息.毕业证书扫描件" style="width: 80px;height: 50px;" /></a>
+                                                </li>
+                                            }
+                                        </ul>
+                                        <iframe name="BYZS" id="BYZS" frameborder="0" height="0" width="100%"></iframe>
+                                    </td>
+                                </tr>
+
+
                                 <!--最高学位证书-->
                                 <tr>
                                     <td class="lab">最高学位证书扫描件：</td>
                                     <td>
                                         <form action="/专家后台/SavePicture" method="post" name="upload" enctype="multipart/form-data" target="ZGXWZ">
                                             <input type="hidden" value="zgxwz" name="pic1" />
-                                            <input type="file" accept="image/jpeg" onchange="fileChange(this)" name="file1" style="width:72px;" />
+                                            <input type="file" accept="image/jpeg" onchange="fileChange(this)" name="file1" style="width:69px;" />
                                             <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片，该扫描件只能上传一张，若需上传正反面，请保证件正反面在一张图片上。</em>
                                         </form>
                                     </td>
@@ -864,10 +904,10 @@
                                         <ul name="zgxwz">
                                             @if (!string.IsNullOrWhiteSpace(Model.学历信息.最高学位证书))
                                             {
-                                                <li>
-                                                    <a style="position: absolute; display: block; width: 15px; height: 15px; text-align: center; line-height: 15px; background-color: red; color: white; cursor: pointer; text-decoration: none; margin-left: 65px;" type="zgxwz" onclick=" delPic(this) " lang="@Model.学历信息.最高学位证书">×</a>
-                                                    <a href="@Model.学历信息.最高学位证书" target="_blank"> <img alt="@Model.学历信息.最高学位证书" src="@Model.学历信息.最高学位证书" style="width: 80px;height: 50px;" /></a>
-                                                </li>
+                                            <li>
+                                                <a style="position: absolute; display: block; width: 15px; height: 15px; text-align: center; line-height: 15px; background-color: red; color: white; cursor: pointer; text-decoration: none; margin-left: 65px;" type="zgxwz" onclick=" delPic(this) " lang="@Model.学历信息.最高学位证书">×</a>
+                                                <a href="@Model.学历信息.最高学位证书" target="_blank"> <img alt="@Model.学历信息.最高学位证书" src="@Model.学历信息.最高学位证书" style="width: 80px;height: 50px;" /></a>
+                                            </li>
                                             }
                                         </ul>
                                         <iframe name="ZGXWZ" id="ZGXWZ" frameborder="0" height="0" width="100%"></iframe>
@@ -879,7 +919,7 @@
                                     <td>
                                         <form action="/专家后台/SavePicture" method="post" name="upload" enctype="multipart/form-data" target="TXZS">
                                             <input type="hidden" value="txz" name="pic1" />
-                                            <input type="file" accept="image/jpeg" onchange="fileChange(this)" name="file1" style="width:72px;" />
+                                            <input type="file" accept="image/jpeg" onchange="fileChange(this)" name="file1" style="width:69px;" />
                                             <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片，该扫描件只能上传一张，若需上传正反面，请保证件正反面在一张图片上。</em>
                                         </form>
                                     </td>
@@ -889,16 +929,16 @@
                                         <ul name="txz">
                                             @if (!string.IsNullOrWhiteSpace(Model.工作经历信息.退休证书))
                                             {
-                                                <li>
-                                                    <a style="position: absolute; display: block; width: 15px; height: 15px; text-align: center; line-height: 15px; background-color: red; color: white; cursor: pointer; text-decoration: none; margin-left: 65px;" type="txz" onclick=" delPic(this) " lang="@Model.工作经历信息.退休证书">×</a>
-                                                    <a href="@Model.工作经历信息.退休证书" target="_blank"> <img alt="@Model.工作经历信息.退休证书" src="@Model.工作经历信息.退休证书" style="width: 80px;height: 50px;" /></a>
-                                                </li>
+                                            <li>
+                                                <a style="position: absolute; display: block; width: 15px; height: 15px; text-align: center; line-height: 15px; background-color: red; color: white; cursor: pointer; text-decoration: none; margin-left: 65px;" type="txz" onclick=" delPic(this) " lang="@Model.工作经历信息.退休证书">×</a>
+                                                <a href="@Model.工作经历信息.退休证书" target="_blank"> <img alt="@Model.工作经历信息.退休证书" src="@Model.工作经历信息.退休证书" style="width: 80px;height: 50px;" /></a>
+                                            </li>
                                             }
                                         </ul>
                                         <iframe name="TXZS" id="TXZS" frameborder="0" height="0" width="100%"></iframe>
                                     </td>
                                 </tr>
-                                
+
                                 <tr>
                                     <td colspan="4" style="text-align: center">
                                         <input class="front_login_rightbox_button" style="width: 120px;" type="button" onclick="showContent(1)" value="上一步" />
@@ -1054,18 +1094,171 @@
         $("#provence").val(provence);
         $("#city").val(city);
         $("#area").val(area);
-        if (paperstype == "未填写") {
-            $("div#outbox").children("div.expert_identity").each(function () {
-                $(this).hide();
-            });
-            $("div.box_header a").each(function () {
-                $(this).css({ "background-color": "gray", "color": "white" });
-            });
-            $("div.box_header a:eq(0)").css({ "background-color": "rgb(233, 249, 212)", "color": "black" });
-            $("#ptype").parents(".expert_identity").show().end().html("请选择证件类型！").prev().focus();
-            return false;
+
+        //信息完整性验证
+        var identity = [
+            "身份信息.姓名",
+            "身份信息.出生年月",
+            "联系方式.固定电话",
+            "联系方式.传真",
+            "联系方式.手机",
+            "联系方式.电子邮件",
+            "身份信息.证件号",
+            "学历信息.毕业院校",
+            "工作经历信息.工作单位",
+            "工作经历信息.从事专业起始年度",
+            "工作经历信息.从事专业",
+            "工作经历信息.现任职务",
+            "工作经历信息.单位地址.省份",
+            "工作经历信息.单位地址.城市",
+            "工作经历信息.单位地址.区县",
+            "工作经历信息.单位地址.街道",
+            "可参评物资类别列表",
+        ];
+        var identity_a = [
+            "身份信息.性别",
+            "身份信息.政治面貌",
+            "所属管理单位",
+            "身份信息.民族",
+            "身份信息.证件类型",
+            "身份信息.专家类型",
+            "学历信息.专业技术职称",
+            "学历信息.最高学位",
+            "学历信息.最高学历",
+        ];
+        var identity_b = ["工作经历信息.本人参加过何种项目招标及评标"];
+        //input
+        for(item in identity){
+            var $this = $("input[name='" + identity[parseInt(item)] + "']");
+            var index = $this.parents(".expert_identity").attr("index");
+            if ($this.val() == "" || $this.val() == "0001/1/1 0:00:00" || $this.val() == "0") {
+                //隐藏三个步骤内容块
+                $("div#outbox").children("div.expert_identity").each(function () {
+                    $(this).hide();
+                });
+                //重置三个步骤tab样式
+                $("div.box_header a").each(function () {
+                    $(this).css({ "background-color": "gray", "color": "white" });
+                });
+                $("div.box_header a:eq(" + index + ")").css({ "background-color": "rgb(233, 249, 212)", "color": "black" });
+                if (identity[parseInt(item)] == "可参评物资类别列表") {
+                    $this.parents(".expert_identity").show();
+                   alert("请填写可参评物资类别！");
+                }
+                else {
+                    $this.parents(".expert_identity").show().end().next().html("请填写" + identity[parseInt(item)].split('.')[identity[parseInt(item)].split('.').length - 1] + "信息！").end().focus();
+                }
+                return false;
+            }
+            else { $this.next().html("*") }
         }
-        else { $("#ptype").html("*") }
+        //select
+        for (item in identity_a) {
+            var $this = $("select[name='" + identity_a[parseInt(item)] + "']");
+            var index = $this.parents(".expert_identity").attr("index");
+            if ($this.val() == "未填写" || $this.val() == "0") {
+                //隐藏三个步骤内容块
+                $("div#outbox").children("div.expert_identity").each(function () {
+                    $(this).hide();
+                });
+                //重置三个步骤tab样式
+                $("div.box_header a").each(function () {
+                    $(this).css({ "background-color": "gray", "color": "white" });
+                });
+                $("div.box_header a:eq("+index+")").css({ "background-color": "rgb(233, 249, 212)", "color": "black" });
+                if (identity_a[parseInt(item)] == "所属管理单位") {
+                    $this.parents(".expert_identity").show().end().next().html("请填写" + identity_a[parseInt(item)] + "信息！").end().focus();
+                }
+                else {
+                    $this.parents(".expert_identity").show().end().next().html("请填写" + identity_a[parseInt(item)].split('.')[identity[parseInt(item)].split('.').length - 1] + "信息！").end().focus();
+                }
+                return false;
+            }
+            else { $this.next().html("*") }
+        }
+
+        //textarea
+        for (item in identity_b) {
+            var $this = $("textarea[name='" + identity_b[parseInt(item)] + "']");
+            var index = $this.parents(".expert_identity").attr("index");
+            if ($this.val() == "") {
+                //隐藏三个步骤内容块
+                $("div#outbox").children("div.expert_identity").each(function () {
+                    $(this).hide();
+                });
+                //重置三个步骤tab样式
+                $("div.box_header a").each(function () {
+                    $(this).css({ "background-color": "gray", "color": "white" });
+                });
+                $("div.box_header a:eq("+index+")").css({ "background-color": "rgb(233, 249, 212)", "color": "black" });
+                $this.parents(".expert_identity").show().end().next().html("请填写" + identity_b[parseInt(item)].split('.')[identity[parseInt(item)].split('.').length - 1] + "信息！").end().focus();
+                return false;
+            }
+            else { $this.next().html("*") }
+        }
+        //验证必须上传附件是否上传
+        var fjlist = [
+            $("ul[name='zjzgz']").html(),
+            $("ul[name='zjsmj']").html(),
+            $("ul[name='byzs']").html(),
+            $("ul[name='zczs']").html(),
+        ];
+        for (ab in fjlist) {
+            var item = fjlist[parseInt(ab)].trim();
+            if (item == "" || item == "undefined" || item == null) {
+                if (ab == "0") {
+                    alert("请上传专家资格证书电子扫描件！");
+                    return false;
+                }
+                if (ab == "1") {
+                    alert("请上传军官证或身份证电子扫描件！");
+                    return false;
+                }
+                if (ab == "2") {
+                    alert("请上传毕业证书电子扫描件！");
+                    return false;
+                }
+                if (ab == "3") {
+                    alert("请上传职称证书电子扫描件！");
+                    return false;
+                }
+            }
+        }
+
+
+
+        //if ($("input[name='身份信息.姓名']").val() == "") {
+        //    //隐藏三个步骤内容块
+        //    $("div#outbox").children("div.expert_identity").each(function () {
+        //        $(this).hide();
+        //    });
+        //    //重置三个步骤tab样式
+        //    $("div.box_header a").each(function () {
+        //        $(this).css({ "background-color": "gray", "color": "white" });
+        //    });
+        //    $("div.box_header a:eq(0)").css({ "background-color": "rgb(233, 249, 212)", "color": "black" });
+        //    $("input[name='身份信息.姓名']").parents(".expert_identity").show().end().next().html("请填写信息！").end().focus();
+        //    return false;
+        //}
+        //else { $("input[name='身份信息.姓名']").next().html("*") }
+
+        //验证证件类型
+        //if (paperstype == "未填写") {
+        //    $("div#outbox").children("div.expert_identity").each(function () {
+        //        $(this).hide();
+        //    });
+        //    $("div.box_header a").each(function () {
+        //        $(this).css({ "background-color": "gray", "color": "white" });
+        //    });
+        //    $("div.box_header a:eq(0)").css({ "background-color": "rgb(233, 249, 212)", "color": "black" });
+        //    $("#ptype").parents(".expert_identity").show().end().html("请选择证件类型！").prev().focus();
+        //    return false;
+        //}
+        //else { $("#ptype").html("*") }
+
+
+
+
 
         //if ($("#phone_area").val() == "" || $("#phone_area").val() == null) {
         //    $("#moelphone_error").show().html("请填写区号");
@@ -1080,10 +1273,10 @@
         //    return false;
         //}
         //else { $("#moelphone_error").html("*") }
-        if (f == null || f == "") {
-            $("#moelphone_error").show();
-            $("#modelPhone").focus();
-        }
+        //if (f == null || f == "") {
+        //    $("#moelphone_error").show();
+        //    $("#modelPhone").focus();
+        //}
         $("form[name='addexpert']").submit();
     });
     function addData(th) {

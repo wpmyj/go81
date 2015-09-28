@@ -1,4 +1,4 @@
-﻿@*@model Go81WebApp.Models.数据模型.用户数据模型.专家*@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.专家
 @{
     ViewBag.Title = "打印专家资料";
     Layout = null;
@@ -68,15 +68,15 @@
                 <table width="100%" style="border: none; font-size:24px; margin-left:auto; margin-top:260px; margin-right:auto;">
                     <tr>
                         <td width="40%" align="right" style="border: none;letter-spacing:10px;">专家姓名：</td>
-                        <td width="60%" style="border: none;">@*@Model.身份信息.姓名*@</td>
+                        <td width="60%" style="border: none;">@Model.身份信息.姓名</td>
                     </tr>
                     <tr>
                         <td align="right" style="border: none;letter-spacing:10px;">工作单位：</td>
-                        <td style="border: none;">@*@Model.工作经历信息.工作单位*@</td>
+                        <td style="border: none;">@Model.工作经历信息.工作单位</td>
                     </tr>
                     <tr>
                         <td align="right" style="border: none;letter-spacing:10px;">初审单位：</td>
-                        <td style="border: none;">@*@Model.所属管理单位.ToString()*@</td>
+                        <td style="border: none;">@Model.所属管理单位.ToString()</td>
                     </tr>
                     <tr>
                         <td align="right" style="border: none;letter-spacing:10px;">申请日期：</td>
@@ -111,73 +111,73 @@
             <table style="width:100%; margin-left:auto; margin-right:auto;" cellpadding="0" cellspacing="0">
                 <tr>
                     <td width="14%" align="center">姓名</td>
-                    <td width="15%" align="center">@*@Model.身份信息.姓名*@</td>
+                    <td width="15%" align="center">@Model.身份信息.姓名</td>
                     <td width="14%" align="center">性别</td>
-                    <td width="15%" align="center">@*@Model.身份信息.性别*@</td>
+                    <td width="15%" align="center">@Model.身份信息.性别</td>
                     <td width="14%" align="center">出生年月</td>
-                    <td width="15%" align="center">@*@Model.身份信息.出生年月.ToString("yyyy-MM-dd")*@</td>
+                    <td width="15%" align="center">@Model.身份信息.出生年月.ToString("yyyy-MM-dd")</td>
                     <td width="13%" rowspan="3" style="width:50px; height:80px; text-align:center;">1寸免冠照片@*<img src="Model.身份信息.本人照片电子扫描件" style="display:block; width:100%; height:150px;" />*@</td>
                 </tr>
                 <tr>
                     <td align="center">政治面貌</td>
-                    <td align="center">@*@Model.身份信息.政治面貌.ToString()*@</td>
+                    <td align="center">@Model.身份信息.政治面貌.ToString()</td>
                     <td align="center">民族</td>
-                    <td align="center">@*@Model.身份信息.民族.ToString()*@</td>
+                    <td align="center">@Model.身份信息.民族.ToString()</td>
                     <td align="center">健康状况</td>
-                    <td align="center">@*@Model.工作经历信息.健康状况.ToString()*@</td>
+                    <td align="center">@Model.工作经历信息.健康状况.ToString()</td>
                 </tr>
                 <tr>
                     <td align="center">工作单位</td>
-                    <td align="center" colspan="5">@*@Model.工作经历信息.工作单位*@</td>
+                    <td align="center" colspan="5">@Model.工作经历信息.工作单位</td>
                 </tr>
                 <tr>
                     <td align="center">单位地址</td>
-                    <td align="center" colspan="4">@*@(Model.工作经历信息.单位地址.省份)@(Model.工作经历信息.单位地址.城市)@(Model.工作经历信息.单位地址.区县)*@</td>
+                    <td align="center" colspan="4">@(Model.工作经历信息.单位地址.省份)@(Model.工作经历信息.单位地址.城市)@(Model.工作经历信息.单位地址.区县)</td>
                     <td align="center">邮编</td>
-                    <td align="center">@*@Model.工作经历信息.邮编*@</td>
+                    <td align="center">@Model.工作经历信息.邮编</td>
                 </tr>
                 <tr>
                     <td align="center">现任职务</td>
-                    <td align="center" colspan="3">@*@Model.工作经历信息.现任职务*@</td>
+                    <td align="center" colspan="3">@Model.工作经历信息.现任职务</td>
                     <td align="center">专业技术</td>
-                    <td align="center" colspan="2">@*@Model.学历信息.专业技术职称*@</td>
+                    <td align="center" colspan="2">@Model.学历信息.专业技术职称</td>
                 </tr>
                 <tr>
                     <td align="center">从事专业</td>
-                    <td align="center">@*@Model.工作经历信息.从事专业*@</td>
+                    <td align="center">@Model.工作经历信息.从事专业</td>
                     <td align="center">从事专业<br />起始年度</td>
-                    <td align="center">@*@Model.工作经历信息.从事专业起始年度*@</td>
+                    <td align="center">@Model.工作经历信息.从事专业起始年度</td>
                     <td align="center">取得技术</td>
-                    <td align="center" colspan="2">@*@Model.学历信息.取得现技术职称时间.ToString("yyyy-MM-dd")*@</td>
+                    <td align="center" colspan="2">@Model.学历信息.取得现技术职称时间.ToString("yyyy-MM-dd")</td>
                 </tr>
                 <tr>
                     <td align="center">专家类别</td>
-                    <td align="center">@*@Model.身份信息.专家类别.ToString()*@</td>
+                    <td align="center">@Model.身份信息.专家类别.ToString()</td>
                     <td align="center">证件类型</td>
-                    <td align="center">@*@Model.身份信息.证件类型.ToString()*@</td>
+                    <td align="center">@Model.身份信息.证件类型.ToString()</td>
                     <td align="center">证件号码</td>
-                    <td align="center" colspan="2">@*@Model.身份信息.证件号*@</td>
+                    <td align="center" colspan="2">@Model.身份信息.证件号</td>
                 </tr>
                 <tr>
                     <td align="center">学位</td>
-                    <td align="center">@*@Model.学历信息.最高学位*@</td>
+                    <td align="center">@Model.学历信息.最高学位</td>
                     <td align="center">最高学历</td>
-                    <td align="center">@*@Model.学历信息.最高学历*@</td>
+                    <td align="center">@Model.学历信息.最高学历</td>
                     <td align="center">毕业院校<br />及专业</td>
-                    <td align="center" colspan="2">@*@Model.学历信息.毕业院校*@</td>
+                    <td align="center" colspan="2">@Model.学历信息.毕业院校</td>
                 </tr>
                 <tr>
                     <td align="center">固定电话</td>
-                    <td align="center">@*@Model.工作经历信息.单位地址.固定电话*@</td>
+                    <td align="center">@Model.联系方式.固定电话</td>
                     <td align="center">传真电话</td>
-                    <td align="center">@*@Model.工作经历信息.单位地址.传真*@</td>
+                    <td align="center">@Model.联系方式.传真</td>
                     <td align="center">移动电话</td>
-                    <td align="center" colspan="2">@*@Model.工作经历信息.单位地址.手机*@</td>
+                    <td align="center" colspan="2">@Model.联系方式.手机</td>
                 </tr>
                 <tr>
                     <td style="height:190px;" align="center">可参评的<br />物资类别</td>
                     <td align="left" colspan="6">
-                        @*@{string g = "";}
+                        @{string g = "";}
                         @if (Model.可参评物资类别列表 != null && Model.可参评物资类别列表.Count() != 0)
                         {
                         <table style="border:none;">
@@ -204,12 +204,12 @@
                                 </tr>
                                 }
                         </table>
-                        }*@
+                        }
                     </td>
                 </tr>
                 <tr>
                     <td style="height:190px;" align="center">参加物资<br />采购评审<br />情况</td>
-                    <td align="left" colspan="6">@*@Model.工作经历信息.本人参加过何种项目招标及评标*@</td>
+                    <td align="left" colspan="6">@Model.工作经历信息.本人参加过何种项目招标及评标</td>
                 </tr>
                     
             </table>
@@ -220,15 +220,15 @@
             <table style="width:100%; margin-left:auto; margin-right:auto;" cellpadding="0" cellspacing="0">
                 <tr>
                     <td style="height:230px;" align="center">专业学术<br />成果</td>
-                    <td align="left" colspan="6">@*@Model.工作经历信息.本人专业领域研究及成果*@</td>
+                    <td align="left" colspan="6">@Model.工作经历信息.本人专业领域研究及成果</td>
                 </tr>
                 <tr>
                     <td width="14%" style="text-align:center;">主要工作<br />经历</td>
-                    <td align="left" colspan="2" style="height:200px;">@*@Model.工作经历信息.主要工作经历*@</td>
+                    <td align="left" colspan="2" style="height:200px;">@Model.工作经历信息.主要工作经历</td>
                 </tr>
                 <tr>
                     <td align="center" style="text-align:center;">社会兼职<br />情况</td>
-                    <td align="left" colspan="2" style="height:200px;">@*@Model.工作经历信息.社会兼聘职情况*@</td>
+                    <td align="left" colspan="2" style="height:200px;">@Model.工作经历信息.社会兼聘职情况</td>
                 </tr>
                 <tr>
                     <td align="center" rowspan="3">本人所在<br />单位推荐<br />意见</td>

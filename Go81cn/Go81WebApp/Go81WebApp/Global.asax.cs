@@ -37,6 +37,7 @@ namespace Go81WebApp
 
         protected void Session_Start(Object sender, EventArgs e)
         {
+            Session.Timeout = 60 * 24;
         }
 
         protected void Session_End(Object sender, EventArgs e)

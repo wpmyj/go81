@@ -78,20 +78,20 @@
                         }
                     });
                     var timer;
+
                     $("li.changetab").hover(function () {
                         var tab = $(this);
                         timer = setTimeout(function () {
                             var index = tab.attr("index");
                             var divs = tab.parents(".outtab").next(".tabcontent");
                             tab.addClass("cli").siblings().removeClass("cli");
-                            $(".divhide").each(function () {
-                                $(this).hide();
-                            });
-                            $(".divhide:eq(" + index + ")").show();
-                        }, 200);
+                            divs.children().hide().eq(index).fadeIn();
+                        }, 500);
                     }, function () {
                         clearTimeout(timer);
                     });
+
+                   
                     $(".jqzoom").jqueryzoom({
                         xzoom: 400,
                         yzoom: 400,
@@ -229,13 +229,22 @@
                     {
                         if (ViewBag.data == 0 || ViewBag.data == 1)
                         {
-                            <img src="../../Images/star.png" />
+                            <img style="_vertical-align:middle;*vertical-align:middle" src="../../Images/star.png" />
                         }
                     }
                     catch
                     {
                         <span>未知</span>
-                    } <a style="display:inline-block; height:30px; color:black; text-decoration:underline; margin-top:-10px;" href="###">查看积分</a>
+                    } <a style="display:inline-block;-webkit-vertical-align:middle; color:black; text-decoration:underline; margin-top:-10px;" href="###">查看积分</a>
+                </div>
+                <div class="prodtpage_detail_topbox_right_contentlist">
+                    <div class="purchase">
+                        <input type="text" value="1" id="purchase_num" />
+                        <a class="purchase_bt" id="add">+</a>
+                        <a class="purchase_bt" id="diff" style="top:19px;border-bottom:none;height:16px;">-</a>
+            </div>
+                    <div style="display:inline-block;"><a id="car" lang="@Model.Id"></a></div>
+                    <div><a href="/商品陈列/PurchaseInfo" style="color:#4da3ff;">去购物车结算>></a></div>
                 </div>
             </div>
         </div>                         @*270*@
@@ -262,45 +271,10 @@
             <div style="text-align:center;border-top:1px solid #9B9B9B;">
                 <span class="samegys_name">同型号商品报价企业列表</span><div>
                     <div id="result" style="height:230px;overflow-y:scroll;overflow-x:hidden;"></div>
-            <div id="pager"></div>
-
-            @*<table width="100%;">
-                        <tr>
-                            <th colspan="2">同类商品供应商报价</th>
-                        </tr>
-                    <tr>
-                        <td align="right" valign="top" width="70%">四川大爱科技有限公司：</td>
-                        <td width="30%">￥1530.00</td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top">上海康盟保健用品有限公司：</td>
-                        <td>￥1452.00</td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top">重庆雨禾医疗器械有限公司：</td>
-                        <td>¥ 2280.00</td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top">湖南泰瑞医疗科技有限公司：</td>
-                        <td>¥ 2100.00</td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top">北京中成航宇空分设备有限公司：</td>
-                        <td>¥ 1950.00</td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top">北京世纪信达科技：</td>
-                        <td>¥ 1800.00</td>
-                    </tr>
-                    <tr>
-                        <td align="right" valign="top">日照爱德医疗设备工程有限公司：</td>
-                        <td>¥ 1750.00</td>
-                    </tr>
-                </table>*@
-
+                    <div id="pager"></div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
         </div>
     </div>
 <script type="text/javascript">
@@ -335,9 +309,7 @@
             </div>
         </div>
         <div class="product_tabmenu_content_box tabcontent" style="border:none;">
-            <div class="divhide fdiv">
-                <ul>
-                    <li>
+            <div class="divhide fdiv" style="zoom:1">
                         <div style=" width: 900px; color:#666; font-size: 16px; font-weight: bold; margin-top: 20px;">
                             商品名称:<span style="color: #808080; font-size: 16px; font-weight: normal;"> @Model.商品信息.商品名</span>
                         </div>
@@ -355,12 +327,8 @@
                         <div class="goodpre" style="width: 865px; color: #808080; font-size: 16px; line-height: 25px; font-weight: normal;">
                             @Html.Raw(Model.商品数据.商品详情)
                         </div>
-                    </li>
-                </ul>
             </div>
             <div class="divhide">
-                <ul>
-                    <li>
                         <div class="product_detaildiv">
                             @foreach (var arr in Model.商品数据.商品属性)
                             {
@@ -373,34 +341,32 @@
                                         <tr>
                                             <td width="15%" style="text-align:center;">@proname.Key</td>
                                             <td width="85%">
-                                                @foreach (var list in proname.Value)
+                                                @if (proname.Value.Count > 0)
+                                                {
+                                                    foreach (var list in proname.Value)
                                                 {
                                                     @list
                                                     if (list != proname.Value[proname.Value.Count - 1])
                                                     {<span>、</span>}
                                                 }
+                                                }
+                                                else
+                                                {
+                                                    <span>&nbsp;</span> 
+                                                }
+                                         
                                             </td>
                                         </tr>
                                     }
                                 </table>
                             }
                         </div>
-                    </li>
-                </ul>
             </div>
             <div class="divhide">
-                <ul style="font-size: 16px; text-indent: 2em; line-height: 22px; padding-left: 10px;padding-right:10px">
-                    <li>
                         @Html.Raw(Model.商品数据.售后服务)
-                    </li>
-                </ul>
             </div>
             <div class="divhide">
-                <ul>
-                    <li>
                         <div id="historyPrices" style="padding:10px;" pdata="@ViewBag.L1"></div>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>
@@ -450,4 +416,33 @@
         });
     }
     searchSameType(1);
+    $(".purchase_bt").click(function(){
+       var num = parseInt($("#purchase_num").val());
+    if($(this).attr("id")=="add")
+        {
+        num+=1;
+    }
+    else
+    {
+        if(num>1)
+        {
+            num-=1;
+        }
+    }
+    $("#purchase_num").val(num)
+    });
+    $("#car").click(function(){
+        var count = $("#purchase_num").val();
+        var pid=$(this).attr("lang");
+        $.get("/商品陈列/AddGoodInfo", {num:count,id:pid}, function (data) { 
+            if(data==1)
+            {
+                alert("商品已经成功添加到购物车！");
+            }
+            else
+            {
+                alert("添加商品到购物车失败！");
+            }
+        });
+    });
 </script>

@@ -37,12 +37,14 @@ namespace Go81WebApp.Models.数据模型.商品数据模型
             public string 精确型号 { get; set; }
             public string 计量单位 { get; set; }
             public List<string> 商品图片 { get; set; }
+            public List<string> 商品型号图片 { get; set; }
             public 用户链接<供应商> 所属供应商 { get; set; }
             public 商品分类链接 所属商品分类 { get; set; }
 
             public _商品信息()
             {
                 this.商品图片 = new List<string>();
+                this.商品型号图片 = new List<string>();
                 this.所属供应商 = new 用户链接<供应商>();
                 this.所属商品分类 = new 商品分类链接();
             }

@@ -41,6 +41,8 @@
         <input type="button" onclick="DbExport('供应商服务记录')" value="导出供应商服务记录" class="inputstyle" />
         <input type="button" onclick="DbExport('供应商计费项目扣费记录')" value="导出供应商计费项目扣费记录" class="inputstyle" />
         <input type="button" onclick="DbExport('供应商增值服务申请记录')" value="导出供应商增值服务申请记录" class="inputstyle" />
+        <input type="button" onclick="ExportExcel()" value="导出专家到Excel表" class="inputstyle" />
+        <input type="button" onclick="PhoneNumExport()" value="导出供应商手机号到Excel表" class="inputstyle" />
     </div>
 </div>
 <script type="text/javascript" language="javascript">
@@ -49,6 +51,15 @@
         $("#导出数据").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
         $("#导出数据").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
+    function ExportExcel() {
+        window.open("/运营团队后台/ExportExpertsToExcel","_blank");
+    }
+
+    function PhoneNumExport() {
+        window.open("/运营团队后台/ExportGysPhoneToExcel", "_blank");
+
+    }
+
     function DbExport(type) {
         if (!confirm("确定导出" + type + "？")) {
             return false;

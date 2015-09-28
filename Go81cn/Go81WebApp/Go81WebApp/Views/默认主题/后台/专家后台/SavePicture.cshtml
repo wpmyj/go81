@@ -12,6 +12,7 @@
                 var path = document.getElementById("pics").value;
                 if (path.split('|')[0] != "出错") {
                     window.parent.document.getElementById("databack").value = path;
+                    $("input[name='" + $("#zjtype").val() + "']", window.parent.document).val(path);
                     window.parent.setPic($("#zjtype").val());
                     window.parent.document.getElementById("f1").style.display = "none";
                 }

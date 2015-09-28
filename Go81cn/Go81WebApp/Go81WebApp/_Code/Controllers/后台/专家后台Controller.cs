@@ -32,7 +32,8 @@ namespace Go81WebApp._Code.Controllers.后台
         }
         public ActionResult Print()
         {
-            return View();
+            var zj = 用户管理.查找用户<专家>(currentUser.Id);
+            return View(zj);
         }
         public ActionResult Index()
         {
@@ -108,8 +109,67 @@ namespace Go81WebApp._Code.Controllers.后台
             model.身份信息.专家证电子扫描件 = _zj.身份信息.专家证电子扫描件;
             model.身份信息.证件电子扫描件 = _zj.身份信息.证件电子扫描件;
             model.工作经历信息.退休证书 = _zj.工作经历信息.退休证书;
+            model.学历信息.毕业证书扫描件 = _zj.学历信息.毕业证书扫描件;
             model.学历信息.最高学位证书 = _zj.学历信息.最高学位证书;
             model.学历信息.职称证书电子扫描件 = _zj.学历信息.职称证书电子扫描件;
+
+            //var zjzgz = Request.Form["zjzgz"];
+            //var zczs = Request.Form["zczs"];
+            //var zjsmj = Request.Form["zjsmj"];
+            //var txz = Request.Form["txz"];
+            //var byzs = Request.Form["byzs"];
+            //var zgxwz = Request.Form["zgxwz"];
+            //if (!string.IsNullOrWhiteSpace(zjzgz))
+            //{
+            //    var a=zjzgz.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+            //    foreach (var item in a)
+            //    {
+            //        model.身份信息.专家证电子扫描件.Add(item);
+            //    }
+            //}
+            //if (!string.IsNullOrWhiteSpace(zczs))
+            //{
+            //    var b = zczs.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+            //    foreach (var item in b)
+            //    {
+            //        model.学历信息.职称证书电子扫描件.Add(item);
+            //    }
+            //}
+            //if (!string.IsNullOrWhiteSpace(zjsmj))
+            //{
+            //    if (System.IO.File.Exists(Server.MapPath(@_zj.身份信息.证件电子扫描件)))
+            //    {
+            //        System.IO.File.Delete(Server.MapPath(@_zj.身份信息.证件电子扫描件));
+            //    }
+            //    model.身份信息.证件电子扫描件 = zjsmj;
+            //}
+            //if (!string.IsNullOrWhiteSpace(txz))
+            //{
+            //    if (System.IO.File.Exists(Server.MapPath(@_zj.工作经历信息.退休证书)))
+            //    {
+            //        System.IO.File.Delete(Server.MapPath(@_zj.工作经历信息.退休证书));
+            //    }
+            //    model.工作经历信息.退休证书 = txz;
+            //}
+            //if (!string.IsNullOrWhiteSpace(byzs))
+            //{
+            //    if (System.IO.File.Exists(Server.MapPath(@_zj.学历信息.毕业证书扫描件)))
+            //    {
+            //        System.IO.File.Delete(Server.MapPath(@_zj.学历信息.毕业证书扫描件));
+            //    }
+            //    model.学历信息.毕业证书扫描件 = byzs;
+            //}
+            //if (!string.IsNullOrWhiteSpace(zgxwz))
+            //{
+            //    if (System.IO.File.Exists(Server.MapPath(@_zj.学历信息.最高学位证书)))
+            //    {
+            //        System.IO.File.Delete(Server.MapPath(@_zj.学历信息.最高学位证书));
+            //    }
+            //    model.学历信息.最高学位证书 = zgxwz;
+            //}
+
+
+
             if (model.所属地域.地域 == "不限省份不限城市不限区县")
             {
                 model.所属地域.省份 = "";
@@ -299,6 +359,15 @@ namespace Go81WebApp._Code.Controllers.后台
                                 zj_type = "txz";
                                 model.工作经历信息.退休证书 = filePath + fname;
                             }
+                            else if (name == "byzs") //毕业证书
+                            {
+                                if (System.IO.File.Exists(Server.MapPath(@model.学历信息.毕业证书扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@model.学历信息.毕业证书扫描件));
+                                }
+                                zj_type = "byzs";
+                                model.学历信息.毕业证书扫描件 = filePath + fname;
+                            }
                             else //最高学位证
                             {
                                 if (System.IO.File.Exists(Server.MapPath(@model.学历信息.最高学位证书)))
@@ -335,13 +404,16 @@ namespace Go81WebApp._Code.Controllers.后台
                     case "txz":
                         path = model.工作经历信息.退休证书;
                         break;
+                    case "byzs":
+                        path = model.学历信息.毕业证书扫描件;
+                        break;
                     case "zgxwz":
                         path = model.学历信息.最高学位证书;
                         break;
 
                 }
                 用户管理.更新用户<专家>(model);
-               ViewBag.type = zj_type;
+                ViewBag.type = zj_type;
                 ViewData["path"] = path;
                return View();
             }

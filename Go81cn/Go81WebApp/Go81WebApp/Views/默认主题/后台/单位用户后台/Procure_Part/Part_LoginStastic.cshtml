@@ -1,0 +1,170 @@
+﻿@using Go81WebApp.Models.数据模型.统计数据模型
+<style>
+    #pager {
+        text-align: center;
+    }
+
+        #pager a {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+            line-height: 25px;
+            font-size: 12px;
+            height: 25px;
+            border: 1px solid rgb(204, 204, 204);
+            margin-top: 10px;
+            margin-left: 5px;
+            margin-right: auto;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+            #pager a:hover {
+                background-color: rgb(243, 243, 243);
+            }
+</style>
+<div class="gys_znxx_topbox">
+    <div class="gys_xttz_topbg">
+        <div class="index_bottom_zb_top_title">登录统计</div>
+    </div>
+</div>
+<div class="gys_znxx_box">
+    <div class="gys_znxx_contentbox">
+        <div style="width: 800px; height: auto; padding: 20px; margin: 0 auto; padding-bottom:0;">
+            <div style="width: 750px; height: 35px; ">
+                <div style="float: left; width: 100px; text-align: left; line-height: 30px; text-align: right; color: #666;">筛选条件：</div>
+                <div style="float: left;">
+                    <select id="loginuser" name="loginuser" style="width:150px; height:30px;" onchange="getloginstatistic(1);">
+                        <option value="单位用户" selected="selected">单位用户</option>
+                        @*<option value="供应商">供应商</option>
+                        <option value="单位用户">单位用户</option>
+                        <option value="专家">专家</option>
+                        <option value="单位用户">单位用户</option>*@
+                    </select>
+                </div>
+
+                @*<div style="float: left; text-align: left; line-height: 30px; text-align: right; color: #666;">行业：</div>*@
+                <div style="float: left;">
+                    <select id="loginresult" name="loginresult" style="width:150px; height:30px; margin: 0 5px 0 5px;" onchange="getloginstatistic(1);">
+                        <option value="">不限登录结果</option>
+                        <option value="登录成功">登录成功</option>
+                        <option value="登录失败">登录失败</option>
+                    </select>
+
+                </div>
+                <div style="float: left;">
+                    <select id="nettype" name="nettype" style="width:150px; height:30px; margin-right:5px;" onchange="getloginstatistic(1);">
+                        <option value="内网" selected="selected">内网</option>
+                        @*<option value="外网">外网</option>
+                        <option value="内网">内网</option>*@
+                    </select>
+                </div>
+                <div style="float: left;">
+                    <select id="time" name="time" style="width:150px; height:30px;" onchange="getloginstatistic(1);">
+                        <option value="">不限时间</option>
+                        <option value="1" selected="selected">今天</option>
+                        <option value="7">近一周</option>
+                        <option value="30">近一月</option>
+                        <option value="90">近三月</option>
+                        <option value="180">近半年</option>
+                        <option value="365">近一年</option>
+                    </select>
+                </div>
+            </div>
+            <hr />
+        </div>
+        <div class="gys_znxx_content" id="textcontent">
+
+        </div>
+        <div id="pager">
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        getloginstatistic(1);
+        $("#登陆统计").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#登陆统计").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function setPage(pgCount, currentPage) {
+        var str = '';
+        if (pgCount > 0) {
+            if (currentPage != 1) {
+                str += "<a onclick='getloginstatistic(1)'>首页</a><a onclick='getloginstatistic(" + (currentPage - 1) + ")'>上一页</a>";
+            }
+        }
+        if (pgCount <= 6) {
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='getloginstatistic(" + i + ")'>" + i + "</a>";
+            }
+        }
+        else {
+            if (currentPage < 6) {
+                if (currentPage != 1) {
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a onclick='getloginstatistic(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a  onclick='getloginstatistic(" + pgCount + ")'>" + pgCount + "</a>";
+                }
+                else {
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a  onclick='getloginstatistic(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='getloginstatistic(" + pgCount + ")'>" + pgCount + "</a>";
+                }
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                str += "<a onclick='getloginstatistic(" + (1) + ")'>1</a>...";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='getloginstatistic(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='getloginstatistic(" + pgCount + ")'>" + pgCount + "</a>";
+            }
+            else if (currentPage >= pgCount - 3) {
+                str += "<a onclick='getloginstatistic(" + 1 + ")'>1</a>...";
+                for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
+                    str += "<a onclick='getloginstatistic(" + i + ")'>" + i + "</a>";
+                }
+            }
+        }
+        if (pgCount > 0) {
+            if (currentPage != pgCount) {
+                str += "<a onclick='getloginstatistic(" + (currentPage + 1) + ")'>下一页</a><a onclick='getloginstatistic(" + pgCount + ")'>末页</a>";
+            }
+            if (pgCount != 0) {
+                str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
+            }
+        }
+        $("div#pager").html(str);
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    function getloginstatistic(p) {
+        var loginuser = $("#loginuser").val();
+        var loginresult = $("#loginresult").val();
+        var time = $("#time").val();
+        var nettype = $("#nettype").val();
+        var parm = "loginuser=" + loginuser + "&loginresult=" + loginresult + "&time=" + time + "&nettype=" + nettype + "&page=" + p;
+        $.ajax({
+            cache: false,
+            async: false,
+            url: "/单位用户后台/Part_StatisticsLoginSearch",
+            data: parm,
+            success: function (data) {
+                var str = "<div>共" + data.Data.sum + "条数据</div>";
+                str += "<table width='99%' cellpadding='0' cellspacing='0'><tr><th width='25%'>登录IP地址</th><th width='15%'>登录结果</th><th width='20%'>用户ID</th><th width='25%'>登录时间</th><th width='15%'>访问网络</th></tr>";
+                for (var i = 0; i < data.Data.loginuser.length; i++) {
+                    str += "<tr><td>" + data.Data.loginuser[i].IpAddr + "</td><td>" + data.Data.loginuser[i].Result + "</td><td>" + data.Data.loginuser[i].UserId + "</td><td>" + data.Data.loginuser[i].LoginTime + "</td><td>" + data.Data.loginuser[i].InOrEx + "</td></tr>";
+                }
+                $("#textcontent").html(str);
+                setPage(data.Data.pCount, p);
+            }
+        });
+    }
+</script>

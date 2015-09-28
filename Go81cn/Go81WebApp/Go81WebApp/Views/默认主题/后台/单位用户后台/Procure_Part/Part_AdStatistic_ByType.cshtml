@@ -1,0 +1,47 @@
+﻿ @{}
+<div id="chengdu">
+    <div style="padding: 10px 0 0;border-bottom: 1px solid #ccc;">
+        <h3 style="margin:0;background: #28B37E;">@ViewData["地区"]</h3>
+    </div>
+    <div class="adStatisticData">
+        <table cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+                <th width="24%">单位名称</th>
+                <th width="5%">1月</th>
+                <th width="5%">2月</th>
+                <th width="5%">3月</th>
+                <th width="5%">4月</th>
+                <th width="5%">5月</th>
+                <th width="5%">6月</th>
+                <th width="5%">7月</th>
+                <th width="5%">8月</th>
+                <th width="5%">9月</th>
+                <th width="5%">10月</th>
+                <th width="5%">11月</th>
+                <th width="5%">12月</th>
+                <th width="7%">合计</th>
+            </tr>
+           @{
+               var 公告 = ViewData["区域公告"] as Dictionary<string, List<int>>;
+               if (公告.Count > 0 && 公告.Any())
+               {
+                   foreach (var mm in 公告)
+                   {
+                    <tr>
+                        <td>@mm.Key</td>
+                        @foreach (var k in mm.Value)
+                        {
+                            <td>@k</td>
+                        }
+                        <td>@mm.Value.Sum()</td>
+                    </tr>
+                   }
+               }
+        }
+
+        </table>
+    </div>
+</div>
+
+
+

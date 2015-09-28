@@ -413,6 +413,7 @@
     }
 
 .submenulist {
+    z-index:2;/*兼容IE7以下z-index设置无效*/
     position: relative;
 }
 
@@ -770,7 +771,7 @@ ul li a:hover {
     position: relative;
     overflow: hidden;
     border: none;
-    z-index: 0;
+    z-index: 1;
 }
 /*图片新闻*/
 .slider {
@@ -1945,8 +1946,8 @@ a {
         .gys_xttz_contentbox ul li a {
             font-size: 14px;
             text-decoration: none;
-            display: block;
-            width: 810px;
+            display: inline-block;
+            vertical-align:middle;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -2371,6 +2372,7 @@ a {
 
     .product_tabmenu_content_box .divhide {
         display: none;
+        padding:10px 30px;
     }
 
     .product_tabmenu_content_box .fdiv {
@@ -2635,10 +2637,15 @@ line-height: 1.5;
 }
 
 .prodtpage_prodtlistdiv {
-    width: 229px;
+    width: 219px;
     height: 360px;
     float: left;
     padding: 10px 0 0 0;
+    border:5px solid #fff;
+}
+.prodtpage_prodtlistdiv:hover{
+    border:5px solid #309000;
+    box-shadow:0px 0px 10px #aaa;
 }
 
     .prodtpage_prodtlistdiv a {

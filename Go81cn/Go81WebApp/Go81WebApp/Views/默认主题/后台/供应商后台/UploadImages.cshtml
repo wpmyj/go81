@@ -7,14 +7,24 @@
     string[] path = ViewData["path"].ToString().Split('|');
 }
 <input type="hidden" value="@ViewData["path"].ToString()" id="pics" />
+<input type="hidden" value="@ViewData["type"].ToString()" id="gtype" />
 <script type="text/javascript" language="javascript">
     $(document).ready(
             function () {
                 var path = document.getElementById("pics").value;
+                var type = document.getElementById("gtype").value;
                 if(path.split('|')[0]!="出错")
                 {
-                    window.parent.document.getElementById("picture").value += path;
-                    window.parent.setPic("#picture");
+                    if(type!=1)
+                    {
+                        window.parent.document.getElementById("picture").value += path;
+                        window.parent.setPic("#picture");
+                    }
+                    else
+                    {
+                        window.parent.document.getElementById("picture1").value += path;
+                        window.parent.setPic("#picture1");
+                    }
                 }
                 else
                 {

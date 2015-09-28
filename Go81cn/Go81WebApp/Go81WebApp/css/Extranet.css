@@ -187,6 +187,8 @@ body{
 .news_search {
     float: right;
     margin: -3px 10px 0px auto;
+    _margin:-3px 0;
+    *margin:-3px 0;
 }
 
 .pushmessagetitle {

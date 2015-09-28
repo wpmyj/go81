@@ -1,0 +1,233 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@{
+    ViewBag.Title = "公告统计";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<link href="~/css/css.css" rel="stylesheet" />
+<link href="~/css/stylesheet.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right" style="padding-bottom:20px;">
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">统计详情</div>
+                @*<a style="position:absolute;top:8px;right:20px;" class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>*@
+            </div>
+        </div>
+
+        <div>
+            <div class="static-info">
+                <p style="color: #228b22"><strong>发布公告总数为： <span> @ViewData["公告总数"] 条</span></strong></p>
+            </div>
+            <!--基础分类统计-->
+            <div class="statistic_title" show="true">
+                <div class="color_dot" style=" background: #10BB12;"></div>
+                <div class="statistic_title_type">基础分类统计</div>
+                <div class="statistic_title_derect " style="transform: rotate(90deg);"></div>
+            </div>
+
+            <div class="statistic_content">
+                <div class="statistic_content_container" style="margin-bottom:30px;">
+                    <ul>
+                        @{
+                            var 公告性质 = ViewData["按公告性质统计"] as Dictionary<string, string>;
+                            foreach (var k in 公告性质)
+                            {
+                                <li style=" margin: 15px 5px;border: 1px solid #713286;">
+                                    <span>@k.Value</span>条
+                                    <p>@k.Key</p>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <p style="font-size:14px;">按公告性质统计</p>
+                </div>
+
+                <div class="statistic_content_container" style="margin-bottom:30px;">
+                    <ul>
+                        @{
+                            var 重要程度 = ViewData["按重要程度统计"] as Dictionary<string, string>;
+                            foreach (var j in 重要程度)
+                            {
+                                <li style="border: 1px solid #3ACDCD;">
+                                    <span>@j.Value</span>条
+                                    <p>@j.Key</p>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <p style="font-size:14px;">按重要程度统计</p>
+                </div>
+
+                <div class="statistic_content_container" style="margin-bottom:30px;">
+                    <ul>
+                        @{
+                            var 公告性质点击率 = ViewData["按公告性质点击率统计"] as Dictionary<string, string>;
+                            foreach (var k in 公告性质点击率)
+                            {
+                                <li style=" margin: 15px 5px;border: 1px solid #49CD3A;">
+                                    <span>@k.Value</span>%
+                                    <p>@k.Key</p>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <p style="font-size:14px;">按公告性质点击率统计</p>
+                </div>
+
+                <div class="statistic_content_container">
+                    <ul>
+                        @{
+                            var 公告类别 = ViewData["按公告类别统计"] as Dictionary<string, string>;
+                            var yy = 0;
+                            foreach (var k in 公告类别)
+                            {
+                                yy++;
+                                if (yy == 6)
+                                {
+                                    <li style="margin-left:110px;border: 1px solid #E4DB31;">
+                                        <span>@k.Value</span>条
+                                        <p>@k.Key</p>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li style="border: 1px solid #E4DB31;">
+                                        <span>@k.Value</span>条
+                                        <p>@k.Key</p>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                    <p style="font-size:14px;">按公告类别统计</p>
+                </div>
+            </div>
+
+            <!--各省各采购站某一年每月发布数量统计-->
+            <div class="statistic_title" show="false">
+                <div class="color_dot"></div>
+                <div class="statistic_title_type">各省各采购站某一年每月发布数量统计</div>
+                <div class="statistic_title_derect "></div>
+            </div>
+            <div class="hidden_content">
+                <div style="padding:12px;">
+                    <select id="area" style="width: 150px;height: 31px;" onchange="getData()">
+                        <option>四川</option>
+                        <option>重庆</option>
+                        <option>贵州</option>
+                        <option>云南</option>
+                        <option>西藏</option>
+                    </select>
+                    <input style="height:25px;text-indent:10px" id="adYear" value="@DateTime.Now.Year" onchange="getData()" onfocus="WdatePicker({ dateFmt: 'yyyy' })" />
+                    @Html.DropDownList("adType", new SelectList(Enum.GetValues(typeof(公告.公告性质))), new { @onchange = "getData()", style = "height:31px;width: 155px;" })
+                </div>
+                <div id="waitfor" style="position:absolute; z-index:100; width:940px; height:200px; text-align:center; line-height:320px; display:none;">
+                    <img src="~/Images/ajax-loader.gif" width="30px" height="30px" />
+                </div>
+                <div id="isInClient" style="min-height:300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function printpage() {
+        $('#adstatislist').children().eq(1).hide();
+        document.body.innerHTML = $('#printContent').html();
+        window.print();
+    }
+    $(".statistic_title").click(function(){
+        var isShow=$(this).attr("show");
+        var $this=$(this);
+        if(isShow=="false"){
+            $this.attr({"show":"true"}).next().fadeIn().end()
+                .children(".color_dot")
+                .css({"background":"#10BB12"}).end()
+                .children(".statistic_title_derect")
+                .css({"transform":"rotate(90deg)"});
+        }
+        else{
+            $this.attr({"show":"false"}).next().fadeOut().end()
+              .children(".color_dot")
+              .css({"background":"#DF7E2D"}).end()
+              .children(".statistic_title_derect")
+              .css({"transform":"rotate(0deg)"});
+        }
+    });
+
+    function getData() {
+        var area=$("#area").find("option:selected").text();
+        var year=$("#adYear").val();
+        var type=$("#adType").find("option:selected").text();
+        $.ajax({
+            url: '/单位用户后台/Part_AdStatistic_ByType',
+            data: { year: year,type:type,area:area },
+            beforeSend: function () {
+                $("#waitfor").show();
+                $("#isInClient").html("");
+            },
+            success: function (data) {
+                $("#waitfor").hide();
+                $("#isInClient").html(data);
+            },
+            erroe: function () {
+                alert("服务器错误！");
+            },
+        });
+    }
+
+    var i = @(int.Parse(ViewData["currentpage"].ToString()));
+    var j=@(int.Parse(ViewData["pagecount"].ToString()));
+    $(function () {
+        $(".gys_znxx_content_detailbox a").each(function () {
+            if ($(this).text() == i) {
+                $(this).addClass("currentPage");
+            }
+            if (i== j) {
+                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
+            }
+            if (i == 1) {
+                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
+            }
+        });
+
+        var isExist=false;
+        window.onscroll=function(){
+            var oDiv=document.getElementById("isInClient");
+            var top = oDiv.getBoundingClientRect().top;
+            var se = document.documentElement.clientHeight;
+            var area=$("#area").find("option:selected").text();
+            var year=$("#adYear").val();
+            var type=$("#adType").find("option:selected").text();
+            if(top <= se ) {
+                if(!isExist)
+                {
+                    $.ajax({
+                        url:'/单位用户后台/Part_AdStatistic_ByType',
+                        data:{year:year,type:type,area:area},
+                        beforeSend:function(){
+                            $("#waitfor").show();
+                        },
+                        success:function(data){
+                            $("#waitfor").hide();
+                            $("#isInClient").html(data);
+                            isExist=true;
+                        },
+                        error:function(){
+                            $("#waitfor").hide();
+                            $("$isInClient").html("获取超时！");
+                        },
+                    });
+                }
+            }
+        }
+
+        $("#公告统计").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#公告统计").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

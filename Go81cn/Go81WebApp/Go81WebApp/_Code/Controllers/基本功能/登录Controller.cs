@@ -46,6 +46,11 @@ namespace Go81WebApp.Controllers.基本功能
         //[ValidateAntiForgeryToken]
         public ActionResult Login(LoginInfo li)
         {
+            string temp_session="";
+            if (Session["Ginfo"] != null)
+            {
+                temp_session = Session["Ginfo"].ToString();
+            }
             var vc = this.HttpContext.Session["vcode"] as 验证码;
             if (null == vc || string.IsNullOrWhiteSpace(li.VerifyCode))
             {
@@ -58,7 +63,7 @@ namespace Go81WebApp.Controllers.基本功能
                 return View();
             }
             var u = this.HttpContext.登录(li.LoginName, li.LoginPwd, li.noExpire);
-
+            Session["Ginfo"] = temp_session;
             //记录登录统计
             登录统计 logindate = new 登录统计();
             logindate.登录结果 = 登录结果.用户名或密码错误;

@@ -1599,6 +1599,13 @@ namespace Go81WebApp.Controllers.后台
             }
         }
 
+        public void ExportGysPhoneToExcel()
+        {
+            HttpResponseBase rs = Response;
+            TemplateExcel.供应商手机号导出(rs);
+        }
+
+
 
         public ActionResult Modify_Finance()
         {
@@ -9260,24 +9267,26 @@ namespace Go81WebApp.Controllers.后台
         {
             var _gys = 用户管理.查询用户<供应商>(0, 0);
             string[] _area = { "成都", "贵阳", "重庆", "昆明" };
-            var newdic = new Dictionary<string, int>();
+
+            var newdic = new Dictionary<string, int>(); 
             var newdic1 = new Dictionary<string, int>();
 
             //供应商入网数量
             var dic = new Dictionary<string, Dictionary<string, int>>();
-            var _qjrk = _gys.Where(o => o.供应商用户信息.入库级别 == 供应商.入库级别.全军库).Count();
-            newdic.Add("全军入库", _qjrk);
-            var _cdrk = _gys.Where(o => o.供应商用户信息.入库级别 == 供应商.入库级别.成都军区库).Count();
-            newdic.Add("成都军区入库", _cdrk);
+            var _qjrk = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.入库级别 == 供应商.入库级别.全军库));
+            newdic.Add("全军入库", (int)_qjrk);
+
+            var _cdrk = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.入库级别 == 供应商.入库级别.成都军区库));
+            newdic.Add("成都军区入库", (int)_cdrk);
             dic.Add("入网供应商总数", newdic);
 
             newdic = new Dictionary<string, int>();
             foreach (var item in _area)
             {
-                var _agreegys = _gys.Where(o => o.供应商用户信息.协议供应商 && o.所属地域.城市 != null && o.所属地域.城市.Contains(item)).Count();
-                newdic.Add(item, _agreegys);
-                var _emergys = _gys.Where(o => o.所属地域.城市 != null && o.所属地域.城市.Contains(item) && o.供应商用户信息.应急供应商).Count();
-                newdic1.Add(item, _emergys);
+                var _agreegys = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.协议供应商 && o.所属地域.城市 != null && o.所属地域.城市.Contains(item)));
+                newdic.Add(item, (int)_agreegys);
+                var _emergys = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.所属地域.城市 != null && o.所属地域.城市.Contains(item) && o.供应商用户信息.应急供应商));
+                newdic1.Add(item, (int)_emergys);
             }
             dic.Add("入网协议供应商总数", newdic);
             dic.Add("入网应急供应商总数", newdic1);
@@ -9287,20 +9296,31 @@ namespace Go81WebApp.Controllers.后台
             var dic1 = new Dictionary<string, Dictionary<string, int>>();
             newdic = new Dictionary<string, int>();
             newdic1 = new Dictionary<string, int>();
-            string[] _tywz = { "办公设备", "文体器材", "计算机及通信", "电气设备", "机械设备", "家具", "仪器仪表", "原材料", "建筑装修材料", "车辆" };
-            string[] _zywz = { "医疗设备", "油料设备器材", "给养器材", "军用食品", "后勤装备", "药品类", "被装", "医用耗材", "军事交通器材", "基建营房工程器材" };
+
+            //获取商品分类 并按分类通用与专用物资
+            var _tywz = new List<string>();
+            var _zywz = new List<string>();
+            var _classify = 商品分类管理.查找子分类(-1);
+            foreach (var item in _classify)
+            {
+                if (item.分类性质 == 商品分类性质.通用物资) { _tywz.Add(item.分类名); }
+                else { _zywz.Add(item.分类名); }
+            }
+            
             foreach (var item in _tywz)
             {
+                //var _hy = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.可提供产品类别列表.Count > 0 && o.可提供产品类别列表.Exists(p => p.一级分类.Contains(item))));
                 var _hy = _gys.Where(o => o.可提供产品类别列表.Count > 0 && o.可提供产品类别列表.Exists(p => p.一级分类.Contains(item))).Count();
-                newdic.Add(item, _hy);
+                newdic.Add(item, (int)_hy);
             }
             dic1.Add("通用物资", newdic);
             foreach (var items in _zywz)
-            {
+            {                                                                                                                                       
+                //var _hy = 用户管理.计数用户<供应商>(0,0, Query<供应商>.Where(o => o.可提供产品类别列表.Count > 0 && o.可提供产品类别列表.Exists(p => p.一级分类.Contains(items))));
                 var _hy = _gys.Where(o => o.可提供产品类别列表.Count > 0 && o.可提供产品类别列表.Exists(p => p.一级分类.Contains(items))).Count();
-                newdic1.Add(items, _hy);
+                newdic1.Add(items, (int)_hy);
             }
-            dic1.Add("专用物资", newdic1);
+            dic1.Add("专用物资", newdic1);                              
             ViewData["各行业供应商入网数量"] = dic1;
 
             return View();
@@ -9308,17 +9328,15 @@ namespace Go81WebApp.Controllers.后台
 
         public ActionResult Part_UnitOrAdStatics()
         {
-
             string[] _area = { "成都", "贵阳", "重庆", "昆明" };
             var newdic = new Dictionary<string, int>();
 
             //部队单位用户
-            var _unitaccount = 用户管理.查询用户<单位用户>(0, 0);
             var dic = new Dictionary<string, Dictionary<string, int>>();
             foreach (var item in _area)
             {
-                var _allaccount = _unitaccount.Where(o => o.所属地域.城市 != null && o.所属地域.城市.Contains(item)).Count();
-                newdic.Add(item, _allaccount);
+                var _allaccount = 用户管理.计数用户<单位用户>(0, 0, Query<单位用户>.Where(o => o.所属地域.城市 != null && o.所属地域.城市.Contains(item)));
+                newdic.Add(item, (int)_allaccount);
             }
             dic.Add("单位用户账号申请总数", newdic);
 
@@ -9327,17 +9345,31 @@ namespace Go81WebApp.Controllers.后台
 
             //公告月发布数量
             var jk = new List<Tuple<string, string, string>>(); //统计月份，每月数量，某月每天数量
+
+            ////每一年的开始时间与结束时间
+            //var _yearStart = new DateTime(DateTime.Now.Year, 1, 1, 0, 0, 0);
+            //var _yearEnd = new DateTime(DateTime.Now.Year, 12, 31, 23, 59, 59);
+            //某一年每月的开始时间与结束时间
+            var _monthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
+            var _monthEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month), 0, 0, 0);
+
             var _month = DateTime.Now.Month;
             var _year = DateTime.Now.Year;
             for (int i = 1; i <= 7; i++)
             {
+                _monthStart.AddMonths(-1);
+                _monthEnd.AddMonths(-1);
                 _month--;
+                //当月份倒数到前一年12月时年份减去一年，月份设为12月
                 if (_month <= 0)
                 {
+                    _monthStart = new DateTime(DateTime.Now.Year - 1, 12, 1, 0, 0, 0);
+                    _monthEnd = new DateTime(DateTime.Now.Year - 1, 12, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month), 0, 0, 0);
                     _year -= 1;
                     _month = 12;
                 }
-                var _monthnum = _ad.Where(o => o.基本数据.添加时间.Year == _year && o.基本数据.添加时间.Month == _month).Count();
+
+                var _monthnum = 公告管理.计数公告(0, 0, Query<公告>.GTE(o => o.基本数据.添加时间, _monthStart).And(Query<公告>.LTE(o => o.基本数据.添加时间, _monthEnd)));
                 var _perday = Math.Round(_monthnum / 30.0, 1);
                 jk.Add(Tuple.Create(_month + "月", _monthnum + "条", _perday + "条"));
             }
@@ -9348,49 +9380,52 @@ namespace Go81WebApp.Controllers.后台
             var typs = new Dictionary<string, Dictionary<string, int>>();
 
             newdic = new Dictionary<string, int>();
-            newdic.Add("", _ad.Where(o => o.公告信息.公告类别 == 公告.公告类别.公开招标 &&
+            newdic.Add("", (int)公告管理.计数公告(0,0,Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.公开招标 &&
                                         (o.公告信息.公告性质 == 公告.公告性质.采购公告 ||
                                         o.公告信息.公告性质 == 公告.公告性质.预公告 ||
-                                        o.公告信息.公告性质 == 公告.公告性质.技术公告)).Count());
+                                        o.公告信息.公告性质 == 公告.公告性质.技术公告))));
             typs.Add("公开招标类", newdic);
 
             newdic = new Dictionary<string, int>();
-            newdic.Add("", _ad.Where(o => o.公告信息.公告类别 == 公告.公告类别.公开招标 &&
+            newdic.Add("", (int)公告管理.计数公告(0,0,Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.公开招标 &&
                                           (o.公告信息.公告性质 == 公告.公告性质.中标结果公示 ||
                                           o.公告信息.公告性质 == 公告.公告性质.流标公告 ||
-                                          o.公告信息.公告性质 == 公告.公告性质.废标公告)).Count());
+                                          o.公告信息.公告性质 == 公告.公告性质.废标公告))));
             typs.Add("结果公示类", newdic);
 
             newdic = new Dictionary<string, int>();
-            newdic.Add("邀请招标类", _ad.Where(o => o.公告信息.公告类别 == 公告.公告类别.邀请招标).Count());
-            newdic.Add("询价类", _ad.Where(o => o.公告信息.公告类别 == 公告.公告类别.询价采购).Count());
-            newdic.Add("竞争性谈判类", _ad.Where(o => o.公告信息.公告类别 == 公告.公告类别.竞争性谈判).Count());
-            newdic.Add("协议采购类", _ad.Where(o => o.公告信息.公告类别 == 公告.公告类别.协议采购).Count());
-            newdic.Add("单一来源类", _ad.Where(o => o.公告信息.公告类别 == 公告.公告类别.单一来源).Count());
-            newdic.Add("网上竞标类", _ad.Where(o => o.公告信息.公告类别 == 公告.公告类别.网上竞标).Count());
+            newdic.Add("邀请招标类", (int)公告管理.计数公告(0,0,Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.邀请招标)));
+            newdic.Add("询价类", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.询价采购)));
+            newdic.Add("竞争性谈判类", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.竞争性谈判)));
+            newdic.Add("协议采购类", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.协议采购)));
+            newdic.Add("单一来源类", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.单一来源)));
+            newdic.Add("网上竞标类", (int)公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.网上竞标)));
             typs.Add("采购类", newdic);
             ViewData["公告发布类型"] = typs;
 
             //公告发布单位
-            var _units = _ad.Where(o => o.公告信息.公告类别 != 公告.公告类别.其他)
-                            .Select(o => o.公告信息.需求单位 != null ? o.公告信息.需求单位.Trim() : o.公告信息.需求单位)
+            //var _units = 公告管理.查询公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 != 公告.公告类别.其他))
+            //                .Select(o => o.公告信息.需求单位 != null ? o.公告信息.需求单位.Trim() : o.公告信息.需求单位)
+            //                .Distinct();
+            var _units = 公告管理.查询公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 != 公告.公告类别.其他))
+                            .Select(o => o.公告信息.需求单位)
                             .Distinct();
             var unitgg = new List<Tuple<string, int, int>>();
             foreach (var item in _units)
             {
                 //某单位招投标类公告数量
-                var _zbl = _ad.Where(o => (o.公告信息.需求单位 != null ? o.公告信息.需求单位.Trim() : o.公告信息.需求单位) == item &&
+                var _zbl = 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.需求单位 != null && o.公告信息.需求单位 == item &&
                                           o.公告信息.公告类别 == 公告.公告类别.公开招标 &&
-                                          o.公告信息.公告性质 != 公告.公告性质.未设置).Count();
+                                          o.公告信息.公告性质 != 公告.公告性质.未设置));
                 //某单位采购类公告数量
-                var _cgl = _ad.Where(o => (o.公告信息.需求单位 != null ? o.公告信息.需求单位.Trim() : o.公告信息.需求单位) == item &&
+                var _cgl = 公告管理.计数公告(0, 0, Query<公告>.Where(o => o.公告信息.需求单位 != null && o.公告信息.需求单位 == item &&
                                           (o.公告信息.公告类别 == 公告.公告类别.单一来源 ||
                                           o.公告信息.公告类别 == 公告.公告类别.竞争性谈判 ||
                                           o.公告信息.公告类别 == 公告.公告类别.网上竞标 ||
                                           o.公告信息.公告类别 == 公告.公告类别.协议采购 ||
                                           o.公告信息.公告类别 == 公告.公告类别.询价采购 ||
-                                          o.公告信息.公告类别 == 公告.公告类别.邀请招标)).Count();
-                unitgg.Add(Tuple.Create(item, _zbl, _cgl));
+                                          o.公告信息.公告类别 == 公告.公告类别.邀请招标)));
+                unitgg.Add(Tuple.Create(item, (int)_zbl, (int)_cgl));
             }
             ViewData["公告发布单位"] = unitgg;
             return PartialView("Part_View/Part_UnitOrAdStatics");
@@ -13775,6 +13810,11 @@ namespace Go81WebApp.Controllers.后台
 
             }
             return Content(retstr);
+        }
+        public void ExportExpertsToExcel()
+        {
+            HttpResponseBase rs = Response;
+            TemplateExcel.导出专家信息(rs);
         }
 
 

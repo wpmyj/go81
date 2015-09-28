@@ -1,0 +1,125 @@
+﻿<div style="font-size:13px">
+    <div><h4 style="margin:10px;">公告月发布数量</h4></div>
+    <table class="table-brief" cellpadding="0" cellspacing="0">
+        @{
+            var 公告月发布数量 = ViewData["公告月发布数量"] as List<Tuple<string, string, string>>;
+            if (公告月发布数量.Any())
+            {
+                <tr>
+                    <td>统计月份</td>
+                    @foreach (var item in 公告月发布数量)
+                    {
+                        <td>@item.Item1</td>
+                    }
+                </tr>
+                <tr>
+                    <td>总数量</td>
+                    @foreach (var item in 公告月发布数量)
+                    {
+                        <td>@item.Item2</td>
+                    }
+                </tr>
+                <tr>
+                    <td>平均每日</td>
+                    @foreach (var item in 公告月发布数量)
+                    {
+                        <td>@item.Item3</td>
+                    }
+                </tr>
+            }
+        }
+
+    </table>
+</div>
+<div style="font-size:13px;">
+    <div><h4 style="margin:10px;">公告发布类型</h4></div>
+    <table class="table-brief" cellpadding="0" cellspacing="0">
+        <tr>
+            <th width="3%">编号</th>
+            <th width="10%">项目</th>
+            <th width="6%">&nbsp;</th>
+            <th width="6%">数量</th>
+        </tr>
+        @{
+            var 公告发布类型 = ViewData["公告发布类型"] as Dictionary<string, Dictionary<string, int>>;
+            if (公告发布类型.Any())
+            {
+                var num = 0;
+                foreach (var item in 公告发布类型)
+                {
+                    num++;
+                    <tr>
+                        <td>@num )</td>
+                        <td>@item.Key</td>
+                        <td>&nbsp;</td>
+                        <td>@公告发布类型[item.Key].Sum(o => o.Value)</td>
+                    </tr>
+                    if (item.Key == "采购类")
+                    {
+                        var numb=0;
+                        foreach (var i in 公告发布类型[item.Key])
+                        {
+                            numb++;
+                            <tr>
+                                <td>&nbsp;</td>
+                                @if (numb == 1)
+                                {
+                                    <td>其中：</td>
+                                }
+                                else
+                                {
+                                    <td>&nbsp;</td>
+                                }
+                              
+                                <td>@i.Key</td>
+                                <td>@i.Value</td>
+                            </tr>
+                        }
+                    }
+                }
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>总计</td>
+                    <td>&nbsp;</td>
+                    <td>@公告发布类型.Sum(o=>o.Value.Sum(p=>p.Value))</td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+<div style="font-size:13px;">
+    <div><h4 style="margin:10px;">公告发布单位</h4></div>
+    <table class="table-brief" cellpadding="0" cellspacing="0">
+        <tr>
+            <th width="20%">发布单位</th>
+            <th width="6%">招标类条数</th>
+            <th width="6%">采购类条数</th>
+            <th width="6%">总条数</th>
+            <th width="6%">采购总金额</th>
+        </tr>
+        @{
+            var 公告发布单位 = ViewData["公告发布单位"] as List<Tuple<string, int, int>>;
+            if (公告发布单位.Any())
+            {
+                foreach (var items in 公告发布单位)
+                {
+                    <tr>
+                        <td>@(items.Item1 !=null ? items.Item1 :"未填写发布单位" )</td>
+                        <td>@items.Item2</td>
+                        <td>@items.Item3</td>
+                        <td>@(items.Item2 + items.Item3)</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                }
+                <tr>
+                    <td>总计</td>
+                    <td>@公告发布单位.Sum(o => o.Item2)</td>
+                    <td>@公告发布单位.Sum(o => o.Item3)</td>
+                    <td>@(公告发布单位.Sum(o => o.Item2) + 公告发布单位.Sum(o => o.Item3))</td>
+                    <td>&nbsp;</td>
+                </tr>
+            }
+}
+
+    </table>
+</div>

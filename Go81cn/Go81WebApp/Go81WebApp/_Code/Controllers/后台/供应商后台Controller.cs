@@ -235,10 +235,10 @@ namespace Go81WebApp.Controllers.后台
             {
                 ViewBag.servicedepart = false;
             }
-            if (Newmodel.供应商用户信息.U盾信息 == null || string.IsNullOrWhiteSpace(Newmodel.供应商用户信息.U盾信息.加密参数) || string.IsNullOrWhiteSpace(Newmodel.供应商用户信息.U盾信息.序列号))
+            /*if (Newmodel.供应商用户信息.U盾信息 == null || string.IsNullOrWhiteSpace(Newmodel.供应商用户信息.U盾信息.加密参数) || string.IsNullOrWhiteSpace(Newmodel.供应商用户信息.U盾信息.序列号))
             {
                 ViewData["U_message"] = "您还没有<a href='/jct/ApplyVip' style='text-decoration:underline; font-weight:bold;' target='_blank'>申请安全认证和办理U盾</a>";
-            }
+            }*/
             ViewData["msg_count"] = count;
             ViewData["user"] = Newmodel.登录信息.登录名;
 
@@ -574,12 +574,12 @@ namespace Go81WebApp.Controllers.后台
                 {
                     name=Request.QueryString["name"];
                 }
-                long PageCount = 商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled :false) / 20;
-                if (商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled :false) % 20 > 0)
+                long PageCount = 商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled :true) / 20;
+                if (商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled :true) % 20 > 0)
                 {
                     PageCount++;
                 }
-                IEnumerable<商品> goods = 商品管理.查询供应商商品(id, 20 * (CurrentPage - 1), 20, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled : false);
+                IEnumerable<商品> goods = 商品管理.查询供应商商品(id, 20 * (CurrentPage - 1), 20, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled : true);
                 if (goods != null)
                 {
                     foreach (var item in goods)
@@ -6153,6 +6153,10 @@ namespace Go81WebApp.Controllers.后台
                 {
                     Pro_Model.商品信息.商品图片 = new List<string>(Request.Form["oldpicture"].Substring(0, Request.Form["oldpicture"].Length - 1).Split('|'));
                 }
+                if (!string.IsNullOrWhiteSpace(Request.Form["oldpicture1"].ToString()))
+                {
+                    Pro_Model.商品信息.商品型号图片 = new List<string>(Request.Form["oldpicture1"].Substring(0, Request.Form["oldpicture1"].Length - 1).Split('|'));
+                }
                 if (!string.IsNullOrEmpty(Request.Form["pro_imgstr"]))
                 {
                     string[] img = Request.Form["pro_imgstr"].Substring(0, Request.Form["pro_imgstr"].Length - 1).Split('|');
@@ -6161,6 +6165,17 @@ namespace Go81WebApp.Controllers.后台
                         if (System.IO.File.Exists(Server.MapPath(@item)))
                         {
                             Pro_Model.商品信息.商品图片.Add(item);
+                        }
+                    }
+                }
+                if (!string.IsNullOrEmpty(Request.Form["pro_imgstr1"]))
+                {
+                    string[] img = Request.Form["pro_imgstr1"].Substring(0, Request.Form["pro_imgstr1"].Length - 1).Split('|');
+                    foreach (var item in img)
+                    {
+                        if (System.IO.File.Exists(Server.MapPath(@item)))
+                        {
+                            Pro_Model.商品信息.商品型号图片.Add(item);
                         }
                     }
                 }
@@ -6330,7 +6345,17 @@ namespace Go81WebApp.Controllers.后台
                         });
                     }
                 }
-                商品管理.添加商品(Pro_Model, long.Parse(Request.Form["idsttrsrr"]), currentUser.Id);
+                if (!string.IsNullOrWhiteSpace(Request.Form["pro_typeimgstr"]))
+                {
+                    List<string> imglist = new List<string>();
+                    string[] img = Request.Form["pro_typeimgstr"].Split('|');
+                    for (int i = 0; i < img.Length - 1;i++ )
+                    {
+                        imglist.Add(img[i]);
+                    }
+                    Pro_Model.商品信息.商品型号图片 = imglist;
+                }
+                商品管理.添加商品(Pro_Model,long.Parse(Request.Form["idsttrsrr"]), currentUser.Id);
                 //CreateIndex(Pro_Model, "/Lucene.Net/IndexDic/Product");
 
                 return RedirectToAction("Gys_Product_List", "供应商后台");
@@ -6525,6 +6550,11 @@ namespace Go81WebApp.Controllers.后台
                                 filePath = 上传管理.获取上传路径<订购合同上传记录>(媒体类型.图片, 路径类型.服务器本地路径);
                                 filePath1 = 上传管理.获取上传路径<订购合同上传记录>(媒体类型.图片, 路径类型.不带域名根路径);
                             }
+                            else if(url=="gtype")
+                            {
+                                filePath = 上传管理.获取上传路径<商品>(媒体类型.图片, 路径类型.服务器本地路径);
+                                filePath1 = 上传管理.获取上传路径<商品>(媒体类型.图片, 路径类型.不带域名根路径);
+                            }
                             else
                             {
                                 filePath = 上传管理.获取上传路径<商品>(媒体类型.图片, 路径类型.服务器本地路径);
@@ -6578,6 +6608,14 @@ namespace Go81WebApp.Controllers.后台
                             path = "出错|文件格式或大小不对！";
                         }
                     }
+                }
+                if (url == "gtype")
+                {
+                    ViewData["type"] = "1";
+                }
+                else
+                {
+                    ViewData["type"] = "0";
                 }
                 ViewData["path"] = path;
             }
@@ -6638,6 +6676,7 @@ namespace Go81WebApp.Controllers.后台
         public int DeleteImages()
         {
             long id = 0;
+            string number = Request.QueryString["number"];
             if (!string.IsNullOrWhiteSpace(Request.QueryString["gid"]))
             {
                 id = long.Parse(Request.QueryString["gid"]);
@@ -6651,12 +6690,26 @@ namespace Go81WebApp.Controllers.后台
                 商品 model = 商品管理.查找商品(id);
                 if (model != null)
                 {
-                    for (int i = 0; i < model.商品信息.商品图片.Count(); i++)
+                    if(number=="0")
                     {
-                        if (model.商品信息.商品图片[i] == strname)
+                        for (int i = 0; i < model.商品信息.商品图片.Count(); i++)
                         {
-                            model.商品信息.商品图片.Remove(strname);
-                            break;
+                            if (model.商品信息.商品图片[i] == strname)
+                            {
+                                model.商品信息.商品图片.Remove(strname);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < model.商品信息.商品型号图片.Count(); i++)
+                        {
+                            if (model.商品信息.商品型号图片[i] == strname)
+                            {
+                                model.商品信息.商品型号图片.Remove(strname);
+                                break;
+                            }
                         }
                     }
                     商品管理.更新商品(model);

@@ -16,7 +16,7 @@
         foreach (var t in Model)
         {
             <div class="gyspage_detail_leftimgbox">
-                <a href="~/商品陈列/Product_Detail?id=@t.Id" target="_blank" onclick='clickStatistics("C2","1", "@t.Id","@t.商品信息.所属供应商.用户ID")'>
+                <a href="~/商品陈列/Product_Detail?id=@t.Id" onclick='clickStatistics("C2","1", "@t.Id","@t.商品信息.所属供应商.用户ID")'>
                     @if (t.商品信息.商品图片.Count > 0)
                     {
                         <img src="@t.商品信息.商品图片[0].Replace("original", "150X150")" />
@@ -29,11 +29,11 @@
                 <div style="text-align:left;font-size:13px; width:178px; padding-left:26px; margin-left:auto;margin-right:auto;">
                     @if (t.商品信息.商品名.Length > 35)
                     {
-                        <a target="_blank" title="@t.商品信息.商品名" href="~/商品陈列/Product_Detail?id=@t.Id" onclick='clickStatistics("C2","1", "@t.Id","@t.商品信息.所属供应商.用户ID")'>@t.商品信息.商品名.Substring(0, 35)</a>
+                        <a title="@t.商品信息.商品名" href="~/商品陈列/Product_Detail?id=@t.Id" onclick='clickStatistics("C2","1", "@t.Id","@t.商品信息.所属供应商.用户ID")'>@t.商品信息.商品名.Substring(0, 35)</a>
                     }
                     else
                     {
-                        <a target="_blank" title="@t.商品信息.商品名" href="~/商品陈列/Product_Detail?id=@t.Id" onclick='clickStatistics("C2","1", "@t.Id","@t.商品信息.所属供应商.用户ID")'>@t.商品信息.商品名</a>
+                        <a title="@t.商品信息.商品名" href="~/商品陈列/Product_Detail?id=@t.Id" onclick='clickStatistics("C2","1", "@t.Id","@t.商品信息.所属供应商.用户ID")'>@t.商品信息.商品名</a>
                     }
                     <br />
                     <em style="color:red;">￥@(string.Format("{0:0.00}", t.销售信息.价格))</em><br />

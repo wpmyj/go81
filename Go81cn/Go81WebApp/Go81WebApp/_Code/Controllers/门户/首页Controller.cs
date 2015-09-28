@@ -235,7 +235,7 @@ namespace Go81WebApp.Controllers.门户
                         }
                         else
                         {
-                            IEnumerable<商品> gd = 商品管理.查询商品(0, 1, Query<商品>.Where(o => o.商品信息.所属供应商.用户ID == u.所属供应商.用户ID && o.审核数据.审核状态 == 审核状态.审核通过), false, SortBy.Descending("销售信息.点击量"), false);
+                           IEnumerable<商品> gd = 商品管理.查询商品(0, 1, Query<商品>.Where(o => o.商品信息.所属供应商.用户ID == u.所属供应商.用户ID && o.审核数据.审核状态 == 审核状态.审核通过), false, SortBy.Descending("销售信息.点击量"), false);
                             if (gd != null && gd.Count() != 0)
                             {
                                 sp2.Add(gd.First());
