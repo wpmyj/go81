@@ -38,7 +38,9 @@ for (i = 0; i < PCAN.length; i++) {
     PCAP[i] = PCAArea[i].split(",")[0];
     PCAC[i] = PCAArea[i].split(',')
 }
-
+function getprovince() {
+    return PCAP;
+}
 //下面开始初始化省市区控件
 function PCAS() {
     this.SelP = document.getElementsByName(arguments[0])[0];

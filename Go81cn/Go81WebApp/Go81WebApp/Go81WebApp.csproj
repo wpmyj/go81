@@ -280,6 +280,7 @@
     <Compile Include="_Code\Models\数据模型\内容数据模型\培训资料.cs" />
     <Compile Include="_Code\Models\数据模型\商品数据模型\商品.cs" />
     <Compile Include="_Code\Models\数据模型\商品数据模型\商品分类.cs" />
+    <Compile Include="_Code\Models\数据模型\商品数据模型\询价采购.cs" />
     <Compile Include="_Code\Models\数据模型\商品数据模型\购物车.cs" />
     <Compile Include="_Code\Models\数据模型\审核数据结构\审核数据.cs" />
     <Compile Include="_Code\Models\数据模型\微信数据模型\入库申请用户.cs" />
@@ -336,6 +337,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="_Code\Models\管理器\商品管理\商品分类管理.cs" />
+    <Compile Include="_Code\Models\管理器\商品管理\询价采购管理.cs" />
     <Compile Include="_Code\Models\管理器\微信管理\入库申请用户管理.cs" />
     <Compile Include="_Code\Models\管理器\用户管理\Api登录管理.cs" />
     <Compile Include="_Code\Models\管理器\统计管理\广告点击统计管理.cs" />
@@ -428,6 +430,7 @@
     <Content Include="Images\calendar.png" />
     <Content Include="Images\car1.png" />
     <Content Include="Images\cglc.png" />
+    <Content Include="Images\consultPrice.png" />
     <Content Include="Images\contact_way.jpg" />
     <Content Include="Images\countor.png" />
     <Content Include="Images\cover1.jpg" />
@@ -646,6 +649,8 @@
     <Content Include="Images\seal\昆明民族干部学院.png" />
     <Content Include="Images\seal\昆明民族干部学院章.png" />
     <Content Include="Images\seal\昆明民族干部学院签名.png" />
+    <Content Include="Images\seal\观山湖人武部章.png" />
+    <Content Include="Images\seal\观山湖人武部签名.png" />
     <Content Include="Images\seal\贵州省军区章.png" />
     <Content Include="Images\seal\贵州省军区签名.png" />
     <Content Include="Images\seal\贵州省贵阳警备区后勤部签名.png" />
@@ -691,6 +696,7 @@
     <Content Include="Images\undercons2.png" />
     <Content Include="Images\unitreg.png" />
     <Content Include="Images\unitregintranet.png" />
+    <Content Include="Images\unselected.png" />
     <Content Include="Images\up.png" />
     <Content Include="Images\value.png" />
     <Content Include="Images\vipintroduce.png" />
@@ -2147,6 +2153,9 @@
     <Content Include="Views\默认主题\门户\供应商陈列\GysList_Inlib.cshtml" />
     <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_GysList_Inlib.cshtml" />
     <Content Include="Views\默认主题\门户\商品陈列\PurchaseInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\ConsultPrice.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\CounsultStepTwo.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\CreateInfo.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\_BackLayout.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_BackHead.cshtml" />
     <Content Include="Views\默认主题\门户\商品陈列\ProductAllList.cshtml" />

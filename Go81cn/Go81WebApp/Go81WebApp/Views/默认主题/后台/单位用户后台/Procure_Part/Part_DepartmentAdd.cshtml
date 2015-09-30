@@ -3,9 +3,7 @@
 @using Go81WebApp.Models.数据模型.用户数据模型
 @using Go81WebApp.Models.管理器
 <script src="~/JS/provinceandcity_all.js"></script>
-@{
-    IEnumerable<单位用户> user = ViewData["user"] as IEnumerable<单位用户>;
-}
+ <script src="~/JS/myComfirm.js"></script>
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary(true)
@@ -46,29 +44,16 @@
                                 @Html.EditorFor(model => model.u.单位信息.单位代号, new { style = "width: 300px; height: 30px; line-height: 25px;" })<span style="color:red;">@*@Html.ValidationMessageFor(model => model.u.单位信息.单位代号)*@</span>
                             </div>
                         </div>
-                        @*<div style=" height:30px; padding:10px;">
+                        <div style=" height:30px; padding:10px;">
                             <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">所属单位：</div>
                             <div class="procure_selectlistdiv">
                                 <input id="admin" type="hidden" value="-1" name="admin" />
                                 <div id="admin_box">
-                                    <select style="width:100px;" onchange="searchUser(this)">
-                                        <option value="-1">请选择所属单位</option>
-                                        @foreach (var item in user)
-                                        {
-                                            if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
-                                            {
-                                                <option value="@item.Id">@item.单位信息.单位代号</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@item.Id">@item.单位信息.单位名称</option>
-                                            }
-                                        }
-                                    </select>
+                                   
                                 </div>
                                
                             </div>
-                        </div>*@
+                        </div>
 
                         <div style=" height:30px; padding:10px;">
                             <div style=" width:200px; font-size: 16px; font-weight: bold; color: #666666; letter-spacing: 0px; float:left; text-align:right; line-height:30px; padding-right:20px;">单位级别：</div>
@@ -183,6 +168,21 @@
 }
 <script type="text/javascript" language="javascript">
     $("#modiibutton").click(function () {
+        //验证是否设置所属单位
+        var coun = $("#admin_box").children().length;
+        var adminid = $("#admin_box").children().eq(coun - 1).val();
+        if (coun == 1) {
+            if (adminid == "-1") { alert("请选择所属单位！"); return false; }
+            $("#admin").val(adminid);
+        }
+        else {
+            if (adminid == "-1") {
+                adminid = $("#admin_box").children().eq(coun - 2).val();
+                $("#admin").val(adminid);
+            }
+            $("#admin").val(adminid);
+        }
+
         var v = $("#phone_area").val() + "-" + $("#phone_num").val();
         $("#modelPhone").val(v);
         var f = $("#modelPhone").val().replace("-", "");
@@ -228,27 +228,12 @@
     function hidetip(th) {
         $(th).parent().children("div").hide();
     }
-    function searchUser(th) {
-        if ($(th).val() != "-1") {
-            $.get('/单位用户后台/SearchUser', { id: $(th).val() }, function (data) {
-                $(th).nextAll().remove();
-                $("#admin").val($(th).val());
-                if (data.Data.length != 0) {
-                    var str = "<select onchange='searchUser(this)' style='width:100px;margin-right:4px;'><option value='-1'>请选择所属单位</option>";
-                    for (var i = 0; i < data.Data.length; i++) {
-                        str += "<option value='" + data.Data[i].Id + "'>" + data.Data[i].Name + "</option>";
-                    }
-                    str += "</select>";
-                    $("#admin_box").append(str);
-                }
-            });
-        }
-        else {
-            $(th).nextAll().remove();
-            $("#admin").val($(th).prev().val());
-        }
-    }
+
     $(document).ready(function () {
+        //设置单位级别-----所属单位
+        var dataUser = "@ViewData["jsonUser"]";
+        UnitLevel.Init(dataUser, "admin_box");
+
         $("select option").each(function () { if ($(this).text() == '') { $(this).remove(); } });
         $("#新建附属账号").addClass("left_menu_select").children("a").css({ "color": "#fff" });
         $("#新建附属账号").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });

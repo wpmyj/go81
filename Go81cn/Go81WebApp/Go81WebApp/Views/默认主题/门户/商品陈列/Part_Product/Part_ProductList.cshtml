@@ -290,7 +290,7 @@
                             </div>
                             @{ var GoodName = thisp_name.Length > 15 ? thisp_name.Substring(0, 15) : thisp_name; }
                             <div>
-                                +对比<input type="checkbox" value="@(item.销售信息.价格)" id="@item.Id" name="ck" alt="@GoodName" onclick="showcontrast(this) " />
+                                +对比<input type="checkbox" value="@(item.销售信息.价格)" id="@item.Id" name="ck" alt="@GoodName" onclick="showcontrast(this) " /><a class="consultPrice" href="/单位用户后台/ConsultPrice?id=@item.Id"></a>
                             </div>
                         </div>
                     </div>
@@ -333,7 +333,7 @@
             }
         </div>
     </div>
-
+    <input type="hidden" name="data" value="@ViewData["type"].ToString()"  id="data"/>
 </div>
 <script type="text/javascript">
     function showcontrast(a) {
@@ -475,11 +475,23 @@
 
     <script type="text/javascript" language="javascript">
         $(document).ready(function () {
-            $(".action_link").each(function () {
-                if ($(this).text() == "采购商城") {
-                    $(this).parent("div").addClass("on");
-                }
-            });
+            var d=$("#data").val();
+            if(d=="1")
+            {
+                $(".action_link").each(function () {
+                    if ($(this).text() == "办公物资") {
+                        $(this).parent("div").addClass("on");
+                    }
+                });
+            }
+            else
+            {
+                $(".action_link").each(function () {
+                    if ($(this).text() == "采购商城") {
+                        $(this).parent("div").addClass("on");
+                    }
+                });
+            }
         });
     </script>
 <script type="text/javascript" language="javascript">
@@ -488,25 +500,6 @@
         if (propertycount > 0) {
             $("#properttydiv").show();
         }
-
-        var i = @(int.Parse(ViewData["currentPage"].ToString()));
-        var j=@(int.Parse(ViewData["pagecount"].ToString()))
-        $(document).ready(function () {
-            $(".gys_znxx_content_detailbox a").each(function () {
-                if ($(this).text() == i) {
-                    $(this).css("border","1px solid #ff0000");
-                }
-                if (i== j) {
-                    $(".gys_znxx_content_detailbox a:last").addClass("endPage");
-                }
-                if (i == 1) {
-                    $(".gys_znxx_content_detailbox a:first").addClass("endPage");;
-                }
-            });
-        });
-
-
-
         //$("div.Page2").css("background-color", "#990808")
         $("#contrastdiv").css({"background-color":"white","border":"2px solid #4AA154","box-shadow":"0px 0px 5px lightgray","-webkit-box-shadow":"0px 0px 5px lightgray","-moz-box-shadow":"0px 0px 5px lightgray","height":"auto"});
     });

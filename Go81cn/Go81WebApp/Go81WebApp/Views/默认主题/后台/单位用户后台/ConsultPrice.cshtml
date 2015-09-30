@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "询价采购";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<style>
+    .Content{
+        width:900px;
+        height:auto;
+        margin:0px auto;
+    }
+    .divbox{
+        float:left;
+        width:150px;
+    }
+    .sname{
+        width:70%;
+        float:left;
+        line-height:30px;
+        text-indent:2em;
+    }
+    .gprice{
+        width:30%;
+        float:left;
+        text-align:center;
+        line-height:30px;
+    }
+</style>
+<script type="text/javascript" src="~/JS/provinceandcity_all.js"></script>
+<div class="bg_outdiv">
+    <div style="border:1px solid #327229; margin:0px auto; width:900px;background-color:#F9F9F9; font-size:13px;">
+        <div class="Content" style="margin-bottom:10px; text-indent:2em;">请选择供应商</div>
+        <div class="Content" id="province" style="border:none;">
+
+        </div>
+        <div class="Content" style="margin-top:10px;border-top:1px solid #808080;"><div class="sname">供应商名称</div><div class="gprice">商品价格</div></div>
+        <div class="Content" id="user" style="border-bottom:1px solid #808080;">
+
+        </div>
+        <div class="Content" style="text-align:center;">
+            <input type="button" id="subbt" value="下一步" />
+        </div>
+    </div>
+    <form action="/单位用户后台/CounsultStepTwo" name="data" method="post">
+        <input type="hidden" value="@ViewData["id"].ToString()" name="pid" id="pid" />
+        <input type="hidden" name="gid" value="" id="gid" />
+    </form>
+    
+</div>
+<script type="text/javascript" language="javascript">
+    $(document).ready(function () {
+        var arr = getprovince();
+        var province = "";
+        for (var i = 1; i < arr.length-1;i++)
+        {
+            province += "<div class=\"divbox\"><input type=\"radio\" onclick=\"getSupplier(this)\" name=\"province\" value=\"" + arr[i] + "\"/>" + arr[i] + "</div>";
+        }
+        province += "<div style='clear:both;'></div>";
+        $("#province").html(province);
+        $(":input[name='province']:first").attr("checked",true);
+
+        var str = "";
+        $.get("/单位用户后台/GetSupplier", { id: $("#pid").val(), pro:"四川省" }, function (data) {
+            for (var i = 0; i < data.Data.length; i++) {
+                str += "<div class=\"sname\"><input type='checkbox' name='gysname' value='" + data.Data[i].Id + "'/>" + data.Data[i].Sname + "</div><div class=\"gprice\">" + data.Data[i].Gprice + "</div>";
+            }
+            str += "<div style='clear:both;'></div>";
+            $("#user").html(str);
+        });
+    });
+    function getSupplier(th)
+    {
+        $("#user").html("请稍等......");
+        var str = "";
+        $.get("/单位用户后台/GetSupplier", { id: $("#pid").val(),pro:$(th).val() }, function (data) {
+            for (var i = 0; i < data.Data.length;i++)
+            {
+                str += "<div class=\"sname\"><input type='checkbox' name='gysname' value='" + data.Data[i].Id + "'/>" + data.Data[i].Sname + "</div><div class=\"gprice\">" + data.Data[i].Gprice+ "</div>";
+            }
+            str += "<div style='clear:both;'></div>";
+            $("#user").html(str);
+        });
+    }
+    $("#subbt").click(function () {
+        var str = "";
+        var elem = document.getElementsByName("gysname");
+        for (var i = 0; i < elem.length;i++)
+        {
+            if(elem.item(i).checked)
+            {
+                str += elem.item(i).value + ",";
+            }
+        }
+        if(str!="")
+        {
+            $("#gid").val(str);
+            document.forms["data"].submit();
+        }
+        else
+        {
+            alert("请选择供应商");
+        }
+    });
+</script>

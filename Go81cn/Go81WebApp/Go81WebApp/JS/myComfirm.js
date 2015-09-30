@@ -26,6 +26,9 @@
 		});
 	});
 */
+/*
+  对话框
+*/
 ;(function($){ 
 	$.fn.myComfirm=function(options){ 
 		var opts=$.extend({}, $.fn.myComfirm.defaults, options);
@@ -66,4 +69,98 @@
 	$.fn.myComfirm.comfirm=function(callback){ 
 		callback();
 	};
+})(jQuery);
+
+
+/*
+  单位级别联动
+  1.0.0
+  DuBo
+*/
+;(function ($) {
+    var UnitLevel = function (jsonData, tagId) {
+        var _this_ = this;
+
+        var reg = new RegExp("&quot;", "g"); //创建正则RegExp对象
+        var data = JSON.parse(jsonData.replace(reg, '"'));
+
+        var select = $("<select></select>");
+        select.css({ "width": "100px", "margin-left": "3px" }).bind("change", function () {
+            _this_.searchUser(this, tagId, data);
+        });
+
+        var optionDefault = $("<option></option>");
+        optionDefault.val("-1").html("请选择所属单位");
+
+        select.append(optionDefault);
+
+        //循环数组慎用for in,IE下容易出问题，即便是高版本IE
+        for (var item = 0; item < data.length; item++) {
+            var option = $("<option></option>");
+            option.val(data[item].id).html(data[item].name);
+            select.append(option);
+        }
+        $("#" + tagId).append(select);
+
+    };
+    UnitLevel.prototype = {
+        //获取当前匹配id的下级单位列表
+        //id：当前单位的id
+        //list：当前单位的下级单位列表
+        htmlSplice: function (id, list) {
+            for (i in list) {
+                if (parseInt(id) === list[i].id) {
+                    return list[i].下级单位列表;
+                }
+            }
+        },
+        //select选项改变事件调用
+        //e：触发当前事件的标签
+        //tagId：触发当前事件标签的父标签
+        searchUser: function (e, tagId, jsonData) {
+            var _this_ = this;
+            var id = $(e).val();
+            var oDiv = $("#" + tagId);
+            var count = $(e).prevAll().length;
+            //移除当前select后面所有的select
+            oDiv.children().eq(count).nextAll().remove();
+            //如果选择的值是请选择所属单位，则移除该select,只有第一个select的时候不移除
+            if (id == "-1") {
+                $(e).nextAll().remove(); return false;
+            }
+            //根据当前选择的select前面所有select的个数加上该select，确定循环几级，并返回当前级别的下一级列表
+            var arr = jsonData;
+            for (var ik = 0; ik < count + 1; ik++) {
+                var id = oDiv.children().eq(ik).val();
+                arr = this.htmlSplice(id, arr);
+            }
+            //循环下级列表，拼接html串
+            if (arr.length > 0) {
+                var select = $("<select></select>");
+                select.css({ "width": "100px", "margin-left": "3px" }).bind("change", function () {
+                    _this_.searchUser(this, tagId, jsonData);
+                });
+
+                var optionDefault = $("<option></option>");
+                optionDefault.val("-1").html("请选择所属单位");
+
+                select.append(optionDefault);
+                for (var item = 0; item < arr.length; item++) {
+                    var option = $("<option></option>");
+                    option.val(arr[item].id).html(arr[item].name);
+                    select.append(option);
+                }
+                $("#" + tagId).append(select);
+            }
+        }
+    };
+
+    //初始化插件
+    //data:后台传回的经过JsonConvert序列化的json字符串
+    //tagId:触发当前事件select标签的父标签
+    UnitLevel.Init = function (data, tagId) {
+        new this(data, tagId);
+    };
+
+    window["UnitLevel"] = UnitLevel;
 })(jQuery);

@@ -858,6 +858,7 @@ namespace Go81WebApp.Controllers.门户
         {
             try
             {
+                ViewData["type"] = 0;
                 if (-1 != HttpContext.检查登录())
                 {
                     ViewData["已登录"] = "1";
@@ -865,6 +866,10 @@ namespace Go81WebApp.Controllers.门户
                 else
                 {
                     ViewData["已登录"] = "0";
+                }
+                if (!string.IsNullOrWhiteSpace(Request.QueryString["type"]) && Request.QueryString["type"]=="1")
+                {
+                    ViewData["type"] = 1;
                 }
                 long id = 0;
                 if (!string.IsNullOrWhiteSpace(Request.QueryString["id"]))
@@ -913,6 +918,12 @@ namespace Go81WebApp.Controllers.门户
             //var gc = new Dictionary<string,> Dictionary<商品分类, long>();//商品分类，商品分类下商品数量    
             //var _dc = new Dictionary<商品分类, long>();
             //var _uc = new Dictionary<商品分类, long>();
+            long id = -1;
+            if(!string.IsNullOrWhiteSpace(Request.QueryString["id"])&&Request.QueryString["id"]=="1")
+            {
+                id = long.Parse(Request.QueryString["id"]);
+            }
+            ViewData["id"] = id;
             var goodclass = 商品分类管理.查找子分类();
             //foreach (var k in goodclass)
             //{

@@ -11,6 +11,7 @@ using System.Configuration;
 using System.Linq;
 using System.Collections.Generic;
 using MongoDB.Driver.Builders;
+using Newtonsoft.Json;
 namespace Go81WebApp.Controllers.基本功能
 {
     public class 注册Controller : Controller
@@ -42,8 +43,7 @@ namespace Go81WebApp.Controllers.基本功能
         }
         public ActionResult Register_Unit()
         {
-            IEnumerable<单位用户> user = 用户管理.查询用户<单位用户>(0, 0);
-            ViewData["user"] = user;
+            ViewData["jsonUser"] = JsonConvert.SerializeObject(单位用户.单位级别列表);
             ViewData["用户组列表"] = 用户组管理.查询用户组(0, 0);
 #if INTRANET
             单位用户 u = new 单位用户();
@@ -53,6 +53,7 @@ namespace Go81WebApp.Controllers.基本功能
             return View("OutUnitRegisterTips");
 #endif
         }
+
         public ActionResult OutUnitRegisterTips()
         {
             return View();
@@ -460,6 +461,9 @@ namespace Go81WebApp.Controllers.基本功能
             {
                 单位用户 u = new 单位用户();
                 //ViewData["一级单位"] = 单位用户.公告接收单位;
+                ViewData["jsonUser"] = JsonConvert.SerializeObject(单位用户.单位级别列表);
+                ViewData["用户组列表"] = 用户组管理.查询用户组(0, 0);
+
                 ViewBag.VCodeError = "验证码错误";
                 return View();
             }
@@ -468,7 +472,7 @@ namespace Go81WebApp.Controllers.基本功能
                 var p = Request.Form["deliverprovince"];
                 var c = Request.Form["delivercity"];
                 var a = Request.Form["deliverarea"];
-                //long admin_id =long.Parse(Request.Form["admin"]);
+                long admin_id =long.Parse(Request.Form["admin"]);
                 switch (p)
                 {
                     case "重庆市":
@@ -516,7 +520,10 @@ namespace Go81WebApp.Controllers.基本功能
                         unitRegisterModel.U.用户组.Add(_f[i]);
                     }
                 }
-                //unitRegisterModel.U.所属单位.用户ID = admin_id;
+                if (admin_id != -1)
+                {
+                    unitRegisterModel.U.所属单位.用户ID = admin_id;
+                }
                 用户管理.添加用户(unitRegisterModel.U);
                 //TempData["RegisterMessage"] = "注册成功";
                 return Content("<script>window.location='/注册/Successe_Regist?id=1';</script>");

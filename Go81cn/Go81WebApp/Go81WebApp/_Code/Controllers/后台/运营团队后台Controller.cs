@@ -1499,13 +1499,12 @@ namespace Go81WebApp.Controllers.后台
 
         public ActionResult Part_DepartmentAdd()
         {
-            IEnumerable<单位用户> user = 用户管理.查询用户<单位用户>(0, 0);
-            ViewData["user"] = user;
+            ViewData["jsonUser"] = JsonConvert.SerializeObject(单位用户.单位级别列表);
             ViewData["用户组列表"] = 用户组管理.查询用户组(0, 0);
             return PartialView("Part_View/Part_DepartmentAdd");
         }
         public class User
-        {
+        {   
             public long Id { get; set; }
             public string Name { get; set; }
         }
@@ -3697,10 +3696,10 @@ namespace Go81WebApp.Controllers.后台
                         model.u.管理单位.用户ID = 16;
                         break;
                 }
-                //if (Request.Form["admin"] != "-1")
-                //{
-                //    model.u.所属单位.用户ID = long.Parse(Request.Form["admin"]);
-                //}
+                if (Request.Form["admin"] != "-1")
+                {
+                    model.u.所属单位.用户ID = long.Parse(Request.Form["admin"]);
+                }
                 model.u.审核数据.审核状态 = 审核状态.审核通过;
                 model.u.登录信息.登录名 = model.loginName;
                 model.u.单位信息.单位编码 = model.unitCode;
@@ -13394,7 +13393,7 @@ namespace Go81WebApp.Controllers.后台
                 }
                 else
                 {
-                    if (long.Parse(id) == 10005 || long.Parse(id) == 10009 || long.Parse(id) == 10013 || long.Parse(id) == 20151 || long.Parse(id) == 20150 || long.Parse(id) == 20145 || long.Parse(id) == 20146 || long.Parse(id) == 20137 || long.Parse(id) == 20138 || long.Parse(id) == 20139 || long.Parse(id) == 20140 || long.Parse(id) == 20141 || long.Parse(id) == 20142 || long.Parse(id) == 20143 || long.Parse(id) == 20144 || long.Parse(id) == 20152 || long.Parse(id) == 20149 || long.Parse(id) == 20147 || long.Parse(id) == 20148 || long.Parse(id) == 20261)
+                    if (long.Parse(id) == 10005 || long.Parse(id) == 10009 ||long.Parse(id) == 10013 || long.Parse(id) == 20151 || long.Parse(id) == 20150 || long.Parse(id) == 20145 || long.Parse(id) == 20146 || long.Parse(id) == 20137 || long.Parse(id) == 20138 || long.Parse(id) == 20139 || long.Parse(id) == 20140 || long.Parse(id) == 20141 || long.Parse(id) == 20142 || long.Parse(id) == 20143 || long.Parse(id) == 20144 || long.Parse(id) == 20152 || long.Parse(id) == 20149 || long.Parse(id) == 20147 || long.Parse(id) == 20148 || long.Parse(id) == 20261)
                     {
                         t.自动计算签名字体大小 = false;
                         t.业务签名.字体大小 = 15.6F;

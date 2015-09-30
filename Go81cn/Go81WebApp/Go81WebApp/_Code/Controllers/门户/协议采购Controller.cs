@@ -74,9 +74,9 @@ namespace Go81WebApp.Controllers.门户
             int page = 1;
             ViewData["currentpage"] = page;
             ViewData["pagecount"] = maxpagesize;
-
+            IEnumerable<商品分类> goodtype = 商品分类管理.查找分类(1).子分类;
             ViewData["供应商列表"] = 用户管理.查询用户<供应商>(PAGESIZE * (page - 1), PAGESIZE, q, false, SortBy<供应商>.Descending(o => o.供应商用户信息.认证级别).Descending(o => o.基本数据.修改时间), false);
-
+            ViewData["goodtype"] = goodtype;
             return PartialView("Part_Agreement/Part_Agreement_Gys");
         }
         public ActionResult Part_AgreementgysCondition()
@@ -94,7 +94,7 @@ namespace Go81WebApp.Controllers.门户
             var page = int.Parse(Request.Params["page"]);
             var gys_name = Request.Params["gys"];
 
-            var q = MongoDB.Driver.Builders.Query<供应商>.GTE(o => o.审核数据.审核状态, 审核状态.审核通过);
+            var q = MongoDB.Driver.Builders.Query<供应商>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过);
             q = q.And(MongoDB.Driver.Builders.Query<供应商>.EQ(o => o.供应商用户信息.协议供应商, true));
             q = q.And(MongoDB.Driver.Builders.Query<供应商>
                 .Where(o => o.供应商用户信息.协议供应商所属地区.Any(oc => oc.省份 == province && (oc.城市 == city || oc.区县 == city))));

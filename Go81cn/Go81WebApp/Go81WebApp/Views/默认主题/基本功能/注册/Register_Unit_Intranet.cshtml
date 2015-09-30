@@ -1,8 +1,10 @@
 ﻿@using Go81WebApp.Models.数据模型.权限数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
 @{
     ViewBag.Title = "单位用户注册";
 }
 <script src="~/JS/provinceandcity_all.js"></script>
+<script src="~/JS/myComfirm.js"></script>
 @model Go81WebApp.Controllers.基本功能.注册Controller.RegInfo_Unit
 @using Go81WebApp.Models.数据模型.用户数据模型
 <link href="~/css/Msg_Tips.css" rel="stylesheet" />
@@ -27,9 +29,6 @@
             </div>
         </div>
         <div class="front_login_box">
-            @{
-    IEnumerable<单位用户> user = ViewData["user"] as IEnumerable<单位用户>;
-            }
             <table class="front_login_rightbox">
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">账户名：</td>
@@ -68,9 +67,9 @@
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">所在地域：</td>
                     <td class="front_login_rightbox_inputdiv" style="position:relative;">
-                        <select id="deliverprovince" onblur="hidetip(this)" onclick="showtip(this)" name="deliverprovince" onchange="alert('aaa')" style=" width:98px;"></select>
-                        <select id="delivercity" onblur="hidetip(this)" onclick="showtip(this)" name="delivercity" style=" width:98px;"></select>
-                        <select id="deliverarea" onblur="hidetip(this)" onclick="showtip(this)" name="deliverarea" style=" width:98px;"></select>
+                        <select id="deliverprovince" onblur="hidetip(this)" onclick="showtip(this)" name="deliverprovince" onchange="alert('aaa')" style=" width:96px;"></select>
+                        <select id="delivercity" onblur="hidetip(this)" onclick="showtip(this)" name="delivercity" style=" width:96px;"></select>
+                        <select id="deliverarea" onblur="hidetip(this)" onclick="showtip(this)" name="deliverarea" style=" width:96px;"></select>
 
                         <div class="out_box">
                             <div class="arrow"></div>
@@ -79,7 +78,7 @@
                         <span id="place_error" style="color:red; display:none">请选择地域！</span>
                     </td>
                 </tr>
-                @*<tr class="front_login_rightbox_listdiv">
+                <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">所属采购站：</td>
                     <td class="front_login_rightbox_inputdiv" style="position:relative;">
                         <select id="audit" name="audit"></select>
@@ -88,24 +87,18 @@
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">所属单位：</td>
                     <td class="front_login_rightbox_inputdiv" style="position:relative;">
+                        <input name="admin" type="hidden" id="admin" />
                         <div id="admin_box">
-                            <select style="width:100px;" onchange="searchUser(this)">
+                            @*<select id="one" style="width:100px;" onchange="searchUser(this)">
                                 <option value="-1">请选择所属单位</option>
                                 @foreach (var item in user)
                                 {
-                                    if (!string.IsNullOrWhiteSpace(item.单位信息.单位代号))
-                                    {
-                                        <option value="@item.Id">@item.单位信息.单位代号</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@item.Id">@item.单位信息.单位名称</option>
-                                    }
+                                    <option value="@item.id">@item.name</option>
                                 }
-                            </select>
+                            </select>*@
                         </div>
                     </td>
-                </tr>*@
+                </tr>
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">单位名称：</td>
                     <td class="front_login_rightbox_inputdiv" style="position:relative;">
@@ -153,11 +146,10 @@
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">固定电话：</td>
                     <td class="front_login_rightbox_inputdiv" style="position:relative;">
-                        <input id="admin" type="hidden" value="10" name="admin" />
                         @Html.HiddenFor(model => model.ContactPhone, new { @id = "modelPhone" })
                         <input type="text" id="phone_area" placeholder="区号" style="width:70px;" />
                         -
-                        <input type="text" id="phone_num" placeholder="电话号码" style="width:208px;" />
+                        <input type="text" id="phone_num" placeholder="电话号码" style="width:202px;" />
                         <div class="out_box">
                             <div class="arrow"></div>
                             <div class="con_box">区号-电话号码，如：028-76817981或者0816-8245876</div>
@@ -198,6 +190,7 @@
                             }
                         }
                         <input name="usergroup" id="usergroup" type="hidden" />
+
                     </td>
                 </tr>
 
@@ -212,13 +205,13 @@
                         </div>
                         <span></span>
                         <img src=@Url.Action("NewVCodeImage", "登录") style="cursor:pointer;vertical-align:middle;margin-left:5px;" title="看不清，换一张" alt="看不清，换一张" onclick='$(this).attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());' />
-                        <span>@ViewBag.VCodeError</span>
+                        <span id="VerifyCodeError">@ViewBag.VCodeError</span>
 
                     </td>
                 </tr>
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_checkboxdiv" colspan="2">
-                        <input type="checkbox" checked="checked" class="front_login_rightbox_checkbox" />
+                        <input type="checkbox" checked="checked" name="agreement" class="front_login_rightbox_checkbox" />
                         <span>我已阅读同意<a id="agreement" href="#" target="_blank">《成都军区物资采购网注册协议》</a>，相关注册信息需提报成都军区物资采购管理部门审核</span><span id="error_agree" style="color:red;font-size:12px; display:none; margin-left:10px;">请阅读并同意《西南军队物资采购网注册协议》！</span>
                     </td>
                 </tr>
@@ -238,6 +231,7 @@
     <div class="modal_agree">@Html.Action("Part_Agree_Regist", "注册")</div>
 </div>
 <script type="text/javascript">
+
     $("#agreement").click(function () {
         //document.body.style.overflow="hidden";
         $("#modal_agree").fadeIn();
@@ -259,11 +253,30 @@
         $("#usergroup").val(t);
 
         //验证
+
+        //验证是否设置所属单位
+        var coun = $("#admin_box").children().length;
+        var adminid = $("#admin_box").children().eq(coun - 1).val();
+        if (coun == 1) {
+            if (adminid == "-1") { alert("请选择所属单位！"); return false;}
+            $("#admin").val(adminid);
+        }
+        else {
+            if (adminid == "-1") {
+                adminid = $("#admin_box").children().eq(coun - 2).val();
+                $("#admin").val(adminid);
+            }
+            $("#admin").val(adminid);
+        }
+
+
+
         var v = $("#phone_area").val() + "-" + $("#phone_num").val();
         $("#modelPhone").val(v);
         var f = $("#modelPhone").val().replace("-", "");
-        if ($("input[type=checkbox]").prop("checked") != true) {
+        if ($("input[name='agreement']").prop("checked") != true) {
             $("#error_agree").show();
+            $("input[name='agreement']").focus();
             return false;
         }
         if ($("#deliverprovince").val() == "" || $("#deliverprovince").val() == "不限省份" || $("#delivercity").val() == "" || $("#delivercity").val() == "不限城市" || $("#deliverarea").val() == "" || $("#deliverarea").val() == "不限区县") {
@@ -281,7 +294,15 @@
         if (f == null || f == "") {
             $("#moelphone_error").show();
         }
+
+        if ($("#VerifyCode").val() == "" || $("#VerifyCode").val() == null) {
+            $("#VerifyCodeError").html("请输入验证码！");
+            $("#VerifyCode").focus();
+            return false;
+        }
     });
+
+
     //$("input").focus(function () {
     //    if ($(this).attr("type") != "checkbox") {
     //        $(this).parent().children(".tips").show();
@@ -291,6 +312,10 @@
     //    $(this).parent().children().eq(1).show();
     //});
     $(document).ready(function () {
+        //设置单位级别-----所属单位
+        var dataUser = "@ViewData["jsonUser"]";
+        UnitLevel.Init(dataUser, "admin_box");
+
         $("table tr td :input").focus(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
         $("table tr td :input").blur(function () { $(this).next("div").hide(); });
     });
@@ -315,23 +340,23 @@
     function hidetip(th) {
         $(th).parent().children("div").hide();
     }
-    function searchUser(th)
-    {
-        if($(th).val()!="-1")
-        {
-            $.get('/注册/SearchUser', { id: $(th).val() }, function (data) {
-                $(th).nextAll().remove();
-                $("#admin").val($(th).val());
-                if (data.Data.length!=0)
-                {
-                    var str = "<select onchange='searchUser(this)' style='width:100px;margin-right:4px;'><option value='-1'>请选择所属单位</option>";
-                    for (var i = 0; i < data.Data.length; i++) {
-                        str += "<option value='" + data.Data[i].Id + "'>" + data.Data[i].Name + "</option>";
-                    }
-                    str += "</select>";
-                    $("#admin_box").append(str);
-                }
-            });
-        }
-    }
+    //function searchUser(th)
+    //{
+    //    if($(th).val()!="-1")
+    //    {
+    //        $.get('/注册/SearchUser', { id: $(th).val() }, function (data) {
+    //            $(th).nextAll().remove();
+    //            $("#admin").val($(th).val());
+    //            if (data.Data.length!=0)
+    //            {
+    //                var str = "<select onchange='searchUser(this)' style='width:100px;margin-right:4px;'><option value='-1'>请选择所属单位</option>";
+    //                for (var i = 0; i < data.Data.length; i++) {
+    //                    str += "<option value='" + data.Data[i].Id + "'>" + data.Data[i].Name + "</option>";
+    //                }
+    //                str += "</select>";
+    //                $("#admin_box").append(str);
+    //            }
+    //        });
+    //    }
+    //}
 </script>

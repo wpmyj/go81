@@ -1,10 +1,3 @@
-E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\Go81WebApp.ModuleTester.csprojResolveAssemblyReference.cache
-E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\MainWindow.baml
-E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\MainWindow.g.cs
-E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\App.g.cs
-E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\Go81WebApp.ModuleTester_Content.g.cs
-E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\Go81WebApp.ModuleTester_MarkupCompile.cache
-E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\Go81WebApp.ModuleTester.g.resources
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\Go81WebApp.ModuleTester.exe.config
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\Go81WebApp.ModuleTester.exe
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\Go81WebApp.ModuleTester.pdb
@@ -35,10 +28,10 @@ E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\System.Net.Http.
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\System.Web.Optimization.dll
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\System.Web.WebPages.dll
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\Gma.QrCodeNet.Encoding.dll
+E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\WebGrease.dll
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\System.Web.Http.WebHost.dll
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\System.Web.Razor.dll
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\System.Web.WebPages.Razor.dll
-E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\WebGrease.dll
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\System.Web.WebPages.Deployment.dll
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\Antlr3.Runtime.dll
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\Go81WebApp.pdb
@@ -73,5 +66,12 @@ E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\zh-Hans\System.W
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\zh-Hans\System.Web.Razor.resources.dll
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\zh-Hans\System.Web.WebPages.Razor.resources.dll
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\bin\Debug Intranet\zh-Hans\System.Web.WebPages.Deployment.resources.dll
+E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\Go81WebApp.ModuleTester.csprojResolveAssemblyReference.cache
+E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\MainWindow.baml
+E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\MainWindow.g.cs
+E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\App.g.cs
+E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\Go81WebApp.ModuleTester_Content.g.cs
+E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\Go81WebApp.ModuleTester_MarkupCompile.cache
+E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\Go81WebApp.ModuleTester.g.resources
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\Go81WebApp.ModuleTester.exe
 E:\Go81cn\Go81WebApp\Go81WebApp.ModuleTester\obj\Debug Intranet\Go81WebApp.ModuleTester.pdb

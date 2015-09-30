@@ -1,0 +1,75 @@
+﻿@model Go81WebApp._Code.Models.数据模型.商品数据模型.询价采购
+@{
+    ViewBag.Title = "询价采购";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<style>
+    .Content {
+        width: 900px;
+        height: auto;
+        margin: 0px auto;
+    }
+
+    .divbox {
+        float: left;
+        width: 150px;
+    }
+
+    .sname {
+        float: left;
+        line-height: 30px;
+        text-indent: 2em;
+    }
+</style>
+<script type="text/javascript" src="~/JS/provinceandcity_all.js"></script>
+<div class="bg_outdiv">
+    <div style="border:1px solid #327229; margin:0px auto; width:900px;background-color:#F9F9F9; font-size:13px;">
+        <div class="Content" style="margin-top:10px;"><div class="sname" style="width:21%">商品名称</div><div class="sname" style="width:21%">供应商名称</div><div class="sname" style="width:10%">价格(元)</div><div class="sname" style="width:10%">数量</div><div class="sname" style="width:10%">合计(元)</div><div class="sname" style="width:18%">备注</div><div class="sname" style="width:10%">操作</div><div style="clear:both;"></div></div>
+        <div class="Content" style="text-align:left;">
+            <form action="/单位用户后台/CreateInfo" method="post">
+                <input type="hidden" name="yjsp" value="@Model.询价商品.商品ID" />
+                @if (Model != null)
+                {
+                    int i=0;
+                    foreach (var item in Model.议价列表)
+                    {
+                        <div class="childbox">
+                            <input type="hidden" class="gid" name="gid@(i)" value="@item.供应商.用户ID" />
+                            <div class="sname" style="width:21%">@item.议价商品.商品.商品信息.商品名</div>
+                            <div class="sname" style="width:21%">@item.供应商.用户数据.企业基本信息.企业名称</div>
+                            <div class="sname single" id="single@(i)" style="width:10%">@item.价格</div>
+                            <div class="sname" style="width:10%"><input type="text" data="number" onkeyup="setSum(this)" name="number@(i)" alt="@(i)" value="@item.数量" style="width:50px;" /></div>
+                            <div class="sname" style="width:10%"><span class="yj" id="sum@(i)">@item.原价合计</span></div>
+                            <div class="sname" style="width:18%"><input type="text" value="@item.备注" name="note@(i)" style="width:100px;" /></div>
+                            <div class="sname" style="width:10%;"><a class="deletebt" style="color: red;">删除</a></div>
+                            <div style="clear:both;"></div>
+                        </div>
+                        i++;
+                    }
+                }
+                <div class="Content" style="text-align:center;">
+                    <input type="submit" value="下一步" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    $(".deletebt").click(function () {
+        $(this).parent().parent().remove();
+        var i = 0;
+        $(".childbox").each(function () {
+            $(this).children(":input[type='hidden']").attr("name", "gid" + i);
+            $(this).find(":text").eq(0).attr("name", "number" + i);
+            $(this).find(":text").eq(1).attr("name", "note" + i);
+            i++;
+        });
+    });
+    function setSum(th)
+    {
+        var index=$(th).attr("alt");
+        var price = parseInt($("#single" + index).text());
+        var count = $(th).val();
+        $("#sum" + index).text(price*count);
+    }
+</script>
