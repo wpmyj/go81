@@ -1,10 +1,19 @@
-﻿<style type="text/css">
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+<script src="~/JS/provinceandcity_all.js"></script>
+<link href="~/css/stylesheet.css" rel="stylesheet"/>
+<style type="text/css">
     .inputstyle {
         margin: 10px;
         width: 200px;
         height: 50px;
         line-height: 50px;
         float: left;
+    }
+    select{
+        width:100px;
+        height:30px;
     }
 </style>
 <div class="title-base-out">
@@ -42,9 +51,67 @@
         <input type="button" onclick="DbExport('供应商计费项目扣费记录')" value="导出供应商计费项目扣费记录" class="inputstyle" />
         <input type="button" onclick="DbExport('供应商增值服务申请记录')" value="导出供应商增值服务申请记录" class="inputstyle" />
         <input type="button" onclick="ExportExcel()" value="导出专家到Excel表" class="inputstyle" />
-        <input type="button" onclick="PhoneNumExport()" value="导出供应商手机号到Excel表" class="inputstyle" />
+        <input type="button" onclick="$('#modalselect').fadeIn();" value="导出供应商手机号到Excel表" class="inputstyle" />
     </div>
 </div>
+
+<!--供应商手机号导出筛选条件-->
+<div id="modalselect" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading" style="top:50%;left:50%;width:600px;height:200px;margin:-120px 0 0 -300px;padding:30px;">
+        <form action="/运营团队后台/ExportGysPhoneToExcel" method="post">
+            <div>
+                <select id="examstate" name="examstate">
+                    <option value="-1" selected="selected">不限</option>
+                    <option value="1">已审核</option>
+                    <option value="0">未审核</option>
+                    <option value="2">审核未通过</option>
+                </select>
+                <select id="authlevel" name="authlevel">
+                    <option value="0">不限</option>
+                    <option value="2">一级供应商</option>
+                    <option value="3">二级供应商</option>
+                    <option value="4">军采通基础会员</option>
+                    <option value="5">军采通标准会员</option>
+                    <option value="6">军采通商务会员</option>
+                </select>
+                <select id="category" name="category">
+                    <option value="请选择">不限</option>
+                    @foreach (var item in (IEnumerable<商品分类>)ViewData["行业分类"])
+                    {
+                        <option value="@item.分类名">@item.分类名</option>
+                    }
+                </select>
+                <select id="gsytype" name="gsytype">
+                    <option value="请选择">不限</option>
+                    <option value="普通供应商">普通供应商</option>
+                    <option value="协议供应商">协议供应商</option>
+                    <option value="应急供应商">应急供应商</option>
+                </select>
+            </div>
+            <div>
+                <select id="deliverprovince" name="deliverprovince" style="width:153px; margin-left:2px;"></select>
+                <select id="delivercity" name="delivercity" style="width:153px;"></select>
+                <select id="deliverarea" name="deliverarea" style="width:153px;"></select>
+                <script>
+                    window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                </script>
+
+            </div>
+            <div>
+                <input type="checkbox" disabled="disabled" name="shortmessage" id="shortmessage" value="1" />
+                <label for="shortmessage" style="display:inline;font-weight:normal">是否订购短信服务</label>
+            </div>
+            <div style="text-align:center;text-indent:0;">
+                <input class="btn-pri" type="submit" value="导出" />
+                <input class="btn-pri" type="button" onclick="$('#modalselect').fadeOut();" value="关闭" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
 <script type="text/javascript" language="javascript">
     $(document).ready(function () {
 
@@ -53,11 +120,6 @@
     });
     function ExportExcel() {
         window.open("/运营团队后台/ExportExpertsToExcel","_blank");
-    }
-
-    function PhoneNumExport() {
-        window.open("/运营团队后台/ExportGysPhoneToExcel", "_blank");
-
     }
 
     function DbExport(type) {

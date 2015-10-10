@@ -2,6 +2,7 @@
 using FileHelper;
 using Gma.QrCodeNet.Encoding;
 using Gma.QrCodeNet.Encoding.Windows.Render;
+using Go81WebApp._Code.Models.数据模型.商品数据模型;
 using Go81WebApp.Models.Helpers;
 using Go81WebApp.Models.管理器;
 using Go81WebApp.Models.管理器.推广业务管理;
@@ -71,7 +72,6 @@ namespace Go81WebApp.Controllers.后台
                     return null;
                 }
             }
-            
         }
         public void 清除过期服务()
         {
@@ -252,7 +252,81 @@ namespace Go81WebApp.Controllers.后台
 
             return View(Newmodel);
         }
-
+        public ActionResult ConsultList()
+        {
+            IEnumerable<询价采购> model = 询价采购管理.查询询价采购(0, 0, Query<询价采购>.Where(m=>m.订单状态==false));
+            List<询价采购> newmodel = new List<询价采购>();
+            foreach(var item in model)
+            {
+                if(item.议价列表.Where(m=>m.供应商.用户ID==currentUser.Id).Count()!=0)
+                {
+                    newmodel.Add(item);
+                }
+            }
+            ViewData["id"] = currentUser.Id;
+            return View(newmodel);
+        }
+        public ActionResult ConsultDetail()
+        {
+            try
+            {
+                long id = long.Parse(Request.QueryString["id"]);
+                询价采购 model = 询价采购管理.查找询价采购(id);
+                ViewData["id"] = currentUser.Id;
+                if(model==null)
+                {
+                    return Redirect("/供应商后台/ConsultList");
+                }
+                return View(model);
+            }
+            catch
+            {
+                return Redirect("/供应商后台/ConsultList");
+            }
+        }
+        public int ChangePrice()
+        {
+            try
+            {
+                long id = long.Parse(Request.QueryString["id"]);
+                decimal hj =decimal.Parse(Request.QueryString["h"]);
+                decimal jc = decimal.Parse(Request.QueryString["jc"]);
+                decimal fw = decimal.Parse(Request.QueryString["fw"]);
+                decimal gx = decimal.Parse(Request.QueryString["gx"]);
+                询价采购 model = 询价采购管理.查找询价采购(id);
+                foreach(var item in model.议价列表)
+                {
+                    if(item.供应商.用户ID==currentUser.Id)
+                    {
+                        item.服务费 = fw;
+                        item.管线费 = gx;
+                        item.回复价格 = hj;
+                        item.集成费 = jc;
+                    }
+                }
+                return 询价采购管理.更新询价采购(model)?1:-1;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+        [HttpPost]
+        public ActionResult ConfirmInfo(询价采购 model)
+        {
+            try
+            {
+                询价采购 m = 询价采购管理.查找询价采购(model.Id);
+                m.供货信息 = model.供货信息;
+                m.订单状态 = true;
+                询价采购管理.更新询价采购(m);
+                return Redirect("/供应商后台/ConsultList");
+            }
+            catch
+            {
+                return Redirect("/供应商后台/ConsultList");
+            }
+        }
         public ActionResult AddGoods()
         {
             //判断是否能使用批量上传工具
@@ -1702,9 +1776,9 @@ namespace Go81WebApp.Controllers.后台
         public ActionResult Part_Gys_Product_List(int? page)
         {
             ViewData["sum"] = 商品管理.计数供应商商品(currentUser.Id, 0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过));
-            var q = Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.未审核);
+            //var q = Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.未审核);
             供应商 model = 用户管理.查找用户<供应商>(currentUser.Id);
-            int listcount = (int)商品管理.计数供应商商品(this.currentUser.Id, 0, 0,q);
+            int listcount = (int)商品管理.计数供应商商品(this.currentUser.Id, 0, 0);
             int maxpage = Math.Max((listcount + PRO_PAGESIZE - 1) / PRO_PAGESIZE, 1);
 
             if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
@@ -1715,7 +1789,7 @@ namespace Go81WebApp.Controllers.后台
             ViewData["listcount"] = listcount;
             ViewData["pagesize"] = PRO_PAGESIZE;
 
-            ViewData["供应商商品信息"] = 商品管理.查询供应商商品(this.currentUser.Id, PRO_PAGESIZE * (int.Parse(page.ToString()) - 1), PRO_PAGESIZE,q);
+            ViewData["供应商商品信息"] = 商品管理.查询供应商商品(this.currentUser.Id, PRO_PAGESIZE * (int.Parse(page.ToString()) - 1), PRO_PAGESIZE);
 
             //判断是否能使用批量上传工具
             ViewData["批量上传"] = "0";
@@ -2354,7 +2428,7 @@ namespace Go81WebApp.Controllers.后台
         {
             try
             {
-                var p_id = long.Parse(Request.Form["p_id"]);
+                    var p_id = long.Parse(Request.Form["p_id"]);
                 var p_price = decimal.Parse(Request.Form["price"]);
                 var att_march = new 商品._价格属性组合();
 
@@ -6175,7 +6249,14 @@ namespace Go81WebApp.Controllers.后台
                     {
                         if (System.IO.File.Exists(Server.MapPath(@item)))
                         {
-                            Pro_Model.商品信息.商品型号图片.Add(item);
+                            if (Pro_Model.商品信息.商品型号图片!=null)
+                            {
+                                Pro_Model.商品信息.商品型号图片.Add(item);
+                            }
+                            else
+                            {
+                                Pro_Model.商品信息.商品型号图片 = new List<string>();
+                            }
                         }
                     }
                 }

@@ -237,254 +237,11 @@ namespace Go81WebApp.Controllers.基本功能
         }
 #endif
 
-        #region 新供应商后台
-        private ActionResult 供应商菜单(供应商 u)
-        {
-            var p1 = new[] { 权限.新增消息 };            //权限.酒店
-            var p2 = new[] { 权限.新增消息 };      //权限.历史采购结果查看, 权限.历史采购信息查看
-            var p = new Dictionary<权限[], bool>
-            {
-                {p1, false}, //采用单一权限验证
-                {p2, true}, //采用多重权限验证
-            };
-            //HttpContext.批量权限验证(ref p);
-            var k = new Dictionary<string, object>();
-            var m = new Dictionary<string, object>
-            {
-            };
-            switch (u.供应商用户信息.供应商细分类型)
-                {
-                case 供应商.供应商细分类型.未填写:
-                    m.Add("商品库维护", new Dictionary<string, object>
-                    {
-                        {"新增商品信息","供应商后台/AddGoods"},
-                        {"新增中标商品","供应商后台/Gys_Product_AddStep1?id=1"},
-                        {
-                            "我的商品列表",new Dictionary<string,object>
-                            {
-                                {"未审核的商品信息","供应商后台/Gys_Product_List"},
-                                {"已审核的商品信息" , "供应商后台/Gys_Product_Listed"},
-                                {"当前上架的商品信息", "供应商后台/Gys_Product_Shelved"}
-                    }
-                },
-#if DEBUG
-                        {"新增促销商品信息","供应商后台/AddGoods"},
-                {
-                            "我的促销商品列表",new Dictionary<string,object>
-                    {
-                                {"未审核的促销(商品)信息","供应商后台/Gys_Product_List"},
-                                {"已审核的促销(商品)信息" , "供应商后台/Gys_Product_AddStep1"},
-                                {"当前上架的促销(商品)信息", "供应商后台/Gys_Product_Type"}
-                            }
-                        },
-#endif
-                    });
-#if DEBUG
-                    m.Add("采购商城店铺维护", new Dictionary<string, object>
-                    {
-                        {"店铺模板","供应商后台/AddAcceptanceForm"},
-                        {"店铺推广", "供应商后台/Service_Evaluate"},
-                        {"商城主题活动", "供应商后台/ProjectService_List"},
-                    });
-#endif
-
-
-                    break;
-                case 供应商.供应商细分类型.酒店:
-                    m.Add("酒店管理", new Dictionary<string, object>(){
-                                        { "酒店信息管理", "供应商后台/HotelEdit" },
-                                        { "酒店房间管理", "供应商后台/Roomlist" },
-                    });
-                    break;
-                case 供应商.供应商细分类型.机票代售点:
-                    m.Add("机票验收单管理", new Dictionary<string, object>
-                    {
-                        {"新增机票验收单","供应商后台/AcceptanceTicketList"},
-                        //{"上传验收单", "供应商后台/Service_Evaluate"},
-                        //{"已上传验收单", "供应商后台/ProjectService_List"},
-                        {"验收单管理流程", "通知/NoticeDetail?id=32"},
-                    });
-
-
-                    m.Add("机票代售点管理", new Dictionary<string, object>{
-                                            {"添加代售点","供应商后台/TicketAdd"},
-                                            {"代售点列表","供应商后台/Ticketlist"},
-                    });
-                    break;
-                case 供应商.供应商细分类型.租车企业:
-                    m.Add("租车信息管理", new Dictionary<string, object>{
-                                            {"添加租车企业","供应商后台/CompanyWithCar"}
-                    });
-                    break;
-            }
-
-            m.Add("军采通服务管理", new Dictionary<string, object>
-            {
-                {"我订购的服务","供应商后台/AccountInfoManage"},
-                //{"增值服务类订购合同","供应商后台/ValueAddedService"},
-                //{"我的订购服务","供应商后台/MyServices"},
-            });
-#if DEBUG
-            m.Add("协议供货（办公物资采购）", new Dictionary<string, object>
-            {
-                {"申请供货资格","供应商后台/AccountInfoManage"},
-                {
-                    "我供货的商品",new Dictionary<string,object>
-                    {
-                        {"办公设备","供应商后台/Gys_Product_List"},
-                        {"办公耗材" , "供应商后台/Gys_Product_AddStep1"},
-                        {"办公用品", "供应商后台/Gys_Product_Type"},
-                        {"计算机及配件","供应商后台/Gys_Product_List"},
-                        {"影音设备" , "供应商后台/Gys_Product_AddStep1"},
-                        {"办公家具", "供应商后台/Gys_Product_Type"}
-                    }
-                },
-            });
-#endif
-
-            if (u.供应商用户信息.供应商细分类型 == 供应商.供应商细分类型.未填写)
-            {
-                m.Add("验收单管理", new Dictionary<string, object>
-                {
-                    //{"新增及打印验收单","供应商后台/CheckSecurity?type=List"},
-                    //{"上传验收单", "供应商后台/CheckSecurity?type=Upload"},
-                    //{"已上传验收单", "供应商后台/CheckSecurity?type=UploadList"},
-                    //{"验收单管理流程", "通知/NoticeDetail?id=32"},
-
-                    {"验收单使用流程", "通知/NoticeDetail?id=32"},
-                    {"新增验收单","供应商后台/AddAcceptForm"},
-                    {"未审核验收单", "供应商后台/AddAcceptanceForm?comes=w"},
-                    {"已审核验收单", "供应商后台/AddAcceptanceForm?comes=y"},
-                    {"已作废验收单", "供应商后台/AddAcceptanceForm?comes=f"},
-                    //{"打印验收单","供应商后台/AddAcceptanceForm"},
-                    {"回传验收单存根联", "供应商后台/Service_Evaluate"},
-                    {"全部验收单列表","供应商后台/AddAcceptanceForm?comes=a"},
-
-                    //{"已上传验收单", "供应商后台/ProjectService_List"},
-                });
-            }
-#if DEBUG
-            m.Add("网上竞价管理", new Dictionary<string, object>
-            {
-                {"可参与的网上竞价项目","供应商后台/OnlineBiddingProject?comes=w"},
-                {"我参与的网上竞价项目","供应商后台/OnlineBiddingProject?comes=y"},
-                {"我已成交的网上竞价项目","供应商后台/OnlineBiddingManage"},
-                {"我未成交的网上竞价项目","供应商后台/OnlineBiddingManage"},
-                        
-                //{"历史报价项目","供应商后台/OnlineBiddingHistory"},
-                //{"我的订购服务","供应商后台/MyServices"},
-            });
-            m.Add("批量集中采购管理", new Dictionary<string, object>
-            {
-                {"可参与的采购项目","供应商后台/OnlineBiddingProject"},
-                {"我参与的采购项目","供应商后台/OnlineBiddingProject"},
-                {"我已成交的采购项目","供应商后台/OnlineBiddingManage"},
-                {"我未成交的采购项目","供应商后台/OnlineBiddingManage"},
-            });
-            m.Add("应急采购采购管理", new Dictionary<string, object>
-            {
-                {"网上协议","供应商后台/OnlineBiddingProject"},
-                {"在线投标","供应商后台/OnlineBiddingProject"},
-            });
-#endif
-
-            m.Add("企业信息管理", k = new Dictionary<string, object>
-                    {
-                        {"入库须知", "供应商后台/Notice"},
-                        {"联系人信息", "供应商后台/Vip_Manage?comes=x"},
-                        {"企业基本信息", "供应商后台/Gys_Manage"},
-                        {"法定代表人信息", "供应商后台/Law_Person"},
-                        {"营业信息", "供应商后台/Gys_Sales_Manage"},
-                        {"资质证书信息", "供应商后台/Qualify_Management"},
-                        {"售后服务机构信息", "供应商后台/Service_Management"},
-                        {"出资人信息", "供应商后台/Investor_Management"},
-                        {"财务信息", "供应商后台/Gys_Financial_Manage"},
-                        {"税务信息", "供应商后台/Tax_Management"},
-                        {"招投标经历", "供应商后台/Toubiao"},
-                        //{
-                          //  "地理位置", "供应商后台/Location"
-                       // },
-                        {"可提供商品类别", "供应商后台/Gys_Product_Type"},
-                        {"提交预审", "供应商后台/SubmitAndCheck"},
-                {"打印入库申请表","供应商后台/Print_Detail"},
-                    });
-            //m.Add("招标采购预报名", k = new Dictionary<string, object>
-            //        {
-            //            {"我的预报名", "供应商后台/gys_enroll?page=1"},
-            //            {"可参加的预报名", "供应商后台/Gys_Manage"},
-            //        });
-
-            m.Add("本账号信息维护", new Dictionary<string, object>
-                {
-                {"修改登录密码", "供应商后台/Vip_Password_Manage"},
-                {"修改注册人信息", "供应商后台/Vip_Manage?comes=z"},
-                });
-            m.Add("站内消息", new Dictionary<string, object>
-            {
-                {"新增消息" , "供应商后台/Gys_ZnxxAdd"},
-                {"已发消息", "供应商后台/Msg_Sent"},
-                {"已收消息", "供应商后台/Gys_Znxx"},
-            });
-            //m.Add("投诉建议", new Dictionary<string, object>
-            //        {
-            //            {
-            //                "投诉", new Dictionary<string, object>
-            //                {
-            //                    {"发起投诉" , "供应商后台/Gys_ComplainAdd"},
-            //                    {"我的投诉" , "供应商后台/Gys_ComplainList"},
-            //                }
-            //            },
-            //            {
-            //                "建议", new Dictionary<string, object>
-            //{
-            //                    {"发起建议" , "供应商后台/Gys_SuggestAdd"},
-            //                    {"我的建议" , "供应商后台/Gys_SuggestList"},
-            //}
-            //            },
-            //        });
-            //if(u.供应商用户信息.供应商细分类型==供应商.供应商细分类型.未填写)
-            //{
-            //    k.Add("可提供商品类别", "供应商后台/Gys_Product_Type");
-            //}
-            //m.Add("公告管理", new Dictionary<string, object>
-            //        {
-            //            {
-            //                "公告查询" , "供应商后台/Gys_Ztb_Search_Zb"
-            //            },
-            //             {
-            //                "公告订阅", "供应商后台/Book_Msg"
-            //            }
-            //        });
-            //m.Add("招标采购预报名管理", new Dictionary<string, object>
-            //        {
-            //               {"我的预报名" , "供应商后台/Gys_enroll?page=1"}
-            //        });
-
-
-            //m.Add("投诉建议", new Dictionary<string, object>
-            //        {
-            //            {
-            //                "投诉", new Dictionary<string, object>
-            //                {
-            //                    //{"发起投诉" , "供应商后台/Gys_ComplainAdd"},
-            //                    {"我的投诉" , "供应商后台/Gys_ComplainList"},
-            //                }
-            //            },
-            //            {
-            //                "建议", new Dictionary<string, object>
-            //                {
-            //                    //{"发起建议" , "供应商后台/Gys_SuggestAdd"},
-            //                    {"我的建议" , "供应商后台/Gys_SuggestList"},
-            //                }
-            //            },
-            //        });
-            return PartialView(m);
-        }
-        #endregion
-        //        private ActionResult 供应商菜单(供应商 u)
+//        #region 新供应商后台
+//        private ActionResult 供应商菜单(供应商 u)
 //        {
-//            var p1 = new[] { 权限.酒店 };
-//            var p2 = new[] { 权限.历史采购结果查看, 权限.历史采购信息查看 };
+//            var p1 = new[] { 权限.新增消息 };            //权限.酒店
+//            var p2 = new[] { 权限.新增消息 };      //权限.历史采购结果查看, 权限.历史采购信息查看
 //            var p = new Dictionary<权限[], bool>
 //            {
 //                {p1, false}, //采用单一权限验证
@@ -494,75 +251,44 @@ namespace Go81WebApp.Controllers.基本功能
 //            var k = new Dictionary<string, object>();
 //            var m = new Dictionary<string, object>
 //            {
-//                {
-//                    "后台首页",new Dictionary<string,object>
-//                    { 
-//                        {"欢迎页面", "供应商后台/Index"},
-//                        {"入库须知", "供应商后台/Notice"},
-//                        {"待办事项", "供应商后台/Completing"},
-//                    }
-//                },
-//                {
-//                    "消息管理", new Dictionary<string, object>
-//                    {
-//                        {"系统通知", "供应商后台/Gys_Xttz"},
-//                        {
-//                            "站内消息", new Dictionary<string, object>
-//                            {
-//                                {"发新消息" , "供应商后台/Gys_ZnxxAdd"},
-//                                {"已发消息", "供应商后台/Msg_Sent"},
-//                                {"已收消息", "供应商后台/Gys_Znxx"},
-//                            }
-//                        },
-
-//                    }
-//                },
 //            };
-
-//#if DEBUG
-//            m.Add("网上竞价管理", new Dictionary<string, object>
-//                    {
-//                        {"参与竞价项目","供应商后台/OnlineBiddingProject"},
-//                        {"中标结果查看","供应商后台/OnlineBiddingManage"},
-
-//                        //{"历史报价项目","供应商后台/OnlineBiddingHistory"},
-//                        //{"我的订购服务","供应商后台/MyServices"},
-//                    });
-
-//#endif
-                    
-//            m.Add("服务管理", new Dictionary<string, object>
-//                    {
-//                        {"军采通服务管理","供应商后台/AccountInfoManage"},
-//                        //{"增值服务类订购合同","供应商后台/ValueAddedService"},
-//                        //{"我的订购服务","供应商后台/MyServices"},
-//                    });
 //            switch (u.供应商用户信息.供应商细分类型)
-//            {
+//                {
 //                case 供应商.供应商细分类型.未填写:
-//                    m.Add("验收单管理", new Dictionary<string, object>
+//                    m.Add("商品库维护", new Dictionary<string, object>
 //                    {
-//                        //{"新增及打印验收单","供应商后台/CheckSecurity?type=List"},
-//                        //{"上传验收单", "供应商后台/CheckSecurity?type=Upload"},
-//                        //{"已上传验收单", "供应商后台/CheckSecurity?type=UploadList"},
-//                        //{"验收单管理流程", "通知/NoticeDetail?id=32"},
-                    
-//                        {"新增及打印验收单","供应商后台/AddAcceptanceForm"},
-//                        {"上传验收单", "供应商后台/Service_Evaluate"},
-//                        {"已上传验收单", "供应商后台/ProjectService_List"},
-//                        {"验收单管理流程", "通知/NoticeDetail?id=32"},
-//                    });
-//                    m.Add("商品管理", new Dictionary<string, object>
-//                    {
+//                        {"新增商品信息","供应商后台/AddGoods"},
+//                        {"新增中标商品","供应商后台/Gys_Product_AddStep1?id=1"},
 //                        {
-//                            "我的商品库",new Dictionary<string,object>
+//                            "我的商品列表",new Dictionary<string,object>
 //                            {
-//                                {"商品列表","供应商后台/Gys_Product_List"},
-//                                //{"添加新商品" , "供应商后台/Gys_Product_AddStep1"},
-//                                //{"可提供商品类别", "供应商后台/Gys_Product_Type"}
+//                                {"未审核的商品信息","供应商后台/Gys_Product_List"},
+//                                {"已审核的商品信息" , "供应商后台/Gys_Product_Listed"},
+//                                {"当前上架的商品信息", "供应商后台/Gys_Product_Shelved"}
+//                    }
+//                },
+//#if DEBUG
+//                        {"新增促销商品信息","供应商后台/AddGoods"},
+//                {
+//                            "我的促销商品列表",new Dictionary<string,object>
+//                    {
+//                                {"未审核的促销(商品)信息","供应商后台/Gys_Product_List"},
+//                                {"已审核的促销(商品)信息" , "供应商后台/Gys_Product_AddStep1"},
+//                                {"当前上架的促销(商品)信息", "供应商后台/Gys_Product_Type"}
 //                            }
 //                        },
+//#endif
 //                    });
+//#if DEBUG
+//                    m.Add("采购商城店铺维护", new Dictionary<string, object>
+//                    {
+//                        {"店铺模板","供应商后台/AddAcceptanceForm"},
+//                        {"店铺推广", "供应商后台/Service_Evaluate"},
+//                        {"商城主题活动", "供应商后台/ProjectService_List"},
+//                    });
+//#endif
+
+
 //                    break;
 //                case 供应商.供应商细分类型.酒店:
 //                    m.Add("酒店管理", new Dictionary<string, object>(){
@@ -591,9 +317,81 @@ namespace Go81WebApp.Controllers.基本功能
 //                    });
 //                    break;
 //            }
+
+//            m.Add("军采通服务管理", new Dictionary<string, object>
+//            {
+//                {"我订购的服务","供应商后台/AccountInfoManage"},
+//                //{"增值服务类订购合同","供应商后台/ValueAddedService"},
+//                //{"我的订购服务","供应商后台/MyServices"},
+//            });
+//#if DEBUG
+//            m.Add("协议供货（办公物资采购）", new Dictionary<string, object>
+//            {
+//                {"申请供货资格","供应商后台/AccountInfoManage"},
+//                {
+//                    "我供货的商品",new Dictionary<string,object>
+//                    {
+//                        {"办公设备","供应商后台/Gys_Product_List"},
+//                        {"办公耗材" , "供应商后台/Gys_Product_AddStep1"},
+//                        {"办公用品", "供应商后台/Gys_Product_Type"},
+//                        {"计算机及配件","供应商后台/Gys_Product_List"},
+//                        {"影音设备" , "供应商后台/Gys_Product_AddStep1"},
+//                        {"办公家具", "供应商后台/Gys_Product_Type"}
+//                    }
+//                },
+//            });
+//#endif
+
+//            if (u.供应商用户信息.供应商细分类型 == 供应商.供应商细分类型.未填写)
+//            {
+//                m.Add("验收单管理", new Dictionary<string, object>
+//                {
+//                    //{"新增及打印验收单","供应商后台/CheckSecurity?type=List"},
+//                    //{"上传验收单", "供应商后台/CheckSecurity?type=Upload"},
+//                    //{"已上传验收单", "供应商后台/CheckSecurity?type=UploadList"},
+//                    //{"验收单管理流程", "通知/NoticeDetail?id=32"},
+
+//                    {"验收单使用流程", "通知/NoticeDetail?id=32"},
+//                    {"新增验收单","供应商后台/AddAcceptForm"},
+//                    {"未审核验收单", "供应商后台/AddAcceptanceForm?comes=w"},
+//                    {"已审核验收单", "供应商后台/AddAcceptanceForm?comes=y"},
+//                    {"已作废验收单", "供应商后台/AddAcceptanceForm?comes=f"},
+//                    //{"打印验收单","供应商后台/AddAcceptanceForm"},
+//                    {"回传验收单存根联", "供应商后台/Service_Evaluate"},
+//                    {"全部验收单列表","供应商后台/AddAcceptanceForm?comes=a"},
+
+//                    //{"已上传验收单", "供应商后台/ProjectService_List"},
+//                });
+//            }
+//#if DEBUG
+//            m.Add("网上竞价管理", new Dictionary<string, object>
+//            {
+//                {"可参与的网上竞价项目","供应商后台/OnlineBiddingProject?comes=w"},
+//                {"我参与的网上竞价项目","供应商后台/OnlineBiddingProject?comes=y"},
+//                {"我已成交的网上竞价项目","供应商后台/OnlineBiddingManage"},
+//                {"我未成交的网上竞价项目","供应商后台/OnlineBiddingManage"},
+                        
+//                //{"历史报价项目","供应商后台/OnlineBiddingHistory"},
+//                //{"我的订购服务","供应商后台/MyServices"},
+//            });
+//            m.Add("批量集中采购管理", new Dictionary<string, object>
+//            {
+//                {"可参与的采购项目","供应商后台/OnlineBiddingProject"},
+//                {"我参与的采购项目","供应商后台/OnlineBiddingProject"},
+//                {"我已成交的采购项目","供应商后台/OnlineBiddingManage"},
+//                {"我未成交的采购项目","供应商后台/OnlineBiddingManage"},
+//            });
+//            m.Add("应急采购采购管理", new Dictionary<string, object>
+//            {
+//                {"网上协议","供应商后台/OnlineBiddingProject"},
+//                {"在线投标","供应商后台/OnlineBiddingProject"},
+//            });
+//#endif
+
 //            m.Add("企业信息管理", k = new Dictionary<string, object>
 //                    {
-//                        {"联系人信息", "供应商后台/Vip_Manage"},
+//                        {"入库须知", "供应商后台/Notice"},
+//                        {"联系人信息", "供应商后台/Vip_Manage?comes=x"},
 //                        {"企业基本信息", "供应商后台/Gys_Manage"},
 //                        {"法定代表人信息", "供应商后台/Law_Person"},
 //                        {"营业信息", "供应商后台/Gys_Sales_Manage"},
@@ -608,10 +406,7 @@ namespace Go81WebApp.Controllers.基本功能
 //                       // },
 //                        {"可提供商品类别", "供应商后台/Gys_Product_Type"},
 //                        {"提交预审", "供应商后台/SubmitAndCheck"},
-//                        {"打印资料",new Dictionary<string,object> {
-//                        {"打印申请表","供应商后台/Print_Detail"},
-//                        {"打印须知","供应商后台/NoticeAboutApply"}
-//                        }},
+//                {"打印入库申请表","供应商后台/Print_Detail"},
 //                    });
 //            //m.Add("招标采购预报名", k = new Dictionary<string, object>
 //            //        {
@@ -619,11 +414,17 @@ namespace Go81WebApp.Controllers.基本功能
 //            //            {"可参加的预报名", "供应商后台/Gys_Manage"},
 //            //        });
 
-//            m.Add("密码管理", new Dictionary<string, object>
+//            m.Add("本账号信息维护", new Dictionary<string, object>
 //                {
-//                    {"修改密码", "供应商后台/Vip_Password_Manage"},
+//                {"修改登录密码", "供应商后台/Vip_Password_Manage"},
+//                {"修改注册人信息", "供应商后台/Vip_Manage?comes=z"},
 //                });
-
+//            m.Add("站内消息", new Dictionary<string, object>
+//            {
+//                {"新增消息" , "供应商后台/Gys_ZnxxAdd"},
+//                {"已发消息", "供应商后台/Msg_Sent"},
+//                {"已收消息", "供应商后台/Gys_Znxx"},
+//            });
 //            //m.Add("投诉建议", new Dictionary<string, object>
 //            //        {
 //            //            {
@@ -645,40 +446,239 @@ namespace Go81WebApp.Controllers.基本功能
 //            //{
 //            //    k.Add("可提供商品类别", "供应商后台/Gys_Product_Type");
 //            //}
-//            m.Add("公告管理", new Dictionary<string, object>
-//                    {
-//                        {
-//                            "公告查询" , "供应商后台/Gys_Ztb_Search_Zb"
-//                        },
-//                         {
-//                            "公告订阅", "供应商后台/Book_Msg"
-//                        }
-//                    });
-//            m.Add("招标采购预报名管理", new Dictionary<string, object>
-//                    {
-//                           {"我的预报名" , "供应商后台/Gys_enroll?page=1"}
-//                    });
+//            //m.Add("公告管理", new Dictionary<string, object>
+//            //        {
+//            //            {
+//            //                "公告查询" , "供应商后台/Gys_Ztb_Search_Zb"
+//            //            },
+//            //             {
+//            //                "公告订阅", "供应商后台/Book_Msg"
+//            //            }
+//            //        });
+//            //m.Add("招标采购预报名管理", new Dictionary<string, object>
+//            //        {
+//            //               {"我的预报名" , "供应商后台/Gys_enroll?page=1"}
+//            //        });
 
 
-//            m.Add("投诉建议", new Dictionary<string, object>
-//                    {
-//                        {
-//                            "投诉", new Dictionary<string, object>
-//                            {
-//                                //{"发起投诉" , "供应商后台/Gys_ComplainAdd"},
-//                                {"我的投诉" , "供应商后台/Gys_ComplainList"},
-//                            }
-//                        },
-//                        {
-//                            "建议", new Dictionary<string, object>
-//                            {
-//                                //{"发起建议" , "供应商后台/Gys_SuggestAdd"},
-//                                {"我的建议" , "供应商后台/Gys_SuggestList"},
-//                            }
-//                        },
-//                    });
+//            //m.Add("投诉建议", new Dictionary<string, object>
+//            //        {
+//            //            {
+//            //                "投诉", new Dictionary<string, object>
+//            //                {
+//            //                    //{"发起投诉" , "供应商后台/Gys_ComplainAdd"},
+//            //                    {"我的投诉" , "供应商后台/Gys_ComplainList"},
+//            //                }
+//            //            },
+//            //            {
+//            //                "建议", new Dictionary<string, object>
+//            //                {
+//            //                    //{"发起建议" , "供应商后台/Gys_SuggestAdd"},
+//            //                    {"我的建议" , "供应商后台/Gys_SuggestList"},
+//            //                }
+//            //            },
+//            //        });
 //            return PartialView(m);
 //        }
+//        #endregion
+         private ActionResult 供应商菜单(供应商 u)
+         {
+            // var p1 = new[] { };
+            // var p2 = new[] { };
+            // var p = new Dictionary<权限[], bool>
+            //{
+            //    {p1, false}, //采用单一权限验证
+            //    {p2, true}, //采用多重权限验证
+            //};
+             //HttpContext.批量权限验证(ref p);
+             var k = new Dictionary<string, object>();
+             var m = new Dictionary<string, object>
+            {
+                {
+                    "后台首页",new Dictionary<string,object>
+                    { 
+                        {"欢迎页面", "供应商后台/Index"},
+                        {"入库须知", "供应商后台/Notice"},
+                        {"待办事项", "供应商后台/Completing"},
+                    }
+                },
+                {
+                    "消息管理", new Dictionary<string, object>
+                    {
+                        {"系统通知", "供应商后台/Gys_Xttz"},
+                        {
+                            "站内消息", new Dictionary<string, object>
+                            {
+                                {"发新消息" , "供应商后台/Gys_ZnxxAdd"},
+                                {"已发消息", "供应商后台/Msg_Sent"},
+                                {"已收消息", "供应商后台/Gys_Znxx"},
+                            }
+                        },
+
+                    }
+                },
+            };
+
+#if DEBUG
+            m.Add("网上竞价管理", new Dictionary<string, object>
+                    {
+                        {"参与竞价项目","供应商后台/OnlineBiddingProject"},
+                        {"中标结果查看","供应商后台/OnlineBiddingManage"},
+
+                        //{"历史报价项目","供应商后台/OnlineBiddingHistory"},
+                        //{"我的订购服务","供应商后台/MyServices"},
+                    });
+
+#endif
+
+             m.Add("服务管理", new Dictionary<string, object>
+                    {
+                        {"军采通服务管理","供应商后台/AccountInfoManage"},
+                        //{"增值服务类订购合同","供应商后台/ValueAddedService"},
+                        //{"我的订购服务","供应商后台/MyServices"},
+                    });
+             switch (u.供应商用户信息.供应商细分类型)
+             {
+                 case 供应商.供应商细分类型.未填写:
+                     m.Add("验收单管理", new Dictionary<string, object>
+                    {
+                        //{"新增及打印验收单","供应商后台/CheckSecurity?type=List"},
+                        //{"上传验收单", "供应商后台/CheckSecurity?type=Upload"},
+                        //{"已上传验收单", "供应商后台/CheckSecurity?type=UploadList"},
+                        //{"验收单管理流程", "通知/NoticeDetail?id=32"},
+                    
+                        {"新增及打印验收单","供应商后台/AddAcceptanceForm"},
+                        {"上传验收单", "供应商后台/Service_Evaluate"},
+                        {"已上传验收单", "供应商后台/ProjectService_List"},
+                        {"验收单管理流程", "通知/NoticeDetail?id=32"},
+                    });
+                     m.Add("商品管理", new Dictionary<string, object>
+                    {
+                        {
+                            "我的商品库",new Dictionary<string,object>
+                            {
+                                {"商品列表","供应商后台/Gys_Product_List"},
+                                //{"添加新商品" , "供应商后台/Gys_Product_AddStep1"},
+                                //{"可提供商品类别", "供应商后台/Gys_Product_Type"}
+                            }
+                        },
+                    });
+                     break;
+                 case 供应商.供应商细分类型.酒店:
+                     m.Add("酒店管理", new Dictionary<string, object>(){
+                                        { "酒店信息管理", "供应商后台/HotelEdit" },
+                                        { "酒店房间管理", "供应商后台/Roomlist" },
+                    });
+                     break;
+                 case 供应商.供应商细分类型.机票代售点:
+                     m.Add("机票验收单管理", new Dictionary<string, object>
+                    {
+                        {"新增机票验收单","供应商后台/AcceptanceTicketList"},
+                        //{"上传验收单", "供应商后台/Service_Evaluate"},
+                        //{"已上传验收单", "供应商后台/ProjectService_List"},
+                        {"验收单管理流程", "通知/NoticeDetail?id=32"},
+                    });
+
+
+                     m.Add("机票代售点管理", new Dictionary<string, object>{
+                                            {"添加代售点","供应商后台/TicketAdd"},
+                                            {"代售点列表","供应商后台/Ticketlist"},
+                    });
+                     break;
+                 case 供应商.供应商细分类型.租车企业:
+                     m.Add("租车信息管理", new Dictionary<string, object>{
+                                            {"添加租车企业","供应商后台/CompanyWithCar"}
+                    });
+                     break;
+             }
+             m.Add("企业信息管理", k = new Dictionary<string, object>
+                    {
+                        {"联系人信息", "供应商后台/Vip_Manage"},
+                        {"企业基本信息", "供应商后台/Gys_Manage"},
+                        {"法定代表人信息", "供应商后台/Law_Person"},
+                        {"营业信息", "供应商后台/Gys_Sales_Manage"},
+                        {"资质证书信息", "供应商后台/Qualify_Management"},
+                        {"售后服务机构信息", "供应商后台/Service_Management"},
+                        {"出资人信息", "供应商后台/Investor_Management"},
+                        {"财务信息", "供应商后台/Gys_Financial_Manage"},
+                        {"税务信息", "供应商后台/Tax_Management"},
+                        {"招投标经历", "供应商后台/Toubiao"},
+                        //{
+                          //  "地理位置", "供应商后台/Location"
+                       // },
+                        {"可提供商品类别", "供应商后台/Gys_Product_Type"},
+                        {"提交预审", "供应商后台/SubmitAndCheck"},
+                        {"打印资料",new Dictionary<string,object> {
+                        {"打印申请表","供应商后台/Print_Detail"},
+                        {"打印须知","供应商后台/NoticeAboutApply"}
+                        }},
+                    });
+             //m.Add("招标采购预报名", k = new Dictionary<string, object>
+             //        {
+             //            {"我的预报名", "供应商后台/gys_enroll?page=1"},
+             //            {"可参加的预报名", "供应商后台/Gys_Manage"},
+             //        });
+
+             m.Add("密码管理", new Dictionary<string, object>
+                {
+                    {"修改密码", "供应商后台/Vip_Password_Manage"},
+                });
+
+             //m.Add("投诉建议", new Dictionary<string, object>
+             //        {
+             //            {
+             //                "投诉", new Dictionary<string, object>
+             //                {
+             //                    {"发起投诉" , "供应商后台/Gys_ComplainAdd"},
+             //                    {"我的投诉" , "供应商后台/Gys_ComplainList"},
+             //                }
+             //            },
+             //            {
+             //                "建议", new Dictionary<string, object>
+             //{
+             //                    {"发起建议" , "供应商后台/Gys_SuggestAdd"},
+             //                    {"我的建议" , "供应商后台/Gys_SuggestList"},
+             //}
+             //            },
+             //        });
+             //if(u.供应商用户信息.供应商细分类型==供应商.供应商细分类型.未填写)
+             //{
+             //    k.Add("可提供商品类别", "供应商后台/Gys_Product_Type");
+             //}
+             m.Add("公告管理", new Dictionary<string, object>
+                    {
+                        {
+                            "公告查询" , "供应商后台/Gys_Ztb_Search_Zb"
+                        },
+                         {
+                            "公告订阅", "供应商后台/Book_Msg"
+                        }
+                    });
+             m.Add("招标采购预报名管理", new Dictionary<string, object>
+                    {
+                           {"我的预报名" , "供应商后台/Gys_enroll?page=1"}
+                    });
+
+
+             m.Add("投诉建议", new Dictionary<string, object>
+                    {
+                        {
+                            "投诉", new Dictionary<string, object>
+                            {
+                                //{"发起投诉" , "供应商后台/Gys_ComplainAdd"},
+                                {"我的投诉" , "供应商后台/Gys_ComplainList"},
+                            }
+                        },
+                        {
+                            "建议", new Dictionary<string, object>
+                            {
+                                //{"发起建议" , "供应商后台/Gys_SuggestAdd"},
+                                {"我的建议" , "供应商后台/Gys_SuggestList"},
+                            }
+                        },
+                    });
+             return PartialView(m);
+         }
 
         #region 新单位用户后台
         private ActionResult 单位用户菜单()

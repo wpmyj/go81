@@ -239,6 +239,7 @@ namespace Go81WebApp.Controllers.后台
             model.询价商品.商品ID = goodid;
             return View(model);
         }
+        [HttpPost]
         public ActionResult CreateInfo()
         {
             询价采购 model = new 询价采购();
@@ -258,9 +259,142 @@ namespace Go81WebApp.Controllers.后台
             }
             model.议价列表 = list;
             询价采购管理.添加询价采购(model);
+            return Redirect("/单位用户后台/ConsultDetail?id=" + model.Id);
+        }
+        public int ChangePrice()
+        {
+            try
+            {
+                string[] arr = Request.QueryString["id"].ToString().Split('|');
+                decimal price = decimal.Parse(Request.QueryString["p"]);
+                long xid = long.Parse(arr[0]);
+                long gid = long.Parse(arr[1]);
+                询价采购 model = 询价采购管理.查找询价采购(xid);
+                foreach (var item in model.议价列表)
+                {
+                    if (item.供应商.用户ID == gid)
+                    {
+                        item.议价 = price;
+                    }
+                }
+                return 询价采购管理.更新询价采购(model) ? 1 : -1;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+        public int DeleteXj()
+        {
+            try
+            {
+                string[] arr =Request.QueryString["id"].ToString().Split('|');
+                long xid = long.Parse(arr[0]);
+                long gid = long.Parse(arr[1]);
+                询价采购 model = 询价采购管理.查找询价采购(xid);
+                List<_议价列表> items = new List<_议价列表>();
+                foreach(var item in model.议价列表)
+                {
+                    if(item.供应商.用户ID!=gid)
+                    {
+                        items.Add(item);
+                    }
+                }
+                model.议价列表 = items;
+                return 询价采购管理.更新询价采购(model) ? 1 : -1 ;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+        public ActionResult ConsultDetail()
+        {
+            try
+            {
+                long id = long.Parse(Request.QueryString["id"]);
+                询价采购 model = 询价采购管理.查找询价采购(id);
+                return View(model);
+            }
+            catch
+            {
+                return Redirect("/商品陈列/");
+            }
+        }
+        public ActionResult UpdateInfo()
+        {
+            try
+            {
+                long xid = long.Parse(Request.Form["xid"]);
+                string[] ids = Request.Form["gids"].ToString().Split(',');
+                询价采购 model = 询价采购管理.查找询价采购(xid);
+                List<long> gids = new List<long>();
+                for (int i = 0; i < ids.Length - 1;i++ )
+                {
+                    gids.Add(long.Parse(ids[i]));
+                }
+                foreach(var item in model.议价列表)
+                {
+                    if(gids.Contains(item.供应商.用户ID))
+                    {
+                        item.交易状态 = true;
+                    }
+                }
+                询价采购管理.更新询价采购(model);
+                return Redirect("/单位用户后台/AddattachInfo?id="+model.Id);
+            }
+            catch
+            {
+                return Redirect("/商品陈列/");
+            }
+        }
+        public ActionResult AddattachInfo()
+        {
+            long id =long.Parse(Request.QueryString["id"]);
+            询价采购 model = 询价采购管理.查找询价采购(id);
             return View(model);
         }
-
+        [HttpPost]
+        public ActionResult AddattachInfo_purchase(询价采购 model)
+        {
+            询价采购 m = 询价采购管理.查找询价采购(model.Id);
+            m.订单号 = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
+            m.生成日期 = DateTime.Now;
+            m.采购单位.用户ID = currentUser.Id;
+            m.附加信息 = model.附加信息;
+            询价采购管理.更新询价采购(m);
+            return Redirect("/单位用户后台/OrderInfo");
+        }
+        public ActionResult OrderContract()
+        {
+            long id = long.Parse(Request.QueryString["id"]);
+            询价采购 model = 询价采购管理.查找询价采购(id);
+            return View(model);
+        }
+        public ActionResult OrderInfo()
+        {
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+            {
+                cpg = int.Parse(Request.QueryString["page"]);
+            }
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 询价采购管理.计数询价采购(0,0);
+            pgCount = pc / 10;
+            if (pc % 10 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            IEnumerable<询价采购> model = 询价采购管理.查询询价采购(10*(cpg-1), 10);
+            ViewData["orders"] = model;
+            return View();
+        }
         public ActionResult Del_Department(long id)
         {
             用户管理.删除用户<单位用户>(id);

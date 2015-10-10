@@ -68,19 +68,19 @@
             <div id="title_div" class="title-base-middle">
                 <div class="title-base-inner">
                     验收单管理
-                    <select id="ysd_status">
-                        <option selected="selected">全部</option>
-                        <option>审核通过</option>
-                        <option>已完成</option>
-                        <option>未验收</option>
-                        <option>未打印</option>
-                    </select>
-                    <input type="text" id="company-name" placeholder="请输入供应商名称" />
-                    <input type="text" id="ysd-number" placeholder="请输入验收单号" />
+                <select id="ysd_status">
+                    <option selected="selected">全部</option>
+                    <option>审核通过</option>
+                    <option>已完成</option>
+                    <option>未验收</option>
+                    <option>未打印</option>
+                </select>
+                <input type="text" id="company-name" placeholder="请输入供应商名称" />
+                <input type="text" id="ysd-number" placeholder="请输入验收单号" />
                     <input type="button" id="btn_searchysd" value="搜索" />
-                    <a href="/通知/NoticeDetail?id=32" target="_blank" class="adaddtip">如何使用验收单?</a>
-                </div>
+                <a href="/通知/NoticeDetail?id=32" target="_blank" class="adaddtip">如何使用验收单?</a>
             </div>
+        </div>
         </div>
         <div class="gys_ztbsearch_contentbox" id="acceptlist">
             <table cellpadding="0" cellspacing="0">
@@ -163,14 +163,14 @@
                                 
                                 @if (k.管理单位审核人.用户数据!=null)
                                 {
-                                    if (k.管理单位审核人.用户数据.单位信息.单位名称.Length > 8)
+                                    if (k.管理单位审核人.用户数据.验收单名称.Length > 8)
                                     {
-                                        <td class="name" title="@k.管理单位审核人.用户数据.单位信息.单位名称"> @k.管理单位审核人.用户数据.单位信息.单位名称.Substring(0, 8) ... </td>
+                                        <td class="name" title="@k.管理单位审核人.用户数据.验收单名称"> @k.管理单位审核人.用户数据.验收单名称.Substring(0, 8) ... </td>
                                     }
                                     else
                                     {
-                                        <td title="@k.管理单位审核人.用户数据.单位信息.单位名称">@k.管理单位审核人.用户数据.单位信息.单位名称</td>
-                                    }
+                                        <td title="@k.管理单位审核人.用户数据.验收单名称">@k.管理单位审核人.用户数据.验收单名称</td>
+                                    }    
                                 }
                                 else
                                 {

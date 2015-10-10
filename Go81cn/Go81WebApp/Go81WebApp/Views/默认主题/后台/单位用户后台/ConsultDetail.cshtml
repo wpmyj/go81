@@ -1,0 +1,176 @@
+﻿@model Go81WebApp._Code.Models.数据模型.商品数据模型.询价采购
+@{
+    ViewBag.Title = "询价采购";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<style>
+    .Content {
+        width: 1200px;
+        height: auto;
+        margin: 0px auto;
+    }
+
+    .hidebox {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .divbox {
+        float: left;
+        width: 150px;
+    }
+
+    .sname {
+        float: left;
+        line-height: 30px;
+        text-indent: 2em;
+    }
+
+    .modifybt {
+        display: inline-block;
+        width: 80px;
+        height: 20px;
+        line-height: 20px;
+        background-color: #ff0000;
+        color: #fff;
+        margin-right: 5px;
+        text-align: center;
+        text-indent: 0em;
+    }
+    a{
+        cursor:pointer;
+    }
+</style>
+<script type="text/javascript" src="~/JS/provinceandcity_all.js"></script>
+<div class="bg_outdiv">
+    <div style="border:1px solid #327229; margin:0px auto;background-color:#F9F9F9; font-size:13px;">
+        <div class="Content" style="margin-top:10px;">
+            <div class="sname" style="width:5%">选择</div>
+            <div class="sname" style="width:10%">产品名称</div>
+            <div class="sname" style="width:10%">供应商名称</div>
+            <div class="sname" style="width:7%">原价(元)</div>
+            <div class="sname" style="width:7%">议价(元)</div>
+            <div class="sname" style="width:8%">回复价(元)</div>
+            <div class="sname" style="width:7%">数量</div>
+            <div class="sname" style="width:8%">集成费(元)</div>
+            <div class="sname" style="width:8%">服务费(元)</div>
+            <div class="sname" style="width:8%">管线费(元)</div>
+            <div class="sname" style="width:7%">合计(元)</div>
+            <div class="sname" style="width:15%;text-align:center;">操作</div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="Content" style="text-align:left;">
+            <form action="/单位用户后台/UpdateInfo" method="post">
+                <input type="hidden" name="xid" value="@Model.Id" />
+                <input type="hidden" id="gids" name="gids" value="" />
+                @if (Model != null)
+                {
+                    int i = 0;
+                    foreach (var item in Model.议价列表)
+                    {
+                        <div class="childbox">
+                            <div class="sname" style="width:5%">
+                                @if (item.回复价格 <= item.议价 && item.回复价格 > 0)
+                                {
+                                    <input type="checkbox" name="gid" value="@item.供应商.用户ID" />
+                                }
+                                else
+                                {
+                                    <img src="~/Images/unselected.png" style="vertical-align:middle;" />
+                                }
+                            </div>
+                            <div class="sname hidebox" style="width:10%" title="@item.议价商品.商品.商品信息.商品名">@item.议价商品.商品.商品信息.商品名</div>
+                            <div class="sname hidebox" style="width:10%" title="@item.供应商.用户数据.企业基本信息.企业名称">@item.供应商.用户数据.企业基本信息.企业名称</div>
+                            <div class="sname single" style="width:7%">@item.价格</div>
+                            <div class="sname single" style="width:7%"><input type="text" name="yj@(i)" style="width:50px;" value="@item.议价" /></div>
+                            <div class="sname single" style="width:8%">
+                                @if (item.回复价格 <= item.价格 && item.回复价格 > 0)
+                                {
+                                    <span>@item.回复价格</span>
+                                }
+                                else
+                                {
+                                    <span style="color:#ff0000;">等待回复</span>
+                                }
+                            </div>
+                            <div class="sname" style="width:7%">@item.数量</div>
+                            <div class="sname single" style="width:8%">@item.集成费</div>
+                            <div class="sname single" style="width:8%">@item.服务费</div>
+                            <div class="sname single" style="width:8%">@item.管线费</div>
+                            <div class="sname" style="width:7%">
+                                @if (item.回复价格 != 0)
+                                {
+                                    <span class="yj" id="sum@(i)">@item.现价合计</span>
+                                }
+                                else
+                                {
+                                    <span class="yj" style="color:#ff0000;" id="sum@(i)">等待回复</span>
+                                }
+                            </div>
+                            <div class="sname" style="width:15%;"><a data-id="@Model.Id" id="@(i)" name="@Model.Id|@item.供应商.用户ID" onclick="changePrice(this)" class="modifybt">修改议价</a><a data-id="@Model.Id" name="@Model.Id|@item.供应商.用户ID" onclick="deletexj(this)" class="deletebt modifybt" style="width:60px;">删除</a></div>
+                            <div style="clear:both;"></div>
+                        </div>
+                                i++;
+                    }
+                }
+                <div class="Content" style="text-align:center;">
+                    <input type="submit" value="下一步" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function changePrice(th) {
+        var name = $(th).attr("name");
+        var xid = $(th).attr("data-id");
+        var index=$(th).attr("id");
+        var price = $(":input[name='yj" + index + "']").val();
+        $.get("/单位用户后台/ChangePrice", { id: name,p:price }, function (data) {
+            if(data==1)
+            {
+                alert("修改成功！");
+                window.location = '/单位用户后台/ConsultDetail?id='+xid;
+            }
+            else
+            {
+                alert("修改失败！");
+            }
+        });
+    }
+    function deletexj(th) {
+        var name = $(th).attr("name");
+        if (confirm("确定删除吗？")) {
+            $.get("/单位用户后台/DeleteXj", { id: name }, function (data) {
+                if (data == 1) {
+                    alert("删除成功！");
+                    window.location = '/单位用户后台/ConsultDetail?id=' + xid;
+                }
+                else
+                {
+                    alert("删除失败！请重新尝试删除");
+                }
+            });
+        }
+    }
+    var strid = "";
+    $(":input[type='checkbox']").click(function () {
+        var elem = document.getElementsByName("gid");
+        for (var i = 0; i < elem.length;i++)
+        {
+            if(elem.item(i).checked)
+            {
+                strid += elem.item(i).value+",";
+            }
+        }
+        $("#gids").val(strid);
+    });
+    $(":input[type='submit']").click(function () {
+        if(strid=="")
+        {
+            alert("请选择商品");
+            return false;
+        }
+    });
+</script>

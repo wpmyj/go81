@@ -1,0 +1,150 @@
+﻿@model Go81WebApp._Code.Models.数据模型.商品数据模型.询价采购
+@{
+    ViewBag.Title = "询价采购";
+    Layout = "_BackLayout.cshtml";
+}
+<style>
+    .Content {
+        width: 1200px;
+        height: auto;
+        margin: 0px auto;
+    }
+
+    .hidebox {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .divbox {
+        float: left;
+        width: 150px;
+    }
+
+    .sname {
+        float: left;
+        line-height: 30px;
+        text-indent: 2em;
+    }
+
+    .modifybt {
+        display: inline-block;
+        width: 80px;
+        height: 20px;
+        line-height: 20px;
+        background-color: #ff0000;
+        color: #fff;
+        margin-right: 5px;
+        text-align: center;
+        text-indent: 0em;
+    }
+    .childbox input[type=text]{
+        width:50px;
+    }
+    a{
+        cursor:pointer;
+    }
+</style>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<div class="bg_outdiv">
+    <div style="border:1px solid #327229; margin:0px auto;background-color:#F9F9F9; font-size:13px;">
+        <div class="Content" style="margin-top:10px;">
+            <div class="sname" style="width:36%">产品名称</div>
+            <div class="sname" style="width:8%">原价</div>
+            <div class="sname" style="width:8%">议价</div>
+            <div class="sname" style="width:8%">数量</div>
+            <div class="sname" style="width:8%">回复价</div>
+            <div class="sname" style="width:8%">集成费</div>
+            <div class="sname" style="width:8%">服务费</div>
+            <div class="sname" style="width:8%">管线费</div>
+            <div class="sname" style="width:8%">合计</div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="Content" style="text-align:left;">
+                @if (Model != null)
+                {
+                    decimal price = decimal.MaxValue;
+                    foreach (var item in Model.议价列表)
+                    {
+                        if (item.回复价格 != 0 && item.回复价格 < price)
+                        {
+                            price = item.回复价格;
+                        }
+                    }
+                    foreach (var item in Model.议价列表)
+                    {
+                        if (item.供应商.用户ID == long.Parse(ViewData["id"].ToString()))
+                        {
+                            if (!item.交易状态)
+                            {
+                                <div class="childbox">
+                                    <div class="sname hidebox" style="width:36%" title="@item.议价商品.商品.商品信息.商品名">@item.议价商品.商品.商品信息.商品名</div>
+                                    <div class="sname single" style="width:8%">@item.价格</div>
+                                    <div class="sname single" style="width:8%">@item.议价</div>
+                                    <div class="sname" style="width:8%">@item.数量</div>
+                                    <div class="sname single" style="width:8%">
+                                        <input type="text" name="hj" id="hj" value="@item.回复价格" />
+                                    </div>
+                                    <div class="sname single" style="width:8%"><input type="text" name="jcf" id="jcf" value="@item.集成费" /></div>
+                                    <div class="sname single" style="width:8%"><input type="text" name="fwf" id="fwf" value="@item.服务费" /></div>
+                                    <div class="sname single" style="width:8%"><input type="text" name="gxf" id="gxf" value="@item.管线费" /></div>
+                                    <div class="sname" style="width:8%">
+                                        @if (price != decimal.MaxValue)
+                                        {
+                                            <span>@price</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.价格</span>
+                                        }
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="childbox">
+                                    <div class="sname hidebox" style="width:36%" title="@item.议价商品.商品.商品信息.商品名">@item.议价商品.商品.商品信息.商品名</div>
+                                    <div class="sname single" style="width:8%">@string.Format("{0:c2}", item.价格)</div>
+                                    <div class="sname single" style="width:8%">@string.Format("{0:c2}", item.议价)</div>
+                                    <div class="sname" style="width:8%">@item.数量</div>
+                                    <div class="sname single" style="width:8%">
+                                        @string.Format("{0:c2}", item.回复价格)
+                                    </div>
+                                    <div class="sname single" style="width:8%">@string.Format("{0:c2}", item.集成费)</div>
+                                    <div class="sname single" style="width:8%">@string.Format("{0:c2}", item.服务费)</div>
+                                    <div class="sname single" style="width:8%">@string.Format("{0:c2}", item.管线费)</div>
+                                    <div class="sname" style="width:8%">
+                                       @string.Format("{0:c2}", item.现价合计)
+                                    </div>
+                                    <div style="clear:both;"></div>
+                                </div>
+                            }
+                        }
+                    }
+                }
+        </div>
+        <div class="Content">
+            <form action="/供应商后台/ConfirmInfo" method="post">
+                @Html.HiddenFor(m=>m.Id)
+                <table>
+                    <tr>
+                        <td align="right">发票编号：</td>
+                        <td>@Html.TextBoxFor(m => m.供货信息.发票编号)<span style="color:#ff0000;">*</span></td>
+                    </tr>
+                    <tr>
+                        <td align="right">内部管理编号：</td>
+                        <td>@Html.TextBoxFor(m => m.供货信息.内部管理编号)<span style="color:#ff0000;">*</span>(供应商自行定义，以便管理)</td>
+                    </tr>
+                    <tr>
+                        <td align="right">供货日期：</td>
+                        <td>@Html.TextBoxFor(m => m.供货信息.供货日期, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })<span style="color:#ff0000;">*</span></td>
+                    </tr>
+                    <tr><td colspan="2" align="center"><input type="submit" value="确认合同" /></td></tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>

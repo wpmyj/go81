@@ -2155,6 +2155,12 @@
     <Content Include="Views\默认主题\门户\商品陈列\PurchaseInfo.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\ConsultPrice.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\CounsultStepTwo.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\ConsultDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\ConsultDetail.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\ConsultList.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\AddattachInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\OrderInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\OrderContract.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\CreateInfo.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\_BackLayout.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_BackHead.cshtml" />

@@ -91,6 +91,35 @@ namespace Go81WebApp.Controllers.后台
             get { return this.HttpContext.获取当前用户<运营团队>(); }
         }
 
+        public ActionResult ModifiAnyUserPWD()
+        {
+            return View("ModifiAnyUserPWD");
+        }
+        [HttpPost]
+        public ActionResult ModifiAnyUserPWD(long? id)
+        {
+            var username = Request.Form["user"];
+            var pwd = Request.Form["pwd"];
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(pwd) || pwd.Length<6)
+            return Content("<script>alert('登录名和密码必须填写,密码不少于6个字符！');window.location='/运营团队后台/ModifiAnyUserPWD';</script>");
+            var usernameuUpper = username.ToUpper();
+            var userUnit = 用户管理.查询用户<单位用户>(0, 0, Query<单位用户>.Where(o => o.登录信息.登录名 == usernameuUpper));
+            if (!userUnit.Any())
+            {
+                var userGys = 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.登录信息.登录名 == usernameuUpper));
+                if (!userGys.Any())
+                {
+                    return Content("<script>alert('没有该用户，请核实！');window.location='/运营团队后台/ModifiAnyUserPWD';</script>");
+                }
+                用户管理.修改登录密码<供应商>(userGys.First().Id, pwd);
+                return Content("<script>alert('修改供应商密码成功！');window.location='/运营团队后台/ModifiAnyUserPWD';</script>");
+            }
+            用户管理.修改登录密码<单位用户>(userUnit.First().Id, pwd);
+            return Content("<script>alert('修改单位用户密码成功！');window.location='/运营团队后台/ModifiAnyUserPWD';</script>");
+        }
+
+        
+
         ///////////////////////////////////////////////////////////////////////////////////////////////////////从单位用户转移代码
         public ActionResult Del_Department(long id)
         {
@@ -1504,7 +1533,7 @@ namespace Go81WebApp.Controllers.后台
             return PartialView("Part_View/Part_DepartmentAdd");
         }
         public class User
-        {   
+        {
             public long Id { get; set; }
             public string Name { get; set; }
         }
@@ -1600,8 +1629,30 @@ namespace Go81WebApp.Controllers.后台
 
         public void ExportGysPhoneToExcel()
         {
+            var param = new Dictionary<string,string>();
+            var examstate = Request.Form["examstate"]; //审核状态
+            var authlevel = Request.Form["authlevel"]; //认证级别---军采通会员
+            var category = Request.Form["category"];  //行业
+            var gsytype = Request.Form["gsytype"];   //协议、应急、普通
+
+            var provence = Request.Form["deliverprovince"];  //地区
+            var city = Request.Form["delivercity"];
+            var area = Request.Form["deliverarea"];
+
+            var shortmessage = Request.Form["shortmessage"];   //是否订购短信服务
+
+            param.Add("审核状态", examstate);
+            param.Add("认证级别", authlevel);
+            param.Add("所属行业", category);
+            param.Add("协议应急普通", gsytype);
+            param.Add("省", provence);
+            param.Add("市", city);
+            param.Add("县", area);
+            if (string.IsNullOrWhiteSpace(shortmessage)) { shortmessage = "0"; }
+            param.Add("短信服务", shortmessage);
+
             HttpResponseBase rs = Response;
-            TemplateExcel.供应商手机号导出(rs);
+            TemplateExcel.供应商手机号导出(param, rs);
         }
 
 
@@ -4856,13 +4907,14 @@ namespace Go81WebApp.Controllers.后台
             //IEnumerable<商品> sp = 商品管理.查询商品(0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过), includeDisabled: false);
             //foreach (var s in sp)
             //{
-            //    CreateIndex(s, "/Lucene.Net/IndexDic/Product");
-            //    Count1++;
-            //    //if (s.商品信息 != null && !string.IsNullOrWhiteSpace(s.商品信息.精确型号))
-            //    //{
-            //    //    catlog.Add(s.商品信息.精确型号);
-            //    //}
+            //    //CreateIndex(s, "/Lucene.Net/IndexDic/Product");
+            //    //Count1++;
+            //    if (s.商品信息 != null && !string.IsNullOrWhiteSpace(s.商品信息.精确型号))
+            //    {
+            //        catlog.Add(s.商品信息.精确型号);
+            //    }
             //}
+            //catlog = catlog.Distinct().ToList();
             //var Count = 0;
             //IEnumerable<供应商> gys = 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过), includeDisabled: false);
             //foreach (var g in gys)
@@ -4880,7 +4932,7 @@ namespace Go81WebApp.Controllers.后台
             //    }
             //}
 
-            //foreach (var g in catlogdata)
+            //foreach (var g in catlog)
             //{
             //    CreateIndex_ProductCatalog(g, "/Lucene.Net/IndexDic/ProductCatalog");
             //}
@@ -9267,25 +9319,24 @@ namespace Go81WebApp.Controllers.后台
             var _gys = 用户管理.查询用户<供应商>(0, 0);
             string[] _area = { "成都", "贵阳", "重庆", "昆明" };
 
-            var newdic = new Dictionary<string, int>(); 
+            var newdic = new Dictionary<string, int>();
             var newdic1 = new Dictionary<string, int>();
 
             //供应商入网数量
             var dic = new Dictionary<string, Dictionary<string, int>>();
-            var _qjrk = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.入库级别 == 供应商.入库级别.全军库));
-            newdic.Add("全军入库", (int)_qjrk);
-
-            var _cdrk = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.入库级别 == 供应商.入库级别.成都军区库));
-            newdic.Add("成都军区入库", (int)_cdrk);
+            var _qjrk = _gys.Count(o => o.供应商用户信息.入库级别 == 供应商.入库级别.全军库 && o.审核数据.审核状态 == 审核状态.审核通过);
+            newdic.Add("全军入库", _qjrk);
+            var _cdrk = _gys.Count(o => o.供应商用户信息.入库级别 == 供应商.入库级别.成都军区库 && o.审核数据.审核状态 == 审核状态.审核通过);
+            newdic.Add("成都军区入库", _cdrk);
             dic.Add("入网供应商总数", newdic);
 
             newdic = new Dictionary<string, int>();
             foreach (var item in _area)
             {
-                var _agreegys = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.协议供应商 && o.所属地域.城市 != null && o.所属地域.城市.Contains(item)));
-                newdic.Add(item, (int)_agreegys);
-                var _emergys = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.所属地域.城市 != null && o.所属地域.城市.Contains(item) && o.供应商用户信息.应急供应商));
-                newdic1.Add(item, (int)_emergys);
+                var _agreegys = _gys.Count(o => o.供应商用户信息.协议供应商 && o.所属地域.城市 != null && o.所属地域.城市.Contains(item) && o.审核数据.审核状态 == 审核状态.审核通过);
+                newdic.Add(item, _agreegys);
+                var _emergys = _gys.Count(o => o.所属地域.城市 != null && o.所属地域.城市.Contains(item) && o.供应商用户信息.应急供应商 && o.审核数据.审核状态 == 审核状态.审核通过);
+                newdic1.Add(item, _emergys);
             }
             dic.Add("入网协议供应商总数", newdic);
             dic.Add("入网应急供应商总数", newdic1);
@@ -9314,12 +9365,12 @@ namespace Go81WebApp.Controllers.后台
             }
             dic1.Add("通用物资", newdic);
             foreach (var items in _zywz)
-            {                                                                                                                                       
+            {
                 //var _hy = 用户管理.计数用户<供应商>(0,0, Query<供应商>.Where(o => o.可提供产品类别列表.Count > 0 && o.可提供产品类别列表.Exists(p => p.一级分类.Contains(items))));
                 var _hy = _gys.Where(o => o.可提供产品类别列表.Count > 0 && o.可提供产品类别列表.Exists(p => p.一级分类.Contains(items))).Count();
                 newdic1.Add(items, (int)_hy);
             }
-            dic1.Add("专用物资", newdic1);                              
+            dic1.Add("专用物资", newdic1);
             ViewData["各行业供应商入网数量"] = dic1;
 
             return View();
@@ -10078,7 +10129,7 @@ namespace Go81WebApp.Controllers.后台
             string enddate = Request.Params["enddate"];
             long listcount;
             IMongoQuery q = null;
-            q = Query<公告>.Where(O => O.内容主体.发布时间 >= Convert.ToDateTime(startdate) && O.内容主体.发布时间 <= Convert.ToDateTime(enddate));
+            q = Query<公告>.Where(O => O.内容主体.发布时间 >= Convert.ToDateTime(startdate) && O.内容主体.发布时间 < Convert.ToDateTime(enddate) && O.审核数据.审核状态 == 审核状态.审核通过);
 
             var a = q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.采购公告));
             var b = q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.废标公告));
@@ -10086,6 +10137,16 @@ namespace Go81WebApp.Controllers.后台
             var d = q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.流标公告));
             var e = q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.预公告));
             var f = q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.中标结果公示));
+
+
+            var g = q.And(Query<公告>.EQ(o=>o.公告信息.公告类别, 公告.公告类别.公开招标));
+            var h = q.And(Query<公告>.EQ(o => o.公告信息.公告类别, 公告.公告类别.邀请招标));
+            var i = q.And(Query<公告>.EQ(o => o.公告信息.公告类别, 公告.公告类别.询价采购));
+            var j = q.And(Query<公告>.EQ(o => o.公告信息.公告类别, 公告.公告类别.竞争性谈判));
+            var k = q.And(Query<公告>.Where(o => o.公告信息.公告类别 != 公告.公告类别.公开招标 && o.公告信息.公告类别 != 公告.公告类别.其他 && o.公告信息.公告类别 != 公告.公告类别.未设置));
+
+
+
             listcount = (int)公告管理.计数公告(0, 0, q);
 
             int page = 1;
@@ -10098,11 +10159,22 @@ namespace Go81WebApp.Controllers.后台
             ViewData["公告总数"] = 公告管理.计数公告(0, 0);
             ViewData["预公告"] = 公告管理.计数公告(0, 0, e);
             ViewData["发标公告"] = 公告管理.计数公告(0, 0, a);
-            ViewData["废标公告"] = 公告管理.计数公告(0, 0, b);
+            var fb = 公告管理.计数公告(0, 0, b);
+            ViewData["废标公告"] = fb;
             ViewData["技术公告"] = 公告管理.计数公告(0, 0, c);
-            ViewData["流标公告"] = 公告管理.计数公告(0, 0, d);
-            ViewData["中标公告"] = 公告管理.计数公告(0, 0, f);
+            var lb = 公告管理.计数公告(0, 0, d);
+            ViewData["流标公告"] = lb;
+            var zb = 公告管理.计数公告(0, 0, f);
+            ViewData["中标公告"] = zb;
             ViewData["区间查询数"] = listcount;
+
+            ViewData["公开招标类"] = 公告管理.计数公告(0, 0, g);
+            ViewData["结果公示类"] = fb + lb + zb;
+            ViewData["采购类"] = 公告管理.计数公告(0, 0, k);
+            ViewData["邀请招标类"] = 公告管理.计数公告(0, 0, h);
+            ViewData["询价类"] = 公告管理.计数公告(0, 0, i);
+            ViewData["竞争性谈判类"] = 公告管理.计数公告(0, 0, j);
+
             ViewData["本月所发公告"] = 公告管理.查询公告(5 * (page - 1), 5, q, false, SortBy.Descending("内容主体.发布时间"));
 
             return PartialView("Part_View/Part_AdStatistic");
@@ -10112,161 +10184,38 @@ namespace Go81WebApp.Controllers.后台
             var area = Request.Params["area"];//地区，如四川
             var year = Request.Params["year"];
             var type = Request.Params["type"];//公告性质
-            var val = 0;
-            switch (type)
+            var notype = false;
+            var ad = 公告管理.查询公告(0, 0, Query<公告>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过));
+            ad = ad.Where(o => !string.IsNullOrWhiteSpace(o.公告信息.所属地域.省份) && o.公告信息.所属地域.省份.Contains(area) && o.内容主体.发布时间.Year == int.Parse(year));
+            if (string.IsNullOrWhiteSpace(type) || type == "--请选择--")
             {
-                case "未设置":
-                    val = 0;
-                    break;
-                case "预公告":
-                    val = 1;
-                    break;
-                case "技术公告":
-                    val = 2;
-                    break;
-                case "发标公告":
-                    val = 3;
-                    break;
-                case "中标公告":
-                    val = 4;
-                    break;
-                case "废标公告":
-                    val = 5;
-                    break;
-                case "流标公告":
-                    val = 6;
-                    break;
+                notype = true;
             }
-
-            var ad = 公告管理.查询公告(0, 0, Query<公告>.Where(o => o.公告信息.公告类别 != 公告.公告类别.其他));
-            var units = ad.Where(o => o.公告信息.所属地域.省份 != null && o.公告信息.所属地域.省份.Contains(area))
-                .Select(o => o.公告信息.需求单位 != null ? o.公告信息.需求单位.Trim() : o.公告信息.需求单位)
-                .Distinct();
+            
+            if (!notype)
+            {
+                var val = (公告.公告性质)Enum.Parse(typeof(公告.公告性质), type);
+                ad = ad.Where(o => o.公告信息.公告性质 == val);
+            }
+            var units = ad.Select(o => o.公告信息.需求单位 != null ? o.公告信息.需求单位.Trim() : o.公告信息.需求单位).Distinct();
 
             var adlist = new Dictionary<string, List<int>>();
-
-            switch (area)
+            foreach (var k in units)
             {
-                case "四川":
-                    foreach (var k in units)
-                    {
-                        var 本年各月发布公告数量集合 = new List<int>();
-                        for (int i = 1; i <= 12; i++)
-                        {
-                            var count = ad.Where(o => o.公告信息.需求单位 == k &&
-                                                            o.内容主体.发布时间.Month == i &&
-                                                            (int)o.公告信息.公告性质 == val &&
-                                                            o.公告信息.所属地域.省份 != null &&
-                                                            o.公告信息.所属地域.省份.Contains(area) &&
-                                                            o.内容主体.发布时间.Year == int.Parse(year)).Count();
-                            本年各月发布公告数量集合.Add(count);
-                        }
-                        if (k == null)
-                        {
-                            adlist.Add("未填写需求单位", 本年各月发布公告数量集合);
-                        }
-                        else
-                        {
-                            adlist.Add(k, 本年各月发布公告数量集合);
-                        }
-                    }
-                    break;
-                case "重庆":
-                    foreach (var k in units)
-                    {
-                        var 本年各月发布公告数量集合 = new List<int>();
-                        for (int i = 1; i <= 12; i++)
-                        {
-                            var count = ad.Where(o => o.公告信息.需求单位 == k &&
-                                                            o.内容主体.发布时间.Month == i &&
-                                                            (int)o.公告信息.公告性质 == val &&
-                                                            o.公告信息.所属地域.省份 != null &&
-                                                            o.公告信息.所属地域.省份.Contains(area) &&
-                                                            o.内容主体.发布时间.Year == int.Parse(year)).Count();
-                            本年各月发布公告数量集合.Add(count);
-                        }
-                        if (k == null)
-                        {
-                            adlist.Add("未填写需求单位", 本年各月发布公告数量集合);
-                        }
-                        else
-                        {
-                            adlist.Add(k, 本年各月发布公告数量集合);
-                        }
-                    }
-                    break;
-                case "贵州":
-                    foreach (var k in units)
-                    {
-                        var 本年各月发布公告数量集合 = new List<int>();
-                        for (int i = 1; i <= 12; i++)
-                        {
-                            var count = ad.Where(o => o.公告信息.需求单位 == k &&
-                                                            o.内容主体.发布时间.Month == i &&
-                                                            (int)o.公告信息.公告性质 == val &&
-                                                            o.公告信息.所属地域.省份 != null &&
-                                                            o.公告信息.所属地域.省份.Contains(area) &&
-                                                            o.内容主体.发布时间.Year == int.Parse(year)).Count();
-                            本年各月发布公告数量集合.Add(count);
-                        }
-                        if (k == null)
-                        {
-                            adlist.Add("未填写需求单位", 本年各月发布公告数量集合);
-                        }
-                        else
-                        {
-                            adlist.Add(k, 本年各月发布公告数量集合);
-                        }
-                    }
-                    break;
-                case "云南":
-                    foreach (var k in units)
-                    {
-                        var 本年各月发布公告数量集合 = new List<int>();
-                        for (int i = 1; i <= 12; i++)
-                        {
-                            var count = ad.Where(o => o.公告信息.需求单位 == k &&
-                                                            o.内容主体.发布时间.Month == i &&
-                                                            (int)o.公告信息.公告性质 == val &&
-                                                            o.公告信息.所属地域.省份 != null &&
-                                                            o.公告信息.所属地域.省份.Contains(area) &&
-                                                            o.内容主体.发布时间.Year == int.Parse(year)).Count();
-                            本年各月发布公告数量集合.Add(count);
-                        }
-                        if (k == null)
-                        {
-                            adlist.Add("未填写需求单位", 本年各月发布公告数量集合);
-                        }
-                        else
-                        {
-                            adlist.Add(k, 本年各月发布公告数量集合);
-                        }
-                    }
-                    break;
-                case "西藏":
-                    foreach (var k in units)
-                    {
-                        var 本年各月发布公告数量集合 = new List<int>();
-                        for (int i = 1; i <= 12; i++)
-                        {
-                            var count = ad.Where(o => o.公告信息.需求单位 == k &&
-                                                            o.内容主体.发布时间.Month == i &&
-                                                            (int)o.公告信息.公告性质 == val &&
-                                                            o.公告信息.所属地域.省份 != null &&
-                                                            o.公告信息.所属地域.省份.Contains(area) &&
-                                                            o.内容主体.发布时间.Year == int.Parse(year)).Count();
-                            本年各月发布公告数量集合.Add(count);
-                        }
-                        if (k == null)
-                        {
-                            adlist.Add("未填写需求单位", 本年各月发布公告数量集合);
-                        }
-                        else
-                        {
-                            adlist.Add(k, 本年各月发布公告数量集合);
-                        }
-                    }
-                    break;
+                var 本年各月发布公告数量集合 = new List<int>();
+                for (int i = 1; i <= 12; i++)
+                {
+                    var count = ad.Count(o => o.公告信息.需求单位 == k && o.内容主体.发布时间.Month == i);
+                    本年各月发布公告数量集合.Add(count);
+                }
+                if (k == null)
+                {
+                    adlist.Add("未填写需求单位", 本年各月发布公告数量集合);
+                }
+                else
+                {
+                    adlist.Add(k, 本年各月发布公告数量集合);
+                }
             }
             ViewData["地区"] = area;
             ViewData["区域公告"] = adlist;
@@ -10805,10 +10754,11 @@ namespace Go81WebApp.Controllers.后台
                         var pronamelist = proliststr.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                         foreach (var proname in pronamelist)
                         {
-                            Pro_Model.中标信息.Add(new 商品._中标信息 { 
-                                  中标项目编号= Request.Form["pronum___" + proname],
-                                  中标数量 = int.Parse(Request.Form["procount___" + proname]),
-                                  中标金额 = decimal.Parse(Request.Form["proprice___" + proname]),
+                            Pro_Model.中标信息.Add(new 商品._中标信息
+                            {
+                                中标项目编号 = Request.Form["pronum___" + proname],
+                                中标数量 = int.Parse(Request.Form["procount___" + proname]),
+                                中标金额 = decimal.Parse(Request.Form["proprice___" + proname]),
                             });
 
                             var gg_id = long.Parse(Request.Form["ggid___" + proname]);
@@ -13697,6 +13647,7 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult Part_DbExport()
         {
+            ViewData["行业分类"] = 商品分类管理.查找子分类();
             return PartialView("Part_View/Part_DbExport");
         }
         public ActionResult DbInport()

@@ -1,0 +1,179 @@
+﻿@model Go81WebApp._Code.Models.数据模型.商品数据模型.询价采购
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp._Code.Models.数据模型.商品数据模型
+@using Go81WebApp.Controllers.后台
+@{
+    ViewBag.Title = "询价采购";
+    Layout = null;// "_Back_IntranetLayout.cshtml";
+}
+<style>
+    .Content {
+        width: 100%;
+        height: auto;
+        margin: 0px auto;
+    }
+
+    .divbox {
+        float: left;
+        width: 150px;
+    }
+
+    .sname {
+        width: 70%;
+        float: left;
+        line-height: 30px;
+        text-indent: 2em;
+    }
+
+    .gprice {
+        width: 30%;
+        float: left;
+        text-align: center;
+        line-height: 30px;
+    }
+    .Content .input {
+        width: 80px;
+    }
+    table.orderdetail{
+        border:1px solid #000;
+        border-top:none;
+        border-left:none;
+    }
+    table.orderdetail tr td{
+        line-height:30px;
+        border:1px solid #000;
+        border-right:none;
+        border-bottom:none;
+        text-align:center;
+    }
+</style>
+<script type="text/javascript" src="~/JS/provinceandcity_all.js"></script>
+<div class="bg_outdiv">
+    <div style="margin:0px auto; width:100%;font-size:13px;">
+        <div class="Content">
+            @{
+                供应商 gys = null;
+                商品 sp = null;
+                _议价列表 yj = null;
+                decimal price =0;
+                foreach (var item in Model.议价列表)
+                {
+                    if (item.交易状态)
+                    {
+                        price =item.现价合计;
+                        gys = item.供应商.用户数据;
+                        sp = item.议价商品.商品;
+                        yj = item;
+                        break;
+                    }
+                }
+            }
+            <table width="100%">
+                <tr><td colspan="10"><div style="text-align:center; color:#ff0000; font-size:20px; font-weight:bold;">订单信息</div></td></tr>
+                <tr><td colspan="10"><div style="text-align:center; font-size:18px; font-weight:bold;">订单号：@Model.订单号</div></td></tr>
+                    <tr>
+                        <td colspan="10">
+                            <table width="100%">
+                                <tr>
+                                    <td width="15%" align="right">上级单位：</td>
+                                    <td width="45%" align="left">@Model.采购单位.用户数据.单位信息.所属单位</td>
+                                    <td width="15%" align="right">联系人：</td>
+                                    <td width="25%" align="left">@Model.采购单位.用户数据.联系方式.联系人</td>
+                                </tr>
+                                <tr>
+                                    <td align="right">采购单位：</td>
+                                    <td align="left">@Model.采购单位.用户数据.单位信息.单位名称</td>
+                                    <td align="right">联系电话：</td>
+                                    <td align="left">@Model.采购单位.用户数据.联系方式.固定电话</td>
+                                </tr>
+                                <tr>
+                                    <td align="right">单位地址：</td>
+                                    <td align="left">@Model.附加信息.收货地址</td>
+                                    <td align="right">生成日期：</td>
+                                    <td align="left">@Model.生成日期</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="10">
+                            <table width="100%">
+                                <tr>
+                                    <td width="15%" align="right" valign="top">采购项目：</td>
+                                    <td width="30%" align="left" valign="top">@sp.商品信息.所属商品分类.商品分类.父分类.商品分类.分类名</td>
+                                    <td width="15%" align="right" valign="top">采购预算：</td>
+                                    <td width="10%" align="left" valign="top">@(string.Format("{0:c2}", Model.附加信息.预算金额.合计))</td>
+                                    <td width="15%" align="right" valign="top">采购方式：</td>
+                                    <td width="15%" align="left" valign="top">协议采购</td>
+                                </tr>
+                            </table>
+                            <table width="100%" cellpadding="0" cellspacing="0" class="orderdetail">
+                                <tr><td colspan="10" style="font-weight:bold;">产品信息</td></tr>
+                                <tr>
+                                    <td>产品名称</td>
+                                    <td width="8%">品牌</td>
+                                    <td width="8%">型号</td>
+                                    <td>技术规格与主要配置</td>
+                                    <td width="8%">单位</td>
+                                    <td>成交价</td>
+                                    <td>服务费</td>
+                                    <td>集成费</td>
+                                    <td width="8%">数量</td>
+                                    <td>总计</td>
+                                </tr>
+                                <tr>
+                                    <td valign="middle">@sp.商品信息.商品名</td>
+                                    <td valign="middle">@sp.商品信息.品牌</td>
+                                    <td valign="middle">@sp.商品信息.型号</td>
+                                    <td valign="middle">技术规格与主要配置</td>
+                                    <td valign="middle">@sp.商品信息.计量单位</td>
+                                    <td valign="middle">@(string.Format("{0:c2}", price))</td>
+                                    <td valign="middle">@yj.服务费</td>
+                                    <td valign="middle">@yj.集成费</td>
+                                    <td valign="middle">@yj.数量</td>
+                                    <td valign="middle">@(string.Format("{0:c2}", yj.现价合计))</td>
+                                </tr>
+                                <tr>
+                                    <td>合计</td>
+                                    <td colspan="8" style="text-align:left; padding-left:10px;">大写金额：@单位用户后台Controller.MoneyToUpper(price.ToString())</td>
+                                    <td>@(string.Format("{0:c2}",yj.现价合计))</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10" style="font-weight:bold;">服务费</td>
+                                </tr>
+                                <tr>
+                                    <td>说明</td>
+                                    <td colspan="9" style="height:150px;"></td>
+                                </tr>
+                                <tr>
+                                    <td>备注</td>
+                                    <td colspan="9" style="height:60px;"></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                <tr>
+                    <td colspan="10">
+                        <table width="100%">
+                            <tr>
+                                <td width="15%" align="right" valign="top">供货单位：</td>
+                                <td width="35%" align="left" valign="top">@gys.企业基本信息.企业名称</td>
+                                <td width="15%" align="right" valign="top">联系人：</td>
+                                <td width="35%" align="left" valign="top">@gys.企业联系人信息.联系人姓名</td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top">单位地址：</td>
+                                <td align="left" valign="top">@gys.企业联系人信息.联系人地址</td>
+                                <td align="right" valign="top">联系电话：</td>
+                                <td align="left" valign="top">@gys.企业联系人信息.联系人固定电话</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" language="javascript">
+    </script>

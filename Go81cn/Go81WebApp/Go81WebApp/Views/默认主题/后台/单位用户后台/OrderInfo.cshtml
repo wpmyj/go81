@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "询价采购";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+@using Go81WebApp._Code.Models.数据模型.商品数据模型
+<style>
+    .Content {
+        width: 100%;
+        height: auto;
+        margin: 0px auto;
+    }
+    .Content td{
+        text-align:center;
+    }
+    .Content a:hover{
+        text-decoration:underline;
+        cursor:pointer;
+    }
+    .cancelbt{
+        display:block;
+        width:50px;
+        height:25px;
+        line-height:25px;
+        background-color:#ff0000;
+        border-radius:3px;
+        color:#fff;
+    }
+</style>
+<script type="text/javascript" src="~/JS/provinceandcity_all.js"></script>
+@{
+    IEnumerable<询价采购> model = ViewData["orders"] as IEnumerable<询价采购>;
+    int counter = 1;
+}
+<div class="bg_outdiv">
+    <div style="border:1px solid #327229; margin:0px auto; width:900px;background-color:#F9F9F9; font-size:13px;">
+        <div class="Content" style="margin-bottom:10px auto; text-align:center;">订单信息列表</div>
+        <div class="Content">
+            <table width="100%">
+                <tr>
+                    <th width="5%">序号</th>
+                    <th width="45%">合同名称</th>
+                    <th width="25%">订单号</th>
+                    <th width="5%">状态</th>
+                    <th width="5%">打印</th>
+                    <th width="5%" colspan="2">取消</th>
+                </tr>
+                @foreach (var item in model)
+                {
+                    if (item.订单状态 == false)
+                    {
+                        <tr>
+                            <td>@counter</td>
+                            <td><a href="/单位用户后台/OrderContract?id=@item.Id" style="color:#0094ff;">@item.附加信息.合同名称</a></td>
+                            <td>@item.订单号</td>
+                            <td>等待</td>
+                            <td colspan="2">—</td>
+                            <td><a class="cancelbt">取消</a></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@counter</td>
+                            <td>@item.附加信息.合同名称</td>
+                            <td>@item.订单号</td>
+                            <td>完成</td>
+                            <td><a>验收单</a>/<a>合同</a></td>
+                            <td>—</td>
+                            <td>评分</td>
+                        </tr>
+                    }
+                    counter++;
+                }
+            </table>
+        </div>
+    </div>
+    <div class="gys_znxx_content_detailbox">
+        @{
+            int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+            int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+            if (Pagecount <= 6)
+            {
+                if (CurrentPage != 1)
+                {
+                    <a style="border:1px solid red;" href='/单位用户后台/OrderInfo?page=1'>首页</a><a style="border:1px solid red;" href='/单位用户后台/OrderInfo?page=@(CurrentPage-1)'>上一页</a>
+                }
+                for (int i = 1; i <= Pagecount; i++)
+                {
+                    if (CurrentPage == i)
+                    {
+                        <a style="border:1px solid red;" href='/单位用户后台/OrderInfo?page=@i'>@i</a>
+                    }
+                    else
+                    {
+                        <a href='/单位用户后台/OrderInfo?page=@i'>@i</a>
+                    }
+                }
+            }
+            else
+            {
+                if (CurrentPage < 6)
+                {
+                    for (int i = 1; i < 6; i++)
+                    {
+                        <a href="/单位用户后台/OrderInfo?page=@(i)">@i</a>
+                    }
+                    <span>...</span><a href="/单位用户后台/OrderInfo?page=@(Pagecount)">@Pagecount</a><a href="/单位用户后台/OrderInfo?page=@(CurrentPage+1)">下一页</a>
+                }
+                else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                {
+                    <span><a href="/单位用户后台/OrderInfo?page=1">1</a>...</span>
+                    for (int i = (CurrentPage - 4 + 1); i <= CurrentPage; i++)
+                    {
+                        <a href="/单位用户后台/OrderInfo?page=@(i)">i</a>
+                    }
+                    <span>...</span><a href="/单位用户后台/OrderInfo?page=@(Pagecount)">@Pagecount</a>
+                }
+                else if (CurrentPage >= Pagecount - 3)
+                {
+                    <span><a href="/单位用户后台/OrderInfo?page=1">1</a>...</span>
+                    for (int i = Pagecount - 5 + 1; i <= Pagecount; i++)
+                    {
+                        if (CurrentPage == i)
+                        {
+                            <a style="border:1px solid red;" href="/单位用户后台/OrderInfo?page=@(i)">@i</a>
+                        }
+                        else
+                        {
+                            <a href="/单位用户后台/OrderInfo?page=@(i)">@i</a>
+                        }
+                    }
+                }
+            }
+            if (Pagecount > 0)
+            {
+                if (CurrentPage < Pagecount)
+                {
+                    <a href="/单位用户后台/OrderInfo?page=@(CurrentPage+1)">下一页</a><a href="/单位用户后台/OrderInfo?page=@(Pagecount)">末页</a>
+                }
+                <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+            }
+        }
+    </div>
+
+</div>
+<script type="text/javascript" language="javascript">
+</script>

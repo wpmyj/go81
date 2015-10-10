@@ -20,18 +20,24 @@ namespace Go81WebApp._Code.Models.数据模型.商品数据模型
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime 生成日期 { get; set; }
         public bool 订单状态 { get; set; }
+        public 用户链接<单位用户> 采购单位 { get; set; }
+        public _供货信息 供货信息 { get; set; }
         public 询价采购()
         {
             this.询价商品 = new 商品链接();
             this.议价列表 = new List<_议价列表>();
             this.附加信息 = new _附加信息();
+            this.采购单位 = new 用户链接<单位用户>();
+            this.供货信息 = new _供货信息();
         }
     }
-    public class 商品链接
+    public class _供货信息
     {
-        public long 商品ID { get; set; }
-        public 商品 商品 { get { return 商品管理.查找商品(商品ID); } }
-        public 商品链接() { this.商品ID = -1; }
+        public string 发票编号 { get; set; }
+        public string 内部管理编号 { get; set; }
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        public DateTime 供货日期 { get; set; }
+        public bool 供货成功 { get; set; }
     }
     public class _议价列表
     {
@@ -64,16 +70,12 @@ namespace Go81WebApp._Code.Models.数据模型.商品数据模型
     }
      public class _附加信息
      {
-         public 商品链接 商品 { get; set; }
+         public string 合同名称 { get; set; }
          public _预算金额 预算金额 { get; set; }
          public _预算金额 实际金额 { get; set; }
          public _支付方式 支付方式 { get; set; }
          public string 所属行业 { get; set; }
          public string 收货地址 { get; set; }
-         public _附加信息()
-         {
-             this.商品 = new 商品链接();
-         }
      }
      public enum _支付方式
      {

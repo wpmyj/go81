@@ -125,7 +125,7 @@
                                 if (i % 2 == 0)
                                 {
                                     <li>
-                                        @if (ts.TotalHours < 72)
+                                        @if (ts.TotalHours < 72 || item.Id == 2990)
                                         {
                                             <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
@@ -141,7 +141,7 @@
                                 else
                                 {
                                     <li class="oddlinecolor">
-                                        @if (ts.TotalHours < 72)
+                                        @if (ts.TotalHours < 72 || item.Id == 2990)
                                         {
                                             <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
@@ -580,7 +580,7 @@
                                 if (i % 2 == 0)
                                 {
                                     <li>
-                                        @if (ts.TotalHours < 72)
+                                        @if (ts.TotalHours < 72 || item.Id == 3035)
                                         {
                                             <img src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
@@ -596,7 +596,7 @@
                                 else
                                 {
                                     <li class="oddlinecolor">
-                                        @if (ts.TotalHours < 72)
+                                        @if (ts.TotalHours < 72 || item.Id == 3035)
                                         {
                                             <img src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
@@ -730,11 +730,11 @@
                                 if (i % 2 == 0)
                                 {
                                     <li>
-                                        @if (ts.TotalHours < 72)
+                                        @if (ts.TotalHours < 72 || item.Id == 3035)
                                         {
                                             <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
-                                            <a class="new" style="width:195px" @*style="width:195px;"*@ target="_blank" href="@Url.Encode("/公告/AnnounceDetail")?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                            <a class="new" style="width:195px" target="_blank" href="@Url.Encode("/公告/AnnounceDetail")?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
                                         }
                                         else
                                         {
@@ -746,11 +746,11 @@
                                 else
                                 {
                                     <li class="oddlinecolor">
-                                        @if (ts.TotalHours < 72)
+                                        @if (ts.TotalHours < 72 || item.Id == 3035)
                                         {
                                             <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
-                                            <a class="new" style="width:195px" @*style="width: 195px;"*@ target="_blank" href="@Url.Encode("/公告/AnnounceDetail")?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                            <a class="new" style="width:195px" target="_blank" href="@Url.Encode("/公告/AnnounceDetail")?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
                                         }
                                         else
                                         {

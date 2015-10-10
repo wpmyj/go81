@@ -125,7 +125,7 @@
                         <option>西藏</option>
                     </select>
                     <input style="height:25px;text-indent:10px" id="adYear" value="@DateTime.Now.Year" onchange="getData()" onfocus="WdatePicker({ dateFmt: 'yyyy' })" />
-                    @Html.DropDownList("adType", new SelectList(Enum.GetValues(typeof(公告.公告性质))), new { @onchange = "getData()", style = "height:31px;width: 155px;" })
+                    @Html.DropDownList("adType", new SelectList(Enum.GetValues(typeof(公告.公告性质))),"--请选择--", new { @onchange = "getData()", style = "height:31px;width: 155px;" })
                 </div>
                 <div id="waitfor" style="position:absolute; z-index:100; width:940px; height:200px; text-align:center; line-height:320px; display:none;">
                     <img src="~/Images/ajax-loader.gif" width="30px" height="30px" />

@@ -17,6 +17,9 @@ using System.Web;
 using Go81WebApp.Models.数据模型.用户数据模型;
 using MongoDB.Driver.Builders;
 using Go81WebApp.Models.数据模型;
+using MongoDB.Driver;
+using MongoDB;
+using Go81WebApp.Models.数据模型.推广业务数据模型;
 
 namespace Go81WebApp.Models.Helpers
 {
@@ -27,7 +30,7 @@ namespace Go81WebApp.Models.Helpers
             var wb = LoadFromFile(path);
             if (null == wb || wb.NumberOfSheets < 1) return null;//加载文件失败，或没有可用的工作表
             var ret = new List<List<Tuple<商品, string>>>();
-            for (var i=0; i<wb.NumberOfSheets;++i)
+            for (var i = 0; i < wb.NumberOfSheets; ++i)
             {
                 var wsName = wb.GetSheetName(i);
                 if (string.IsNullOrWhiteSpace(wsName)) continue;//第一个工作表名为空
@@ -136,7 +139,7 @@ namespace Go81WebApp.Models.Helpers
                     if (!hitColumn) break;
                     p.商品信息.所属供应商.用户ID = 供应商ID;
                     p.商品信息.所属商品分类.商品分类ID = catId;
-                    ret2.Add(Tuple.Create(p,imgDir));
+                    ret2.Add(Tuple.Create(p, imgDir));
                 }
                 ret.Add(ret2);
             }
@@ -154,12 +157,12 @@ namespace Go81WebApp.Models.Helpers
             excel.专家信息(rs);
         }
 
-        public static void 供应商手机号导出(HttpResponseBase rs)
+        public static void 供应商手机号导出(Dictionary<string, string> dics, HttpResponseBase rs)
         {
             var excel = new excel(SpreadsheetVersion.EXCEL97);
-            excel.导出供应商手机号(rs);
+            excel.导出供应商手机号(dics,rs);
         }
-        
+
 
         private class excel
         {
@@ -172,7 +175,7 @@ namespace Go81WebApp.Models.Helpers
             }
             private void PutNames(ISheet ws, ICellStyle cs1, ICellStyle cs2, ICellStyle cs3, params string[] names)
             {
-                PutNamesWithValidations(ws, cs1, cs2, cs3, names.Select(s => new[] {s}).ToArray());
+                PutNamesWithValidations(ws, cs1, cs2, cs3, names.Select(s => new[] { s }).ToArray());
             }
             private void PutNamesWithValidations(ISheet ws, ICellStyle cs1, ICellStyle cs2, ICellStyle cs3, params string[][] names)
             {
@@ -196,7 +199,7 @@ namespace Go81WebApp.Models.Helpers
                         vd.ShowPromptBox = true;
                         ws.AddValidationData(vd);
                     }
-                    
+
                     var c = r.CreateCell(0);
                     c.SetCellValue(names[i][0]);
                     if (0 == i)
@@ -292,13 +295,13 @@ namespace Go81WebApp.Models.Helpers
                             {
                                 var prop = cat.商品属性模板[pn][s];
                                 if (prop.属性类型 != 属性类型.复选)
-                                    return new[] {s};
+                                    return new[] { s };
 
                                 var l = cat.商品属性模板[pn][s].值.ToList();
                                 l.Insert(0, s);
                                 return l.ToArray();
                             }).ToList();
-                            names.Insert(0, new[] {kv.Key});
+                            names.Insert(0, new[] { kv.Key });
                             PutNamesWithValidations(ws, cs2, cs3, cs4, names.ToArray());
                         }
                         ws.GroupRow(rn0, ws.PhysicalNumberOfRows - 1);
@@ -376,7 +379,7 @@ namespace Go81WebApp.Models.Helpers
                 style_6.Alignment = HorizontalAlignment.Left;
 
                 //样式七：12号字体、居中对齐、有边框
-                
+
                 ICellStyle style_7 = wb.CreateCellStyle();
                 style_7.VerticalAlignment = VerticalAlignment.Center;
                 style_7.Alignment = HorizontalAlignment.Center;
@@ -488,7 +491,7 @@ namespace Go81WebApp.Models.Helpers
                                 cell = row.CreateCell(9);
                                 cell.SetCellValue("采购年度：" + 需求计划表.采购年度.ToString("yyyy年MM月dd日"));
                                 cell.CellStyle = style_1;
-                                
+
                                 //内容表头
                                 row = ws.CreateRow(page * 20 + 3);
                                 for (int k = 0; k < 11; k++)
@@ -515,7 +518,7 @@ namespace Go81WebApp.Models.Helpers
                                 //填充内容
                                 var list = 物资列表.Skip(page * 14).Take(14).ToList();
                                 var length = list.Count();
-                                for (int p = 0; p <length; p++)   //行
+                                for (int p = 0; p < length; p++)   //行
                                 {
                                     row = ws.CreateRow(page * 20 + 4 + p);
                                     row.HeightInPoints = 25;
@@ -615,7 +618,7 @@ namespace Go81WebApp.Models.Helpers
                                 cell = row.CreateCell(0);
                                 cell.SetCellValue("编制单位：" + 需求计划表.编制单位);
                                 cell.CellStyle = style_3;
-                                
+
                                 //内容表头
                                 row = ws.CreateRow(page * 20 + 3);
                                 for (int k = 0; k < 10; k++)
@@ -641,7 +644,7 @@ namespace Go81WebApp.Models.Helpers
                                 //填充内容
                                 var fflist = 分发列表.Skip(page * 14).Take(14).ToList();
                                 var length = fflist.Count();
-                                for (int p = 0; p <length; p++)   //行
+                                for (int p = 0; p < length; p++)   //行
                                 {
                                     row = ws.CreateRow(page * 20 + 4 + p);
                                     row.HeightInPoints = 25;
@@ -782,11 +785,11 @@ namespace Go81WebApp.Models.Helpers
                             ws.PrintSetup.PaperSize = 9; //设置打印纸张
                             break;
                             #endregion
-                            
+
                     }
                 }
 
-               
+
                 rs.ContentType = "application/vnd.ms-excel";
                 rs.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", "军队物资集中采购需求计划表" + DateTime.Now.Second.ToString()));
                 wb.Write(rs.OutputStream);
@@ -841,7 +844,7 @@ namespace Go81WebApp.Models.Helpers
                         case 2: cell.SetCellValue("专家证号"); ws.SetColumnWidth(k, 7000); break;
                         case 3: cell.SetCellValue("证件类型"); ws.SetColumnWidth(k, 3000); break;
                         case 4: cell.SetCellValue("证件号"); ws.SetColumnWidth(k, 5500); break;
-                        case 5: cell.SetCellValue("专业技术职称"); ws.SetColumnWidth(k,4000); break;
+                        case 5: cell.SetCellValue("专业技术职称"); ws.SetColumnWidth(k, 4000); break;
                         case 6: cell.SetCellValue("毕业院校"); ws.SetColumnWidth(k, 7500); break;
                         case 7: cell.SetCellValue("最高学历"); ws.SetColumnWidth(k, 3000); break;
                         case 8: cell.SetCellValue("工作单位"); ws.SetColumnWidth(k, 7000); break;
@@ -893,7 +896,7 @@ namespace Go81WebApp.Models.Helpers
                 wb.Write(rs.OutputStream);
             }
 
-            internal void 导出供应商手机号(HttpResponseBase rs)
+            internal void 导出供应商手机号(Dictionary<string,string> dics,HttpResponseBase rs)
             {
                 var wb = CreateWorkbook(_excelVer);
 
@@ -907,279 +910,80 @@ namespace Go81WebApp.Models.Helpers
                 style.SetFont(font);
                 style.Alignment = HorizontalAlignment.Center;
 
-                for (var i = 0; i < 8; i++)
+                IMongoQuery query = null;
+                if (dics["审核状态"] != "-1")
+                    query = query.And(Query<供应商>.Where(o => (int)o.审核数据.审核状态 == int.Parse(dics["审核状态"])));
+                if (dics["认证级别"] != "0")
+                    query = query.And(Query<供应商>.Where(o => (int)o.供应商用户信息.认证级别 == int.Parse(dics["认证级别"])));
+                if (dics["所属行业"] != "请选择")
+                    query = query.And(Query<供应商>.Where(o => o.企业基本信息.所属行业.Contains(dics["所属行业"])));
+                if (dics["协议应急普通"] != "请选择")
                 {
-                    switch (i)
+                    if (dics["协议应急普通"] == "普通供应商")
+                        query = query.And(Query<供应商>.Where(o => o.供应商用户信息.普通供应商));
+                    if (dics["协议应急普通"] == "协议供应商")
+                        query = query.And(Query<供应商>.Where(o => o.供应商用户信息.协议供应商));
+                    if (dics["协议应急普通"] == "应急供应商")
+                        query = query.And(Query<供应商>.Where(o => o.供应商用户信息.应急供应商));
+                }
+                if (dics["省"] != "")
+                {
+                    query = query.And(Query<供应商>.Where(o => o.所属地域.省份 == dics["省"]));
+                    if (dics["市"] != "")
                     {
-                        case 0:
-                            #region 行业
-                            var ws = wb.CreateSheet("按行业分");
-
-                            //数据准备，按行业分类
-                            var _category = 商品分类管理.查找子分类();
-                            var _dicCategory = new Dictionary<string, List<供应商>>();
-                            foreach (var item in _category)
-                            {
-                                var _gysCate = 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.企业基本信息.所属行业.Contains(item.分类名))).ToList();
-                                _dicCategory.Add(item.分类名, _gysCate);
-                            }
-
-                            //写入数据
-                            var rowsCount = 0;
-                            foreach (var items in _dicCategory)   //行
-                            {
-                                //输出行业
-                                ws.AddMergedRegion(new CellRangeAddress(rowsCount, rowsCount, 0, 1));
-                                var row = ws.CreateRow(rowsCount);
-                                row.HeightInPoints = 20;
-                                var cell = row.CreateCell(0);
-                                cell.SetCellValue(items.Key);
-                                cell.CellStyle = style;
-
-                                //输出该行业下的供应商名称与手机号
-                                foreach (var its in _dicCategory[items.Key])
-                                {
-                                    rowsCount++;
-                                    row = ws.CreateRow(rowsCount);
-                                    row.HeightInPoints = 20;
-                                    for (int t = 0; t < 2; t++) //列
-                                    {
-                                        cell = row.CreateCell(t);
-                                        switch (t)
-                                        {
-                                            case 0: cell.SetCellValue(its.企业联系人信息.联系人手机); ws.SetColumnWidth(t,5000); break;
-                                            case 1: cell.SetCellValue(its.企业基本信息.企业名称); ws.SetColumnWidth(t,12000); break;
-                                        }
-                                    }
-                                }
-                            }
-                            #endregion
-                            break;
-                        case 1:
-                            #region 审核状态
-                            ws = wb.CreateSheet("按审核状态分");
-
-                            //数据准备
-                            _dicCategory = new Dictionary<string, List<供应商>>();
-                            _dicCategory.Add("审核通过", 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过)).ToList());
-                            _dicCategory.Add("审核未通过", 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.审核数据.审核状态 == 审核状态.审核未通过)).ToList());
-                            _dicCategory.Add("未审核", 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.审核数据.审核状态 == 审核状态.未审核)).ToList());
-
-                            //写入数据
-                            rowsCount = 0;
-                            foreach (var items in _dicCategory)   //行
-                            {
-                                //输出行业
-                                ws.AddMergedRegion(new CellRangeAddress(rowsCount, rowsCount, 0, 1));
-                                var row = ws.CreateRow(rowsCount);
-                                row.HeightInPoints = 20;
-                                var cell = row.CreateCell(0);
-                                cell.SetCellValue(items.Key);
-                                cell.CellStyle = style;
-
-                                //输出该行业下的供应商名称与手机号
-                                foreach (var its in _dicCategory[items.Key])
-                                {
-                                    rowsCount++;
-                                    row = ws.CreateRow(rowsCount);
-                                    row.HeightInPoints = 20;
-                                    for (int t = 0; t < 2; t++) //列
-                                    {
-                                        cell = row.CreateCell(t);
-                                        switch (t)
-                                        {
-                                            case 0: cell.SetCellValue(its.企业联系人信息.联系人手机); ws.SetColumnWidth(t,5000); break;
-                                            case 1: cell.SetCellValue(its.企业基本信息.企业名称); ws.SetColumnWidth(t,12000); break;
-                                        }
-                                    }
-                                }
-                            }
-                            #endregion
-                            break;
-                        case 2:
-                            #region 会员级别
-                             ws = wb.CreateSheet("按会员级别分");
-
-                            //数据准备
-                             var jct = Enum.GetValues(typeof(供应商.认证级别));
-                            _dicCategory = new Dictionary<string, List<供应商>>();
-                            foreach (var item in jct)
-                            {
-                                _dicCategory.Add(item.ToString(), 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o =>o.供应商用户信息.认证级别 == (供应商.认证级别)item)).ToList());
-                            }
-
-                            //写入数据
-                            rowsCount = 0;
-                            foreach (var items in _dicCategory)   //行
-                            {
-                                //输出行业
-                                ws.AddMergedRegion(new CellRangeAddress(rowsCount, rowsCount, 0, 1));
-                                var row = ws.CreateRow(rowsCount);
-                                row.HeightInPoints = 20;
-                                var cell = row.CreateCell(0);
-                                cell.SetCellValue(items.Key);
-                                cell.CellStyle = style;
-
-                                //输出该行业下的供应商名称与手机号
-                                foreach (var its in _dicCategory[items.Key])
-                                {
-                                    rowsCount++;
-                                    row = ws.CreateRow(rowsCount);
-                                    row.HeightInPoints = 20;
-                                    for (int t = 0; t < 2; t++) //列
-                                    {
-                                        cell = row.CreateCell(t);
-                                        switch (t)
-                                        {
-                                            case 0: cell.SetCellValue(its.企业联系人信息.联系人手机); ws.SetColumnWidth(t,5000); break;
-                                            case 1: cell.SetCellValue(its.企业基本信息.企业名称); ws.SetColumnWidth(t,12000); break;
-                                        }
-                                    }
-                                }
-                            }
-                            #endregion
-                            break;
-                        case 3:
-                            #region 地区
-                            //  ws = wb.CreateSheet("按所属地区分");
-
-                            ////数据准备
-                            //var jct = Enum.GetValues(typeof(供应商.认证级别));
-                            //_dicCategory = new Dictionary<string, List<供应商>>();
-                            //foreach (var item in jct)
-                            //{
-                            //    _dicCategory.Add(item.ToString(), 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o =>o.供应商用户信息.认证级别 == (供应商.认证级别)item)).ToList());
-                            //}
-
-                            ////写入数据
-                            //rowsCount = 0;
-                            //foreach (var items in _dicCategory)   //行
-                            //{
-                            //    //输出行业
-                            //    ws.AddMergedRegion(new CellRangeAddress(rowsCount, rowsCount, 0, 1));
-                            //    var row = ws.CreateRow(rowsCount);
-                            //    row.HeightInPoints = 20;
-                            //    var cell = row.CreateCell(0);
-                            //    cell.SetCellValue(items.Key);
-                            //    cell.CellStyle = style;
-
-                            //    //输出该行业下的供应商名称与手机号
-                            //    foreach (var its in _dicCategory[items.Key])
-                            //    {
-                            //        rowsCount++;
-                            //        row = ws.CreateRow(rowsCount);
-                            //        row.HeightInPoints = 20;
-                            //        for (int t = 0; t < 2; t++) //列
-                            //        {
-                            //            cell = row.CreateCell(t);
-                            //            switch (t)
-                            //            {
-                            //                case 0: cell.SetCellValue(its.企业联系人信息.联系人手机); ws.SetColumnWidth(t,5000); break;
-                            //                case 1: cell.SetCellValue(its.企业基本信息.企业名称); ws.SetColumnWidth(t,12000); break;
-                            //            }
-                            //        }
-                            //    }
-                            //}
-                            #endregion
-                            break;
-                        case 4:
-                            #region 协议\应急\普通
-                            ws = wb.CreateSheet("按协议应急采购分");
-
-                            //数据准备
-                            _dicCategory = new Dictionary<string, List<供应商>>();
-                            _dicCategory.Add("应急供应商", 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.应急供应商)).ToList());
-                            _dicCategory.Add("协议供应商", 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.协议供应商)).ToList());
-                            _dicCategory.Add("普通供应商", 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.供应商用户信息.普通供应商)).ToList());
-                            
-                            //写入数据
-                            rowsCount = 0;
-                            foreach (var items in _dicCategory)   //行
-                            {
-                                //输出行业
-                                ws.AddMergedRegion(new CellRangeAddress(rowsCount, rowsCount, 0, 1));
-                                var row = ws.CreateRow(rowsCount);
-                                row.HeightInPoints = 20;
-                                var cell = row.CreateCell(0);
-                                cell.SetCellValue(items.Key);
-                                cell.CellStyle = style;
-
-                                //输出该行业下的供应商名称与手机号
-                                foreach (var its in _dicCategory[items.Key])
-                                {
-                                    rowsCount++;
-                                    row = ws.CreateRow(rowsCount);
-                                    row.HeightInPoints = 20;
-                                    for (int t = 0; t < 2; t++) //列
-                                    {
-                                        cell = row.CreateCell(t);
-                                        switch (t)
-                                        {
-                                            case 0: cell.SetCellValue(its.企业联系人信息.联系人手机); ws.SetColumnWidth(t,5000); break;
-                                            case 1: cell.SetCellValue(its.企业基本信息.企业名称); ws.SetColumnWidth(t,12000); break;
-                                        }
-                                    }
-                                }
-                            }
-                            #endregion
-                            break;
-                        case 5:
-                            #region 入库入网
-                            ws = wb.CreateSheet("按入网入库分");
-
-                            //数据准备
-                             var _rkrw = Enum.GetValues(typeof(供应商.入库级别));
-                            _dicCategory = new Dictionary<string, List<供应商>>();
-                            foreach (var item in _rkrw)
-                            {
-                                _dicCategory.Add(item.ToString(), 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o =>o.供应商用户信息.入库级别 == (供应商.入库级别)item)).ToList());
-                            }
-
-                            //写入数据
-                            rowsCount = 0;
-                            foreach (var items in _dicCategory)   //行
-                            {
-                                //输出行业
-                                ws.AddMergedRegion(new CellRangeAddress(rowsCount, rowsCount, 0, 1));
-                                var row = ws.CreateRow(rowsCount);
-                                row.HeightInPoints = 20;
-                                var cell = row.CreateCell(0);
-                                cell.SetCellValue(items.Key);
-                                cell.CellStyle = style;
-
-                                //输出该行业下的供应商名称与手机号
-                                foreach (var its in _dicCategory[items.Key])
-                                {
-                                    rowsCount++;
-                                    row = ws.CreateRow(rowsCount);
-                                    row.HeightInPoints = 20;
-                                    for (int t = 0; t < 2; t++) //列
-                                    {
-                                        cell = row.CreateCell(t);
-                                        switch (t)
-                                        {
-                                            case 0: cell.SetCellValue(its.企业联系人信息.联系人手机); ws.SetColumnWidth(t,5000); break;
-                                            case 1: cell.SetCellValue(its.企业基本信息.企业名称); ws.SetColumnWidth(t,12000); break;
-                                        }
-                                    }
-                                }
-                            }
-                            #endregion
-                            break;
-                        case 6:
-                            #region  短信服务
-
-                            #endregion
-                            break;
+                        query = query.And(Query<供应商>.Where(o => o.所属地域.城市 == dics["市"]));
+                        if (dics["县"] != "")
+                        {
+                            query = query.And(Query<供应商>.Where(o => o.所属地域.区县 == dics["县"]));
+                        }
                     }
                 }
+                //if (dics["短信服务"] != "0")
+                //{
+                //    var 供应商服务记录 = 供应商服务记录管理.查询供应商服务记录(0, 0, null, false, SortBy<供应商服务记录>.Ascending(o => o.基本数据.修改时间));
+                //    var A2广告位置服务记录 = 供应商服务记录.Where(o => o.已开通的服务.Exists(p => p.所申请项目名 == "企业推广服务A2位置" && p.签订时间 < now && p.结束时间 > now));
+                //}
 
-                
+                var ws = wb.CreateSheet("Sheet1");
 
-                //填充内容
-                
-
-                
+                //数据准备
+                var _gysCate = 用户管理.查询用户<供应商>(0, 0, query).ToList();
+               
+                //写入数据
+                var rowsCount = 0;
+                foreach (var its in _gysCate)
+                {
+                    rowsCount++;
+                    var row = ws.CreateRow(rowsCount);
+                    row.HeightInPoints = 20;
+                    var cell = row.CreateCell(0);
+                    cell.CellStyle = style;
+                    for (int t = 0; t < 7; t++) //列
+                    {
+                        cell = row.CreateCell(t);
+                        switch (t)
+                        {
+                            case 0: cell.SetCellValue(its.企业联系人信息.联系人手机); ws.SetColumnWidth(t, 5000); break;
+                            case 1: cell.SetCellValue(its.企业基本信息.企业名称); ws.SetColumnWidth(t, 12000); break;
+                            case 2: cell.SetCellValue(its.所属地域.地域); ws.SetColumnWidth(t, 5000); break;
+                            case 3: cell.SetCellValue(its.审核数据.审核状态.ToString()); ws.SetColumnWidth(t, 3000); break;
+                            case 4: cell.SetCellValue(its.供应商用户信息.认证级别.ToString()); ws.SetColumnWidth(t, 5000); break;
+                            case 5: var ert = "";
+                                if (its.供应商用户信息.协议供应商)
+                                    ert = "协议供应商";
+                                else if (its.供应商用户信息.应急供应商)
+                                    ert = "应急供应商";
+                                else if (its.供应商用户信息.普通供应商)
+                                    ert = "普通供应商";
+                                else
+                                    ert = "未设置";
+                                cell.SetCellValue(ert);
+                                ws.SetColumnWidth(t, 4000);
+                                break;
+                            case 6: cell.SetCellValue(its.企业基本信息.所属行业); ws.SetColumnWidth(t, 5000); break;
+                        }
+                    }
+                }
 
                 rs.ContentType = "application/vnd.ms-excel";
                 rs.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", "供应商手机号信息表" + DateTime.Now.Second.ToString()));
@@ -1239,7 +1043,7 @@ namespace Go81WebApp.Models.Helpers
         }
         private static ICellStyle GetDefaultCellStyle(this IWorkbook wb)
         {
-            return wb.GetCellStyleAt(wb is HSSFWorkbook ? (short) 15 : (short) 0);
+            return wb.GetCellStyleAt(wb is HSSFWorkbook ? (short)15 : (short)0);
         }
         private static void SetDefaultCellStyle(this IWorkbook wb, ICellStyle cs)
         {

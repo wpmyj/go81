@@ -49,6 +49,24 @@
         </td>
     </tr>*@
 </table>
+<table style="width:100%;color: #515151;" cellpadding="0" cellspacing="0">
+    <tr>
+        <th style="border-top:1px solid #ccc">公开招标类</th>
+        <th style="border-top:1px solid #ccc">结果公示类</th>
+        <th style="border-top:1px solid #ccc">采购类</th>
+        <th style="border-top:1px solid #ccc">邀请招标类</th>
+        <th style="border-top:1px solid #ccc">询价类</th>
+        <th style="border-top:1px solid #ccc">竞争性谈判类</th>
+    </tr>
+    <tr>
+        <td>@ViewData["公开招标类"] 条</td>
+        <td>@ViewData["结果公示类"] 条</td>
+        <td>@ViewData["采购类"] 条</td>
+        <td>@ViewData["邀请招标类"] 条</td>
+        <td>@ViewData["询价类"] 条</td>
+        <td>@ViewData["竞争性谈判类"] 条</td>
+    </tr>
+</table>
 
 @*<div class="gys_znxx_content_detailbox">
     @if (int.Parse(ViewData["currentpage"].ToString()) == 1)

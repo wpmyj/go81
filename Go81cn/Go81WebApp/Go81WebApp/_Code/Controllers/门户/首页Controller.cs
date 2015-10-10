@@ -136,8 +136,29 @@ namespace Go81WebApp.Controllers.门户
                 );
             var picnews = 新闻管理.查询图片新闻(0, 5, Query<新闻>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过));
             ViewData["图片新闻动态"] = picnews;
+
             //公开招标部分 
-            ViewData["全部公开招标公告"] = 公告管理.查询公告(0, 8, q.And(Query.Or(new[] { Query.EQ("公告信息.公告性质", 公告.公告性质.预公告), Query.EQ("公告信息.公告性质", 公告.公告性质.采购公告), Query.EQ("公告信息.公告性质", 公告.公告性质.技术公告), Query.EQ("公告信息.公告性质", 公告.公告性质.需求公告), Query.EQ("公告信息.公告性质", 公告.公告性质.补遗公告), Query.EQ("公告信息.公告性质", 公告.公告性质.更正公告), Query.EQ("公告信息.公告性质", 公告.公告性质.变更公告), Query.EQ("公告信息.公告性质", 公告.公告性质.答疑公告) })), false, SortBy.Descending("内容主体.发布时间"), false);
+            if (DateTime.Now > new DateTime(2015, 10, 12, 17, 0, 0))
+            {
+                ViewData["全部公开招标公告"] = 公告管理.查询公告(0, 8,
+                    q.And(
+                        Query.Or(new[]
+                        {
+                            Query.EQ("公告信息.公告性质", 公告.公告性质.预公告), Query.EQ("公告信息.公告性质", 公告.公告性质.采购公告),
+                            Query.EQ("公告信息.公告性质", 公告.公告性质.技术公告), Query.EQ("公告信息.公告性质", 公告.公告性质.需求公告),
+                            Query.EQ("公告信息.公告性质", 公告.公告性质.补遗公告), Query.EQ("公告信息.公告性质", 公告.公告性质.更正公告),
+                            Query.EQ("公告信息.公告性质", 公告.公告性质.变更公告), Query.EQ("公告信息.公告性质", 公告.公告性质.答疑公告)
+                        })), false,
+                    SortBy.Descending("内容主体.发布时间"), false);
+            }
+            else
+            {
+                var ggg_listex = 公告管理.查询公告(0, 7, q.And(Query.Or(new[] { Query.EQ("公告信息.公告性质", 公告.公告性质.预公告), Query.EQ("公告信息.公告性质", 公告.公告性质.采购公告), Query.EQ("公告信息.公告性质", 公告.公告性质.技术公告), Query.EQ("公告信息.公告性质", 公告.公告性质.需求公告), Query.EQ("公告信息.公告性质", 公告.公告性质.补遗公告), Query.EQ("公告信息.公告性质", 公告.公告性质.更正公告), Query.EQ("公告信息.公告性质", 公告.公告性质.变更公告), Query.EQ("公告信息.公告性质", 公告.公告性质.答疑公告) })), false, SortBy.Descending("内容主体.发布时间"), false).ToList();
+                var ggg_ex = 公告管理.查找公告(2990);
+                if (ggg_ex != null) ggg_listex.Insert(0, ggg_ex);
+                ViewData["全部公开招标公告"] = (IEnumerable<公告>)ggg_listex;
+            }
+
 
             ViewData["预公告"] = 公告管理.查询公告(0, 8, q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.预公告)), false, SortBy.Descending("内容主体.发布时间"), false);
             ViewData["技术公告"] = 公告管理.查询公告(0, 8, q.And(Query.EQ("公告信息.公告性质", 公告.公告性质.技术公告)), false, SortBy.Descending("内容主体.发布时间"), false);
@@ -155,11 +176,34 @@ namespace Go81WebApp.Controllers.门户
             ViewData["全部结果公示"] = 公告管理.查询公告(0, 8, Query<公告>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过 && (m.公告信息.公告性质 == 公告.公告性质.废标公告 || m.公告信息.公告性质 == 公告.公告性质.流标公告 || m.公告信息.公告性质 == 公告.公告性质.中标结果公示)), false, SortBy.Descending("内容主体.发布时间"), false);
             //采购部分
             var q1 = Query.EQ("审核数据.审核状态", 审核状态.审核通过).And(Query.NE("公告信息.公告性质", 公告.公告性质.中标结果公示)).And(Query.NE("公告信息.公告性质", 公告.公告性质.废标公告)).And(Query.NE("公告信息.公告性质", 公告.公告性质.流标公告));
-            ViewData["全部采购公告"] = 公告管理.查询公告(0, 8, q1.And(Query.NE("公告信息.公告类别", 公告.公告类别.公开招标)).And(Query.NE("公告信息.公告类别", 公告.公告类别.其他)).And(Query.NE("公告信息.公告类别", 公告.公告类别.单一来源)), false, SortBy.Descending("内容主体.发布时间"), false);
+
+            if (DateTime.Now > new DateTime(2015, 10, 10, 23, 0, 0))
+            {
+                ViewData["全部采购公告"] = 公告管理.查询公告(0, 8, q1.And(Query.NE("公告信息.公告类别", 公告.公告类别.公开招标)).And(Query.NE("公告信息.公告类别", 公告.公告类别.其他)).And(Query.NE("公告信息.公告类别", 公告.公告类别.单一来源)), false, SortBy.Descending("内容主体.发布时间"), false);
+            }
+            else
+            {
+                var gglist_ex = 公告管理.查询公告(0, 7, q1.And(Query.NE("公告信息.公告类别", 公告.公告类别.公开招标)).And(Query.NE("公告信息.公告类别", 公告.公告类别.其他)).And(Query.NE("公告信息.公告类别", 公告.公告类别.单一来源)), false, SortBy.Descending("内容主体.发布时间"), false).ToList();
+                var gg_ex = 公告管理.查找公告(3035);
+                if (gg_ex != null) gglist_ex.Add(gg_ex);
+                ViewData["全部采购公告"] = (IEnumerable<公告>)gglist_ex;
+            }
+
             ViewData["邀请招标"] = 公告管理.查询公告(0, 8, q1.And(Query.EQ("公告信息.公告类别", 公告.公告类别.邀请招标)), false, SortBy.Descending("内容主体.发布时间"), false);
             ViewData["单一来源"] = 公告管理.查询公告(0, 8, q1.And(Query.EQ("公告信息.公告类别", 公告.公告类别.单一来源)), false, SortBy.Descending("内容主体.发布时间"), false);
             ViewData["询价采购"] = 公告管理.查询公告(0, 8, q1.And(Query.EQ("公告信息.公告类别", 公告.公告类别.询价采购)), false, SortBy.Descending("内容主体.发布时间"), false);
-            ViewData["竞争性谈判"] = 公告管理.查询公告(0, 8, q1.And(Query.EQ("公告信息.公告类别", 公告.公告类别.竞争性谈判)), false, SortBy.Descending("内容主体.发布时间"), false);
+
+            if (DateTime.Now > new DateTime(2015, 10, 10, 23, 0, 0))
+            {
+                ViewData["竞争性谈判"] = 公告管理.查询公告(0, 8, q1.And(Query.EQ("公告信息.公告类别", 公告.公告类别.竞争性谈判)), false, SortBy.Descending("内容主体.发布时间"), false);
+            }
+            else
+            {
+                var gglist_ex = 公告管理.查询公告(0, 7, q1.And(Query.EQ("公告信息.公告类别", 公告.公告类别.竞争性谈判)), false, SortBy.Descending("内容主体.发布时间"), false).ToList();
+                var gg_ex = 公告管理.查找公告(3035);
+                if (gg_ex != null) gglist_ex.Add(gg_ex);
+                ViewData["竞争性谈判"] = (IEnumerable<公告>)gglist_ex;
+            }
 
             //政策法规部分
             ViewData["政策法规"] = 政策法规管理.查询政策法规(0, 8, Query<政策法规>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false, SortBy.Descending("内容主体.发布时间"), false);
