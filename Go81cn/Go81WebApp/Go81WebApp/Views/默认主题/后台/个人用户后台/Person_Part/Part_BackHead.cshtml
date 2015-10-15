@@ -1,0 +1,352 @@
+﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@using Go81WebApp.Models.数据模型.消息数据模型
+@model Go81WebApp.Models.数据模型.用户数据模型.个人用户
+@*<link href="~/css/Intranet_p.css" rel="stylesheet" />*@
+<link href="~/css/pageStyle.css" rel="stylesheet" />
+<script src="~/JS/SimpleTree.js" type="text/javascript" language="javascript"></script>
+<style>
+    .mainBox {
+        width: 100%;
+        height: auto;
+        min-width: 1304px;
+    }
+
+    .topLogin_in {
+        font-size: 13px;
+        width: 1304px;
+        height: 30px;
+        margin: 0px auto;
+    }
+
+    .topLogin_inLeft {
+        line-height: 30px;
+        float: left;
+        width: 30%;
+        height: 100%;
+        text-align: left;
+    }
+
+    .topLogin_inRight {
+        line-height: 30px;
+        float: left;
+        width: 70%;
+        height: 100%;
+        text-align: right;
+    }
+
+    .navBoxLeft_Right {
+        float: left;
+        height: 100%;
+    }
+
+    .navBoxMiddle {
+        float: left;
+        width: 520px;
+        height: 100%;
+        text-align: center;
+    }
+
+        .navBoxMiddle a {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 65px;
+            display: inline-block;
+            width: 100px;
+            height: 65px;
+            height: 100%;
+            color: #fff;
+            vertical-align: middle;
+            cursor: pointer;
+            padding: 0px;
+        }
+
+    .search_ipt {
+        vertical-align: middle;
+        width: 150px;
+        height: 30px;
+        font-size: 14px;
+        border: none;
+    }
+
+    .navBoxMiddle a:hover {
+        background-color: #D67C24;
+    }
+
+    .navBoxMiddle div {
+        width: 100px;
+        float: left;
+        position:relative;
+    }
+
+    #dropList {
+        z-index:100;
+        display: none;
+        position: absolute;
+        width: 120px;
+        top:65px;
+        left:0px;
+        box-shadow: 0px 6px 10px #9CA3B6;
+        -webkit-box-shadow: 0px 6px 10px #9CA3B6;
+        -moz-box-shadow: 0px 6px 10px #9CA3B6;
+        -ms-box-shadow: 0px 6px 10px #9CA3B6;
+    }
+
+        #dropList a {
+             height: 30px;
+            line-height:30px;
+            width: 100%;
+            text-align:center;
+            font-size:14px;
+        }
+
+    .lm {
+        text-align: center;
+        line-height: 45px;
+        font-size: 18px;
+        width: 238px;
+        height: 45px;
+        font-weight: bold;
+        background-image: url(/Images/leftMenuHaeder.png);
+    }
+
+    .bottomContent {
+        width: 1285px;
+        margin: 0px auto;
+    }
+
+    .leftMenu {
+        border: 1px solid #ebe5e5;
+        float: left;
+    }
+
+    .rightbox {
+        width: 1060px;
+        margin-left: 5px;
+        float: left;
+    }
+
+    .searchfm {
+        width: auto;
+        float: left;
+        height: 37px;
+        margin-top: 15px;
+        color: white;
+        border-radius: 3px;
+    }
+
+    .leftMenu_a {
+        display: block;
+        line-height: 50px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+        .leftMenu_a:hover {
+            background-color: #207AD6;
+            color: white;
+        }
+
+    .rightboxContent {
+        border: 1px solid #ebe5e5;
+    }
+
+    .task {
+        width: 100%;
+        height: auto;
+    }
+
+        .task .header {
+            height: 40px;
+            font-size: 18px;
+            line-height: 40px;
+            font-weight: bolder;
+            letter-spacing: 2px;
+        }
+
+            .task .header img {
+                vertical-align: middle;
+                margin-right: 15px;
+            }
+
+    .loginTip {
+        font-size: 12px;
+        margin-top: 30px;
+    }
+    .bottomtext {
+        position: fixed;
+        bottom: 0px;
+        height: 30px;
+        background-image: url(/Images/bi.png);
+        text-align: center;
+        color: white;
+        font-size: 12px;
+        line-height: 30px;
+        letter-spacing: 2px;
+    }
+
+    li {
+        font-size: 14px;
+    }
+
+    .st_tree {
+        border: none;
+    }
+
+    .bg_outdiv {
+        margin-bottom: 80px;
+    }
+
+    #searchSelect {
+        float: left;
+        width: 54px;
+        height: 37px;
+        color: #000;
+        margin-left: 5px;
+    }
+
+    #type {
+        position: absolute;
+        width: 50px;
+        height: auto;
+        background-color:#327229;
+        text-align:center;
+        display:none;
+        box-shadow:0px 5px 10px #808080;
+        -webkit-box-shadow:0px 5px 10px #808080;
+        -moz-box-shadow:0px 5px 10px #808080;
+        -ms-box-shadow:0px 5px 10px #808080;
+    }
+    #type a{
+        display:block; height:20px;
+        width:100%;
+        cursor:pointer;
+        color:#fff;
+    }
+    #type a:hover{
+        background-color:#fff;
+        color:#000;
+    }
+</style>
+<div style="width:1200px; margin:0px auto;">
+    <div class="topLogin_in" style="width:1200px;">
+        <div class="topLogin_inLeft">成都军区联勤部军需物资油料部</div>
+        <div class="topLogin_inRight">您好，@Model.登录信息.登录名,欢迎来到西南物资采购网！<a href="/供应商后台/">[我的后台]</a>&nbsp;&nbsp;<a href="/登录/LogOut">注销登录</a>&nbsp;&nbsp;<img src="~/Images/purchaseCar.png" />采购车</div>
+        @*<div style="clear:both;"></div>*@
+    </div>
+</div>
+<div class="back_nav">
+    <div class="topLogin_in" style="height:65px;width:1200px;">
+        <div class="navBoxLeft_Right" style="width:250px;">
+            <img src="~/Images/backStar.png" style="margin-left:20px;" />
+        </div>
+        <div class="navBoxMiddle">
+            <div><a class="action_link" href="/">首页</a></div>
+            <div onmouseover="$(this).children('div').show()" onmouseout="$(this).children('div').hide()">
+                <a class="action_link" href="/%E4%BE%9B%E5%BA%94%E5%95%86%E9%99%88%E5%88%97/GysList">供应商库</a>
+                @if(WebApiApplication.IsIntranet)
+                {
+                    <div id="dropList" style="background-color:#207AD6;width:100%;">
+                    <a href="/供应商陈列/GysList_Inlib" class="drop_menu_bt" style="color:#fff;">入库供应商</a>
+                </div>
+                }
+                else
+                {
+                    <div id="dropList" style="background-color:#327229;width:100%;">
+                    <a href="/供应商陈列/GysList_Inlib" class="drop_menu_bt" style="color:#fff;">入库供应商</a>
+                </div>
+                }
+            </div>
+            <div>
+            <a class="action_link" href="/%E5%95%86%E5%93%81%E9%99%88%E5%88%97">采购商城</a></div>
+            <div>
+            <a href="/%E4%B8%9A%E5%8A%A1%E5%9F%B9%E8%AE%AD/TrainingList">采购范本</a></div>
+            <div onmouseover="$(this).children('div').show()" onmouseout="$(this).children('div').hide()">
+                <a style="display:block; height:65px; line-height:65px;">应用<img style="margin-left:3px;" src="~/Images/arrow_bottom.png" /></a>
+                <div id="dropList">
+                    <a href="/%E4%B8%8B%E8%BD%BD/Download_List">入库须知和下载</a>
+                    <a href="/下载/Download_Detail?id=15">谷歌浏览器下载</a>
+                    <a href="/供应商后台/Gys_Znxx">站内消息</a>
+                    <a href="/%E4%B8%8B%E8%BD%BD/Download_List">网站操作手册</a>
+                </div>
+            </div>
+        </div>
+        <div class="navBoxLeft_Right" style="width:430px;">
+            <div style="background-color:white;">
+                <div class="searchfm" style="background-color:#fff;width:260px;">
+                    <div id="searchSelect">
+                        <div id="tptext" style="float:left; height:37px; width:39px; line-height:37px;text-align: center;">供应商</div>
+                        <div style="float:left; width:15px; height:37px; line-height:37px; background-image:url(/Images/dropbutton.png)"></div>
+                        <div style="clear:both;"></div>
+                        <div id="type">
+                            <div><a lang="gys">供应商</a></div>
+                            <div><a lang="sp">商品</a></div>
+                        </div>
+                    </div>
+                    <div style="float:left;width:auto; height:37px;">
+                        <input type="hidden" id="info_type" value="" />
+                        <input type="text" id="txt" class="search_ipt" style="width:160px; height:35px;" value="" placeholder="请输入您要查找的内容" />
+                        <input type="button" onclick="searchValue()" class="search_ipt" value="" style="background-image:url(/Images/searchbt.png);width:30px; height:30px; background-color:white; border:none;" />
+                    </div>
+                </div>
+                <div class="searchfm" style="padding-left:5px;width:155px;">欢迎您，
+                @if (!string.IsNullOrWhiteSpace(Model.登录信息.登录名))
+                {
+                    <span title="@Model.登录信息.登录名" style="display: inline-block;width: 70px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;vertical-align: bottom;">@Model.登录信息.登录名</span>
+                }
+              <br /><span id="systime"></span>&nbsp;&nbsp;@*第22次登录*@</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#systime").html(GetNowTime());
+    });
+    function GetNowTime() {
+        var myDate = new Date();        
+        var fullyear = myDate.getFullYear();    
+        var month = myDate.getMonth() + 1;       
+        var date = myDate.getDate();       
+        var weekday = new Array("星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六");
+        var week = weekday[myDate.getDay()];
+        var nowtime = fullyear + "-" + zeroCupy(month) + "-" + zeroCupy(date) +" "+week;
+        return nowtime;
+    };
+    function zeroCupy(m) {
+        var d;
+        if (m < 10) {
+            d = "0" + m;
+        }
+        else {
+            d = m;
+        }
+        return d;
+    };
+
+    function searchValue() {
+        var searchtext = $("#txt").val();
+        var type = $("#info_type").val();
+        if (searchtext == "") {
+            return false;
+        }
+        if (type == "sp") {
+            window.open("/商品陈列/ProductSearch?name=" + searchtext);
+        } else {
+            window.open("/供应商陈列/GysList?name=" + searchtext);
+        }
+    }
+    $("#searchSelect").mouseover(function () {
+        $("#type").show();
+    });
+    $("#searchSelect").mouseout(function () {
+        $("#type").hide();
+    });
+    $("#type a").click(function () {
+        var str = $(this).attr("lang");
+        var html = $(this).html();
+        $("#info_type").val(str);
+        $("#tptext").html(html);
+        $("#type").hide();
+    });
+</script>

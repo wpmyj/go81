@@ -132,17 +132,20 @@
                 <table>
                     <tr>
                         <td align="right">发票编号：</td>
-                        <td>@Html.TextBoxFor(m => m.供货信息.发票编号)<span style="color:#ff0000;">*</span></td>
+                        <td>@Html.TextBoxFor(m => m.供货信息.发票编号, new { size="30"})<span style="color:#ff0000;">*</span></td>
                     </tr>
                     <tr>
                         <td align="right">内部管理编号：</td>
-                        <td>@Html.TextBoxFor(m => m.供货信息.内部管理编号)<span style="color:#ff0000;">*</span>(供应商自行定义，以便管理)</td>
+                        <td>@Html.TextBoxFor(m => m.供货信息.内部管理编号, new { size = "30" })<span style="color:#ff0000;">*</span>(供应商自行定义，以便管理)</td>
                     </tr>
                     <tr>
                         <td align="right">供货日期：</td>
-                        <td>@Html.TextBoxFor(m => m.供货信息.供货日期, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })<span style="color:#ff0000;">*</span></td>
+                        <td>@Html.TextBoxFor(m => m.供货信息.供货日期, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd HH:mm:ss'})",size="30" })<span style="color:#ff0000;">*</span></td>
                     </tr>
-                    <tr><td colspan="2" align="center"><input type="submit" value="确认合同" /></td></tr>
+                    @if(!Model.确认订单)
+                    {
+                        <tr><td colspan="2" align="center"><input type="submit" value="确认合同" /></td></tr>
+                    }
                 </table>
             </form>
         </div>

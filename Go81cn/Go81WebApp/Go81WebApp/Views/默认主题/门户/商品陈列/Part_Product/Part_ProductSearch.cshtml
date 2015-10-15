@@ -319,7 +319,7 @@
                             </div>
                             @{ var GoodName = thisp_name.Length > 15 ? thisp_name.Substring(0, 15) : thisp_name; }
                             <div>
-                                +对比<input type="checkbox" value="@(arr.销售信息.价格)" id="@arr.Id" name="ck" alt="@GoodName" onclick=" showcontrast(this) " />
+                                +对比<input type="checkbox" value="@(arr.销售信息.价格)" id="@arr.Id" name="ck" alt="@GoodName" onclick=" showcontrast(this) " /><a class="consultPrice" href="/单位用户后台/ConsultPrice?id=@arr.Id"></a>
                             </div>
                         </div>
                     </div>

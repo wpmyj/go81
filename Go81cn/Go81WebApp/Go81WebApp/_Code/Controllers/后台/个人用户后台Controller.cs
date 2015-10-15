@@ -11,6 +11,8 @@ using Go81WebApp.Models.数据模型.消息数据模型;
 using System;
 using System.IO;
 using FileHelper;
+using Go81WebApp.Models.数据模型.商品数据模型;
+using MongoDB;
 
 namespace Go81WebApp.Controllers.后台
 {
@@ -43,7 +45,6 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult MyBaseInfo()
         {
-            ViewData["mysex"] = MySex(性别.男.ToString());
             个人用户 per = 用户管理.查找用户<个人用户>(currentUser.Id);
             return View(per);
         }
@@ -52,18 +53,75 @@ namespace Go81WebApp.Controllers.后台
             个人用户 per = 用户管理.查找用户<个人用户>(currentUser.Id);
             return View(per);
         }
+        public ActionResult Part_BackHead()
+        {
+            var m = currentUser;
+            return PartialView("Person_Part/Part_BackHead", m);
+        }
+        public ActionResult PurchaseInfo()
+        {
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+            {
+                cpg = int.Parse(Request.QueryString["page"]);
+            }
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 购物车管理.计数购物车(0, 0, Query<购物车>.Where(m => m.所属用户.用户ID == currentUser.Id));
+            pgCount = pc / 10;
+            if (pc % 10 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            IEnumerable<购物车> cars = 购物车管理.查询购物车(10 * (cpg - 1), 10, Query<购物车>.Where(m => m.所属用户.用户ID == currentUser.Id));
+            return View(cars);
+        }
 
         public ActionResult PersonInfoManage(个人用户 per)
         {
-            if (!string.IsNullOrEmpty(Request.Form["attachtext"]))
+            var step = Request.Form["step"];
+            switch (step)
             {
-                currentUser.登录信息.头像 = Request.Form["attachtext"];
+                case "identity":
+                    currentUser.个人信息 = per.个人信息;
+                    break;
+                case "attach":
+                    if (!string.IsNullOrWhiteSpace(Request.Form["attachtext"]))
+                    {
+                        currentUser.登录信息.头像 = Request.Form["attachtext"];
+                    }
+                    break;
+                case "contact":
+                    currentUser.联系方式 = per.联系方式;
+                    break;
+                case "password":
+                    var oldpwd = Request.Form["oldpwd"];
+                    var newpwd = Request.Form["newpwd"];
+                    var confirmpwd = Request.Form["confirmpwd"];
+
+                    if (currentUser.登录信息.密码 != Hash.Compute(oldpwd.Trim()))
+                    {
+                        return Content("<script>alert('原密码错误！');window.location='/个人用户后台/MyBaseInfo'</script>");
+                    }
+                    else if (newpwd.Trim() != confirmpwd.Trim())
+                    {
+                        return Content("<script>alert('新密码两次输入不一致！');window.location='/个人用户后台/MyBaseInfo'</script>");
+                    }
+                    else
+                    {
+                        currentUser.登录信息.密码 = Hash.Compute(newpwd.Trim());
+                    }
+                    break;
             }
+
             
-            currentUser.个人信息 = per.个人信息;
-            currentUser.联系方式 = per.联系方式;
             用户管理.更新用户<个人用户>(currentUser);
-            return RedirectToAction("MyBaseInfo");
+            return Content("<script>alert('修改成功');window.location='/个人用户后台/MyBaseInfo'</script>");
         }
 
         [HttpPost]
@@ -139,15 +197,6 @@ namespace Go81WebApp.Controllers.后台
         //    }
         //}
 
-        public static SelectList MySex(String option)
-        {
-            List<SelectListItem> items = new List<SelectListItem>()
-            {
-                new SelectListItem(){Text=性别.男.ToString(),Value=性别.男.ToString()},
-                new SelectListItem(){Text=性别.女.ToString(),Value=性别.女.ToString()},
-            };
-            SelectList selectlist = new SelectList(items, "Text", "Value", option);
-            return selectlist;
-        }
+       
     }
 }

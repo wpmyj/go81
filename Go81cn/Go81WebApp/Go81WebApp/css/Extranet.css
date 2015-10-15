@@ -18,7 +18,7 @@ body{
     border-bottom: 3px solid #5EA42E;
 }
  .title-base-inner {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     margin-top: 3px;
     letter-spacing: 0;
@@ -629,7 +629,7 @@ body a,body div{
 .index_bottom_zb_content_box {
     width: 354px;
 }
-..index_content_news ul li{
+.index_content_news ul li{
     font-size:12px;
 }
  .index_bottom_zb_content_box ul li a {

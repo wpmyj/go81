@@ -126,16 +126,41 @@ namespace Go81WebApp.Controllers.门户
         }
         public ActionResult Part_GoodClass()
         {
-            IEnumerable<商品分类> goodclass = 商品分类管理.查找子分类();
-            List<商品分类> calss = new List<商品分类>();
-            foreach (var k in goodclass)
+            //var gc = new Dictionary<string,> Dictionary<商品分类, long>();//商品分类，商品分类下商品数量    
+            //var _dc = new Dictionary<商品分类, long>();
+            //var _uc = new Dictionary<商品分类, long>();
+            long id = -1;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["id"]) && Request.QueryString["id"] == "1")
             {
-                if (k.分类名.Contains("计算机及通信") || k.分类名.Contains("家具") || k.分类名.Contains("办公设备"))
-                {
-                    calss.Add(k);
-                }
+                id = long.Parse(Request.QueryString["id"]);
             }
-            return PartialView("Part_Agreement/Part_GoodClass", calss);
+            ViewData["id"] = id;
+            var goodclass = 商品分类管理.查找子分类();
+            //foreach (var k in goodclass)
+            //{
+            //    if (k.分类性质 == 商品分类性质.通用物资)
+            //    {
+            //        foreach (var p in k.子分类)
+            //        {
+            //            foreach (var t in p.子分类)
+            //            {
+            //                var _gnumber = 商品管理.计数分类下商品(t.Id, 0, 0, Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false);
+            //                _dc.Add(t, _gnumber);
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        foreach (var h in k.子分类)
+            //        {
+            //            var _gnum = 商品管理.计数分类下商品(h.Id, 0, 0, Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false);
+            //            _uc.Add(h, _gnum);
+            //        }
+            //    }
+            //}
+            //gc.Add("通用物资", _dc);
+            //gc.Add("专用物资", _uc);
+            return PartialView("Part_Agreement/Part_GoodClass", goodclass);
         }
         public ActionResult Agreement_Good_Details()
         {

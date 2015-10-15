@@ -118,3 +118,56 @@ body{margin:0;padding:0;}
 .drop_menu_bt:hover{
     background-color:#D67C24;
 }
+        .out_box {
+        display: none;
+    }
+
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 3%;
+    }
+
+    .out_box_insecond_child {
+        width: 500px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+        border:1px solid #EF4444;
+    }
+
+    .close_outbox {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }

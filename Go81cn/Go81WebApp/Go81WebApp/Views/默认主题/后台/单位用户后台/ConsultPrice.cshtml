@@ -73,12 +73,18 @@
         $("#user").html("请稍等......");
         var str = "";
         $.get("/单位用户后台/GetSupplier", { id: $("#pid").val(),pro:$(th).val() }, function (data) {
-            for (var i = 0; i < data.Data.length;i++)
+            if (data.Data.length!=0)
             {
-                str += "<div class=\"sname\"><input type='checkbox' name='gysname' value='" + data.Data[i].Id + "'/>" + data.Data[i].Sname + "</div><div class=\"gprice\">" + data.Data[i].Gprice+ "</div>";
+                for (var i = 0; i < data.Data.length; i++) {
+                    str += "<div class=\"sname\"><input type='checkbox' name='gysname' value='" + data.Data[i].Id + "'/>" + data.Data[i].Sname + "</div><div class=\"gprice\">" + data.Data[i].Gprice + "</div>";
+                }
+                str += "<div style='clear:both;'></div>";
+                $("#user").html(str);
             }
-            str += "<div style='clear:both;'></div>";
-            $("#user").html(str);
+            else
+            {
+                $("#user").html("<div style='width:100%; text-align:center;padding:10px; font-size:18px;'>暂时没有供应商......</div>");
+            }
         });
     }
     $("#subbt").click(function () {

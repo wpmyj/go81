@@ -87,7 +87,7 @@
                     <tr><td>所属行业：</td><td>@Html.TextBoxFor(m => m.附加信息.所属行业)</td></tr>
                     <tr><td>送货地址：</td><td>@Html.TextBoxFor(m => m.附加信息.收货地址, new { style = "width:318px;" })</td></tr>
                 </table>
-                @if(Model.订单状态==false)
+                @if (Model.确认订单 == false)
                 {
                     <input type="submit" value="下一步" style="display:block;margin:10px auto;" />
                 }

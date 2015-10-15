@@ -32,21 +32,21 @@
     int counter = 1;
 }
 <div class="bg_outdiv">
-    <div style="border:1px solid #327229; margin:0px auto; width:900px;background-color:#F9F9F9; font-size:13px;">
-        <div class="Content" style="margin-bottom:10px auto; text-align:center;">订单信息列表</div>
+    <div style="border:1px solid #327229; margin:0px auto; width:100%;background-color:#F9F9F9; font-size:13px;">
+        <div class="Content" style="margin-bottom:10px auto; text-align:center;font-size:18px; font-weight:bold;">订单信息列表</div>
         <div class="Content">
             <table width="100%">
                 <tr>
                     <th width="5%">序号</th>
-                    <th width="45%">合同名称</th>
+                    <th width="35%">合同名称</th>
                     <th width="25%">订单号</th>
                     <th width="5%">状态</th>
-                    <th width="5%">打印</th>
-                    <th width="5%" colspan="2">取消</th>
+                    <th width="15%">打印</th>
+                    <th width="5%" colspan="2">操作</th>
                 </tr>
                 @foreach (var item in model)
                 {
-                    if (item.订单状态 == false)
+                    if (item.确认订单 == false)
                     {
                         <tr>
                             <td>@counter</td>
@@ -64,8 +64,7 @@
                             <td>@item.附加信息.合同名称</td>
                             <td>@item.订单号</td>
                             <td>完成</td>
-                            <td><a>验收单</a>/<a>合同</a></td>
-                            <td>—</td>
+                            <td colspan="2"><a>验收单</a>/<a href="/单位用户后台/OrderContract?id=@item.Id">合同</a></td>
                             <td>评分</td>
                         </tr>
                     }

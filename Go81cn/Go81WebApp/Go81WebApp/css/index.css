@@ -1946,8 +1946,8 @@ a {
         .gys_xttz_contentbox ul li a {
             font-size: 14px;
             text-decoration: none;
-            display: inline-block;
-            vertical-align:middle;
+            display: block;
+            width: 710px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;

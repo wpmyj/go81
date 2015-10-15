@@ -29,42 +29,7 @@
         {
             if (i.分类性质 == 商品分类性质.通用物资)
             {
-                if (ViewData["id"].ToString() == "1")
-                {
-                    if (i.Id == 1)
-                    {
-                        <div class="goodclass_yjfn">
-                            <div class="yjfn_name">@i.分类名</div>
-                        </div>
-                        foreach (var f in i.子分类)
-                        {
-                            <div class="goodclass_ejfn">
-                                <table width="100%" cellspacing="0">
-                                    <tr>
-                                        <td class="ejfn_name">@f.分类名</td>
-                                        <td class="sjfn_name" style="padding-left:30px;">
-                                            @foreach (var g in f.子分类)
-                                            {
-                                                var thisproductclasscount = 商品管理.计数分类下商品(g.Id, 0, 0, MongoDB.Driver.Builders.Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false);
-                                                if (thisproductclasscount > 0)
-                                                {
-                                                    <a href="/商品陈列/ProductList?id=@g.Id&type=1">@g.分类名 (@商品管理.计数分类下商品(g.Id, 0, 0, MongoDB.Driver.Builders.Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false))</a>
-                                                }
-                                                else
-                                                {
-                                                    <a style="color:#999;">@g.分类名 (@商品管理.计数分类下商品(g.Id, 0, 0, MongoDB.Driver.Builders.Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false))</a>
-                                                }
-
-                                            }
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        }
-                    }
-                }
-                else
-                {
+                
                     <div class="goodclass_yjfn">
                         <div class="yjfn_name">@i.分类名</div>
                     </div>
@@ -92,11 +57,8 @@
                             </table>
                         </div>
                     }
-                }
             }
         }
-        if (ViewData["id"].ToString() == "-1")
-        {
             <div class="goodclass_yjfn">
                 <div class="yjfn_name">专用物资</div>
             </div>
@@ -128,7 +90,6 @@
                     </div>
                 }
             }
-        }
     }
 </div>
 

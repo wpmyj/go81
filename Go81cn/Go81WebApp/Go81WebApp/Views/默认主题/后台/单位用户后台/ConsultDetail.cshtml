@@ -49,14 +49,14 @@
             <div class="sname" style="width:5%">选择</div>
             <div class="sname" style="width:10%">产品名称</div>
             <div class="sname" style="width:10%">供应商名称</div>
-            <div class="sname" style="width:7%">原价(元)</div>
-            <div class="sname" style="width:7%">议价(元)</div>
-            <div class="sname" style="width:8%">回复价(元)</div>
+            <div class="sname" style="width:7%">原价</div>
+            <div class="sname" style="width:7%">议价</div>
+            <div class="sname" style="width:8%">回复价</div>
             <div class="sname" style="width:7%">数量</div>
-            <div class="sname" style="width:8%">集成费(元)</div>
-            <div class="sname" style="width:8%">服务费(元)</div>
-            <div class="sname" style="width:8%">管线费(元)</div>
-            <div class="sname" style="width:7%">合计(元)</div>
+            <div class="sname" style="width:8%">集成费</div>
+            <div class="sname" style="width:8%">服务费</div>
+            <div class="sname" style="width:8%">管线费</div>
+            <div class="sname" style="width:7%">合计</div>
             <div class="sname" style="width:15%;text-align:center;">操作</div>
             <div style="clear:both;"></div>
         </div>
@@ -87,7 +87,7 @@
                             <div class="sname single" style="width:8%">
                                 @if (item.回复价格 <= item.价格 && item.回复价格 > 0)
                                 {
-                                    <span>@item.回复价格</span>
+                                    <span>@string.Format("{0:c2}", item.回复价格)</span>
                                 }
                                 else
                                 {
@@ -95,13 +95,13 @@
                                 }
                             </div>
                             <div class="sname" style="width:7%">@item.数量</div>
-                            <div class="sname single" style="width:8%">@item.集成费</div>
-                            <div class="sname single" style="width:8%">@item.服务费</div>
-                            <div class="sname single" style="width:8%">@item.管线费</div>
+                            <div class="sname single" style="width:8%">@string.Format("{0:c2}",item.集成费)</div>
+                            <div class="sname single" style="width:8%">@string.Format("{0:c2}",item.服务费)</div>
+                            <div class="sname single" style="width:8%">@string.Format("{0:c2}",item.管线费)</div>
                             <div class="sname" style="width:7%">
                                 @if (item.回复价格 != 0)
                                 {
-                                    <span class="yj" id="sum@(i)">@item.现价合计</span>
+                                    <span class="yj" id="sum@(i)">@string.Format("{0:c2}",item.现价合计)</span>
                                 }
                                 else
                                 {
@@ -115,7 +115,7 @@
                     }
                 }
                 <div class="Content" style="text-align:center;">
-                    <input type="submit" value="下一步" />
+                    <input type="submit" value="购买选中" />
                 </div>
             </form>
         </div>

@@ -127,6 +127,29 @@ namespace Go81WebApp.Controllers.后台
             return View(m);
 
         }
+        public ActionResult PurchaseInfo()
+        {
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+            {
+                cpg = int.Parse(Request.QueryString["page"]);
+            }
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 购物车管理.计数购物车(0, 0, Query<购物车>.Where(m => m.所属用户.用户ID == currentUser.Id));
+            pgCount = pc / 10;
+            if (pc % 10 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            IEnumerable<购物车> cars = 购物车管理.查询购物车(10 * (cpg - 1), 10, Query<购物车>.Where(m => m.所属用户.用户ID == currentUser.Id));
+            return View(cars);
+        }
         [HttpPost]
 
         public ActionResult MessageModify(单位用户 model)
@@ -183,7 +206,7 @@ namespace Go81WebApp.Controllers.后台
         {
             public long Id { get; set; }
             public string Sname { get; set; }
-            public decimal Gprice { get; set; }
+            public string Gprice { get; set; }
         }
         public ActionResult GetSupplier()
         {
@@ -206,7 +229,7 @@ namespace Go81WebApp.Controllers.后台
                         ConsultInfo cinfo = new ConsultInfo();
                         cinfo.Id = item.商品信息.所属供应商.用户数据.Id;
                         cinfo.Sname = item.商品信息.所属供应商.用户数据.企业基本信息.企业名称;
-                        cinfo.Gprice = item.销售信息.价格;
+                        cinfo.Gprice =string.Format("{0:c2}",item.销售信息.价格);
                         info.Add(cinfo);
                     }
                 }
@@ -257,6 +280,7 @@ namespace Go81WebApp.Controllers.后台
                 m.议价商品.商品ID = id;
                 list.Add(m);
             }
+            model.采购单位.用户ID = currentUser.Id;
             model.议价列表 = list;
             询价采购管理.添加询价采购(model);
             return Redirect("/单位用户后台/ConsultDetail?id=" + model.Id);
@@ -307,6 +331,20 @@ namespace Go81WebApp.Controllers.后台
             {
                 return -1;
             }
+        }
+        public ActionResult ConsultList()
+        {
+            IEnumerable<询价采购> model = 询价采购管理.查询询价采购(0, 10);
+            List<询价采购> newmodel = new List<询价采购>();
+            foreach (var item in model)
+            {
+                if (item.采购单位.用户ID==currentUser.Id)
+                {
+                    newmodel.Add(item);
+                }
+            }
+            ViewData["id"] = currentUser.Id;
+            return View(newmodel);
         }
         public ActionResult ConsultDetail()
         {

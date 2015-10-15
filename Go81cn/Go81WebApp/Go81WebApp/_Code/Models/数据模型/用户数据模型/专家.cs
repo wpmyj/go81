@@ -92,8 +92,9 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
             public string 从事专业 { get; set; }
             [Required(ErrorMessage = "请填写从事专业起始年度！")]
             public int 从事专业起始年度 { get; set; }
+            public 在职状态 在职状态 { get; set; }
             public string 工作单位 { get; set; }
-            public _地址信息 单位地址 { get; set; }
+            public string 单位地址 { get; set; }
             public string 邮编 { get; set; }
             public string 现任职务 { get; set; }
             public 健康状况 健康状况 { get; set; }
@@ -102,7 +103,11 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
             public string 本人参加过何种项目招标及评标 { get; set; }
             public string 本人专业领域研究及成果 { get; set; }
             public string 退休证书 { get; set; }
-            public _工作经历信息() { this.单位地址 = new _地址信息(); }
+            public List<string> 其他证明文件扫描件 { get; set; }
+            public _工作经历信息()
+            {
+                this.其他证明文件扫描件 = new List<string>();
+            }
         }
         public bool 黑名单 { get; set; }
         public 专家()
@@ -347,6 +352,12 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
         其他 = 99,
     }
 
+    public enum 在职状态
+    {
+        未填写 = 0,
+        在职 = 1,
+        已退休 = 2,
+    }
     public class 专家可评标专业
     {
         public static List<string> 非商品分类评审专业

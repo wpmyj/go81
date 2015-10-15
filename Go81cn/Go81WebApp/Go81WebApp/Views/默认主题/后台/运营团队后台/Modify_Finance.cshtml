@@ -36,11 +36,13 @@
                         <td height="30" width="20%" align="right">年份：</td>
                         <td height="30" width="25%"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line input-validation-error" data-val="true" data-val-number="字段 年份 必需是一个数字。" data-val-required="请输入年份" name="财务状况信息[0].年份" type="text" value="@Model.财务状况信息[index].年份" aria-required="true" aria-invalid="true"><span>*</span></td>
                         <td height="30" width="25%" align="right">会计事务所名称：</td>
-                        <td height="30" width="30%"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-required="*请输入会计事务所名称" name="财务状况信息[0].会计事务所名称" type="text" value="@Model.财务状况信息[index].会计事务所名称" aria-required="true" aria-invalid="false"></td>
+                        <td height="30" width="30%"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true"  name="财务状况信息[0].会计事务所名称" type="text" value="@Model.财务状况信息[index].会计事务所名称"  aria-invalid="false"></td>
                     </tr>
                     <tr>
                         <td height="30" align="right">会计事务所联系电话：</td>
-                        <td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-regex="*请输入手机号码或固话号码" data-val-regex-pattern="[0-9]{11}|[0-9]{3}-[0-9]{8}|[0-9]{4}-[0-9]{7,8}|" data-val-required="*请输入会计事务所联系电话" name="财务状况信息[0].会计事务所联系电话" type="text" value="@Model.财务状况信息[index].会计事务所联系电话" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">会计事务所联系电话，如：13214786542或028-14786523或0816-25894562</div></div></td>
+<td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-regex="*请输入正确的手机号码或固话号码" data-val-regex-pattern="[0-9]{11}|[0-9]{3}-[0-9]{8}|[0-9]{4}-[0-9]{7,8}|"  name="财务状况信息[0].会计事务所联系电话" type="text" value="@Model.财务状况信息[index].会计事务所联系电话"  aria-invalid="false">
+    <span class="field-validation-valid" data-valmsg-for="财务状况信息[0].会计事务所联系电话" data-valmsg-replace="true"></span>
+                        <div class="out_box"><div class="arrow"></div><div class="con_box">会计事务所联系电话，如：13214786542或028-14786523或0816-25894562</div></div></td>
                         <td align="right">
                             @if(Model.财务状况信息[index].会计报表是否经注册会计师审计)
                             {
@@ -69,8 +71,8 @@
         $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
         $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
 
-        $("#财务信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#财务信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#供应商列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#供应商列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
     function checkRegist(th) {
         if (th.checked) {

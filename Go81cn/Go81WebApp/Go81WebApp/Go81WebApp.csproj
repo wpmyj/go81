@@ -2178,6 +2178,12 @@
     <Content Include="Views\默认主题\后台\单位用户后台\OperationInfo.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_UnitOrAdStatics.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_AdStatistic_ByType.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\ConsultList.cshtml" />
+    <Content Include="Views\默认主题\后台\供应商后台\PurchaseInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\个人用户后台\PurchaseInfo.cshtml" />
+    <Content Include="Views\默认主题\后台\个人用户后台\_BackLayout.cshtml" />
+    <Content Include="Views\默认主题\后台\个人用户后台\Person_Part\Part_BackHead.cshtml" />
+    <Content Include="Views\默认主题\后台\单位用户后台\PurchaseInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

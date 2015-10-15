@@ -38,13 +38,29 @@
                 <div style="margin:0; width:250px; float:left; font-size:16px; font-weight:bold; line-height:28px;">请选择评审专家可评标物质类别</div>
                 <div style=" width:340px; float:left;">
                     关键字：<input id="dfzyml" class="checkboxclass2" type="text" name="（地方政府专家库评审专业目录）" onkeyup="do_kpbwzlbserch($(this).val());" style="line-height: 21px;" />
-                    <input id="adddfzy" type="button" class="btn-pri" style="width:95px;" value="未找到？添加" />
+                    @*<input id="adddfzy" type="button" class="btn-pri" style="width:95px;" value="未找到？添加" />*@
                 </div>
-                <div style="clear:both;font-size:14px;">注：所添加的分类只能添加到 <u>地方政府专家库评审专业目录</u> 分类下</div>
+                @*<div style="clear:both;font-size:14px;">注：所添加的分类只能添加到 <u>地方政府专家库评审专业目录</u> 分类下</div>*@
             </div>
             <div class="modal-body" id="othergysdiv">
                 <div style="width: 390px; height:350px; overflow-y: scroll; float: left;" id="selectconditionbox">
-                    @foreach (var item in ViewData["goodType"] as IEnumerable<商品分类>)
+                    @foreach (var item in ViewData["专家可评标类别"] as IEnumerable<专家可评标专业分类>)
+                    {
+                        <div name="kpbwzlb">
+                            <div class="divclass1"><div name="treepic" class="tre_level1" value="@item.分类名" onclick="changeshow(this);"></div><input class="checkboxclass1" id="@item.分类名" type="checkbox" value="@item.分类名" name="@item.分类名" style="line-height: 21px;" onclick="get_ptype(this,1)" /><a class="classtype1" onclick="changeshow(this);" value="@item.分类名">@item.分类名</a></div>
+                            <div index="@item.分类名" style="display: none;padding-left: 28px;">
+                                @foreach (var k in item.子分类)
+                                {
+                                    <div class="divclass2">
+                                        <input class="checkboxclass2" type="checkbox" value="@k" name="@item.分类名" style="line-height: 21px;" onclick="get_ptype(this,2)" /><a class="classtype2" value="@k">@k</a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    
+                    
+                    @*@foreach (var item in ViewData["goodType"] as IEnumerable<商品分类>)
                     {
                         <div name="kpbwzlb">
                             <div class="divclass1"><div name="treepic" class="tre_level1" value="@item.分类名" onclick="changeshow(this);"></div><input class="checkboxclass1" id="@item.分类名" type="checkbox" value="@item.分类名" name="@item.分类名" style="line-height: 21px;" onclick="get_ptype(this,1)" /><a class="classtype1" onclick="changeshow(this);" value="@item.分类名">@item.分类名</a></div>
@@ -68,7 +84,7 @@
                                 </div>
                             }
                         </div>
-                    </div>
+                    </div>*@
 
                 </div>
 

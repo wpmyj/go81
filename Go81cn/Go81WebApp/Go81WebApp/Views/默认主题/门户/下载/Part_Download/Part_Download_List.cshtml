@@ -131,7 +131,7 @@
                 str += "<a onclick='getValues(" + (currentPage + 1) + ")'>下一页</a><a onclick='getValues(" + pgCount + ")'>末页</a>";
             }
             if (pgCount != 0) {
-                str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
+                str += "<span>第" + currentPage + "页/共" + pgCount + "页</span>";
             }
         }
         $("div#pager").html(str);

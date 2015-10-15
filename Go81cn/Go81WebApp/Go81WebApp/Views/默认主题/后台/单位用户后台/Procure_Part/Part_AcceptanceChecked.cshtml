@@ -52,24 +52,24 @@
                     {
                         if (k.供应商链接.用户数据.企业基本信息.企业名称.Length > 10)
                         {
-                            <td class="name" title="@k.供应商链接.用户数据.企业基本信息.企业名称">
-                                @k.供应商链接.用户数据.企业基本信息.企业名称.Substring(0, 9) ...
-                                @for (var yn = 1; yn <= vl_all.Count; ++yn)
-                                {
-                                    <p style="padding: 0; margin: 0; font-size: 12px; color: #ff5e00; line-height: 17px;">@k.验收单号 - @yn</p>
-                                }
-                            </td>
-                        }
-                        else
-                        {
-                            <td class="name" title="@k.供应商链接.用户数据.企业基本信息.企业名称">
-                                @k.供应商链接.用户数据.企业基本信息.企业名称
-                                @for (var yn = 1; yn <= vl_all.Count; ++yn)
-                                {
-                                    <p style="padding: 0; margin: 0; font-size: 12px; color: #ff5e00; line-height: 17px;">@k.验收单号 - @yn</p>
-                                }
-                            </td>
-                        }
+                        <td class="name" title="@k.供应商链接.用户数据.企业基本信息.企业名称">
+                            @k.供应商链接.用户数据.企业基本信息.企业名称.Substring(0, 9) ...
+                            @for (var yn = 1; yn <= vl_all.Count; ++yn)
+                            {
+                                <p style="padding: 0; margin: 0; font-size: 12px; color: #ff5e00; line-height: 17px;">@k.验收单号 - @yn</p>
+                            }
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="name" title="@k.供应商链接.用户数据.企业基本信息.企业名称">
+                            @k.供应商链接.用户数据.企业基本信息.企业名称
+                            @for (var yn = 1; yn <= vl_all.Count; ++yn)
+                            {
+                                <p style="padding: 0; margin: 0; font-size: 12px; color: #ff5e00; line-height: 17px;">@k.验收单号 - @yn</p>
+                            }
+                        </td>
+                    }
                     }
                     @if (k.收货单位.Length > 9)
                     {
@@ -138,7 +138,7 @@
                     }
 
                     <td>
-                        <a href="/单位用户后台/AcceptanceDetail?id=@k.Id&comes=已审核">查看详情</a>
+                        <a href="/单位用户后台/AcceptancedDetail?id=@k.Id&comes=已审核">查看详情</a>
                         <a style="cursor:pointer" id="@k.Id" onclick="ConfirmCancel(this)">撤销审核</a>
                         @if (k.是否作废)
                         {
@@ -195,6 +195,6 @@
     });
     $(function () {
         $("#验收单管理").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#验收单管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#验收单管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
 </script>

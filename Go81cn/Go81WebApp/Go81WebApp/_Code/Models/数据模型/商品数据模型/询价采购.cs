@@ -19,7 +19,7 @@ namespace Go81WebApp._Code.Models.数据模型.商品数据模型
         public string 订单号 { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime 生成日期 { get; set; }
-        public bool 订单状态 { get; set; }
+        public bool 确认订单 { get; set; }
         public 用户链接<单位用户> 采购单位 { get; set; }
         public _供货信息 供货信息 { get; set; }
         public 询价采购()

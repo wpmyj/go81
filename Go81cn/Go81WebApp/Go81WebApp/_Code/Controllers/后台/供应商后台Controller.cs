@@ -108,7 +108,29 @@ namespace Go81WebApp.Controllers.后台
             //清除过期服务();
             return View();
         }
-
+        public ActionResult PurchaseInfo()
+        {
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+            {
+                cpg = int.Parse(Request.QueryString["page"]);
+            }
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 购物车管理.计数购物车(0, 0, Query<购物车>.Where(m => m.所属用户.用户ID == currentUser.Id));
+            pgCount = pc / 10;
+            if (pc % 10 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            IEnumerable<购物车> cars = 购物车管理.查询购物车(10*(cpg-1),10,Query<购物车>.Where(m=>m.所属用户.用户ID==currentUser.Id));
+            return View(cars);
+        }
         public ActionResult Part_BackHead()
         {
             var m = currentUser;
@@ -137,6 +159,20 @@ namespace Go81WebApp.Controllers.后台
             ViewBag.LawPerson = Newmodel.法定代表人信息.已填写完整;
             ViewBag.goodType = Newmodel.可提供产品类别列表.Count();
             ViewBag.PrintMessage = (Newmodel.审核数据.审核状态 == 审核状态.审核通过 && !Newmodel.供应商用户信息.符合入库标准) ? "由于您所提供的资料还不符合申请入库的标准，故不能打印入库申请表格。如有任何疑问，请拨打网站客服电话咨询，谢谢。" : "";
+            IEnumerable<询价采购> xjModel = 询价采购管理.查询询价采购(0, 0);
+            int xjCount = 0;//回复价格数量
+            int xjorderCount = 0;//确认订单数量
+            foreach (var item in xjModel)
+            {
+                if (item.采购单位.用户数据!=null&&item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id && o.议价 != 0 && o.回复价格 == 0 && o.交易状态 == false).Count() != 0)
+                {
+                    xjCount++;
+                }
+                if (item.采购单位.用户数据 != null && item.确认订单 == false && item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id && o.议价 != 0 && o.回复价格 == 0 && o.交易状态 == true).Count() != 0)
+                {
+                    xjorderCount++;
+                }
+            }
             if (Newmodel.出资人或股东信息 != null)
             {
                 if (Newmodel.出资人或股东信息.Count() == 0)
@@ -239,6 +275,8 @@ namespace Go81WebApp.Controllers.后台
             {
                 ViewData["U_message"] = "您还没有<a href='/jct/ApplyVip' style='text-decoration:underline; font-weight:bold;' target='_blank'>申请安全认证和办理U盾</a>";
             }*/
+            ViewData["xjCount"] = xjCount;
+            ViewData["xjorderCount"] = xjorderCount;
             ViewData["msg_count"] = count;
             ViewData["user"] = Newmodel.登录信息.登录名;
 
@@ -254,7 +292,7 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult ConsultList()
         {
-            IEnumerable<询价采购> model = 询价采购管理.查询询价采购(0, 0, Query<询价采购>.Where(m=>m.订单状态==false));
+            IEnumerable<询价采购> model = 询价采购管理.查询询价采购(0, 10);
             List<询价采购> newmodel = new List<询价采购>();
             foreach(var item in model)
             {
@@ -318,7 +356,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 询价采购 m = 询价采购管理.查找询价采购(model.Id);
                 m.供货信息 = model.供货信息;
-                m.订单状态 = true;
+                m.确认订单 = true;
                 询价采购管理.更新询价采购(m);
                 return Redirect("/供应商后台/ConsultList");
             }
@@ -358,6 +396,20 @@ namespace Go81WebApp.Controllers.后台
                 if (item.基本数据.添加时间 > item.收信人.上次阅读时间 && item.发起者.用户数据 != null)
                 {
                     count++;
+                }
+            }
+            IEnumerable<询价采购> xjModel = 询价采购管理.查询询价采购(0, 0);
+            int xjCount = 0;//回复价格数量
+            int xjorderCount = 0;//确认订单数量
+            foreach (var item in xjModel)
+            {
+                if (item.采购单位.用户数据!=null&&item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id && o.议价 != 0 && o.回复价格 == 0 && o.交易状态 == false).Count() != 0)
+                {
+                    xjCount++;
+                }
+                if (item.采购单位.用户数据 != null && item.确认订单 == false && item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id && o.议价 != 0 && o.回复价格 != 0 && o.交易状态 == true).Count() != 0)
+                {
+                    xjorderCount++;
                 }
             }
             ViewBag.Toubiao = 招标采购预报名管理.计数招标采购预报名(0, 0, Query<招标采购预报名>.EQ(o => o.预报名已关闭, false));
@@ -475,7 +527,8 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["msg_count"] = count;
             ViewData["user"] = Newmodel.登录信息.登录名;
-
+            ViewData["xjCount"] = xjCount;
+            ViewData["xjorderCount"] = xjorderCount;
             var BjCount = 网上竞标管理.查询网上竞标(0, 0, Query<网上竞标>.Where(o => o.所属行业 == (currentUser.企业基本信息.所属行业 != null ? currentUser.企业基本信息.所属行业.Replace(";", "") : "") && o.报价结束时间 > DateTime.Now)).Count();
             ViewData["可报价数量"] = BjCount;
             return PartialView("Gys_Part/Part_Home", Newmodel);
@@ -1623,39 +1676,53 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
-        public ActionResult Part_Gys_Xttz(int? page)
+        public ActionResult Part_Gys_Xttz()
         {
-            int listcount = (int)通知管理.计数通知(0, 0);
-            int maxpage = Math.Max((listcount + TZ_PAGESIZE - 1) / TZ_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = listcount;
-            ViewData["pagesize"] = TZ_PAGESIZE;
-            ViewData["通知管理"] = 通知管理.查询通知(TZ_PAGESIZE * (int.Parse(page.ToString()) - 1), TZ_PAGESIZE);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 通知管理.计数通知(0, 0);
+            pgCount = pc / 10;
+            if (pc % 10 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["通知管理"] = 通知管理.查询通知(10 * (cpg- 1), 10);
             return PartialView("Gys_Part/Part_Gys_Xttz");
         }
 
-        public ActionResult Part_Gys_Ztb_Search_Zb(int? page)
+        public ActionResult Part_Gys_Ztb_Search_Zb()
         {
             ViewData["行业列表"] = 商品分类管理.查找子分类();
             IMongoQuery q = Query.EQ("审核数据.审核状态", 审核状态.审核通过);
-
-            int listcount = (int)公告管理.计数公告(0, 0, q);
-            int maxpage = Math.Max((listcount + GG_PAGESIZE - 1) / GG_PAGESIZE, 1);
-
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = listcount;
-            ViewData["pagesize"] = GG_PAGESIZE;
-            ViewData["公告管理"] = 公告管理.查询公告(GG_PAGESIZE * (int.Parse(page.ToString()) - 1), GG_PAGESIZE, q);
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =公告管理.计数公告(0, 0, q);
+            pgCount = pc / 20;
+            if (pc % 20 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["公告管理"] = 公告管理.查询公告(20 * (cpg- 1), 20, q);
             return PartialView("Gys_Part/Part_Gys_Ztb_Search_Zb");
         }
 
@@ -1773,23 +1840,32 @@ namespace Go81WebApp.Controllers.后台
             return PartialView("Gys_Part/Part_Gys_Register");
         }
 
-        public ActionResult Part_Gys_Product_List(int? page)
+        public ActionResult Part_Gys_Product_List()
         {
             ViewData["sum"] = 商品管理.计数供应商商品(currentUser.Id, 0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过));
             //var q = Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.未审核);
             供应商 model = 用户管理.查找用户<供应商>(currentUser.Id);
-            int listcount = (int)商品管理.计数供应商商品(this.currentUser.Id, 0, 0);
-            int maxpage = Math.Max((listcount + PRO_PAGESIZE - 1) / PRO_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-            ViewData["page"] = page;
-            ViewData["listcount"] = listcount;
-            ViewData["pagesize"] = PRO_PAGESIZE;
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =商品管理.计数供应商商品(this.currentUser.Id, 0, 0);
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
 
-            ViewData["供应商商品信息"] = 商品管理.查询供应商商品(this.currentUser.Id, PRO_PAGESIZE * (int.Parse(page.ToString()) - 1), PRO_PAGESIZE);
+
+            ViewData["供应商商品信息"] = 商品管理.查询供应商商品(this.currentUser.Id, 15* (cpg- 1),15);
 
             //判断是否能使用批量上传工具
             ViewData["批量上传"] = "0";
@@ -4443,20 +4519,27 @@ namespace Go81WebApp.Controllers.后台
             //return PartialView("Gys_Part/ProjectService_List");
             return View();
         }
-        public ActionResult Part_ProjectService_List(int? page)
+        public ActionResult Part_ProjectService_List()
         {
             //int pro_listcount = (int)(项目服务记录管理.计数项目服务记录(0, 0, Query.EQ("供应商链接.用户ID", currentUser.Id)));
-            int pro_listcount = (int)(验收单管理.计数验收单(0, 0, Query<验收单>.EQ(o => o.供应商链接.用户ID, currentUser.Id).And(Query<验收单>.Where(o => o.验收单扫描件.Count>0))));
-            int pro_maxpage = Math.Max((pro_listcount + 15 - 1) / 15, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > pro_maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["listcount"] = pro_listcount;
-            ViewData["page"] = page;
-            ViewData["pagesize"] = 15;
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 验收单管理.计数验收单(0, 0, Query<验收单>.EQ(o => o.供应商链接.用户ID, currentUser.Id).And(Query<验收单>.Where(o => o.验收单扫描件.Count > 0)));
+            pgCount = pc / 10;
+            if (pc % 10 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
             if (currentUser.审核数据.审核状态 == 审核状态.审核通过)
             {
                 ViewBag.Shen = true;
@@ -4466,7 +4549,7 @@ namespace Go81WebApp.Controllers.后台
                 ViewBag.Shen = false;
             }
             //ViewData["待评分项目服务列表"] = 项目服务记录管理.查询项目服务记录(15 * (int.Parse(page.ToString()) - 1), 15, Query.EQ("供应商链接.用户ID", currentUser.Id));
-            ViewData["验收单列表"] = 验收单管理.查询验收单(0, 20, Query<验收单>.EQ(o => o.供应商链接.用户ID, currentUser.Id).And(Query<验收单>.Where(o => o.验收单扫描件.Count>0)));
+            ViewData["验收单列表"] = 验收单管理.查询验收单(20*(cpg-1), 20, Query<验收单>.EQ(o => o.供应商链接.用户ID, currentUser.Id).And(Query<验收单>.Where(o => o.验收单扫描件.Count>0)));
 
             //TD:先检查用户是否持有U盾，且未过期
             var payysd = "0";
@@ -5036,6 +5119,20 @@ namespace Go81WebApp.Controllers.后台
             ViewBag.LawPerson = Newmodel.法定代表人信息.已填写完整;
             ViewBag.goodType = Newmodel.可提供产品类别列表.Count();
             ViewBag.GoodCount = 商品管理.计数供应商商品(Newmodel.Id);
+            IEnumerable<询价采购> xjModel = 询价采购管理.查询询价采购(0, 0);
+            int xjCount = 0;//回复价格数量
+            int xjorderCount = 0;//确认订单数量
+            foreach (var item in xjModel)
+            {
+                if (item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id &&o.议价!=0&& o.回复价格 == 0 && o.交易状态 == false).Count() != 0)
+                {
+                    xjCount++;
+                }
+                if (item.确认订单 == false && item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id && o.议价 != 0 && o.回复价格 != 0 && o.交易状态 == true).Count() != 0)
+                {
+                    xjorderCount++;
+                }
+            }
             if (currentUser.出资人或股东信息 != null)
             {
                 if (Newmodel.出资人或股东信息.Count() == 0)
@@ -5112,6 +5209,8 @@ namespace Go81WebApp.Controllers.后台
             {
                 ViewData["U_message"] = "您还没有<a href='/jct/ApplyVip' style='text-decoration:underline; font-weight:bold;' target='_blank'>申请安全认证和办理U盾</a>";
             }
+            ViewData["xjCount"] = xjCount;
+            ViewData["xjorderCount"] = xjorderCount;
             return PartialView("Gys_Part/Part_Completing", Newmodel);
         }
         [HttpPost]

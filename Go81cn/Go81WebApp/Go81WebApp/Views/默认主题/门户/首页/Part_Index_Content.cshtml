@@ -580,7 +580,7 @@
                                 if (i % 2 == 0)
                                 {
                                     <li>
-                                        @if (ts.TotalHours < 72 || item.Id == 3035)
+                                        @if ((item.Id< 3094 && item.Id > 3100)&&(ts.TotalHours < 72 || item.Id == 3035))
                                         {
                                             <img src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
@@ -596,7 +596,7 @@
                                 else
                                 {
                                     <li class="oddlinecolor">
-                                        @if (ts.TotalHours < 72 || item.Id == 3035)
+                                        @if ((item.Id < 3094 && item.Id > 3100) && (ts.TotalHours < 72 || item.Id == 3035))
                                         {
                                             <img src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
@@ -680,7 +680,7 @@
                                 if (i % 2 == 0)
                                 {
                                     <li>
-                                        @if (ts.TotalHours < 72)
+                                        @if ((item.Id < 3094 && item.Id > 3100) &&ts.TotalHours < 72)
                                         {
                                             <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
@@ -696,7 +696,7 @@
                                 else
                                 {
                                     <li class="oddlinecolor">
-                                        @if (ts.TotalHours < 72)
+                                        @if ((item.Id < 3094 && item.Id > 3100) && ts.TotalHours < 72)
                                         {
                                             <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>

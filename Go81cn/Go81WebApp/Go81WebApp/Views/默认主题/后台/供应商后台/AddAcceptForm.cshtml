@@ -5,7 +5,7 @@
 @using Go81WebApp.Models.数据模型
 @{
     ViewBag.Title = "添加验收单";
-  
+
 }
 <link href="~/css/css.css" rel="stylesheet" />
 @*<script src="~/Scripts/jquery-1.8.3.min.js" type="text/javascript"></script>*@
@@ -77,7 +77,7 @@
         text-decoration: underline;
     }
 
-     .wenxintishi {
+    .wenxintishi {
         text-indent: 2.0em;
     }
 
@@ -85,7 +85,7 @@
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.4);
-        filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
+        filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
         z-index: 9999;
         left: 0;
         top: 0;
@@ -161,8 +161,9 @@
         text-align: right;
         border-top: 1px solid #e5e5e5;
     }
-     .out_box {
-            display:none;
+
+    .out_box {
+        display: none;
     }
 
     .out_box_infirst {
@@ -195,12 +196,12 @@
     }
 
     .out_box_insecond_child {
-        width:725px;
+        width: 725px;
         position: relative;
         margin: 0px auto;
         z-index: 100;
         background-color: white;
-        border:1px solid red;
+        border: 1px solid red;
     }
 
     .close_outbox {
@@ -214,6 +215,7 @@
         float: right;
         cursor: pointer;
     }
+
     #pager {
         text-align: center;
     }
@@ -236,14 +238,15 @@
             #pager a:hover {
                 background-color: rgb(243, 243, 243);
             }
-            .gname{
-                display: inline-block;
-width: 320px;
-height: 25px;
-overflow: hidden;
-text-overflow: ellipsis;
-white-space: nowrap;
-            }
+
+    .gname {
+        display: inline-block;
+        width: 320px;
+        height: 25px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 </style>
 <div id="pdf1" class="out_box">
     <div class="out_box_infirst">
@@ -291,15 +294,15 @@ white-space: nowrap;
 @if (ViewData["是否持有U盾"] != null && ViewData["是否持有U盾"] == "1")
 {
 
-<div class="bg_outdiv">
-    <div id="title_div" class="gys_xttz_topbg">
-        <div class="index_bottom_zb_top_title">新增验收单</div>
-    </div>
-       @using (Html.BeginForm("AddAcceptence", "供应商后台", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    <div class="bg_outdiv">
+        <div id="title_div" class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">新增验收单</div>
+        </div>
+        @using (Html.BeginForm("AddAcceptence", "供应商后台", FormMethod.Post, new { @enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true)
-           <input type="hidden" value="@ViewData["供应商ID"].ToString()" id="uid" />
+            <input type="hidden" value="@ViewData["供应商ID"].ToString()" id="uid" />
             <div style=" width:1200px;margin:30px auto;background:#fff;border-radius:5px;">
                 <table class="accept" cellpadding="0" cellspacing="0">
                     <tr>
@@ -309,11 +312,11 @@ white-space: nowrap;
                             <select style="width:200px;" name="checker" id="selectSh_unit">
                                 @{
                                     <option value="">请选择审核单位</option>
-                                    var sh_unit = ViewData["审核单位列表"] as IEnumerable<单位用户>;
-                                    foreach (var j in sh_unit)
-                                    {
-                                            <option value="@j.Id">@j.验收单审核单位名称</option>
-                                    }
+            var sh_unit = ViewData["审核单位列表"] as IEnumerable<单位用户>;
+            foreach (var j in sh_unit)
+            {
+                <option value="@j.Id">@j.验收单审核单位名称</option>
+            }
                                 }
                             </select>
                         </td>
@@ -475,52 +478,52 @@ white-space: nowrap;
                 <input type="hidden" id="costJson" name="costJson" />
             </div>
         }
-</div>
+    </div>
 
-<div id="Uppicture" style="position:fixed; display:none; top:0; left:0; width:100%;height:100%;background:rgba(0, 0, 0, 0.5) ">
-    <div style="min-height: 200px; min-width:670px; margin:5% auto; width:50%; background-color: rgb(245, 245, 245);border-radius: 4px;border: 4px solid rgb(219, 218, 218); filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=3);-webkit-box-shadow:0px 0px 11px #BFAEAE; -moz-box-shadow:0px 0px 11px #BFAEAE;">
-        <a style="display:block; width:20px; height:20px; line-height:20px; color:white; background-color:red; text-align:center; float:right; cursor:pointer;" onclick="hidethis('#Uppicture')" title="关闭">×</a>
-        <form action="/供应商后台/UploadAttach_ysd" method="post" name="upload" enctype="multipart/form-data" target="showPic">
-            <table width="70%" height="100" style="font-size:14px; margin-left:20px;">
-                <tr><td colspan="4" align="left" style="font-size:16px;">请从这里添加验收单附件信息<label style="font-size:13px;color:red;">(格式为jpg,png,word或者excel的文件)上传后的附件显示在保存按钮下方</label></td></tr>
-                <tr>
-                    <td style="width:120px;">附件商品总金额：</td>
-                    <td align="left"><input type="text" name="sum" id="sum" /></td>
-                    <td style="width:90px;">请选择附件：</td>
-                    <td align="left">
-                        <input type="file" onchange="filechange()" style="width:70px;" name="file1" />
-                    </td>
-                </tr>
-            </table>
-        </form>
-        <div id="uploadimg" style="padding:0 17px"></div>
-        <div id="framebox" style="margin-left:20px; display:none; margin-top:10px;width:700px; height:auto;  margin-right: auto;">
-            <iframe name="showPic" scrolling="no" id="showPic" frameborder="0" style="height:auto; width:100%;"></iframe>
-        </div>
-        <div style="text-align:center;margin-top:20px;">
-            <input type="button" class="btn-pri" style="background:#5A8625" value="关 闭" onclick="hidethis('#Uppicture')" />
+    <div id="Uppicture" style="position:fixed; display:none; top:0; left:0; width:100%;height:100%;background:rgba(0, 0, 0, 0.5) ">
+        <div style="min-height: 200px; min-width:670px; margin:5% auto; width:50%; background-color: rgb(245, 245, 245);border-radius: 4px;border: 4px solid rgb(219, 218, 218); filter:progid:DXImageTransform.Microsoft.Shadow(color=#909090,direction=120,strength=3);-webkit-box-shadow:0px 0px 11px #BFAEAE; -moz-box-shadow:0px 0px 11px #BFAEAE;">
+            <a style="display:block; width:20px; height:20px; line-height:20px; color:white; background-color:red; text-align:center; float:right; cursor:pointer;" onclick="hidethis('#Uppicture')" title="关闭">×</a>
+            <form action="/供应商后台/UploadAttach_ysd" method="post" name="upload" enctype="multipart/form-data" target="showPic">
+                <table width="70%" height="100" style="font-size:14px; margin-left:20px;">
+                    <tr><td colspan="4" align="left" style="font-size:16px;">请从这里添加验收单附件信息<label style="font-size:13px;color:red;">(格式为jpg,png,word或者excel的文件)上传后的附件显示在保存按钮下方</label></td></tr>
+                    <tr>
+                        <td style="width:120px;">附件商品总金额：</td>
+                        <td align="left"><input type="text" name="sum" id="sum" /></td>
+                        <td style="width:90px;">请选择附件：</td>
+                        <td align="left">
+                            <input type="file" onchange="filechange()" style="width:70px;" name="file1" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <div id="uploadimg" style="padding:0 17px"></div>
+            <div id="framebox" style="margin-left:20px; display:none; margin-top:10px;width:700px; height:auto;  margin-right: auto;">
+                <iframe name="showPic" scrolling="no" id="showPic" frameborder="0" style="height:auto; width:100%;"></iframe>
+            </div>
+            <div style="text-align:center;margin-top:20px;">
+                <input type="button" class="btn-pri" style="background:#5A8625" value="关 闭" onclick="hidethis('#Uppicture')" />
+            </div>
         </div>
     </div>
-</div>
-<div style="display:none;">
-    <select id="gaa_name">
-        <option>请选择商品</option>
-        @{
-            IEnumerable<商品> gg = ViewData["商品列表"] as IEnumerable<商品>;
-            if (gg != null && gg.Any())
+    <div style="display:none;">
+        <select id="gaa_name">
+            <option>请选择商品</option>
+            @{
+        IEnumerable<商品> gg = ViewData["商品列表"] as IEnumerable<商品>;
+        if (gg != null && gg.Any())
+        {
+            foreach (var j in gg)
             {
-                foreach (var j in gg)
-                {
-                    <option id="@j.Id" class="@j.商品信息.型号 / @j.商品信息.精确型号" value="@j.销售信息.价格" title="@j.商品信息.计量单位">@j.商品信息.商品名</option>
-                }
-            }
-            else
-            {
-                <option>请选择商品</option>
+                <option id="@j.Id" class="@j.商品信息.型号 / @j.商品信息.精确型号" value="@j.销售信息.价格" title="@j.商品信息.计量单位">@j.商品信息.商品名</option>
             }
         }
-    </select>
-</div>
+        else
+        {
+            <option>请选择商品</option>
+        }
+            }
+        </select>
+    </div>
 }
 else
 {
@@ -605,8 +608,7 @@ else
         document.getElementById("uploadimg").innerHTML = str;
     }
     function delPic(th) {
-        if(confirm("确定删除吗？"))
-        {
+        if (confirm("确定删除吗？")) {
             var path = $(th).attr("lang");
             $.get('/供应商后台/DeleteAttach_ysd', { n: path },
                 function (data) {
@@ -747,7 +749,7 @@ else
                 str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
             }
             if (pgCount != 0) {
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                str += "<span>第" + currentPage + "页/共" + pgCount + "页</span>";
             }
             $("div#pager").html(str);
         }
@@ -759,7 +761,7 @@ else
                         str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
                     }
                     str += "...<a  onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
-                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    str += "<span>第" + currentPage + "页/共" + pgCount + "页</span>";
                     $("div#pager").html(str);
                 }
                 else {
@@ -768,7 +770,7 @@ else
                         str += "<a  onclick='getGoods(" + i + ")'>" + i + "</a>";
                     }
                     str += "...<a onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
-                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    str += "<span>第" + currentPage + "页/共" + pgCount + "页</span>";
                     $("div#pager").html(str);
                 }
             }
@@ -778,7 +780,7 @@ else
                     str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
                 }
                 str += "...<a onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a><a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a>";
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                str += "<span>第" + currentPage + "页/共" + pgCount + "页</span>";
                 $("div#pager").html(str);
             }
             else if (currentPage >= pgCount - 3) {
@@ -786,7 +788,7 @@ else
                 for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
                     str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
                 }
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                str += "<span>第" + currentPage + "页/共" + pgCount + "页</span>";
                 $("div#pager").html(str);
             }
         }
@@ -799,21 +801,16 @@ else
         );
     }
     var ev = null;
-    function getChecked()
-    {
+    function getChecked() {
         var id = $(ev).find("option:selected").attr("id");
         var elem = document.getElementsByName("good");
-        for (var i = 0; i < elem.length;i++)
-        {
-            if(elem[i].value==id)
-            {
+        for (var i = 0; i < elem.length; i++) {
+            if (elem[i].value == id) {
                 elem[i].checked = true;
                 break;
             }
-            else
-            {
-                if (elem[i].checked)
-                {
+            else {
+                if (elem[i].checked) {
                     elem[i].checked = false;
                 }
             }
@@ -824,7 +821,7 @@ else
         var row = parseInt(data.length / 2);
         var maintain = data.length % 2;
         var num = 0;
-        if (row > 0) {  
+        if (row > 0) {
             for (var i = 0; i < row; i++) {
                 var s0 = "<tr>";
                 for (var j = 0; j < 2; j++) {
@@ -850,14 +847,14 @@ else
     function selectGoods(th) {
         ev = $(th).prev("select");
         $("#pdf1").show();
-            $.get("/供应商后台/GoodList", { p: 1, id: $("#uid").val(), name: $("#gname").val() }, function (data) {
-                setPage(data.Data.Pcount, 1);
-                setValue(data.Data.Newgood);
-            });
+        $.get("/供应商后台/GoodList", { p: 1, id: $("#uid").val(), name: $("#gname").val() }, function (data) {
+            setPage(data.Data.Pcount, 1);
+            setValue(data.Data.Newgood);
+        });
         getChecked();
     }
     function getGoods(cp) {
-        $.get("/供应商后台/GoodList", { p: cp, id: $("#uid").val(),name:$("#gname").val() }, function (data) {
+        $.get("/供应商后台/GoodList", { p: cp, id: $("#uid").val(), name: $("#gname").val() }, function (data) {
             setPage(data.Data.Pcount, cp);
             setValue(data.Data.Newgood);
         });
@@ -913,7 +910,7 @@ else
 
     //物资列表
     var t = "<tr>";
-    t += "<td style='text-align:center;position:relative;'><input data-val='true' data-val-number='字段 商品ID 必须是一个数字。' data-val-required='商品ID 字段是必需的。' name='物资服务列表[`].商品链接.商品ID' value='' type='hidden'> <select class='g_name' onchange='set_price(this)' style='position:absolute;left:15px;top:5px;'></select><input type='text'  style='position:absolute;left:15px;top:5px;width:155px;opacity:0;filter:alpha(opacity=0);' onclick='selectGoods(this)'/></td>";
+    t += "<td style='text-align:center;position:relative;'><input data-val='true' data-val-number='字段 商品ID 必须是一个数字。' data-val-required='商品ID 字段是必需的。' name='物资服务列表[`].商品链接.商品ID' value='' type='hidden'> <select class='g_name' onchange='set_price(this)' style='position:absolute;left:15px;top:5px;'></select><input type='text'  style='position:absolute;left:15px;top:5px;width:155px;height:25px;opacity:0;filter:alpha(opacity=0);' onclick='selectGoods(this)'/></td>";
     t += "<td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='物资服务列表[`].规格型号' value='' type='text'></td>";
     t += "<td style='text-align:center'><input placeholder='可不填' class='text-box single-line' name='物资服务列表[`].采购合同号' value='' type='text'></td>";
     t += "<td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='物资服务列表[`].计量单位' value='' type='text' style='width:60px;'></td>";

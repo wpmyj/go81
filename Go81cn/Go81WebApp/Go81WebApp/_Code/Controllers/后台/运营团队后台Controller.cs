@@ -1627,36 +1627,7 @@ namespace Go81WebApp.Controllers.后台
             }
         }
 
-        public void ExportGysPhoneToExcel()
-        {
-            var param = new Dictionary<string,string>();
-            var examstate = Request.Form["examstate"]; //审核状态
-            var authlevel = Request.Form["authlevel"]; //认证级别---军采通会员
-            var category = Request.Form["category"];  //行业
-            var gsytype = Request.Form["gsytype"];   //协议、应急、普通
-
-            var provence = Request.Form["deliverprovince"];  //地区
-            var city = Request.Form["delivercity"];
-            var area = Request.Form["deliverarea"];
-
-            var shortmessage = Request.Form["shortmessage"];   //是否订购短信服务
-
-            param.Add("审核状态", examstate);
-            param.Add("认证级别", authlevel);
-            param.Add("所属行业", category);
-            param.Add("协议应急普通", gsytype);
-            param.Add("省", provence);
-            param.Add("市", city);
-            param.Add("县", area);
-            if (string.IsNullOrWhiteSpace(shortmessage)) { shortmessage = "0"; }
-            param.Add("短信服务", shortmessage);
-
-            HttpResponseBase rs = Response;
-            TemplateExcel.供应商手机号导出(param, rs);
-        }
-
-
-
+      
         public ActionResult Modify_Finance()
         {
             try
@@ -5108,10 +5079,25 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult Part_SystemInfo(int? page) //系统通知
         {
-            int listcount = (int)通知管理.计数通知(0, 0);
-            int maxpage = Math.Max((listcount + TZ_PAGESIZE - 1) / TZ_PAGESIZE, 1);
-
-            消息查询(page, TZ_PAGESIZE, listcount, maxpage, "系统通知");
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+            {
+                cpg = int.Parse(Request.QueryString["page"]);
+            }
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 通知管理.计数通知(0, 0);
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["系统通知列表"]=通知管理.查询通知(15*(cpg-1),15);
             return PartialView("Part_View/Part_SystemInfo");
         }
         public ActionResult Print_Detail()
@@ -6348,7 +6334,7 @@ namespace Go81WebApp.Controllers.后台
                         }
                         else if (supplier.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_贵阳)
                         {
-                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往贵阳物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询13984817881（姚祖光,助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往贵阳物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询0851-85508963（田助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
                         }
                         else if (supplier.供应商用户信息.所属管理单位 == 供应商.采购管理单位.西藏军区物资采购中心)
                         {
@@ -6397,7 +6383,7 @@ namespace Go81WebApp.Controllers.后台
                         }
                         else if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_贵阳)
                         {
-                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往贵阳物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询13984817881（姚祖光,助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往贵阳物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询0851-85508963（田助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
                         }
                         else if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.西藏军区物资采购中心)
                         {
@@ -13767,7 +13753,33 @@ namespace Go81WebApp.Controllers.后台
             TemplateExcel.导出专家信息(rs);
         }
 
+        public void ExportGysPhoneToExcel()
+        {
+            var param = new Dictionary<string, string>();
+            var examstate = Request.Form["examstate"]; //审核状态
+            var authlevel = Request.Form["authlevel"]; //认证级别---军采通会员
+            var category = Request.Form["category"];  //行业
+            var gsytype = Request.Form["gsytype"];   //协议、应急、普通
 
+            var provence = Request.Form["deliverprovince"];  //地区
+            var city = Request.Form["delivercity"];
+            var area = Request.Form["deliverarea"];
+
+            var shortmessage = Request.Form["shortmessage"];   //是否订购短信服务
+
+            param.Add("审核状态", examstate);
+            param.Add("认证级别", authlevel);
+            param.Add("所属行业", category);
+            param.Add("协议应急普通", gsytype);
+            param.Add("省", provence);
+            param.Add("市", city);
+            param.Add("县", area);
+            if (string.IsNullOrWhiteSpace(shortmessage)) { shortmessage = "0"; }
+            param.Add("短信服务", shortmessage);
+
+            HttpResponseBase rs = Response;
+            TemplateExcel.供应商手机号导出(param, rs);
+        }
 
         public ActionResult ExpertBatchmodify()
         {
@@ -13779,6 +13791,9 @@ namespace Go81WebApp.Controllers.后台
             ViewData["pagecount"] = maxpagesize;
             ViewData["goodType"] = 商品分类管理.查找子分类();
             ViewData["专家特殊类别"] = 专家可评标专业.非商品分类评审专业;
+
+            ViewData["专家可评标类别"] = 专家可评标专业分类.评审专业;
+
             var _zj = 用户管理.查询用户<专家>(PRO_PAGESIZE * (page - 1), PRO_PAGESIZE, null, false, SortBy.Descending("基本数据.添加时间"));
             return View(_zj);
         }

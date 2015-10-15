@@ -396,21 +396,7 @@
             $(domEle).prev().val($(domEle).find("option:selected").attr("id"));
         });
     });
-
-    var i = @int.Parse(ViewData["currentpage"].ToString());
-    var j=@(int.Parse(ViewData["pagecount"].ToString()));
     $(function () {
-        $(".gys_znxx_content_detailbox a").each(function () {
-            if ($(this).text() == i) {
-                $(this).addClass("currentPage");
-            }
-            if (i== j) {
-                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
-            }
-            if (i == 1) {
-                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
-            }
-        });
         $("#已审核的验收单").addClass("left_menu_select").children("a").css({ "color": "#fff" });
         $("#已审核的验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
     });

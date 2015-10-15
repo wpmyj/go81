@@ -1,0 +1,223 @@
+﻿@model List<Go81WebApp._Code.Models.数据模型.商品数据模型.询价采购>
+@{
+    ViewBag.Title = "询价采购";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<style>
+    .hidebox {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .divbox {
+        float: left;
+        width: 150px;
+    }
+
+    .sname {
+        float: left;
+        line-height: 30px;
+        text-indent: 2em;
+    }
+
+    .modifybt {
+        display: inline-block;
+        width: 80px;
+        height: 20px;
+        line-height: 20px;
+        background-color: #ff0000;
+        color: #fff;
+        margin-right: 5px;
+        text-align: center;
+        text-indent: 0em;
+    }
+
+    .childbox input[type=text] {
+        width: 50px;
+    }
+
+    a {
+        cursor: pointer;
+    }
+
+    #header {
+        width: 100%;
+        background-color: #327229;
+    }
+
+        #header a {
+            display: inline-block;
+            width: 100px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            color: #fff;
+        }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div id="title_div" class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">询价信息列表</div>
+        </div>
+        <div style="border:1px solid #327229; margin:10px auto;background-color:#F9F9F9; font-size:13px;">
+            <div id="header"><a style="background-color:#fff;color:#327229" id="0">回复议价</a><a id="1">确认合同</a><a id="2">供货成功</a></div>
+            <div class="bigbox">
+                <div class="Content" style="margin-top:10px;">
+                    <div class="sname" style="width:12%">产品名称</div>
+                    <div class="sname" style="width:13%">供应商名称</div>
+                    <div class="sname" style="width:7%">原价</div>
+                    <div class="sname" style="width:7%">议价</div>
+                    <div class="sname" style="width:7%">数量</div>
+                    <div class="sname" style="width:8%">回复价</div>
+                    <div class="sname" style="width:8%">集成费</div>
+                    <div class="sname" style="width:8%">服务费</div>
+                    <div class="sname" style="width:8%">管线费</div>
+                    <div class="sname" style="width:12%">当前最低报价</div>
+                    <div class="sname" style="width:10%">操作</div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="Content" style="text-align:left;">
+                    <form>
+                        @if (Model != null && Model.Any())
+                        {
+                            int i = 0;
+                            foreach (var m in Model)
+                            {
+                                decimal price = decimal.MaxValue;
+                                foreach (var item in m.议价列表)
+                                {
+                                    if (item.回复价格 != 0 && item.回复价格 < price)
+                                    {
+                                        price = item.回复价格;
+                                    }
+                                }
+                                foreach (var item in m.议价列表)
+                                {
+                                    if (m.采购单位.用户ID== long.Parse(ViewData["id"].ToString()))
+                                    {
+                                        if (item.交易状态)
+                                        {
+                                            <div class="childbox">
+                                                <div class="sname hidebox" style="width:12%" title="@item.议价商品.商品.商品信息.商品名">@item.议价商品.商品.商品信息.商品名</div>
+                                                <div class="sname hidebox" style="width:13%" title="@item.供应商.用户数据.企业基本信息.企业名称">@item.供应商.用户数据.企业基本信息.企业名称</div>
+                                                <div class="sname single" style="width:7%">@string.Format("{0:c2}", item.价格)</div>
+                                                <div class="sname single" style="width:7%">@string.Format("{0:c2}", item.议价)</div>
+                                                <div class="sname" style="width:7%">@item.数量</div>
+                                                <div class="sname single" style="width:8%">
+                                                    @item.回复价格
+                                                </div>
+                                                <div class="sname single" style="width:8%">@string.Format("{0:c2}", item.集成费)</div>
+                                                <div class="sname single" style="width:8%">@string.Format("{0:c2}", item.服务费)</div>
+                                                <div class="sname single" style="width:8%">@string.Format("{0:c2}", item.管线费)</div>
+                                                <div class="sname" style="width:12%">
+                                                    @if (price != decimal.MaxValue)
+                                                    {
+                                                        <span>@string.Format("{0:c2}", price)</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@string.Format("{0:c2}", item.价格)</span>
+                                                    }
+                                                </div>
+                                                <div class="sname" style="width:10%;text-indent:0px;"><a name="@m.Id" class="modifybt" style="background-color:#808080;">修改价格</a></div>
+                                                <div style="clear:both;"></div>
+                                            </div>
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </form>
+                </div>
+            </div>
+            <div class="bigbox" style="display:none;">
+                <div class="Content">
+                    <div class="sname" style="width:20%">订单号</div>
+                    <div class="sname" style="width:30%">购买单位</div>
+                    <div class="sname" style="width:20%"> 订单日期</div>
+                    <div class="sname" style="width:10%">查看详情</div>
+                    <div class="sname" style="width:20%">状态</div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="Content">
+                    @foreach (var item in Model)
+                    {
+                        if (!string.IsNullOrWhiteSpace(item.订单号))
+                        {
+                            <div class="sname" style="width:20%">@item.订单号</div>
+                            <div class="sname" style="width:30%">@item.采购单位.用户数据.单位信息.单位名称</div>
+                            <div class="sname" style="width:20%">@item.生成日期</div>
+                            <div class="sname" style="width:10%"><a href="/单位用户后台/ConsultDetail?id=@item.Id" style="color:#354af2;cursor:pointer;">查看</a></div>
+                            <div class="sname" style="width:20%">
+                                @if (item.确认订单)
+                                {
+                                    <span>已确认</span>
+                                }
+                                else
+                                {
+                                    <span>等待确认</span>
+                                }
+                            </div>
+                        }
+                    }
+                    <div style="clear:both;"></div>
+                </div>
+            </div>
+            <div class="bigbox" style="display:none;">
+                <div class="Content">
+                    <div class="sname" style="width:20%">订单号</div>
+                    <div class="sname" style="width:50%">购买单位</div>
+                    <div class="sname" style="width:20%"> 订单日期</div>
+                    <div class="sname" style="width:10%">供货成功</div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="Content">
+                    @foreach (var item in Model)
+                    {
+                        if (string.IsNullOrWhiteSpace(item.订单号))
+                        {
+                            if (item.供货信息.供货成功)
+                            {
+                                <div class="sname" style="width:20%">@item.订单号</div>
+                                <div class="sname" style="width:30%">@item.采购单位.用户数据.单位信息.单位名称</div>
+                                <div class="sname" style="width:20%">@item.生成日期</div>
+                                <div class="sname" style="width:10%"><span>是</span></div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function changePrice(th) {
+        var index = $(th).attr("id");
+        var name = $(th).attr("name");
+        var hj = $("#hj" + index).val();
+        var jcf = $("#jcf" + index).val();
+        var fwf = $("#fwf" + index).val();
+        var gxf = $("#gxf" + index).val();
+        $.get("/供应商后台/ChangePrice", { id: name, h: hj, jc: jcf, fw: fwf, gx: gxf }, function (data) {
+            if (data == 1) {
+                alert("修改成功！");
+            }
+            else {
+                alert("修改失败！");
+            }
+        });
+    }
+    $("#header a").click(function () {
+        var index = $(this).attr("id");
+        $("#header a").each(function () {
+            $(this).css({ "background-color": "#327229", "color": "#fff" });
+        });
+        $(this).css({ "background-color": "#fff", "color": "#327229" });
+        $(".bigbox").hide();
+        $(".bigbox:eq(" + index + ")").show();
+    });
+</script>

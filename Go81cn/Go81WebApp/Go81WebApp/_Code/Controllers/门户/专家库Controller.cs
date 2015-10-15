@@ -75,7 +75,7 @@ namespace Go81WebApp.Controllers.门户
 
         public ActionResult Part_Expert_Applay()
         {
-            ViewData["goodType"] = 商品分类管理.查找子分类();
+            ViewData["goodType"] = 专家可评标专业分类.评审专业;// 商品分类管理.查找子分类();
             ViewData["经办人"] = HttpContext.获取当前用户<单位用户>().联系方式.联系人;
 
             var t = typeof(专业技术职称);
@@ -132,7 +132,7 @@ namespace Go81WebApp.Controllers.门户
             }
             ViewData["专家级别"] = d;
 
-            ViewData["专家特殊类别"] = 专家可评标专业.非商品分类评审专业;
+            //ViewData["专家特殊类别"] = 专家可评标专业.非商品分类评审专业;
             var 所属单位 = 用户管理.查找用户<单位用户>(currentUser.Id).单位信息.所属单位;
             ViewData["所属单位"] = 所属单位==null?"":所属单位;
 

@@ -112,64 +112,8 @@ namespace Go81WebApp._Code.Controllers.后台
             model.学历信息.毕业证书扫描件 = _zj.学历信息.毕业证书扫描件;
             model.学历信息.最高学位证书 = _zj.学历信息.最高学位证书;
             model.学历信息.职称证书电子扫描件 = _zj.学历信息.职称证书电子扫描件;
-
-            //var zjzgz = Request.Form["zjzgz"];
-            //var zczs = Request.Form["zczs"];
-            //var zjsmj = Request.Form["zjsmj"];
-            //var txz = Request.Form["txz"];
-            //var byzs = Request.Form["byzs"];
-            //var zgxwz = Request.Form["zgxwz"];
-            //if (!string.IsNullOrWhiteSpace(zjzgz))
-            //{
-            //    var a=zjzgz.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-            //    foreach (var item in a)
-            //    {
-            //        model.身份信息.专家证电子扫描件.Add(item);
-            //    }
-            //}
-            //if (!string.IsNullOrWhiteSpace(zczs))
-            //{
-            //    var b = zczs.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-            //    foreach (var item in b)
-            //    {
-            //        model.学历信息.职称证书电子扫描件.Add(item);
-            //    }
-            //}
-            //if (!string.IsNullOrWhiteSpace(zjsmj))
-            //{
-            //    if (System.IO.File.Exists(Server.MapPath(@_zj.身份信息.证件电子扫描件)))
-            //    {
-            //        System.IO.File.Delete(Server.MapPath(@_zj.身份信息.证件电子扫描件));
-            //    }
-            //    model.身份信息.证件电子扫描件 = zjsmj;
-            //}
-            //if (!string.IsNullOrWhiteSpace(txz))
-            //{
-            //    if (System.IO.File.Exists(Server.MapPath(@_zj.工作经历信息.退休证书)))
-            //    {
-            //        System.IO.File.Delete(Server.MapPath(@_zj.工作经历信息.退休证书));
-            //    }
-            //    model.工作经历信息.退休证书 = txz;
-            //}
-            //if (!string.IsNullOrWhiteSpace(byzs))
-            //{
-            //    if (System.IO.File.Exists(Server.MapPath(@_zj.学历信息.毕业证书扫描件)))
-            //    {
-            //        System.IO.File.Delete(Server.MapPath(@_zj.学历信息.毕业证书扫描件));
-            //    }
-            //    model.学历信息.毕业证书扫描件 = byzs;
-            //}
-            //if (!string.IsNullOrWhiteSpace(zgxwz))
-            //{
-            //    if (System.IO.File.Exists(Server.MapPath(@_zj.学历信息.最高学位证书)))
-            //    {
-            //        System.IO.File.Delete(Server.MapPath(@_zj.学历信息.最高学位证书));
-            //    }
-            //    model.学历信息.最高学位证书 = zgxwz;
-            //}
-
-
-
+            model.工作经历信息.其他证明文件扫描件 = _zj.工作经历信息.其他证明文件扫描件;
+            
             if (model.所属地域.地域 == "不限省份不限城市不限区县")
             {
                 model.所属地域.省份 = "";
@@ -187,64 +131,29 @@ namespace Go81WebApp._Code.Controllers.后台
             }
 
             var kpbtype = Request.Form["可参评物资类别列表"];
-            var az = kpbtype.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-            var cplb = new List<供应商._产品类别>();
-            foreach (var y in az)
+            if (!string.IsNullOrWhiteSpace(kpbtype))
             {
-                var yj = y.Split(':')[0];
-                var ej = y.Split(':')[1].Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                var cp = new 供应商._产品类别();
-                var listr = new List<string>();
-                foreach (var j in ej)
+                var az = kpbtype.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                var cplb = new List<供应商._产品类别>();
+                foreach (var y in az)
                 {
-                    listr.Add(j);
+                    var yj = y.Split(':')[0];
+                    var ej = y.Split(':')[1].Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    var cp = new 供应商._产品类别();
+                    var listr = new List<string>();
+                    foreach (var j in ej)
+                    {
+                        listr.Add(j);
+                    }
+                    cp.一级分类 = yj;
+                    cp.二级分类 = listr;
+                    cplb.Add(cp);
                 }
-                cp.一级分类 = yj;
-                cp.二级分类 = listr;
-                cplb.Add(cp);
+                _zj.可参评物资类别列表 = cplb;
             }
+            
            
-            //List<供应商._产品类别> list = new List<供应商._产品类别>();
-            //if (model.可参评物资类别列表 != null && model.可参评物资类别列表.Count() != 0)
-            //{
-            //    if (model.可参评物资类别列表.Count() == 1)
-            //    {
-            //        if (model.可参评物资类别列表[0].二级分类[0] == "-1")
-            //        {
-            //            供应商._产品类别 mm = new 供应商._产品类别();
-            //            mm.一级分类 = model.可参评物资类别列表[0].一级分类;
-            //            mm.二级分类 = new List<string>();
-            //            list.Add(mm);
-            //        }
-            //        else
-            //        {
-            //            model.可参评物资类别列表[0].二级分类 = model.可参评物资类别列表[0].二级分类.Where(s => !string.IsNullOrEmpty(s)).ToList();
-            //            if (model.可参评物资类别列表[0].二级分类.Count > 0)
-            //            {
-            //                供应商._产品类别 mm = new 供应商._产品类别();
-            //                mm.一级分类 = model.可参评物资类别列表[0].一级分类;
-            //                mm.二级分类 = model.可参评物资类别列表[0].二级分类;
-            //                list.Add(mm);
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        for (int i = 0; i < model.可参评物资类别列表.Count; i++)
-            //        {
-            //            model.可参评物资类别列表[i].二级分类 = model.可参评物资类别列表[i].二级分类.Where(s => !string.IsNullOrEmpty(s)).ToList();
-            //            if (model.可参评物资类别列表[i].二级分类.Count > 0)
-            //            {
-            //                供应商._产品类别 mm = new 供应商._产品类别();
-            //                mm.一级分类 = model.可参评物资类别列表[i].一级分类;
-            //                mm.二级分类 = model.可参评物资类别列表[i].二级分类;
-            //                list.Add(mm);
-            //            }
-            //        }
-            //    }
-          //  }
-
-            _zj.可参评物资类别列表 = cplb;
+            
             _zj.所属管理单位 = model.所属管理单位;
             _zj.学历信息 = model.学历信息;
             _zj.工作经历信息 = model.工作经历信息;
@@ -294,9 +203,11 @@ namespace Go81WebApp._Code.Controllers.后台
                 var zj = 用户管理.查找用户<专家>(currentUser.Id);
                 if (type == "zjzgz"){zj.身份信息.专家证电子扫描件.Remove(uri);}
                 if (type == "zczs"){zj.学历信息.职称证书电子扫描件.Remove(uri);}
+                if (type == "qtzm") { zj.工作经历信息.其他证明文件扫描件.Remove(uri); }
                 if (type == "zjsmj") { zj.身份信息.证件电子扫描件=""; }
                 if (type == "txz") { zj.工作经历信息.退休证书=""; }
-                if (type == "zgxwz"){  zj.学历信息.最高学位证书 = "";}
+                if (type == "byzs") { zj.学历信息.毕业证书扫描件 = ""; }
+                if (type == "zgxwz") { zj.学历信息.最高学位证书 = ""; }
                 用户管理.更新用户<专家>(zj);
                 if (System.IO.File.Exists(Server.MapPath(@uri)))
                 {
@@ -340,6 +251,11 @@ namespace Go81WebApp._Code.Controllers.后台
                             {
                                 zj_type = "zczs";
                                 model.学历信息.职称证书电子扫描件.Add(filePath + fname);
+                            }
+                            else if (name == "qtzm")//其他证明文件
+                            {
+                                zj_type = "qtzm";
+                                model.工作经历信息.其他证明文件扫描件.Add(filePath + fname);
                             }
                             else if (name == "zjsmj")//身份证或军官证
                             {
@@ -394,6 +310,12 @@ namespace Go81WebApp._Code.Controllers.后台
                         break;
                     case "zczs":
                         foreach (var item in model.学历信息.职称证书电子扫描件)
+                        {
+                            path += item + "|";
+                        }
+                        break;
+                    case "qtzm":
+                        foreach (var item in model.工作经历信息.其他证明文件扫描件)
                         {
                             path += item + "|";
                         }

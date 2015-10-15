@@ -1,0 +1,168 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.商品数据模型.购物车>
+@{
+    ViewBag.Title = "我的购物车";
+    Layout = "_Back_IntranetLayout.cshtml";
+}
+<style>
+   .good_left{
+        float:left;
+        width:220px;
+        margin-left:10px;
+    }
+    .good_right{
+        float:left;
+        width:700px;
+    }
+    .good_box{
+        height:155px;
+        border-bottom:1px solid #327229;
+        overflow-y:hidden;
+        margin-bottom:10px;
+    }
+    .good_price{
+        color:#ff0000;
+    }
+    .bg_outdiv_right ul{
+        list-style:none;
+        padding:0px;
+        border:1px solid #327229;
+        border-bottom:none;
+    }
+</style>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div id="title_div" class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">我的采购信息</div>
+        </div>
+        <ul>
+            @foreach(var item in Model)
+            {
+                foreach(var child in item.选购商品列表)
+                {
+                    <li>
+                        <div class="good_box">
+                            <div class="good_left"><a href="/商品陈列/Product_Detail?id=@child.商品.商品ID" title="@child.商品.商品.商品信息.商品名"><img src="@child.商品.商品.商品信息.商品图片.First().Replace("original", "150X150")" class="imginfo" /></a></div>
+                            <div class="good_right">
+                                <div><a href="/商品陈列/Product_Detail?id=@child.商品.商品ID">@child.商品.商品.商品信息.商品名</a></div>
+                                <div class="good_price">商品价格：@string.Format("{0:c2}",child.商品.商品.销售信息.价格)</div>
+                                <div>采购数量：@child.数量</div>
+                            </div>
+                            <div style="clear:both;"></div>
+                        </div>
+                    </li>
+                }
+            }
+        </ul>
+        <div class="gys_znxx_content_detailbox">
+            @{
+                int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                if (Pagecount > 0)
+                {
+                    if (CurrentPage != 1)
+                    {
+                        <a href='/供应商后台/PurchaseInfo?page=1'>首页</a><a href='/供应商后台/PurchaseInfo?page=@(CurrentPage-1)'>上一页</a>
+                    }
+                }
+                if (Pagecount <= 6)
+                {
+                    for (int i = 1; i <= Pagecount; i++)
+                    {
+                        if (CurrentPage == i)
+                        {
+                            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                        }
+                        else
+                        {
+                            <a href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                        }
+                    }
+                }
+                else
+                {
+                    if (CurrentPage < 6)
+                    {
+                        if (CurrentPage != 1)
+                        {
+                            for (int i = 1; i < 7; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                                }
+                            }
+                            <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)">@Pagecount</a>
+                        }
+                        else
+                        {
+                            for (int i = 1; i < 7; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                                }
+                            }
+                            <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)">@Pagecount</a>
+                        }
+                    }
+                    else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                    {
+                        <a href="/供应商后台/PurchaseInfo?page=1">1</a><span>...</span>
+                        for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                            }
+                            else
+                            {
+                                <a href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                            }
+                        }
+                        <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)">@Pagecount</a>
+                    }
+                    else if (CurrentPage >= Pagecount - 3)
+                    {
+                        <a href="/供应商后台/PurchaseInfo?page=1">1</a><span>...</span>
+                        for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                            }
+                            else
+                            {
+                                <a href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                            }
+                        }
+                    }
+                }
+                if (Pagecount > 0)
+                {
+                    if (CurrentPage != Pagecount)
+                    {
+                        <a href='/供应商后台/PurchaseInfo?page=@(CurrentPage+1)'>下一页</a><a href='/供应商后台/PurchaseInfo?page=@(Pagecount)'>末页</a>
+                    }
+                    <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                }
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#我的购物车").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#我的购物车").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

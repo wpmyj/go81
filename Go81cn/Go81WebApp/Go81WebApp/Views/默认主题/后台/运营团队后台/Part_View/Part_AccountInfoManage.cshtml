@@ -4,14 +4,16 @@
     @{
         if (Model.Count() > 0 && Model.Any())
         {
+            int counter = 1;
             foreach (var k in Model)
             {
                 if (k != null)
                 {
                     <tr style="line-height:40px;">
-                        <td><a href="/运营团队后台/ValueAddedService?id=@k.Id">@k.企业基本信息.企业名称</a></td>
+                        <td><span>@counter 、</span><a href="/运营团队后台/ValueAddedService?id=@k.Id">@k.企业基本信息.企业名称</a></td>
                     </tr>
                 }
+                counter++;
             }
         }
         else

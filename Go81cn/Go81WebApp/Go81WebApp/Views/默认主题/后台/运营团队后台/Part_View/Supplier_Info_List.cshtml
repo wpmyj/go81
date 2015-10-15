@@ -77,6 +77,9 @@
             div#pager a:hover {
                 background-color: rgb(243, 243, 243);
             }
+            .alink:hover{
+                text-decoration:underline;
+            }
 </style>
 @{
         IEnumerable<供应商> supplier = ViewData["supplier"] as IEnumerable<供应商>;
@@ -89,12 +92,12 @@
     <div class="out_box_insecond">
         <div class="out_box_insecond_child">
             <div style="width:100%; height:auto;"><a class="close_outbox" title="关闭窗口" onclick="$('#f').hide()">×</a></div>
-            <div style="width:600px; height:270px; overflow:hidden;">
+            <div style="width:600px; height:270px; overflow:scroll;">
                 <table width="90%" cellpadding="0" cellspacing="0" style="margin:0px auto;">
                     <tr><th>待审核供应商名称</th></tr>
                     @foreach(var item in gys)
                     {
-                        <tr><td style="border-bottom:1px dashed #808080;line-height:30px;">@item.企业基本信息.企业名称</td></tr>
+                        <tr><td style="border-bottom:1px dashed #808080;line-height:30px;"><a class="alink" href="/运营团队后台/Modify_Supplier_Info?id=@item.Id">@item.企业基本信息.企业名称</a></td></tr>
                     }
                 </table>
             </div>

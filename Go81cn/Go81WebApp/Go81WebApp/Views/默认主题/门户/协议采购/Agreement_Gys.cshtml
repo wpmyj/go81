@@ -12,10 +12,18 @@
     </div>*@
     <div class="prodtpage_rightbox" style="float:left; margin-top:5px;margin-left:9px;">
         @*<div id="top" style="margin-top: 4px; border-bottom:1px solid #999; height:33px;">
-            <span style="display: inline-block;width:300px; text-align: center;margin-left:116px; padding: 5px; font-weight: bold; "><a style=" font-family:'微软雅黑';display: inline-block; width:300px;" href="/协议采购/Index">通用办公物资协议采购目录</a></span>
-            <span style="display: inline-block; width:300px;background-color:#fff;height:23px; border: 1px solid #999; border-bottom:none; text-align: center; padding: 5px; font-weight: bold;"><a style=" font-family:'微软雅黑';display: inline-block; width:300px;" href="/协议采购/Agreement_Gys">协议供应商目录</a></span>
-        </div>*@
-        @Html.Action("Part_Agreement_Gys", "协议采购")
+        <span style="display: inline-block;width:300px; text-align: center;margin-left:116px; padding: 5px; font-weight: bold; "><a style=" font-family:'微软雅黑';display: inline-block; width:300px;" href="/协议采购/Index">通用办公物资协议采购目录</a></span>
+        <span style="display: inline-block; width:300px;background-color:#fff;height:23px; border: 1px solid #999; border-bottom:none; text-align: center; padding: 5px; font-weight: bold;"><a style=" font-family:'微软雅黑';display: inline-block; width:300px;" href="/协议采购/Agreement_Gys">协议供应商目录</a></span>
+    </div>
+    @Html.Action("Part_Agreement_Gys", "协议采购")*@
+        <div class="title-base-out" style="margin-top:0;">
+            <div class="title-base-middle">
+                <div class="title-base-inner">协议采购商品目录</div>
+            </div>
+        </div>
+        <div style="margin-top:10px;">
+            @Html.Action("Part_GoodClass", "协议采购")
+        </div>
     </div>
 </div>
 

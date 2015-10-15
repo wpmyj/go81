@@ -119,7 +119,7 @@
                     }
 
                     <td>
-                        <a href="/单位用户后台/AcceptanceDetail?id=@k.Id">查看详情</a>
+                        <a href="/单位用户后台/AcceptanceDetail?id=@k.Id&comes=未审核">查看详情</a>
                         @if (k.是否作废)
                         {
                             <span style="color: red;">已作废</span>
@@ -134,11 +134,7 @@
 @if (ViewData["currentPage"] != null)
 {
     <div class="gys_znxx_content_detailbox">
-        @if (int.Parse(ViewData["currentPage"].ToString()) == 1)
-        {
-            <a>首页</a>
-        }
-        else
+        @if (int.Parse(ViewData["currentPage"].ToString()) != 1)
         {
             <a id="1" class="page">首页</a><a id="@(int.Parse(ViewData["currentpage"].ToString()) - 1)" class="page">上一页</a>
         }
@@ -157,11 +153,7 @@
                 }
             }
         }
-        @if (int.Parse(ViewData["currentPage"].ToString()) == int.Parse(ViewData["pagecount"].ToString()))
-        {
-            <a>末页</a>
-        }
-        else
+        @if (int.Parse(ViewData["currentPage"].ToString()) != int.Parse(ViewData["pagecount"].ToString()))
         {
             <a id="@(int.Parse(ViewData["currentpage"].ToString()) + 1)" class="page">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
         }
@@ -184,6 +176,6 @@
     });
     $(function () {
         $("#验收单管理").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#验收单管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#验收单管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
 </script>

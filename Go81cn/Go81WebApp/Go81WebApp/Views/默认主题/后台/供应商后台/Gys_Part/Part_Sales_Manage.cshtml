@@ -25,6 +25,10 @@
         width: 135px;
         left: initial;
     }
+    .bg_outdiv
+    {
+        overflow:visible;
+    }
 </style>
 <div id="f1" class="modal_out">
     <div class="modal_in"></div>
@@ -54,7 +58,7 @@
     {   @Html.HiddenFor(m => m.Id)
         <div class="company_msg">
             <div class="gys_znxx_box">
-                <table width="100%" cellspacing="0">
+                <table width="95%" cellspacing="0">
                     <tr>
                         <td width="20%" align="right">组织机构代码：</td>
                         <td width="30%">
@@ -185,8 +189,8 @@
                     <tr>
                         <td align="right">营业执照有效期类型：</td>
                         <td>
-                            @Html.EnumDropDownListFor(m => m.营业执照信息.营业执照有效期类型, new { @style = "width:154px; margin-left:2px;", id = "type", onchange = "settype(this)" })
-                            <div class="out_box">
+                            @Html.EnumDropDownListFor(m => m.营业执照信息.营业执照有效期类型, new { @style = "width:154px; margin-left:2px;display:inline;top:0px; box-shadow:none;-webkit-box-shdow:none", id = "type", onchange = "settype(this)" })
+                            <div class="out_box" style="left:159px;">
                                 <div class="arrow"></div>
                                 <div class="con_box">请选择营业执照的有效期类型</div>
                             </div>

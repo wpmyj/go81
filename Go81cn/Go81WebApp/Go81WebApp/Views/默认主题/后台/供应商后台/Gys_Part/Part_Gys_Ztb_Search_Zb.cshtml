@@ -54,8 +54,108 @@
                 }
             </ul>
             <div class="gys_znxx_content_detailbox">
-                @Html.Pager("page", int.Parse(ViewData["pagesize"].ToString()), int.Parse(ViewData["listcount"].ToString()))
+                @{
+                    int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                    int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                    if (Pagecount > 0)
+                    {
+                        if (CurrentPage != 1)
+                        {
+                            <a href='/供应商后台/Gys_Ztb_Search_Zb?page=1'>首页</a><a href='/供应商后台/Gys_Ztb_Search_Zb?page=@(CurrentPage-1)'>上一页</a>
+                        }
+                    }
+                    if (Pagecount <= 6)
+                    {
+                        for (int i = 1; i <= Pagecount; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                            }
+                            else
+                            {
+                                <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (CurrentPage < 6)
+                        {
+                            if (CurrentPage != 1)
+                            {
+                                for (int i = 1; i < 7; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/供应商后台/Gys_Ztb_Search_Zb?page=@(Pagecount)">@Pagecount</a>
+                            }
+                            else
+                            {
+                                for (int i = 1; i < 7; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/供应商后台/Gys_Ztb_Search_Zb?page=@(Pagecount)">@Pagecount</a>
+                            }
+                        }
+                        else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                        {
+                            <a href="/供应商后台/Gys_Ztb_Search_Zb?page=1">1</a><span>...</span>
+                            for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                                }
+                            }
+                            <span>...</span><a href="/供应商后台/Gys_Ztb_Search_Zb?page=@(Pagecount)">@Pagecount</a>
+                        }
+                        else if (CurrentPage >= Pagecount - 3)
+                        {
+                            <a href="/供应商后台/Gys_Ztb_Search_Zb?page=1">1</a><span>...</span>
+                            for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                                }
+                            }
+                        }
+                    }
+                    if (Pagecount > 0)
+                    {
+                        if (CurrentPage != Pagecount)
+                        {
+                            <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@(CurrentPage+1)'>下一页</a><a href='/供应商后台/Gys_Ztb_Search_Zb?page=@(Pagecount)'>末页</a>
+                        }
+                        <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                    }
+                }
             </div>
+
         </div>
     </div>
 </div>
@@ -77,28 +177,7 @@
     }
 </script>
 <script type="text/javascript" language="javascript">
-    @{
-        int pages = int.Parse(ViewData["listcount"].ToString())/int.Parse(ViewData["pagesize"].ToString());
-        if (int.Parse(ViewData["listcount"].ToString())%int.Parse(ViewData["pagesize"].ToString()) > 0)
-        {
-            pages++;
-        }
-    }
-    var num =@(int.Parse(ViewData["page"].ToString()));
-    var j=@pages
     $(document).ready(function () {
-        $(".gys_znxx_content_detailbox a").each(function () {
-            if ($(this).text() == num) {
-                $(this).css("border","1px solid #ff0000");
-            }
-            if (num == j) {
-                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
-            }
-            if (num == 1) {
-                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
-            }
-        });
-
         $("#公告查询").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
         $("#公告查询").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
     });

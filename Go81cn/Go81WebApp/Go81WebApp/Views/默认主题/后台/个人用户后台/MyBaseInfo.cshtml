@@ -1,6 +1,7 @@
 ﻿@model Go81WebApp.Models.数据模型.用户数据模型.个人用户
 @{
     ViewBag.Title = "我的基本信息";
+    Layout = "_BackLayout.cshtml";
 }
 <script src="~/JS/provinceandcity_all.js"></script>
 <link href="~/css/css.css" type="text/css" rel="stylesheet" />
@@ -12,9 +13,7 @@
         @Html.Action("LeftMenu", "布局")
     </div>
     <div class="bg_outdiv_right" style="padding-left:17px;">
-        @using (Html.BeginForm("PersonInfoManage", "个人用户后台"))
-        {
-            Html.AntiForgeryToken();
+       
             <div class="gys_znxx_topbox">
                 <div class="gys_xttz_topbg">
                     <div class="index_bottom_zb_top_title">基本信息设置</div>
@@ -26,113 +25,169 @@
                         <a class="hov" index="0">身份信息</a>
                         <a index="1">头像设置</a>
                         <a index="2">联系方式</a>
+                        <a index="3">密码修改</a>
                     </div>
                     <div class="list_myinfo">
+                   
                         <!--身份信息-->
                         <div class="expert_identity">
-                            <table>
-                                <tr>
-                                    @Html.HiddenFor(model => model.Id)
+                            @using (Html.BeginForm("PersonInfoManage", "个人用户后台"))
+                            {
+                                Html.AntiForgeryToken();
+                                <input type="hidden" value="identity" name="step"/>
+                                <table>
+                                    <tr>
+                                        @Html.HiddenFor(model => model.Id)
+                                        <td class="lab" valign="top">姓名：</td>
+                                        <td valign="top">
+                                            @Html.EditorFor(model => model.个人信息.姓名)<br />
+                                            @Html.ValidationMessageFor(model => model.个人信息.姓名)
+                                        </td>
 
-                                    <td class="lab" valign="top">姓名：</td>
-                                    <td valign="top">
-                                        @Html.EditorFor(model => model.个人信息.姓名)<br />
-                                        @Html.ValidationMessageFor(model => model.个人信息.姓名)
-                                    </td>
+                                        <td class="lab" valign="top">性别：</td>
+                                        <td valign="top">
+                                            @Html.EnumDropDownListFor(model => model.个人信息.性别)
+                                            @Html.ValidationMessageFor(model => model.个人信息.性别)
+                                        </td>
 
-                                    <td class="lab" valign="top">性别：</td>
-                                    <td valign="top">
-                                        @*@Html.EnumDropDownListFor(model => model.身份信息.性别)*@
-                                        @Html.DropDownListFor(model => model.个人信息.性别, ViewData["mysex"] as SelectList)  <br />
-                                        @Html.ValidationMessageFor(model => model.个人信息.性别)
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td class="lab" valign="top">身份证号：</td>
-                                    <td valign="top">
-                                        @Html.EditorFor(model => model.个人信息.身份证号)<br />
-                                        @Html.ValidationMessageFor(model => model.个人信息.身份证号)
-                                    </td>
-                                    <td class="lab" valign="top">出生日期：</td>
-                                    <td valign="top">
-                                        @Html.TextBoxFor(model => model.个人信息.出生日期, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })<br />
-                                        @Html.ValidationMessageFor(model => model.个人信息.出生日期)
-                                    </td>
-                                </tr>
-                            </table>
+                                    </tr>
+                                    <tr>
+                                        <td class="lab" valign="top">身份证号：</td>
+                                        <td valign="top">
+                                            @Html.EditorFor(model => model.个人信息.身份证号)<br />
+                                            @Html.ValidationMessageFor(model => model.个人信息.身份证号)
+                                        </td>
+                                        <td class="lab" valign="top">出生日期：</td>
+                                        <td valign="top">
+                                            @Html.TextBoxFor(model => model.个人信息.出生日期, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })<br />
+                                            @Html.ValidationMessageFor(model => model.个人信息.出生日期)
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div style="text-align:center;"><button class="front_login_rightbox_button" type="submit">提交</button></div>
+                            }
                         </div>
-
+                       
+                   
+                   
                         <!--头像设置-->
-                        @*@Html.TextAreaFor(model => model.登录信息.头像, new { style = "width:500px; height:100px", id = "attachtext" })*@
-                        
                         <div class="expert_identity myhid">
-                            <input type="hidden" id="attachtext" name="attachtext" />
-                            <div><label>当前头像：</label><br /><img src="@Model.登录信息.头像" style="width:150px;height:150px; margin-left:110px;" /></div>
-                            <div id="attachdiv" class="photo_div">
-                                <div class="attachtitle" style="width:922px;">上传新头像</div>
-                                <label>上传说明：</label><font color="red">附件大小不超过100M</font><br />
-                                <div style="text-align:center">
-                                    <div></div>
-                                    <div id="ShowImage" class="product_add_upimagesbox"></div>
-                                    <div class="product_add_upimagesbox_image"></div>
-                                    <div style="padding-top:5px">
-                                        <input type="file" name="uploadify" id="uploadify" />&nbsp;&nbsp;
-                                        <a id="btnBegin" href="javascript:return false"><img alt="开始上传" src="~/js/jquery.uploadify-v2.1.4/btn1.jpg" style="border:0px;width:120px;height:30px;" /></a>
+                            @using (Html.BeginForm("PersonInfoManage", "个人用户后台"))
+                            {
+                                Html.AntiForgeryToken();
+                                <input type="hidden" value="attach" name="step" />
+                                <input type="hidden" id="attachtext" name="attachtext" />
+                                <div><label>当前头像：</label><br /><img src="@Model.登录信息.头像" style="width:150px;height:150px; margin-left:110px;" /></div>
+                                <div id="attachdiv" class="photo_div">
+                                    <div class="attachtitle" style="width:922px;">上传新头像</div>
+                                    <label>上传说明：</label><font color="red">附件大小不超过100M</font><br />
+                                    <div style="text-align:center">
+                                        <div></div>
+                                        <div id="ShowImage" class="product_add_upimagesbox"></div>
+                                        <div class="product_add_upimagesbox_image"></div>
+                                        <div style="padding-top:5px">
+                                            <input type="file" name="uploadify" id="uploadify" />&nbsp;&nbsp;
+                                            <a id="btnBegin" href="javascript:return false"><img alt="开始上传" src="~/js/jquery.uploadify-v2.1.4/btn1.jpg" style="border:0px;width:120px;height:30px;" /></a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!--联系方式-->
-                        <div class="expert_identity myhid">
-                            <table>
-                                <tr>
-                                    <td class="lab" valign="top">手机：</td>
-                                    <td valign="top">
-                                        @Html.EditorFor(model => model.联系方式.手机)<br />
-                                        @Html.ValidationMessageFor(model => model.联系方式.手机)
-                                    </td>
-                                    <td class="lab" valign="top">固定电话：</td>
-                                    <td valign="top">
-                                        @*@Html.EnumDropDownListFor(model => model.身份信息.性别)*@
-                                        @Html.EditorFor(model => model.联系方式.固定电话)  <br />
-                                        @Html.ValidationMessageFor(model => model.联系方式.固定电话)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="lab" valign="top">电子邮件：</td>
-                                    <td valign="top">
-                                        @Html.EditorFor(model => model.联系方式.电子邮件)<br />
-                                        @Html.ValidationMessageFor(model => model.联系方式.电子邮件)
-                                    </td>
-                                    <td class="lab" valign="top">QQ：</td>
-                                    <td valign="top">
-                                        @Html.EditorFor(model => model.联系方式.QQ) <br />
-                                        @Html.ValidationMessageFor(model => model.联系方式.QQ)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="lab" valign="top">微信：</td>
-                                    <td valign="top">
-                                        @Html.EditorFor(model => model.联系方式.微信)<br />
-                                        @Html.ValidationMessageFor(model => model.联系方式.微信)
-                                    </td>
-                                    <td class="lab" valign="top">微博：</td>
-                                    <td valign="top">
-                                        @Html.EditorFor(model => model.联系方式.微博) <br />
-                                        @Html.ValidationMessageFor(model => model.联系方式.微博)
-                                    </td>
-                                </tr>
-                            </table>
+                                <div style="text-align:center;"><button class="front_login_rightbox_button" type="submit">提交</button></div>
+                            }  
                         </div>
                         
+                  
+                    
+                        <!--联系方式-->
+                        <div class="expert_identity myhid">
+                            @using (Html.BeginForm("PersonInfoManage", "个人用户后台"))
+                            {
+                                Html.AntiForgeryToken();
+                                <input type="hidden" value="contact" name="step" />
+                                <table>
+                                    <tr>
+                                        <td class="lab" valign="top">手机：</td>
+                                        <td valign="top">
+                                            @Html.EditorFor(model => model.联系方式.手机)<br />
+                                            @Html.ValidationMessageFor(model => model.联系方式.手机)
+                                        </td>
+                                        <td class="lab" valign="top">固定电话：</td>
+                                        <td valign="top">
+                                            @*@Html.EnumDropDownListFor(model => model.身份信息.性别)*@
+                                            @Html.EditorFor(model => model.联系方式.固定电话)  <br />
+                                            @Html.ValidationMessageFor(model => model.联系方式.固定电话)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="lab" valign="top">电子邮件：</td>
+                                        <td valign="top">
+                                            @Html.EditorFor(model => model.联系方式.电子邮件)<br />
+                                            @Html.ValidationMessageFor(model => model.联系方式.电子邮件)
+                                        </td>
+                                        <td class="lab" valign="top">QQ：</td>
+                                        <td valign="top">
+                                            @Html.EditorFor(model => model.联系方式.QQ) <br />
+                                            @Html.ValidationMessageFor(model => model.联系方式.QQ)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="lab" valign="top">微信：</td>
+                                        <td valign="top">
+                                            @Html.EditorFor(model => model.联系方式.微信)<br />
+                                            @Html.ValidationMessageFor(model => model.联系方式.微信)
+                                        </td>
+                                        <td class="lab" valign="top">微博：</td>
+                                        <td valign="top">
+                                            @Html.EditorFor(model => model.联系方式.微博) <br />
+                                            @Html.ValidationMessageFor(model => model.联系方式.微博)
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div style="text-align:center;"><button class="front_login_rightbox_button" type="submit">提交</button></div>
+                            }
+                        </div>
+                        
+                    
+                   
+                        <!--密码修改-->
+                        <div class="expert_identity myhid">
+                            @using (Html.BeginForm("PersonInfoManage", "个人用户后台"))
+                            {
+                                Html.AntiForgeryToken();
+                                <input type="hidden" value="password" name="step" />
+                                <table>
+                                    <tr>
+                                        <td class="lab" valign="top">原密码：</td>
+                                        <td valign="top">
+                                           <input type="password" name="oldpwd" />
+                                            <span style="color:red">*</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="lab" valign="top">新密码：</td>
+                                        <td valign="top">
+                                            <input type="password" name="newpwd" />
+                                            <span style="color:red">*</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="lab" valign="top">确认新密码：</td>
+                                        <td valign="top">
+                                            <input type="password" name="confirmpwd" />
+                                            <span style="color:red">*</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div style="text-align:center;"><button class="front_login_rightbox_button" id="pwd_sub" type="submit">提交</button></div>
+                            }
+                        </div>
+                        
+                   
                     </div>
-                    <div style="text-align:center;"><button class="front_login_rightbox_button" id="btn_sub" type="submit">提交</button></div>
+                    
                 </div>
             </div>
 
-        }
+        
         <link type="text/css" rel="stylesheet" href="~/JS/jquery.uploadify-v2.1.4/uploadify.css" />
         
         <script type="text/javascript" language="javascript" src="~/JS/jquery.uploadify-v2.1.4/jquery.uploadify.v2.1.4.js" charset="gb2312"></script>
@@ -183,6 +238,31 @@
             }
          </script>
         <script type="text/javascript">
+            $("#pwd_sub").click(function () {
+                var pwd = $("input[name='oldpwd']").val();
+                var pwd1 = $("input[name='newpwd']").val();
+                var pwd2 = $("input[name='confirmpwd']").val();
+                                     
+                if ($.trim(pwd) == "") { alert("请输入原密码"); return false;}
+                if ($.trim(pwd1) == "") { alert("请输入新密码"); return false; }
+                if ($.trim(pwd2) == "") { alert("请确认新密码"); return false; }
+
+                if ($.trim(pwd1) != $.trim(pwd2)) {
+                    alert("新密码两次输入不一致！");
+                    return false;
+                }
+            });
+
+            $("input[name='newpwd']").blur(function () {
+                if (!$.trim($(this).val()).match("[a-zA-Z0-9]{6,}")) {
+                    $(this).next().html("请输入六位以上有效密码!");
+                    return false;
+                }
+                else {
+                    $(this).next().html("*");
+                }
+            });
+
             $(".expert_info_tab a").click(function () {
                 var index = $(this).attr("index");
                 $(this).addClass("hov").siblings().removeClass("hov").parents(".expert_info_tab").next(".list_myinfo").children().hide().eq(index).show();

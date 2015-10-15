@@ -34,7 +34,7 @@
                         }
                         else
                         {
-                            <span>还没有个人头像，<a href="###" style="color:red;" onclick="showUpload(this)">点击这里</a>添加头像</span>
+                            <span style="display:block; width:100px;color:#000;">还没有个人头像，<a href="###" style="color:red;" onclick="showUpload(this)">点击这里</a>添加头像</span>
                         }
                     </td>
                 </tr>
@@ -46,9 +46,9 @@
                 </tr>
                 <tr>
                     <td align="right">新密码：</td>
-                    <td>
+                    <td style="position:relative;">
                         <input type="password" id="pwd0" name="p" value="" />
-                        <div class="out_box">
+                        <div class="out_box" style="left:160px;">
                             <div class="arrow"></div>
                             <div class="con_box">请填写新密码,<span style="color:red;">请记住修改后的密码</span></div>
                         </div>
@@ -56,9 +56,9 @@
                 </tr>
                 <tr>
                     <td align="right">确认密码：</td>
-                    <td>
+                    <td style="position:relative;">
                         <input onmouseout="checkpwd()" id="pwd1" type="password" name="p1" value="" />
-                        <div class="out_box">
+                        <div class="out_box" style="left:160px;">
                             <div class="arrow"></div>
                             <div class="con_box">请再次输入新密码,<span style="color:red;">请记住修改后的密码</span></div>
                         </div>
@@ -74,9 +74,9 @@
                     <table width="100%" style="font-size:14px;margin-left: 167px;">
                         <tr>
                             <td width="25%" align="right">请选择图片展示图片：</td>
-                            <td width="75%">
-                                <input type="file" onchange="fileChange()" accept="image/jpeg" name="file1" size="40"/>
-                                <div class="out_box">
+                            <td width="75%" style="position:relative;">
+                                <input type="file" onchange="fileChange()" accept="image/jpeg" name="file1" size="40" />
+                                <div class="out_box" style="left:150px;">
                                     <div class="arrow"></div>
                                     <div class="con_box"><em style="color:red;">注：请上传2M以下的jpg格式的彩色图片</em></div>
                                 </div>
@@ -117,7 +117,6 @@
     }
     function showUpload(th) {
         $("#Uppicture").css("display", "inline-block");
-        $(th).hide();
     }
     function fileChange() {
         document.forms["upload"].submit();

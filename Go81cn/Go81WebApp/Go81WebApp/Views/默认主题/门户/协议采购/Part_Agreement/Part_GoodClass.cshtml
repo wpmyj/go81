@@ -1,638 +1,138 @@
-﻿@model IEnumerable<Go81WebApp.Models.数据模型.商品数据模型.商品分类>
+﻿@model IEnumerable<商品分类>
 @using Go81WebApp.Models.数据模型
 @using Go81WebApp.Models.数据模型.商品数据模型
 @using Go81WebApp.Models.管理器
+@using MongoDB.Driver
+
 <link href="~/css/css.css" rel="stylesheet" />
-
-<div class="goodclass" style="border:1px solid #999;border-top:none;">
-    
-    <div class="goodclass_yjfn">
-        <div class="yjfn_name">计算机及外设</div>
-    </div>
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">台式电脑</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("台式电脑", "Agreement_Good", new { id = "665", name = "台式计算机" }, new { target = "_blank" }) 
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(665, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">笔记本电脑</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("笔记本电脑", "Agreement_Good", new { id = "666", name = "便携式计算机" }, new { target = "_blank" }) 
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(666, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">平板电脑</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("平板电脑", "Agreement_Good", new { id = "668", name = "平板计算机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(668, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">服务器</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("刀片服务器", "Agreement_Good", new { id = "689", name = "刀片服务器" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(689, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("服务器机箱", "Agreement_Good", new { id = "690", name = "服务器机箱" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(690, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("企业级服务器", "Agreement_Good", new { id = "687", name = "企业级服务器" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(687, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("加固服务器", "Agreement_Good", new { id = "688", name = "加固服务器" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(688, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("入门级服务器", "Agreement_Good", new { id = "684", name = "入门级服务器" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(684, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("工作组级服务器", "Agreement_Good", new { id = "685", name = "工作组级服务器" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(685, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("部门级服务器", "Agreement_Good", new { id = "686", name = "部门级服务器" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(686, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">交换机</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("交换机", "Agreement_Good", new { id = "693", name = "交换机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(693, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">路由器</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("路由器", "Agreement_Good", new { id = "692", name = "路由器" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(692, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">防火墙</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("防火墙", "Agreement_Good", new { id = "721", name = "防火墙" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(721, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">打印机</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("专业打印机", "Agreement_Good", new { id = "11", name = "专业打印机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(11, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("喷墨打印机", "Agreement_Good", new { id = "9", name = "喷墨打印机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(9, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("针式打印机", "Agreement_Good", new { id = "10", name = "针式打印机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(10, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("速印机", "Agreement_Good", new { id = "6", name = "速印机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(6, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("激光打印机", "Agreement_Good", new { id = "8", name = "激光打印机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(8, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">扫描仪</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("扫描仪", "Agreement_Good", new { id = "16", name = "扫描仪" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(16, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">刻录机</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("刻录机", "Agreement_Good", new { id = "938", name = "刻录机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(938, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">电脑软件</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("多媒体软件", "Agreement_Good", new { id = "748", name = "多媒体软件" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(748, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("备份软件", "Agreement_Good", new { id = "749", name = "备份软件" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(749, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("安全软件", "Agreement_Good", new { id = "746", name = "安全软件" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(746, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("办公软件", "Agreement_Good", new { id = "744", name = "办公软件" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(744, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("防病毒软件", "Agreement_Good", new { id = "745", name = "防病毒软件" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(745, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("操作系统", "Agreement_Good", new { id = "741", name = "操作系统" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(741, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("数据库管理软件", "Agreement_Good", new { id = "742", name = "数据库管理软件" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(742, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("网络软件", "Agreement_Good", new { id = "743", name = "网络软件" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(743, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">移动存储设备</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("容灾备份设备", "Agreement_Good", new { id = "714", name = "容灾备份设备" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(714, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("U盘", "Agreement_Good", new { id = "711", name = "U盘" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(711, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("磁带", "Agreement_Good", new { id = "712", name = "磁带" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(712, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("存储用光纤机", "Agreement_Good", new { id = "713", name = "存储用光纤机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(713, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("磁盘阵列", "Agreement_Good", new { id = "710", name = "磁盘阵列" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(710, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("磁带库", "Agreement_Good", new { id = "708", name = "磁带库" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(708, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("磁盘机", "Agreement_Good", new { id = "709", name = "磁盘机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(709, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("光盘库", "Agreement_Good", new { id = "705", name = "光盘库" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(705, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("磁带机", "Agreement_Good", new { id = "707", name = "磁带机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(707, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("塔式光盘机", "Agreement_Good", new { id = "706", name = "塔式光盘机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(706, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("光盘", "Agreement_Good", new { id = "704", name = "光盘" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(704, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">便携式视频（播放）设备</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("便携式电影放映机", "Agreement_Good", new { id = "795", name = "便携式电影放映机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(795, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("闭路播放设备", "Agreement_Good", new { id = "792", name = "闭路播放设备" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(792, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("箱体屏墙", "Agreement_Good", new { id = "774", name = "箱体屏墙" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(774, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("大型投影机", "Agreement_Good", new { id = "775", name = "大型投影机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(775, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("屏幕", "Agreement_Good", new { id = "776", name = "屏幕" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(776, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">其他计算机外接设备</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("显示器", "Agreement_Good", new { id = "676", name = "显示器" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(676, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("纪录塔", "Agreement_Good", new { id = "681", name = "纪录塔" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(681, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink(" 军人保障卡配套应用设备", "Agreement_Good", new { id = "682", name = "军人保障卡配套应用设备" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(682, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("硬盘", "Agreement_Good", new { id = "678", name = "硬盘" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(678, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("手写屏", "Agreement_Good", new { id = "679", name = "手写屏" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(679, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("手写板", "Agreement_Good", new { id = "680", name = "手写板" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(680, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("光驱", "Agreement_Good", new { id = "677", name = "光驱" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(677, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("数据采集器", "Agreement_Good", new { id = "673", name = "数据采集器" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(673, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("鼠标", "Agreement_Good", new { id = "674", name = "鼠标" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(674, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("键盘", "Agreement_Good", new { id = "675", name = "键盘" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(675, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    @*<div class="goodclass_ejfn">
-        <table>
-            <tr>
-                <td class="ejfn_name" valign="top">计算机及外设用耗材</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("计算机外设耗材", "Agreement_Good", new { id = "", name = "" }, new { target = "_blank" })
-                </td>
-            </tr>
-        </table>
-    </div>*@
-
-    <div class="goodclass_yjfn">
-        <div class="yjfn_name">办公设备</div>
-    </div>
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">复印机</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("光化学复印机", "Agreement_Good", new { id = "7", name = "光化学复印机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(7, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("热敏复印机", "Agreement_Good", new { id = "5", name = "热敏复印机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(5, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("静电复印机", "Agreement_Good", new { id = "4", name = "静电复印机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(4, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">多功能一体机</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("多功能一体机", "Agreement_Good", new { id = "3", name = "多功能一体机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(3, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">传真机</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink(" 激光传真机", "Agreement_Good", new { id = "14", name = "激光传真机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(14, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink(" 喷墨传真机", "Agreement_Good", new { id = "15", name = "喷墨传真机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(15, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink(" 热敏纸传真机", "Agreement_Good", new { id = "12", name = "热敏纸传真机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(12, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink(" 色带传真机", "Agreement_Good", new { id = "13", name = "色带传真机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(13, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">碎纸机</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("碎纸机", "Agreement_Good", new { id = "22", name = "碎纸机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(22, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">文件柜（盒、夹）</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("文件柜（盒、夹）", "Agreement_Good", new { id = "108", name = "文件柜" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(108, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">保险柜</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("保险柜", "Agreement_Good", new { id = "106", name = "保险柜" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(106, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">资料（档案）柜</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("资料（档案）柜", "Agreement_Good", new { id = "107", name = "档案柜" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(107, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">办公用纸</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("宣纸", "Agreement_Good", new { id = "65", name = "宣纸" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(65, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("热敏纸", "Agreement_Good", new { id = "62", name = "热敏纸" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(62, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("地图纸", "Agreement_Good", new { id = "63", name = "地图纸" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(63, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("相纸", "Agreement_Good", new { id = "64", name = "相纸" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(64, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("卷筒纸", "Agreement_Good", new { id = "61", name = "卷筒纸" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(61, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("铜版纸", "Agreement_Good", new { id = "59", name = "铜版纸" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(59, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("胶版纸", "Agreement_Good", new { id = "60", name = "胶版纸" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(60, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("打印纸", "Agreement_Good", new { id = "56", name = "打印纸" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(56, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("复印纸", "Agreement_Good", new { id = "57", name = "复印纸" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(57, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("新闻纸", "Agreement_Good", new { id = "58", name = "新闻纸" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(58, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">办公设备耗材</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("剪刀", "Agreement_Good", new { id = "76", name = "剪刀" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(76, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("尺子", "Agreement_Good", new { id = "74", name = "尺子" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(74, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("橡皮", "Agreement_Good", new { id = "75", name = "橡皮" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(75, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("信封", "Agreement_Good", new { id = "71", name = "信封" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(71, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("装订机", "Agreement_Good", new { id = "72", name = "装订机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(72, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("订书机", "Agreement_Good", new { id = "73", name = "订书机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(73, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("笔", "Agreement_Good", new { id = "69", name = "笔" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(69, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("墨盒", "Agreement_Good", new { id = "67", name = "墨盒" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(67, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("色带", "Agreement_Good", new { id = "68", name = "色带" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(68, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("硒鼓", "Agreement_Good", new { id = "66", name = "硒鼓" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(66, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-
-                </td>
-            </tr>
-        </table>
-    </div>
-
-
-    <div class="goodclass_yjfn">
-        <div class="yjfn_name">影音设备</div>
-    </div>
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">照相设备</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("数码照相机", "Agreement_Good", new { id = "32", name = "数码照相机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(32, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("光学照相机", "Agreement_Good", new { id = "33", name = "光学照相机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(33, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">摄录像（音）设备</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("摄录一体机", "Agreement_Good", new { id = "40", name = "摄录一体机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(40, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("高拍仪", "Agreement_Good", new { id = "37", name = "高拍仪" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(37, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("便携式摄像机", "Agreement_Good", new { id = "38", name = "便携式摄像机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(38, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("专业摄像机", "Agreement_Good", new { id = "39", name = "专业摄像机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(39, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">投影仪</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("CRT投影仪", "Agreement_Good", new { id = "29", name = "CRT投影仪" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(29, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("实物投影仪", "Agreement_Good", new { id = "30", name = "实物投影仪" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(30, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("液晶光阀投影仪", "Agreement_Good", new { id = "28", name = "液晶光阀投影仪" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(28, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("数码投影仪", "Agreement_Good", new { id = "26", name = "数码投影仪" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(26, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("液晶板投影仪", "Agreement_Good", new { id = "27", name = "液晶板投影仪" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(27, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("投影机", "Agreement_Good", new { id = "25", name = "投影机" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(25, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">音响设备</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("音响处理器", "Agreement_Good", new { id = "805", name = "音响处理器" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(805, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("麦克风", "Agreement_Good", new { id = "797", name = "麦克风" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(797, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("组合音响", "Agreement_Good", new { id = "791", name = "组合音响" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(791, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("喇叭", "Agreement_Good", new { id = "788", name = "喇叭" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(788, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("话筒", "Agreement_Good", new { id = "789", name = "话筒" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(789, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("音箱", "Agreement_Good", new { id = "787", name = "音箱" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(787, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">监控设备</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("监控设备", "Agreement_Good", new { id = "940", name = "监控设备" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(940, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">LED屏幕</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("LED屏", "Agreement_Good", new { id = "773", name = "LED屏" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(773, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-   
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">其他影音设备</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("三脚架", "Agreement_Good", new { id = "34", name = "三脚架" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(34, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("镜头", "Agreement_Good", new { id = "35", name = "镜头" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(35, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                    @Html.ActionLink("闪光灯", "Agreement_Good", new { id = "36", name = "闪光灯" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(36, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态==审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌!=null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="goodclass_yjfn">
-        <div class="yjfn_name">办公(酒店)家具类</div>
-    </div>
-
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">办公（酒店）家具</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("金属凳", "Agreement_Good", new { id = "104", name = "金属凳" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(104, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("金属床", "Agreement_Good", new { id = "105", name = "金属床" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(105, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("金属椅", "Agreement_Good", new { id = "103", name = "金属椅" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(103, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("金属桌", "Agreement_Good", new { id = "102", name = "金属桌" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(102, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-
-                    @Html.ActionLink("木柜", "Agreement_Good", new { id = "99", name = "书柜" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(99, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("木架", "Agreement_Good", new { id = "100", name = "书架" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(100, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("木凳", "Agreement_Good", new { id = "96", name = "凳子" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(96, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("木床", "Agreement_Good", new { id = "97", name = "床" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(97, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-
-                    @Html.ActionLink("沙发", "Agreement_Good", new { id = "98", name = "沙发" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(98, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("餐桌", "Agreement_Good", new { id = "93", name = "餐桌" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(93, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("电脑桌", "Agreement_Good", new { id = "94", name = "电脑桌" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(94, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("椅子", "Agreement_Good", new { id = "95", name = "椅子" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(95, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-
-                    @Html.ActionLink("办工桌", "Agreement_Good", new { id = "91", name = "办工桌" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(91, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("会议桌", "Agreement_Good", new { id = "92", name = "会议桌" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(92, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("竹制家具", "Agreement_Good", new { id = "112", name = "竹制家具等" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(112, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("塑料家具", "Agreement_Good", new { id = "110", name = "塑料家具" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(110, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                    @Html.ActionLink("藤制家具", "Agreement_Good", new { id = "111", name = "藤制家具" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(111, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-    <div class="goodclass_yjfn">
-        <div class="yjfn_name">系统集成类</div>
-    </div>
-    <div class="goodclass_ejfn">
-        <table cellspacing="0">
-            <tr>
-                <td class="ejfn_name" valign="top">系统集成</td>
-                <td class="sjfn_name">
-                    @Html.ActionLink("软件开发", "Agreement_Good", new { id = "861", name = "软件开发" }, new { target = "_blank" })
-                    <span style="margin-left:-10px;">(@商品管理.计数分类下商品(861, 0, 0, MongoDB.Driver.Builders.Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 && o.采购信息.参与协议采购 && o.商品信息.品牌 != null)))</span>
-                </td>
-            </tr>
-        </table>
-    </div>
-    @*@if (Model != null && Model.Any())
+<style type="text/css">
+    .highlight {
+        background: green;
+        font-weight: bold;
+        color: white;
+    }
+</style>
+<div id="classbox" style="width:947px;border: 1px solid rgb(204, 210, 176); margin-top: 10px;">
+    @if (Model != null && Model.Any())
     {
         foreach (var i in Model)
         {
-            <div class="goodclass_yjfn">
-                <div class="yjfn_name">@i.分类名</div>
-            </div>
-            foreach (var f in i.子分类)
+            if (i.分类性质 == 商品分类性质.通用物资)
             {
-                <div class="goodclass_ejfn">
-                    <table>
-                        <tr>
-                            <td class="ejfn_name" valign="top">@f.分类名</td>
-                            <td class="sjfn_name">
-                                @foreach (var g in f.子分类)
-                                {
-                                    @Html.ActionLink(g.分类名, "Agreement_Good", new { id = g.Id, name = g.分类名 }, new { target="_blank"})
-                                }
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                if (ViewData["id"].ToString() == "1")
+                {
+                    if (i.Id == 1)
+                    {
+                        <div class="goodclass_yjfn">
+                            <div class="yjfn_name">@i.分类名</div>
+                        </div>
+                        foreach (var f in i.子分类)
+                        {
+                            <div class="goodclass_ejfn">
+                                <table width="100%" cellspacing="0">
+                                    <tr>
+                                        <td class="ejfn_name">@f.分类名</td>
+                                        <td class="sjfn_name" style="padding-left:30px;">
+                                            @foreach (var g in f.子分类)
+                                            {
+                                                var thisproductclasscount = 商品管理.计数分类下商品(g.Id, 0, 0, MongoDB.Driver.Builders.Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false);
+                                                if (thisproductclasscount > 0)
+                                                {
+                                                    <a href="/协议采购/Agreement_Good?id=@g.Id&name=@g.分类名">@g.分类名 (@商品管理.计数分类下商品(g.Id, 0, 0, MongoDB.Driver.Builders.Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false))</a>
+                                                }
+                                                else
+                                                {
+                                                    <a style="color:#999;">@g.分类名 (@商品管理.计数分类下商品(g.Id, 0, 0, MongoDB.Driver.Builders.Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false))</a>
+                                                }
+
+                                            }
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        }
+                    }
+                }
             }
         }
-    }*@
+    }
 </div>
+
+
+
+<script type="text/javascript" language="javascript">
+    //$(document).ready(function () { $("div.Page2").css("background-color", "#990808"); });
+
+    $(document).ready(function () {
+        var d = $("#data").val();
+        if (d == "1") {
+            $(".action_link").each(function () {
+                if ($(this).text() == "办公物资") {
+                    $(this).parent("div").addClass("on");
+                }
+            });
+        }
+        else {
+            $(".action_link").each(function () {
+                if ($(this).text() == "采购商城") {
+                    $(this).parent("div").addClass("on");
+                }
+            });
+        }
+    });
+</script>
+<script type="text/javascript">
+    $("#search_btn").click(function () {
+        highlight($("#s").val());
+    });
+    function encode(s) {
+        return s.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">").replace(/([\\\.\*\[\]\(\)\$\^])/g, "\\$1");
+    }
+    function decode(s) {
+        return s.replace(/\\([\\\.\*\[\]\(\)\$\^])/g, "$1").replace(/>/g, ">").replace(/</g, "<").replace(/&/g, "&");
+    }
+    function highlight(s) {
+        if (s.length == 0) {
+            alert('搜索关键词未填写！');
+            return false;
+        }
+        s = encode(s);
+        var obj = document.getElementById("classbox");
+        var t = obj.innerHTML.replace(/<span\s+class=.?highlight.?>([^<>]*)<\/span>/gi, "$1");
+        obj.innerHTML = t;
+        var cnt = loopSearch(s, obj);
+        t = obj.innerHTML
+        var r = /{searchHL}(({(?!\/searchHL})|[^{])*){\/searchHL}/g
+        t = t.replace(r, "<span class='highlight'>$1</span>");
+        obj.innerHTML = t;
+        var gg = window.find(s, false, true);
+        //if (!gg){
+        //    alert("未找到相关项！");
+        //}
+
+    }
+    function loopSearch(s, obj) {
+        var cnt = 0;
+        if (obj.nodeType == 3) {
+            cnt = replace(s, obj);
+            return cnt;
+        }
+        for (var i = 0, c; c = obj.childNodes[i]; i++) {
+            if (!c.className || c.className != "highlight")
+                cnt += loopSearch(s, c);
+        }
+        return cnt;
+    }
+    function replace(s, dest) {
+        var r = new RegExp(s, "g");
+        var tm = null;
+        var t = dest.nodeValue;
+        var cnt = 0;
+        if (tm = t.match(r)) {
+            cnt = tm.length;
+            t = t.replace(r, "{searchHL}" + decode(s) + "{/searchHL}")
+            dest.nodeValue = t;
+        }
+        return cnt;
+    }
+</script>
