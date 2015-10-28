@@ -1,7 +1,7 @@
 ﻿@model Go81WebApp.Models.数据模型.项目数据模型.验收单
 @using Go81WebApp.Models.数据模型.项目数据模型;
 @using Go81WebApp.Models.数据模型.用户数据模型;
-<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/css.css" rel=" styl esheet" />
 <link href="~/css/Msg_Tips.css" rel="stylesheet" />
 <script type="text/javascript" src="~/JS/NTClientJavascript.js"></script>
 <div id="title_div" class="gys_xttz_topbg">
@@ -24,7 +24,6 @@
                     <span style="color:red;" id="errortips"></span>
                 </div>
                 <div style="width: 100%; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" id="submitpassword" class="gys_ztbsearch_search_botton" style="margin-left:0;" value="确  定" onclick="return OnLogon();" /></div>
-
             </div>
         </div>
     </div>
@@ -48,7 +47,7 @@
                 <table width="80%">
                     <tr>
                         <td width="50%" align="right" valign="top">验收单号：</td>
-                        <td width="50%">
+                        <td width="50%" style="position:relative;">
                             <select style="width:155px;" name="selectSh_unit" id="selectSh_unit">
                                 <option>请选择验收单号</option>
                                 @{
@@ -59,7 +58,7 @@
                 }
                                 }
                             </select>
-                            <div class="out_box">
+                            <div class="out_box" style="left:160px;">
                                 <div class="arrow"></div>
                                 <div class="con_box">只能选择已经打印的验收单</div>
                             </div>

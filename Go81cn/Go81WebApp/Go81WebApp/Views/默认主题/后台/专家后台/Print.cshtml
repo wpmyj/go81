@@ -177,32 +177,28 @@
                 <tr>
                     <td style="height:190px;" align="center">可参评的<br />物资类别</td>
                     <td align="left" colspan="6">
-                        @{string g = "";}
                         @if (Model.可参评物资类别列表 != null && Model.可参评物资类别列表.Count() != 0)
                         {
                         <table style="border:none;">
                             @foreach (var item in Model.可参评物资类别列表)
-                                {
+                            {
+                                string g = "";
                                 <tr>
-                                    <td style="border:none;">
-                                        @item.一级分类
-                                        <table style="border:none;">
-                                            <tr>
-                                                <td style="border:none;">
-                                                    @if (item.二级分类 != null && item.二级分类.Count() != 0)
-                                                        {
-                                                            foreach (var m in item.二级分类)
-                                                            {
-                                                                g += m + "、"; ;
-                                                            }
-                                                        <span>@g</span>
-                                                        }
-                                                </td>
-                                            </tr>
-                                        </table>
+                                    <td align="right" valign="top" style="width:120px; border:none;height:30px;">
+                                        @item.一级分类：
+                                    </td>
+                                    <td colspan="4" style="border:none;height:30px;">
+                                        @if (item.二级分类 != null && item.二级分类.Count() != 0)
+                                        {
+                                            foreach (var m in item.二级分类)
+                                            {
+                                                g += m + "、";
+                                            }
+                                            <span>@g</span>
+                                        }
                                     </td>
                                 </tr>
-                                }
+                             }
                         </table>
                         }
                     </td>

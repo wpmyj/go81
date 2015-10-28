@@ -30,7 +30,7 @@
             <table class="front_login_rightbox">
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">账户名：</td>
-                    <td class="front_login_rightbox_inputdiv">
+                    <td class="front_login_rightbox_inputdiv" style="position:relative;">
                         @Html.TextBoxFor(model => model.loginName, new { autocomplete = "off" })
                         <div class="out_box">
                             <div class="arrow"></div>
@@ -41,7 +41,7 @@
                 </tr>
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">请设置密码：</td>
-                    <td class="front_login_rightbox_inputdiv">
+                    <td class="front_login_rightbox_inputdiv" style="position:relative;">
                         @Html.PasswordFor(model => model.Pwd, new { autocomplete = "off" })
                         <div class="out_box">
                             <div class="arrow"></div>
@@ -52,7 +52,7 @@
                 </tr>
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">请确认密码：</td>
-                    <td class="front_login_rightbox_inputdiv">
+                    <td class="front_login_rightbox_inputdiv" style="position:relative;">
                         @Html.PasswordFor(model => model.PwdConfirm)
                         <div class="out_box">
                             <div class="arrow"></div>
@@ -61,7 +61,7 @@
                         @Html.ValidationMessageFor(model => model.PwdConfirm)
                     </td>
                 </tr>
-                <tr class="front_login_rightbox_listdiv">
+                @*<tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">姓名：</td>
                     <td class="front_login_rightbox_inputdiv">
                         @Html.EditorFor(model => model.Name)
@@ -82,10 +82,10 @@
                         </div><span style="color:red;">*</span>
                         @Html.ValidationMessageFor(model => model.PwdConfirm)
                     </td>
-                </tr>
+                </tr>*@
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">手机：</td>
-                    <td class="front_login_rightbox_inputdiv">
+                    <td class="front_login_rightbox_inputdiv" style="position:relative;">
                         @Html.EditorFor(model => model.Phone)
                         <div class="out_box">
                             <div class="arrow"></div>
@@ -94,7 +94,7 @@
                         @Html.ValidationMessageFor(model => model.PwdConfirm)
                     </td>
                 </tr>
-                <tr class="front_login_rightbox_listdiv">
+                @*<tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">邮箱：</td>
                     <td class="front_login_rightbox_inputdiv">
                         @Html.EditorFor(model => model.Emial)
@@ -104,10 +104,10 @@
                         </div><span style="color:red;">*</span>
                         @Html.ValidationMessageFor(model => model.PwdConfirm)
                     </td>
-                </tr>
+                </tr>*@
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">验证码：</td>
-                    <td id="Veryfy_Code" class="front_login_rightbox_inputdiv">
+                    <td id="Veryfy_Code" class="front_login_rightbox_inputdiv" style="position:relative;">
                         @Html.TextBoxFor(m => m.verifyCode)
                         <div class="out_box">
                             <div class="arrow" style="margin-left: 90px;"></div>
@@ -116,7 +116,7 @@
                         <span></span>
                         <img src=@Url.Action("NewVCodeImage", "登录") style="cursor:pointer;vertical-align:middle;margin-left:5px;" title="看不清，换一张" alt="看不清，换一张" onclick='$(this).attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());' />
                         <span>@ViewBag.VCodeError</span>
-                        
+
                     </td>
                 </tr>
                 <tr class="front_login_rightbox_listdiv">

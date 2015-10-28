@@ -189,43 +189,43 @@
             @Html.HiddenFor(model => model.Id)
             <table class="accept">
                 <tr>
-                    <td align="right">审核单位：</td>
+                    <td style="text-align:right;">审核单位：</td>
                     <td width="105px;">
                         @Html.HiddenFor(model => model.管理单位审核人.用户ID, new { @id = "unit_user_sh" })
                         <select style="width:100px;" name="checker" id="selectSh_unit">
                             @{
-            var sh_unit = ViewData["审核单位列表"] as IEnumerable<单位用户>;
+            var sh_unit = ViewData["审核单位列表"] as List<Go81WebApp.Controllers.后台.供应商后台Controller.ysdData>;
             foreach (var j in sh_unit)
             {
                 if (j.Id == Model.管理单位审核人.用户ID)
                 {
-                    <option selected="selected" value="@j.Id">@j.验收单审核单位名称</option>
+                    <option selected="selected" value="@j.Id">@j.name</option>
                 }
                 else
                 {
-                    <option value="@j.Id">@j.验收单审核单位名称</option>
+                    <option value="@j.Id">@j.name</option>
                 }
-                
+
             }
                             }
                         </select>
                     </td>
-                    <td>收货单位：</td>
-                    <td width="268px;">
+                    <td style="text-align:right;">收货单位：</td>
+                    <td width="268px;" style="text-align:left;">
                         @*@Html.HiddenFor(model => model.收货单位, new { @id = "unit_user_id" })*@
                         @*<select onchange="showtext(this)" id="unit_user" style="width:130px;">
-                                @{
-                                    var dw = ViewData["收货单位列表"] as IEnumerable<单位用户>;
-                                    foreach (var t in dw)
-                                    {
-                                        <option value="@t.单位信息.单位名称">@t.单位信息.单位名称</option>
-                                    }
-                                }
-                                <option value="-1">不限</option>
-                            </select>*@
+                @{
+                    var dw = ViewData["收货单位列表"] as IEnumerable<单位用户>;
+                    foreach (var t in dw)
+                    {
+                        <option value="@t.单位信息.单位名称">@t.单位信息.单位名称</option>
+                    }
+                }
+                <option value="-1">不限</option>
+            </select>*@
                         @Html.TextBoxFor(model => model.收货单位, new { id = "reciever", style = "width:120px" })
                     </td>
-                    <td>供货单位开票人：</td>
+                    <td style="text-align:right;">供货单位开票人：</td>
                     <td width="160px;">@Html.EditorFor(model => model.供货单位开票人, new { id = "sender", style = "width:155px;" })</td>
                 </tr>
                 <tr>
@@ -312,26 +312,29 @@
                 int d = (int)Math.Ceiling(Convert.ToDouble(s.ToString()));
                 for (int i = 0; i <= d; i++)
                 {
-                    <tr>
-                        @if (i < d)
+                    if (i < d)
+                    {
+                        for (int j = (3 * ((1 / 3) + i)) + 1; j <= 3 * (i + 1); j++)
                         {
-                            for (int j = (3 * ((1 / 3) + i)) + 1; j <= 3 * (i + 1); j++)
-                            {
-                                <td style="font-size:13px; text-align:right;">
-                                    @Html.TextBoxFor(m => m.其他费用[j - 1].费用名称, new { @style = "width:50px;", placeholder = "费用名称" })
+                            <tr>
+                                <td style=" text-align:right;" colspan="3">
+                                    费用名称：@Html.TextBoxFor(m => m.其他费用[j - 1].费用名称, new { @style = "width:50px;", placeholder = "费用名称" })
                                 </td>
-                                <td>@Html.EditorFor(model => model.其他费用[j - 1].金额, new { placeholder = "费用金额" })</td>
-                            }
+                                <td>费用金额：@Html.EditorFor(model => model.其他费用[j - 1].金额, new { placeholder = "费用金额" })</td>
+                            </tr>
                         }
-                        else
+                    }
+                    else
+                    {
+                        for (int j = 3 * i + 1; j <= Model.其他费用.Count; j++)
                         {
-                            for (int j = 3 * i + 1; j <= Model.其他费用.Count; j++)
-                            {
-                                <td style="font-size:13px; text-align:right;">@Html.TextBoxFor(m => m.其他费用[j - 1].费用名称, new { @style = "width:50px;", placeholder = "费用名称" }) </td>
-                                <td>@Html.TextBoxFor(model => model.其他费用[j - 1].金额, new { placeholder = "费用金额" })</td>
-                            }
+                            <tr>
+                                <td style=" text-align:right;" colspan="3">费用名称：@Html.TextBoxFor(m => m.其他费用[j - 1].费用名称, new { @style = "width:50px;", placeholder = "费用名称" }) </td>
+                                <td>费用金额：@Html.TextBoxFor(model => model.其他费用[j - 1].金额, new { placeholder = "费用金额" })</td>
+                            </tr>
                         }
-                    </tr>
+                    }
+
                 }
             }
                             }

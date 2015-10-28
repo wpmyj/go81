@@ -64,7 +64,7 @@ namespace Go81WebApp.ModuleTester
         }
         private void Button_Click1(object sender, RoutedEventArgs e)
         {
-            List<long> idlist = new List<long> { 10001,10003,20306, 10004, 10005, 10007, 10008, 10009, 10011, 10012, 10013, 10014, 10015, 20057, 20151, 20150, 20145, 20146, 20137, 20138, 20139, 20140, 20141, 20142, 20143, 20144, 20152, 20149, 20314, 20148, 20261, 20292, 20254 };
+            List<long> idlist = new List<long> { 10001, 10003,20317, 20306, 10004, 10005, 10007, 10008, 10009, 10011, 10012, 10013, 10014, 10015, 20057, 20151, 20150, 20145, 20146, 20137, 20138, 20139, 20140, 20141, 20142, 20143, 20144, 20152, 20149, 20314, 20148, 20261, 20292, 20254 };
             foreach (var item in idlist)
             {
                 单位用户 m = 用户管理.查找用户<单位用户>(item);
@@ -235,7 +235,11 @@ namespace Go81WebApp.ModuleTester
                             m.验收单审核单位名称 = "贵州省贵阳市观山湖区人武部";
                             m.印章底部文本 = "";
                             break;
-
+                        case 20317:
+                            m.验收单名称 = "中国人民解放军78655部队";
+                            m.验收单审核单位名称 = "中国人民解放军78655部队";
+                            m.印章底部文本 = "物资采购专用章";
+                            break;
                     }
                     用户管理.更新用户<单位用户>(m);
                 }
@@ -292,7 +296,7 @@ namespace Go81WebApp.ModuleTester
 
             var d1 = 用户管理.查找用户<单位用户>(16);
             d1.登录信息.密码 = "7C4A8D09CA3762AF61E59520943DC26494F8941B";
-            用户管理.更新用户<单位用户>(d1,false);
+            用户管理.更新用户<单位用户>(d1, false);
 
 
             var unitlist = 用户管理.查询用户<单位用户>(0, 0);
@@ -300,7 +304,7 @@ namespace Go81WebApp.ModuleTester
             {
                 if (unit.用户组.Contains("操作员"))
                 {
-                    unit.用户组 = new List<string> {"二级管理员账号"};
+                    unit.用户组 = new List<string> { "二级管理员账号" };
                     用户管理.更新用户<单位用户>(unit, false);
                 }
             }
@@ -416,7 +420,7 @@ namespace Go81WebApp.ModuleTester
             var user = 用户管理.查询用户<单位用户>(0, 0, null, false, SortBy<单位用户>.Ascending(o => o.Id), includeDeleted: true);
             foreach (var u in user)
             {
-                str += u.Id+"\r\n";
+                str += u.Id + "\r\n";
             }
             textBox1.Text = str;
 
@@ -485,7 +489,7 @@ namespace Go81WebApp.ModuleTester
         {
             textBox1.Text = 工具.ImpColl<单位用户>(true).ToString();
             MessageBox.Show("导入完成!开始删除敏感字段！");
-            var userlist = 用户管理.查询用户<单位用户>(0, 0,includeDeleted:false);
+            var userlist = 用户管理.查询用户<单位用户>(0, 0, includeDeleted: false);
             foreach (var user in userlist)
             {
                 user.所属地域 = new _地域();
@@ -623,7 +627,7 @@ namespace Go81WebApp.ModuleTester
                 //输出表尾()
             }
         }
-        
+
         private void Button_Click8(object sender, RoutedEventArgs e)
         {
             #region 修改商品中标字段类型
@@ -650,7 +654,7 @@ namespace Go81WebApp.ModuleTester
             //       Update.Set("中标信息", new BsonArray(KP)));
             //}
             #endregion
-                                               
+
             #region 修改验收单回传字段类型
             //var ysd = Mongo.Coll<验收单>().FindAs<BsonDocument>(Query.Exists("验收单扫描件"));
             //foreach (var y in ysd)
@@ -755,7 +759,7 @@ namespace Go81WebApp.ModuleTester
             //    }
 
             //}
-            #endregion  
+            #endregion
 
             #region 修改专家单位地址字段类型
             var ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("工作经历信息.单位地址"));
@@ -772,9 +776,9 @@ namespace Go81WebApp.ModuleTester
                 Update.Combine(
                 Update.Set("工作经历信息.单位地址", new BsonString("")))
                 );
-                    
+
             }
-            #endregion 
+            #endregion
             MessageBox.Show("OK");
         }
         private void ButtonExpColl_Click(object sender, RoutedEventArgs e)
@@ -820,9 +824,9 @@ namespace Go81WebApp.ModuleTester
                 }
                 else
                 {
-                    zjnamestr += "删除专家ID：" + zj.Id+"\r\n";
+                    zjnamestr += "删除专家ID：" + zj.Id + "\r\n";
                 }
-            }    
+            }
             textBox1.Text = zjnamestr;
         }
         private void Button32_OnClick(object sender, RoutedEventArgs e)
@@ -2152,119 +2156,119 @@ namespace Go81WebApp.ModuleTester
 /// 
 /// 
 /// IEnumerable<公告> model=公告管理.查询公告(0, 0);
-            //IEnumerable<新闻> news = 新闻管理.查询新闻(0,0);
-            //IEnumerable<通知> tz = 通知管理.查询通知(0,0);
-            //IEnumerable<政策法规> policy = 政策法规管理.查询政策法规(0, 0);
-            //string str = "公告里面\r\n\r\n";
-            //foreach(var item in model)
-            //{
-            //    if(item.内容主体.标题.Contains("徐")||item.内容主体.内容.Contains("徐"))
-            //    {
-            //        str += "徐\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if(item.内容主体.标题.Contains("郭")|| item.内容主体.内容.Contains("郭"))
-            //    {
-            //        str += "郭\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if(item.内容主体.标题.Contains("周")|| item.内容主体.内容.Contains("周"))
-            //    {
-            //        str += "周\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if(item.内容主体.标题.Contains("谷")|| item.内容主体.内容.Contains("谷"))
-            //    {
-            //        str += "谷\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if(item.内容主体.标题.Contains("杨")|| item.内容主体.内容.Contains("杨"))
-            //    {
-            //        str += "杨\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if(item.内容主体.标题.Contains("朱")|| item.内容主体.内容.Contains("朱"))
-            //    {
-            //        str += "朱\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //}
-            //str+= "新闻里面\r\n\r\n";
-            //foreach (var item in news)
-            //{
-            //    if (item.内容主体.标题.Contains("徐") || item.内容主体.内容.Contains("徐"))
-            //    {
-            //        str += "徐\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("郭") || item.内容主体.内容.Contains("郭"))
-            //    {
-            //        str += "郭\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("周") || item.内容主体.内容.Contains("周"))
-            //    {
-            //        str += "周\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("谷") || item.内容主体.内容.Contains("谷"))
-            //    {
-            //        str += "谷\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("杨") || item.内容主体.内容.Contains("杨"))
-            //    {
-            //        str += "杨\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("朱") || item.内容主体.内容.Contains("朱"))
-            //    {
-            //        str += "朱\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //}
-            //str += "通知里面\r\n\r\n";
-            //foreach (var item in tz)
-            //{
-            //    if (item.内容主体.标题.Contains("徐") || item.内容主体.内容.Contains("徐"))
-            //    {
-            //        str += "徐\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("郭") || item.内容主体.内容.Contains("郭"))
-            //    {
-            //        str += "郭\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("周") || item.内容主体.内容.Contains("周"))
-            //    {
-            //        str += "周\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("谷") || item.内容主体.内容.Contains("谷"))
-            //    {
-            //        str += "谷\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("杨") || item.内容主体.内容.Contains("杨"))
-            //    {
-            //        str += "杨\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("朱") || item.内容主体.内容.Contains("朱"))
-            //    {
-            //        str += "朱\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //}
-            //str += "政策法规里面\r\n\r\n";
-            //foreach (var item in policy)
-            //{
-            //    if (item.内容主体.标题.Contains("徐") || item.内容主体.内容.Contains("徐"))
-            //    {
-            //        str += "徐\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("郭") || item.内容主体.内容.Contains("郭"))
-            //    {
-            //        str += "郭\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("周") || item.内容主体.内容.Contains("周"))
-            //    {
-            //        str += "周\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("谷") || item.内容主体.内容.Contains("谷"))
-            //    {
-            //        str += "谷\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("杨") || item.内容主体.内容.Contains("杨"))
-            //    {
-            //        str += "杨\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //    else if (item.内容主体.标题.Contains("朱") || item.内容主体.内容.Contains("朱"))
-            //    {
-            //        str += "朱\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
-            //    }
-            //}
-            //textBox1.Text = str;
+//IEnumerable<新闻> news = 新闻管理.查询新闻(0,0);
+//IEnumerable<通知> tz = 通知管理.查询通知(0,0);
+//IEnumerable<政策法规> policy = 政策法规管理.查询政策法规(0, 0);
+//string str = "公告里面\r\n\r\n";
+//foreach(var item in model)
+//{
+//    if(item.内容主体.标题.Contains("徐")||item.内容主体.内容.Contains("徐"))
+//    {
+//        str += "徐\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if(item.内容主体.标题.Contains("郭")|| item.内容主体.内容.Contains("郭"))
+//    {
+//        str += "郭\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if(item.内容主体.标题.Contains("周")|| item.内容主体.内容.Contains("周"))
+//    {
+//        str += "周\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if(item.内容主体.标题.Contains("谷")|| item.内容主体.内容.Contains("谷"))
+//    {
+//        str += "谷\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if(item.内容主体.标题.Contains("杨")|| item.内容主体.内容.Contains("杨"))
+//    {
+//        str += "杨\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if(item.内容主体.标题.Contains("朱")|| item.内容主体.内容.Contains("朱"))
+//    {
+//        str += "朱\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//}
+//str+= "新闻里面\r\n\r\n";
+//foreach (var item in news)
+//{
+//    if (item.内容主体.标题.Contains("徐") || item.内容主体.内容.Contains("徐"))
+//    {
+//        str += "徐\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("郭") || item.内容主体.内容.Contains("郭"))
+//    {
+//        str += "郭\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("周") || item.内容主体.内容.Contains("周"))
+//    {
+//        str += "周\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("谷") || item.内容主体.内容.Contains("谷"))
+//    {
+//        str += "谷\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("杨") || item.内容主体.内容.Contains("杨"))
+//    {
+//        str += "杨\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("朱") || item.内容主体.内容.Contains("朱"))
+//    {
+//        str += "朱\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//}
+//str += "通知里面\r\n\r\n";
+//foreach (var item in tz)
+//{
+//    if (item.内容主体.标题.Contains("徐") || item.内容主体.内容.Contains("徐"))
+//    {
+//        str += "徐\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("郭") || item.内容主体.内容.Contains("郭"))
+//    {
+//        str += "郭\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("周") || item.内容主体.内容.Contains("周"))
+//    {
+//        str += "周\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("谷") || item.内容主体.内容.Contains("谷"))
+//    {
+//        str += "谷\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("杨") || item.内容主体.内容.Contains("杨"))
+//    {
+//        str += "杨\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("朱") || item.内容主体.内容.Contains("朱"))
+//    {
+//        str += "朱\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//}
+//str += "政策法规里面\r\n\r\n";
+//foreach (var item in policy)
+//{
+//    if (item.内容主体.标题.Contains("徐") || item.内容主体.内容.Contains("徐"))
+//    {
+//        str += "徐\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("郭") || item.内容主体.内容.Contains("郭"))
+//    {
+//        str += "郭\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("周") || item.内容主体.内容.Contains("周"))
+//    {
+//        str += "周\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("谷") || item.内容主体.内容.Contains("谷"))
+//    {
+//        str += "谷\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("杨") || item.内容主体.内容.Contains("杨"))
+//    {
+//        str += "杨\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//    else if (item.内容主体.标题.Contains("朱") || item.内容主体.内容.Contains("朱"))
+//    {
+//        str += "朱\r\n" + item.Id.ToString() + "\r\n" + item.内容主体.标题 + "\r\n\r\n";
+//    }
+//}
+//textBox1.Text = str;

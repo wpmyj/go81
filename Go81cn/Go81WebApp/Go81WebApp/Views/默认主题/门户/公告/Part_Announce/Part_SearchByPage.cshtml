@@ -11,12 +11,12 @@
                 <li>
                     @if (ts.TotalHours < 48)
                     {
-                        <img src="~/Images/newico.gif" />
-                        <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" class="new" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                        <img src="~/Images/newico.gif" style="float:left;" />
+                        <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" class="new" href="/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
                     }
                     else
                     {
-                        <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                        <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" href="/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
                     }
                 </li>
             }
@@ -25,12 +25,12 @@
                 <li class="oddlinecolor">
                     @if (ts.TotalHours < 48)
                     {
-                        <img src="~/Images/newico.gif" />
-                        <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" class="new" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                        <img src="~/Images/newico.gif" style="float:left;" />
+                        <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" class="new" href="/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
                     }
                     else
                     {
-                        <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                        <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" href="/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
                     }
                 </li>
             }

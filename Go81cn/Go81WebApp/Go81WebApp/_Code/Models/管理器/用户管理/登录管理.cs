@@ -18,6 +18,11 @@ namespace Go81WebApp.Models.管理器
         /// <returns></returns>
         public static long 检查登录(this HttpContextBase hc)
         {
+            string temp_session = "";
+            if (hc.Session["Ginfo"]!=null)
+            {
+                temp_session = hc.Session["Ginfo"].ToString();
+            }
             long uid = -1;
             if (hc.User.Identity.IsAuthenticated
                 && long.TryParse(hc.User.Identity.Name, out uid)
@@ -30,6 +35,7 @@ namespace Go81WebApp.Models.管理器
                     hc.Session.Clear();
                     hc.Session["u"] = u;
                     hc.Session["p"] = 权限管理.计算权限(u);
+                    hc.Session["Ginfo"] = temp_session;
                     LoginSessions[uid] = hc.Session;
                 }
                 return uid;

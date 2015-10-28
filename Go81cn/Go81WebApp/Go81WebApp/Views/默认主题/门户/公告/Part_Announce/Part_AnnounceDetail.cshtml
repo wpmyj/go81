@@ -1,8 +1,8 @@
 ﻿@using Go81WebApp.Models.数据模型.内容数据模型
+@using NPOI.SS.Formula.Functions
 @model Go81WebApp.Models.数据模型.内容数据模型.公告
 <style type="text/css">
     <!--
-   
     .successed_register {
         height: auto;
         overflow: hidden;
@@ -11,9 +11,9 @@
         border: 1px solid skyblue;
     }
 
-    .successed_register img {
-        float: left;
-    }
+        .successed_register img {
+            float: left;
+        }
 
     .links:hover {
         text-decoration: underline;
@@ -114,11 +114,11 @@
         margin-right: auto;
     }
 
-    table tr td {
-        border: 1px solid gray;
-        border-top: none;
-        border-left: none;
-    }
+        table tr td {
+            border: 1px solid gray;
+            border-top: none;
+            border-left: none;
+        }
 
     .addbt {
         display: inline-block;
@@ -131,18 +131,21 @@
         font-size: 13px;
         background-color: #0094ff;
     }
-
--->
+    -->
 </style>
 @if (!WebApiApplication.IsIntranet)
 {
     <style>
-         .gys_xttz_contentbox{
-        -webkit-user-select:none;
-        -moz-user-select:none;
-        -ms-user-select:none;
-        user-select:none;
-    }
+        .gys_xttz_contentbox {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .gys_xttz_contentbox_news_text {
+            position: relative;
+        }
     </style>
     <script type="text/javascript">
         $(function(){
@@ -225,6 +228,10 @@
 
                     </div>
                     <div class="gys_xttz_contentbox_news_text">
+                        @if (!WebApiApplication.IsIntranet)
+                        {
+                             <div style="position: absolute;WIDTH: 100%;background: url(/Images/go81公告水印.png);height: 100%;"></div>
+                        }
                         @Html.Raw(Model.内容主体.内容)
                     </div>
                     if (Model.内容主体.附件 != null && Model.内容主体.附件.Count > 0)
@@ -246,9 +253,9 @@
                     if (Model.中标商品链接.Any())
                     {
                         <div style="text-align:center;">
-                            <a target="_blank" href="/公告/AnnounceBidGood?id=@Model.Id"><input class="front_login_rightbox_button" type="button" value="查看中标商品" /></a>    
+                            <a target="_blank" href="/公告/AnnounceBidGood?id=@Model.Id"><input class="front_login_rightbox_button" type="button" value="查看中标商品" /></a>
                         </div>
-                        
+
                     }
                 }
             }

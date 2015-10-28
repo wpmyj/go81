@@ -54,4 +54,10 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
             1000000,
         };
     }
+
+    public class 优惠码 : 基本数据模型
+    {
+        public string WeChatUser { get; set; }
+        public string Code { get; set; }
+    }
 }

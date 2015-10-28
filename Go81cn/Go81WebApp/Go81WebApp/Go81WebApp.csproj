@@ -204,6 +204,7 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="_Code\ApiControllers\ExpertController.cs" />
+    <Compile Include="_Code\ApiControllers\HotelController.cs" />
     <Compile Include="_Code\App_Start\BundleConfig.cs" />
     <Compile Include="_Code\App_Start\FilterConfig.cs" />
     <Compile Include="_Code\App_Start\RouteConfig.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="_Code\Controllers\后台\供应商后台Controller.cs" />
     <Compile Include="_Code\Controllers\后台\单位用户后台Controller.cs" />
     <Compile Include="_Code\Controllers\后台\运营团队后台Controller.cs" />
+    <Compile Include="_Code\Controllers\基本功能\PayResultController.cs" />
     <Compile Include="_Code\Controllers\基本功能\WeChatController.cs" />
     <Compile Include="_Code\Controllers\基本功能\布局Controller.cs" />
     <Compile Include="_Code\Controllers\基本功能\注册Controller.cs" />
@@ -313,6 +315,7 @@
     <Compile Include="_Code\Models\数据模型\竞标数据模型\网上竞标.cs" />
     <Compile Include="_Code\Models\数据模型\统计数据模型\广告点击统计.cs" />
     <Compile Include="_Code\Models\数据模型\统计数据模型\登录统计.cs" />
+    <Compile Include="_Code\Models\数据模型\订单数据模型\订单.cs" />
     <Compile Include="_Code\Models\数据模型\需求计划模型\需求计划.cs" />
     <Compile Include="_Code\Models\数据模型\项目数据模型\招标采购项目.cs" />
     <Compile Include="_Code\Models\数据模型\项目数据模型\招标采购预报名.cs" />
@@ -340,6 +343,7 @@
     <Compile Include="_Code\Models\管理器\商品管理\询价采购管理.cs" />
     <Compile Include="_Code\Models\管理器\微信管理\入库申请用户管理.cs" />
     <Compile Include="_Code\Models\管理器\用户管理\Api登录管理.cs" />
+    <Compile Include="_Code\Models\管理器\用户管理\优惠码管理.cs" />
     <Compile Include="_Code\Models\管理器\统计管理\广告点击统计管理.cs" />
     <Compile Include="_Code\Models\管理器\统计管理\登录统计管理.cs" />
     <Compile Include="_Code\Models\管理器\微信管理\微信管理.cs" />
@@ -388,6 +392,8 @@
     <Compile Include="_Code\Models\管理器\竞标管理\网上竞标管理.cs" />
     <Compile Include="_Code\Models\管理器\商品管理\购物车管理.cs" />
     <Compile Include="_Code\Models\管理器\管理器.cs" />
+    <Compile Include="_Code\Models\管理器\订单管理\优惠券信息管理.cs" />
+    <Compile Include="_Code\Models\管理器\订单管理\订单管理.cs" />
     <Compile Include="_Code\Models\管理器\需求计划管理\需求计划分发管理.cs" />
     <Compile Include="_Code\Models\管理器\需求计划管理\需求计划物资管理.cs" />
     <Compile Include="_Code\Models\管理器\需求计划管理\需求计划管理.cs" />
@@ -443,6 +449,7 @@
     <Content Include="Images\cover7.jpg" />
     <Content Include="Images\cover8.jpg" />
     <Content Include="Images\cover9.jpg" />
+    <Content Include="Images\deleteorder.png" />
     <Content Include="Images\dlbg.jpg" />
     <Content Include="Images\dlbg.png" />
     <Content Include="Images\dropbutton.png" />
@@ -452,6 +459,7 @@
     <Content Include="Images\floorsix.jpg" />
     <Content Include="Images\floorthree.jpg" />
     <Content Include="Images\floortwo.jpg" />
+    <Content Include="Images\go81公告水印.png" />
     <Content Include="Images\goodtype.png" />
     <Content Include="Images\gwjp.jpg" />
     <Content Include="Images\hot.gif" />
@@ -639,6 +647,7 @@
     <Content Include="Images\seal\77256签名.png" />
     <Content Include="Images\seal\77298签名.png" />
     <Content Include="Images\seal\78006签名.png" />
+    <Content Include="Images\seal\78655签名.png" />
     <Content Include="Images\seal\gzzj.png" />
     <Content Include="Images\seal\xz.png" />
     <Content Include="Images\seal\zjrwb.png" />
@@ -2102,15 +2111,6 @@
     <Content Include="Views\默认主题\门户\办事指南\Part_Service\Part_OtherList.cshtml" />
     <Content Include="Views\默认主题\门户\办事指南\Part_Service\Part_SearchByCondition.cshtml" />
     <Content Include="Views\默认主题\门户\办事指南\Part_Service\Part_SearchByPage.cshtml" />
-    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_OtherList.cshtml" />
-    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_SearchByCondition.cshtml" />
-    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_SearchByPage.cshtml" />
-    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_TrainingDetail.cshtml" />
-    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_TrainingList.cshtml" />
-    <Content Include="Views\默认主题\门户\业务培训\Part_Training\Part_TrainingSearch.cshtml" />
-    <Content Include="Views\默认主题\门户\业务培训\TrainingDetail.cshtml" />
-    <Content Include="Views\默认主题\门户\业务培训\TrainingList.cshtml" />
-    <Content Include="Views\默认主题\门户\业务培训\TrainingSearch.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\UploadImagesGT.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\GuideAdd.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\guideDetail.cshtml" />
@@ -2184,6 +2184,9 @@
     <Content Include="Views\默认主题\后台\个人用户后台\_BackLayout.cshtml" />
     <Content Include="Views\默认主题\后台\个人用户后台\Person_Part\Part_BackHead.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\PurchaseInfo.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\mall.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Product_Inmall.cshtml" />
+    <Content Include="Views\默认主题\基本功能\PayResult\Payment_Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

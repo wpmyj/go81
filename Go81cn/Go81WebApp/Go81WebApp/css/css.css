@@ -1799,6 +1799,19 @@ label {
     border: none;
     cursor:pointer;
 }
+#sub_bt1 {
+    width: 90px;
+    height: 35px;
+    display: block;
+    margin: 0px auto;
+    font-size: 20px;
+    line-height:35px;
+    color: #fff;
+    border: none;
+    cursor:pointer;
+    background-color:#74BFFB;
+    border-radius:5px;
+}
  #tip {
         padding-top: 10px;
         color: red;
@@ -1901,4 +1914,15 @@ label {
         color:#fff;
         font-weight:bold;
         cursor:pointer;
+    }
+    #orderInfo{
+        color:#000;
+    }
+    .leftbox{
+        float:left;
+        width:200px;
+    }
+    .rightboxinmall{
+        float:left;
+        width:350px;
     }

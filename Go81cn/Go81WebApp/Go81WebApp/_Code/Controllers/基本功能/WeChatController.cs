@@ -1,4 +1,7 @@
-﻿using Go81WebApp._Code.Models.Helpers;
+﻿using System.Data;
+using System.Data.Metadata.Edm;
+using Go81WebApp.Models.管理器.统计管理;
+using Go81WebApp._Code.Models.Helpers;
 using Go81WebApp.Models.管理器;
 using Go81WebApp.Models.管理器.微信管理;
 using Go81WebApp.Models.数据模型.微信数据模型;
@@ -38,7 +41,7 @@ namespace Go81WebApp.Controllers.基本功能
 {
     public class WeChatController : Controller
     {
-        const string Token = "sd87512382go81";//您的token 
+        const string Token = "sd87512382";//您的token 
         public static string AppID = ConfigurationManager.AppSettings["微信AppID"];
         public static string AppSecret = ConfigurationManager.AppSettings["微信AppSecret"];
 
@@ -108,7 +111,7 @@ namespace Go81WebApp.Controllers.基本功能
                             requestXML.Wxevent = rootElement.SelectSingleNode("Event").InnerText;
                             requestXML.EventKey = rootElement.SelectSingleNode("EventKey").InnerText;
                         }
-                        WriteTxt("----------粉丝发送过来的消息，消息类型：" + requestXML.MsgType + "----------：" + postStr);
+                       // WriteTxt("----------粉丝发送过来的消息，消息类型：" + requestXML.MsgType + "----------：" + postStr);
                         //回复消息
                         ResponseMsg(requestXML);
                     }
@@ -272,14 +275,34 @@ namespace Go81WebApp.Controllers.基本功能
                 string resxml = "";
                 if (requestXML.MsgType == "text")
                 {
-                    //if (requestXML.Content == "1")
-                    //{
-                    resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName + "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName + "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) + "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[<a href=\"http://www.go81.cn\">正在建设中，稍等时日，更多精彩……</a>]]></Content><FuncFlag>0</FuncFlag></xml>";
-                    //}
-                    //else
-                    //{
-                    //    resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName + "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName + "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) + "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[正在建设中，稍等时日，更多精彩……]]></Content><FuncFlag>0</FuncFlag></xml>";
-                    //}
+                    if (requestXML.Content.ToLower().StartsWith("dwyh"))
+                    {
+                        var wechatuser = 优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(o => o.WeChatUser == requestXML.FromUserName));
+                        if (wechatuser > 0)
+                        {
+                            resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                                             "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                                             "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                                             "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[您已经获取过优惠码，不能再次获取！]]></Content><FuncFlag>0</FuncFlag></xml>";
+                        }
+                        else
+                        {
+                            var discountCode = GenerateDisCountCode("unit");
+                            resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                                             "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                                             "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                                             "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[您的优惠码为：" +
+                                             discountCode + "]]></Content><FuncFlag>0</FuncFlag></xml>";
+                            var code = new 优惠码();
+                            code.WeChatUser = requestXML.FromUserName;
+                            code.Code = discountCode;
+                            优惠码管理.添加优惠码(code);
+                        }
+                    }
+                    else
+                    {
+                        resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName + "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName + "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) + "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[指令不正确，未找到相关信息!]]></Content><FuncFlag>0</FuncFlag></xml>";
+                    }
                 }
                 else if (requestXML.MsgType == "location")
                 {
@@ -352,6 +375,7 @@ namespace Go81WebApp.Controllers.基本功能
                         switch (requestXML.EventKey)
                         {
                             //点击验收单事件
+                            #region 点击验收单事件
                             case "DoWechatSearchYsd":
                                 try
                                 {
@@ -434,7 +458,9 @@ namespace Go81WebApp.Controllers.基本功能
                                     resxml += "<item><Title><![CDATA[验收单信息]]></Title><Description><![CDATA[未找到关于您的验收单。]]></Description><PicUrl><![CDATA[]]></PicUrl><Url><![CDATA[]]></Url></item>";
                                     resxml += "</Articles><FuncFlag>1</FuncFlag></xml>";
                                 }
+                                #endregion
                                 break;
+                            #region 用户绑定
                             case "doBindUserInfo":
                                 //绑定用户，先判断该用户是否已绑定
                                 if (user.Count() > 0)
@@ -468,7 +494,41 @@ namespace Go81WebApp.Controllers.基本功能
                                     resxml += "<item><Title><![CDATA[点击此信息进行用户绑定]]></Title><Description><![CDATA[点击这里进行用户绑定]]></Description><PicUrl><![CDATA[]]></PicUrl><Url><![CDATA[http://www.go81.cn/wechat/WeChatBindUser?openid=" + openid + "]]></Url></item>";
                                     resxml += "</Articles><FuncFlag>1</FuncFlag></xml>";
                                 }
+                                 #endregion
                                 break;
+                           
+                               #region 优惠券获取
+                            case "gys":
+                                var wechatuser = 优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(o => o.WeChatUser == requestXML.FromUserName));
+                                if (wechatuser > 0)
+                                {
+                                    resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                                             "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                                             "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                                             "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[您已经获取过优惠码，不能再次获取！]]></Content><FuncFlag>0</FuncFlag></xml>";
+                                }
+                                else
+                                {
+                                    var discountcode = GenerateDisCountCode("gys");
+                                    resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                                             "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                                             "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                                             "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[您的优惠码为：" +
+                                             discountcode + "]]></Content><FuncFlag>0</FuncFlag></xml>";
+                                    var code = new 优惠码();
+                                    code.WeChatUser = requestXML.FromUserName;
+                                    code.Code = discountcode;
+                                    优惠码管理.添加优惠码(code);
+                                }
+                                
+                                break;
+                            case "unit":
+                                resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                                         "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                                         "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                                         "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[请输入您所在单位代号,格式如dwyh：123456598]]></Content><FuncFlag>0</FuncFlag></xml>";
+                                break;
+                               #endregion
                             default:
                                 resxml = "<xml><ToUserName><![CDATA[" + openid + "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName + "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) + "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[点击菜单事件]]></Content><FuncFlag>0</FuncFlag></xml>";
                                 break;
@@ -752,30 +812,51 @@ namespace Go81WebApp.Controllers.基本功能
             }]  
        },  
       {  
-           ""name"":""军采通"",  
+           ""name"":""优惠码"",
            ""sub_button"":[  
-            {  
-               ""type"":""view"",  
-               ""name"":""会员中心"",  
-                ""url"":""http://go81.cn/jct""  
-            },  
-            {  
-               ""type"":""view"",  
-               ""name"":""已订购的服务"",  
-               ""url"":""http://go81.cn/wechat/MyService""  
-            },  
-            {  
-               ""type"":""view"",  
-               ""name"":""关于我们"",  
-               ""url"":""http://go81.cn/wechat/AboutUs""
-            },  
-            {  
-               ""type"":""view"",  
-               ""name"":""进入网站"",  
-               ""url"":""http://go81.cn""
-            }]  
-       }]  
+                {  
+                   ""type"":""click"",  
+                   ""name"":""我是供应商"",  
+                    ""key"":""gys""  
+                },  
+                {  
+                   ""type"":""click"",  
+                   ""name"":""我是军人"",  
+                   ""key"":""unit""  
+                }]  
+           }]  
  } ";
+
+           //  ""name"":""军采通"",  
+           //""sub_button"":[  
+           // {  
+           //    ""type"":""view"",  
+           //    ""name"":""会员中心"",  
+           //     ""url"":""http://go81.cn/jct""  
+           // },  
+           // {  
+           //    ""type"":""view"",  
+           //    ""name"":""已订购的服务"",  
+           //    ""url"":""http://go81.cn/wechat/MyService""  
+           // },  
+           // {  
+           //    ""type"":""view"",  
+           //    ""name"":""关于我们"",  
+           //    ""url"":""http://go81.cn/wechat/AboutUs""
+           // },  
+           // {  
+           //    ""type"":""view"",  
+           //    ""name"":""进入网站"",  
+           //    ""url"":""http://go81.cn""
+           // }]  
+
+
+
+
+
+
+
+
             //            weixinMenu = @" {  
             //     ""button"":[  
             //     {    
@@ -1481,6 +1562,27 @@ namespace Go81WebApp.Controllers.基本功能
                 验收单管理.更新验收单(ysd);
             }
             return Content("<script>window.location='/WeChat/UnitYsdlist?openid=" + openid + "';</script>");
+        }
+
+        /// <summary>
+        /// 生成优惠码
+        /// </summary>
+        /// <returns></returns>
+        public string GenerateDisCountCode(string type)
+        {
+            var str = "";
+            var d = DateTime.Now;
+            var random = new Random();
+            var rd = random.Next(10, 10000);
+            if (type == "gys")
+            {
+                str = string.Format("TGMG{0}{1}{2}{3}{4}", d.Hour, d.Minute, d.Second, d.Millisecond, rd);
+            }
+            else if(type == "unit")
+            {
+                str = string.Format("CDJQ{0}{1}{2}{3}{4}", d.Hour, d.Minute, d.Second, d.Millisecond, rd);
+            }
+            return str;
         }
     }
 

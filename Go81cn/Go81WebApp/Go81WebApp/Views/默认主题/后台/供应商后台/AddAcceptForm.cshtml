@@ -312,10 +312,10 @@
                             <select style="width:200px;" name="checker" id="selectSh_unit">
                                 @{
                                     <option value="">请选择审核单位</option>
-            var sh_unit = ViewData["审核单位列表"] as IEnumerable<单位用户>;
+            var sh_unit = ViewData["审核单位列表"] as List<Go81WebApp.Controllers.后台.供应商后台Controller.ysdData>;
             foreach (var j in sh_unit)
             {
-                <option value="@j.Id">@j.验收单审核单位名称</option>
+                <option value="@j.Id">@j.name</option>
             }
                                 }
                             </select>

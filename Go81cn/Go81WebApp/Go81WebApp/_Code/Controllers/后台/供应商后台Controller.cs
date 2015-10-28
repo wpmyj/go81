@@ -5,8 +5,10 @@ using Gma.QrCodeNet.Encoding.Windows.Render;
 using Go81WebApp._Code.Models.数据模型.商品数据模型;
 using Go81WebApp.Models.Helpers;
 using Go81WebApp.Models.管理器;
+using Go81WebApp.Models.管理器.订单管理;
 using Go81WebApp.Models.管理器.推广业务管理;
 using Go81WebApp.Models.数据模型;
+using Go81WebApp.Models.数据模型.订单数据模型;
 using Go81WebApp.Models.数据模型.竞标数据模型;
 using Go81WebApp.Models.数据模型.内容数据模型;
 using Go81WebApp.Models.数据模型.商品数据模型;
@@ -120,16 +122,16 @@ namespace Go81WebApp.Controllers.后台
             {
                 cpg = 1;
             }
-            long pc = 购物车管理.计数购物车(0, 0, Query<购物车>.Where(m => m.所属用户.用户ID == currentUser.Id));
-            pgCount = pc / 10;
-            if (pc % 10 > 0)
+            long pc = 订单管理.计数订单(0, 0);
+            pgCount = pc / 2;
+            if (pc % 2 > 0)
             {
                 pgCount++;
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            IEnumerable<购物车> cars = 购物车管理.查询购物车(10*(cpg-1),10,Query<购物车>.Where(m=>m.所属用户.用户ID==currentUser.Id));
-            return View(cars);
+            IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2);
+            return View(orders);
         }
         public ActionResult Part_BackHead()
         {
@@ -3727,11 +3729,22 @@ namespace Go81WebApp.Controllers.后台
                 this.Y = new 验收单();
             }
         }
-
+        public class ysdData
+        {
+            public long Id { get; set; }
+            public string name { get; set; }
+        }
         public ActionResult AddAcceptForm()
         {
-            var q = Query.Or(Query<单位用户>.In(o => o.Id, 验收单单位列表信息.验收单单位列表.Select(o=>o.Id)));
-            ViewData["审核单位列表"] = 用户管理.查询用户<单位用户>(0, 0, q);
+            List<ysdData> ds = new List<ysdData>();
+            foreach(var item in 验收单单位列表信息.验收单单位列表)
+            {
+                ysdData yd=new ysdData();
+                yd.Id=item.Id;
+                yd.name=item.验收单审核单位名称;
+                ds.Add(yd);
+            }
+            ViewData["审核单位列表"] = ds;// 用户管理.查询用户<单位用户>(0, 0, q);
 
             ViewData["商品列表"] = 商品管理.查询供应商商品(currentUser.Id, 0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过));
             ViewBag.user = currentUser.企业联系人信息.联系人姓名;
@@ -4380,8 +4393,15 @@ namespace Go81WebApp.Controllers.后台
         {
             try
             {
-                var q = Query.Or(Query<单位用户>.In(o => o.Id, 验收单单位列表信息.验收单单位列表.Select(o=>o.Id)));
-                ViewData["审核单位列表"] = 用户管理.查询用户<单位用户>(0, 0, q);
+                List<ysdData> ds = new List<ysdData>();
+                foreach (var item in 验收单单位列表信息.验收单单位列表)
+                {
+                    ysdData yd = new ysdData();
+                    yd.Id = item.Id;
+                    yd.name = item.验收单审核单位名称;
+                    ds.Add(yd);
+                }
+                ViewData["审核单位列表"] = ds;
                 ViewData["商品列表"] = 商品管理.查询供应商商品(currentUser.Id);
                 ViewData["收货单位列表"] = 用户管理.查询用户<单位用户>(0, 0);
                 string id = Request.Params["id"];

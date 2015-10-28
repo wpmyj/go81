@@ -9,11 +9,11 @@
             <div class="main-classify">
                 <ul style="margin: 0;padding: 0;">
                     <li>
-                        <i style=" background:url('../Images/bgwz.jpg') no-repeat top center"></i>
+                        <i style=" background:url('/Images/bgwz.jpg') no-repeat top center"></i>
                         <span><a href="/协议采购/Index">办公物资</a></span>
                     </li>
                     <li>
-                        <i style="background:url('../Images/yjwz.jpg') no-repeat top center"></i>
+                        <i style="background:url('/Images/yjwz.jpg') no-repeat top center"></i>
                         <span><a href="/应急采购/Index">应急采购</a></span>
                     </li>
                     @*<li>
@@ -21,14 +21,12 @@
                             <span >公务机票</span>
                         </li>*@
                 </ul>
-
             </div>
-
             <div>
                 <ul style="padding-left:32px;font-family:STSong;font-size:14px;">
                     <li style="line-height:40px;">
                         <p style="font-weight:bold;color:#cc6666;padding: 0;margin: 0">货物类</p>
-                    </li>
+                    </  li>
                     <li style="margin-left:-32px;">
                         <div class="sn-subside" id="outboxdiv">
                             <div class="submenu">
@@ -36,7 +34,6 @@
                                     <ul>
                                         @foreach (var item in (IEnumerable<商品分类>)Model)
                                         {
-
                                             if (item.分类性质 == 商品分类性质.通用物资)
                                             {
                                                 <li>

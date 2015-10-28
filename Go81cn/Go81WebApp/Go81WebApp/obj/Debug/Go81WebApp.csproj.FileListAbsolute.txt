@@ -71,3 +71,4 @@ E:\Go81cn\Go81WebApp\Go81WebApp\bin\zh-Hans\System.Web.WebPages.Razor.resources.
 E:\Go81cn\Go81WebApp\Go81WebApp\obj\Debug\Go81WebApp.csproj.ResolveComReference.cache
 E:\Go81cn\Go81WebApp\Go81WebApp\obj\Debug\Go81WebApp.dll
 E:\Go81cn\Go81WebApp\Go81WebApp\obj\Debug\Go81WebApp.pdb
+E:\Go81cn\Go81WebApp\Go81WebApp\obj\Debug\Go81WebApp.csprojResolveAssemblyReference.cache

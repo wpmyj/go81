@@ -25,12 +25,21 @@ using System.Web;
 using System.Web.Mvc;
 using Go81WebApp.Models.数据模型.推广业务数据模型;
 using Go81WebApp.Models.管理器.推广业务管理;
+using Go81WebApp.Models.管理器.订单管理;
+using Go81WebApp.Models.数据模型.订单数据模型;
 
 namespace Go81WebApp.Controllers.门户
 {
     public class 商品陈列Controller : Controller
     {
         private static readonly int PAGESIZE = int.Parse(ConfigurationManager.AppSettings["商品每页显示条数"]);
+        private 用户基本数据 currentUser
+        {
+            get
+            {
+                return HttpContext.获取当前用户();
+            }
+        }
 
         [静态化(0, 3)]
         public ActionResult Index()
@@ -360,12 +369,12 @@ namespace Go81WebApp.Controllers.门户
         {
             try
             {
-                string count=Request.QueryString["num"];
+                string count = Request.QueryString["num"];
                 string id = Request.QueryString["id"];
-                if (Session["Ginfo"]!=null)
+                if (Session["Ginfo"] != null)
                 {
                     string ginfo = Session["Ginfo"].ToString();
-                    if(!ginfo.Contains(id))
+                    if (!ginfo.Contains(id))
                     {
                         Session["Ginfo"] += id + "," + count + "|";
                     }
@@ -386,14 +395,14 @@ namespace Go81WebApp.Controllers.门户
             try
             {
                 string str = "";
-                if (Session["Ginfo"]!=null)
+                if (Session["Ginfo"] != null)
                 {
                     string id = Request.QueryString["id"];
                     string ginfo = Session["Ginfo"].ToString();
                     string[] infos = ginfo.Split('|');
-                    for (int i = 0; i < infos.Length-1;i++ )
+                    for (int i = 0; i < infos.Length - 1; i++)
                     {
-                        if(!infos[i].Contains(id))
+                        if (!infos[i].Contains(id))
                         {
                             str += infos[i] + "|";
                         }
@@ -407,31 +416,43 @@ namespace Go81WebApp.Controllers.门户
                 return -1;
             }
         }
-        public long AddPurchaseInfo()
+        public long CheckLogin()
         {
-            long id=HttpContext.检查登录();
-            if(id!=-1)
+            long id = HttpContext.检查登录();
+            return id;
+        }
+        [HttpPost]
+        public ActionResult AddPurchaseInfo()
+        {
+            if (HttpContext.检查登录()!=-1&&currentUser.GetType()==typeof(个人用户))
             {
-                购物车 shopCar = new 购物车();
-                List<购物车.选购商品> good=new List<购物车.选购商品>();
-                string str = Request.QueryString["info"];
+                string str = Request.Form["summary"];
                 string[] info = str.Split('|');
-                shopCar.所属用户.用户ID = id;
-                for (int i = 0; i < info.Length - 1;i++ )
+                decimal allprice = 0;
+                订单 order = new 订单();
+                order.收货地址.省份 = Request.Form["province"];
+                order.收货地址.城市 = Request.Form["city"];
+                order.收货地址.区县 = Request.Form["area"];
+                order.联系人 =Request.Form["contactMan"];
+                order.联系电话 = Request.Form["phone"];
+                order.详细地址 = Request.Form["detail"];
+                order.订单所属用户.用户ID = currentUser.Id;
+                for (int i = 0; i < info.Length - 1; i++)
                 {
-                    购物车.选购商品 g = new 购物车.选购商品();
-                    g.商品.商品ID = long.Parse(info[i].Split(',')[1]);
-                    g.数量 = int.Parse(info[i].Split(',')[0]);
-                    good.Add(g);
+                    商品 sp = 商品管理.查找商品(long.Parse(info[i].Split(',')[1]));
+                    商品订单 o = new 商品订单();
+                    o.商品.商品ID = long.Parse(info[i].Split(',')[1]);
+                    o.数量 = int.Parse(info[i].Split(',')[0]);
+                    o.商品订单价格 = sp.销售信息.价格 * int.Parse(info[i].Split(',')[0]);
+                    order.商品订单列表.Add(o);
                 }
-                shopCar.选购商品列表 = good;
-                购物车管理.添加购物车(shopCar);
+                订单管理.添加订单(order);
                 Session["Ginfo"] = "";
-                return id;
-            }
+                return Content("<script>alert('您已成功提交订单，可以到后台去支付');window.location='/个人用户后台/PurchaseInfo';</script>");
+            } 
             else
             {
-                return id;
+                return Redirect("/商品陈列/PurchaseInfo");
             }
         }
         public ActionResult Login()
@@ -439,8 +460,8 @@ namespace Go81WebApp.Controllers.门户
             string temp_session = Session["Ginfo"].ToString();
             string uname = Request.Form["uname"];
             string upwd = Request.Form["upwd"];
-            var u=this.HttpContext.登录(uname,upwd,false);
-            if(u!=null)
+            var u = this.HttpContext.登录(uname, upwd, false);
+            if (u != null)
             {
                 Session["Ginfo"] = temp_session;
                 return Redirect("/商品陈列/PurchaseInfo");
@@ -451,10 +472,10 @@ namespace Go81WebApp.Controllers.门户
                 return Redirect("/登录/Login");
             }
         }
-        public  ActionResult PurchaseInfo()
+        public ActionResult PurchaseInfo()
         {
-            Dictionary<long,int> ninfo=new Dictionary<long,int>();
-            if (Session["Ginfo"]!=null)
+            Dictionary<long, int> ninfo = new Dictionary<long, int>();
+            if (Session["Ginfo"] != null)
             {
                 string ginfo = Session["Ginfo"].ToString();
                 string[] info = ginfo.Split('|');
@@ -699,6 +720,51 @@ namespace Go81WebApp.Controllers.门户
             }
 
         }
+        public ActionResult Product_Inmall()
+        {
+            try
+            {
+                if (-1 != HttpContext.检查登录())
+                {
+                    ViewData["已登录"] = "1";
+                }
+                else
+                {
+                    ViewData["已登录"] = "0";
+                }
+                long id = long.Parse(Request.QueryString["id"]);
+                商品 pro_detail = 商品管理.查找商品(id);
+
+                //防止未审核通过的商品出现在前台中
+                //pro_detail.审核数据.审核状态 != 审核状态.审核通过 || 用户管理.查找用户<供应商>(pro_detail.商品信息.所属供应商.用户ID, false).审核数据.审核状态 != 审核状态.审核通过
+                if (pro_detail.审核数据.审核状态 != 审核状态.审核通过)
+                {
+                    pro_detail = null;
+                }
+                if (pro_detail != null)
+                {
+                    商品管理.增加浏览量(pro_detail.Id);
+                    ViewBag.data = (用户管理.查找用户<供应商>(pro_detail.商品信息.所属供应商.用户ID)).信用评级信息.等级;
+                    if (pro_detail.商品信息.商品图片.Count == 0)
+                    {
+                        pro_detail.商品信息.商品图片.Add("/images/noimage.jpg");
+                    }
+                    var l = 商品管理.查询历史价格数据((long)id);
+                    this.ViewBag.L1 = l.Item1.ToJson().Replace("ISODate", "new Date");
+                    return View(pro_detail);
+                }
+                else
+                {
+                    return Content("<script>window.location='/商品陈列/';</script>");
+                }
+
+            }
+            catch
+            {
+                return Content("<script>window.location='/商品陈列/';</script>");
+            }
+
+        }
         public class SupplierInfo
         {
             public long Id { get; set; }
@@ -711,44 +777,44 @@ namespace Go81WebApp.Controllers.门户
             {
                 int cpage = 1;
                 int pgCount = 0;
-                if(!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+                if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
                 {
                     cpage = int.Parse(Request.QueryString["page"]);
                 }
                 string type = Request.QueryString["tp"];
                 List<SupplierInfo> sp = new List<SupplierInfo>();
-                IEnumerable<商品> goods = 商品管理.查询商品(0,0,Query<商品>.Where(m=>m.商品信息.精确型号==type&&m.审核数据.审核状态== 审核状态.审核通过)).OrderBy(m=>m.销售信息.价格);
-                foreach(var item in goods)
+                IEnumerable<商品> goods = 商品管理.查询商品(0, 0, Query<商品>.Where(m => m.商品信息.精确型号 == type && m.审核数据.审核状态 == 审核状态.审核通过)).OrderBy(m => m.销售信息.价格);
+                foreach (var item in goods)
                 {
-                   if(item.商品信息!=null)
-                   {
-                       SupplierInfo s = new SupplierInfo();
-                       s.Id = item.商品信息.所属供应商.用户ID;
-                       s.Price =item.销售信息.价格.ToString("0.00");
-                       if(item.商品信息.所属供应商.用户数据!=null)
-                       {
-                           s.Sname = item.商品信息.所属供应商.用户数据.企业基本信息.企业名称;
-                       }
-                       else
-                       {
-                           s.Sname = "信息未完善的供应商";
-                       }
-                       sp.Add(s);
-                   }
+                    if (item.商品信息 != null)
+                    {
+                        SupplierInfo s = new SupplierInfo();
+                        s.Id = item.商品信息.所属供应商.用户ID;
+                        s.Price = item.销售信息.价格.ToString("0.00");
+                        if (item.商品信息.所属供应商.用户数据 != null)
+                        {
+                            s.Sname = item.商品信息.所属供应商.用户数据.企业基本信息.企业名称;
+                        }
+                        else
+                        {
+                            s.Sname = "信息未完善的供应商";
+                        }
+                        sp.Add(s);
+                    }
                 }
                 pgCount = sp.Count / 5;
-                if(sp.Count%5>0)
+                if (sp.Count % 5 > 0)
                 {
                     pgCount++;
                 }
-                sp = sp.Skip((cpage-1)*5).Take(5).ToList();
+                sp = sp.Skip((cpage - 1) * 5).Take(5).ToList();
                 JsonResult json = new JsonResult() { Data = new { supplier = sp, pCount = pgCount } };
-                return Json(json,JsonRequestBehavior.AllowGet);
+                return Json(json, JsonRequestBehavior.AllowGet);
             }
             catch
             {
                 JsonResult json = new JsonResult() { Data = new { supplier = new List<SupplierInfo>(), pCount = 0 } };
-                return Json(json,JsonRequestBehavior.AllowGet);
+                return Json(json, JsonRequestBehavior.AllowGet);
             }
         }
         public ActionResult showOtherGys()
@@ -867,7 +933,7 @@ namespace Go81WebApp.Controllers.门户
                 {
                     ViewData["已登录"] = "0";
                 }
-                if (!string.IsNullOrWhiteSpace(Request.QueryString["type"]) && Request.QueryString["type"]=="1")
+                if (!string.IsNullOrWhiteSpace(Request.QueryString["type"]) && Request.QueryString["type"] == "1")
                 {
                     ViewData["type"] = 1;
                 }
@@ -913,13 +979,36 @@ namespace Go81WebApp.Controllers.门户
                 return Content("<script>window.location='/商品陈列/';</script>");
             }
         }
+        public ActionResult mall()
+        {
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+            {
+                cpg = int.Parse(Request.QueryString["page"]);
+            }
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 商品管理.计数供应商商品(200000000281, 0, 0);
+            pgCount = pc / 20;
+            if (pc % 20 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            IEnumerable<商品> goods = 商品管理.查询商品(20 * (cpg - 1), 20, Query<商品>.Where(m => m.商品信息.所属供应商.用户ID == 200000000281));
+            return View(goods);
+        }
         public ActionResult Part_GoodClass()
         {
             //var gc = new Dictionary<string,> Dictionary<商品分类, long>();//商品分类，商品分类下商品数量    
             //var _dc = new Dictionary<商品分类, long>();
             //var _uc = new Dictionary<商品分类, long>();
             long id = -1;
-            if(!string.IsNullOrWhiteSpace(Request.QueryString["id"])&&Request.QueryString["id"]=="1")
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["id"]) && Request.QueryString["id"] == "1")
             {
                 id = long.Parse(Request.QueryString["id"]);
             }
@@ -1061,8 +1150,8 @@ namespace Go81WebApp.Controllers.门户
                 }
                 if (Recommend_Good.Count < 10)
                 {
-                    int remain =Recommend_Good.Count;
-                    for (int i = remain; i <10; i++)
+                    int remain = Recommend_Good.Count;
+                    for (int i = remain; i < 10; i++)
                     {
                         IEnumerable<商品> Temp_Good = 商品管理.查询商品(0, 1, Query<商品>.Where(o => !o.采购信息.参与协议采购 && !o.采购信息.参与应急采购 && o.审核数据.审核状态 == 审核状态.审核通过).And(Query<商品>.NotIn(h => h.Id, ids)).And(Query<商品>.NotIn(h => h.商品信息.所属供应商.用户ID, gid)), includeDisabled: false).OrderByDescending(u => u.销售信息.点击量);
                         if (Temp_Good != null && Temp_Good.Count() != 0)

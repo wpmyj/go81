@@ -1,0 +1,147 @@
+﻿@model IEnumerable<Go81WebApp.Models.数据模型.商品数据模型.商品>
+@{
+    ViewBag.Title = "西南物资采购网-采购商城";
+}
+<style>
+    .prodtpage_prodtlistdiv:hover{
+        border:5px solid #BEB9B9;
+    }
+</style>
+<div style="height:auto; overflow:hidden; margin-bottom:5px; ">
+    <div class="gys_ztbsearch_contentbox" style=" width:96%; margin-bottom:10px;" id="pro_search_content">
+            @foreach (var item in Model)
+            {
+                <div class="prodtpage_prodtlistdiv" style="height:330px;width:220px;">
+                    <div class="prodtpage_prodtlistdiv_imgdiv">
+                        <a href="/商品陈列/Product_Inmall?id=@item.Id" title="@item.商品信息.商品名" target="_blank">
+                            @if (item.商品信息.商品图片.Count > 0)
+                            {
+                                <img src="@item.商品信息.商品图片[0]" />
+                            }
+                            else
+                            {
+                                <img src="~/images/noimage.jpg" />
+                            }
+                        </a>
+                    </div>
+                    <div class="prodtpage_prodtlistdiv_textdiv">
+                        @{ var thisp_name = item.商品信息.商品名.Replace("<font color=\"red\">", "").Replace("</font>", ""); }
+                        <div style="height:40px;">
+                            <a href="/商品陈列/Product_Inmall?id=@item.Id" title="@thisp_name" class="product_name_twoline" target="_blank">
+                                @Html.Raw(item.商品信息.商品名)
+                            </a>
+                        </div>
+                        <div class="prodtpage_prodtlistdiv_price"><a href="/商品陈列/Product_Inmall?id=@item.Id" target="_blank">￥@(string.Format("{0:0.00}", item.销售信息.价格))</a><span style="padding-left:20px; color:#999; cursor:pointer;" title="报价时间">(@item.销售信息.价格修改日期.ToString("yyyy-MM-dd"))</span></div>
+                        <div style="height:20px;">
+                            <a class="product_gysname_oneline" href="/供应商陈列/Supplier_Destination?id=@item.商品信息.所属供应商.用户数据.Id" title="@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        <div class="gys_znxx_content_detailbox" id="pagediv" style="float: left; width:100%;">
+            <div class="gys_znxx_content_detailbox">
+                @{
+                    int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                    int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                    if (Pagecount > 0)
+                    {
+                        if (CurrentPage != 1)
+                        {
+                            <a href='/商品陈列/mall?page=1'>首页</a><a href='/商品陈列/mall?page=@(CurrentPage-1)' style="border-left:none;">上一页</a>
+                        }
+                    }
+                    if (Pagecount <= 6)
+                    {
+                        for (int i = 1; i <= Pagecount; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/商品陈列/mall?page=@i'>@i</a>
+                            }
+                            else
+                            {
+                                <a href='/商品陈列/mall?page=@i'>@i</a>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (CurrentPage < 6)
+                        {
+                            if (CurrentPage != 1)
+                            {
+                                for (int i = 1; i < 7; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/商品陈列/mall?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/商品陈列/mall?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/商品陈列/mall?page=@(Pagecount)">@Pagecount</a>
+                            }
+                            else
+                            {
+                                for (int i = 1; i < 7; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/商品陈列/mall?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/商品陈列/mall?page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/商品陈列/mall?page=@(Pagecount)">@Pagecount</a>
+                            }
+                        }
+                        else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                        {
+                            <a href="/商品陈列/mall?page=1">1</a><span>...</span>
+                            for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/商品陈列/mall?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/商品陈列/mall?page=@i'>@i</a>
+                                }
+                            }
+                            <span>...</span><a href="/商品陈列/mall?page=@(Pagecount)">@Pagecount</a>
+                        }
+                        else if (CurrentPage >= Pagecount - 3)
+                        {
+                            <a href="/商品陈列/mall?page=1">1</a><span>...</span>
+                            for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/商品陈列/mall?page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/商品陈列/mall?page=@i'>@i</a>
+                                }
+                            }
+                        }
+                    }
+                    if (Pagecount > 0)
+                    {
+                        if (CurrentPage != Pagecount)
+                        {
+                            <a href='/商品陈列/mall?page=@(CurrentPage+1)' style="border-right:none;">下一页</a><a href='/商品陈列/mall?page=@(Pagecount)'>末页</a>
+                        }
+                        <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                    }
+                }
+            </div>
+            </div>
+    </div>
+
+</div>

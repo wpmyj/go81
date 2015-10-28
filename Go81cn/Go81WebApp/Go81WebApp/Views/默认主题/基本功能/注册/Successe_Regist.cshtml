@@ -29,8 +29,16 @@
         }
         else
         {
-            <p style="font-size:20px; color:red;">恭喜您注册成功！请及时登录后台修改账户信息及企业信息！</p>
-            <p>相关注册信息需提报成都军区物资采购管理部门审核！</p>
+
+            if (ViewData["账号申请类型"] != null && ViewData["账号申请类型"].ToString() == "3")
+            {
+                <p style="font-size:20px; color:red;">恭喜您注册成功！</p>
+            }
+            else
+            {
+                <p style="font-size:20px; color:red;">恭喜您注册成功！请及时登录后台修改账户信息及企业信息！</p>
+                <p>相关注册信息需提报成都军区物资采购管理部门审核！</p>
+            }
         }
         <p id="urlredirect">秒后跳转到登录页面</p><a style="font-size:12px; color:red; text-decoration:underline;" href="/登录/Login">直接登录》</a>
     </div>

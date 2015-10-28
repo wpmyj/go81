@@ -284,8 +284,8 @@
                         </tr>
                         <tr>
                             <td height="30" align="right">联系手机：</td>
-                            <td height="30">
-                                <input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="售后服务机构列表[0].负责人联系方式.手机" /><div class="out_box"><div class="arrow"></div><div class="con_box">请填写联系人手机号码，如13214789654</div></div>
+                            <td height="30" style="position:relative;">
+                                <input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="售后服务机构列表[0].负责人联系方式.手机" /><div class="out_box" style="left:155px;"><div class="arrow"></div><div class="con_box">请填写联系人手机号码，如13214789654</div></div>
                             </td>
                         </tr>
                     </table>
@@ -316,12 +316,12 @@
                         </tr>
                         <tr>
                             <td align="right" height="30">参标结果：</td>
-                            <td><select onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="历史参标记录[0].参标结果"><option value="0">请选择参标结果</option><option value="1">中标</option><option value="2">落标</option><option value="3">流标</option><option value="4">废标</option><option value="9999">其他</option></select><div class="out_box"><div class="arrow"></div><div class="con_box">请选择参标结果</div></div></td>
+                            <td style="position:relative;"><select onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="历史参标记录[0].参标结果"><option value="0">请选择参标结果</option><option value="1">中标</option><option value="2">落标</option><option value="3">流标</option><option value="4">废标</option><option value="9999">其他</option></select><div class="out_box" style="left:155px;"><div class="arrow"></div><div class="con_box">请选择参标结果</div></div></td>
 
                             <td align="right" height="30">参标时间：</td>
                             <td><input onmouseout="hide_tip(this)" onmouseover="show_tip(this)" onfocus="WdatePicker({ isShowWeek: true })" type="text" name="历史参标记录[0].参标时间" /></td>
                         </tr>
-                        <tr><td align="right"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" value="true" type="checkbox" name="历史参标记录[0].本平台项目" /><div class="out_box"><div class="arrow"></div><div class="con_box">是本平台项目，请选择，否则，不用选</div></div></td><td>是否是本平台项目</td></tr>
+                        <tr><td align="right" style="position:relative;"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" value="true" type="checkbox" name="历史参标记录[0].本平台项目" /><div class="out_box" style="left:155px;"><div class="arrow"></div><div class="con_box" style="min-width:120px;">是本平台项目，请选择，否则，不用选</div></div></td><td>是否是本平台项目</td></tr>
                     </table>
                     <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
                 </form>
@@ -388,7 +388,7 @@
                         <tr><td height="30" align="right">负债总额(万元)：</td><td><input name="财务状况信息[0].负债总额" type="text" value="0.00" /></td><td height="30" align="right">资产负债率(%)：</td><td><input name="财务状况信息[0].资产负债率" type="text" value="0.00" /></td></tr>
                         <tr><td height="30" align="right">销售收入(万元)：</td><td><input name="财务状况信息[0].销售收入" type="text" value="0.00"></td><td height="30" align="right">利润总额：</td><td><input name="财务状况信息[0].利润总额" type="text" value="0.00"></td></tr>
                         <tr><td height="30" align="right">净利润：</td><td><input name="财务状况信息[0].净利润" type="text" value="0.00"></td><td colspan="2" align="right"><input name="财务状况信息[0].会计报表是否经注册会计师审计" type="checkbox" value="true">会计报表是否经注册会计师审计</td></tr>
-                        <tr><td height="30" align="right">资本金(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 净利润 必需是一个数字。" data-val-required="*请输入利润总额" name="财务状况信息[0].资本金" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写实收资本,如2200</div></div></td></tr>
+                        <tr><td height="30" align="right">资本金(万元)：</td><td style="position:relative;"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 净利润 必需是一个数字。" data-val-required="*请输入利润总额" name="财务状况信息[0].资本金" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box" style="left:155px;"><div class="arrow"></div><div class="con_box">请填写实收资本,如2200</div></div></td></tr>
                     </table>
                     <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
                 </form>

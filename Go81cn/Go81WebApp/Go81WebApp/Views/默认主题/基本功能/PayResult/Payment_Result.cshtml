@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "购物支付信息";
+}
+<div style="padding: 80px 244px;"> 
+    <input type="hidden" value="@ViewData["userid"]" id="uid" />
+    @if ((int)ViewData["Trade_Status"] == 1) //后台返回充值成功状态
+    {
+        <div style="width: 250px;margin:0 auto">
+            <div style="width:80px;height: 69px;float:left; background: url(../Images/alert-comfirm.png) 0 -75px no-repeat "></div>
+            <div style="margin-left: 15px;color: #4D921F;line-height: 70px;font-size: 30px;float: left;">付款成功！</div>
+        </div>
+        <div style="padding-left: 235px;margin: 80px auto;font-size: 13px;text-align: left;clear: both;">
+            <span style="font-size: 20px;color: red">@ViewData["result"]</span><a style="text-decoration: underline;color: #165AB1">即将进入您的订单页......</a>
+        </div>
+    }
+    else    // 后台返回充值未成功状态
+    {
+        <div style="width: 250px;margin:0 auto">
+            <div style="width:80px;height: 69px;float:left; background: url(../Images/alert-comfirm.png) 15px -5px no-repeat "></div>
+            <div style="margin-left: 15px;color:#484947;line-height: 70px;font-size: 30px;float: left;">支付失败！</div>
+        </div>
+    } 
+</div>

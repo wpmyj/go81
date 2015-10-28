@@ -281,13 +281,13 @@
                         <tr>
                             <td align="right" class="lab">经营类型：</td>
                             <td>
-                                @Html.EnumDropDownListFor(m => m.企业基本信息.经营类型, new { @style = "width:90px; margin-left:2px;",id="jy" })
+                                @Html.EnumDropDownListFor(m => m.企业基本信息.经营类型, new { @style = "width:80px; margin-left:2px;",id="jy" })
                                 @Html.ValidationMessageFor(m => m.企业基本信息.经营类型)
                                 @if (Model.企业基本信息.经营类型 == 供应商.经营类型.未填写)
                                 {
                                     <span>*必需</span>
                                 }
-                                @Html.EnumDropDownListFor(m => m.企业基本信息.供应商类别, new{id="catorgray",style="width:90px;"})
+                                @Html.EnumDropDownListFor(m => m.企业基本信息.供应商类别, new{id="catorgray",style="width:80px;"})
                             </td>
                             <td align="right" class="lab">经营子类型：</td>
                             <td>

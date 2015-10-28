@@ -163,7 +163,7 @@
                                 
                                 @if (k.管理单位审核人.用户数据!=null)
                                 {
-                                    if (k.管理单位审核人.用户数据.验收单名称.Length > 8)
+                                    if (!string.IsNullOrWhiteSpace(k.管理单位审核人.用户数据.验收单名称) && k.管理单位审核人.用户数据.验收单名称.Length > 8)
                                     {
                                         <td class="name" title="@k.管理单位审核人.用户数据.验收单名称"> @k.管理单位审核人.用户数据.验收单名称.Substring(0, 8) ... </td>
                                     }

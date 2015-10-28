@@ -334,15 +334,15 @@ namespace Go81WebApp.Controllers.基本功能
             [System.Web.Mvc.Remote("CheckUserName", "注册", ErrorMessage = "该用户名已注册")]
             public string loginName { get; set; }
             public string Name { get; set; }
-            [Required(ErrorMessage = "身份证号码必须填写")]
-            [RegularExpression("[0-9]{17}[0-9,X]{1}", ErrorMessage = "*请正确输入您的18位有效身份证号码")]
-            public string IdCard { get; set; }
+            //[Required(ErrorMessage = "身份证号码必须填写")]
+            //[RegularExpression("[0-9]{17}[0-9,X]{1}", ErrorMessage = "*请正确输入您的18位有效身份证号码")]
+            //public string IdCard { get; set; }
             [Required(ErrorMessage = "手机号必须填写")]
             [RegularExpression(@"(13|14|15|16|18|19)\d{9}$", ErrorMessage = "*请输入正确的手机格式")]
             public string Phone { get; set; }
-            [Required(ErrorMessage = "邮箱必须填写")]
-            [RegularExpression(@"^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "*请输入正确的邮箱")]
-            public string Emial { get; set; }
+            //[Required(ErrorMessage = "邮箱必须填写")]
+            //[RegularExpression(@"^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$", ErrorMessage = "*请输入正确的邮箱")]
+            //public string Emial { get; set; }
             public string verifyCode { get; set; }
 
             public 个人用户 u { get; set; }
@@ -413,12 +413,12 @@ namespace Go81WebApp.Controllers.基本功能
                 PersonRegisterModel.u.登录信息.登录名 = PersonRegisterModel.loginName;
                 PersonRegisterModel.u.登录信息.密码 = PersonRegisterModel.Pwd;
                 PersonRegisterModel.u.个人信息.姓名 = PersonRegisterModel.Name;
-                PersonRegisterModel.u.个人信息.身份证号 = PersonRegisterModel.IdCard;
-                PersonRegisterModel.u.联系方式.电子邮件 = PersonRegisterModel.Emial;
+                //PersonRegisterModel.u.个人信息.身份证号 = PersonRegisterModel.IdCard;
+                //PersonRegisterModel.u.联系方式.电子邮件 = PersonRegisterModel.Emial;
                 PersonRegisterModel.u.联系方式.手机 = PersonRegisterModel.Phone;
                 用户管理.添加用户(PersonRegisterModel.u);
                 //TempData["RegisterMessage"] = "注册成功";
-                return RedirectToAction("Login", "登录");
+                return Content("<script>window.location='/注册/Successe_Regist?id=3';</script>");
             }
 
             return View();

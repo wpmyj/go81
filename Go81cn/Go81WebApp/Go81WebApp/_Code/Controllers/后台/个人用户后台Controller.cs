@@ -13,6 +13,9 @@ using System.IO;
 using FileHelper;
 using Go81WebApp.Models.数据模型.商品数据模型;
 using MongoDB;
+using Go81WebApp.Models.管理器.订单管理;
+using Go81WebApp.Models.数据模型.订单数据模型;
+using Go81WebApp.Models.管理器.统计管理;
 
 namespace Go81WebApp.Controllers.后台
 {
@@ -30,18 +33,38 @@ namespace Go81WebApp.Controllers.后台
         //[单一权限验证(权限.专家库, 权限.合同范本)]
         public ActionResult Index()
         {
-            IEnumerable<站内消息> Msg = 站内消息管理.查询收信人的站内消息(0, 0, currentUser.Id);
-            int count = 0;
-            foreach (var item in Msg)
+            if (HttpContext.检查登录() != -1&&currentUser!=null)
             {
-                if (item.基本数据.添加时间 > item.收信人.上次阅读时间)
+                IEnumerable<站内消息> Msg = 站内消息管理.查询收信人的站内消息(0, 0, currentUser.Id);
+                int count = 0;
+                foreach (var item in Msg)
                 {
-                    count++;
+                    if (item.基本数据.添加时间 > item.收信人.上次阅读时间)
+                    {
+                        count++;
+                    }
                 }
+                ViewData["msg_count"] = count;
+                ViewData["user"] = currentUser.登录信息.登录名;
+                return View();
             }
-            ViewData["msg_count"] = count;
-            ViewData["user"] = currentUser.登录信息.登录名;
-            return View();
+            else
+            {
+                return Redirect("/错误页面/WrongUserType");
+            }
+        }
+        public int Checkstr()
+        {
+            string str = Request.QueryString["ser"];
+            long count = 优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(m => m.Code == str));
+            if(count==0)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
         }
         public ActionResult MyBaseInfo()
         {
@@ -70,16 +93,35 @@ namespace Go81WebApp.Controllers.后台
             {
                 cpg = 1;
             }
-            long pc = 购物车管理.计数购物车(0, 0, Query<购物车>.Where(m => m.所属用户.用户ID == currentUser.Id));
-            pgCount = pc / 10;
-            if (pc % 10 > 0)
+            long pc =订单管理.计数订单(0,0,Query<订单>.Where(m=>m.订单所属用户.用户ID==currentUser.Id));
+            pgCount = pc / 2;
+            if (pc % 2 > 0)
             {
                 pgCount++;
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            IEnumerable<购物车> cars = 购物车管理.查询购物车(10 * (cpg - 1), 10, Query<购物车>.Where(m => m.所属用户.用户ID == currentUser.Id));
-            return View(cars);
+            IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2, Query<订单>.Where(m => m.订单所属用户.用户ID == currentUser.Id));
+            return View(orders);
+        }
+        public ActionResult DeleteOrder()
+        {
+            try
+            {
+                long id=long.Parse(Request.QueryString["id"]);
+                if (订单管理.计数订单(0,0,Query<订单>.Where(m=>m.Id==id&&m.订单所属用户.用户ID==currentUser.Id))!=0)
+                {
+                    return 订单管理.删除订单(id) ? Content("<script>alert('成功删除订单！');window.location='/个人用户后台/PurchaseInfo';</script>") : Content("<script>alert('删除订单失败！');window.location='/个人用户后台/PurchaseInfo';</script>");
+                }
+                else
+                {
+                    return Content("<script>alert('删除订单失败！');window.location='/个人用户后台/PurchaseInfo';</script>");
+                }
+            }
+            catch
+            {
+                return Content("<script>alert('删除订单失败！');window.location='/个人用户后台/PurchaseInfo';</script>");
+            }
         }
 
         public ActionResult PersonInfoManage(个人用户 per)

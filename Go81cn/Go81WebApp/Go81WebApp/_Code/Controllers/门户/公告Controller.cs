@@ -8,6 +8,8 @@ using Lucene.Net.Analysis.PanGu;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
+using MongoDB;
+using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using PanGu;
 using PanGu.HighLight;
@@ -110,38 +112,8 @@ namespace Go81WebApp.Controllers.门户
             var exactdate = "";
             var startdate = "";
             var enddate = "";
-
-            TopDocs serchalllist = SearchIndex("/Lucene.Net/IndexDic/GongGao", pro, city, area, hy, id, keyword);
-
-            if (serchalllist != null && serchalllist.totalHits > 0)
-            {
-                IList<公告> serchlisttemp = new List<公告>();
-                Dictionary<string, string> dic = new Dictionary<string, string>();
-                dic.Add("title", keyword);
-                //IndexSearcher search = new IndexSearcher(IndexDic("/Lucene.Net/IndexDic/GongGao"), true);
-                IndexSearcher search = new IndexSearcher(new Lucene.Net.Store.SimpleFSDirectory(new System.IO.DirectoryInfo(IndexDic("/Lucene.Net/IndexDic/GongGao"))), true);
-                for (int i = 0; i < serchalllist.totalHits && i < 1000; i++)
-                {
-                    公告 model = new 公告();
-                    model.Id = long.Parse(search.Doc(serchalllist.scoreDocs[i].doc).Get("NumId"));
-                    model.内容主体.标题 = search.Doc(serchalllist.scoreDocs[i].doc).Get("Title");
-                    model.公告信息.公告类别 = (公告.公告类别)Enum.Parse(typeof(公告.公告类别), search.Doc(serchalllist.scoreDocs[i].doc).Get("AdClass"));
-                    model.公告信息.公告性质 = (公告.公告性质)Enum.Parse(typeof(公告.公告性质), search.Doc(serchalllist.scoreDocs[i].doc).Get("AdFeature"));
-                    model.公告信息.所属地域.省份 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdPro");
-                    model.公告信息.所属地域.城市 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdCity");
-                    model.公告信息.所属地域.区县 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdArea");
-                    model.公告信息.一级分类 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdHy");
-                    model.内容主体.发布时间 = Convert.ToDateTime(search.Doc(serchalllist.scoreDocs[i].doc).Get("AddTime"));
-                    serchlisttemp.Add(SetHighlighter(dic, model));
-                }
-                getsearch(1, time, exactdate, serchlisttemp, startdate, enddate, id);
-
-            }
-            else
-            {
-                ViewData["currentpage"] = 1;
-                ViewData["pagecount"] = 1;
-            }
+            getsearch(1, pro, city, area, hy, id, keyword, time, exactdate, startdate, enddate);
+            
             ViewBag.Provence = pro;
             ViewBag.City = city;
             ViewBag.Area = area;
@@ -163,44 +135,16 @@ namespace Go81WebApp.Controllers.门户
             var city = Request.Params["delivercity"];
             var area = Request.Params["deliverarea"];
             var hy = Request.Params["hy"];
-            var adclass = Request.Params["adclass"];
+            var adclass = Request.Params["adclass"];//公告分类
             var keyword = Request.Params["keyword"];
-            int time = int.Parse(Request.Params["time"]);
+            int time = int.Parse(Request.Params["time"]);//时间段---近几月
             int page = int.Parse(Request.Params["page"]);
-            var exactdate = Request.Params["exactdate"];
+            var exactdate = Request.Params["exactdate"];//精确日期
             var startdate = Request.Params["startdate"];
             var enddate = Request.Params["enddate"];
 
-            TopDocs serchalllist = SearchIndex("/Lucene.Net/IndexDic/GongGao", pro, city, area, hy, adclass, keyword);
-
-            if (serchalllist != null && serchalllist.totalHits > 0)
-            {
-                IList<公告> serchlisttemp = new List<公告>();
-                Dictionary<string, string> dic = new Dictionary<string, string>();
-                dic.Add("title", keyword);
-                //IndexSearcher search = new IndexSearcher(IndexDic("/Lucene.Net/IndexDic/GongGao"), true);
-                IndexSearcher search = new IndexSearcher(new Lucene.Net.Store.SimpleFSDirectory(new System.IO.DirectoryInfo(IndexDic("/Lucene.Net/IndexDic/GongGao"))), true);
-                for (int i = 0; i < serchalllist.totalHits && i < 1000; i++)
-                {
-                    公告 model = new 公告();
-                    model.Id = long.Parse(search.Doc(serchalllist.scoreDocs[i].doc).Get("NumId"));
-                    model.内容主体.标题 = search.Doc(serchalllist.scoreDocs[i].doc).Get("Title");
-                    model.公告信息.公告类别 = (公告.公告类别)Enum.Parse(typeof(公告.公告类别), search.Doc(serchalllist.scoreDocs[i].doc).Get("AdClass"));
-                    model.公告信息.公告性质 = (公告.公告性质)Enum.Parse(typeof(公告.公告性质), search.Doc(serchalllist.scoreDocs[i].doc).Get("AdFeature"));
-                    model.公告信息.所属地域.省份 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdPro");
-                    model.公告信息.所属地域.城市 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdCity");
-                    model.公告信息.所属地域.区县 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdArea");
-                    model.公告信息.一级分类 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdHy");
-                    model.内容主体.发布时间 = Convert.ToDateTime(search.Doc(serchalllist.scoreDocs[i].doc).Get("AddTime")); ;
-                    serchlisttemp.Add(SetHighlighter(dic, model));
-                }
-                getsearch(page, time, exactdate, serchlisttemp, startdate, enddate, adclass);
-            }
-            else
-            {
-                ViewData["currentpage"] = 1;
-                ViewData["pagecount"] = 1;
-            }
+            getsearch(page, pro, city, area, hy, adclass, keyword, time, exactdate, startdate, enddate);
+            
             return PartialView("Part_Announce/Part_SearchByPage");
         }
         public ActionResult Part_AnnounceDetail()
@@ -255,38 +199,8 @@ namespace Go81WebApp.Controllers.门户
             var exactdate = Request.Form["exactdate"];
             var startdate = Request.Form["startdate"];
             var enddate = Request.Form["enddate"];
-
-            TopDocs serchalllist = SearchIndex("/Lucene.Net/IndexDic/GongGao", pro, city, area, hy, adclass, keyword);
-
-            if (serchalllist != null && serchalllist.totalHits > 0)
-            {
-                IList<公告> serchlisttemp = new List<公告>();
-                Dictionary<string, string> dic = new Dictionary<string, string>();
-                dic.Add("title", keyword);
-                //IndexSearcher search = new IndexSearcher(IndexDic("/Lucene.Net/IndexDic/GongGao"), true);
-                IndexSearcher search = new IndexSearcher(new Lucene.Net.Store.SimpleFSDirectory(new System.IO.DirectoryInfo(IndexDic("/Lucene.Net/IndexDic/GongGao"))), true);
-                for (int i = 0; i < serchalllist.totalHits && i < 1000; i++)
-                {
-                    公告 model = new 公告();
-                    model.Id = long.Parse(search.Doc(serchalllist.scoreDocs[i].doc).Get("NumId"));
-                    model.内容主体.标题 = search.Doc(serchalllist.scoreDocs[i].doc).Get("Title");
-                    model.公告信息.公告类别 = (公告.公告类别)Enum.Parse(typeof(公告.公告类别), search.Doc(serchalllist.scoreDocs[i].doc).Get("AdClass"));
-                    model.公告信息.公告性质 = (公告.公告性质)Enum.Parse(typeof(公告.公告性质), search.Doc(serchalllist.scoreDocs[i].doc).Get("AdFeature"));
-                    model.公告信息.所属地域.省份 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdPro");
-                    model.公告信息.所属地域.城市 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdCity");
-                    model.公告信息.所属地域.区县 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdArea");
-                    model.公告信息.一级分类 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdHy");
-                    model.内容主体.发布时间 = Convert.ToDateTime(search.Doc(serchalllist.scoreDocs[i].doc).Get("AddTime"));
-                    serchlisttemp.Add(SetHighlighter(dic, model));
-                }
-                getsearch(1, time, exactdate, serchlisttemp, startdate, enddate, adclass);
-
-            }
-            else
-            {
-                ViewData["currentpage"] = 1;
-                ViewData["pagecount"] = 1;
-            }
+            getsearch(1, pro, city, area, hy, adclass, keyword, time, exactdate, startdate, enddate);
+            
             ViewBag.Provence = pro;
             ViewBag.City = city;
             ViewBag.Area = area;
@@ -302,104 +216,114 @@ namespace Go81WebApp.Controllers.门户
             return PartialView("Part_Announce/Part_AnnounceSearch");
         }
 
-        public void getsearch(int page, int days, string exactdate, IList<公告> serchlisttemp, string startdate, string enddate, string adclass)
+        public void getsearch(int page, string provence, string city, string area, string hy, string adclass, string keyword, int days, string exactdate, string startdate, string enddate)
         {
-            serchlisttemp = serchlisttemp.OrderByDescending(o => o.内容主体.发布时间).ToList();
             var datenow = Convert.ToDateTime(DateTime.Now.ToShortDateString());
-            IList<公告> serchlist = new List<公告>();
-            try
+            IMongoQuery query = null;
+            //地域
+            if (!string.IsNullOrWhiteSpace(provence))
             {
-
-                if (days != -1)
+                query = query.And(Query<公告>.Where(o => o.公告信息.所属地域.省份.Contains(provence)));
+                if (!string.IsNullOrWhiteSpace(city))
                 {
-                    if (!string.IsNullOrWhiteSpace(exactdate))
+                    query = query.And(Query<公告>.Where(o => o.公告信息.所属地域.城市.Contains(city)));
+                    if (!string.IsNullOrWhiteSpace(area))
                     {
-                        var exactdatetime = Convert.ToDateTime(exactdate);
-                        if (exactdatetime <= datenow && exactdatetime.AddDays(days) >= datenow)
-                        {
-                            foreach (var item in serchlisttemp)
-                            {
-                                if (exactdatetime.ToShortDateString() == item.内容主体.发布时间.ToShortDateString())
-                                {
-                                    serchlist.Add(item);
-                                }
-                            }
-                        }
+                        query = query.And(Query<公告>.Where(o => o.公告信息.所属地域.区县.Contains(area)));
                     }
-                    else
-                    {
-                        foreach (var item in serchlisttemp)
-                        {
-                            TimeSpan t = datenow - item.内容主体.发布时间;
-                            if (t.TotalDays <= days)
-                            {
-                                serchlist.Add(item);
-                            }
-                        }
-                    }
+                }
+            }
+            //行业
+            if (!string.IsNullOrWhiteSpace(hy))
+            {
+                query = query.And(Query<公告>.Where(o => o.公告信息.一级分类.Contains(hy)));
+            }
+            //公告类别--招标公告、采购公告、中标商品结果查询
+            if (!string.IsNullOrWhiteSpace(adclass))
+            {
+                if (adclass == "中标商品公告查询")
+                {
+                    query = query.And(Query<公告>.Where(o => o.中标商品链接.Any(p => p.商品ID != -1)));
+                }
+                else if(adclass=="招标公告")
+                {
+                    query = query.And(Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.公开招标 ));    
+                }
+                else if(adclass=="采购公告")
+                {
+                    query = query.And(Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.邀请招标 || o.公告信息.公告类别 == 公告.公告类别.询价采购 || o.公告信息.公告类别 == 公告.公告类别.竞争性谈判));
+                }
+                else if(adclass=="其他")
+                {
+                    query =
+                        query.And(
+                            Query<公告>.Where(
+                                o =>
+                                    o.公告信息.公告类别 == 公告.公告类别.其他 || o.公告信息.公告类别 == 公告.公告类别.单一来源 ||
+                                    o.公告信息.公告类别 == 公告.公告类别.协议采购 || o.公告信息.公告类别 == 公告.公告类别.未设置));
+                }
+            }
+                
+            //关键字
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                query = query.And(Query<公告>.Where(o => o.内容主体.标题.Contains(keyword)));
+            }
+            //时间段-----近一周、近一月
+            if (days != -1)
+            {
+                if (!string.IsNullOrWhiteSpace(exactdate))
+                {
+                    //既选择了时间段又选择了精确日期 ----以精确日期为准
+                    var exactdatetime = Convert.ToDateTime(exactdate);
+                    var exactdatetimeend = Convert.ToDateTime(exactdate).AddDays(1);
+                    query =
+                        query.And(
+                            Query<公告>.Where(
+                                o => o.内容主体.发布时间 >= exactdatetime && o.内容主体.发布时间 < exactdatetimeend));
+
                 }
                 else
                 {
-                    if (!string.IsNullOrWhiteSpace(exactdate))
-                    {
-                        var exactdatetime = Convert.ToDateTime(exactdate);
-                        foreach (var item in serchlisttemp)
-                        {
-                            if (exactdatetime.ToShortDateString() == item.内容主体.发布时间.ToShortDateString())
-                            {
-                                serchlist.Add(item);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        serchlist = serchlisttemp;
-                    }
+                    //选择了时间段未选择精确日期
+                    var laste = datenow.AddDays(-days);
+                    query = query.And(Query<公告>.Where(o => o.内容主体.发布时间 > laste && o.内容主体.发布时间 < datenow));
                 }
-
-                if (!string.IsNullOrWhiteSpace(startdate))
-                {
-                    serchlist = serchlist.Where(o => o.内容主体.发布时间 >= Convert.ToDateTime(startdate)).ToList();
-                }
-                if (!string.IsNullOrWhiteSpace(enddate))
-                {
-                    serchlist = serchlist.Where(o => o.内容主体.发布时间 <= Convert.ToDateTime(enddate)).ToList();
-                }
-
-                if (adclass == "中标商品公告查询")
-                {
-                    serchlist = serchlist.Where(o => o.中标商品链接.Any(p=>p.商品ID!=-1)).ToList();
-                }
-            }
-            catch
-            {
-
-            }
-
-            if (serchlist.Count > 0)
-            {
-                IList<公告> serchlist_t = new List<公告>();
-                int maxpage = Math.Max((serchlist.Count + PAGESIZE - 1) / PAGESIZE, 1);
-
-                int length = PAGESIZE;
-                if (maxpage == page && serchlist.Count % PAGESIZE != 0)
-                    length = serchlist.Count % PAGESIZE;
-
-                int count = PAGESIZE * (page - 1);
-
-                for (int i = count; i < count + length; i++)
-                {
-                    serchlist_t.Add(serchlist[i]);
-                }
-                ViewData["currentpage"] = page;
-                ViewData["pagecount"] = maxpage;
-                ViewData["公告搜索显示列表"] = serchlist_t;
             }
             else
             {
-                ViewData["currentpage"] = 1;
-                ViewData["pagecount"] = 1;
+                if (!string.IsNullOrWhiteSpace(exactdate))
+                {
+                    //未选择时间段仅选择了精确日期
+                    var exactdatetime = Convert.ToDateTime(exactdate);
+                    query =
+                        query.And(
+                            Query<公告>.Where(
+                                o => o.内容主体.发布时间.ToShortDateString() == exactdatetime.ToShortDateString()));
+                }
             }
+
+            //时间段
+            if (!string.IsNullOrWhiteSpace(startdate))
+            {
+                query = query.And(Query<公告>.Where(o => o.内容主体.发布时间 >= Convert.ToDateTime(startdate)));
+            }
+            if (!string.IsNullOrWhiteSpace(enddate))
+            {
+                query = query.And(Query<公告>.Where(o => o.内容主体.发布时间 <= Convert.ToDateTime(enddate)));
+            }
+            
+            var listcount = (int)公告管理.计数公告(0, 0, query);
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+
+            //int length = PAGESIZE;
+            //if (maxpage == page && listcount % PAGESIZE != 0)
+            //    length = listcount % PAGESIZE;
+
+            //int count = PAGESIZE * (page - 1);
+            ViewData["currentpage"] = page;
+            ViewData["pagecount"] = maxpage;
+            ViewData["公告搜索显示列表"] = 公告管理.查询公告(PAGESIZE * (page - 1), PAGESIZE, query, false, SortBy.Descending("内容主体.发布时间"));
         }
 
         public ActionResult AnnounceBidGood()
@@ -434,39 +358,8 @@ namespace Go81WebApp.Controllers.门户
             var exactdate = Request.Params["exactdate"];
             var startdate = Request.Params["startdate"];
             var enddate = Request.Params["enddate"];
-
-            TopDocs serchalllist = SearchIndex("/Lucene.Net/IndexDic/GongGao", pro, city, area, hy, adclass, keyword);
-
-            if (serchalllist != null && serchalllist.totalHits > 0)
-            {
-                IList<公告> serchlisttemp = new List<公告>();
-                Dictionary<string, string> dic = new Dictionary<string, string>();
-                dic.Add("title", keyword);
-                //IndexSearcher search = new IndexSearcher(IndexDic("/Lucene.Net/IndexDic/GongGao"), true);
-                IndexSearcher search = new IndexSearcher(new Lucene.Net.Store.SimpleFSDirectory(new System.IO.DirectoryInfo(IndexDic("/Lucene.Net/IndexDic/GongGao"))), true);
-                for (int i = 0; i < serchalllist.totalHits && i < 1000; i++)
-                {
-                    公告 model = new 公告();
-                    model.Id = long.Parse(search.Doc(serchalllist.scoreDocs[i].doc).Get("NumId"));
-                    model.内容主体.标题 = search.Doc(serchalllist.scoreDocs[i].doc).Get("Title");
-                    model.公告信息.公告类别 = (公告.公告类别)Enum.Parse(typeof(公告.公告类别), search.Doc(serchalllist.scoreDocs[i].doc).Get("AdClass"));
-                    model.公告信息.公告性质 = (公告.公告性质)Enum.Parse(typeof(公告.公告性质), search.Doc(serchalllist.scoreDocs[i].doc).Get("AdFeature"));
-                    model.公告信息.所属地域.省份 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdPro");
-                    model.公告信息.所属地域.城市 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdCity");
-                    model.公告信息.所属地域.区县 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdArea");
-                    model.公告信息.一级分类 = search.Doc(serchalllist.scoreDocs[i].doc).Get("AdHy");
-                    model.内容主体.发布时间 = Convert.ToDateTime(search.Doc(serchalllist.scoreDocs[i].doc).Get("AddTime"));
-                    serchlisttemp.Add(SetHighlighter(dic, model));
-                }
-
-                getsearch(page, time, exactdate, serchlisttemp, startdate, enddate, adclass);
-            }
-            else
-            {
-                ViewData["currentpage"] = 1;
-                ViewData["pagecount"] = 1;
-            }
-
+            getsearch(page, pro, city, area, hy, adclass, keyword, time, exactdate, startdate, enddate);
+           
             return PartialView("Part_Announce/Part_SearchByCondition");
         }
 

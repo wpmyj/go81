@@ -522,7 +522,7 @@ namespace Go81WebApp.Controllers.基本功能
                         //{"历史报价项目","供应商后台/OnlineBiddingHistory"},
                         //{"我的订购服务","供应商后台/MyServices"},
                     });
-            m.Add("购物车", new Dictionary<string, object> { { "我的购物车", "供应商后台/PurchaseInfo" } });
+            m.Add("订单管理", new Dictionary<string, object> { { "我的订单", "供应商后台/PurchaseInfo" } });
 
 #endif
 
@@ -618,7 +618,10 @@ namespace Go81WebApp.Controllers.基本功能
                 {
                     {"修改密码", "供应商后台/Vip_Password_Manage"},
                 });
-
+            m.Add("订单", new Dictionary<string, object>
+                {
+                    {"订单列表", "供应商后台/PurchaseInfo"},
+                });
             //m.Add("投诉建议", new Dictionary<string, object>
             //        {
             //            {
@@ -686,7 +689,7 @@ namespace Go81WebApp.Controllers.基本功能
                 {
                     {"询价采购历史", new Tuple<权限[], bool>(new[]{权限.欢迎页面}, false)}, 
                     {"欢迎页面", new Tuple<权限[], bool>(new[]{权限.欢迎页面}, false)}, 
-                    {"我的购物车", new Tuple<权限[], bool>(new[]{权限.欢迎页面}, false)},
+                    {"我的订单", new Tuple<权限[], bool>(new[]{权限.欢迎页面}, false)},
                     {"待办任务", new Tuple<权限[], bool>(new[]{权限.待办任务}, false)}, 
 
                     {"新增采购公告", new Tuple<权限[], bool>(new[]{权限.新增采购公告}, false)}, 
@@ -794,9 +797,9 @@ namespace Go81WebApp.Controllers.基本功能
                         }
                     },
                     {
-                       "购物车", new Dictionary<string, object>
+                       "订单管理", new Dictionary<string, object>
                        {
-                       { "我的购物车", "单位用户后台/PurchaseInfo" },
+                       { "我的订单", "单位用户后台/PurchaseInfo" },
                        }
                     },
                     {
@@ -1720,10 +1723,10 @@ namespace Go81WebApp.Controllers.基本功能
                     }
                 },
                 {
-                    "购物车", new Dictionary<string, object>
+                    "订单管理", new Dictionary<string, object>
                     {
                         {
-                            "我的购物车", "个人用户后台/PurchaseInfo"
+                            "我的订单", "个人用户后台/PurchaseInfo"
                         },
                     }
                 },

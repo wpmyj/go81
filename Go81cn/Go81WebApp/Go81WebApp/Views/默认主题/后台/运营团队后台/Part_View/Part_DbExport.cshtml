@@ -53,6 +53,16 @@
         <input type="button" onclick="ExportExcel()" value="导出专家到Excel表" class="inputstyle" />
         <input type="button" onclick="$('#modalselect').fadeIn();" value="导出供应商手机号到Excel表" class="inputstyle" />
     </div>
+
+    <div id="demo">
+        <form name="sub" action="/运营团队后台/Uploadtest" method="post" enctype="multipart/form-data">
+            <input id="file_upload" type="file" name="fiel" multiple="multiple" />
+            <div class="image_container">
+                <img id="preview" width="100" height="100">
+            </div>
+            <input type="submit" value="提交"/>
+        </form>
+    </div>
 </div>
 
 <!--供应商手机号导出筛选条件-->
@@ -114,6 +124,46 @@
 
 <script type="text/javascript" language="javascript">
     $(document).ready(function () {
+        $("#file_upload").change(function () {
+            var $file = $(this);
+            var allowExtention = "jpg,bmp,gif,png"; //.jpg,.bmp,.gif,.png,允许上传文件的后缀名
+            var extention = $file.val().substring($file.val().lastIndexOf(".") + 1).toLowerCase(); //获取当前上传文件的扩展名
+            if (allowExtention.indexOf(extention) > -1) {
+                var fileObj = $file[0];
+                //Firefox、IE10、11存在window.URL，Chrome存在window.URL和window.webkitURL，IE7、8、9不存在window.URL
+                var windowURL = window.URL || window.webkitURL;
+                var dataURL;
+                var $img = $("#preview");
+
+                //在IE7、8、9中无法获取到FileObject的files属性   可以用来区分IE7、8、9和IE10、11、Chrome、Firefox
+                if (fileObj && fileObj.files && fileObj.files[0]) {
+                    //IE11、10和Chrome、Firefox获取上传图片完整路径
+
+                     
+   
+
+                    dataURL = windowURL.createObjectURL(fileObj.files[0]);
+                    $img.attr('src', dataURL);
+                } else {
+                    //IE9及以下获取上传图片完整路径
+                    //在Chrome中无法获取FileObject的全路径，得到的是一个假路径
+                    //在Firefox中根本获取不到路径，得到的是一个文件名
+                    dataURL = $file.val();
+                    var imgObj = document.getElementById("preview");
+                    // 两个坑:
+                    // 1、在设置filter属性时，元素必须已经存在在DOM树中，动态创建的Node，也需要在设置属性前加入到DOM中，先设置属性在加入，无效；
+                    // 2、src属性需要像下面的方式添加，上面的两种方式添加，无效；
+                    imgObj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                    imgObj.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = dataURL;
+                }
+
+            }
+            else {
+                alert("仅支持" + allowExtention + "为后缀名的文件!");
+            }
+        });
+
+
 
         $("#导出数据").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
         $("#导出数据").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });

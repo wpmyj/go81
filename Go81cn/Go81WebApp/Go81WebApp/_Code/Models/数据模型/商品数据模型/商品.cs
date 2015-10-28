@@ -40,6 +40,10 @@ namespace Go81WebApp.Models.数据模型.商品数据模型
             public List<string> 商品型号图片 { get; set; }
             public 用户链接<供应商> 所属供应商 { get; set; }
             public 商品分类链接 所属商品分类 { get; set; }
+            /// <summary>
+            /// 若计量单位为KG则重量为KG数，否则重量为平均重量
+            /// </summary>
+            public decimal 商品重量 { get; set; }
 
             public _商品信息()
             {

@@ -1263,6 +1263,7 @@
                     alert("请填写可参评物资类别！");
                 }
                 else {
+                   
                     $this.parents(".expert_identity").show().end().next().html("请填写" + identity[parseInt(item)].split('.')[identity[parseInt(item)].split('.').length - 1] + "信息！").end().focus();
                 }
                 return false;
@@ -1287,7 +1288,7 @@
                     $this.parents(".expert_identity").show().end().next().html("请填写" + identity_a[parseInt(item)] + "信息！").end().focus();
                 }
                 else {
-                    $this.parents(".expert_identity").show().end().next().html("请填写" + identity_a[parseInt(item)].split('.')[identity[parseInt(item)].split('.').length - 1] + "信息！").end().focus();
+                    $this.parents(".expert_identity").show().end().next().html("请填写" + identity_a[parseInt(item)].split('.')[identity_a[parseInt(item)].split('.').length - 1] + "信息！").end().focus();
                 }
                 return false;
             }

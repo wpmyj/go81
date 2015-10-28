@@ -580,7 +580,7 @@
                                 if (i % 2 == 0)
                                 {
                                     <li>
-                                        @if ((item.Id< 3094 && item.Id > 3100)&&(ts.TotalHours < 72 || item.Id == 3035))
+                                        @if ((item.Id < 3094 || item.Id > 3100 || item.Id == 3035) && ts.TotalHours < 72)
                                         {
                                             <img src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
@@ -596,7 +596,7 @@
                                 else
                                 {
                                     <li class="oddlinecolor">
-                                        @if ((item.Id < 3094 && item.Id > 3100) && (ts.TotalHours < 72 || item.Id == 3035))
+                                        @if ((item.Id < 3094 || item.Id > 3100 || item.Id == 3035) &&ts.TotalHours < 72)
                                         {
                                             <img src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
@@ -981,7 +981,7 @@
                 </div>
                 <div style="margin: 5px;text-align: center;">
                     <a href="/注册/Register_Expert_Agree" style="display:inline-block; width:100px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.png') no-repeat center left">评审专家申请</a>
-                    <a href="####" style="display:inline-block;margin-left:5px; width:100px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.png') no-repeat right center">个人用户注册</a>
+                    <a href="/注册/Register_Person" style="display:inline-block;margin-left:5px; width:100px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.png') no-repeat right center">个人用户注册</a>
                 </div>
                 <div style="margin: 5px;text-align: center;">
                     <a href="/政策法规/ZcfgList" style="display:inline-block; width:100px;height:44px;line-height:44px; text-align :center;color:#fff;font-family:STSong;font-size:14px;font-weight:bold; background:url('../Images/ywfw.png') no-repeat">政策法规</a>

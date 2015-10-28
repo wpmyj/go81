@@ -258,7 +258,7 @@
         }
 
 .layout_other_imgbox #produserchtext {
-    width: 565px;
+    width:450px;
     height: 42px;
     line-height:42px\9;
     float:left;
@@ -1932,8 +1932,7 @@ a {
         font-size: 14px;
         height: 25px;
         line-height: 25px;
-        background-image: url('../images/index_ullibg.jpg');
-        background-repeat: no-repeat;
+        background: url('../images/index_ullibg.jpg') no-repeat top left;
         padding-left: 10px;
     }
 
@@ -1944,9 +1943,10 @@ a {
         }
 
         .gys_xttz_contentbox ul li a {
+            float:left;
             font-size: 14px;
             text-decoration: none;
-            display: block;
+            display: inline-block;
             width: 710px;
             overflow: hidden;
             text-overflow: ellipsis;

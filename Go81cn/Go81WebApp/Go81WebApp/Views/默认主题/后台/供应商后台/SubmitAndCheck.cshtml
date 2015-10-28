@@ -3,9 +3,21 @@
 @using Go81WebApp.Models.数据模型.用户数据模型
 @{
     ViewBag.Title = "提交申请";
-    Layout = "_BackLayout.cshtml";
+    //Layout = "_BackLayout.cshtml";
 }
 <link href="~/css/Bk_Mangage.css" rel="stylesheet" />
+<style>
+    .Tab{
+        background-color:rgb(211, 209, 209);
+    }
+    .Tab a{
+        display:inline-block;
+        width:115px;
+        height:30px;
+        line-height:30px;
+        text-align:center;
+    }
+</style>
 <div id="f">
     <div style="position:fixed;z-index:10; top:0px; left:0px; text-align:center; right:0; bottom:0px; background-color:black; opacity:0.5; -moz-opacity:0.5; filter:alpha(opacity:50); height:100%; width:100%;border:1px solid green;">
     </div>
@@ -104,8 +116,8 @@
             </div>
         </div>
         <div class="gys_znxx_box">
-            <div style="margin-left:55px;">
-                <div style="margin-top:20px;" class="Tab">
+            <div>
+                <div style="margin-top:20px;width:100%;" class="Tab">
                     <a onmouseover="checks(this,'tb2')">企业概况</a><a onmouseover="checks(this,'tb3')">企业基本信息</a><a onmouseover="checks(this,'tb4')">工商注册信息</a><a onmouseover="checks(this,'tb5')">营业执照信息</a><a onmouseover="checks(this,'tb6')">法定代表人信息</a><a onmouseover="checks(this,'tb7')">出资人或股东</a><a onmouseover="checks(this,'tb8')">财务状况信息</a><a onmouseover="checks(this,'tb9')" style="border-right:none;">税务信息</a>
                 </div>
                 <div class="tb2">

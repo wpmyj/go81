@@ -3,7 +3,7 @@
     ViewBag.Title = "商品详情";
 }
 @model Go81WebApp.Models.数据模型.商品数据模型.商品
-<script language="javascript" type="application/javascript" src="~/JS/tblmenu.js"></script>
+@*<script language="javascript" type="application/javascript" src="~/JS/tblmenu.js"></script>*@
 <link href="~/css/css.css" type="text/css" rel="stylesheet">
 @*<script src="~/js/jquery-1.2.6.pack.js" type=text/javascript></script>*@
 <script src="~/js/base.js" type=text/javascript></script>
@@ -242,7 +242,7 @@
                         <input type="text" value="1" id="purchase_num" />
                         <a class="purchase_bt" id="add">+</a>
                         <a class="purchase_bt" id="diff" style="top:19px;border-bottom:none;height:16px;">-</a>
-            </div>
+                    </div>
                     <div style="display:inline-block;"><a id="car" lang="@Model.Id"></a></div>
                     <div><a href="/商品陈列/PurchaseInfo" style="color:#4da3ff;">去购物车结算>></a></div>
                 </div>

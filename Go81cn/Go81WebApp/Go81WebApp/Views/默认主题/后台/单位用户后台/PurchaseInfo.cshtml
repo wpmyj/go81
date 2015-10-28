@@ -49,6 +49,8 @@
                                 <div><a href="/商品陈列/Product_Detail?id=@child.商品.商品ID">@child.商品.商品.商品信息.商品名</a></div>
                                 <div class="good_price">商品价格：@string.Format("{0:c2}",child.商品.商品.销售信息.价格)</div>
                                 <div>采购数量：@child.数量</div>
+                                <div class="good_price">总价：@string.Format("{0:c2}", child.商品.商品.销售信息.价格 * child.数量)</div>
+                                <div>采购时间：@item.基本数据.添加时间.ToString("yyyy/MM/dd HH:mm:ss")</div>
                             </div>
                             <div style="clear:both;"></div>
                         </div>

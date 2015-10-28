@@ -5,15 +5,51 @@
     ViewBag.Title = "我的购物车";
 }
 <link href="~/css/css.css" type="text/css" rel="stylesheet">
+<script src="~/JS/provinceandcity_all.js"></script>
 <div id="result" class="out_box">
     <div class="out_box_infirst">
     </div>
     <div class="out_box_insecond" style="top:10%;">
-        <div class="out_box_insecond_child" style="width:400px;">
-            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="$('#result').hide(); window.location = '/商品陈列/PurchaseInfo';">×</a></div>
-            <div style="width:400px; height:auto;overflow:hidden;">
-                <div style="color: #0065FF;height: 240px;text-align: center;line-height: 220px;">
-                    您的商品订单已经成功提交！
+        <div class="out_box_insecond_child" style="width:600px;">
+            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="$('#result').hide();">×</a></div>
+            <div style="width:600px; height:auto;overflow:hidden;">
+                <div style="color: #0065FF;min-height: 240px; height:auto;">
+                    <form action="/商品陈列/AddPurchaseInfo" method="post" name="Info">
+                        <input type="hidden" id="summary" name="summary" value="" />
+                        <table id="orderInfo" style="width:100%;">
+                            <tr>
+                                <td align="right" style="text-indent:2em;">联系人：</td>
+                                <td><input type="text" name="contactman" id="contactman" /></td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="text-indent:2em;">联系电话：</td>
+                                <td><input type="text" name="phone" id="phone" /></td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="text-indent:2em;">联系地址：</td>
+                                <td>
+                                    <select id="province" name="province" style="width:100px;"></select>
+                                    <select id="city" name="city" style="width:100px;"></select>
+                                    <select id="area" name="area" style="width:100px;"></select>
+                                    <script>
+                                        window.onload = function () { new PCAS("province", "city", "area"); }
+                                    </script>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="text-indent:2em;" valign="top">具体地址：</td>
+                                <td>
+                                    <textarea id="detail_address" name="detail" cols="50" rows="5" style="resize:none;"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center">
+                                    <a id="sub_bt1">确定</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>
@@ -26,18 +62,24 @@
         <div class="out_box_insecond_child" style="width:400px;">
             <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="$('#login').hide()">×</a></div>
             <div style="width:400px; height:auto;overflow:hidden;">
-                <div>
+                <div id="loginbox">
                     <div style="text-align:center;">请先登录</div>
                     <form action="/商品陈列/Login" method="post">
                         <div class="login">
                             <div class="img"><img src="~/Images/login_user.jpg" /></div>
-                            <div class="text"><input type="text" placeholder="请输入登录名" value="" name="uname" /></div>
+                            <div class="text">
+                                <input type="text" placeholder="请输入登录名" value="" name="uname" />
+                            </div>
                         </div>
                         <div class="login">
                             <div class="img"><img src="~/Images/login_pwd.jpg" /></div>
-                            <div class="text"><input type="password" placeholder="请输入密码" value="" name="upwd" /></div>
+                            <div class="text">
+                                <input type="password" placeholder="请输入密码" value="" name="upwd" />
+                            </div>
                         </div>
-                        <div style="text-align:center;margin:10px auto;"><input type="submit" id="submitbt" value="登录" /></div>
+                        <div style="text-align:center;margin:10px auto;">
+                            <input type="submit" id="submitbt" value="登录" />
+                        </div>
                     </form>
                 </div>
             </div>
@@ -61,19 +103,17 @@
             <div class="header_operate">操作</div>
             <div style="clear:both;"></div>
         </div>
-    <form action="/商品陈列/AddPurchaseInfo" method="post">
-        <input type="hidden" id="summary" value="" />
-        @foreach (var item in Model)
+        foreach (var item in Model)
         {
             <div class="goodlist" id="goodlist@(i)">
                 @{
             商品 g = 商品管理.查找商品(item.Key);
                 }
                 <div style="float:left; width:52px;"><input type="checkbox" data-number="@item.Value" data-id="@g.Id" id="allprice@(i)" value="@(item.Value * g.销售信息.价格)" name="sum" onclick="selectme(this)" /></div>
-                <div class="goodlist_img"><img style="width:80px; height:80px;" src="@g.商品信息.商品图片.First().Replace("original","150X150")" /></div>
+                <div class="goodlist_img"><img style="width:80px; height:80px;" src="@g.商品信息.商品图片.First().Replace(" original","150x150")" /></div>
                 <div class="goodlist_introduce">@g.商品信息.商品名</div>
                 <div class="goodlist_price">@g.销售信息.价格</div>
-                <div class="goodlist_count" style="position:relative;border:1px solid #aaa;width:94px; height:25px;"><a class="changebt" id="diff"  name="@(i)" data-price="@g.销售信息.价格">-</a><input data-price="@g.销售信息.价格" name="@i" class="gnumber" type="text" onblur="setValue(this)" value="@item.Value" /><a class="changebt" id="add" style="top:0px;left:72px; border-right:none; border-left:1px solid #aaa;" name="@(i)" data-price="@g.销售信息.价格">+</a></div>
+                <div class="goodlist_count" style="position:relative;border:1px solid #aaa;width:94px; height:25px;"><a class="changebt" id="diff" name="@(i)" data-price="@g.销售信息.价格">-</a><input data-price="@g.销售信息.价格" name="@i" class="gnumber" type="text" onkeydown="getValue(this)" onkeyup="setValue(this)" onblur="    setValue(this)" value="@item.Value" /><a class="changebt" id="add" style="top:0px;left:72px; border-right:none; border-left:1px solid #aaa;" name="@(i)" data-price="@g.销售信息.价格">+</a></div>
                 <div class="goodlist_sum" id="price@(i)">@(item.Value * g.销售信息.价格)</div>
                 <div class="header_operate"><a class="delbt" id="@g.Id" href="###" name="@(i)" style="color:#ff0000;">删除</a></div>
                 <div style="clear:both;"></div>
@@ -81,28 +121,34 @@
             i++;
         }
         <div style="text-align:right;">
-        <span style="color:#ff0000;margin-right:10px;" id="allprice"></span>
-        <a id="sub_bt"></a>
+            <span style="color:#ff0000;margin-right:10px;" id="allprice"></span>
+            <a id="sub_bt"></a>
         </div>
-    </form>
     }
 </div>
 <script type="text/javascript" language="javascript">
+    $("#sub_bt1").click(function () {
+        if ($("#contactman").val() != "" && $("#phone").val() != "" && $("#province").val() != "" && $("#city").val() != "" && $("#area").val() != "" && $("#detail_address").val() != "") {
+            document.forms["Info"].submit();
+        }
+        else
+        {
+            alert("请将信息填写完整！");
+        }
+    });
     $("#sub_bt").click(function () {
-        var str = "";
-        $(":input[name='sum']").each(function () {
-            if(this.checked)
-            {
-                str += $(this).attr("data-number") + "," + $(this).attr("data-id") + "|";;
-            }
-        });
-        $.get("/商品陈列/AddPurchaseInfo", { info: str }, function (data) {
-            if(data!=-1)
-            {
+        $.get("/商品陈列/CheckLogin", {}, function (data) {
+            if (data != -1) {
+                var str = "";
+                $(":input[name='sum']").each(function () {
+                    if (this.checked) {
+                        str += $(this).attr("data-number") + "," + $(this).attr("data-id") + "|";;
+                    }
+                });
+                $("#summary").val(str);
                 $("#result").show();
             }
-            else
-            {
+            else {
                 $("#login").show();
             }
         });
@@ -110,64 +156,20 @@
     $(".changebt").click(function () {
         var price = parseFloat($(this).attr("data-price"));
         var name = $(this).attr("name");
-        var str=$(this).attr("id");
-        var count=0;
-        if(str=="add")
-        {
-            count =parseInt($(this).prev(":input").val());
+        var str = $(this).attr("id");
+        var count = 0;
+        if (str == "add") {
+            count = parseInt($(this).prev(":input").val());
             count += 1;
             $(this).prev(":input").val(count);
         }
-        else
-        {
+        else {
             count = parseInt($(this).next(":input").val());
-            if (count>1)
-            {
+            if (count > 1) {
                 count -= 1;
                 $(this).next(":input").val(count);
             }
         }
-        var strPrice = price.toString();
-        if(strPrice.indexOf('.')!=-1)
-        {
-            $("#price" + name).text(count * price);
-            $("#allprice" + name).val(count * price);
-        }
-        else
-        {
-            $("#price" + name).text((count * price) + ".00");
-            $("#allprice" + name).val((count * price) + ".00");
-        }
-        $("#allprice" + name).attr("data-number", count);
-        calulator();
-    });
-    function calulator()
-    {
-        var elem = document.getElementsByName("sum");
-        var price = 0;
-        for (var i = 0; i < elem.length; i++) {
-            if (elem.item(i).checked)
-            {
-                price += parseFloat(elem.item(i).value);
-            }
-        }
-        var strPrice = price.toString();
-        if (strPrice.indexOf('.')!=-1)
-        {
-            $("#allprice").text("总金额：" + price + "元");
-        }
-        else
-        {
-            $("#allprice").text("总金额：" + price + ".00元");
-        }
-    }
-    function setValue(th)
-    {
-        var price = parseFloat($(th).attr("data-price"));
-        var name = $(th).attr("name");
-        var count = 0;
-        count = parseInt($(th).val());
-        $(th).val(count);
         var strPrice = price.toString();
         if (strPrice.indexOf('.') != -1) {
             $("#price" + name).text(count * price);
@@ -177,8 +179,54 @@
             $("#price" + name).text((count * price) + ".00");
             $("#allprice" + name).val((count * price) + ".00");
         }
-        $("#allprice" + name).val("data-number", count);
+        $("#allprice" + name).attr("data-number", count);
         calulator();
+    });
+    function calulator() {
+        var elem = document.getElementsByName("sum");
+        var price = 0;
+        for (var i = 0; i < elem.length; i++) {
+            if (elem.item(i).checked) {
+                price += parseFloat(elem.item(i).value);
+            }
+        }
+        var strPrice = price.toString();
+        if (strPrice.indexOf('.') != -1) {
+            $("#allprice").text("总金额：" + price + "元");
+        }
+        else {
+            $("#allprice").text("总金额：" + price + ".00元");
+        }
+    }
+    var globlestr = "";
+    function getValue(th) {
+        globlestr = $(th).val();
+    }
+    function setValue(th) {
+        var reg = /[0-9]{1,20}$/g;
+        var str = $(th).val();
+        var price = parseFloat($(th).attr("data-price"));
+        if (!reg.test(str)) {
+            alert("请填写数字");
+            $(th).val(globlestr);
+        }
+        else {
+            var name = $(th).attr("name");
+            var count = 0;
+            count = parseInt($(th).val());
+            $(th).val(count);
+            var strPrice = price.toString();
+            if (strPrice.indexOf('.') != -1) {
+                $("#price" + name).text(count * price);
+                $("#allprice" + name).val(count * price);
+            }
+            else {
+                $("#price" + name).text((count * price) + ".00");
+                $("#allprice" + name).val((count * price) + ".00");
+            }
+            $("#allprice" + name).attr("data-number", count);
+            calulator();
+        }
     }
     $(document).ready(function () {
         var elem = document.getElementsByName("sum");
@@ -187,25 +235,21 @@
         }
         selectme();
     });
-    function selectAll(th)
-    {
+    function selectAll(th) {
         var elem = document.getElementsByName("sum");
-        if(th.checked)
-        {
+        if (th.checked) {
             for (var i = 0; i < elem.length; i++) {
                 elem.item(i).checked = true;
             }
         }
-        else
-        {
+        else {
             for (var i = 0; i < elem.length; i++) {
                 elem.item(i).checked = false;
             }
         }
         calulator();
     }
-    function selectme(th)
-    {
+    function selectme(th) {
         var allselectd = true;
         var elem = document.getElementsByName("sum");
         for (var i = 0; i < elem.length; i++) {
@@ -214,12 +258,10 @@
                 break;
             }
         }
-        if (!allselectd)
-        {
+        if (!allselectd) {
             document.getElementById("allselect").checked = false;
         }
-        else
-        {
+        else {
             document.getElementById("allselect").checked = true;
         }
         calulator();
@@ -227,19 +269,16 @@
     $(".delbt").click(function () {
         var name = $(this).attr("name");
         var gid = $(this).attr("id");
-        $.get("/商品陈列/DelPurchaseInfo", {id:gid}, function (data) {
-            if(data==1)
-            {
+        $.get("/商品陈列/DelPurchaseInfo", { id: gid }, function (data) {
+            if (data == 1) {
                 $("#goodlist" + name).remove();
                 var elem = document.getElementsByName("sum");
-                if(elem.length==0)
-                {
+                if (elem.length == 0) {
                     $("#sub_bt").hide();
                 }
                 calulator();
             }
-            else
-            {  
+            else {
                 alert("删除商品出错！");
             }
         });

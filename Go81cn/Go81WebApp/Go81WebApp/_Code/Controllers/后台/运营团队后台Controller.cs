@@ -133,6 +133,24 @@ namespace Go81WebApp.Controllers.后台
             return PartialView("Part_View/Part_BackHead", m);
         }
 
+        [HttpPost]
+        public ActionResult Uploadtest()
+        {
+
+            var da = Request.Files.Count;
+            HttpPostedFileBase file = Request.Files[0];
+            string filePath = 上传管理.获取上传路径<供应商>(媒体类型.图片, 路径类型.不带域名根路径);
+            string fname = UploadAttachment(file);
+            var path = filePath + fname;
+            return RedirectToAction("DbExport");
+        }
+        public void GetZj()
+        {
+            var zj = 用户管理.查询用户<专家>(0, 0);
+            var json = JsonConvert.SerializeObject(zj);
+            var ssss = 0;
+        }
+
         public class Department
         {
             /// <summary>
@@ -1663,8 +1681,7 @@ namespace Go81WebApp.Controllers.后台
                 {
                     if (string.IsNullOrWhiteSpace(item.资产总额.ToString()) ||
                        string.IsNullOrWhiteSpace(item.负债总额.ToString()) ||
-                       string.IsNullOrWhiteSpace(item.净利润.ToString()) ||
-                       string.IsNullOrWhiteSpace(item.年份.ToString()) ||
+                        string.IsNullOrWhiteSpace(item.年份.ToString()) ||
                        string.IsNullOrWhiteSpace(item.销售收入.ToString()))
                     {
                         item.已填写完整 = false;
@@ -9144,24 +9161,25 @@ namespace Go81WebApp.Controllers.后台
                            .ToDictionary(gg => gg[0]/*.ToString()*/, gg => gg.Skip(1).ToArray()));
             //ViewData["权限集合"] = JsonConvert.SerializeObject(l);
             ViewData["权限集合"] = l;
-
-            int listcount = (int)(用户组管理.计数用户组(0, 0));
-            int maxpage = Math.Max((listcount + USERGROUP_PAGESIZE - 1) / USERGROUP_PAGESIZE, 1);
-
-            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            long pgCount = 0;
+            int cpg = 0;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
-                page = 1;
+                cpg = int.Parse(Request.QueryString["page"]);
             }
-
-            ViewData["listcount"] = listcount;
-            ViewData["pagesize"] = USERGROUP_PAGESIZE;
-            ViewData["currentpage"] = page;
-            ViewData["pagecount"] = maxpage;
-
-            ViewData["用户组列表"] = 用户组管理.查询用户组(USERGROUP_PAGESIZE * (int.Parse(page.ToString()) - 1), USERGROUP_PAGESIZE);
-
-
-
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc =用户组管理.计数用户组(0, 0);
+            pgCount = pc / 3;
+            if (pc % 3 > 0)
+            {
+                pgCount++;
+            }
+            ViewData["Pagecount"] = pgCount;
+            ViewData["CurrentPage"] = cpg;
+            ViewData["用户组列表"] = 用户组管理.查询用户组(3 * (cpg- 1), 3);
             return PartialView("Part_View/Part_Usergroup_Mannage");
         }
 
