@@ -93,11 +93,11 @@ namespace Go81WebApp._Code.Controllers.后台
 
         public ActionResult ApplyOnline()
         {
-            ViewData["goodType"] = 商品分类管理.查找子分类();
+            //ViewData["goodType"] = 商品分类管理.查找子分类();
 
             ViewData["专家可评标类别"] = 专家可评标专业分类.评审专业;
 
-            ViewData["专家特殊类别"] = 专家可评标专业.非商品分类评审专业;
+            //ViewData["专家特殊类别"] = 专家可评标专业.非商品分类评审专业;
             var model = 用户管理.查找用户<专家>(currentUser.Id);
             return View(model);
         }

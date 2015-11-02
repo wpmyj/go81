@@ -315,12 +315,6 @@ namespace Go81WebApp.Controllers.门户
             
             var listcount = (int)公告管理.计数公告(0, 0, query);
             int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
-
-            //int length = PAGESIZE;
-            //if (maxpage == page && listcount % PAGESIZE != 0)
-            //    length = listcount % PAGESIZE;
-
-            //int count = PAGESIZE * (page - 1);
             ViewData["currentpage"] = page;
             ViewData["pagecount"] = maxpage;
             ViewData["公告搜索显示列表"] = 公告管理.查询公告(PAGESIZE * (page - 1), PAGESIZE, query, false, SortBy.Descending("内容主体.发布时间"));

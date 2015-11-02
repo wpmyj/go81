@@ -114,6 +114,8 @@ namespace Go81WebApp.Controllers.后台
         {
             long pgCount = 0;
             int cpg = 0;
+            string status = "-1";//是否付款，0和1以外：全部，1：已付，0：未付
+            ViewData["status"] = status;
             if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
                 cpg = int.Parse(Request.QueryString["page"]);
@@ -122,16 +124,50 @@ namespace Go81WebApp.Controllers.后台
             {
                 cpg = 1;
             }
-            long pc = 订单管理.计数订单(0, 0);
-            pgCount = pc / 2;
-            if (pc % 2 > 0)
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["s"]))
             {
-                pgCount++;
+                status = Request.QueryString["s"];
+                ViewData["status"] = status;
             }
-            ViewData["Pagecount"] = pgCount;
-            ViewData["CurrentPage"] = cpg;
-            IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2);
-            return View(orders);
+            if (status == "1")
+            {
+                long pc = 订单管理.计数订单(0, 0, Query<订单>.Where(m =>m.已付款 == true));
+                pgCount = pc / 2;
+                if (pc % 2 > 0)
+                {
+                    pgCount++;
+                }
+                ViewData["Pagecount"] = pgCount;
+                ViewData["CurrentPage"] = cpg;
+                IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2, Query<订单>.Where(m =>m.已付款 == true));
+                return View(orders);
+            }
+            else if (status == "0")
+            {
+                long pc = 订单管理.计数订单(0, 0, Query<订单>.Where(m =>m.已付款 == false));
+                pgCount = pc / 2;
+                if (pc % 2 > 0)
+                {
+                    pgCount++;
+                }
+                ViewData["Pagecount"] = pgCount;
+                ViewData["CurrentPage"] = cpg;
+                IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2, Query<订单>.Where(m =>m.已付款 == false));
+                return View(orders);
+            }
+            else
+            {
+                long pc = 订单管理.计数订单(0, 0);
+                pgCount = pc / 2;
+                if (pc % 2 > 0)
+                {
+                    pgCount++;
+                }
+                ViewData["Pagecount"] = pgCount;
+                ViewData["CurrentPage"] = cpg;
+                IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2);
+                return View(orders);
+            }
         }
         public ActionResult Part_BackHead()
         {
@@ -4525,7 +4561,7 @@ namespace Go81WebApp.Controllers.后台
             var cc = 验收单管理.查询验收单(0, 0, Query<验收单>.Where(o => o.供应商链接.用户ID == currentUser.Id && o.是否已经打印 && !o.是否作废 && o.验收单扫描件.Count <= 0));
             foreach (var k in cc)
             {
-                if (k.打印信息.Count > 0 && k.打印信息.Last().打印时间.AddDays(10) < DateTime.Now)
+                if (k.打印信息.Count > 0 && k.打印信息.Last().打印时间.AddDays(20) < DateTime.Now)
                 {
                     是否有未上传验收单 = true;
                     break;

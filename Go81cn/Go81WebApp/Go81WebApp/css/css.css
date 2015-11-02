@@ -1689,7 +1689,7 @@ label {
 .goodlist {
     padding-top: 10px;
     margin-top: 10px;
-    background-color: #fff4e8;
+    background-color: #FDFBF9;
     border: 1px solid #E1E1E1;
     border-top: 1px solid #aaa;
 }
@@ -1797,132 +1797,158 @@ label {
     background-image: url(/Images/countor.png);
     color: #fff;
     border: none;
-    cursor:pointer;
+    cursor: pointer;
 }
+
 #sub_bt1 {
     width: 90px;
     height: 35px;
     display: block;
     margin: 0px auto;
     font-size: 20px;
-    line-height:35px;
+    line-height: 35px;
     color: #fff;
     border: none;
-    cursor:pointer;
-    background-color:#74BFFB;
-    border-radius:5px;
+    cursor: pointer;
+    background-color: #74BFFB;
+    border-radius: 5px;
 }
- #tip {
-        padding-top: 10px;
-        color: red;
-        text-align: center;
-        text-decoration:underline;
-    }
-    .out_box {
-       display: none;
+
+#tip {
+    padding-top: 10px;
+    color: red;
+    text-align: center;
+    text-decoration: underline;
+}
+
+.out_box {
+    display: none;
+}
+
+.out_box_infirst {
+    position: fixed;
+    z-index: 5;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    right: 0;
+    bottom: 0px;
+    background-color: black;
+    opacity: 0.5;
+    -moz-opacity: 0.5;
+    filter: alpha(opacity=50);
+    height: 100%;
+    width: 100%;
+    border: 1px solid green;
+    box-shadow: 0px 0px 10px gray;
+    -webkit-box-shadow: 0px 0px 10px gray;
+    -moz-box-shadow: 0px 0px 10px gray;
+}
+
+.out_box_insecond {
+    position: fixed;
+    width: 100%;
+    height: 80%;
+    left: 0px;
+    z-index: 20;
+    top: 3%;
+}
+
+.out_box_insecond_child {
+    width: 400px;
+    position: relative;
+    margin: 0px auto;
+    z-index: 100;
+    background-color: white;
+}
+
+.close_outbox {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background-color: red;
+    font-size: 30px;
+    color: white;
+    float: right;
+    cursor: pointer;
+}
+
+.login {
+    position: relative;
+    width: 350px;
+    height: 30px;
+    margin: 10px auto;
+    border: 1px solid #aaa;
+}
+
+.img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    background-color: #f3f3f3;
+}
+
+    .img img {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
     }
 
-    .out_box_infirst {
-        position: fixed;
-        z-index: 5;
-        top: 0px;
-        left: 0px;
-        text-align: center;
-        right: 0;
-        bottom: 0px;
-        background-color: black;
-        opacity: 0.5;
-        -moz-opacity: 0.5;
-        filter: alpha(opacity=50);
-        height: 100%;
+.text {
+    position: absolute;
+    left: 30px;
+    top: 0px;
+    height: 30px;
+    width: 320px;
+}
+
+    .text input {
         width: 100%;
-        border: 1px solid green;
-        box-shadow: 0px 0px 10px gray;
-        -webkit-box-shadow: 0px 0px 10px gray;
-        -moz-box-shadow: 0px 0px 10px gray;
+        border: none;
+        height: 28px;
     }
 
-    .out_box_insecond {
-        position: fixed;
-        width: 100%;
-        height: 80%;
-        left: 0px;
-        z-index: 20;
-        top: 3%;
-    }
+#submitbt {
+    height: 30px;
+    width: 100px;
+    border: none;
+    background-color: #37a8fc;
+    border-radius: 3px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-    .out_box_insecond_child {
-        width: 400px;
-        position: relative;
-        margin: 0px auto;
-        z-index: 100;
-        background-color: white;
-    }
+#orderInfo {
+    color: #000;
+}
 
-    .close_outbox {
-        width: 30px;
-        height: 30px;
-        line-height: 30px;
-        text-align: center;
-        background-color: red;
-        font-size: 30px;
-        color: white;
-        float: right;
-        cursor: pointer;
-    }
-    .login{
-        position:relative;
-        width:350px;
-        height:30px;
-        margin:10px auto;
-        border:1px solid #aaa;
-    }
-    .img{
-        position:absolute;
-        left:0px;
-        top:0px;
-        height:30px;
-        width:30px;
-        text-align:center;
-        background-color:#f3f3f3;
-    }
-    .img img{
-        width:20px;
-        height:20px;
-        vertical-align:middle;
-    }
-    .text{
-        position:absolute;
-        left:30px;
-        top:0px;
-        height:30px;
-        width:320px;
-    }
-    .text input
-    {
-        width:100%;
-        border:none;
-        height:28px;
-    }
-    #submitbt
-    {
-        height:30px;
-        width:100px;
-        border:none;
-        background-color:#37a8fc;
-        border-radius:3px;
-        color:#fff;
-        font-weight:bold;
-        cursor:pointer;
-    }
-    #orderInfo{
-        color:#000;
-    }
-    .leftbox{
-        float:left;
-        width:200px;
-    }
-    .rightboxinmall{
-        float:left;
-        width:350px;
-    }
+.leftbox {
+    float: left;
+    width: 200px;
+}
+
+.rightboxinmall {
+    float: left;
+    width: 350px;
+}
+
+.delbt {
+    color: #ff0000;
+    display: block;
+    width: 50px;
+    height: 20px;
+    border: 1px solid #ff0000;
+    font-size: 13px;
+    border-radius: 3px;
+    line-height:20px;
+    text-align:center;
+}
+.delbt:hover{
+    background-color:#ff0000;
+    color:#fff;
+}

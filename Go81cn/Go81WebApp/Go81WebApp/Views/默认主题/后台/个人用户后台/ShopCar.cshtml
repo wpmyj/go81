@@ -1,0 +1,579 @@
+﻿@model  IEnumerable<Go81WebApp.Models.数据模型.商品数据模型.购物车.选购商品>
+@{
+    ViewBag.Title = "我的购物车";
+    //Layout = "_BackLayout.cshtml";
+}
+<link href="~/css/css.css" type="text/css" rel="stylesheet">
+<script src="~/JS/provinceandcity_all.js"></script>
+<style>
+    .good_left {
+        width:80px; 
+        height:100%; 
+        float: left;
+        margin-left: 10px;
+    } 
+    .good_left img{margin-top: 5px;}
+    .good_right {
+        float: left;
+        width: 280px;
+        margin-left: 10px;
+        margin-top: 5px;
+    }
+
+    .good_box {
+        width: 100%;
+        height: 90px;
+        overflow-y: hidden;
+    }
+
+    .good_price {
+        color: #ff0000;
+    }
+
+    .bg_outdiv_right ul {
+        list-style: none;
+        padding: 0px;
+    }
+
+    .imginfo {
+        width: 80px;
+        height: 80px;
+    }
+
+    table#outboxtb {
+        border: 1px solid #CBCBCB;
+        border-left: none;
+        border-top: none;
+        font-size: 13px;
+    }
+
+    table#outboxtb tr td {
+        border: 1px solid #CBCBCB;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    .trbg {
+        background-color: #F0F0F0;
+        line-height: 30px;
+    }
+
+    .markertd {
+        text-align: center;
+    }
+
+    .posbox {
+        position: relative;
+    }
+
+    .arrowbox {
+        position: relative;
+        top: 0px;
+        left: 10px;
+        display: none;
+    }
+
+    .arrow {
+        width: 0px;
+        height: 0px;
+        border: 10px solid transparent;
+        border-left: 10px solid #8A8181;
+        position: absolute;
+        top: 10px;
+        left: 0px;
+    }
+
+    .arrowIn {
+        width: 0px;
+        height: 0px;
+        border: 9px solid transparent;
+        border-left: 9px solid #fff;
+        position: absolute;
+        top: 11px;
+    }
+
+    .arrowbox_content {
+        position: absolute;
+        top: 0px;
+        left: -251px;
+        width: 250px;
+        height: auto;
+        word-break: break-all;
+        background-color: #fff;
+        border: 1px solid #9F9F9F;
+        box-shadow: 0px 0px 5px #E2E2E2;
+        -webkit-box-shadow: 0px 0px 5px #E2E2E2;
+        -moz-box-shadow: 0px 0px 5px #E2E2E2;
+        text-align: left;
+        border-radius: 3px;
+    }
+
+    .arrowbox_contentIn {
+        width: 240px;
+        margin: 10px auto;
+        height: auto;
+    }
+
+    .Contactcontent {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .paybt {
+        display: block;
+        width: 100px;
+        height: 20px;
+        line-height: 20px;
+        color: #ff0000;
+        text-align: center;
+        border: 1px solid #ff0000;
+        margin: 10px auto;
+        border-radius: 3px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .paybt:hover {
+        background-color: #ff0000;
+        color: #fff;
+    }
+
+    .deleteorder {
+        cursor:pointer;
+    }
+
+    .orderheader {
+        background-color: #E9F1FF;
+        padding-left: 10px;
+        position: relative;
+        line-height: 30px;
+    }
+    .shopopera {
+        border: 1px solid #e2e2e2;
+        margin-top: 10px;
+        display: table;
+        width: 100%;
+    }
+    .bill {
+        letter-spacing: 3px;
+        color: #fff;
+        background-color: #31A034;
+        display: inline-block;
+        width: 100px;
+        text-align: center;
+        height: 45px;
+        line-height: 45px;
+        cursor: pointer;
+    }
+</style>
+
+<div id="result" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond" style="top:10%;">
+        <div class="out_box_insecond_child" style="width:600px;">
+            <div style="width:100%; height:auto;"><a class="close_outbox" id="close" lang="" title="关闭窗口" onclick="$('#result').hide();">×</a></div>
+            <div style="width:600px; height:auto;overflow:hidden;">
+                <div style="color: #0065FF;min-height: 240px; height:auto;">
+                    <form action="/商品陈列/AddPurchaseInfo" method="post" name="Info">
+                        <input type="hidden" id="summary" name="summary" value="" />
+                        <table id="orderInfo" style="width:100%;">
+                            <tr>
+                                <td align="right" style="text-indent:2em;">联系人：</td>
+                                <td><input type="text" name="contactman" id="contactman" /></td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="text-indent:2em;">联系电话：</td>
+                                <td><input type="text" name="phone" id="phone" /></td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="text-indent:2em;">联系地址：</td>
+                                <td>
+                                    <select id="province" name="province" style="width:100px;"></select>
+                                    <select id="city" name="city" style="width:100px;"></select>
+                                    <select id="area" name="area" style="width:100px;"></select>
+                                    <script>
+                                        window.onload = function () { new PCAS("province", "city", "area"); }
+                                    </script>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" style="text-indent:2em;" valign="top">具体地址：</td>
+                                <td>
+                                    <textarea id="detail_address" name="detail" cols="50" rows="5" style="resize:none;"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center">
+                                    <a id="sub_bt1">确定</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right">
+        <div id="title_div" class="gys_xttz_topbg">
+            <div class="index_bottom_zb_top_title">我的购物车</div>
+        </div>
+        <div style="margin-top:10px;">
+            <table width="100%" id="outboxtb" cellpadding="0" cellspacing="0">
+                <tr class="trbg">
+                    <td align="center" width="7%">
+                        <input style="vertical-align: middle; margin: 0 0 3px 0" type="checkbox" id="seleall" name="seleall"/>
+                        <label style="font-weight: normal;margin: 0" for="seleall">全选</label>
+                    </td>
+                    <td width="50%" align="center">商品</td>
+                    <td align="center" width="10%">单价（元）</td>
+                    <td align="center" width="12%">数量</td>
+                    <td align="center" width="10%">小计（元）</td>
+                    <td align="center" width="20%">操作</td>
+                </tr>
+                @{
+                    if (Model.Any())
+                    {
+                        var i = 0;
+                        foreach (var child in Model)
+                        {
+                            <tr>
+                                @*<td colspan="6" class="orderheader">
+                                    <span>@child.商品.商品.商品信息.所属供应商.用户数据.企业基本信息.企业名称</span>
+                                </td>*@
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <input type="checkbox" class="select" /> 
+                                </td>
+                                <td>
+                                    <div class="good_box">
+                                        <div class="good_left">
+                                            <a href="/商品陈列/Product_Inmall?id=@child.商品.商品ID"><img src="@child.商品.商品.商品信息.商品图片.First().Replace("original", "150X150")" title="@child.商品.商品.商品信息.商品名" class="imginfo" /></a>
+                                        </div>
+                                        <div class="good_right">
+                                            <div><a href="/商品陈列/Product_Inmall?id=@child.商品.商品ID">@child.商品.商品.商品信息.商品名</a></div>
+                                        </div>
+                                        <div style="clear: both;"></div>
+                                    </div>
+                                </td>
+                                <td class="markertd">￥@child.商品.商品.销售信息.价格</td>
+                                <td class="markertd" >
+                                    <div style="position:relative;border:1px solid #aaa;width:93px; height:25px;margin: 0 auto">
+                                        <a class="changebt" href="javascript:void;" id="diff" name="@(i)" data-price="@child.商品.商品.销售信息.价格">-</a><input data-id="@child.商品.商品ID" data-price="@child.商品.商品.销售信息.价格" name="@i" class="gnumber" type="text" value="@child.数量" /><a class="changebt" href="javascript:void;" id="add" style="top:0px;left:72px; border-right:none; border-left:1px solid #aaa;" name="@(i)" data-price="@child.商品.商品.销售信息.价格">+</a>
+                                    </div>
+                                </td>
+                                <td class="markertd">￥@(child.商品.商品.销售信息.价格 * child.数量)</td>
+                                <td class="markertd">
+                                    <a title="删除该商品" data-id="@child.商品.商品ID" class="deleteorder">删除</a>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" style="line-height: 35px;text-indent: 10px;">
+                                您的购物车中尚无商品，<a href="/商品陈列/mall" style="text-decoration: underline;color: #E64646">前去商城选购！</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+            <div class="shopopera">
+                <div style="float: right;">
+                    <div style="float:left;line-height: 30px;margin-right: 20px;font-size: 13px;float: left;">
+                        已选择 <span id="quantity" style="color:red;font-size: 14px;font-weight: bold">0</span> 件商品 
+                        &nbsp;
+                        总价：<span id="discount" style="color: red;font-size: 20px;">￥0.00</span>
+                    </div>
+                    <div style="float: left">
+                        <a class="bill" id="sub_btn">下单</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*<div class="gys_znxx_content_detailbox">
+    @{
+        int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+        int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+        if (Pagecount > 0)
+        {
+            if (CurrentPage != 1)
+            {
+                <a href='/个人用户后台/PurchaseInfo?page=1'>首页</a><a style="border-left:none;" href='/个人用户后台/PurchaseInfo?page=@(CurrentPage-1)'>上一页</a>
+            }
+        }
+        if (Pagecount <= 6)
+        {
+            for (int i = 1; i <= Pagecount; i++)
+            {
+                if (CurrentPage == i)
+                {
+                    <a style="border:1px solid red;" href='/个人用户后台/PurchaseInfo?page=@i'>@i</a>
+                }
+                else
+                {
+                    <a href='/个人用户后台/PurchaseInfo?page=@i'>@i</a>
+                }
+            }
+        }
+        else
+        {
+            if (CurrentPage < 6)
+            {
+                if (CurrentPage != 1)
+                {
+                    for (int i = 1; i < 7; i++)
+                    {
+                        if (CurrentPage == i)
+                        {
+                            <a style="border:1px solid red;" href='/个人用户后台/PurchaseInfo?page=@i'>@i</a>
+                        }
+                        else
+                        {
+                            <a href='/个人用户后台/PurchaseInfo?page=@i'>@i</a>
+                        }
+                    }
+                    <span>...</span><a href="/个人用户后台/PurchaseInfo?page=@(Pagecount)">@Pagecount</a>
+                }
+                else
+                {
+                    for (int i = 1; i < 7; i++)
+                    {
+                        if (CurrentPage == i)
+                        {
+                            <a style="border:1px solid red;" href='/个人用户后台/PurchaseInfo?page=@i'>@i</a>
+                        }
+                        else
+                        {
+                            <a href='/个人用户后台/PurchaseInfo?page=@i'>@i</a>
+                        }
+                    }
+                    <span>...</span><a href="/个人用户后台/PurchaseInfo?page=@(Pagecount)">@Pagecount</a>
+                }
+            }
+            else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+            {
+                <a href="/个人用户后台/PurchaseInfo?page=1">1</a><span>...</span>
+                for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                {
+                    if (CurrentPage == i)
+                    {
+                        <a style="border:1px solid red;" href='/个人用户后台/PurchaseInfo?page=@i'>@i</a>
+                    }
+                    else
+                    {
+                        <a href='/个人用户后台/PurchaseInfo?page=@i'>@i</a>
+                    }
+                }
+                <span>...</span><a href="/个人用户后台/PurchaseInfo?page=@(Pagecount)">@Pagecount</a>
+            }
+            else if (CurrentPage >= Pagecount - 3)
+            {
+                <a href="/个人用户后台/PurchaseInfo?page=1">1</a><span>...</span>
+                for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                {
+                    if (CurrentPage == i)
+                    {
+                        <a style="border:1px solid red;" href='/个人用户后台/PurchaseInfo?page=@i'>@i</a>
+                    }
+                    else
+                    {
+                        <a href='/个人用户后台/PurchaseInfo?page=@i'>@i</a>
+                    }
+                }
+            }
+        }
+        if (Pagecount > 0)
+        {
+            if (CurrentPage != Pagecount)
+            {
+                <a style="border-right:none;" href='/个人用户后台/PurchaseInfo?page=@(CurrentPage+1)'>下一页</a><a href='/个人用户后台/PurchaseInfo?page=@(Pagecount)'>末页</a>
+            }
+            <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+        }
+    }
+</div>*@
+
+<script>
+    //数量加减
+    $(".changebt").click(function () {
+        var price = parseFloat($(this).attr("data-price")),//单个商品价格
+            str = $(this).attr("id"), //判断是加还是减
+            checked = $("input[class='select']:checked"),//获取所有选中商品
+            totaldiscount=0,
+            count = 0;//计数
+
+        if (str == "add") {
+            count = parseInt($(this).prev(":input").val());
+            count += 1;
+            $(this).prev(":input").val(count);
+        }
+        else {
+            count = parseInt($(this).next(":input").val());
+            if (count > 1) {
+                count -= 1;
+                $(this).next(":input").val(count);
+            }
+        }
+        //计算单个商品总额
+        var totalprice = count * price;
+        $(this).parents("td").next().html("￥" + totalprice + ".00");
+
+        //计算所有商品总额
+        $.each(checked, function() {
+            totaldiscount = calDiscount(this, checked.length, totaldiscount);
+        });
+    });
+
+    //数量输入卡失去焦点时判断输入数字是否为大于0的整数
+    //并改变价格小计
+    $(".gnumber").blur(function () {
+        var $this = $(this);
+        var val = $this.val();
+        var price = parseFloat($this.attr("data-price"));
+        var reg = /^[1-9]+[0-9]*]*$/;
+        if (val != null && val != "") {
+            if (!reg.test(val)) {
+                val = parseInt(val);
+                if (val == 0) {
+                    val = 1;
+                }
+            }
+        } else {
+            val = 1;
+        }
+        
+
+        $this.val(val);
+        var totalprice = val * price;
+        $this.parents("td").next().html("￥" + totalprice + ".00");
+    });
+
+    $(function () {
+        $("#我的购物车").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#我的购物车").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+
+    //删除购物车指定商品
+    $(".deleteorder").click(function () {
+        var $this = $(this);
+        var id = $this.attr("data-id");
+        if(confirm("确定从购物车中删除该商品？")) {
+            $.ajax({
+                url: "/个人用户后台/DeleteShop",
+                data: { id: id },
+                success: function(data) {
+                    if (data == 1) {
+                        $this.parents("tr").prev().remove().end().remove();
+                    } else {
+                        alert("删除失败！");
+                    }
+                },
+                error:function() {
+                    alert("服务器繁忙！");
+                }
+            });
+        }
+    });
+
+    //全选事件
+    $("#seleall").click(function() {
+        var ipt = $(".select"),
+            totaldiscount = 0;
+        if ($(this).is(":checked")) {
+            $.each(ipt, function() {
+                $(this).prop("checked", true);
+                totaldiscount = calDiscount(this, ipt.length, totaldiscount);
+            });
+        } else {
+            $("#quantity").html("0");
+            $("#discount").html("￥0.00");
+            $.each(ipt, function () {
+                $(this).prop("checked", false);
+            });
+        }
+    });
+
+    //单个check点击事件
+    $("input[class='select']").click(function() {
+        var count = $("input[class='select']").length,
+            checked = $("input[class='select']:checked"),
+            totaldiscount = 0,
+            checkLength = checked.length;
+
+        $.each(checked, function () {
+            totaldiscount = calDiscount(this, checkLength, totaldiscount);
+        });
+        if (count === checkLength) {
+            $("#seleall").prop("checked", true);
+        } else {
+            $("#seleall").prop("checked", false);
+            if (checkLength === 0) {
+                $("#quantity").html("0");
+                $("#discount").html("￥0.00");
+            }
+        }
+        
+
+    });
+
+    //计算已选择商品的总价
+    function calDiscount(obj,count,totaldiscount) {
+        var $quantity = $("#quantity"),
+            $discount = $("#discount"),
+            ipt = $(obj).parents("tr").find("input[class='gnumber']"),
+            num = ipt.val(),
+            disc = ipt.attr("data-price");
+        totaldiscount += num * disc;
+        $discount.html("￥" + totaldiscount + ".00");
+        $quantity.html(count);
+        return totaldiscount;
+    }
+
+    //结算按钮事件
+    $("#sub_btn").click(function () {
+        var str = "",
+            checked = $("input[class='select']:checked");//获取所有选中商品
+        $.each(checked, function () {
+            if ($(this).is(":checked")) {
+                var ipt = $(this).parents("tr").find("input[class='gnumber']"),
+                    num = ipt.val(),
+                    id = ipt.attr("data-id");
+                str += num + "," + id + "|";
+            }
+        });
+        if (str != "") {
+            $("#summary").val(str);
+            $("#result").fadeIn(200);
+        }
+        else {
+            alert("请至少选择一个商品！");
+        }
+    });
+
+    //订单联系信息提交按钮---下单
+    $("#sub_bt1").click(function () {
+        if ($("#contactman").val() != "" && $("#phone").val() != "" && $("#province").val() != "" && $("#city").val() != "" && $("#area").val() != "" && $("#detail_address").val() != "") {
+            document.forms["Info"].submit();
+        }
+        else {
+            alert("请将信息填写完整！");
+        }
+    });
+</script>

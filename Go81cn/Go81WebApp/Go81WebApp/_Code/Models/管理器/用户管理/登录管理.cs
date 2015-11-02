@@ -45,21 +45,33 @@ namespace Go81WebApp.Models.管理器
         }
         public static 用户基本数据 登录(this HttpContextBase hc, string loginName, string password, bool noExpire)
         {
+            string temp_session = "";
+            if (hc.Session["Ginfo"] != null)
+            {
+                temp_session = hc.Session["Ginfo"].ToString();
+            }
             用户基本数据 u;
             if (!用户管理.验证登录名和密码(loginName, password, out u)) return null;
             FormsAuthentication.SetAuthCookie(u.Id.ToString(), noExpire);
             hc.Session.Clear();
             hc.Session["u"] = u;
             hc.Session["p"] = 权限管理.计算权限(u);
+            hc.Session["Ginfo"] = temp_session;
             return u;
         }
         public static T 登录<T>(this HttpContextBase hc, string loginName, string password, bool noExpire) where T : 用户基本数据
         {
+            string temp_session = "";
+            if (hc.Session["Ginfo"] != null)
+            {
+                temp_session = hc.Session["Ginfo"].ToString();
+            }
             T u;
             if (!用户管理.验证登录名和密码(loginName, password, out u)) return null;
             FormsAuthentication.SetAuthCookie(u.Id.ToString(), noExpire);
             hc.Session.Clear();
             hc.Session.Add("u", u);
+            hc.Session["Ginfo"] = temp_session;
             return u;
         }
         public static void 登出(this HttpContextBase hc)

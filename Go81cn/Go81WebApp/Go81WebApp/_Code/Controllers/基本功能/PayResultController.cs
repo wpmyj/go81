@@ -200,7 +200,7 @@ namespace Go81WebApp.Controllers.基本功能
                 {
                     ordercode = Request.Form["yhm"];//订单优惠码
                 }
-                long count = 订单管理.计数订单(0, 0, Query<订单>.Where(m => m.Id == id && m.已付款 == false&&currentUser.Id==m.订单所属用户.用户ID));
+                long count = 订单管理.计数订单(0, 0, Query<订单>.Where(m => m.Id == id && m.已付款 == false && m.订单所属用户.用户ID == currentUser.Id));
                 if (count != 0)
                 {
                     //支付类型

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Go81WebApp.Models.数据模型.订单数据模型.订单>
 @{
-    ViewBag.Title = "我的购物车";
+    ViewBag.Title = "我的订单";
     //Layout = "_BackLayout.cshtml";
 }
 <style>
@@ -140,6 +140,48 @@
             background-color: #ff0000;
             color: #fff;
         }
+        td ul {
+        width: 100%;
+        list-style: none;
+        list-style-type: none;
+        position: absolute;
+        background-color: #ff0;
+        top: 28px;
+        left: 0px;
+        line-height: 30px;
+        text-align: center;
+        margin: 0px;
+        z-index: 100;
+        background-color: #FEFCFC;
+        box-shadow: 0px 3px 10px #E2E2E2;
+        -webkit-box-shadow: 0px 3px 10px #E2E2E2;
+        -moz-box-shadow: 0px 3px 10px #E2E2E2;
+        display: none;
+    }
+
+        td ul li:hover {
+            cursor: pointer;
+            background-color: #EEEEEE;
+        }
+
+    #status_content {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 28px;
+        width: 100%;
+        line-height: 30px;
+        cursor: pointer;
+        z-index: 101;
+    }
+
+    #orderstatus {
+        background-image: url(/Images/Orderstatus.png);
+        display: inline-block;
+        width: 12px;
+        height: 10px;
+        background-position:15px 10px;
+    }
 </style>
 <div class="bg_outdiv">
     <div class="bg_outdiv_left">
@@ -155,7 +197,48 @@
                     <td width="55%" align="center">订单详情</td>
                     <td align="center" width="15%">收货人</td>
                     <td align="center" width="15%">总计</td>
-                    <td align="center" width="15%">状态</td>
+                    <td align="center" width="15%" style="position:relative;">
+                        <div id="status">
+                            @if (ViewData["status"].ToString() == "1")
+                            {
+                                <ul>
+                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=-1">全部状态</a></li>
+                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=0">未付款</a></li>
+                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=1" style="color:red;">已付款</a></li>
+                                </ul>
+                            }
+                            else if (ViewData["status"].ToString() == "0")
+                            {
+                                <ul>
+                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=-1">全部状态</a></li>
+                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=0" style="color:red;">未付款</a></li>
+                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=1">已付款</a></li>
+                                </ul>
+                            }
+                            else
+                            {
+                                <ul>
+                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=-1" style="color:red;">全部状态</a></li>
+                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=0">未付款</a></li>
+                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=1">已付款</a></li>
+                                </ul>
+                            }
+                            <div id="status_content">
+                                @if (ViewData["status"].ToString() == "1")
+                                {
+                                    <span>已付款</span><span id="orderstatus"></span>
+                                }
+                                else if (ViewData["status"].ToString() == "0")
+                                {
+                                    <span>未付款</span><span id="orderstatus"></span>
+                                }
+                                else
+                                {
+                                    <span>全部状态</span><span id="orderstatus"></span>
+                                }
+                            </div>
+                        </div>
+                    </td>
                 </tr>
                 @{
                     bool exist = false;
@@ -232,27 +315,27 @@
     </div>
 </div>
 <div class="gys_znxx_content_detailbox">
-    @{
-        int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
-        int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
-        if (Pagecount > 0)
-        {
-            if (CurrentPage != 1)
+        @{
+            int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+            int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+            if (Pagecount > 0)
             {
-                <a href='/供应商后台/PurchaseInfo?page=1'>首页</a><a style="border-left:none;" href='/供应商后台/PurchaseInfo?page=@(CurrentPage-1)'>上一页</a>
-            }
-        }
-        if (Pagecount <= 6)
-        {
-            for (int i = 1; i <= Pagecount; i++)
-            {
-                if (CurrentPage == i)
+                if (CurrentPage != 1)
                 {
-                    <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                    <a href='/供应商后台/PurchaseInfo?page=1&s=@ViewData["status"]'>首页</a><a style="border-left:none;" href='/供应商后台/PurchaseInfo?page=@(CurrentPage-1)&s=@ViewData["status"]'>上一页</a>
+                }
+            }
+            if (Pagecount <= 6)
+            {
+                for (int i = 1; i <= Pagecount; i++)
+                {
+                    if (CurrentPage == i)
+                    {
+                    <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
                 }
                 else
                 {
-                    <a href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                    <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
                 }
             }
         }
@@ -266,14 +349,14 @@
                     {
                         if (CurrentPage == i)
                         {
-                            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
                         }
                         else
                         {
-                            <a href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                            <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
                         }
                     }
-                    <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)">@Pagecount</a>
+                    <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]">@Pagecount</a>
                 }
                 else
                 {
@@ -281,44 +364,44 @@
                     {
                         if (CurrentPage == i)
                         {
-                            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s= @ViewData["status"]'>@i</a>
                         }
                         else
                         {
-                            <a href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                            <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
                         }
                     }
-                    <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)">@Pagecount</a>
+                    <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]">@Pagecount</a>
                 }
             }
             else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
             {
-                <a href="/供应商后台/PurchaseInfo?page=1">1</a><span>...</span>
+                <a href="/供应商后台/PurchaseInfo?page=1&s=@ViewData["status"]">1</a><span>...</span>
                 for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
                 {
                     if (CurrentPage == i)
                     {
-                        <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                        <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
                     }
                     else
                     {
-                        <a href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                        <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
                     }
                 }
-                <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)">@Pagecount</a>
+                <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]">@Pagecount</a>
             }
             else if (CurrentPage >= Pagecount - 3)
             {
-                <a href="/供应商后台/PurchaseInfo?page=1">1</a><span>...</span>
+                <a href="/供应商后台/PurchaseInfo?page=1&s=@ViewData["status"]">1</a><span>...</span>
                 for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
                 {
                     if (CurrentPage == i)
                     {
-                        <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                        <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
                     }
                     else
                     {
-                        <a href='/供应商后台/PurchaseInfo?page=@i'>@i</a>
+                        <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
                     }
                 }
             }
@@ -327,7 +410,7 @@
         {
             if (CurrentPage != Pagecount)
             {
-                <a style="border-right:none;" href='/供应商后台/PurchaseInfo?page=@(CurrentPage+1)'>下一页</a><a href='/供应商后台/PurchaseInfo?page=@(Pagecount)'>末页</a>
+                <a style="border-right:none;" href='/供应商后台/PurchaseInfo?page=@(CurrentPage+1)&s=@ViewData["status"]'>下一页</a><a href='/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]'>末页</a>
             }
             <span>第@(CurrentPage)页/共@(Pagecount)页</span>
         }
@@ -341,8 +424,18 @@
     $(".Contactcontent").mouseout(function () {
         $(this).next(".arrowbox").hide();
     });
+    $("#status").mouseover(function () {
+        $(this).children("#status_content").css("background-color", "#FEFCFC");
+        $(this).find("#orderstatus").css("background-position", "0px 10px");
+        $(this).children("ul").show();
+    });
+    $("#status").mouseout(function () {
+        $(this).children("#status_content").css("background-color", "#F0F0F0");
+        $(this).find("#orderstatus").css("background-position", "15px 10px");
+        $(this).children("ul").hide();
+    });
     $(function () {
-        $("#订单列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#订单列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+        $("#我的订单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#我的订单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
 </script>

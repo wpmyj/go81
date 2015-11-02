@@ -805,27 +805,36 @@ namespace Go81WebApp.ModuleTester
             //textBox1.Text = 工具.ImpColl<通知>(true).ToString();
             //textBox1.Text = 工具.ImpColl<下载>(true).ToString();
             //textBox1.Text = 工具.ImpColl<政策法规>(true).ToString();
-            //textBox1.Text = 工具.ImpColl<专家>(true).ToString();
+            textBox1.Text = 工具.ImpColl<专家>(true).ToString();
             //textBox1.Text = 工具.ImpColl<专家抽选记录>(true).ToString();
-            textBox1.Text = 工具.ImpColl<专家可评标专业>(true).ToString();
+            //textBox1.Text = 工具.ImpColl<专家可评标专业>(true).ToString();
         }
         private void Button31_OnClick(object sender, RoutedEventArgs e)
         {
             var zjnamestr = "";
             var zjlist = 用户管理.查询用户<专家>(0, 0, includeDisabled: false);
-            foreach (var zj in zjlist)
+            //foreach (var zj in zjlist)
+            //{
+            //    if (!string.IsNullOrWhiteSpace(zj.身份信息.姓名))
+            //    {
+            //        zj.身份信息.姓名 = zj.身份信息.姓名.Replace(" ", "").Replace(" ", "");
+            //        用户管理.更新用户<专家>(zj, false);
+            //        zjnamestr += zj.身份信息.姓名 + "          " + zj.身份信息.性别 + "          " + zj.身份信息.出生年月 + "          " +
+            //                     zj.Id + "\r\n";
+            //    }
+            //    else
+            //    {
+            //        zjnamestr += "删除专家ID：" + zj.Id + "\r\n";
+            //    }
+            //}
+            foreach(var item in zjlist)
             {
-                if (!string.IsNullOrWhiteSpace(zj.身份信息.姓名))
+                string temp = "";
+                foreach(var item1 in item.可参评物资类别列表)
                 {
-                    zj.身份信息.姓名 = zj.身份信息.姓名.Replace(" ", "").Replace(" ", "");
-                    用户管理.更新用户<专家>(zj, false);
-                    zjnamestr += zj.身份信息.姓名 + "          " + zj.身份信息.性别 + "          " + zj.身份信息.出生年月 + "          " +
-                                 zj.Id + "\r\n";
+                    temp +=item1.一级分类+"|";
                 }
-                else
-                {
-                    zjnamestr += "删除专家ID：" + zj.Id + "\r\n";
-                }
+                zjnamestr += item.身份信息.姓名 + "       " + item.身份信息.出生年月.ToString("yyyy-MM-dd") + "      " + item.学历信息.专业技术职称 + "      " + item.身份信息.专家级别 + "      " + item.联系方式.手机 + "      " + item.学历信息.毕业院校 + "      " +"可评标类别："+ temp +"\r\n";
             }
             textBox1.Text = zjnamestr;
         }

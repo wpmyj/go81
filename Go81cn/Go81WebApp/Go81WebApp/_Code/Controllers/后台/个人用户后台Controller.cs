@@ -1,4 +1,5 @@
-﻿using Go81WebApp.Models.管理器;
+﻿using System.Linq;
+using Go81WebApp.Models.管理器;
 using Lucene.Net.Search;
 using MongoDB.Bson;
 using System.Web;
@@ -53,6 +54,11 @@ namespace Go81WebApp.Controllers.后台
                 return Redirect("/错误页面/WrongUserType");
             }
         }
+
+        /// <summary>
+        /// 验证优惠码
+        /// </summary>
+        /// <returns></returns>
         public int Checkstr()
         {
             string str = Request.QueryString["ser"];
@@ -81,10 +87,17 @@ namespace Go81WebApp.Controllers.后台
             var m = currentUser;
             return PartialView("Person_Part/Part_BackHead", m);
         }
+
+        /// <summary>
+        /// 订单页面
+        /// </summary>
+        /// <returns></returns>
         public ActionResult PurchaseInfo()
         {
             long pgCount = 0;
             int cpg = 0;
+            string status = "-1";//是否付款，0和1以外：全部，1：已付，0：未付
+            ViewData["status"] = status;
             if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
             {
                 cpg = int.Parse(Request.QueryString["page"]);
@@ -93,17 +106,55 @@ namespace Go81WebApp.Controllers.后台
             {
                 cpg = 1;
             }
-            long pc =订单管理.计数订单(0,0,Query<订单>.Where(m=>m.订单所属用户.用户ID==currentUser.Id));
-            pgCount = pc / 2;
-            if (pc % 2 > 0)
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["s"]))
             {
-                pgCount++;
+                status = Request.QueryString["s"];
+                ViewData["status"] = status;
             }
-            ViewData["Pagecount"] = pgCount;
-            ViewData["CurrentPage"] = cpg;
-            IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2, Query<订单>.Where(m => m.订单所属用户.用户ID == currentUser.Id));
-            return View(orders);
+            if(status=="1")
+            {
+                long pc = 订单管理.计数订单(0, 0, Query<订单>.Where(m => m.订单所属用户.用户ID == currentUser.Id && m.已付款 == true));
+                pgCount = pc / 2;
+                if (pc % 2 > 0)
+                {
+                    pgCount++;
+                }
+                ViewData["Pagecount"] = pgCount;
+                ViewData["CurrentPage"] = cpg;
+                IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2, Query<订单>.Where(m => m.订单所属用户.用户ID == currentUser.Id && m.已付款 == true));
+                return View(orders);
+            }
+            else if(status=="0")
+            {
+                long pc = 订单管理.计数订单(0, 0, Query<订单>.Where(m => m.订单所属用户.用户ID == currentUser.Id && m.已付款 == false));
+                pgCount = pc / 2;
+                if (pc % 2 > 0)
+                {
+                    pgCount++;
+                }
+                ViewData["Pagecount"] = pgCount;
+                ViewData["CurrentPage"] = cpg;
+                IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2, Query<订单>.Where(m => m.订单所属用户.用户ID == currentUser.Id&&m.已付款==false));
+                return View(orders);
+            }
+            else
+            {
+                long pc = 订单管理.计数订单(0, 0, Query<订单>.Where(m => m.订单所属用户.用户ID == currentUser.Id));
+                pgCount = pc / 2;
+                if (pc % 2 > 0)
+                {
+                    pgCount++;
+                }
+                ViewData["Pagecount"] = pgCount;
+                ViewData["CurrentPage"] = cpg;
+                IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2, Query<订单>.Where(m => m.订单所属用户.用户ID == currentUser.Id));
+                return View(orders);
+            }
         }
+        /// <summary>
+        /// 删除订单
+        /// </summary>
+        /// <returns></returns>
         public ActionResult DeleteOrder()
         {
             try
@@ -122,6 +173,55 @@ namespace Go81WebApp.Controllers.后台
             {
                 return Content("<script>alert('删除订单失败！');window.location='/个人用户后台/PurchaseInfo';</script>");
             }
+        }
+
+        /// <summary>
+        /// 购物车页面
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ShopCar()
+        {
+            var cars = 购物车管理.查询购物车(0, 0, Query<购物车>.Where(o => o.所属用户.用户ID == currentUser.Id));
+            var goodsInCar = new List<购物车.选购商品>();
+            if (cars.Any() && cars.Count() > 0)
+            {
+                //如果未登录时添加了商品到临时购物车，在用户登录后就将临时购物车里面的商品添加进该用户的购物车并保存至数据库
+                if (Session["Ginfo"] != null)
+                {
+                    var ginfo = Session["Ginfo"].ToString();
+                    string[] info = ginfo.Split('|');
+                    var df = new 购物车.选购商品();
+                    for (int i = 0; i < info.Length - 1; i++)
+                    {
+                        df.商品.商品ID = long.Parse(info[i].Split(',')[0]);
+                        df.数量 = int.Parse(info[i].Split(',')[1]);
+                        cars.First().选购商品列表.Add(df);
+                    }
+                    购物车管理.更新购物车(cars.First());
+                }
+                goodsInCar = cars.First().选购商品列表;
+            }
+            return View(goodsInCar);
+        }
+
+        /// <summary>
+        /// 删除购物车商品
+        /// </summary>
+        /// <returns></returns>
+        public int DeleteShop()
+        {
+            var id = Request.Params["id"];
+            var shopcar = 购物车管理.查询购物车(0, 0, Query<购物车>.Where(o => o.所属用户.用户ID == currentUser.Id));
+            var car = shopcar.Any() ? shopcar.First() : new 购物车();
+
+            var sp = car.选购商品列表.Find(o => o.商品.商品ID == long.Parse(id));
+            if (sp != null)
+            {
+                car.选购商品列表.Remove(sp);
+                购物车管理.更新购物车(car);
+                return 1;
+            }
+            return 0;
         }
 
         public ActionResult PersonInfoManage(个人用户 per)

@@ -618,10 +618,10 @@ namespace Go81WebApp.Controllers.基本功能
                 {
                     {"修改密码", "供应商后台/Vip_Password_Manage"},
                 });
-            m.Add("订单", new Dictionary<string, object>
-                {
-                    {"订单列表", "供应商后台/PurchaseInfo"},
-                });
+            //m.Add("订单", new Dictionary<string, object>
+            //    {
+            //        {"订单列表", "供应商后台/PurchaseInfo"},
+            //    });
             //m.Add("投诉建议", new Dictionary<string, object>
             //        {
             //            {
@@ -1725,6 +1725,9 @@ namespace Go81WebApp.Controllers.基本功能
                 {
                     "订单管理", new Dictionary<string, object>
                     {
+                        {
+                            "我的购物车", "个人用户后台/ShopCar"
+                        },
                         {
                             "我的订单", "个人用户后台/PurchaseInfo"
                         },

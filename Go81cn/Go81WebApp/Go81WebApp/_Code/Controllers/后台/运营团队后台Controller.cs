@@ -13354,6 +13354,8 @@ namespace Go81WebApp.Controllers.后台
                         t.八一五角星 = true;
                     }
                 }
+                //t.自动计算单位签名分布角度 = false;
+                //t.单位签名分布角度 = 280F;
                 t.旋转角度 = (int)(60 - ((long.Parse(id) % 10000) * 17) % 120);
                 t.单位签名.文字 = txt;
                 t.业务签名.文字 = basestr;

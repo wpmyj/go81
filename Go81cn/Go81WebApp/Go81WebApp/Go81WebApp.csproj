@@ -582,6 +582,9 @@
     <Content Include="Images\menu_rightrad.jpg" />
     <Content Include="Images\menu_topbg.jpg" />
     <Content Include="Images\messages2.png" />
+    <Content Include="Images\mgcx.png" />
+    <Content Include="Images\mgcx1.png" />
+    <Content Include="Images\mgcxbg.jpg" />
     <Content Include="Images\myreg.png" />
     <Content Include="Images\newfunc.png" />
     <Content Include="Images\newfunc1.gif" />
@@ -595,6 +598,7 @@
     <Content Include="Images\np.jpg" />
     <Content Include="Images\onlineserver.png" />
     <Content Include="Images\openTrigger.jpg" />
+    <Content Include="Images\Orderstatus.png" />
     <Content Include="Images\organization.jpg" />
     <Content Include="Images\otherh1.jpg" />
     <Content Include="Images\otherh2.jpg" />
@@ -627,10 +631,12 @@
     <Content Include="Images\right.jpg" />
     <Content Include="Images\ruku.png" />
     <Content Include="Images\sczfcg.png" />
+    <Content Include="Images\seal\14集团军签名.png" />
     <Content Include="Images\seal\324医院签名.png" />
     <Content Include="Images\seal\77100签名.png" />
     <Content Include="Images\seal\77200签名.png" />
     <Content Include="Images\seal\77206签名.png" />
+    <Content Include="Images\seal\77206签名0.png" />
     <Content Include="Images\seal\77208签名.png" />
     <Content Include="Images\seal\77211签名.png" />
     <Content Include="Images\seal\77215签名.png" />
@@ -662,6 +668,7 @@
     <Content Include="Images\seal\观山湖人武部签名.png" />
     <Content Include="Images\seal\贵州省军区章.png" />
     <Content Include="Images\seal\贵州省军区签名.png" />
+    <Content Include="Images\seal\贵州省清镇市人武部签名.png" />
     <Content Include="Images\seal\贵州省贵阳警备区后勤部签名.png" />
     <Content Include="Images\seal\采购处签名.png" />
     <Content Include="Images\seal\采购处签名1.png" />
@@ -728,6 +735,7 @@
     <Content Include="Images\zgzfcgxw.png" />
     <Content Include="Images\zgzwxx.png" />
     <Content Include="Images\zyzfcg.png" />
+    <Content Include="Images\seal\贵州省清镇市人武部章.png" />
     <Content Include="JS\clickStatistics.js" />
     <Content Include="JS\common.js" />
     <Content Include="JS\kindeditor-4.1.10\plugins\template\html\4.html" />
@@ -2187,6 +2195,8 @@
     <Content Include="Views\默认主题\门户\商品陈列\mall.cshtml" />
     <Content Include="Views\默认主题\门户\商品陈列\Product_Inmall.cshtml" />
     <Content Include="Views\默认主题\基本功能\PayResult\Payment_Result.cshtml" />
+    <Content Include="Views\默认主题\后台\个人用户后台\ShopCar.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\JcLife.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

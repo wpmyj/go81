@@ -5,6 +5,12 @@
     ViewBag.Title = "我的购物车";
 }
 <link href="~/css/css.css" type="text/css" rel="stylesheet">
+<style>
+    #loginbox input[type=text], #loginbox input[type=password]{
+        width:99%;
+        height:26px;
+    }
+</style>
 <script src="~/JS/provinceandcity_all.js"></script>
 <div id="result" class="out_box">
     <div class="out_box_infirst">
@@ -34,7 +40,6 @@
                                     <script>
                                         window.onload = function () { new PCAS("province", "city", "area"); }
                                     </script>
-
                                 </td>
                             </tr>
                             <tr>
@@ -89,7 +94,7 @@
 <div>
     @if (!Model.Any())
     {
-        <div style="line-height:100px; text-align:center;">您还没有加入任何商品到购物车！<a href="/商品陈列/" id="tip">去商场逛逛>></a></div>
+        <div style="line-height:100px; text-align:center;">您还没有加入任何商品到购物车！<a href="/商品陈列/mall" id="tip">去商场逛逛>></a></div>
     }
     else
     {
@@ -113,9 +118,9 @@
                 <div class="goodlist_img"><img style="width:80px; height:80px;" src="@g.商品信息.商品图片.First().Replace(" original","150x150")" /></div>
                 <div class="goodlist_introduce">@g.商品信息.商品名</div>
                 <div class="goodlist_price">@g.销售信息.价格</div>
-                <div class="goodlist_count" style="position:relative;border:1px solid #aaa;width:94px; height:25px;"><a class="changebt" id="diff" name="@(i)" data-price="@g.销售信息.价格">-</a><input data-price="@g.销售信息.价格" name="@i" class="gnumber" type="text" onkeydown="getValue(this)" onkeyup="setValue(this)" onblur="    setValue(this)" value="@item.Value" /><a class="changebt" id="add" style="top:0px;left:72px; border-right:none; border-left:1px solid #aaa;" name="@(i)" data-price="@g.销售信息.价格">+</a></div>
+                <div class="goodlist_count" style="position:relative;border:1px solid #aaa;width:94px; height:25px;"><a class="changebt" id="diff" name="@(i)" data-price="@g.销售信息.价格">-</a><input data-price="@g.销售信息.价格" name="@i" class="gnumber" type="text" onkeydown="getValue(this)" onkeyup="setValue(this,event)" onblur="setValue(this,event)" value="@item.Value" /><a class="changebt" id="add" style="top:0px;left:72px; border-right:none; border-left:1px solid #aaa;" name="@(i)" data-price="@g.销售信息.价格">+</a></div>
                 <div class="goodlist_sum" id="price@(i)">@(item.Value * g.销售信息.价格)</div>
-                <div class="header_operate"><a class="delbt" id="@g.Id" href="###" name="@(i)" style="color:#ff0000;">删除</a></div>
+                <div class="header_operate"><a class="delbt" id="@g.Id" href="###" name="@(i)">删除</a></div>
                 <div style="clear:both;"></div>
             </div>
             i++;
@@ -131,8 +136,7 @@
         if ($("#contactman").val() != "" && $("#phone").val() != "" && $("#province").val() != "" && $("#city").val() != "" && $("#area").val() != "" && $("#detail_address").val() != "") {
             document.forms["Info"].submit();
         }
-        else
-        {
+        else {
             alert("请将信息填写完整！");
         }
     });
@@ -145,15 +149,20 @@
                         str += $(this).attr("data-number") + "," + $(this).attr("data-id") + "|";;
                     }
                 });
-                $("#summary").val(str);
-                $("#result").show();
+                if (str != "") {
+                    $("#summary").val(str);
+                    $("#result").show();
+                }
+                else {
+                    alert("你的订单还没有任何商品！");
+                }
             }
             else {
                 $("#login").show();
             }
         });
     });
-    $(".changebt").click(function () {
+    $(".changebt").click(function() {
         var price = parseFloat($(this).attr("data-price"));
         var name = $(this).attr("name");
         var str = $(this).attr("id");
@@ -202,30 +211,41 @@
     function getValue(th) {
         globlestr = $(th).val();
     }
-    function setValue(th) {
+    function setValue(th,ev) {
         var reg = /[0-9]{1,20}$/g;
         var str = $(th).val();
         var price = parseFloat($(th).attr("data-price"));
-        if (!reg.test(str)) {
-            alert("请填写数字");
-            $(th).val(globlestr);
-        }
-        else {
-            var name = $(th).attr("name");
-            var count = 0;
-            count = parseInt($(th).val());
-            $(th).val(count);
-            var strPrice = price.toString();
-            if (strPrice.indexOf('.') != -1) {
-                $("#price" + name).text(count * price);
-                $("#allprice" + name).val(count * price);
+        if(!isNaN(str))
+        {
+            if (!reg.test(str)) {
+                $(th).val(parseInt(globlestr));
             }
             else {
-                $("#price" + name).text((count * price) + ".00");
-                $("#allprice" + name).val((count * price) + ".00");
+                var name = $(th).attr("name");
+                var count = 0;
+                count = parseInt($(th).val());
+                if (count > 0) {
+                    $(th).val(count);
+                    var strPrice = price.toString();
+                    if (strPrice.indexOf('.') != -1) {
+                        $("#price" + name).text(count * price);
+                        $("#allprice" + name).val(count * price);
+                    }
+                    else {
+                        $("#price" + name).text((count * price) + ".00");
+                        $("#allprice" + name).val((count * price) + ".00");
+                    }
+                    $("#allprice" + name).attr("data-number", count);
+                    calulator();
+                }
+                else {
+                    $(th).val(parseInt(globlestr));
+                }
             }
-            $("#allprice" + name).attr("data-number", count);
-            calulator();
+        }
+        else
+        {
+            $(th).val(1);
         }
     }
     $(document).ready(function () {
@@ -269,19 +289,22 @@
     $(".delbt").click(function () {
         var name = $(this).attr("name");
         var gid = $(this).attr("id");
-        $.get("/商品陈列/DelPurchaseInfo", { id: gid }, function (data) {
-            if (data == 1) {
-                $("#goodlist" + name).remove();
-                var elem = document.getElementsByName("sum");
-                if (elem.length == 0) {
-                    $("#sub_bt").hide();
+        if(confirm("确认删除商品吗？"))
+        {
+            $.get("/商品陈列/DelPurchaseInfo", { id: gid }, function (data) {
+                if (data == 1) {
+                    $("#goodlist" + name).remove();
+                    var elem = document.getElementsByName("sum");
+                    if (elem.length == 0) {
+                        $("#sub_bt").hide();
+                    }
+                    calulator();
                 }
-                calulator();
-            }
-            else {
-                alert("删除商品出错！");
-            }
-        });
+                else {
+                    alert("删除商品出错！");
+                }
+            });
+        }
     });
 </script>
 

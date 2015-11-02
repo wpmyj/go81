@@ -3,41 +3,41 @@
     ViewBag.Title = "西南物资采购网-采购商城";
 }
 <style>
-    .prodtpage_prodtlistdiv:hover{
-        border:5px solid #BEB9B9;
+    .prodtpage_prodtlistdiv:hover {
+        border: 5px solid #BEB9B9;
     }
 </style>
 <div style="height:auto; overflow:hidden; margin-bottom:5px; ">
     <div class="gys_ztbsearch_contentbox" style=" width:96%; margin-bottom:10px;" id="pro_search_content">
-            @foreach (var item in Model)
-            {
-                <div class="prodtpage_prodtlistdiv" style="height:330px;width:220px;">
-                    <div class="prodtpage_prodtlistdiv_imgdiv">
-                        <a href="/商品陈列/Product_Inmall?id=@item.Id" title="@item.商品信息.商品名" target="_blank">
-                            @if (item.商品信息.商品图片.Count > 0)
-                            {
-                                <img src="@item.商品信息.商品图片[0]" />
-                            }
-                            else
-                            {
-                                <img src="~/images/noimage.jpg" />
-                            }
+        @foreach (var item in Model)
+        {
+            <div class="prodtpage_prodtlistdiv" style="height:330px;width:220px;">
+                <div class="prodtpage_prodtlistdiv_imgdiv">
+                    <a href="/商品陈列/Product_Inmall?id=@item.Id" title="@item.商品信息.商品名" target="_blank">
+                        @if (item.商品信息.商品图片.Count > 0)
+                        {
+                            <img src="@item.商品信息.商品图片[0]" />
+                        }
+                        else
+                        {
+                            <img src="~/images/noimage.jpg" />
+                        }
+                    </a>
+                </div>
+                <div class="prodtpage_prodtlistdiv_textdiv">
+                    @{ var thisp_name = item.商品信息.商品名.Replace("<font color=\"red\">", "").Replace("</font>", ""); }
+                    <div style="height:40px;">
+                        <a href="/商品陈列/Product_Inmall?id=@item.Id" title="@thisp_name" class="product_name_twoline" target="_blank">
+                            @Html.Raw(item.商品信息.商品名)
                         </a>
                     </div>
-                    <div class="prodtpage_prodtlistdiv_textdiv">
-                        @{ var thisp_name = item.商品信息.商品名.Replace("<font color=\"red\">", "").Replace("</font>", ""); }
-                        <div style="height:40px;">
-                            <a href="/商品陈列/Product_Inmall?id=@item.Id" title="@thisp_name" class="product_name_twoline" target="_blank">
-                                @Html.Raw(item.商品信息.商品名)
-                            </a>
-                        </div>
-                        <div class="prodtpage_prodtlistdiv_price"><a href="/商品陈列/Product_Inmall?id=@item.Id" target="_blank">￥@(string.Format("{0:0.00}", item.销售信息.价格))</a><span style="padding-left:20px; color:#999; cursor:pointer;" title="报价时间">(@item.销售信息.价格修改日期.ToString("yyyy-MM-dd"))</span></div>
-                        <div style="height:20px;">
-                            <a class="product_gysname_oneline" href="/供应商陈列/Supplier_Destination?id=@item.商品信息.所属供应商.用户数据.Id" title="@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
-                        </div>
+                    <div class="prodtpage_prodtlistdiv_price"><a href="/商品陈列/Product_Inmall?id=@item.Id" target="_blank">￥@(string.Format("{0:0.00}", item.销售信息.价格))</a><span style="padding-left:20px; color:#999; cursor:pointer;" title="报价时间">(@item.销售信息.价格修改日期.ToString("yyyy-MM-dd"))</span></div>
+                    <div style="height:20px;">
+                        <a class="product_gysname_oneline" href="/供应商陈列/Supplier_Destination?id=@item.商品信息.所属供应商.用户数据.Id" title="@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
                     </div>
                 </div>
-            }
+            </div>
+        }
         <div class="gys_znxx_content_detailbox" id="pagediv" style="float: left; width:100%;">
             <div class="gys_znxx_content_detailbox">
                 @{
@@ -141,7 +141,7 @@
                     }
                 }
             </div>
-            </div>
+        </div>
     </div>
 
 </div>

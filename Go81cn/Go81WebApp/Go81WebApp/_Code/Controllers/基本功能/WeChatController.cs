@@ -275,7 +275,7 @@ namespace Go81WebApp.Controllers.基本功能
                 string resxml = "";
                 if (requestXML.MsgType == "text")
                 {
-                    if (requestXML.Content.ToLower().StartsWith("dwyh"))
+                    if (requestXML.Content.ToLower().StartsWith("gbyh"))
                     {
                         var wechatuser = 优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(o => o.WeChatUser == requestXML.FromUserName));
                         if (wechatuser > 0)
@@ -301,7 +301,10 @@ namespace Go81WebApp.Controllers.基本功能
                     }
                     else
                     {
-                        resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName + "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName + "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) + "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[指令不正确，未找到相关信息!]]></Content><FuncFlag>0</FuncFlag></xml>";
+                        resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                                 "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                                 "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                                 "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[指令不正确，未找到相关信息! 请输入您的官兵用户信息，格式为：gbyh:+（单位拼音缩写或番号）。    如：gbyh：0000或gbyh：xnwzcgw。请点击左下角键盘符号返回输入界面进行输入。]]></Content><FuncFlag>0</FuncFlag></xml>";
                     }
                 }
                 else if (requestXML.MsgType == "location")
@@ -526,11 +529,34 @@ namespace Go81WebApp.Controllers.基本功能
                                 resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
                                          "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
                                          "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
-                                         "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[请输入您所在单位代号,格式如dwyh：123456598]]></Content><FuncFlag>0</FuncFlag></xml>";
+                                         "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[请输入您的官兵用户信息，格式为：gbyh:+（单位拼音缩写或番号）。    如：gbyh：70000或gbyh：xnwzcgw。请点击左下角键盘符号返回输入界面进行输入。]]></Content><FuncFlag>0</FuncFlag></xml>";
+                                break;
+                            case "my":
+                                var mycode = 优惠码管理.查询优惠码(0, 0,
+                                    Query<优惠码>.Where(o => o.WeChatUser == requestXML.FromUserName));
+                                if (mycode.Any())
+                                {
+                                    resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                                             "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                                             "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                                             "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[您的优惠码为：" +
+                                             mycode.First().Code + "]]></Content><FuncFlag>0</FuncFlag></xml>";
+                                }
+                                else
+                                {
+                                    resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                                             "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                                             "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                                             "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[你尚未获取优惠码！]]></Content><FuncFlag>0</FuncFlag></xml>";
+                                }
+                                    
                                 break;
                                #endregion
                             default:
-                                resxml = "<xml><ToUserName><![CDATA[" + openid + "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName + "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) + "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[点击菜单事件]]></Content><FuncFlag>0</FuncFlag></xml>";
+                                resxml = "<xml><ToUserName><![CDATA[" + openid +
+                                         "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                                         "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                                         "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[点击菜单事件]]></Content><FuncFlag>0</FuncFlag></xml>";
                                 break;
                         }
                     }
@@ -816,13 +842,18 @@ namespace Go81WebApp.Controllers.基本功能
            ""sub_button"":[  
                 {  
                    ""type"":""click"",  
-                   ""name"":""我是供应商"",  
+                   ""name"":""一般用户"",  
                     ""key"":""gys""  
                 },  
                 {  
                    ""type"":""click"",  
-                   ""name"":""我是军人"",  
+                   ""name"":""部队用户"",  
                    ""key"":""unit""  
+                },
+                {  
+                   ""type"":""click"",  
+                   ""name"":""我的优惠码"",  
+                   ""key"":""my""  
                 }]  
            }]  
  } ";

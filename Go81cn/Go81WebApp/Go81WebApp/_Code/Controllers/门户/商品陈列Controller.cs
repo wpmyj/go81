@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Linq;
+using System.Net;
 using System.Web.WebSockets;
 using Go81WebApp.Models.管理器;
 using Go81WebApp.Models.数据模型;
@@ -60,6 +61,11 @@ namespace Go81WebApp.Controllers.门户
             return View(goodclass);
         }
         public ActionResult ProductList()
+        {
+            return View();
+        }
+
+        public ActionResult JcLife()
         {
             return View();
         }
@@ -349,7 +355,6 @@ namespace Go81WebApp.Controllers.门户
                         {
                             resultlist.Add(serchlist_temp[i]);
                         }
-
                         //回传参数更改值
                         ViewData["商品搜索显示列表"] = resultlist;
                         ViewData["pagecount"] = maxpage;
@@ -371,6 +376,29 @@ namespace Go81WebApp.Controllers.门户
             {
                 string count = Request.QueryString["num"];
                 string id = Request.QueryString["id"];
+
+                //如果用户登录且为个人用户就将数据写入数据库
+                if (HttpContext.检查登录() != -1 && currentUser.GetType() == typeof (个人用户))
+                {
+                    var shopcar = 购物车管理.查询购物车(0, 0, Query<购物车>.Where(o => o.所属用户.用户ID == currentUser.Id));
+                    var sp = new 购物车.选购商品();
+                    sp.商品.商品ID = long.Parse(id);
+                    sp.数量 = int.Parse(count);
+                    //判断数据库有该用户的购物车
+                    if (shopcar.Any())
+                    {
+                        var df = shopcar.First();
+                        df.选购商品列表.Add(sp);
+                        购物车管理.更新购物车(df);
+                    }
+                    else
+                    {
+                        var car = new 购物车();
+                        car.所属用户.用户ID = currentUser.Id;
+                        car.选购商品列表.Add(sp);
+                        购物车管理.添加购物车(car);
+                    }
+                }
                 if (Session["Ginfo"] != null)
                 {
                     string ginfo = Session["Ginfo"].ToString();
@@ -383,6 +411,7 @@ namespace Go81WebApp.Controllers.门户
                 {
                     Session["Ginfo"] += id + "," + count + "|";
                 }
+               
                 return 1;
             }
             catch
@@ -428,7 +457,10 @@ namespace Go81WebApp.Controllers.门户
             {
                 string str = Request.Form["summary"];
                 string[] info = str.Split('|');
-                decimal allprice = 0;
+                var shopcar = 购物车管理.查询购物车(0, 0, Query<购物车>.Where(o => o.所属用户.用户ID == currentUser.Id));
+                var car = shopcar.First();
+                var shoplist = shopcar.Any() ? car.选购商品列表 : new List<购物车.选购商品>();
+                
                 订单 order = new 订单();
                 order.收货地址.省份 = Request.Form["province"];
                 order.收货地址.城市 = Request.Form["city"];
@@ -445,19 +477,32 @@ namespace Go81WebApp.Controllers.门户
                     o.数量 = int.Parse(info[i].Split(',')[0]);
                     o.商品订单价格 = sp.销售信息.价格 * int.Parse(info[i].Split(',')[0]);
                     order.商品订单列表.Add(o);
+
+                    //该商品已下单，从购物车里删除
+                    var gd = shoplist.Find(p => p.商品.商品ID == long.Parse(info[i].Split(',')[1]));
+                    if (gd != null)
+                    {
+                        shoplist.Remove(gd);
+                    }
+
                 }
+                购物车管理.更新购物车(car);
                 订单管理.添加订单(order);
                 Session["Ginfo"] = "";
-                return Content("<script>alert('您已成功提交订单，可以到后台去支付');window.location='/个人用户后台/PurchaseInfo';</script>");
+                return Content("<script>alert('您已成功提交订单，可以到后台去支付订单');window.location='/个人用户后台/PurchaseInfo';</script>");
             } 
             else
             {
-                return Redirect("/商品陈列/PurchaseInfo");
+                return Content("<script>alert('目前购物功能只对个人用户开放！如果你不是个人用户，请先注册个人用户账号。');window.location='/注册/Register_Person';</script>");
             }
         }
         public ActionResult Login()
         {
-            string temp_session = Session["Ginfo"].ToString();
+            string temp_session = "";
+            if (Session["Ginfo"]!=null)
+            {
+                temp_session = Session["Ginfo"].ToString();
+            }
             string uname = Request.Form["uname"];
             string upwd = Request.Form["upwd"];
             var u = this.HttpContext.登录(uname, upwd, false);
@@ -474,21 +519,44 @@ namespace Go81WebApp.Controllers.门户
         }
         public ActionResult PurchaseInfo()
         {
-            Dictionary<long, int> ninfo = new Dictionary<long, int>();
+            var ninfo = new Dictionary<long, int>();
+            var sp = new 购物车.选购商品();
+            var listsp = new List<购物车.选购商品>();
+
             if (Session["Ginfo"] != null)
             {
-                string ginfo = Session["Ginfo"].ToString();
+                var ginfo = Session["Ginfo"].ToString();
                 string[] info = ginfo.Split('|');
                 for (int i = 0; i < info.Length - 1; i++)
                 {
+                    sp.商品.商品ID = long.Parse(info[i].Split(',')[0]);
+                    sp.数量 = int.Parse(info[i].Split(',')[1]);
+                    listsp.Add(sp);
                     ninfo.Add(long.Parse(info[i].Split(',')[0]), int.Parse(info[i].Split(',')[1]));
                 }
-                return View(ninfo);
             }
-            else
+
+            //如果用户登录且为个人用户就将数据写入数据库
+            if (HttpContext.检查登录() != -1 && currentUser.GetType() == typeof(个人用户))
             {
-                return View(ninfo);
+                var shopcar = 购物车管理.查询购物车(0, 0, Query<购物车>.Where(o => o.所属用户.用户ID == currentUser.Id));
+                
+                //判断数据库有该用户的购物车
+                if (shopcar.Any())
+                {
+                    shopcar.First().选购商品列表 = shopcar.First().选购商品列表.Concat(listsp).ToList();
+                    购物车管理.更新购物车(shopcar.First());
+                }
+                else
+                {
+                    var car = new 购物车();
+                    car.所属用户.用户ID = currentUser.Id;
+                    car.选购商品列表 = car.选购商品列表.Concat(listsp).ToList();
+                    购物车管理.添加购物车(car);
+                }
             }
+
+            return View(ninfo);
         }
         /// <summary>
         /// 输入商品关键词，并选择筛选条件后的方法，page=1
@@ -999,7 +1067,8 @@ namespace Go81WebApp.Controllers.门户
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            IEnumerable<商品> goods = 商品管理.查询商品(20 * (cpg - 1), 20, Query<商品>.Where(m => m.商品信息.所属供应商.用户ID == 200000000281));
+            IEnumerable<商品> goods = 商品管理.查询商品(20*(cpg - 1), 20,
+                Query<商品>.Where(m => m.商品信息.所属供应商.用户ID == 200000000281 && m.审核数据.审核状态 == 审核状态.审核通过));
             return View(goods);
         }
         public ActionResult Part_GoodClass()
