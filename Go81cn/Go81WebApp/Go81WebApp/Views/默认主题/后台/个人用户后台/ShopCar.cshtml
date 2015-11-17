@@ -264,17 +264,18 @@
                                         </div>
                                         <div class="good_right">
                                             <div><a href="/商品陈列/Product_Inmall?id=@child.商品.商品ID">@child.商品.商品.商品信息.商品名</a></div>
+                                            <div >配送范围:@(child.商品.商品.销售信息.销售地域.地域==""?"不限范围":child.商品.商品.销售信息.销售地域.地域 )</div>
                                         </div>
                                         <div style="clear: both;"></div>
                                     </div>
                                 </td>
-                                <td class="markertd">￥@child.商品.商品.销售信息.价格</td>
+                                <td class="markertd">￥@child.商品.商品.销售信息.军采价</td>
                                 <td class="markertd" >
                                     <div style="position:relative;border:1px solid #aaa;width:93px; height:25px;margin: 0 auto">
-                                        <a class="changebt" href="javascript:void;" id="diff" name="@(i)" data-price="@child.商品.商品.销售信息.价格">-</a><input data-id="@child.商品.商品ID" data-price="@child.商品.商品.销售信息.价格" name="@i" class="gnumber" type="text" value="@child.数量" /><a class="changebt" href="javascript:void;" id="add" style="top:0px;left:72px; border-right:none; border-left:1px solid #aaa;" name="@(i)" data-price="@child.商品.商品.销售信息.价格">+</a>
+                                        <a class="changebt" href="javascript:void;" id="diff" name="@(i)" data-price="@child.商品.商品.销售信息.军采价">-</a><input data-id="@child.商品.商品ID" data-price="@child.商品.商品.销售信息.军采价" name="@i" class="gnumber" type="text" value="@child.数量" /><a class="changebt" href="javascript:void;" id="add" style="top:0px;left:72px; border-right:none; border-left:1px solid #aaa;" name="@(i)" data-price="@child.商品.商品.销售信息.军采价">+</a>
                                     </div>
                                 </td>
-                                <td class="markertd">￥@(child.商品.商品.销售信息.价格 * child.数量)</td>
+                                <td class="markertd">￥@(child.商品.商品.销售信息.军采价 * child.数量)</td>
                                 <td class="markertd">
                                     <a title="删除该商品" data-id="@child.商品.商品ID" class="deleteorder">删除</a>
                                 </td>
@@ -480,7 +481,22 @@
                 data: { id: id },
                 success: function(data) {
                     if (data == 1) {
+                        //删除商品
                         $this.parents("tr").prev().remove().end().remove();
+                        var totaldis = 0,
+                            checked = $("input[class='select']:checked");
+                        //删除后如果商品购物车无商品已选商品数量与价格置为0，全选置为未勾选状态
+                        if (checked.length <= 0) {
+                            $("#quantity").html("0");
+                            $("#discount").html("￥0.00");
+                            $("#seleall").prop("checked", false);
+                        } else {
+                            //删除后计算购物车中已选择商品的数量与总价
+                            $.each(checked, function () {
+                                checked = $("input[class='select']:checked");
+                                totaldis = calDiscount(this, checked.length, totaldis);
+                            });
+                        }
                     } else {
                         alert("删除失败！");
                     }

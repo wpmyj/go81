@@ -67,9 +67,23 @@ namespace Go81WebApp.Controllers.门户
 
         public ActionResult JcLife()
         {
-            return View();
+            var sdate = new DateTime(2015, 11, 8);
+            var edate = new DateTime(2015, 11, 13);
+            var date = DateTime.Now;
+            if (date >= sdate && date <= edate)
+            {
+                return RedirectToAction("JcLifeIndex");
+            }
+            else
+            {
+                return View();    
+            }
         }
 
+        public ActionResult JcLifeIndex()
+        {
+            return View();
+        }
         public ActionResult ProductContrast()
         {
             string parms = Request.Params["Contrastparmer"];
@@ -378,7 +392,7 @@ namespace Go81WebApp.Controllers.门户
                 string id = Request.QueryString["id"];
 
                 //如果用户登录且为个人用户就将数据写入数据库
-                if (HttpContext.检查登录() != -1 && currentUser.GetType() == typeof (个人用户))
+                if (HttpContext.检查登录() != -1 && currentUser.GetType() == typeof(个人用户))
                 {
                     var shopcar = 购物车管理.查询购物车(0, 0, Query<购物车>.Where(o => o.所属用户.用户ID == currentUser.Id));
                     var sp = new 购物车.选购商品();
@@ -411,7 +425,7 @@ namespace Go81WebApp.Controllers.门户
                 {
                     Session["Ginfo"] += id + "," + count + "|";
                 }
-               
+
                 return 1;
             }
             catch
@@ -453,44 +467,101 @@ namespace Go81WebApp.Controllers.门户
         [HttpPost]
         public ActionResult AddPurchaseInfo()
         {
-            if (HttpContext.检查登录()!=-1&&currentUser.GetType()==typeof(个人用户))
+            if (HttpContext.检查登录() != -1 && currentUser.GetType() == typeof(个人用户))
             {
                 string str = Request.Form["summary"];
                 string[] info = str.Split('|');
-                var shopcar = 购物车管理.查询购物车(0, 0, Query<购物车>.Where(o => o.所属用户.用户ID == currentUser.Id));
-                var car = shopcar.First();
-                var shoplist = shopcar.Any() ? car.选购商品列表 : new List<购物车.选购商品>();
-                
-                订单 order = new 订单();
-                order.收货地址.省份 = Request.Form["province"];
-                order.收货地址.城市 = Request.Form["city"];
-                order.收货地址.区县 = Request.Form["area"];
-                order.联系人 =Request.Form["contactMan"];
-                order.联系电话 = Request.Form["phone"];
-                order.详细地址 = Request.Form["detail"];
-                order.订单所属用户.用户ID = currentUser.Id;
-                for (int i = 0; i < info.Length - 1; i++)
+                string tip1 = "";
+                bool exist = false;
+                bool IsChengdu = false;
+                for (int i = 0; i < info.Length - 1; i++)//限数量判断
                 {
-                    商品 sp = 商品管理.查找商品(long.Parse(info[i].Split(',')[1]));
-                    商品订单 o = new 商品订单();
-                    o.商品.商品ID = long.Parse(info[i].Split(',')[1]);
-                    o.数量 = int.Parse(info[i].Split(',')[0]);
-                    o.商品订单价格 = sp.销售信息.价格 * int.Parse(info[i].Split(',')[0]);
-                    order.商品订单列表.Add(o);
-
-                    //该商品已下单，从购物车里删除
-                    var gd = shoplist.Find(p => p.商品.商品ID == long.Parse(info[i].Split(',')[1]));
-                    if (gd != null)
+                    long id = long.Parse(info[i].Split(',')[1]);
+                    int sum=int.Parse(info[i].Split(',')[0]);
+                    if (id==9147&&sum>9)
                     {
-                        shoplist.Remove(gd);
+                        exist = true;
+                        tip1+= "订单中存在限购9个的商品";
+                        break;
                     }
-
                 }
-                购物车管理.更新购物车(car);
-                订单管理.添加订单(order);
-                Session["Ginfo"] = "";
-                return Content("<script>alert('您已成功提交订单，可以到后台去支付订单');window.location='/个人用户后台/PurchaseInfo';</script>");
-            } 
+                for (int i = 0; i < info.Length - 1; i++)//限成都市判断
+                {
+                    long id = long.Parse(info[i].Split(',')[1]);
+                    int sum = int.Parse(info[i].Split(',')[0]);
+                    商品 sp = 商品管理.查找商品(long.Parse(info[i].Split(',')[1]));
+                    if (sp.销售信息.销售地域.城市 == "成都市" && sp.销售信息.销售地域.城市 != Request.Form["city"])
+                    {
+                        IsChengdu = true;
+                        tip1+="订单中存在仅限于成都市内供货的商品";
+                        break;
+                    }
+                }
+                if (!exist&&!IsChengdu)
+                {
+                    var shopcar = 购物车管理.查询购物车(0, 0, Query<购物车>.Where(o => o.所属用户.用户ID == currentUser.Id));
+                    var car = shopcar.First();
+                    var shoplist = shopcar.Any() ? car.选购商品列表 : new List<购物车.选购商品>();
+
+                    decimal weight = 0;
+                    decimal sum = 0;//使用优惠码前的总价格
+                    decimal sumwithcode = 0;//使用优惠码后的总价格
+                    订单 order = new 订单();
+                    order.收货地址.省份 = Request.Form["province"];
+                    order.收货地址.城市 = Request.Form["city"];
+                    order.收货地址.区县 = Request.Form["area"];
+                    order.联系人 = Request.Form["contactMan"];
+                    order.联系电话 = Request.Form["phone"];
+                    order.详细地址 = Request.Form["detail"];
+                    order.订单所属用户.用户ID = currentUser.Id;
+                    for (int i = 0; i < info.Length - 1; i++)
+                    {
+                        商品 sp = 商品管理.查找商品(long.Parse(info[i].Split(',')[1]));
+                        商品订单 o = new 商品订单();
+                        o.商品.商品ID = long.Parse(info[i].Split(',')[1]);
+                        o.数量 = int.Parse(info[i].Split(',')[0]);
+                        sum += int.Parse(info[i].Split(',')[0]) * sp.销售信息.价格;
+                        sumwithcode += int.Parse(info[i].Split(',')[0]) * sp.销售信息.军采价;
+                        order.商品订单列表.Add(o);
+                        weight += sp.商品信息.商品重量 * int.Parse(info[i].Split(',')[0]);
+                        //该商品已下单，从购物车里删除
+                        var gd = shoplist.Find(p => p.商品.商品ID == long.Parse(info[i].Split(',')[1]));
+                        if (gd != null)
+                        {
+                            shoplist.Remove(gd);
+                        }
+                    }
+                    order.订单商品总价格 = sum;
+                    if (sumwithcode < 168)
+                    {
+                        if (Request.Form["province"] != "新疆维吾尔自治区" && Request.Form["province"] != "西藏自治区" && Request.Form["province"] != "海南省")
+                        {
+                            order.总运费 = 15;
+                        }
+                        else
+                        {
+                            order.总运费 = 15 + 15 *Math.Ceiling(weight);
+                        }
+                    }
+                    else
+                    {
+                        if (Request.Form["province"] == "新疆维吾尔自治区" || Request.Form["province"] == "西藏自治区" || Request.Form["province"] == "海南省")
+                        {
+                            order.总运费 = 15 + 15 * Math.Ceiling(weight);
+                        }
+                    }
+                    order.订单总付款 = sumwithcode + order.总运费;
+                    order.订单总价格 = sum + order.总运费;
+                    购物车管理.更新购物车(car);
+                    订单管理.添加订单(order);
+                    Session["Ginfo"] = "";
+                    return Content("<script>alert('您已成功提交订单，可以到后台去支付订单');window.location='/个人用户后台/PurchaseInfo';</script>");
+                }
+                else
+                {
+                    return Content("<script>alert('" + tip1 + "，不能下订单');window.location='/个人用户后台/ShopCar';</script>");
+                }
+            }
             else
             {
                 return Content("<script>alert('目前购物功能只对个人用户开放！如果你不是个人用户，请先注册个人用户账号。');window.location='/注册/Register_Person';</script>");
@@ -499,7 +570,7 @@ namespace Go81WebApp.Controllers.门户
         public ActionResult Login()
         {
             string temp_session = "";
-            if (Session["Ginfo"]!=null)
+            if (Session["Ginfo"] != null)
             {
                 temp_session = Session["Ginfo"].ToString();
             }
@@ -540,7 +611,7 @@ namespace Go81WebApp.Controllers.门户
             if (HttpContext.检查登录() != -1 && currentUser.GetType() == typeof(个人用户))
             {
                 var shopcar = 购物车管理.查询购物车(0, 0, Query<购物车>.Where(o => o.所属用户.用户ID == currentUser.Id));
-                
+
                 //判断数据库有该用户的购物车
                 if (shopcar.Any())
                 {
@@ -1049,6 +1120,11 @@ namespace Go81WebApp.Controllers.门户
         }
         public ActionResult mall()
         {
+            long typeId = -1;
+            if(!string.IsNullOrWhiteSpace(Request.QueryString["id"]))
+            {
+                typeId = long.Parse(Request.QueryString["id"].ToString());
+            }
             long pgCount = 0;
             int cpg = 0;
             if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
@@ -1059,16 +1135,34 @@ namespace Go81WebApp.Controllers.门户
             {
                 cpg = 1;
             }
-            long pc = 商品管理.计数供应商商品(200000000281, 0, 0);
+            long pc = 0;
+            if(typeId==-1)
+            {
+                pc=商品管理.计数供应商商品(200000001522, 0, 0, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过));
+            }
+            else
+            {
+                pc = 商品管理.计数供应商商品(200000001522, 0, 0, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过 && m.商品信息.所属商品分类.商品分类ID == typeId));
+            }
             pgCount = pc / 20;
             if (pc % 20 > 0)
             {
                 pgCount++;
             }
+            ViewData["type"]=typeId;
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            IEnumerable<商品> goods = 商品管理.查询商品(20*(cpg - 1), 20,
-                Query<商品>.Where(m => m.商品信息.所属供应商.用户ID == 200000000281 && m.审核数据.审核状态 == 审核状态.审核通过));
+            IEnumerable<商品> goods = null;
+            if (typeId==-1)
+            {
+                goods=商品管理.查询商品(20 * (cpg - 1), 20,
+                Query<商品>.Where(m => m.商品信息.所属供应商.用户ID == 200000001522 && m.审核数据.审核状态 == 审核状态.审核通过));
+            }
+            else
+            {
+                goods = 商品管理.查询商品(20 * (cpg - 1), 20,
+               Query<商品>.Where(m => m.商品信息.所属供应商.用户ID == 200000001522 && m.审核数据.审核状态 == 审核状态.审核通过 && m.商品信息.所属商品分类.商品分类ID == typeId));
+            }
             return View(goods);
         }
         public ActionResult Part_GoodClass()
@@ -1240,6 +1334,19 @@ namespace Go81WebApp.Controllers.门户
                 Recommend_Good = 商品管理.查询商品(0, 5, MongoDB.Driver.Builders.Query.EQ("审核数据.审核状态", 审核状态.审核通过), false, SortBy<商品>.Descending(o => o.销售信息.点击量), false).OrderBy(m => m.销售信息.价格).ToList();
             }
             return PartialView("Part_Product/Part_Recommend", Recommend_Good);
+        }
+        public ActionResult Part_Recommend1()
+        {
+            List<商品> Recommend_Good = new List<商品>();
+            try
+            {
+                Recommend_Good = 商品管理.查询供应商商品(200000001522,0,10).ToList();
+            }
+            catch
+            {
+                Recommend_Good = 商品管理.查询商品(0, 5, MongoDB.Driver.Builders.Query.EQ("审核数据.审核状态", 审核状态.审核通过), false, SortBy<商品>.Descending(o => o.销售信息.点击量), false).OrderBy(m => m.销售信息.价格).ToList();
+            }
+            return PartialView("Part_Product/Part_Recommend1", Recommend_Good);
         }
         public ActionResult Part_OtherClass()
         {

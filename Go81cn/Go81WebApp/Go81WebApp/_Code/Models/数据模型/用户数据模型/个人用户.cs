@@ -59,5 +59,6 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
     {
         public string WeChatUser { get; set; }
         public string Code { get; set; }
+        public bool 已使用 { get; set; }
     }
 }

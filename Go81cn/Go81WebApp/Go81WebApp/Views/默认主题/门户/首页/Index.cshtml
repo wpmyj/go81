@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "西南物资采购网";
 }
 <style type="text/css">
@@ -88,14 +87,27 @@
         border-top: 1px solid #e5e5e5;
     }
 </style>
-
-<div id="indexpagemodal0" class="modal fade" style="display:block;">
+<div id="pdf2" class="out_box">
+    <div class="out_box_infirst">
+    </div>
+    <div class="out_box_insecond">
+        <div class="out_box_insecond_child" style="background-color: #00917c;">
+            <div style="width:100%; height:auto;"><a class="close_outbox" title="关闭窗口" onclick="hidebox('#pdf2')">×</a></div>
+            <div style=" height:415px;background:url(/Images/mgzt.png) -119px -77px"></div>
+             <a target="_blank" style="color:#FBA853;text-align:center;text-decoration:underline;  font-size: 25px;display: block;width: 400px;margin: 10px auto;" href="/商品陈列/JcLifeIndex">麦歌暖冬能量大作战购物狂欢已全面开启，欲了解详情请猛戳此处！！！</a>
+            <div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="indexpagemodal0" class="modal fade" style="display:none;">
     <div class="modal-dialog" style="margin: 3% auto;">
         <div class="modal-content" style="height:500px;">
             <div class="modal-header" style="padding-bottom: 20px;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal0').hide();">×</button>
-                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">物资采购管理处关于验收单规范开取的通知
-</div>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">
+                    物资采购管理处关于验收单规范开取的通知
+                </div>
             </div>
             <div class="modal-body" style=" height:auto; overflow:hidden;">
                 <div id="outlistdiv" style="height: 350px; overflow-y: scroll; line-height:25px;">
@@ -128,41 +140,41 @@
     </div>
 </div>
 @*<div id="indexpagemodal1" class="modal fade">
-    <div class="modal-dialog" style="margin: 3% auto;">
-        <div class="modal-content" style="height:460px;">
-            <div class="modal-header" style="padding-bottom: 20px;">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal1').hide();">×</button>
-                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">通知</div>
-            </div>
-            <div class="modal-body" style=" height:auto; overflow:hidden;">
-                <div id="outlistdiv" style="height: 330px; overflow-y: scroll; line-height:25px;">
-                    <p class="wenxintishi">为了进一步争取优质资源为广大官兵谋福利，优化部队官兵的个人生活，成都军区将与国美电器联合举行“917超级福利日-----国美&合作伙伴   9月17日内购福利闭店专场”活动，凡在活动当日执入场券进场的官兵在购买相关电器产品时均可享受国美电器专门为部队官兵订制的超低价优惠。因入场券数量有限，如有需要的同志可以前往成都军区联勤部军需物资油料部采购管理处领取。</p>
-                    <p class="wenxintishi">
-                        活动时间：2015年9月17日 10：00-24：00
-                    </p>
-                    <p class="wenxintishi">
-                        活动地点：成都国美全川72家门店
-                    </p>
-                    <p class="wenxintishi">
-                        领取联系人：邹助理   028-86683373
-                    </p>
-                    <p class="wenxintishi" style="padding-left:95px;">
-                        曾助理   028-86683369
-                    </p>
-                    <p class="wenxintishi"><a href="/App_Uploads/通知/附件/2015/9/10/b275c7ae-fb96-417b-acc0-dd83abb945a8917国美内购会介绍.pdf" style="text-decoration:underline;" target="_blank">活动详情及优惠商品资料可登录西南物资采购网下载。</a></p>
-                    <p class="wenxintishi" style="text-align:right; padding-right:20px;">成都军区联勤部军需物资油料部采购管理处
-                                  
-</p>
-                    <p class="wenxintishi" style="text-align:right; padding-right:183px;"> 二O一五年九月九日</p>
+        <div class="modal-dialog" style="margin: 3% auto;">
+            <div class="modal-content" style="height:460px;">
+                <div class="modal-header" style="padding-bottom: 20px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal1').hide();">×</button>
+                    <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">通知</div>
                 </div>
-                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="已阅读" onclick="$('#indexpagemodal1').hide();" /></div>
+                <div class="modal-body" style=" height:auto; overflow:hidden;">
+                    <div id="outlistdiv" style="height: 330px; overflow-y: scroll; line-height:25px;">
+                        <p class="wenxintishi">为了进一步争取优质资源为广大官兵谋福利，优化部队官兵的个人生活，成都军区将与国美电器联合举行“917超级福利日-----国美&合作伙伴   9月17日内购福利闭店专场”活动，凡在活动当日执入场券进场的官兵在购买相关电器产品时均可享受国美电器专门为部队官兵订制的超低价优惠。因入场券数量有限，如有需要的同志可以前往成都军区联勤部军需物资油料部采购管理处领取。</p>
+                        <p class="wenxintishi">
+                            活动时间：2015年9月17日 10：00-24：00
+                        </p>
+                        <p class="wenxintishi">
+                            活动地点：成都国美全川72家门店
+                        </p>
+                        <p class="wenxintishi">
+                            领取联系人：邹助理   028-86683373
+                        </p>
+                        <p class="wenxintishi" style="padding-left:95px;">
+                            曾助理   028-86683369
+                        </p>
+                        <p class="wenxintishi"><a href="/App_Uploads/通知/附件/2015/9/10/b275c7ae-fb96-417b-acc0-dd83abb945a8917国美内购会介绍.pdf" style="text-decoration:underline;" target="_blank">活动详情及优惠商品资料可登录西南物资采购网下载。</a></p>
+                        <p class="wenxintishi" style="text-align:right; padding-right:20px;">成都军区联勤部军需物资油料部采购管理处
 
+    </p>
+                        <p class="wenxintishi" style="text-align:right; padding-right:183px;"> 二O一五年九月九日</p>
+                    </div>
+                    <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="已阅读" onclick="$('#indexpagemodal1').hide();" /></div>
+
+                </div>
             </div>
         </div>
-    </div>
-</div>*@
+    </div>*@
 <div class="main_content">
-    <div class="main_content_topbox">                  
+    <div class="main_content_topbox">
         <div class="left_menu">@Html.Action("Part_Index_LeftMenu", "首页")</div>
         <div class="index_content">@Html.Action("Part_Index_Content", "首页")</div>
     </div>
@@ -170,7 +182,71 @@
         @Html.Action("Part_Index_Bottom", "首页")
     </div>
 </div>
+<style>
+    .out_box {
+        display: block;
+    }
 
+    .out_box_infirst {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top: 3%;
+    }
+
+    .out_box_insecond_child {
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: #00917c;
+        border: none;
+        padding:20px;
+    }
+
+    .close_outbox {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        cursor: pointer;
+    }
+
+    #click_into {
+        display: block;
+        width: 480px;
+        height: 40px;
+        position: absolute;
+        top: 290px;
+        right: 40px;
+    }
+</style>
 <script type="text/javascript" language="javascript">
     function clearCookie() {
         var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
@@ -178,5 +254,9 @@
             for (var i = keys.length; i--;)
                 document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
         }
+    }
+    function hidebox(th) {
+        $(th).hide();
+        $("#indexpagemodal0").show();
     }
 </script>

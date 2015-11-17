@@ -1,7 +1,6 @@
 ﻿@model Go81WebApp.Models.数据模型.内容数据模型.培训资料
 @{
-    ViewBag.Title = "添加培训资料";
-    Layout = "_BackLayout.cshtml";
+    ViewBag.Title = "添加培训资料"; 
 }
 <link rel="stylesheet" href="~/JS/kindeditor-4.1.10/themes/default/default.css" />
 <link rel="stylesheet" href="~/JS/kindeditor-4.1.10/plugins/code/prettify.css" />
@@ -41,7 +40,7 @@
         line-height: 25px;
         margin-left: 0;
     }
-</style>
+</style>  
 <div id="f1" class="modal_out">
     <div class="modal_in"></div>
     <div class="modal_content_loading">
@@ -53,7 +52,7 @@
     <div class="bg_outdiv_left">
         @Html.Action("LeftMenu", "布局")
     </div>
-    <div style="margin-bottom:50px;" class="bg_outdiv_right">
+    <div style="width:930px;margin-bottom:50px;" class="bg_outdiv_right">
         <div class="title-base-out">
             <div class="title-base-middle">
                 <div class="title-base-inner">添加培训资料</div>
@@ -101,7 +100,7 @@
                                         <table style="border:none;">
                                             <tr>
                                                 <td style="border:none; background-color:white; width:80px; font-size:16px;" valign="top">
-                                                    内&nbsp;&nbsp;&nbsp;容：
+                                                    内&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容：
                                                 </td>
                                                 <td style="border:none; background-color:white;">
                                                     @Html.TextBoxFor(m => m.内容主体.内容, new { style = "width:690px; height:400px;", id = "content" })

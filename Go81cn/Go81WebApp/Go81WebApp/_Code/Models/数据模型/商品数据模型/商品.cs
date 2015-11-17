@@ -36,6 +36,7 @@ namespace Go81WebApp.Models.数据模型.商品数据模型
             public string 型号 { get; set; }
             public string 精确型号 { get; set; }
             public string 计量单位 { get; set; }
+            public double 单位重量 { get; set; }
             public List<string> 商品图片 { get; set; }
             public List<string> 商品型号图片 { get; set; }
             public 用户链接<供应商> 所属供应商 { get; set; }
@@ -77,18 +78,21 @@ namespace Go81WebApp.Models.数据模型.商品数据模型
             [Required(ErrorMessage = "请输入商品价格")]
             [RegularExpression(@"^(\d+)(.\d+)?", ErrorMessage = "请输入正确的价格")]
             public decimal 价格 { get; set; }
+            public decimal 活动价 { get; set; }
             public decimal 军采价 { get; set; }
             public int 销量 { get; set; }
             public 库存状态 库存状态 { get; set; }
             public int 点击量 { get; set; }
             public int 内网点击量 { get; set; }
             public _价格属性组合 价格属性组合 { get; set; }
+            public _地域 销售地域 { get; set; }
             public _销售信息()
             {
                 this.点击量 = RandomString.ClickStartNum();
                 this.内网点击量 = RandomString.ClickStartNum();
                 this.价格修改日期 = DateTime.Now;
                 this.价格属性组合 = new _价格属性组合();
+                this.销售地域 = new _地域();
             }
         }
         public enum 库存状态

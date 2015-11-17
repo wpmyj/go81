@@ -24,6 +24,18 @@
                         <input type="hidden" id="summary" name="summary" value="" />
                         <table id="orderInfo" style="width:100%;">
                             <tr>
+                                <td align="right">
+                                    <div>运费说明：</div>
+                                </td>
+                                <td style="position:relative;">
+                                    <a id="qimg"><img src="~/Images/question.png" style="vertical-align:middle;cursor:pointer;" /></a>
+                                    <div id="question">
+                                        1.	四川省内、普通省外（不含新疆、西藏、海南）地区快递费统一定价15元，不限订单商品数量与重量，订单满168元，免邮。
+                                        <br />2.	新疆、西藏、海南三省，快递费用由客户自己承担。<br />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td align="right" style="text-indent:2em;">联系人：</td>
                                 <td><input type="text" name="contactman" id="contactman" /></td>
                             </tr>
@@ -85,6 +97,9 @@
                         <div style="text-align:center;margin:10px auto;">
                             <input type="submit" id="submitbt" value="登录" />
                         </div>
+                        <div style="text-align:center;margin:10px auto;">
+                            <a href="/注册/Register_Person" style="text-decoration:underline;color:#ff0000;">没有个人用户账号？去注册</a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -114,12 +129,17 @@
                 @{
             商品 g = 商品管理.查找商品(item.Key);
                 }
-                <div style="float:left; width:52px;"><input type="checkbox" data-number="@item.Value" data-id="@g.Id" id="allprice@(i)" value="@(item.Value * g.销售信息.价格)" name="sum" onclick="selectme(this)" /></div>
-                <div class="goodlist_img"><img style="width:80px; height:80px;" src="@g.商品信息.商品图片.First().Replace(" original","150x150")" /></div>
-                <div class="goodlist_introduce">@g.商品信息.商品名</div>
-                <div class="goodlist_price">@g.销售信息.价格</div>
-                <div class="goodlist_count" style="position:relative;border:1px solid #aaa;width:94px; height:25px;"><a class="changebt" id="diff" name="@(i)" data-price="@g.销售信息.价格">-</a><input data-price="@g.销售信息.价格" name="@i" class="gnumber" type="text" onkeydown="getValue(this)" onkeyup="setValue(this,event)" onblur="setValue(this,event)" value="@item.Value" /><a class="changebt" id="add" style="top:0px;left:72px; border-right:none; border-left:1px solid #aaa;" name="@(i)" data-price="@g.销售信息.价格">+</a></div>
-                <div class="goodlist_sum" id="price@(i)">@(item.Value * g.销售信息.价格)</div>
+                <div style="float:left; width:52px;"><input type="checkbox" data-number="@item.Value" data-id="@g.Id" id="allprice@(i)" value="@(item.Value * g.销售信息.军采价)" name="sum" onclick="selectme(this)" /></div>
+                <div class="goodlist_img">
+                    <img style="width:80px; height:80px;" src="@g.商品信息.商品图片.First().Replace(" original","150x150")" />
+                   
+                </div>
+                <div class="goodlist_introduce">@g.商品信息.商品名
+                    <div style="font-size: 12px;">配送范围：@g.销售信息.销售地域.地域</div>
+                </div>
+                <div class="goodlist_price">@g.销售信息.军采价</div>
+                <div class="goodlist_count" style="position:relative;border:1px solid #aaa;width:94px; height:25px;"><a class="changebt" id="diff" name="@(i)" data-price="@g.销售信息.军采价">-</a><input data-price="@g.销售信息.军采价" name="@i" class="gnumber" type="text" onkeydown="getValue(this)" onkeyup="setValue(this,event)" onblur="setValue(this,event)" value="@item.Value" /><a class="changebt" id="add" style="top:0px;left:72px; border-right:none; border-left:1px solid #aaa;" name="@(i)" data-price="@g.销售信息.军采价">+</a></div>
+                <div class="goodlist_sum" id="price@(i)">@(item.Value * g.销售信息.军采价)</div>
                 <div class="header_operate"><a class="delbt" id="@g.Id" href="###" name="@(i)">删除</a></div>
                 <div style="clear:both;"></div>
             </div>
@@ -305,6 +325,12 @@
                 }
             });
         }
+    });
+    $("#qimg").mouseover(function(){
+    $("#question").show();
+    });
+    $("#qimg").mouseout(function () {
+        $("#question").hide();
     });
 </script>
 

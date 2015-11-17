@@ -275,37 +275,31 @@ namespace Go81WebApp.Controllers.基本功能
                 string resxml = "";
                 if (requestXML.MsgType == "text")
                 {
-                    if (requestXML.Content.ToLower().StartsWith("gbyh"))
-                    {
-                        var wechatuser = 优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(o => o.WeChatUser == requestXML.FromUserName));
-                        if (wechatuser > 0)
-                        {
-                            resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
-                                             "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
-                                             "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
-                                             "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[您已经获取过优惠码，不能再次获取！]]></Content><FuncFlag>0</FuncFlag></xml>";
-                        }
-                        else
-                        {
-                            var discountCode = GenerateDisCountCode("unit");
-                            resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
-                                             "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
-                                             "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
-                                             "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[您的优惠码为：" +
-                                             discountCode + "]]></Content><FuncFlag>0</FuncFlag></xml>";
-                            var code = new 优惠码();
-                            code.WeChatUser = requestXML.FromUserName;
-                            code.Code = discountCode;
-                            优惠码管理.添加优惠码(code);
-                        }
-                    }
-                    else
-                    {
-                        resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
-                                 "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
-                                 "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
-                                 "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[指令不正确，未找到相关信息! 请输入您的官兵用户信息，格式为：gbyh:+（单位拼音缩写或番号）。    如：gbyh：0000或gbyh：xnwzcgw。请点击左下角键盘符号返回输入界面进行输入。]]></Content><FuncFlag>0</FuncFlag></xml>";
-                    }
+                    //var wechatuser = 优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(o => o.WeChatUser == requestXML.FromUserName));
+                    //if (wechatuser > 0)
+                    //{
+                    //    resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                    //                        "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                    //                        "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                    //                        "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[您已经获取过优惠码，不能再次获取！]]></Content><FuncFlag>0</FuncFlag></xml>";
+                    //}
+                    //else
+                    //{
+                    //    var discountCode = GenerateDisCountCode("unit");
+                    //    resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                    //                        "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                    //                        "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                    //                        "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[您的优惠码为：" +
+                    //                        discountCode + "]]></Content><FuncFlag>0</FuncFlag></xml>";
+                    //    var code = new 优惠码();
+                    //    code.WeChatUser = requestXML.FromUserName;
+                    //    code.Code = discountCode;
+                    //    优惠码管理.添加优惠码(code);
+                    //}
+                    resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                                            "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                                            "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                                            "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[未找到相关信息！]]></Content><FuncFlag>0</FuncFlag></xml>";
                 }
                 else if (requestXML.MsgType == "location")
                 {
@@ -501,7 +495,7 @@ namespace Go81WebApp.Controllers.基本功能
                                 break;
                            
                                #region 优惠券获取
-                            case "gys":
+                            case "get":
                                 var wechatuser = 优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(o => o.WeChatUser == requestXML.FromUserName));
                                 if (wechatuser > 0)
                                 {
@@ -521,16 +515,17 @@ namespace Go81WebApp.Controllers.基本功能
                                     var code = new 优惠码();
                                     code.WeChatUser = requestXML.FromUserName;
                                     code.Code = discountcode;
+                                    code.已使用 = false;
                                     优惠码管理.添加优惠码(code);
                                 }
                                 
                                 break;
-                            case "unit":
-                                resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
-                                         "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
-                                         "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
-                                         "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[请输入您的官兵用户信息，格式为：gbyh:+（单位拼音缩写或番号）。    如：gbyh：70000或gbyh：xnwzcgw。请点击左下角键盘符号返回输入界面进行输入。]]></Content><FuncFlag>0</FuncFlag></xml>";
-                                break;
+                            //case "unit":
+                            //    resxml = "<xml><ToUserName><![CDATA[" + requestXML.FromUserName +
+                            //             "]]></ToUserName><FromUserName><![CDATA[" + requestXML.ToUserName +
+                            //             "]]></FromUserName><CreateTime>" + ConvertDateTimeInt(DateTime.Now) +
+                            //             "</CreateTime><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[请输入您的官兵用户信息，格式为：gbyh:+（单位拼音缩写或番号）。    如：gbyh：70000或gbyh：xnwzcgw。请点击左下角键盘符号返回输入界面进行输入。]]></Content><FuncFlag>0</FuncFlag></xml>";
+                            //    break;
                             case "my":
                                 var mycode = 优惠码管理.查询优惠码(0, 0,
                                     Query<优惠码>.Where(o => o.WeChatUser == requestXML.FromUserName));
@@ -842,13 +837,8 @@ namespace Go81WebApp.Controllers.基本功能
            ""sub_button"":[  
                 {  
                    ""type"":""click"",  
-                   ""name"":""一般用户"",  
-                    ""key"":""gys""  
-                },  
-                {  
-                   ""type"":""click"",  
-                   ""name"":""部队用户"",  
-                   ""key"":""unit""  
+                   ""name"":""获取优惠码"",  
+                    ""key"":""get""  
                 },
                 {  
                    ""type"":""click"",  

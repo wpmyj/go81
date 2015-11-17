@@ -525,7 +525,10 @@ namespace Go81WebApp.Controllers.基本功能
             m.Add("订单管理", new Dictionary<string, object> { { "我的订单", "供应商后台/PurchaseInfo" } });
 
 #endif
-
+            if (HttpContext.获取当前用户<供应商>().Id == 200000001522)
+            {
+                m.Add("订单管理", new Dictionary<string, object> { { "我的订单", "供应商后台/PurchaseInfo" } });
+            }
             m.Add("服务管理", new Dictionary<string, object>
                     {
                         {"军采通服务管理","供应商后台/AccountInfoManage"},

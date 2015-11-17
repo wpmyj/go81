@@ -225,7 +225,7 @@
                         <span style="padding:0 10px 0 10px;">时间:@Model.内容主体.发布时间.ToString("yyyy-MM-dd")</span>
                         <span style="padding:0 10px 0 10px;">浏览次数:@Model.点击次数</span>
                         <a class="printspan" onclick="printpage()"><img width="13" height="13" src="~/Images/print.PNG" />打印</a>
-
+                        <b style="color: red">（如是谷歌浏览器，打印时请勾选背景图片选项）</b>
                     </div>
                     <div class="gys_xttz_contentbox_news_text">
                         @if (!WebApiApplication.IsIntranet)

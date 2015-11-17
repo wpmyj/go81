@@ -169,6 +169,46 @@ namespace Go81WebApp.Controllers.后台
                 return View(orders);
             }
         }
+        [HttpPost]
+        public ActionResult UpdateOrder()
+        {
+            try
+            {
+                long id = long.Parse(Request.Form["orderId"]);
+                string code = "";
+                if (!string.IsNullOrWhiteSpace(Request.Form["yhm"]))
+                {
+                    code = Request.Form["yhm"];
+                }
+                string[] ids = Request.Form["gId"].ToString().Split('|');
+                if(!string.IsNullOrWhiteSpace(code))
+                {
+                    订单 order = 订单管理.查找订单(id);
+                    foreach (var item in order.商品订单列表)
+                    {
+                        for (int i = 0; i < ids.Length - 1; i++)
+                        {
+                            if (item.商品.商品ID == long.Parse(ids[i]))
+                            {
+                                item.已发货 = true;
+                                item.发货时间 = DateTime.Now;
+                                item.运单号 =code;
+                            }
+                        }
+                    }
+                    订单管理.更新订单(order);
+                    return Redirect("/供应商后台/PurchaseInfo");
+                }
+                else
+                {
+                    return Content("<script>alert('您还没有输入运单号！');window.location='/供应商后台/PurchaseInfo';</script>");
+                }
+            }
+            catch
+            {
+                return Redirect("/供应商后台/PurchaseInfo");
+            }
+        }
         public ActionResult Part_BackHead()
         {
             var m = currentUser;
@@ -1962,7 +2002,7 @@ namespace Go81WebApp.Controllers.后台
                 }
             }
 
-
+            ViewData["userId"] = currentUser.Id;
             return PartialView("Gys_Part/Part_Gys_Product_List", model);
         }
 
@@ -2289,6 +2329,7 @@ namespace Go81WebApp.Controllers.后台
                 var att = m.商品属性模板;
                 ViewData["商品属性模板"] = att;
                 ViewData["ID"] = m.Id;
+                ViewData["userId"] = currentUser.Id;
                 return PartialView("Gys_Part/Part_Gys_Product_Add");
             }
             catch
@@ -2625,6 +2666,7 @@ namespace Go81WebApp.Controllers.后台
                 ViewData["classid"] = pro_info.商品信息.所属商品分类.商品分类ID;
                 ViewData["商品属性模板"] = att;
                 ViewData["pro_id"] = id;
+                ViewData["userId"] = currentUser.Id;
                 return PartialView("Gys_Part/Part_Gys_Product_Modify", pro_info);
             }
             catch
@@ -6260,6 +6302,8 @@ namespace Go81WebApp.Controllers.后台
             {
                 //商品 Pro_Model = new 商品();
                 商品 Pro_Model = 商品管理.查找商品(long.Parse(Request.Form["idsttrsrr"]));
+                Pro_Model.商品信息.单位重量 = model.商品信息.单位重量;
+                Pro_Model.销售信息.军采价 = model.销售信息.军采价;
                 if (Pro_Model.中标商品)
                 {
                     Pro_Model.中标信息 = new List<商品._中标信息>();
@@ -6445,7 +6489,12 @@ namespace Go81WebApp.Controllers.后台
         public ActionResult Gys_Product_Add(商品 model)
         {
             商品 Pro_Model = new 商品();
-
+            Pro_Model.商品信息.单位重量 = model.商品信息.单位重量;
+            Pro_Model.销售信息.活动价 = model.销售信息.活动价;
+            Pro_Model.销售信息.军采价 = model.销售信息.军采价;
+            Pro_Model.销售信息.销售地域.省份 = model.销售信息.销售地域.省份;
+            Pro_Model.销售信息.销售地域.城市 = model.销售信息.销售地域.城市;
+            Pro_Model.销售信息.销售地域.区县 = model.销售信息.销售地域.区县;
             try
             {
                 string price_sttr = Request.Form["pricesttrsrr"];

@@ -1,0 +1,49 @@
+﻿@model List<Go81WebApp.Models.数据模型.商品数据模型.商品>
+<style>
+    .links:hover {
+        text-decoration: underline;
+    }
+</style>
+<script src="~/JS/clickStatistics.js" type="text/javascript"></script>
+<div class="title-base-out" style="margin-top:0;">
+    <div class="title-base-middle">
+        <div class="title-base-inner">推荐商品</div>
+    </div>
+</div>
+<div class="index_menu_content_box">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var t in Model)
+        {
+            <div class="gyspage_detail_leftimgbox">
+                <a href="~/商品陈列/Product_Detail?id=@t.Id" onclick='clickStatistics("C2","1", "@t.Id","@t.商品信息.所属供应商.用户ID")'>
+                    @if (t.商品信息.商品图片.Count > 0)
+                    {
+                        <img src="@t.商品信息.商品图片[0].Replace("original", "150X150")" />
+                    }
+                    else
+                    {
+                        <img src="~/images/noimage.jpg" />
+                    }
+                </a>
+                <div style="text-align:left;font-size:13px; width:178px; padding-left:26px; margin-left:auto;margin-right:auto;">
+                    @if (t.商品信息.商品名.Length > 35)
+                    {
+                        <a title="@t.商品信息.商品名" href="~/商品陈列/Product_Detail?id=@t.Id" onclick='clickStatistics("C2","1", "@t.Id","@t.商品信息.所属供应商.用户ID")'>@t.商品信息.商品名.Substring(0, 35)</a>
+                    }
+                    else
+                    {
+                        <a title="@t.商品信息.商品名" href="~/商品陈列/Product_Detail?id=@t.Id" onclick='clickStatistics("C2","1", "@t.Id","@t.商品信息.所属供应商.用户ID")'>@t.商品信息.商品名</a>
+                    }
+                    <br />
+                    <em style="color:red;">￥@(string.Format("{0:0.00}", t.销售信息.价格))</em><br />
+                    <span><a class="links" style="font-size:13px;" href="/供应商陈列/Supplier_Destination?id=@t.商品信息.所属供应商.用户ID">@t.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a></span>
+                    <br /><span class="links" style="color:gray;">报价时间：@t.销售信息.价格修改日期.ToString("yyyy-MM-dd")</span>
+                    <br /><span class="links" style="color:gray;">外网浏览：@t.销售信息.点击量</span>
+                </div>
+            </div>
+        }
+    }
+    else
+    { <div>暂无推荐商品！</div>}
+</div>

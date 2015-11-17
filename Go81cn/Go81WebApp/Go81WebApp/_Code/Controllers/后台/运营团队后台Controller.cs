@@ -1547,6 +1547,7 @@ namespace Go81WebApp.Controllers.后台
         public ActionResult Part_DepartmentAdd()
         {
             ViewData["jsonUser"] = JsonConvert.SerializeObject(单位用户.单位级别列表);
+            ViewData["user"] = 用户管理.查询用户<单位用户>(0, 0);
             ViewData["用户组列表"] = 用户组管理.查询用户组(0, 0);
             return PartialView("Part_View/Part_DepartmentAdd");
         }

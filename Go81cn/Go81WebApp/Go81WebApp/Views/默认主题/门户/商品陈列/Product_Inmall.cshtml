@@ -74,17 +74,16 @@
             <div class="prodtpage_detail_topbox_right_contentbox" style="padding-top:0px; padding-left:0px; font-size:14px; width: 550px;">
                 <div class="prodtpage_detail_topbox_right_contentlist" style="line-height: 25px;">
                     <div class="leftbox">
-                        <div>军人价：<span id="product_price" style="font-weight: bold; font-size: 18px; line-height: 25px;">@(string.Format("{0:c2}", Model.销售信息.价格))</span></div>
-                        <div>活动价：<span style="font-weight: bold; font-size: 18px; line-height: 25px;">¥2.00 </span></div>
-                        <div>市场价：<span style="font-weight: bold; font-size: 18px; line-height: 25px;">¥2.00</span></div>
+                        <div style="text-decoration:line-through;font-size: 16px; color:#808080;">市场价：<span style="line-height: 25px;">@(string.Format("{0:c2}", Model.销售信息.价格))</span></div>
+                        <div>军采价：<span id="product_price" style="color:#FF0000; font-size: 18px; line-height: 25px;">@(string.Format("{0:c2}", Model.销售信息.军采价))</span></div>
                         @if (Model.销售信息 != null && Model.销售信息.价格修改日期 != null)
                         {
                             <span style="color:#999;">（报价日期：@Model.销售信息.价格修改日期.ToString("yyyy-MM-dd")）</span>
                         }
                     </div>
                     <div class="rightboxinmall">
-                        <div class="introduction">
-                            fgfdsfgsdfgfdsgfdsgfsfgdsgfdsgf此价格为商品价格此价格为商品价格此价格为商品价格此价格为商品价格此价格为商品价格此价格为商品价格
+                        <div class="introduction" style="color: red">
+                            军采价：军采价是为部队官兵提供的优惠福利政策价。该价格优于同款产品的全网市场价格。
                         </div>
                     </div>
                 </div>
@@ -93,17 +92,6 @@
                 <div class="prodtpage_detail_topbox_right_contentlist">
                     外网浏览：
                     @Model.销售信息.点击量
-                </div>
-                <div class="prodtpage_detail_topbox_right_contentlist">
-                    内网浏览：
-                    @if (WebApiApplication.IsIntranet || ViewData["已登录"].ToString() == "1")
-                    {
-                        <a>@Model.销售信息.内网点击量</a>
-                    }
-                    else
-                    {
-                        <a style="text-decoration:underline;color:#042FAB" href="/登录/Login?ReturnUrl=/商品陈列/ProductList">登陆查看</a>
-                    }
                 </div>
                 @if (Model.销售信息 != null && Model.销售信息.价格属性组合 != null && Model.销售信息.价格属性组合.组合列表.Count > 0)
                 {
@@ -179,41 +167,32 @@
                         <a class="purchase_bt" id="diff" style="top:19px;border-bottom:none;height:16px;">-</a>
                     </div>
                     <div style="display:inline-block;"><a id="car" lang="@Model.Id"></a></div>
-                    <div><a href="/商品陈列/PurchaseInfo" style="color:#4da3ff;">去购物车结算>></a></div>
+                    
+                    @if (Model.Id == 123)
+                    {
+                        //褚橙限购
+                        <div style="display:inline-block;color:red">*本商品为限购商品，每人最高限购9箱</div>
+                    }
+                    @if (Model.销售信息.销售地域.地域.Contains("成都"))
+                    {
+                        //限地区
+                        <div style="display:inline-block;color:red">*本商品仅限成都地区供货</div>
+                    }
+                    <div><a href="/商品陈列/purchaseinfo" style="color:#4da3ff;">去购物车结算>></a></div>
+                    
+                  
                 </div>
             </div>
         </div>                         @*270*@
-        <div style="float:right;width:270px; line-height:25px; font-size:14px; border: 1px solid rgb(219, 219, 219); min-height:392px;">
-            <form>
-                <input type="hidden" name="p_type" id="p_type" value="@Model.商品信息.精确型号" />
-            </form>
-            <table width="100%;">
-                <tr><th colspan="2">其他商家</th></tr>
-                <tr>
-                    <td>
-                        <select id="deliverprovince" name="deliverprovince" style="height: 25px;width:80px; line-height: 25px;"></select>
-                        <select id="delivercity" name="delivercity" style="height: 25px;width:80px;  line-height: 25px;"></select>
-                        <select id="deliverarea" name="deliverarea" style="height: 25px;width:80px;  line-height: 25px;"></select>
-                        <script>
-                            window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea", "@Model.商品信息.所属供应商.用户数据.所属地域.省份", "@Model.商品信息.所属供应商.用户数据.所属地域.城市", "@Model.商品信息.所属供应商.用户数据.所属地域.区县"); }
-                        </script>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center" valign="top"><input type="button" class="gys_ztbsearch_search_botton" style="margin-top: 10px;width:155px;margin-left:54px;" value="查询" onclick='showothergys()' /></td>
-                </tr>
-            </table>
-            <div style="text-align:center;border-top:1px solid #9B9B9B;">
-                <span class="samegys_name">同型号商品报价企业列表</span><div>
-                    <div id="result" style="height:230px;overflow-y:scroll;overflow-x:hidden;"></div>
-                    <div id="pager"></div>
-                </div>
-            </div>
+        <div style="float:right;width:270px;line-height:25px; font-size:18px; min-height:392px;color:#ff0000;">
+            <h3>运费说明</h3>
+            1.	四川省内、普通省外（不含新疆、西藏、海南）地区快递费统一定价15元，不限订单商品数量与重量，订单满168元，免邮。
+            <br />2.	新疆、西藏、海南三省，快递费用由客户自己承担。<br />
         </div>
         </div>
     </div>
 <div class="prodtpage_detail_leftbox" style="float:left;">
-    @Html.Action("Part_Recommend", "商品陈列")
+    @Html.Action("Part_Recommend1", "商品陈列")
     @*@Html.Action("Part_Recent", "商品陈列")*@
 </div>
 <div class="prodtpage_detail_rightbox" style="float:left;">
@@ -225,72 +204,16 @@
                 <div class="product_tabmenu_tabmenu">
                     <ul>
                         <li index="0" class="changetab cli">商品描述</li>
-                        <li index="1" class="changetab">商品参数</li>
+                        @*<li index="1" class="changetab">商品参数</li>
                         <li index="2" class="changetab">售后服务</li>
-                        <li index="3" class="changetab">历史价格</li>
+                        <li index="3" class="changetab">历史价格</li>*@
                     </ul>
                 </div>
             </div>
         </div>
         <div class="product_tabmenu_content_box tabcontent" style="border:none;">
             <div class="divhide fdiv" style="zoom:1">
-                        <div style=" width: 900px; color:#666; font-size: 16px; font-weight: bold; margin-top: 20px;">
-                            商品名称:<span style="color: #808080; font-size: 16px; font-weight: normal;"> @Model.商品信息.商品名</span>
-                        </div>
-                        <div style="width: 900px; color: #666; font-size: 16px; font-weight: bold; margin-top: 20px;">
-                            商品品牌:
-                            <span style="color: #808080; font-size: 16px; font-weight: normal;">@Model.商品信息.品牌</span>
-                        </div>
-                        <div style="width: 900px; color: #666; font-size: 16px; font-weight: bold; margin-top: 20px;">商品简介:</div>
-                        <div style="width: 865px; color: #808080; font-size: 16px; line-height: 25px; font-weight: normal;">
-                            @Model.商品数据.商品简介
-                        </div>
-                        <div style="width: 900px; color: #666; font-size: 16px; font-weight: bold; margin-top: 20px;">
-                            商品详情：
-                        </div>
-                        <div class="goodpre" style="width: 865px; color: #808080; font-size: 16px; line-height: 25px; font-weight: normal;">
-                            @Html.Raw(Model.商品数据.商品详情)
-                        </div>
-            </div>
-            <div class="divhide">
-                        <div class="product_detaildiv">
-                            @foreach (var arr in Model.商品数据.商品属性)
-                            {
-                                <table cellspacing="0" cellpadding="0" width="100%">
-                                    <tr>
-                                        <th colspan="2" align="center">@arr.Key</th>
-                                    </tr>
-                                    @foreach (var proname in arr.Value)
-                                    {
-                                        <tr>
-                                            <td width="15%" style="text-align:center;">@proname.Key</td>
-                                            <td width="85%">
-                                                @if (proname.Value.Count > 0)
-                                                {
-                                                    foreach (var list in proname.Value)
-                                                {
-                                                    @list
-                                                    if (list != proname.Value[proname.Value.Count - 1])
-                                                    {<span>、</span>}
-                                                }
-                                                }
-                                                else
-                                                {
-                                                    <span>&nbsp;</span> 
-                                                }
-                                         
-                                            </td>
-                                        </tr>
-                                    }
-                                </table>
-                            }
-                        </div>
-            </div>
-            <div class="divhide">
-                        @Html.Raw(Model.商品数据.售后服务)
-            </div>
-            <div class="divhide">
-                        <div id="historyPrices" style="padding:10px;" pdata="@ViewBag.L1"></div>
+                @Html.Raw(Model.商品数据.商品详情)
             </div>
         </div>
     </div>
@@ -355,6 +278,7 @@
     $("#car").click(function () {
         var count = parseInt($("#purchase_num").val());
         var pid = $(this).attr("lang");
+        
         $.get("/商品陈列/AddGoodInfo", { num: count, id: pid }, function (data) {
             if (data == 1) {
                 alert("商品已经成功添加到购物车！");
@@ -406,6 +330,7 @@
                 $(this).parent("div").addClass("on");
             }
         });
+    });
         var timer;
 
         $("li.changetab").hover(function () {
@@ -455,22 +380,22 @@
                 "border": "1px solid #ccc",
                 "padding": "2px"
             });
-    });
+        });
 
-    $("#purchase_num").blur(function () {
-        var $this = $(this);
-        var val = $this.val();
-        var reg = /^[1-9]+[0-9]*]*$/;
-        if (val != null && val != "") {
-            if (!reg.test(val)) {
-                val = parseInt(val);
-                if (val == 0) {
-                    val = 1;
+        $("#purchase_num").blur(function () {
+            var $this = $(this);
+            var val = $this.val();
+            var reg = /^[1-9]+[0-9]*]*$/;
+            if (val != null && val != "") {
+                if (!reg.test(val)) {
+                    val = parseInt(val);
+                    if (val == 0) {
+                        val = 1;
+                    }
                 }
+            } else {
+                val = 1;
             }
-        } else {
-            val = 1;
-        }
-        $this.val(val);
-    });
+            $this.val(val);
+        });
 </script>

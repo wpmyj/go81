@@ -433,6 +433,7 @@
     <Content Include="Images\bgwz.jpg" />
     <Content Include="Images\bi.png" />
     <Content Include="Images\bs_01.png" />
+    <Content Include="Images\btnbg.png" />
     <Content Include="Images\calendar.png" />
     <Content Include="Images\car1.png" />
     <Content Include="Images\cglc.png" />
@@ -571,6 +572,7 @@
     <Content Include="Images\logo.gif" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\logo1.png" />
+    <Content Include="Images\logoqrcode.png" />
     <Content Include="Images\logo_01.png" />
     <Content Include="Images\logo_I.png" />
     <Content Include="Images\logo_O.png" />
@@ -582,9 +584,12 @@
     <Content Include="Images\menu_rightrad.jpg" />
     <Content Include="Images\menu_topbg.jpg" />
     <Content Include="Images\messages2.png" />
+    <Content Include="Images\mgAdvertise.png" />
     <Content Include="Images\mgcx.png" />
     <Content Include="Images\mgcx1.png" />
     <Content Include="Images\mgcxbg.jpg" />
+    <Content Include="Images\mgqrcode.jpg" />
+    <Content Include="Images\mgzt.png" />
     <Content Include="Images\myreg.png" />
     <Content Include="Images\newfunc.png" />
     <Content Include="Images\newfunc1.gif" />
@@ -621,6 +626,7 @@
     <Content Include="Images\p_2.png" />
     <Content Include="Images\qrcode.png" />
     <Content Include="Images\qualifies.png" />
+    <Content Include="Images\question.png" />
     <Content Include="Images\qyjz1.jpg" />
     <Content Include="Images\qyjz2.jpg" />
     <Content Include="Images\range_otherHotel.png" />
@@ -687,6 +693,7 @@
     <Content Include="Images\hot.png" />
     <Content Include="Images\star.png" />
     <Content Include="Images\statetax.jpg" />
+    <Content Include="Images\step.jpg" />
     <Content Include="Images\succeed.png" />
     <Content Include="Images\success.png" />
     <Content Include="Images\tabbg.jpg" />
@@ -699,6 +706,7 @@
     <Content Include="Images\ticket4.jpg" />
     <Content Include="Images\ticket5.jpg" />
     <Content Include="Images\tip.png" />
+    <Content Include="Images\titlbg.png" />
     <Content Include="Images\titlebg.jpg" />
     <Content Include="Images\tm.png" />
     <Content Include="Images\top.jpg" />
@@ -719,8 +727,10 @@
     <Content Include="Images\warn.png" />
     <Content Include="Images\website.png" />
     <Content Include="Images\weixin.png" />
+    <Content Include="Images\wgzl.png" />
     <Content Include="Images\wssc.jpg" />
     <Content Include="Images\xieyi.png" />
+    <Content Include="Images\xnmg.png" />
     <Content Include="Images\xzwz.png" />
     <Content Include="Images\yct.png" />
     <Content Include="Images\yingji.png" />
@@ -2197,6 +2207,8 @@
     <Content Include="Views\默认主题\基本功能\PayResult\Payment_Result.cshtml" />
     <Content Include="Views\默认主题\后台\个人用户后台\ShopCar.cshtml" />
     <Content Include="Views\默认主题\门户\商品陈列\JcLife.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\JcLifeIndex.cshtml" />
+    <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_Recommend1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

@@ -5,15 +5,27 @@
 }
 <style>
     .good_left {
-        float: left;
         width: 80px;
+        height: 100%;
+        float: left;
         margin-left: 10px;
-        margin-top: 5px;
     }
+
+        .good_left img {
+            margin-top: 5px;
+        }
+
+
+    /*.good_left {
+         float: left;
+         width: 80px;
+         margin-left: 10px;
+         margin-top: 5px;
+     }*/
 
     .good_right {
         float: left;
-        width: 280px;
+        width: 260px;
         margin-left: 10px;
         margin-top: 5px;
     }
@@ -22,7 +34,6 @@
         width: 100%;
         height: 90px;
         overflow-y: hidden;
-        margin-bottom: 10px;
     }
 
     .good_price {
@@ -64,11 +75,13 @@
 
     .posbox {
         position: relative;
+        margin-top: 20px;
     }
 
     .arrowbox {
         position: relative;
-        top: 0px;
+        z-index: 1;
+        top: 0;
         left: 10px;
         display: none;
     }
@@ -77,7 +90,7 @@
         width: 0px;
         height: 0px;
         border: 10px solid transparent;
-        border-left: 10px solid #8A8181;
+        border-left: 10px solid #DADADA;
         position: absolute;
         top: 10px;
         left: 0px;
@@ -100,7 +113,7 @@
         height: auto;
         word-break: break-all;
         background-color: #fff;
-        border: 1px solid #9F9F9F;
+        border:1px solid #DADADA;
         box-shadow: 0px 0px 5px #E2E2E2;
         -webkit-box-shadow: 0px 0px 5px #E2E2E2;
         -moz-box-shadow: 0px 0px 5px #E2E2E2;
@@ -140,7 +153,8 @@
             background-color: #ff0000;
             color: #fff;
         }
-        td ul {
+
+    td ul {
         width: 100%;
         list-style: none;
         list-style-type: none;
@@ -180,7 +194,18 @@
         display: inline-block;
         width: 12px;
         height: 10px;
-        background-position:15px 10px;
+        background-position: 15px 10px;
+    }
+
+    .status {
+        color: #ff0000;
+    }
+    .shdetail{
+        position: absolute;
+  display: block;
+  left: 0px;
+  width: 100%;
+  cursor:pointer;
     }
 </style>
 <div class="bg_outdiv">
@@ -191,59 +216,67 @@
         <div id="title_div" class="gys_xttz_topbg">
             <div class="index_bottom_zb_top_title">订单列表</div>
         </div>
+        <form action="/供应商后台/UpdateOrder" method="post" name="order">
+            <input type="hidden" name="orderId" id="orderId" value="" />
+            <input type="hidden" name="gId" id="gId" value="" />
+            <input type="hidden" name="yhm" id="yhm" value="" />
+        </form>
         <div style="margin-top:10px;">
             <table width="100%" id="outboxtb" cellpadding="0" cellspacing="0">
                 <tr class="trbg">
-                    <td width="55%" align="center">订单详情</td>
-                    <td align="center" width="15%">收货人</td>
+                    <td width="5%"></td>
+                    <td width="40%" align="center">订单详情</td>
+                    <td width="10%" align="center">是否发货</td>
+                    <td align="center" width="10%">收货人</td>
                     <td align="center" width="15%">总计</td>
-                    <td align="center" width="15%" style="position:relative;">
+                    <td align="center" width="10%" style="position:relative;">
                         <div id="status">
                             @if (ViewData["status"].ToString() == "1")
                             {
-                                <ul>
-                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=-1">全部状态</a></li>
-                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=0">未付款</a></li>
-                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=1" style="color:red;">已付款</a></li>
-                                </ul>
+                            <ul>
+                                <li><a href="/供应商后台/PurchaseInfo?page=1&s=-1">全部状态</a></li>
+                                <li><a href="/供应商后台/PurchaseInfo?page=1&s=0">未付款</a></li>
+                                <li><a href="/供应商后台/PurchaseInfo?page=1&s=1" style="color:red;">已付款</a></li>
+                            </ul>
                             }
                             else if (ViewData["status"].ToString() == "0")
                             {
-                                <ul>
-                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=-1">全部状态</a></li>
-                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=0" style="color:red;">未付款</a></li>
-                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=1">已付款</a></li>
-                                </ul>
+                            <ul>
+                                <li><a href="/供应商后台/PurchaseInfo?page=1&s=-1">全部状态</a></li>
+                                <li><a href="/供应商后台/PurchaseInfo?page=1&s=0" style="color:red;">未付款</a></li>
+                                <li><a href="/供应商后台/PurchaseInfo?page=1&s=1">已付款</a></li>
+                            </ul>
                             }
                             else
                             {
-                                <ul>
-                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=-1" style="color:red;">全部状态</a></li>
-                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=0">未付款</a></li>
-                                    <li><a href="/供应商后台/PurchaseInfo?page=1&s=1">已付款</a></li>
-                                </ul>
+                            <ul>
+                                <li><a href="/供应商后台/PurchaseInfo?page=1&s=-1" style="color:red;">全部状态</a></li>
+                                <li><a href="/供应商后台/PurchaseInfo?page=1&s=0">未付款</a></li>
+                                <li><a href="/供应商后台/PurchaseInfo?page=1&s=1">已付款</a></li>
+                            </ul>
                             }
                             <div id="status_content">
                                 @if (ViewData["status"].ToString() == "1")
                                 {
-                                    <span>已付款</span><span id="orderstatus"></span>
+                                <span>已付款</span><span id="orderstatus"></span>
                                 }
                                 else if (ViewData["status"].ToString() == "0")
                                 {
-                                    <span>未付款</span><span id="orderstatus"></span>
+                                <span>未付款</span><span id="orderstatus"></span>
                                 }
                                 else
                                 {
-                                    <span>全部状态</span><span id="orderstatus"></span>
+                                <span>全部状态</span><span id="orderstatus"></span>
                                 }
                             </div>
                         </div>
                     </td>
+                    <td align="center" width="10%">操作</td>
                 </tr>
                 @{
                     bool exist = false;
                     bool exist1 = false;
-                    int counter = 0;
+                    int counter = 0;//计算订单个数
                 }
                 @foreach (var item in Model)
                 {
@@ -252,24 +285,57 @@
                         if (!exist1)
                         {
                             <tr>
-                                <td colspan="4" style="background-color:#E9F1FF;padding-left:10px; line-height:30px;">
-                                    订单时间：@item.基本数据.添加时间.ToString("yyyy-MM-dd HH:mm:ss")
+                                <td colspan="7" style="background-color:#E9F1FF;padding-left:10px; line-height:30px;">
+                                    @if(item.已付款)
+                                    {
+                                        <input type="checkbox" name="all@(counter)" class="all" alt="@counter" data-id="@item.Id" />
+                                    }
+                                   订单时间：@item.基本数据.添加时间.ToString("yyyy-MM-dd HH:mm:ss")
                                 </td>
                             </tr>
                             exist1 = true;
                         }
                         <tr>
-                            <td width="50%">
+                            <td align="center">
+                                @if(item.已付款)
+                                    {
+                                    <input type="checkbox" name="single@(counter)" class="single" alt="@counter" data-id="@item.Id" value="@child.商品.商品ID" />
+                                }
+                            </td>
+                            <td width="40%">
                                 <div class="good_box">
                                     <div class="good_left">
                                         <a href="/商品陈列/Product_Inmall?id=@child.商品.商品ID" title="@child.商品.商品.商品信息.商品名"><img src="@child.商品.商品.商品信息.商品图片.First().Replace("original", "150X150")" class="imginfo" /></a>
                                     </div>
                                     <div class="good_right">
                                         <div><a href="/商品陈列/Product_Inmall?id=@child.商品.商品ID">@child.商品.商品.商品信息.商品名</a></div>
-                                        <div class="good_price">@string.Format("{0:c2}", child.商品.商品.销售信息.价格) x @(child.数量)</div>
+                                        <div class="good_price" style="text-decoration:line-through;color:#ABABAB;">市场价：@string.Format("{0:c2}", child.商品.商品.销售信息.价格) x @(child.数量)</div>
+                                        <div class="good_price">军采价：@string.Format("{0:c2}", child.商品.商品.销售信息.军采价) x @(child.数量)</div>
+                                        @*<div class="good_price">重量：@(child.商品.商品.商品信息.单位重量)kg x @(child.数量)</div>*@
                                     </div>
                                     <div style="clear:both;"></div>
                                 </div>
+                            </td>
+                            <td align="center" style="position:relative;">
+                                @if (child.已发货)
+                                {
+                                    <span class="shdetail" data-id="@child.商品.商品ID">已发货<img src="~/Images/question.png" style="vertical-align: middle;" /></span>
+                                    <div class="arrowbox" style="left:0px;">
+                                            <div class="arrowbox_content" style="left:0px;top:25px;">
+                                                <div class="arrowbox_contentIn">
+                                                    <div>发货时间：@child.发货时间.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                                                    <div>运单号：@child.运单号</div>
+                                                </div>
+                                            </div>
+                                        <div class="arrow" style="border-bottom:11px solid #8A8181;left:35px;top:5px;border-left:11px solid transparent;"></div>
+                                        <div class="arrowIn" style="border-bottom:9px solid #fff;left:37px;top:8px;border-left:9px solid transparent;"></div>
+                                        </div>
+                                    
+                                }
+                                else
+                                {
+                                    <span class="status">未发货</span>
+                                }
                             </td>
                             @if (!exist)
                             {
@@ -283,7 +349,7 @@
                                             <div class="arrowbox_content">
                                                 <div class="arrowbox_contentIn">
                                                     <div>@item.联系人</div>
-                                                    <div>@item.详细地址</div>
+                                                    <div>@item.收货地址.地域 (@item.详细地址)</div>
                                                     <div>@item.联系电话</div>
                                                 </div>
                                             </div>
@@ -292,15 +358,33 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td rowspan="@item.商品订单列表.Count" class="markertd" style="color:#ff0000;">@string.Format("{0:c2}", item.订单总价格)</td>
-                                <td rowspan="@item.商品订单列表.Count" class="markertd">
-                                    @if (item.已付款)
+                                <td rowspan="@item.商品订单列表.Count" class="markertd" style="color:#ff0000;padding-top: 20px;font-size:12px;">
+                                    @if(item.已付款&&item.使用优惠码)
                                     {
-                                        <span>已付款</span>
+                                        <span>@string.Format("{0:c2}",(item.订单总付款-5))</span>
+                                        <div>(已使用优惠码,优惠5元)</div>
                                     }
                                     else
                                     {
-                                        <span style="color:#ff0000;">等待付款</span>
+                                        <span>@string.Format("{0:c2}", item.订单总付款)</span>
+                                    }
+                                    <div>(含运费：@string.Format("{0:c2}", item.总运费))</div>
+                                </td>
+                                <td rowspan="@item.商品订单列表.Count" class="markertd">
+                                    @if (item.已付款)
+                                    {
+                                        <span style="display: inline-block;margin-top: 20px;">已付款</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color:#ff0000;display: inline-block; margin-top: 20px;">等待付款</span>
+                                    }
+                                </td>
+                                <td rowspan="@item.商品订单列表.Count" valign="top" align="center">
+                                    @if(item.已付款)
+                                    {
+                                        <input type="button" class="subbutton" value="派送" style="margin-top:20px;margin-bottom:20px;" alt="@counter" />
+                                    <div><input type="text" value="" id="expresscode@(counter)" placeholder="请在这里填写运单号" style="width:125px;" /></div>
                                     }
                                 </td>
                                     exist = true;
@@ -309,113 +393,119 @@
                     }
                     exist = false;
                     exist1 = false;
+                    counter++;
                 }
             </table>
         </div>
+        @if(Model.Any())
+        {
+            
+        }
+        <div class="gys_znxx_content_detailbox">
+            @{
+                int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                if (Pagecount > 0)
+                {
+                    if (CurrentPage != 1)
+                    {
+            <a href='/供应商后台/PurchaseInfo?page=1&s=@ViewData["status"]'>首页</a><a style="border-left:none;" href='/供应商后台/PurchaseInfo?page=@(CurrentPage-1)&s=@ViewData["status"]'>上一页</a>
+                    }
+                }
+                if (Pagecount <= 6)
+                {
+                    for (int i = 1; i <= Pagecount; i++)
+                    {
+                        if (CurrentPage == i)
+                        {
+            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
+                        }
+                        else
+                        {
+            <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
+                        }
+                    }
+                }
+                else
+                {
+                    if (CurrentPage < 6)
+                    {
+                        if (CurrentPage != 1)
+                        {
+                            for (int i = 1; i < 7; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
+                                }
+                                else
+                                {
+            <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
+                                }
+                            }
+            <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]">@Pagecount</a>
+                        }
+                        else
+                        {
+                            for (int i = 1; i < 7; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s= @ViewData["status"]'>@i</a>
+                                }
+                                else
+                                {
+            <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
+                                }
+                            }
+            <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]">@Pagecount</a>
+                        }
+                    }
+                    else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                    {
+            <a href="/供应商后台/PurchaseInfo?page=1&s=@ViewData["status"]">1</a><span>...</span>
+                        for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
+                            }
+                            else
+                            {
+            <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
+                            }
+                        }
+            <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]">@Pagecount</a>
+                    }
+                    else if (CurrentPage >= Pagecount - 3)
+                    {
+            <a href="/供应商后台/PurchaseInfo?page=1&s=@ViewData["status"]">1</a><span>...</span>
+                        for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
+                            }
+                            else
+                            {
+            <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
+                            }
+                        }
+                    }
+                }
+                if (Pagecount > 0)
+                {
+                    if (CurrentPage != Pagecount)
+                    {
+            <a style="border-right:none;" href='/供应商后台/PurchaseInfo?page=@(CurrentPage+1)&s=@ViewData["status"]'>下一页</a><a href='/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]'>末页</a>
+                    }
+            <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                }
+            }
+        </div>
     </div>
 </div>
-<div class="gys_znxx_content_detailbox">
-        @{
-            int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
-            int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
-            if (Pagecount > 0)
-            {
-                if (CurrentPage != 1)
-                {
-                    <a href='/供应商后台/PurchaseInfo?page=1&s=@ViewData["status"]'>首页</a><a style="border-left:none;" href='/供应商后台/PurchaseInfo?page=@(CurrentPage-1)&s=@ViewData["status"]'>上一页</a>
-                }
-            }
-            if (Pagecount <= 6)
-            {
-                for (int i = 1; i <= Pagecount; i++)
-                {
-                    if (CurrentPage == i)
-                    {
-                    <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
-                }
-                else
-                {
-                    <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
-                }
-            }
-        }
-        else
-        {
-            if (CurrentPage < 6)
-            {
-                if (CurrentPage != 1)
-                {
-                    for (int i = 1; i < 7; i++)
-                    {
-                        if (CurrentPage == i)
-                        {
-                            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
-                        }
-                        else
-                        {
-                            <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
-                        }
-                    }
-                    <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]">@Pagecount</a>
-                }
-                else
-                {
-                    for (int i = 1; i < 7; i++)
-                    {
-                        if (CurrentPage == i)
-                        {
-                            <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s= @ViewData["status"]'>@i</a>
-                        }
-                        else
-                        {
-                            <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
-                        }
-                    }
-                    <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]">@Pagecount</a>
-                }
-            }
-            else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
-            {
-                <a href="/供应商后台/PurchaseInfo?page=1&s=@ViewData["status"]">1</a><span>...</span>
-                for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
-                {
-                    if (CurrentPage == i)
-                    {
-                        <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
-                    }
-                    else
-                    {
-                        <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
-                    }
-                }
-                <span>...</span><a href="/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]">@Pagecount</a>
-            }
-            else if (CurrentPage >= Pagecount - 3)
-            {
-                <a href="/供应商后台/PurchaseInfo?page=1&s=@ViewData["status"]">1</a><span>...</span>
-                for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
-                {
-                    if (CurrentPage == i)
-                    {
-                        <a style="border:1px solid red;" href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
-                    }
-                    else
-                    {
-                        <a href='/供应商后台/PurchaseInfo?page=@i&s=@ViewData["status"]'>@i</a>
-                    }
-                }
-            }
-        }
-        if (Pagecount > 0)
-        {
-            if (CurrentPage != Pagecount)
-            {
-                <a style="border-right:none;" href='/供应商后台/PurchaseInfo?page=@(CurrentPage+1)&s=@ViewData["status"]'>下一页</a><a href='/供应商后台/PurchaseInfo?page=@(Pagecount)&s=@ViewData["status"]'>末页</a>
-            }
-            <span>第@(CurrentPage)页/共@(Pagecount)页</span>
-        }
-    }
-</div>
+
 
 <script>
     $(".Contactcontent").mouseover(function () {
@@ -434,8 +524,87 @@
         $(this).find("#orderstatus").css("background-position", "15px 10px");
         $(this).children("ul").hide();
     });
+    $(".subbutton").click(function () {
+        var index = $(this).attr("alt");
+        if ($("#gId").val() == "") {
+            alert("您还没有选择任何需要发货的商品！");
+        }
+        else {
+            if ($("#expresscode"+index).val() != "") {
+                $("#yhm").val($("#expresscode" + index).val());
+                document.forms["order"].submit();
+            }
+            else {
+                alert("请输入运单号！");
+            }
+        }
+    });
+    $(".single").click(function () {
+        var orderId = $(this).attr("data-id");
+        var index = $(this).attr("alt");
+        var selectedAll = false;
+        var elem = document.getElementsByName("single" + index);
+        $(":input[type='checkbox']").each(function () {
+            if ($(this).attr("alt") != index) {
+                this.checked = false;
+            }
+        });
+        var strId = "";
+        for (var i = 0; i < elem.length; i++) {
+            if (!elem.item(i).checked) {
+                selectedAll = false;
+                break;
+            }
+            else {
+                selectedAll = true;
+            }
+        }
+        for (var i = 0; i < elem.length; i++) {
+            if (elem.item(i).checked) {
+                strId += elem.item(i).value + "|";
+            }
+        }
+        if (selectedAll) {
+            document.getElementsByName("all" + index).item(0).checked = true;
+        }
+        else {
+            document.getElementsByName("all" + index).item(0).checked = false;
+        }
+        $("#gId").val(strId);
+        $("#orderId").val(orderId);
+    });
+    $(".all").click(function () {
+        var orderId = $(this).attr("data-id");
+        var index = $(this).attr("alt");
+        var strId = "";
+        var elem = document.getElementsByName("single" + index);
+        $(":input[type='checkbox']").each(function () {
+            if ($(this).attr("alt") != index) {
+                this.checked = false;
+            }
+        });
+        if (this.checked) {
+            for (var i = 0; i < elem.length; i++) {
+                elem.item(i).checked = true;
+                strId += elem.item(i).value + "|";
+            }
+        }
+        else {
+            for (var i = 0; i < elem.length; i++) {
+                elem.item(i).checked = false;
+            }
+        }
+        $("#gId").val(strId);
+        $("#orderId").val(orderId);
+    });
     $(function () {
         $("#我的订单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
         $("#我的订单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    $(".shdetail").mouseover(function () {
+        $(this).next(".arrowbox").show();
+    });
+    $(".shdetail").mouseout(function () {
+        $(this).next(".arrowbox").hide();
     });
 </script>

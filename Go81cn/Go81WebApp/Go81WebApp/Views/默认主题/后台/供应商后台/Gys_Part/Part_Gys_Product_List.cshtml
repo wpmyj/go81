@@ -13,7 +13,11 @@
         <span>正在处理，请稍等...</span>
     </div>
 </div>
-
+<style>
+    .gyspage_list_content_list_cont{
+        padding:0px 0 5px 0;
+    }
+</style>
 <div class="Gys_Product_List_box">
     <div class="Gys_Product_List_topbox">
         <div class="Gys_Product_List_topbg">
@@ -104,38 +108,28 @@
                 </div>
                 <div class="gyspage_list_content_listdiv">
                     <div class="gyspage_list_content_list">
-                        <div class="gyspage_list_content_list_cont">名称：@item.商品信息.商品名</div><div class="gyspage_list_content_list_cont">价格：￥@item.销售信息.价格</div><div class="gyspage_list_content_list_cont">
+                        <div class="gyspage_list_content_list_cont">名称：@item.商品信息.商品名</div>
+                        <div class="gyspage_list_content_list_cont">价格：￥@item.销售信息.价格</div>
+                        @if (long.Parse(ViewData["userId"].ToString()) == 200000001522)
+                        {
+                          <div class="gyspage_list_content_list_cont">军采价：￥@item.销售信息.军采价</div>  
+                        }
+                        <div class="gyspage_list_content_list_cont">
                             状态：<font color="green">@item.审核数据.审核状态</font>@if (item.审核数据.审核状态 == 审核状态.审核未通过)
                             {<font color="red">(@item.审核数据.审核不通过原因)</font>}
                         </div>
                         <div class="gyspage_list_content_list_cont" id="sjShelves__@item.Id">
-                            上架：
-
-                            @if (item.审核数据.审核状态 == 审核状态.审核通过)
-                            {
-                                if (item.基本数据.已屏蔽)
-                                    {<font color="red">未上架</font>}
-                                else
-                                    {<font color="green">已上架</font>}
-                            }
+                            上架：@if (item.基本数据.已屏蔽)
+                            {<font color="red">未上架</font>}
                             else
-                            {
-                                {<font color="red">未上架</font>}
-                            }
-                            
+                            {<font color="green">已上架</font>}
                         </div>
-                        @if (item.中标商品)
-                        {
-                            <div class="gyspage_list_content_list_cont">
-                                <font color="red">中标商品</font>
-                            </div>
-                        }
                     </div>
                     <div class="gyspage_list_content_list">
                         <a href="~/供应商后台/Gys_Product_Detail?id=@item.Id" style="padding:0 10px 0 0;">预览</a>
                         <a href="~/供应商后台/Gys_Product_Modify_Price?id=@item.Id&comes=s" style="padding:0 10px 0 0;">修改价格</a>
                         <a href="~/供应商后台/Gys_Product_Modify?id=@item.Id&comes=s" style="padding:0 10px 0 10px;">修改商品信息</a>
-                        <a onclick="del(@item.Id)" style="padding:0 10px 0 10px;">删除</a>
+                        <a href="~/供应商后台/Gys_Product_Delete?id=@item.Id" style="padding:0 10px 0 10px;">删除</a>
                     </div>
 
                     <div class="gyspage_list_content_list">
@@ -352,12 +346,5 @@
             }
         });
         $("#expertchoosewaitblock").hide();
-    }
-    function del(num)
-    {
-        if(confirm("点击确定即将删除此消息！确定删除吗？"))
-        {
-            window.location="/供应商后台/Gys_Product_Delete?id="+num;
-        }
     }
 </script>

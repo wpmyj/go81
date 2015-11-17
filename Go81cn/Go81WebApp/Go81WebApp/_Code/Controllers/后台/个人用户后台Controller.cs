@@ -62,14 +62,14 @@ namespace Go81WebApp.Controllers.后台
         public int Checkstr()
         {
             string str = Request.QueryString["ser"];
-            long count = 优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(m => m.Code == str));
-            if(count==0)
+            long count = 优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(m => m.Code == str&&m.已使用==false));
+            if(count>0)
             {
-                return -1;
+                return 1;
             }
             else
             {
-                return 1;
+                return -1;
             }
         }
         public ActionResult MyBaseInfo()

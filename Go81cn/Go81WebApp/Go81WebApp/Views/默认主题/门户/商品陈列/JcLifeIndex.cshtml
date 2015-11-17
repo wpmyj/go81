@@ -1,0 +1,902 @@
+﻿@{
+    ViewBag.Title = "军采生活";
+    Layout = null;
+}
+<script src="~/Scripts/jquery-1.11.1.min.js"></script>
+
+<style type="text/css">
+    body, ul, p {
+        margin: 0;
+        padding: 0;
+    }
+
+    ul li {
+        list-style: none;
+        float: left;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .topbanner {
+        width: 1200px;
+        height: 698px;
+        margin: 0 auto;
+    }
+
+    .topbanner .leftword {
+        width: 422px;
+        height: 578px;
+        background: url(/Images/mgzt.png) -165px -88px;
+        float: left;
+    }
+
+    .topbanner .rightcontent {
+        height: 560px;
+        width: 722px;
+        border: 9px solid #9defcb;
+        float: right;
+    }
+
+    .lb-tab {
+        height: 436px;
+        position: relative;
+    }
+
+    .lb-tabmenu {
+        width: 100%;
+        height: 124px;
+        background: #1d9379 url(/Images/mgzt.png) -77px -825px;
+    }
+
+    .lb-tab a {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .lb-tab ul {
+        position: absolute;
+        bottom: 0;
+    }
+
+    .lb-tab li {
+        width: 180px;
+        height: 36px;
+        text-align: center;
+        line-height: 36px;
+        background-color: rgba(0,0,0,0.5);
+        color: #cdccce;
+        cursor: pointer;
+    }
+
+    .lb-tab li.hover {
+        background: #ffea05;
+        color: black;
+        opacity: 1;
+    }
+
+    .lb-tabmenu ul {
+        position: absolute;
+        margin-top: 15px;
+    }
+
+    .lb-tabmenu li {
+        margin: 0 25px;
+        height: 95px;
+        width: 95px;
+    }
+
+    .lb-tabmenu li a {
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .floor .floorname {
+        height: 85px;
+        line-height: 85px;
+        background: url(/Images/titlbg.png) no-repeat center center;
+        text-align: center;
+        font-size: 36px;
+        font-family: "微软雅黑";
+        font-weight: bold;
+        color: #fff;
+    }
+
+    .package .tab-menu ul {
+        height: 64px;
+        background: #007463;
+    }
+
+    .package .tab-menu li {
+        height: 64px;
+        width: 300px;
+        text-align: center;
+        color: #b0c9c4;
+        font-family: "微软雅黑";
+        font-size: 20px;
+        cursor: pointer;
+        line-height: 64px;
+    }
+
+    .package .tab-menu li.hover {
+        height: 72px;
+        background: #ffea05;
+        font-size: 28px;
+        color: #894803;
+        position: relative;
+        top: -8px;
+        line-height: 72px;
+    }
+
+    .package .packagedetail {
+        height: 48px;
+        background: #fff;
+        padding: 12px;
+        display: none;
+    }
+</style>
+
+<div id="kef" style="display: none; position: fixed;top: 50%;width: 160px;height: 330px;background: #fff;z-index: 3;border: 1px solid #CBB;margin-top: -165px;box-shadow: 0 0 8px #ccc;padding: 0 0 0 15px;border-radius: 3px;">
+    <h4>客服专线：</h4>
+    <p>028-86790237</p>
+    <h4>工作时间：</h4>
+    <p>周一到周五：9:00-12:00 13:00-17:00</p>
+    <img width="140" height="140" src="/Images/mgqrcode.jpg" />
+    <span onclick="$('#kef').hide(); $('#kfu').show();"   style="cursor: pointer; position: absolute;font-size: 25px;display: inline-block;width: 25px;height: 25px;color: #1F1E1E;top: 2px;right: 2px;">×</span>
+</div>
+<div id="kfu" onclick="$('#kef').show(); $('#kfu').hide();" style=" cursor: pointer; line-height: 24px;position: fixed;top: 50%;width: 28px;height: 135px;background: #fff;z-index: 3;border: 1px solid #CBB;margin-top: -75px;box-shadow: 0 0 8px #ccc;padding: 33px 0 0 15px;border-radius: 3px;">客服热线</div>
+<div id="layout" style="background:#00917c;min-width: 1200px;height: 6240px;">
+    <div style="position: relative">
+        <img src="/Images/mgcxbg.jpg" width="100%" height="698px" style="min-width: 1200px;" />
+    </div>
+    <div style="width: 1200px; margin: 0 auto;position: relative;top:-649px; z-index: 1;">
+        <div class="topbanner">
+            <div class="leftword"></div>
+            <div class="rightcontent">
+                <div class="lb-tab">
+                    <div style="height:100%;position:relative;overflow:hidden;background:#fff">
+                        <div style="display:block;height:100%">
+                            <a href="javascript:void;" style="background:url(/Images/mgzt.png) -949px -1923px; "></a>
+                        </div>
+                        <div style="display:none;height:100%">
+                            <a href="javascript:void;" style="background:url(/Images/mgzt.png) -949px -1286px; "></a>
+                        </div>
+                        <div style="display:none;height:100%">
+                            <a href="javascript:void;" style="background:url(/Images/mgzt.png) -949px -664px; "></a>
+                        </div>
+                        <div style="display:none;height:100%">
+                            <a href="javascript:void;" style="background:url(/Images/mgzt.png) -949px -87px; "></a>
+                        </div>
+
+                    </div>
+                    <ul>
+                        <li index="0" class="tabmenu hover">营养早餐￥139</li>
+                        <li index="1" class="tabmenu">饕餮肉食餐 ￥230</li>
+                        <li index="2" class="tabmenu">家庭营养餐 ￥306</li>
+                        <li index="3" class="tabmenu">闲暇小“食”光 ￥421</li>
+                    </ul>
+                </div>
+                <div class="lb-tabmenu">
+                    <ul>
+                        <li>
+                            <a href="/商品陈列/mall?id=1233"></a>
+                        </li>
+                        <li>
+                            <a href="/商品陈列/mall?id=1234"></a>
+                        </li>
+                        <li>
+                            <a href="/商品陈列/mall?id=1235"></a>
+                        </li>
+                        <li>
+                            <a href="/商品陈列/mall?id=1236"></a>
+                        </li>
+                        <li>
+                            <a href="/商品陈列/mall"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="floor">
+            <div class="package">
+                <div class="floorname">套餐类</div>
+                <div class="tab-menu">
+                    <ul>
+                        <li id="yyzc" class="hover">营养早餐</li>
+                        <li id="ttrsc" style="line-height:45px;">饕餮肉食餐<p style="position: relative;line-height: normal;font-size: 14px;margin: 0;top: -12px;">(成都专供)</p></li>
+                        <li id="jtyyc" style="line-height:45px;">家庭营养餐<p style="position: relative;line-height: normal;font-size: 14px;margin: 0;top: -12px;">(成都专供)</p></li>
+                        <li id="xxxsg">闲暇小"食"光</li>
+                    </ul>
+                    <div>
+                        <div name="yyzc" class="packagedetail" style="display:block">
+                            <div style="font-size:36px;font-family:'微软雅黑';color:#484848;margin-left:18px; float:left">套餐详情</div>
+                            <div style="padding-top:6px; height: 45px;line-height:20px; margin-left: 32px;width: 810px;font-family: '宋体';font-size: 14px;float: left;">
+                                <div style="float:left;color:#646464">
+                                    <p>牛油果的不饱和脂肪酸遇上有机蛋白质，更易吸收的健康！</p>
+                                    <p><span style="font-weight:bold">包含单品：</span>牛油果3个 + 荷高有机牛奶3盒 + 一点田放养土鸡蛋12枚装1盒</p>
+                                </div>
+                                <div style="float:right;text-align:center">
+                                    <p style="color:#a9a9a9"><del>零售价：￥186</del></p>
+                                    <p style="font-size:16px;color:#646464">套餐价：<span style="color:#914e07">￥139</span></p>
+                                </div>
+                            </div>
+                            <div style="float:right;">
+                                <a href="javascript:void;" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
+                            </div>
+                        </div>
+                        <div name="ttrsc" class="packagedetail">
+                            <div style="font-size:36px;font-family:'微软雅黑';color:#484848;margin-left:18px; float:left">套餐详情</div>
+                            <div style="padding-top:6px; height: 45px;line-height:20px; margin-left: 32px;width: 810px;font-family: '宋体';font-size: 14px;float: left;">
+                                <div style="float:left;color:#646464">
+                                    <p>大块吃肉后来点纤维素，口腹满足不长胖，保家卫国有力量。</p>
+                                    <p><span style="font-weight:bold">包含单品：</span>岗子峪有机糙米2袋 + 冬枣4kg + 科尔沁去骨腹肉1kg</p>
+                                </div>
+                                <div style="float:right;text-align:center">
+                                    <p style="color:#a9a9a9"><del>零售价：￥284</del></p>
+                                    <p style="font-size:16px;color:#646464">套餐价：<span style="color:#914e07">￥230</span></p>
+                                </div>
+                            </div>
+                            <div style="float:right;">
+                                <a href="javascript:void;" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
+                            </div>
+                        </div>
+                        <div name="jtyyc" class="packagedetail">
+                            <div style="font-size:36px;font-family:'微软雅黑';color:#484848;margin-left:18px; float:left">套餐详情</div>
+                            <div style="padding-top:6px; height: 45px;line-height:20px; margin-left: 32px;width: 810px;font-family: '宋体';font-size: 14px;float: left;">
+                                <div style="float:left;color:#646464">
+                                    <p>橄榄油纯净、里脊肉嫩滑、红玫瑰苹果芳香，这就是家的味道，温暖的味道。 </p>
+                                    <p><span style="font-weight:bold">包含单品：</span>高金里脊肉块1盒 + 皇家莎萝茉有机特级初榨橄榄油1罐 + 红玫瑰苹果2.5kg </p>
+                                </div>
+                                <div style="float:right;text-align:center">
+                                    <p style="color:#a9a9a9"><del>零售价：￥403.8</del></p>
+                                    <p style="font-size:16px;color:#646464">套餐价：<span style="color:#914e07">￥306</span></p>
+                                </div>
+                            </div>
+                            <div style="float:right;">
+                                <a href="javascript:void;" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
+                            </div>
+                        </div>
+                        <div name="xxxsg" class="packagedetail">
+                            <div style="font-size:36px;font-family:'微软雅黑';color:#484848;margin-left:18px; float:left">套餐详情</div>
+                            <div style="padding-top:6px; height: 45px;line-height:20px; margin-left: 32px;width: 810px;font-family: '宋体';font-size: 14px;float: left;">
+                                <div style="float:left;color:#646464">
+                                    <p>全家齐聚时，不让嘴巴停下来，吃完坚果后，一杯蜂蜜润肠道。</p>
+                                    <p><span style="font-weight:bold">包含单品：</span>松子仁1罐 + 夏威夷果1罐 + 康维他MANUKAHEALTH蜂蜜1瓶 </p>
+                                </div>
+                                <div style="float:right;text-align:center">
+                                    <p style="color:#a9a9a9"><del>零售价：￥542</del></p>
+                                    <p style="font-size:16px;color:#646464">套餐价：<span style="color:#914e07">￥421</span></p>
+                                </div>
+                            </div>
+                            <div style="float:right;">
+                                <a href="javascript:void;" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding-top:10px;display:table">
+                    <div name="yyzc" style="display: block">
+                        <div style="width:393px;height:360px;background:#fff;float:left">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">牛油果</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥20</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥15/个</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">荷高有机牛奶</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥28</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥21/盒</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">一点田放养土鸡蛋12枚装</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥42</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥31.5/盒</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div name="ttrsc" style="display: none">
+                        <div style="width:393px;height:360px;background:#fff;float:left">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/tu.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">有机糙米</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥11</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥8.25/袋</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">冬枣</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥36</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥27/kg</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">科尔沁去骨腹肉</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥118</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥103.2/kg</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div name="jtyyc" style="display: none">
+                        <div style="width:393px;height:360px;background:#fff;float:left">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/otherh1.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">高金里脊肉块</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥26.8</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥24.12/盒</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">皇家莎萝茉有机特级初榨橄榄油</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥198</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥148.5/罐</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">红玫瑰苹果</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥71.6</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥53.7/kg</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div name="xxxsg" style="display: none">
+                        <div style="width:393px;height:360px;background:#fff;float:left">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/otherh2.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">松子仁</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥328</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥246/罐</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">夏威夷果</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥36</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥27/罐</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;">
+                            <div style="height:218px;">
+                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                            </div>
+                            <div style="text-align:center;padding:25px;line-height:30px;">
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">康维他MANUKAHEALTH蜂蜜</a></p>
+                                <p>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥178</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥148/kg</label></span>
+                                </p>
+                                <p>
+                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grain">
+                <div class="floorname" style="background: url(/Images/wgzl.png) no-repeat center center">五谷杂粮类</div>
+                <div style="padding-top:10px;display:table">
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">高棉王子柬米</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥66</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥49.5/袋</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="/商品陈列/Product_Inmall?id=14564"><img src="/App_Uploads/商品/图片/2015/11/7/original/93dd6810-1c80-454f-9cca-0b517afe606b主图2.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="/商品陈列/Product_Inmall?id=14564">绍丰和豆瓣小竹笼3年</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥58</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥43.5/笼</label></span>
+                            </p>
+                            <p>
+                                <a href="/商品陈列/Product_Inmall?id=14564" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">德乌敦泰米3kg礼盒</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥98</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥73.5/盒</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">有机红小豆</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥13</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥9.75/袋</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">有机麦芯粉</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥20</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥15/袋</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">有机挂面</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥8</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥8/把</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center;height: 64px;line-height: 64px;background: #007463;margin-top: 10px;"><a style="color: #b8cfca; font-family: '微软雅黑'; font-size: 20px;" href="/商品陈列/mall?id=1233">查看更多杂粮</a></div>
+            </div>
+            <div class="fruit">
+                <div class="floorname">水果类</div>
+                <div style="padding-top:10px;display:table">
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">牛油果</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥20</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥15/个</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">红富士</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥30</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥22.5/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">红心猕猴桃</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥46</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥34.5/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">冬枣</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥36</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥27/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">三红蜜柚</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥20</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥15/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">澳柑</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥60</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥45/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center;height: 64px;line-height: 64px;background: #007463;margin-top: 10px;color: #b8cfca;font-family: '微软雅黑';font-size: 20px;"><a style="color: #b8cfca; font-family: '微软雅黑'; font-size: 20px;" href="/商品陈列/mall?id=1235">查看更多水果</a></div>
+            </div>
+            <div class="eggs">
+                <div class="floorname" style="height: 65px;line-height: normal; padding: 10px 0;">
+                    <p>禽蛋类</p>
+                    <span style="font-size:14px;font-family: '宋体';font-weight: normal">(成都专供)</span>
+                </div>
+                <div style="padding-top:10px;display:table">
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">旧院黑鸡</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥138</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥124.2/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">一点田放养土鸡蛋12枚装</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥42</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥37.8/盒</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">12月龄土母鸡</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥176</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥158.4/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">宝贝蛋12枚装</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥55</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥49.5盒</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">绿壳蛋10枚装</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥38</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥34.2/盒</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">七彩山鸡蛋12枚装</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥52</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥46.8/盒</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center;height: 64px;line-height: 64px;background: #007463;margin-top: 10px;color: #b8cfca;font-family: '微软雅黑';font-size: 20px;"><a style="color: #b8cfca; font-family: '微软雅黑'; font-size: 20px;" href="/商品陈列/mall?id=1234">查看更禽蛋粮</a></div>
+            </div>
+            <div class="meat">
+                <div class="floorname" style="height: 65px;line-height: normal; padding: 10px 0;">
+                    <p>肉类</p> 
+                    <span style="font-size:14px;font-family: '宋体';font-weight: normal">(成都专供)</span>
+                </div>
+                <div style="padding-top:10px;display:table">
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">有机土猪前蹄</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥256</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥230.4/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">里脊肉块</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥26.8</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥24.12/盒</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">科尔沁去骨腹肉</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥118</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥106.2/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">有机土猪梅花肉</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥216</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥194.4/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">有机土猪精带皮五花</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥198</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥178.2/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
+                        <div style="height:218px;">
+                            <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                        </div>
+                        <div style="text-align:center;padding:25px;line-height:30px;">
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">有机土猪精排</a></p>
+                            <p>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥276</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥248.4/kg</label></span>
+                            </p>
+                            <p>
+                                <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center;height: 64px;line-height: 64px;background: #007463;margin-top: 10px;color: #b8cfca;font-family: '微软雅黑';font-size: 20px;"><a style="color: #b8cfca; font-family: '微软雅黑'; font-size: 20px;" href="/商品陈列/mall?id=1236">查看更多肉类</a></div>
+            </div>
+            <div class="orange">
+                <div class="floorname">褚橙</div>
+                <a href="/商品陈列/Product_Inmall?id=14579"><div style="height: 320px;background: url(/Images/mgzt.png) -504px -2592px"></div></a>
+               
+            </div>
+            <div class="notes">
+                <div class="floorname" style="margin: 10px 0; background: url(/Images/xnmg.png) no-repeat center center">西南物资采购网携麦歌倾情奉上</div>
+                <p style="font-size: 16px;font-family:'宋体';text-indent: 2em;color: #fff;line-height: 25px;">西南物资采购网（www.go81.cn）是由成都军区联勤部军需物资油料部正式授权发布，主要面向整个成都军区部队单位和官兵个人进行招标采购信息发布、物资采购以及个人会员服务等综合服务保障的国际互联网平台系统，是成都军区物资招标采购信息的专业发布平台，也是成都军区物资采购供应商和评审专家入库申请的网上通道。</p>
+                <div style="height: 392px;background: url(/Images/logoqrcode.png) no-repeat center center;margin: 20px 0;"></div>
+                <div style="height: 180px;margin-top: 40px; background: url(/Images/step.jpg)"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".tabmenu").mouseover(function () {
+            changeTab(this);
+        });
+
+
+        function changeTab(obj) {
+            var $this = $(obj),
+                index = $this.attr("index");
+            $this.addClass("hover").siblings().removeClass("hover").parent().prev().children().fadeOut(200).eq(index).fadeIn(400);
+        }
+
+        $(".tab-menu li").mouseover(function () {
+            var $this = $(this),
+                name = $this.attr("id");
+            $this.addClass("hover").siblings().removeClass("hover");
+            $("li[id='ttrsc'],li[id='jtyyc']").css({ "line-height": "45px" });
+            if (name == "ttrsc" || name == "jtyyc") { $this.css({ "line-height": "57px" }); }
+            $this.parent().next().children().hide().end().children("div[name='" + name + "']").show();
+            $this.parents("div.tab-menu").next().children().hide().end().children("div[name='" + name + "']").show();
+        });
+
+
+
+    });
+</script>

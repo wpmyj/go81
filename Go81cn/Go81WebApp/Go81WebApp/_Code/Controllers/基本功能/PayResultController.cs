@@ -31,6 +31,7 @@ using Go81WebApp.Models.管理器.订单管理;
 using Go81WebApp.Models.数据模型.订单数据模型;
 using Com.Alipay;
 using System.Collections.Specialized;
+using Go81WebApp.Models.管理器.统计管理;
 
 
 namespace Go81WebApp.Controllers.基本功能
@@ -72,7 +73,11 @@ namespace Go81WebApp.Controllers.基本功能
 
                         //交易状态
                         string trade_status = Request.QueryString["trade_status"];
-
+                        string ordercode="";
+                        if(!string.IsNullOrWhiteSpace(Request.QueryString["body"]))
+                        {
+                            ordercode=Request.QueryString["body"];//优惠码
+                        }
 
                         if (Request.QueryString["trade_status"] == "TRADE_FINISHED" || Request.QueryString["trade_status"] == "TRADE_SUCCESS")
                         {
@@ -86,6 +91,13 @@ namespace Go81WebApp.Controllers.基本功能
                                 订单 model = 订单管理.查找订单(long.Parse(id));
                                 if (!model.已付款)
                                 {
+                                    if (优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(m => m.Code == ordercode && m.已使用 == false)) > 0)
+                                    {
+                                        model.使用优惠码 = true;
+                                        优惠码 yh = 优惠码管理.查询优惠码(0, 0, Query<优惠码>.Where(m => m.已使用 == false && m.Code == ordercode)).First();
+                                        yh.已使用 = true;
+                                        优惠码管理.更新优惠码(yh);
+                                    }
                                     model.已付款 = true;
                                     订单管理.更新订单(model);
                                     ViewData["userid"] = model.订单所属用户.用户ID;
@@ -95,7 +107,7 @@ namespace Go81WebApp.Controllers.基本功能
                                     ViewData["userid"] = -1;
                                 }
                                 ViewData["Trade_Status"] = 1;//1订单付款成功，0订单付款失败
-                                ViewData["result"] = "用户号为" + Request.QueryString["buyer_id"] + "的你已购买价值为" + account.ToString() + "的商品，" + "交易状态：" + Request.QueryString["trade_status"];
+                                ViewData["result"] = "您已经成功购买价值为"+ account.ToString() + "的商品。";
                             }
                         }
                         else
@@ -147,6 +159,11 @@ namespace Go81WebApp.Controllers.基本功能
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     //请在这里加上商户的业务逻辑程序代码
                     var account = Request.Form["total_fee"];
+                    string ordercode = "";
+                    if (!string.IsNullOrWhiteSpace(Request.Form["body"]))
+                    {
+                        ordercode = Request.Form["body"];//优惠码
+                    }
                     string id = Request.Form["extra_common_param"];//传回的商品id和采购数量
                     //——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
                     //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表
@@ -169,6 +186,13 @@ namespace Go81WebApp.Controllers.基本功能
                             订单 model = 订单管理.查找订单(long.Parse(id));
                             if (!model.已付款)
                             {
+                                if (优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(m => m.Code == ordercode&&m.已使用==false))>0)
+                                {
+                                    model.使用优惠码 = true;
+                                    优惠码 yh=优惠码管理.查询优惠码(0, 0, Query<优惠码>.Where(m => m.已使用 == false && m.Code == ordercode)).First();
+                                    yh.已使用 = true;
+                                    优惠码管理.更新优惠码(yh);
+                                }
                                 model.已付款 = true;
                                 订单管理.更新订单(model);
                             }
@@ -185,7 +209,7 @@ namespace Go81WebApp.Controllers.基本功能
         {
             try
             {
-                double amount = 0.01;
+                double amount = 0.01;//计算总价格
                 long id = 0;
                 string ordercode = "";
                 if (!string.IsNullOrWhiteSpace(Request.Form["money"]))
@@ -200,6 +224,7 @@ namespace Go81WebApp.Controllers.基本功能
                 {
                     ordercode = Request.Form["yhm"];//订单优惠码
                 }
+                long counter=优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(m => m.Code == ordercode&&m.已使用==false));
                 long count = 订单管理.计数订单(0, 0, Query<订单>.Where(m => m.Id == id && m.已付款 == false && m.订单所属用户.用户ID == currentUser.Id));
                 if (count != 0)
                 {
@@ -220,16 +245,20 @@ namespace Go81WebApp.Controllers.基本功能
                     //订单名称   
                     string subject = "商品采购".Trim();
                     //必填
-
+                    //订单描述
+                    string body = ordercode;
+                    if (counter > 0)
+                    {
+                        body = ordercode;
+                        amount -= 5;
+                    }
+                    else
+                    {
+                        body = "商品付款信息";
+                    }
                     //付款金额
                     string total_fee = amount.ToString().Trim();
                     //必填
-
-                    //订单描述
-
-                    string body = "商品付款信息";
-
-
                     ////////////////////////////////////////////////////////////////////////////////////////////////
 
                     //把请求参数打包成数组

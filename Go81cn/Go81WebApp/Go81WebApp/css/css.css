@@ -1952,3 +1952,18 @@ label {
     background-color:#ff0000;
     color:#fff;
 }
+#question{
+        position:absolute;
+        width:auto;
+        height:auto;
+        padding:10px;
+        border:1px solid #E3E3E3;
+        background-color:#fff;
+        box-shadow:0px 5px 10px #E3E3E3;
+        -webkit-box-shadow:0px 5px 10px #E3E3E3;
+        -moz-box-shadow:0px 5px 10px #E3E3E3;
+        display:none;
+        color:#ff0000;
+        left:0px;
+        top:18px;
+    }

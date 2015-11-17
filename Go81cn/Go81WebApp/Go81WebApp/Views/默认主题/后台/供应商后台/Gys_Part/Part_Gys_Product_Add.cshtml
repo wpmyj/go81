@@ -8,6 +8,7 @@
 <script charset="utf-8" src="~/JS/kindeditor-4.1.10/kindeditor.js"></script>
 <script charset="utf-8" src="~/JS/kindeditor-4.1.10/lang/zh_CN.js"></script>
 <script charset="utf-8" src="~/JS/kindeditor-4.1.10/plugins/code/prettify.js"></script>
+<script src="~/JS/provinceandcity_all.js"></script>
 <script>
     //商品详情的编辑器
     var editor1;
@@ -198,7 +199,7 @@
             $(this).hide();
         });
         $("div#product_tabmenu_content ul:eq(" + num1 + ")").show();
-        }
+    }
 </script>
 <div id="f1" class="modal_out">
     <div class="modal_in"></div>
@@ -209,10 +210,10 @@
 </div>
 @if (ViewData["是否中标商品"].ToString() == "1")
 {
-<div id="pro_numdiv" style="display: none;">
-    <div class="product_add_textarabox">
+    <div id="pro_numdiv" style="display: none;">
+        <div class="product_add_textarabox">
         <div style="float:left;padding-right:5px;">
-        <div class="product_add_toptitle">项目编号：</div>
+            <div class="product_add_toptitle">项目编号：</div>
             <input type="text" id="pronum___a" name="pronum___a" style="width: 130px;" />
             <span style="float: left;">*</span>
             <span id="p_number___a" style="display: none; float: left;">请输入项目编号</span>
@@ -230,14 +231,14 @@
             <span id="p_price___a" style="display: none;">请输入中标金额</span>
             <input type="button" style="width: 100px; float: left; height: 35px;" value="删除该项目" id="deleteprobtn___a" onclick="deletepro(this)" />
         </div>
+        </div>
     </div>
-</div>
-<script>
+    <script>
     var procount = 1;
     function deletepro(obj) {
         var id = $(obj).attr("id").replace("deleteprobtn___", "");
-        $(obj).parent().parent().remove();
-        $("#proliststr").val($("#proliststr").val().replace(id+"|",""));
+            $(obj).parent().remove();
+            $("#proliststr").val($("#proliststr").val().replace(id + "|", ""));
     }
     function addpro(obj) {
         var html = $("#pro_numdiv").html().replace(/___a/g, "___" + procount);
@@ -245,23 +246,26 @@
         $("#proliststr").val($("#proliststr").val() + procount + "|");
         procount++;
     }
-</script>
+    </script>
 }
-    <div class="product_add_tabmenu_box">
+@{
+    long id = long.Parse(ViewData["userId"].ToString());
+}
+<div class="product_add_tabmenu_box">
         <div class="title-base-out">
             <div class="title-base-middle">
                 <div class="title-base-inner" style="float:left">商品信息</div>
-                <div class="product_tabmenu_tabmenu" id="listdiv">
-                    <ul>
+            <div class="product_tabmenu_tabmenu" id="listdiv">
+                <ul>
                     <li onclick="change_tbl(this,1)" class="cli">商品描述</li>
                     <li onclick="change_tbl(this,0)">商品图片</li>
                     <li onclick="change_tbl(this,2)">商品属性</li>
                     <li onclick="change_tbl(this,3)">售后服务</li>
-                    </ul>
-                </div>
+                </ul>
             </div>
         </div>
-        <div class="product_tabmenu_content_box gys_znxx_box" id="product_tabmenu_content" style="height:auto;">
+    </div>
+    <div class="product_tabmenu_content_box gys_znxx_box" id="product_tabmenu_content" style="height:auto;">
         <ul style="display:none;">
             <li>
                 <div id="Uppicture" style="width:80%;">
@@ -316,10 +320,10 @@
                 <li>
                     @if (ViewData["是否中标商品"].ToString() == "1")
                     {
-                        <input type="hidden" id="proliststr" name="proliststr" value="0|" />
-                        <div class="product_add_textarabox">
+                    <input type="hidden" id="proliststr" name="proliststr" value="0|" />
+                    <div class="product_add_textarabox">
                             <div style="float:left;padding-right:5px;">
-                            <div class="product_add_toptitle">项目编号：</div>
+                        <div class="product_add_toptitle">项目编号：</div>
                                 <input type="text" id="pronum___0" name="pronum___0" style="width: 130px;" /><span style="float: left;">*</span><span id="p_number___0" style="display: none; float: left;">请输入项目编号</span>
                             </div>
                             <div style="float:left;padding-right:5px;">
@@ -331,7 +335,7 @@
                                 <input type="text" id="proprice___0" name="proprice___0" style="width: 130px;" /><span style="float: left;">*</span><span id="p_price___0" style="display: none;float: left;">请输入中标金额</span>
                                 <input type="button" style="width: 100px; float: left; height: 35px;" value="新增项目" onclick="addpro(this)" />
                             </div>
-                        </div>
+                    </div>
                     }
 
                     <div class="product_add_textarabox" style="margin-top:20px;" id="proneedproname">
@@ -353,11 +357,44 @@
                         @Html.EditorFor(model => model.商品信息.计量单位)<span>*（如：台、辆等）</span><span id="p_jldw" style="display: none;">请输入计量单位</span>
                         @*@Html.ValidationMessageFor(model => model.商品信息.商品名)*@
                     </div>
+                    @if (id == 200000001522)
+                    {
                     <div class="product_add_textarabox">
+                            <div class="product_add_toptitle">单位重量：</div><span style="padding-right: 20px;">千克(kg)</span>
+                            @Html.TextBoxFor(model => model.商品信息.单位重量, new { id = "per_weight", placeholder = "如果计量单位为kg,请填写为1" })
+                            @*@Html.ValidationMessageFor(model => model.商品信息.商品名)*@
+                        </div>
+                        <div class="product_add_textarabox">
+                            <div class="product_add_toptitle">市场价格：</div>
+                            @Html.TextBoxFor(model => model.销售信息.价格, new { id = "p_price1" })
+                            @*@Html.ValidationMessageFor(model => model.销售信息.价格)*@<span style="padding-right: 20px;">*</span>
+                        </div>
+                        <div class="product_add_textarabox">
                         <div class="product_add_toptitle">军采价格：</div>
+                            @Html.EditorFor(model => model.销售信息.军采价)
+                            @*@Html.ValidationMessageFor(model => model.销售信息.价格)*@<span style="padding-right: 20px;">*</span><span id="p_price" style="display: none;">请输入正确的价格(只能为数字或小数)</span>
+                        </div>
+                        <div class="product_add_textarabox">
+                            <div class="product_add_toptitle">销售地域：</div>
+                            @Html.HiddenFor(m => m.销售信息.销售地域.省份, new { id = "province1" })
+                            @Html.HiddenFor(m => m.销售信息.销售地域.城市, new { id = "city1" })
+                            @Html.HiddenFor(m => m.销售信息.销售地域.区县, new { id = "area1" })
+                            <select id="province" name="province" style="width:100px;"></select>
+                            <select id="city" name="city" style="width:100px;"></select>
+                            <select id="area" name="area" style="width:100px;"></select>
+                            <script>
+                                window.onload = function () { new PCAS("province", "city", "area"); }
+                            </script>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="product_add_textarabox">
+                            <div class="product_add_toptitle">军采价格：</div>
                         @Html.EditorFor(model => model.销售信息.价格)
                         @*@Html.ValidationMessageFor(model => model.销售信息.价格)*@<span style="padding-right: 20px;">*</span><span id="p_price" style="display: none;">请输入正确的价格(只能为数字或小数)</span>
                     </div>
+                    }
                     <div class="product_add_textarabox">
                         <div class="product_add_toptitle">商品简介：</div>
                         @Html.TextAreaFor(model => model.商品数据.商品简介)
@@ -388,53 +425,53 @@
                     <div class="product_add_attributebox" id="gys_product_class" style="margin: 0 auto;">
                         @foreach (var arr in (Dictionary<string, Dictionary<string, 商品属性数据>>)ViewData["商品属性模板"])
                         {
-                            <div style=" width:898px; height:auto; overflow:hidden; margin:0 auto;" name="attrbox">
-                                <div class="product_add_toptitle" style=" width:898px; float:left; background-color:#ccd2b0; text-align: left;">@arr.Key</div>
-                                <table class="product_att_table" cellpadding="0" cellspacing="0" id="@arr.Key">
-                                    @foreach (var item in arr.Value)
+                        <div style=" width:898px; height:auto; overflow:hidden; margin:0 auto;" name="attrbox">
+                            <div class="product_add_toptitle" style=" width:898px; float:left; background-color:#ccd2b0; text-align: left;">@arr.Key</div>
+                            <table class="product_att_table" cellpadding="0" cellspacing="0" id="@arr.Key">
+                                @foreach (var item in arr.Value)
                                     {
-                                        <tr id="@item.Key" name="@arr.Key">
-                                            <td class="product_att_table_td_exp">
-                                                @if (item.Value.属性类型 == 属性类型.复选 && item.Value.销售属性)
+                                <tr id="@item.Key" name="@arr.Key">
+                                    <td class="product_att_table_td_exp">
+                                        @if (item.Value.属性类型 == 属性类型.复选 && item.Value.销售属性)
                                                 {
-                                                    <input type="checkbox" name="pricecheckbox" value="@item.Key" onclick="gettablehead(this);" /><span title="点选价格属性,系统会根据您选择的值进行组合,不同的组合可以设置不同的价格!">价格属性</span>
+                                            <input type="checkbox" name="pricecheckbox" value="@item.Key" onclick="gettablehead(this);" /><span title="点选价格属性,系统会根据您选择的值进行组合,不同的组合可以设置不同的价格!">价格属性</span>
                                                 }
                                                 else
                                                 {
-                                                    <input disabled="disabled" type="checkbox" value="@item.Key" onclick=" gettablehead(this) " /><span style="color:#cccccc">价格属性</span>
+                                            <input disabled="disabled" type="checkbox" value="@item.Key" onclick=" gettablehead(this) " /><span style="color:#cccccc">价格属性</span>
                                                 }
-                                            </td>
-                                            <td class="product_att_table_td_exp1">@item.Key</td>
-                                            <td width="100%" class="product_att_table_td">
-                                                @if (item.Value.属性类型 == 属性类型.复选)
+                                    </td>
+                                    <td class="product_att_table_td_exp1">@item.Key</td>
+                                    <td width="100%" class="product_att_table_td">
+                                        @if (item.Value.属性类型 == 属性类型.复选)
                                                 {
                                                     if (item.Value.销售属性)
                                                     {
                                                         foreach (var listitem in item.Value.值)
                                                         {
-                                                            <span class="product_att_table_span"><input type="checkbox" id="@listitem" name="@item.Key" value="@listitem" onclick="gettablehead(this)" />@listitem</span>
+                                            <span class="product_att_table_span"><input type="checkbox" id="@listitem" name="@item.Key" value="@listitem" onclick="gettablehead(this)" />@listitem</span>
                                                         }
-                                                        <a onclick="addattribute(this)" key="@item.Key" issale="1" class="proadd_addattr"></a>
+                                            <a onclick="addattribute(this)" key="@item.Key" issale="1" class="proadd_addattr"></a>
                                                     }
                                                     else
                                                     {
                                                         foreach (var listitem in item.Value.值)
                                                         {
-                                                            <span class="product_att_table_span"><input type="checkbox" id="@listitem" name="@item.Key" value="@listitem" />@listitem</span>
+                                            <span class="product_att_table_span"><input type="checkbox" id="@listitem" name="@item.Key" value="@listitem" />@listitem</span>
                                                         }
-                                                        <a onclick="addattribute(this)" key="@item.Key" issale="0" class="proadd_addattr"></a>
+                                            <a onclick="addattribute(this)" key="@item.Key" issale="0" class="proadd_addattr"></a>
                                                     }
                                                 }
                                                 else
                                                 {
-                                                    <input style="border:none; width:100%; height:100%; color:#aaa;" type="text" name="@item.Key" value='在这里输入...' onblur="if ($(this).val() == '') { value = '在这里输入...'; $(this).css('color', '#aaa'); }" onfocus="if ($(this).val() == '在这里输入...') { value = ''; $(this).css('color', '#000'); }" />
+                                            <input style="border:none; width:100%; height:100%; color:#aaa;" type="text" name="@item.Key" value='在这里输入...' onblur="if ($(this).val() == '') { value = '在这里输入...'; $(this).css('color', '#aaa'); }" onfocus="if ($(this).val() == '在这里输入...') { value = ''; $(this).css('color', '#000'); }" />
                                                 }
-                                            </td>
-                                        </tr>
+                                    </td>
+                                </tr>
                                     }
-                                </table>
+                            </table>
 
-                            </div>
+                        </div>
                         }
                         <script type="text/javascript">
                             function addattribute(a) {
@@ -782,17 +819,15 @@
             <input id="picture" type="hidden" name="pro_imgstr" value="" />
             <input id="picture1" type="hidden" name="pro_typeimgstr" value="" />
         }
-        </div>
+    </div>
     </div>
 
     <script type="text/javascript">
         function filechange(number) {
-            if (number==0)
-            {
-            document.forms["upload"].submit();
+        if (number == 0) {
+                document.forms["upload"].submit();
             }
-            else
-            {
+        else {
                 document.forms["upload1"].submit();
             }
             $("#product_tabmenu_content").css({ "height": "auto" });
@@ -829,7 +864,7 @@
             var tablecontent = document.getElementById("pricelist");
             setTableInnerHTML(tablecontent, retstr);
         }
-        function change_tbl(obj,num) {
+    function change_tbl(obj, num) {
             $("div#listdiv ul li").each(function () {
                 $(this).removeClass("cli");
             });
@@ -851,6 +886,9 @@
                     $("#p_price").hide();
                 }
             });
+
+        $("#商品列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#商品列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
         });
         $(document).ready(function () {
             $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
@@ -870,13 +908,11 @@
                 for (var i = 0; i < row; i++) {
                     str += "<tr>";
                     for (var j = 0; j < 4; j++) {
-                        if (th == "#picture")
-                        {
+                    if (th == "#picture") {
                             str += "<td style='relative'><a href='###' title='删除' onclick='delPic(this,0)' style='color:white; position:absolute; margin-left:85px; display:block; background-color:red; width:15px; height:15px; line-height:15px; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />" +
                             "</td>"
                         }
-                        else
-                        {
+                    else {
                             str += "<td style='relative'><a href='###' title='删除' onclick='delPic(this,1)' style='color:white; position:absolute; margin-left:85px; display:block; background-color:red; width:15px; height:15px; line-height:15px; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />" +
                             "</td>"
                         }
@@ -888,13 +924,11 @@
             if (maintain > 0) {
                 str += "<tr>";
                 for (var m = 0; m < maintain; m++) {
-                    if (th == "#picture")
-                    {
+                if (th == "#picture") {
                         str += "<td style='relative'><a href='###' title='删除' onclick='delPic(this,0)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />"
                         + "</td>";
                     }
-                    else
-                    {
+                else {
                         str += "<td style='relative'><a href='###' title='删除' onclick='delPic(this,1)' style='color:white; position:absolute; margin-left:85px; display:block; width:15px; height:15px; line-height:15px; background-color:red; text-align:center; font-size:12px;' lang='" + path1[count] + "'>×</a><img style='border:1px solid gray;' alt='" + path1[count] + "' src='" + path1[count] + "' width='100' height='80' />"
                         + "</td>";
                     }
@@ -903,19 +937,16 @@
                 str += "</tr>";
             }
             str += "</table>";
-            if (th == "#picture1")
-            {
+        if (th == "#picture1") {
                 document.getElementById("pBox1").innerHTML = str;
             }
-            else
-            {
-            document.getElementById("pBox").innerHTML = str;
+        else {
+                document.getElementById("pBox").innerHTML = str;
             }
             $("#f1").hide();
         }
-        function delPic(th,number) {
-            if(confirm("确定删除吗？"))
-            {
+    function delPic(th, number) {
+        if (confirm("确定删除吗？")) {
                 var path = $(th).attr("lang");
                 $.get('/供应商后台/DeleteImages', { n: path },
                     function (data) {
@@ -923,20 +954,18 @@
                             $(th).parent().remove();
                         }
                     });
-                if(number==0)
-                {
-                var newpath = document.getElementById("picture").value.split('|');
-                var str = "";
-                for (j = 0; j < newpath.length - 1; j++) {
-                    if (path != newpath[j]) {
-                        str += newpath[j] + "|";
+            if (number == 0) {
+                    var newpath = document.getElementById("picture").value.split('|');
+                    var str = "";
+                    for (j = 0; j < newpath.length - 1; j++) {
+                        if (path != newpath[j]) {
+                            str += newpath[j] + "|";
+                        }
                     }
+                    document.getElementById("picture").value = str;
+                    setPic("#picture");
                 }
-                document.getElementById("picture").value = str;
-                setPic("#picture");
-            }
-                else
-                {
+            else {
                     var newpath = document.getElementById("picture1").value.split('|');
                     var str = "";
                     for (j = 0; j < newpath.length - 1; j++) {
@@ -952,23 +981,56 @@
         function hidebox() {
             $("div#f").hide(500);
         }
-    </script>
-}
-
-@if (ViewData["是否中标商品"].ToString() == "1")
-{
-    <script type="text/javascript">
-        $(function () {
-            $("#新增中标商品").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-            $("#新增中标商品").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
-        });
-    </script>
-}
-else
-{
-    <script type="text/javascript">
-        $(function () {
-            $("#新增商品信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-            $("#新增商品信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
-        });
+    var num = 1;
+    $("#per_weight").keydown(function () {
+        if ($(this).val() != "") {
+            num = $(this).val();
+        }
+        else {
+            num = 1;
+        }
+    });
+    $("#per_weight").keyup(function () {
+        var reg = /\d{1,20}$|\d{1,20}[.]{0,1}\d{0,2}$/g;
+        var str = $(this).val();
+        if (str != "") {
+            if (!reg.test(str)) {
+                $(this).val(parseFloat(num));
+            }
+        }
+            
+    });
+    $("#per_weight").blur(function () {
+        var reg = /\d{1,20}$|\d{1,20}[.]{0,1}\d{0,2}$/g;
+        var str = $(this).val();
+        if (str!="")
+        {
+            if (!reg.test(str)) {
+                $(this).val(parseFloat(num));
+            }
+        } 
+    });
+    var num1 = 0;
+    $("#p_price1").keydown(function () {
+        num = $(this).val();
+    });
+    $("#p_price1").keyup(function () {
+        var reg = /\d{1,20}$|\d{1,20}[.]{0,1}\d{0,2}$/g;
+        var str = $(this).val();
+        if (str != "") {
+            if (!reg.test(str)) {
+                $(this).val(parseFloat(num));
+            }
+        }
+        
+    });
+    $("#province").change(function () {
+            $("#province1").val($(this).val());
+    });
+    $("#city").change(function () {
+            $("#city1").val($(this).val());
+    });
+    $("#area").change(function () {
+            $("#area1").val($(this).val());
+    });
     </script>

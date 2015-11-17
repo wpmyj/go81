@@ -122,7 +122,7 @@
                         <div class="page_layout_a" onclick="clickthismenu(this)">
                             @Html.ActionLink(mcas[0], mcas[2], mcas[1], null, new
                             {
-                                @class = "action_link"
+                                @class = "action_link",target="_blank"
                             })
                         </div>
                     }
@@ -132,7 +132,8 @@
                     <div class="Pages page_layout_a" onclick=" clickthismenu(this)">
                         @Html.ActionLink(mcas[0], mcas[2], mcas[1], null, new
                         {
-                            @class = "action_link"
+                            @class = "action_link",
+                            target = "_blank"
                         })
                     </div>
                 }

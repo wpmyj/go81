@@ -26,6 +26,16 @@
         <div class="gys_xttz_contentbox_news_title">@Model.内容主体.标题</div>
         <div class="gys_xttz_contentbox_news_from">@Model.内容主体.发布时间</div>
         <div class="gys_xttz_contentbox_news_text">@Html.Raw(Model.内容主体.内容)</div>
+        <div class="gys_xttz_contentbox_news_text">
+            @if (Model.内容主体.附件!=null&&Model.内容主体.附件.Any())
+            {
+                <div><h2>附件：</h2></div>
+                foreach (var item in Model.内容主体.附件)
+                {
+                    <div><a href="@item" target="_blank">@item</a></div>
+                }
+            }
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -34,6 +44,6 @@
         $("#公告查询").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
     $(document).ready(function () {
-            $("table tr td:first").css("width", "200px");
+        $("table tr td:first").css("width", "200px");
     });
 </script>

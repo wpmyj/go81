@@ -762,20 +762,38 @@ namespace Go81WebApp.ModuleTester
             #endregion
 
             #region 修改专家单位地址字段类型
-            var ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("工作经历信息.单位地址"));
+            //var ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("工作经历信息.单位地址"));
+            //foreach (var y in ysd)
+            //{
+            //    Mongo.Coll<专家>().Update(
+            //    Query.EQ("_id", y["_id"]),
+            //    Update.Combine(
+            //    Update.Unset("工作经历信息.单位地址"))
+            //    );
+
+            //    Mongo.Coll<专家>().Update(
+            //    Query.EQ("_id", y["_id"]),
+            //    Update.Combine(
+            //    Update.Set("工作经历信息.单位地址", new BsonString("")))
+            //    );
+
+            //}
+            #endregion
+            #region 修改专家单位地址字段类型
+            var ysd = Mongo.Coll<商品>().FindAs<BsonDocument>(Query.Exists("商品信息.单位重量"));
             foreach (var y in ysd)
             {
-                Mongo.Coll<专家>().Update(
+                Mongo.Coll<商品>().Update(
                 Query.EQ("_id", y["_id"]),
                 Update.Combine(
-                Update.Unset("工作经历信息.单位地址"))
+                Update.Unset("商品信息.单位重量"))
                 );
 
-                Mongo.Coll<专家>().Update(
+                Mongo.Coll<商品>().Update(
                 Query.EQ("_id", y["_id"]),
                 Update.Combine(
-                Update.Set("工作经历信息.单位地址", new BsonString("")))
-                );
+                Update.Set("商品信息.单位重量", new BsonDouble(0))
+                ));
 
             }
             #endregion
