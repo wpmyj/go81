@@ -8,7 +8,7 @@
     {
        foreach (var good in AgreeGood)
         {
-            var src = good.Key.商品信息.商品图片.Any() ? good.Key.商品信息.商品图片.Last() : "~/images/noimage.jpg";
+            var src = good.Key.商品信息.商品图片.Any() ? good.Key.商品信息.商品图片.Last().Replace("original","150X150") : "~/images/noimage.jpg";
             index++;
         <div class='agreement_good_class_detail' id="agreement_good_class">
             <div class='agreement_good_class_pic'>

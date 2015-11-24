@@ -68,15 +68,15 @@ namespace Go81WebApp.Controllers.门户
         public ActionResult JcLife()
         {
             var sdate = new DateTime(2015, 11, 8);
-            var edate = new DateTime(2015, 11, 13);
+            //var edate = new DateTime(2015, 11, 15);
             var date = DateTime.Now;
-            if (date >= sdate && date <= edate)
+            if (date >= sdate)
             {
                 return RedirectToAction("JcLifeIndex");
             }
             else
             {
-                return View();    
+                return View();
             }
         }
 
@@ -477,11 +477,11 @@ namespace Go81WebApp.Controllers.门户
                 for (int i = 0; i < info.Length - 1; i++)//限数量判断
                 {
                     long id = long.Parse(info[i].Split(',')[1]);
-                    int sum=int.Parse(info[i].Split(',')[0]);
-                    if (id==9147&&sum>9)
+                    int sum = int.Parse(info[i].Split(',')[0]);
+                    if (id == 9147 && sum > 9)
                     {
                         exist = true;
-                        tip1+= "订单中存在限购9个的商品";
+                        tip1 += "订单中存在限购9个的商品";
                         break;
                     }
                 }
@@ -493,11 +493,11 @@ namespace Go81WebApp.Controllers.门户
                     if (sp.销售信息.销售地域.城市 == "成都市" && sp.销售信息.销售地域.城市 != Request.Form["city"])
                     {
                         IsChengdu = true;
-                        tip1+="订单中存在仅限于成都市内供货的商品";
+                        tip1 += "订单中存在仅限于成都市内供货的商品";
                         break;
                     }
                 }
-                if (!exist&&!IsChengdu)
+                if (!exist && !IsChengdu)
                 {
                     var shopcar = 购物车管理.查询购物车(0, 0, Query<购物车>.Where(o => o.所属用户.用户ID == currentUser.Id));
                     var car = shopcar.First();
@@ -523,7 +523,7 @@ namespace Go81WebApp.Controllers.门户
                         sum += int.Parse(info[i].Split(',')[0]) * sp.销售信息.价格;
                         sumwithcode += int.Parse(info[i].Split(',')[0]) * sp.销售信息.军采价;
                         order.商品订单列表.Add(o);
-                        weight += sp.商品信息.商品重量 * int.Parse(info[i].Split(',')[0]);
+                        weight += (decimal)(sp.商品信息.单位重量 * int.Parse(info[i].Split(',')[0]));
                         //该商品已下单，从购物车里删除
                         var gd = shoplist.Find(p => p.商品.商品ID == long.Parse(info[i].Split(',')[1]));
                         if (gd != null)
@@ -540,7 +540,7 @@ namespace Go81WebApp.Controllers.门户
                         }
                         else
                         {
-                            order.总运费 = 15 + 15 *Math.Ceiling(weight);
+                            order.总运费 = 15 + 15 * Math.Ceiling(weight);
                         }
                     }
                     else
@@ -1121,7 +1121,7 @@ namespace Go81WebApp.Controllers.门户
         public ActionResult mall()
         {
             long typeId = -1;
-            if(!string.IsNullOrWhiteSpace(Request.QueryString["id"]))
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["id"]))
             {
                 typeId = long.Parse(Request.QueryString["id"].ToString());
             }
@@ -1136,9 +1136,9 @@ namespace Go81WebApp.Controllers.门户
                 cpg = 1;
             }
             long pc = 0;
-            if(typeId==-1)
+            if (typeId == -1)
             {
-                pc=商品管理.计数供应商商品(200000001522, 0, 0, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过));
+                pc = 商品管理.计数供应商商品(200000001522, 0, 0, Query<商品>.Where(m => m.审核数据.审核状态 == 审核状态.审核通过));
             }
             else
             {
@@ -1149,13 +1149,13 @@ namespace Go81WebApp.Controllers.门户
             {
                 pgCount++;
             }
-            ViewData["type"]=typeId;
+            ViewData["type"] = typeId;
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
             IEnumerable<商品> goods = null;
-            if (typeId==-1)
+            if (typeId == -1)
             {
-                goods=商品管理.查询商品(20 * (cpg - 1), 20,
+                goods = 商品管理.查询商品(20 * (cpg - 1), 20,
                 Query<商品>.Where(m => m.商品信息.所属供应商.用户ID == 200000001522 && m.审核数据.审核状态 == 审核状态.审核通过));
             }
             else
@@ -1340,7 +1340,7 @@ namespace Go81WebApp.Controllers.门户
             List<商品> Recommend_Good = new List<商品>();
             try
             {
-                Recommend_Good = 商品管理.查询供应商商品(200000001522,0,10).ToList();
+                Recommend_Good = 商品管理.查询供应商商品(200000001522, 0, 10).ToList();
             }
             catch
             {

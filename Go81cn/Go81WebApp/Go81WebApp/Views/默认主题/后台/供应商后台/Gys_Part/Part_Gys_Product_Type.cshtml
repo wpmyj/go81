@@ -23,7 +23,7 @@
     }
 </style>
 @{
-    供应商服务记录 modal = ViewData["service"] as 供应商服务记录;
+    /*供应商服务记录 modal = ViewData["service"] as 供应商服务记录;
     int sum = 0;
     if (modal.已开通的服务.Count != 0)
     {
@@ -45,7 +45,7 @@
             }
         }
     }
-    sum += 1;
+    sum += 1;*/
 }
 <div id="indexpagemodalt" class="modal" style="display:block;">
     <div class="modal-dialog" style="margin: 7% auto;">
@@ -58,7 +58,7 @@
                 <div id="outlistdiv" style="height: 280px; overflow-y: scroll; line-height:25px;">
                     <h4 style="margin:0;">尊敬的用户：</h4>
                     <p class="wenxintishi">
-                        <span>为了管理的方便和网站空间资源的有效利用，从<b style="color:red;">2015年5月1日</b>起，我们默认1个账户可管理1个一级商品类别。您目前的账户可管理@(sum)个一级商品类别。如需管理更多一级商品类别，请查看“<a href="/jct/ApplyVip" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">商品类别管理</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline; color:red;">网站客服</a>。</span>
+                        <span>为了管理的方便和网站空间资源的有效利用，从<b style="color:red;">2015年5月1日</b>起，我们默认1个账户可管理2个一级商品类别，如需添加更多商品分类，请联系网站客服。</span>
                     </p>
                 </div>
                 <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="继续" onclick="$('#indexpagemodalt').hide();" /></div>
@@ -132,7 +132,7 @@
             可提供商品类别
             @if (!Model.供应商用户信息.已提交)
             {
-                if (Model.可提供产品类别列表.Count < sum)
+                if (Model.可提供产品类别列表.Count < 2)
                 {
                     <span><a id="addtype" style="cursor:pointer; text-decoration:underline;" onclick="$('#f2').show()">【新增】</a></span>
                 }
@@ -150,13 +150,13 @@
                                 {
                                     <span style="font-size:15px; color:red;"><em>您已提交过申请，不能修改信息了。如需修改信息，请联系网站客服</em></span>
                                 }
-                                else
+                                @*else
                                 {
                                     if (Model.可提供产品类别列表.Count < sum)
                                     {
                                         <span style="font-size:15px; color:red;">注：您最多只能选择@(sum)个一级商品分类，如果您需要申请@(sum)个及以上一级商品分类,请联系网站客服(如果您还没有可供商品分类，请点击【新增】按钮添加商品分类)</span>
                                     }
-                                }
+                                }*@
                                 @{
                                     string typetwo = "";
                                 }

@@ -5,7 +5,7 @@
 <script src="~/JS/provinceandcity_all.js"></script>
 @{
     ViewBag.Title = "供应商详情";
-    Layout = "_Back_IntranetLayout.cshtml";
+    //Layout = "_Back_IntranetLayout.cshtml";
 }
 <style>
     td{
@@ -617,9 +617,9 @@
                             <tr>
                                 @if (Model.税务信息.近3年完税证明 == true)
                                 {
-                                    <td align="right"><span class="title">近3年完税证明：</span></td>
+                                    <td align="right"><span class="title">近3年纳税证明：</span></td>
                                     <td>已完税</td>
-                                    <td align="right"><span class="title">近3年完税证明电子扫描件：</span></td>
+                                    <td align="right"><span class="title">近3年纳税证明电子扫描件：</span></td>
                                     <td>
                                         @if (System.IO.File.Exists(Server.MapPath(@Model.税务信息.近3年完税证明电子扫描件)))
                                         {
@@ -633,9 +633,9 @@
                                 }
                                 else
                                 {
-                                    <td align="right"><span class="title">近3年完税证明：</span></td>
+                                    <td align="right"><span class="title">近3年纳税证明：</span></td>
                                     <td>未完税</td>
-                                    <td align="right"><span class="title">近3年完税证明电子扫描件：</span></td>
+                                    <td align="right"><span class="title">近3年纳税证明电子扫描件：</span></td>
                                     <td>
                                         @if (Model.税务信息.近3年完税证明电子扫描件 != null && Model.税务信息.近3年完税证明电子扫描件 != "")
                                         {

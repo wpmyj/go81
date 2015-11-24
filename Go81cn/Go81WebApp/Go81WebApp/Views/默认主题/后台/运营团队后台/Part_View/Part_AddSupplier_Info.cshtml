@@ -1293,7 +1293,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td align="right">近3年完税证明：</td>
+                                <td align="right">近3年纳税证明：</td>
                                 <td>
                                     @Html.EnumDropDownListFor(m => m.税务信息.地税税务登记证有效期类型, new { @style = "width:153px; margin-left:2px;" })
                                     <div class="out_box">
@@ -1301,12 +1301,12 @@
                                         <div class="con_box">请选择地税登记证有效期类型</div>
                                     </div>
                                 </td>
-                                <td align="right">近3年完税证明电子扫描件:
+                                <td align="right">近3年纳税证明电子扫描件:
                                 <td>
                                     @Html.TextBoxFor(m => m.税务信息.近3年完税证明电子扫描件, new { @type = "file", @style = "width:130px; height:30px;" })
                                     <div class="out_box">
                                         <div class="arrow"></div>
-                                        <div class="con_box">请上传近3年完税证明电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                        <div class="con_box">请上传近3年纳税证明电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
                                     </div>
                                     <br />@Html.ValidationMessageFor(m => m.税务信息.近3年完税证明电子扫描件)
                                 </td>

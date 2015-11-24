@@ -100,7 +100,7 @@
                                         { @Model.收货单位}
                                     </td>
                                     @*<td colspan="3" style="text-align:right;font-family:'Times New Roman'">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>*@
-                                    <td colspan="3" style="text-align:right;padding-right:20px;">生成日期：@DateTime.Now</td>
+                                    <td colspan="3" style="text-align:right;padding-right:20px;">生成日期：@Model.基本数据.添加时间</td>
                                     <td rowspan="12" style="padding-left:14px;padding-top:25px;"> <span>第一联</span><br /><br /><span style="height:33px;">供货单位留存</span></td>
                                 </tr>
                                 <tr>
@@ -254,7 +254,10 @@
                                                 if (ysduser.Any())
                                                 {
                                                     var user = ysduser.First();
-                                                    <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                                    if (user.Id != 10003)
+                                                    {
+                                                        <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                                    }
                                                 }
                                                 }
                                                 }
@@ -319,7 +322,7 @@
                                         { @Model.收货单位}
                                     </td>
                                     @*<td colspan="3" style="text-align:right;font-family:'Times New Roman'">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>*@
-                                    <td colspan="3" style="text-align:right;padding-right:20px;">生成日期：@DateTime.Now</td>
+                                    <td colspan="3" style="text-align:right;padding-right:20px;">生成日期：@Model.基本数据.添加时间</td>
                                     <td rowspan="12" style="padding-left:14px;padding-top:25px;"> <span>第一联</span><br /><br /><span style="height:33px;">供货单位留存</span></td>
                                 </tr>
                                 <tr>

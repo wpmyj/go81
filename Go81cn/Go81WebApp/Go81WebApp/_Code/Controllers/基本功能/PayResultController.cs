@@ -214,7 +214,7 @@ namespace Go81WebApp.Controllers.基本功能
                 string ordercode = "";
                 if (!string.IsNullOrWhiteSpace(Request.Form["money"]))
                 {
-                    amount = double.Parse(Request.Form["money"]); ;
+                    amount = double.Parse(Request.Form["money"]);//订单总价格
                 }
                 if (!string.IsNullOrWhiteSpace(Request.Form["orderid"]))
                 {
@@ -246,7 +246,7 @@ namespace Go81WebApp.Controllers.基本功能
                     string subject = "商品采购".Trim();
                     //必填
                     //订单描述
-                    string body = ordercode;
+                    string body ="";
                     if (counter > 0)
                     {
                         body = ordercode;

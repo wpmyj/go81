@@ -309,8 +309,16 @@
                                     </div>
                                     <div class="good_right">
                                         <div><a href="/商品陈列/Product_Inmall?id=@child.商品.商品ID">@child.商品.商品.商品信息.商品名</a></div>
-                                        <div class="good_price" style="text-decoration:line-through;color:#ABABAB;">市场价：@string.Format("{0:c2}", child.商品.商品.销售信息.价格) x @(child.数量)</div>
-                                        <div class="good_price">军采价：@string.Format("{0:c2}", child.商品.商品.销售信息.军采价) x @(child.数量)</div>
+                                        @if (child.商品.商品.商品信息.计量单位.ToLower().Contains("kg"))
+                                        {
+                                           <div class="good_price" style="text-decoration:line-through;color:#ABABAB;">市场价：@string.Format("{0:c2}",child.商品.商品.销售信息.价格)/@(child.商品.商品.商品信息.单位重量)@(child.商品.商品.商品信息.计量单位) x @(child.数量)</div>
+                                        <div class="good_price">军采价：@string.Format("{0:c2}",child.商品.商品.销售信息.军采价)/@(child.商品.商品.商品信息.单位重量)@(child.商品.商品.商品信息.计量单位) x @(child.数量)</div> 
+                                        }
+                                        else
+                                        {
+                                            <div class="good_price" style="text-decoration:line-through;color:#ABABAB;">市场价：@string.Format("{0:c2}",child.商品.商品.销售信息.价格) x @(child.数量)</div>
+                                        <div class="good_price">军采价：@string.Format("{0:c2}",child.商品.商品.销售信息.军采价)/@child.商品.商品.商品信息.计量单位 x @(child.数量)</div> 
+                                        }
                                         @*<div class="good_price">重量：@(child.商品.商品.商品信息.单位重量)kg x @(child.数量)</div>*@
                                     </div>
                                     <div style="clear:both;"></div>
@@ -327,10 +335,9 @@
                                                     <div>运单号：@child.运单号</div>
                                                 </div>
                                             </div>
-                                        <div class="arrow" style="border-bottom:11px solid #8A8181;left:35px;top:5px;border-left:11px solid transparent;"></div>
+                                        <div class="arrow" style="border-bottom:11px solid #DADADA;left:35px;top:5px;border-left:11px solid transparent;"></div>
                                         <div class="arrowIn" style="border-bottom:9px solid #fff;left:37px;top:8px;border-left:9px solid transparent;"></div>
                                         </div>
-                                    
                                 }
                                 else
                                 {

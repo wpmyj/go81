@@ -210,7 +210,7 @@
                                                 <a target="_blank" href="/商品陈列/Product_Detail?id=@item.Id" onclick='clickStatistics("B3","1", "@item.Id","@item.商品信息.所属供应商.用户ID")'>
                                                     @if (item.商品信息.商品图片.Count > 0)
                                                     {
-                                                        <img src="@item.商品信息.商品图片[0]" style="height: 55px; width: 50px; display: block;" />
+                                                        <img src="@item.商品信息.商品图片[0].Replace("original","150X150")" style="height: 55px; width: 50px; display: block;" />
                                                     }
                                                     else
                                                     {
@@ -374,8 +374,8 @@
                                     {
                                         <tr>
                                             <td colspan="8">
-                                                <div style="width:740px; margin:0px auto 0px auto; overflow:hidden;">
-                                                    <table id="picture" style="background-color:white; width:auto;">
+                                                <div style="width:720px; margin:0px auto 0px auto; overflow:hidden;">
+                                                    <table id="picture" cellpadding="0" cellspacing="0" style="background-color:white; width:auto;">
                                                         <tr>
                                                             @for (int i = 0; i < sp.供应商用户信息.供应商图片.Count(); i++)
                                                             {
@@ -486,7 +486,7 @@
                                                                 <a target="_blank" title="@Goods.ElementAt(number).商品信息.商品名" href="/商品陈列/Product_Detail?id=@Goods.ElementAt(number).Id">
                                                                     @if (Goods.ElementAt(number).商品信息.商品图片.Count > 0)
                                                                     {
-                                                                        <img src="@Goods.ElementAt(number).商品信息.商品图片.First()" height="170" width="150" />
+                                                                        <img src="@Goods.ElementAt(number).商品信息.商品图片.First().Replace("original","150X150")" height="170" width="150" />
                                                                     }
                                                                     else
                                                                     {
@@ -512,7 +512,7 @@
                                                     <td>
                                                         @if (Goods.ElementAt(number).商品信息.商品图片 != null && Goods.ElementAt(number).商品信息.商品图片.Count() != 0)
                                                         {
-                                                            <span style="text-align:center; margin-top:5px; display:block;"><a title="@Goods.ElementAt(number).商品信息.商品名" target="_blank" href="/商品陈列/Product_Detail?id=@Goods.ElementAt(number).Id"><img src="@Goods.ElementAt(number).商品信息.商品图片.First()" height="170" width="150" /></a></span>
+                                                            <span style="text-align:center; margin-top:5px; display:block;"><a title="@Goods.ElementAt(number).商品信息.商品名" target="_blank" href="/商品陈列/Product_Detail?id=@Goods.ElementAt(number).Id"><img src="@Goods.ElementAt(number).商品信息.商品图片.First().Replace("original", "150X150")" height="170" width="150" /></a></span>
                                                         }
                                                         else
                                                         {

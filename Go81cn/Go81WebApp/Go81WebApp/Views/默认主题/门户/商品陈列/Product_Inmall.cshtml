@@ -3,9 +3,7 @@
     ViewBag.Title = "商品详情";
 }
 @model Go81WebApp.Models.数据模型.商品数据模型.商品
-@*<script language="javascript" type="application/javascript" src="~/JS/tblmenu.js"></script>*@
 <link href="~/css/css.css" type="text/css" rel="stylesheet">
-@*<script src="~/js/jquery-1.2.6.pack.js" type=text/javascript></script>*@
 <script src="~/js/base.js" type=text/javascript></script>
 <script src="~/JS/provinceandcity_all.js"></script>
 <script src="~/js/lib.js" type=text/javascript></script>
@@ -30,9 +28,7 @@
         </div>
     </div>
 </div>
-
-
-<div style="height:auto; overflow:hidden; background-color:#fff;">
+<div style="height:auto; overflow:hidden;background-color:#fff;">
     @*<div class="prodtpage_positionbox"> 当前位置：<a href="#">XXXX</a>→<a href="#">XXXX</a>→<a href="#">XXXX</a>→<a href="#">XXXX</a> </div>*@
     <div class="prodtpage_detail_topbox">
         <div class="prodtpage_detail_topbox_left">
@@ -65,7 +61,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <div class="prodtpage_detail_topbox_right" style="width:550px; word-wrap:break-word;">
             <div class="prodtpage_detail_topbox_right_titlebox" style="width:550px; padding:0px;">
@@ -74,11 +69,17 @@
             <div class="prodtpage_detail_topbox_right_contentbox" style="padding-top:0px; padding-left:0px; font-size:14px; width: 550px;">
                 <div class="prodtpage_detail_topbox_right_contentlist" style="line-height: 25px;">
                     <div class="leftbox">
-                        <div style="text-decoration:line-through;font-size: 16px; color:#808080;">市场价：<span style="line-height: 25px;">@(string.Format("{0:c2}", Model.销售信息.价格))</span></div>
-                        <div>军采价：<span id="product_price" style="color:#FF0000; font-size: 18px; line-height: 25px;">@(string.Format("{0:c2}", Model.销售信息.军采价))</span></div>
-                        @if (Model.销售信息 != null && Model.销售信息.价格修改日期 != null)
+                        @if (Model.商品信息.计量单位.ToLower().Contains("kg"))
                         {
-                            <span style="color:#999;">（报价日期：@Model.销售信息.价格修改日期.ToString("yyyy-MM-dd")）</span>
+                            <div>计量单位：<span id="product_price" style="color:#FF0000; font-size: 18px; line-height: 25px;">@Model.商品信息.计量单位</span></div>
+                        <div style="text-decoration:line-through;font-size: 16px; color:#808080;">市场价：<span style="line-height: 25px;">@(string.Format("{0:c2}", Model.销售信息.价格)) / @Model.商品信息.单位重量<span>@Model.商品信息.计量单位</span></span></div>
+                        <div>军采价：<span id="product_price" style="color:#FF0000; font-size: 18px; line-height: 25px;">@(string.Format("{0:c2}", Model.销售信息.军采价)) / @Model.商品信息.单位重量 <span>@Model.商品信息.计量单位</span></span></div>
+                        }
+                        else
+                        {
+                            <div>计量单位：<span id="product_price" style="color:#FF0000; font-size: 18px; line-height: 25px;">@Model.商品信息.计量单位</span></div>
+                        <div style="text-decoration:line-through;font-size: 16px; color:#808080;">市场价：<span style="line-height: 25px;">@(string.Format("{0:c2}", Model.销售信息.价格)) / @Model.商品信息.计量单位</span></div>
+                        <div>军采价：<span id="product_price" style="color:#FF0000; font-size: 18px; line-height: 25px;">@(string.Format("{0:c2}", Model.销售信息.军采价)) / @Model.商品信息.计量单位</span></div>
                         }
                     </div>
                     <div class="rightboxinmall">
@@ -326,13 +327,12 @@
 <script type=text/javascript>
     $(function () {
         $(".action_link").each(function () {
-            if ($(this).text() == "采购商城") {
+            if ($(this).text() == "军彩生活") {
                 $(this).parent("div").addClass("on");
             }
         });
     });
         var timer;
-
         $("li.changetab").hover(function () {
             var tab = $(this);
             timer = setTimeout(function () {

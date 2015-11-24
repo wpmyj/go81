@@ -342,7 +342,7 @@
                                                         if (广告商品数 == 3)
                                                         {
                                                             <div class="gd">
-                                                                <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count>0? g.商品.商品信息.商品图片[0]:"") " /></a>
+                                                                <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count > 0 ? g.商品.商品信息.商品图片[0].Replace("original", "150X150") : "") " /></a>
                                                                 <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" class="rights_productname" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'>@g.商品.商品信息.商品名</a>
                                                                 <p class="price">￥@g.商品.销售信息.价格</p>
                                                                 @*<p class="lg">销量：@kk.销售信息.销量</p>*@
@@ -360,7 +360,7 @@
                                                     if (g != null)
                                                     {
                                                         <div class="gd">
-                                                            <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-1","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count>0? g.商品信息.商品图片[0]:"") " /></a>
+                                                            <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-1","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count > 0 ? g.商品信息.商品图片[0].Replace("original", "150X150") : "") " /></a>
                                                             <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" class="rights_productname" onclick='clickStatistics("B1-1","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'>@g.商品信息.商品名</a>
                                                             <p class="price">￥@g.销售信息.价格</p>
                                                             @*<p class="lg">销量：@kk.销售信息.销量</p>*@
@@ -398,7 +398,7 @@
                                                     if (g.商品 != null)
                                                     {
                                                         <div class="gd li">
-                                                            <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-2","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count>0? g.商品.商品信息.商品图片[0]:"") " /></a>
+                                                            <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-2","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count > 0 ? g.商品.商品信息.商品图片[0].Replace("original", "150X150") : "") " /></a>
                                                             <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" class="rights_productname" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'>@g.商品.商品信息.商品名</a>
                                                             <p class="price">￥@g.商品.销售信息.价格</p>
                                                             @*<p class="lg">销量：@kk.销售信息.销量</p>*@
@@ -415,7 +415,7 @@
                                                     if (g != null)
                                                     {
                                                         <div class="gd li">
-                                                            <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-2","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count>0? g.商品信息.商品图片[0]:"") " /></a>
+                                                            <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-2","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count > 0 ? g.商品信息.商品图片[0].Replace("original", "150X150") : "") " /></a>
                                                             <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" class="rights_productname" onclick='clickStatistics("B1-2","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'>@g.商品信息.商品名</a>
                                                             <p class="price">￥@g.销售信息.价格</p>
                                                             @*<p class="lg">销量：@kk.销售信息.销量</p>*@
@@ -560,7 +560,7 @@
                                             if (g.商品 != null)
                                             {
                                                 <div class="gd">
-                                                    <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count>0? g.商品.商品信息.商品图片[0]:"") " /></a>
+                                                    <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count > 0 ? g.商品.商品信息.商品图片[0].Replace("original", "150X150") : "") " /></a>
                                                     <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" class="rights_productname" onclick='clickStatistics("B1-1","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'>@g.商品.商品信息.商品名</a>
                                                     <p class="price">￥@g.商品.销售信息.价格</p>
                                                     @*<p class="lg">销量：@kk.销售信息.销量</p>*@
@@ -577,7 +577,7 @@
                                             if (g != null)
                                             {
                                                 <div class="gd">
-                                                    <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-1","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count>0? g.商品信息.商品图片[0]:"") " /></a>
+                                                    <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-1","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count > 0 ? g.商品信息.商品图片[0].Replace("original", "150X150") : "") " /></a>
                                                     <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" class="rights_productname" onclick='clickStatistics("B1-1","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'>@g.商品信息.商品名</a>
                                                     <p class="price">￥@g.销售信息.价格</p>
                                                     @*<p class="lg">销量：@kk.销售信息.销量</p>*@
@@ -611,7 +611,7 @@
                                             if (g.商品 != null)
                                             {
                                                 <div class="gd li">
-                                                    <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-2","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count>0? g.商品.商品信息.商品图片[0]:"") " /></a>
+                                                    <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" onclick='clickStatistics("B1-2","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'><img src="@(g.商品.商品信息.商品图片.Count > 0 ? g.商品.商品信息.商品图片[0].Replace("original", "150X150") : "") " /></a>
                                                     <a href="/商品陈列/Product_Detail?id=@g.商品ID" target="_blank" class="rights_productname" onclick='clickStatistics("B1-2","1", "@g.商品ID","@g.商品.商品信息.所属供应商.用户ID")'>@g.商品.商品信息.商品名</a>
                                                     <p class="price">￥@g.商品.销售信息.价格</p>
                                                     @*<p class="lg">销量：@kk.销售信息.销量</p>*@
@@ -628,7 +628,7 @@
                                             if (g != null)
                                             {
                                                 <div class="gd li">
-                                                    <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-2","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count>0? g.商品信息.商品图片[0]:"") " /></a>
+                                                    <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" onclick='clickStatistics("B1-2","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'><img src="@(g.商品信息.商品图片.Count > 0 ? g.商品信息.商品图片[0].Replace("original", "150X150") : "") " /></a>
                                                     <a href="/商品陈列/Product_Detail?id=@g.Id" target="_blank" class="rights_productname" onclick='clickStatistics("B1-2","1", "@g.Id","@g.商品信息.所属供应商.用户ID")'>@g.商品信息.商品名</a>
                                                     <p class="price">￥@g.销售信息.价格</p>
                                                     @*<p class="lg">销量：@kk.销售信息.销量</p>*@

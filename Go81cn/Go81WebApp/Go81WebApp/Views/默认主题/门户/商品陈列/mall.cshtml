@@ -4,9 +4,20 @@
 }
 <style>
     .prodtpage_prodtlistdiv:hover {
-        border: 5px solid #BEB9B9;
+        border: 5px solid #FF5A5A;
+    }
+    .thumb{
+        width:30px;  
+        height:30px;
+        border:2px solid #DADADA;
+        float:left;
+        margin-top:5px;
+        margin-right:5px;
     }
 </style>
+@{
+    int counter = 0;
+}
 <div style="height:auto; overflow:hidden; margin-bottom:5px; ">
     <div class="gys_ztbsearch_contentbox" style=" width:96%; margin-bottom:10px;" id="pro_search_content">
         @if(Model==null||!Model.Any())
@@ -22,15 +33,37 @@
             <div class="prodtpage_prodtlistdiv" style="height:330px;width:220px;">
                 <div class="prodtpage_prodtlistdiv_imgdiv">
                     <a href="/商品陈列/Product_Inmall?id=@item.Id" title="@item.商品信息.商品名" target="_blank">
-                        @if (item.商品信息.商品图片.Count > 0)
+                        @if (item.商品信息.商品图片!=null&&item.商品信息.商品图片.Count > 0)
                         {
-                            <img src="@item.商品信息.商品图片[0].Replace("original","150X150")" />
+                            <img id="big@(counter)" src="@item.商品信息.商品图片[0].Replace("original","150X150")" />
                         }
                         else
                         {
                             <img src="~/images/noimage.jpg" />
                         }
                     </a>
+                </div>
+                <div class="prodtpage_prodtlistdiv_imgdiv" style="height:30px;">
+                    @if (item.商品信息.商品图片 != null && item.商品信息.商品图片.Count > 0)
+                    {
+                        int smallcounter = 1;
+                        foreach(var img_src in item.商品信息.商品图片)
+                        {
+                            if(smallcounter==5)
+                            {
+                                break;
+                            }
+                            if (smallcounter==1)
+                            {
+                                <div class="thumb" style="border:2px solid #ff0000;"><img class="thmbimg" style="width:30px;height:30px;" id="@(counter)" alt="@img_src.Replace("original", "150X150")" src="@img_src.Replace("original", "50X50")"></div>
+                            }
+                            else
+                            {
+                                <div class="thumb"><img class="thmbimg" style="width:30px;height:30px;" id="@(counter)" alt="@img_src.Replace("original", "150X150")" src="@img_src.Replace("original", "50X50")"></div>
+                            }
+                            smallcounter++;    
+                    }
+                    }
                 </div>
                 <div class="prodtpage_prodtlistdiv_textdiv">
                     @{ var thisp_name = item.商品信息.商品名.Replace("<font color=\"red\">", "").Replace("</font>", ""); }
@@ -39,12 +72,15 @@
                             @Html.Raw(item.商品信息.商品名)
                         </a>
                     </div>
-                    <div class="prodtpage_prodtlistdiv_price"><a href="/商品陈列/Product_Inmall?id=@item.Id" target="_blank">￥@(string.Format("{0:0.00}", item.销售信息.军采价))</a><span style="padding-left:20px; color:#999; cursor:pointer;" title="报价时间">(@item.销售信息.价格修改日期.ToString("yyyy-MM-dd"))</span></div>
+                    <div class="prodtpage_prodtlistdiv_price">
+                        <a href="/商品陈列/Product_Inmall?id=@item.Id" target="_blank">@(string.Format("{0:c2}", item.销售信息.军采价))</a>
+                    </div>
                     <div style="height:20px;">
                         <a class="product_gysname_oneline" href="/供应商陈列/Supplier_Destination?id=@item.商品信息.所属供应商.用户数据.Id" title="@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称">@item.商品信息.所属供应商.用户数据.企业基本信息.企业名称</a>
                     </div>
                 </div>
             </div>
+               counter++;
            }
         if (Model != null && Model.Any())
         {
@@ -155,5 +191,20 @@
         }
         }
     </div>
-
 </div>
+<script type="text/javascript">
+    $(".thmbimg").click(function () {
+        $(this).parent().parent().find(".thumb").each(function () {
+            $(this).css("border", "2px solid #DADADA");
+        });
+        $(this).parent().css("border", "2px solid #ff0000");
+        var index = $(this).attr("id");
+        var src = $(this).attr("alt");
+        $("#big" + index).attr("src",src);
+    });
+    $(".action_link").each(function () {
+            if ($(this).text() == "军彩生活") {
+                $(this).parent("div").addClass("on");
+            }
+        });
+</script>

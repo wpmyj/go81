@@ -608,30 +608,30 @@
                         <tr>
                             @if (Model.税务信息.近3年完税证明 == true)
                             {
-                                <td align="right"><span style ="font-size:14px;color:black;">近3年完税证明：</span></td>
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年纳税证明：</span></td>
                                 <td>已完税</td>
-                                <td align="right"><span style ="font-size:14px;color:black;">近3年完税证明电子扫描件：</span></td>
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年纳税证明电子扫描件：</span></td>
                                 if (System.IO.File.Exists(Server.MapPath(@Model.税务信息.近3年完税证明电子扫描件)))
                                 {
                                     <td><a href="@Model.税务信息.近3年完税证明电子扫描件" target="_blank">查看大图</a></td>
                                 }
                                 else
                                 {
-                                    <td style="color:red;">您还未上传近3年完税证明电子扫描件</td>
+                                    <td style="color:red;">您还未上传近3年纳税证明电子扫描件</td>
                                 }
                             }
                             else
                             {
-                                <td align="right"><span style ="font-size:14px;color:black;">近3年完税证明：</span></td>
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年纳税证明：</span></td>
                                 <td>未完税</td>
-                                <td align="right"><span style ="font-size:14px;color:black;">近3年完税证明电子扫描件：</span></td>
+                                <td align="right"><span style ="font-size:14px;color:black;">近3年纳税证明电子扫描件：</span></td>
                                 if (System.IO.File.Exists(Server.MapPath(@Model.税务信息.近3年完税证明电子扫描件)))
                                 {
                                     <td><a href="@Model.税务信息.近3年完税证明电子扫描件" target="_blank">查看大图</a></td>
                                 }
                                 else
                                 {      
-                                    <td style="color:red;">您还未上传近3年完税证明电子扫描件</td>
+                                    <td style="color:red;">您还未上传近3年纳税证明电子扫描件</td>
                                 }
                             }
                         </tr>

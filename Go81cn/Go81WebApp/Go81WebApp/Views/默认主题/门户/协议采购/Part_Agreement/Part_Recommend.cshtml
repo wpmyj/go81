@@ -17,7 +17,7 @@
                     <a href="~/商品陈列/Product_Detail?id=@t.Id" title="@t.商品信息.商品名">
                         @if (t.商品信息.商品图片.Count > 0)
                         {
-                            <img src="@t.商品信息.商品图片[0]" />
+                            <img src="@t.商品信息.商品图片[0].Replace("original", "150X150")" />
                         }
                         else
                         {

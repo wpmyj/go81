@@ -656,26 +656,26 @@ namespace Go81WebApp.ModuleTester
             #endregion
 
             #region 修改验收单回传字段类型
-            //var ysd = Mongo.Coll<验收单>().FindAs<BsonDocument>(Query.Exists("验收单扫描件"));
-            //foreach (var y in ysd)
-            //{
-            //    var kp = new List<BsonDocument>();
-            //    var p = y["验收单扫描件"].AsBsonArray;
-            //    foreach (var item in p)
-            //    {
-            //        var po = new _回传信息();
+            var ysd = Mongo.Coll<验收单>().FindAs<BsonDocument>(Query.Exists("验收单扫描件"));
+            foreach (var y in ysd)
+            {
+                var kp = new List<BsonDocument>();
+                var p = y["验收单扫描件"].AsBsonArray;
+                foreach (var item in p)
+                {
+                    var po = new _回传信息();
 
-            //        if (!(item is BsonDocument))
-            //        {
-            //            po.回传单路径 = item.AsString;
-            //            kp.Add(po.ToBsonDocument());
-            //        }
+                    if (!(item is BsonDocument))
+                    {
+                        po.回传单路径 = item.AsString;
+                        kp.Add(po.ToBsonDocument());
+                    }
 
-            //    }
-            //    Mongo.Coll<验收单>().Update(
-            //       Query.EQ("_id", y["_id"]),
-            //       Update.Set("验收单扫描件", new BsonArray(kp)));
-            //}
+                }
+                Mongo.Coll<验收单>().Update(
+                   Query.EQ("_id", y["_id"]),
+                   Update.Set("验收单扫描件", new BsonArray(kp)));
+            }
             #endregion
 
             #region 验收单添加回传单审核状态字段
@@ -780,22 +780,22 @@ namespace Go81WebApp.ModuleTester
             //}
             #endregion
             #region 修改专家单位地址字段类型
-            var ysd = Mongo.Coll<商品>().FindAs<BsonDocument>(Query.Exists("商品信息.单位重量"));
-            foreach (var y in ysd)
-            {
-                Mongo.Coll<商品>().Update(
-                Query.EQ("_id", y["_id"]),
-                Update.Combine(
-                Update.Unset("商品信息.单位重量"))
-                );
+            //var ysd = Mongo.Coll<商品>().FindAs<BsonDocument>(Query.Exists("商品信息.单位重量"));
+            //foreach (var y in ysd)
+            //{
+            //    Mongo.Coll<商品>().Update(
+            //    Query.EQ("_id", y["_id"]),
+            //    Update.Combine(
+            //    Update.Unset("商品信息.单位重量"))
+            //    );
 
-                Mongo.Coll<商品>().Update(
-                Query.EQ("_id", y["_id"]),
-                Update.Combine(
-                Update.Set("商品信息.单位重量", new BsonDouble(0))
-                ));
+            //    Mongo.Coll<商品>().Update(
+            //    Query.EQ("_id", y["_id"]),
+            //    Update.Combine(
+            //    Update.Set("商品信息.单位重量", new BsonDouble(0))
+            //    ));
 
-            }
+            //}
             #endregion
             MessageBox.Show("OK");
         }
@@ -816,14 +816,14 @@ namespace Go81WebApp.ModuleTester
         private void ButtonImpColl_Click(object sender, RoutedEventArgs e)
         {
             //textBox1.Text = 工具.ImpColl<办事指南>(true).ToString();
-            //textBox1.Text = 工具.ImpColl<单位用户>(true).ToString();
+            textBox1.Text = 工具.ImpColl<单位用户>(true).ToString();
             //textBox1.Text = 工具.ImpColl<登录统计>(true).ToString();
             //textBox1.Text = 工具.ImpColl<广告点击统计>(true).ToString();
             //textBox1.Text = 工具.ImpColl<培训资料>(true).ToString();
             //textBox1.Text = 工具.ImpColl<通知>(true).ToString();
             //textBox1.Text = 工具.ImpColl<下载>(true).ToString();
             //textBox1.Text = 工具.ImpColl<政策法规>(true).ToString();
-            textBox1.Text = 工具.ImpColl<专家>(true).ToString();
+            //textBox1.Text = 工具.ImpColl<专家>(true).ToString();
             //textBox1.Text = 工具.ImpColl<专家抽选记录>(true).ToString();
             //textBox1.Text = 工具.ImpColl<专家可评标专业>(true).ToString();
         }

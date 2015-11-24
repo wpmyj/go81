@@ -555,7 +555,7 @@ namespace Go81WebApp.Controllers.门户
                         g.name = item.商品信息.商品名;
                         if (item.商品信息.商品图片 != null && item.商品信息.商品图片.Count != 0)
                         {
-                            g.Picture = item.商品信息.商品图片[0];
+                            g.Picture = item.商品信息.商品图片[0].Replace("original","150X150");
                         }
                         else
                         {
@@ -572,10 +572,6 @@ namespace Go81WebApp.Controllers.门户
                 JsonResult json = new JsonResult() { Data = new { Newgood = new List<Goods>(), Pcount = 1, Cpage = 1 } };
                 return Json(json, JsonRequestBehavior.AllowGet);
             }
-        }
-        public class Supplier_Info
-        {
-            public string Troduce { get; set; }
         }
         public ActionResult Detail_info()
         {

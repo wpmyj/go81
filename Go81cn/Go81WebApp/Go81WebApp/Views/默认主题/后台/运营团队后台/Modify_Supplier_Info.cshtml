@@ -451,7 +451,7 @@
                                             <td width="25%" align="right" class="lab">企业英文名称：</td>
                                             <td width="25%">
                                                 @Html.TextBoxFor(m => m.企业基本信息.英文名称)
-                                                @Html.ValidationMessageFor(m => m.企业基本信息.企业名称)
+                                                @Html.ValidationMessageFor(m => m.企业基本信息.英文名称)
                                         </tr>
                                         <tr>
                                             <td width="25%" align="right" class="lab">企业简称：</td>
@@ -1281,11 +1281,11 @@
                                         <td align="right">@Html.EditorFor(m => m.税务信息.近3年完税证明)</td>
                                         <td colspan="3">
 
-                                            近3年完税证明
+                                            近3年纳税证明
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td align="right">近3年完税证明电子扫描件:
+                                        <td align="right">近3年纳税证明电子扫描件:
                                         <td colspan="3">
                                             <span style="display:none;">
                                                 <input type="file" style="display:inline;width:120px;" name="tax" />

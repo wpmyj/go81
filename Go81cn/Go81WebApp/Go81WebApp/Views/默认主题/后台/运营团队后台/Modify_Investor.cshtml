@@ -36,21 +36,23 @@
                         <td width="20%" height="30" align="right" class="lab">出资人或股东姓名：</td>
                         <td width="25%" height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].出资人或股东姓名" type="text" value="@Model.出资人或股东信息[index].出资人或股东姓名"><span>*</span></td>
                         <td width="20%" height="30" align="right" class="lab">国籍：</td>
-                        <td width="35%" height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].国籍" type="text" value="@Model.出资人或股东信息[index].国籍">@*<div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的国籍,如中国</div></div>*@ <span>*</span></td>
+                        <td width="35%" height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].国籍" type="text" value="@Model.出资人或股东信息[index].国籍"><span>*</span></td>
                     </tr>
                     <tr>
                         <td align="right" height="30" class="lab">身份证号：</td>
-                        <td height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].身份证号码" type="text" value="@Model.出资人或股东信息[index].身份证号码"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的18位身份证号,如511352123545670708</div></div> <span>*</span></td>
+                        <td height="30" style="position: relative;">
+                            <input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].身份证号码" type="text" value="@Model.出资人或股东信息[index].身份证号码"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的18位身份证号,如511352123545670708</div></div> <span>*</span>
+                        </td>
                         <td height="30" align="right" class="lab">出资人或股东性质：</td>
                         <td height="30">
-                            <input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].出资人或股东性质" type="text" value="@Model.出资人或股东信息[index].出资人或股东性质">@*<div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的性质</div></div>*@<span>*</span>
+                            <input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[0].出资人或股东性质" type="text" value="@Model.出资人或股东信息[index].出资人或股东性质"><span>*</span>
                         </td>
                     </tr>
                     <tr>
                         <td height="30" align="right" class="lab">出资金额(万元)：</td>
-                        <td height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" data-val="true" data-val-number="字段 出资金额 必需是一个数字。" data-val-required="出资金额 字段是必需的。" name="出资人或股东信息[0].出资金额" type="text" value="@Model.出资人或股东信息[index].出资金额"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的出资金额,如120</div></div><span>*</span></td>
+                        <td height="30" style="position: relative;"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" data-val="true" data-val-number="字段 出资金额 必需是一个数字。" data-val-required="出资金额 字段是必需的。" name="出资人或股东信息[0].出资金额" type="text" value="@Model.出资人或股东信息[index].出资金额"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的出资金额,如120</div></div><span>*</span></td>
                         <td align="right" class="lab">所占比例(%)：</td>
-                        <td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" data-val="true" data-val-number="字段 所占比例 必需是一个数字。" data-val-required="所占比例 字段是必需的。" name="出资人或股东信息[0].所占比例" type="text" value="@Model.出资人或股东信息[index].所占比例"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资所占比例，如20</div></div><span>*</span></td>
+                        <td style="position: relative;"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" data-val="true" data-val-number="字段 所占比例 必需是一个数字。" data-val-required="所占比例 字段是必需的。" name="出资人或股东信息[0].所占比例" type="text" value="@Model.出资人或股东信息[index].所占比例"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资所占比例，如20</div></div><span>*</span></td>
                     </tr>
                 </table>
                 <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>

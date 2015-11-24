@@ -287,7 +287,7 @@
                             <tr>
                                 <td colspan="6" class="orderheader">
                                     <span>订单时间：@item.基本数据.添加时间.ToString("yyyy-MM-dd HH:mm:ss")</span>
-                                    <a title="删除订单" class="deleteorder"></a>
+                                    <a data-id="@item.Id" title="删除订单" class="deleteorder"></a>
                                 </td>
                             </tr>
                             exist1 = true;
@@ -300,9 +300,16 @@
                                     </div>
                                     <div class="good_right">
                                         <div><a href="/商品陈列/Product_Inmall?id=@child.商品.商品ID">@child.商品.商品.商品信息.商品名</a></div>
-                                        <div class="good_price" style="text-decoration:line-through;color:#ABABAB;">市场价：@string.Format("{0:c2}", child.商品.商品.销售信息.价格) x @(child.数量)</div>
-                                        <div class="good_price">军采价：@string.Format("{0:c2}", child.商品.商品.销售信息.军采价) x @(child.数量)</div>
-                                        @*<div class="good_price">重量：@(child.商品.商品.商品信息.单位重量)kg x @(child.数量)</div>*@
+                                        @if (child.商品.商品.商品信息.计量单位.ToLower().Contains("kg"))
+                                        {
+                                            <div class="good_price" style="text-decoration:line-through;color:#ABABAB;">市场价：@string.Format("{0:c2}",child.商品.商品.销售信息.价格)/@(child.商品.商品.商品信息.单位重量)@(child.商品.商品.商品信息.计量单位) x @(child.数量)</div>
+                                            <div class="good_price">军采价：@string.Format("{0:c2}",child.商品.商品.销售信息.军采价)/@(child.商品.商品.商品信息.单位重量)@(child.商品.商品.商品信息.计量单位) x @(child.数量)</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="good_price" style="text-decoration:line-through;color:#ABABAB;">市场价：@string.Format("{0:c2}", child.商品.商品.销售信息.价格) x @(child.数量)</div>
+                                            <div class="good_price">军采价：@string.Format("{0:c2}", child.商品.商品.销售信息.军采价)/@child.商品.商品.商品信息.计量单位 x @(child.数量)</div>
+                                        }
                                     </div>
                                     <div style="clear:both;"></div>
                                 </div>

@@ -245,7 +245,7 @@ namespace Go81WebApp.Controllers.门户
                 {
                     query = query.And(Query<公告>.Where(o => o.中标商品链接.Any(p => p.商品ID != -1)));
                 }
-                else if(adclass=="招标公告")
+                else if(adclass=="招标公告" || adclass=="公开招标")
                 {
                     query = query.And(Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.公开招标 ));    
                 }

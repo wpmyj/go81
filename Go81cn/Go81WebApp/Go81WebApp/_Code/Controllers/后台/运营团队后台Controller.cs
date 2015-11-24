@@ -794,10 +794,10 @@ namespace Go81WebApp.Controllers.后台
                 {
                     if (!exist)
                     {
-                        if (oldfirst != "医疗设备" && oldfirst != "油料设备器材" && oldfirst != "给养器材" && oldfirst != "军用食品" && oldfirst != "被装材料" && oldfirst != "后勤装备" && oldfirst != "药品" && oldfirst != "被装" && oldfirst != "医用耗材" && oldfirst != "军事交通器材" && oldfirst != "基建营房工程器材")
-                        {
-                            Newmodel.可提供产品类别列表.Clear();
-                        }
+                        //if (oldfirst != "医疗设备" && oldfirst != "油料设备器材" && oldfirst != "给养器材" && oldfirst != "军用食品" && oldfirst != "被装材料" && oldfirst != "后勤装备" && oldfirst != "药品" && oldfirst != "被装" && oldfirst != "医用耗材" && oldfirst != "军事交通器材" && oldfirst != "基建营房工程器材")
+                        //{
+                        //    Newmodel.可提供产品类别列表.Clear();
+                        //}
                     }
                 }
                 Newmodel.可提供产品类别列表.Add(product);
@@ -805,13 +805,13 @@ namespace Go81WebApp.Controllers.后台
             }
             else
             {
-                if (!string.IsNullOrWhiteSpace(oldfirst))
-                {
-                    if (oldfirst == "医疗设备" || oldfirst == "油料设备器材" || oldfirst == "给养器材" || oldfirst == "军用食品" || oldfirst == "被装材料" || oldfirst == "后勤装备" || oldfirst == "药品" || oldfirst == "被装" || oldfirst == "医用耗材" || oldfirst == "军事交通器材" || oldfirst == "基建营房工程器材")
-                    {
-                        Newmodel.可提供产品类别列表.Clear();
-                    }
-                }
+                //if (!string.IsNullOrWhiteSpace(oldfirst))
+                //{
+                //    if (oldfirst == "医疗设备" || oldfirst == "油料设备器材" || oldfirst == "给养器材" || oldfirst == "军用食品" || oldfirst == "被装材料" || oldfirst == "后勤装备" || oldfirst == "药品" || oldfirst == "被装" || oldfirst == "医用耗材" || oldfirst == "军事交通器材" || oldfirst == "基建营房工程器材")
+                //    {
+                //        Newmodel.可提供产品类别列表.Clear();
+                //    }
+                //}
                 if (Newmodel.可提供产品类别列表 != null && Newmodel.可提供产品类别列表.Count != 0)
                 {
                     bool IsExist = false;
@@ -5611,7 +5611,7 @@ namespace Go81WebApp.Controllers.后台
                             //        return Content("该商品还未审核通过，不能上架！");
                             //    }
                             //}
-                        }
+                        }  
                     }
                 }
                 return Content("0");
@@ -5683,7 +5683,7 @@ namespace Go81WebApp.Controllers.后台
             }
 
             int listcount = (int)(商品管理.计数商品(0, 0, q, includeDeleted: isdelete != "0"));
-            int maxpage = Math.Max((listcount + PRO_PAGESIZE - 1) / PRO_PAGESIZE, 1);
+            int maxpage = Math.Max((listcount + PRO_PAGESIZE - 1) / PRO_PAGESIZE, 0);
 
             ViewData["currentpage"] = page;
             ViewData["pagecount"] = maxpage;
@@ -6388,7 +6388,7 @@ namespace Go81WebApp.Controllers.后台
                 if (Request.QueryString["msg"] != null && Request.QueryString["msg"] == "1")
                 {
                     var UserNumber = model.企业联系人信息.联系人手机;//收信人列表
-                    string MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往成都物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询028-86686673（张助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+                    string MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往成都物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询028-86686673（张助理）或028-69759681（王老师） 。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
                     if (model.供应商用户信息.符合入库标准)
                     {
                         if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_重庆)
