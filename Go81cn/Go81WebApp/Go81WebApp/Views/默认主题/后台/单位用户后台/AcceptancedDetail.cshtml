@@ -162,17 +162,17 @@
                                                         {
                                                             var user = ysduser.First();
                                                             if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
-                                                        {
+                                                            {
                                                                 <img src="@user.盖章图片链接" width="240" />
-                                                        }
+                                                            }
                                                             else
-                                                        {
+                                                            {
                                                                 <img src="/单位用户后台/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
-                                                        }
-                                                        }
+                                                            }
                                                         }
                                                     }
                                                 }
+                                            }
                                             else
                                             {
                                                 <img src="~/Images/avoid.png" />
@@ -242,13 +242,13 @@
 
                                         @if (Model.审核数据.审核者.用户ID == 10003)
                                         {
-                                             <td valign="top" style="width:200px; padding-top:5px;">管理审核部门：</td>
+                                            <td valign="top" style="width:200px; padding-top:5px;">管理审核部门：</td>
                                         }
                                         else
                                         {
-                                        <td valign="top" style="width:200px; padding-top:5px;">
-                                            管理部门审核人：
-                                                @{
+                                            <td valign="top" style="width:200px; padding-top:5px;">
+                                                管理部门审核人：
+                                                  @*@{
                                             if (Model.审核数据.审核状态 == 审核状态.审核通过)
                                             {
                                                 if (ysduser.Any())
@@ -259,12 +259,13 @@
                                                         <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                                     }
                                                 }
-                                                }
-                                                }
-                                        </td>
+                                            }
+                                                  }*@
+                                                  <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            </td>
                                         }
 
-                                        
+
                                         <td style="text-indent:2em;width:16%;text-align:right;padding-top:5px" valign="top">供货单位开票人：</td>
                                         <td colspan="2" style="padding-top:5px" valign="top">@Model.供货单位开票人</td>
                                         <td style="text-indent:8em">收货单位验收人：</td>
@@ -386,13 +387,13 @@
                                                             {
                                                                 var user = ysduser.First();
                                                                 if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
-                                                            {
+                                                                {
                                                                     <img src="@user.盖章图片链接" width="240" />
-                                                            }
+                                                                }
                                                                 else
-                                                            {
+                                                                {
                                                                     <img src="/单位用户后台/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
-                                                            }
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -472,16 +473,17 @@
                                         {
                                             <td valign="top" style="width:200px; padding-top:5px;">
                                                 管理部门审核人：
-                                                @{
+                                                  @*@{
                                             if (Model.审核数据.审核状态 == 审核状态.审核通过)
-                                                {
+                                            {
                                                 if (ysduser.Any())
-                                                    {
+                                                {
                                                     var user = ysduser.First();
                                                     <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                    }
-                                                    }
-                                                    }
+                                                }
+                                            }
+                                                  }*@
+                                                  <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                             </td>
                                         }
                                         <td style="text-indent:2em;width:16%;text-align:right;padding-top:5px" valign="top">供货单位开票人：</td>
@@ -502,6 +504,12 @@
                 </div>
             }
         </div>
+        
+        @if (Model.审核数据.审核状态 == 审核状态.审核未通过)
+        {
+        <div style="margin-top:20px;color:#ff0000;text-align: center">审核未通过原因：@Model.审核数据.审核不通过原因</div>
+        }
+
     </div>
 </div>
 <!--物资清单-->
@@ -521,7 +529,7 @@
                     </tr>
                     <tr>
                         <td align="right">生成日期：</td>
-                        <td align="left">@DateTime.Now</td>
+                        <td align="left">@Model.基本数据.添加时间</td>
                     </tr>
                 </table>
             </div>
@@ -612,18 +620,18 @@
                                             {
                                                 var user = ysduser.First();
                                                 if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
-                                            {
+                                                {
                                                     <img src="@user.盖章图片链接" width="240" />
-                                            }
-                                            else
-                                            {
+                                                }
+                                                else
+                                                {
                                                     <img src="/单位用户后台/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
                         }
                     </div>
                     @if (Model.审核数据.审核者.用户ID == 10003)
@@ -633,14 +641,15 @@
                     else
                     {
                         <span>管理部门审核人：</span>
-                        if (Model.审核数据.审核状态 == 审核状态.审核通过)
-                    {
-                            if (ysduser.Any())
+                        @*if (Model.审核数据.审核状态 == 审核状态.审核通过)
                         {
+                            if (ysduser.Any())
+                            {
                                 var user = ysduser.First();
                                 <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                             }
-                        }
+                        }*@
+                        <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                     }
                 </td>
                 <td colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">供货单位开票人：@Model.供货单位开票人</td>
@@ -670,7 +679,7 @@
                     </tr>
                     <tr>
                         <td align="right">生成日期：</td>
-                        <td align="left">@DateTime.Now</td>
+                        <td align="left">@Model.基本数据.添加时间</td>
                     </tr>
                 </table>
             </div>
@@ -742,18 +751,18 @@
                                             {
                                                 var user = ysduser.First();
                                                 if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
-                                            {
+                                                {
                                                     <img src="@user.盖章图片链接" width="240" />
-                                            }
-                                            else
-                                            {
+                                                }
+                                                else
+                                                {
                                                     <img src="/单位用户后台/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
                         }
                     </div>
                     @if (Model.审核数据.审核者.用户ID == 10003)
@@ -763,11 +772,12 @@
                     else
                     {
                         <span>管理部门审核人：</span>
-                        if (ysduser.Any())
-                    {
+                        @*if (ysduser.Any())
+                        {
                             var user = ysduser.First();
                             <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                    }
+                        }*@
+                        <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                     }
                 </td>
                 <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">供货单位开票人：@Model.供货单位开票人</td>
@@ -797,20 +807,20 @@
 </script>*@
 
 @if (ViewData["comes"].ToString() == "已审核")
-{
-    <script>
-        $(function () {
-            $("#已审核的验收单").addClass("left_menu_select").children("a").css({ "color": "#fff" });
-            $("#已审核的验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
-        });
-    </script>
-}
-@if (ViewData["comes"].ToString() == "验收单")
-{
-    <script>
-        $(function () {
-            $("#我的验收单列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
-            $("#我的验收单列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
-        });
-    </script>
+    {
+        <script>
+            $(function () {
+                $("#已审核的验收单").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+                $("#已审核的验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+            });
+        </script>
+    }
+    @if (ViewData["comes"].ToString() == "验收单")
+    {
+        <script>
+            $(function () {
+                $("#我的验收单列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+                $("#我的验收单列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+            });
+        </script>
 }

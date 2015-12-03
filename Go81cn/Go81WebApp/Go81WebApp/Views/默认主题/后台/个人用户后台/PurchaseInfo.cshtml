@@ -385,14 +385,14 @@
                                             <a class="paybt" id="@counter" data-scj="@item.订单总价格" data-jcj="@item.订单总付款">付款</a>
                                             <input type="hidden" name="orderid" value="@item.Id" />
                                             <input type="hidden" name="money" value="@item.订单总付款"/>
-                                            <div style="width:160px;">
+                                            <div style="width:160px;display:none;">
                                                 <input style="vertical-align: middle; margin: 0 0 2px 0;" onclick="setNumber(this)" id="@item.Id" type="checkbox" alt="@(counter)" />
                                                 <label for="@item.Id">使用优惠码</label>
                                             </div>
                                             <div id="yhm@(counter)" style="display:none;">
                                                 <input type="text" name="yhm" style="width:130px;" placeholder="请输入优惠码" value="" id="yh@(counter)" />
                                             </div>
-                                            <div style="color:red;">使用优惠码将立减5元</div>
+                                            <div style="color:red;display:none;">使用优惠码将立减5元</div>
                                         </form>
                                         counter++;
                                     }

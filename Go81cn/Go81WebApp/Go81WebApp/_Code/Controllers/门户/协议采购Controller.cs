@@ -97,7 +97,7 @@ namespace Go81WebApp.Controllers.门户
             var q = MongoDB.Driver.Builders.Query<供应商>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过);
             q = q.And(MongoDB.Driver.Builders.Query<供应商>.EQ(o => o.供应商用户信息.协议供应商, true));
             q = q.And(MongoDB.Driver.Builders.Query<供应商>
-                .Where(o => o.供应商用户信息.协议供应商所属地区.Any(oc => oc.省份 == province && (oc.城市 == city || oc.区县 == city))));
+                .Where(o => o.供应商用户信息.协议供应商所属地区.Any(oc => oc.省份 == province &&(oc.城市 == city || oc.区县 == city))));
 
             if (!string.IsNullOrWhiteSpace(gys_name))
             {
@@ -418,7 +418,19 @@ namespace Go81WebApp.Controllers.门户
             /// </summary>
             public double TotalScore { get; set; }
         }
-
+        public long Countgys()
+        {
+            try
+            {
+                string area = Request.QueryString["area"];
+                long count = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(m => m.所属地域.省份.Contains(area)));
+                return count;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
         public JsonResult GetGysByArea()
         {
             //同一分类\品牌\型号的商品 所拥有的 不同地区的供应商

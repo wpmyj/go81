@@ -99,8 +99,8 @@
         $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
         $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
 
-        $("#修改登录密码").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#修改登录密码").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#修改密码").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#修改密码").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
     function checkpwd() {
         if ($("#pwd1").val() != $("#pwd0").val()) {

@@ -60,7 +60,7 @@ namespace Go81WebApp
 #if INTRANET
  true
 #else
-                    false
+ false
 #endif
 ;
             }
@@ -74,10 +74,11 @@ namespace Go81WebApp
 #if DEBUG
  true
 #else
-                    false
+ false
 #endif
 ;
             }
         }
+        
     }
 }

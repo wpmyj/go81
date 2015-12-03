@@ -64,186 +64,212 @@ namespace Go81WebApp.ModuleTester
         }
         private void Button_Click1(object sender, RoutedEventArgs e)
         {
-            List<long> idlist = new List<long> { 10001, 10003,20317, 20306, 10004, 10005, 10007, 10008, 10009, 10011, 10012, 10013, 10014, 10015, 20057, 20151, 20150, 20145, 20146, 20137, 20138, 20139, 20140, 20141, 20142, 20143, 20144, 20152, 20149, 20314, 20148, 20261, 20292, 20254 };
-            foreach (var item in idlist)
+            IEnumerable<验收单> ysd=验收单管理.查询验收单(0,0);
+            foreach(var item in ysd)
             {
-                单位用户 m = 用户管理.查找用户<单位用户>(item);
-                if (m != null)
+                foreach(var k in 验收单单位列表信息.验收单单位列表)
                 {
-                    switch (item)
+                    if (item.审核数据.审核者.用户ID == k.Id && item.审核数据.审核者.用户ID == 10013 && item.审核数据.审核时间 >= new DateTime(2015, 7, 9) && item.审核数据.审核时间<=new DateTime(2015,9,18))
                     {
-                        case 10001:
-                            m.验收单名称 = "成都军区联勤部军需物资油料部";
-                            m.验收单审核单位名称 = "成都军区联勤部军需物资油料部(中标)";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 10003:
-                            m.验收单名称 = "成都军区联勤部军需物资油料部";
-                            m.验收单审核单位名称 = "成都军区联勤部军需物资油料部";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 10004:
-                            m.验收单名称 = "中国人民解放军78006部队";
-                            m.验收单审核单位名称 = "中国人民解放军78006部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 10005:
-                            m.验收单名称 = "中国人民解放军四川省军区机关";
-                            m.验收单审核单位名称 = "中国人民解放军四川省军区机关";
-                            m.印章底部文本 = "物资集中采购办公室";
-                            break;
-                        case 10007:
-                            m.验收单名称 = "成都总医院物资采购中心";
-                            m.验收单审核单位名称 = "成都总医院物资采购中心";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 10008:
-                            m.验收单名称 = "中国人民解放军77100部队";
-                            m.验收单审核单位名称 = "中国人民解放军77100部队";
-                            m.印章底部文本 = "物资采购办公室";
-                            break;
-                        case 10009:
-                            m.验收单名称 = "中国人民解放军重庆警备区";
-                            m.验收单审核单位名称 = "中国人民解放军重庆警备区";
-                            m.印章底部文本 = "物资采购办公室";
-                            break;
-                        case 10011:
-                            m.验收单名称 = "中国人民解放军后勤工程学院物资采购";
-                            m.验收单审核单位名称 = "中国人民解放军后勤工程学院";
-                            m.印章底部文本 = "管理办公室";
-                            break;
-                        case 10012:
-                            m.验收单名称 = "中国人民解放军第三二四医院";
-                            m.验收单审核单位名称 = "中国人民解放军第三二四医院";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 10013:
-                            m.验收单名称 = "中国人民解放军77200部队";
-                            m.验收单审核单位名称 = "中国人民解放军77200部队";
-                            m.印章底部文本 = "物资采购办公室";
-                            break;
-                        case 10014:
-                            m.验收单名称 = "云南省军区物资集中采购办公室";
-                            m.验收单审核单位名称 = "中国人民解放军云南省军区";
-                            m.印章底部文本 = "";
-                            break;
-                        case 10015:
-                            m.验收单名称 = "昆明民族干部学院";
-                            m.验收单审核单位名称 = "昆明民族干部学院";
-                            m.印章底部文本 = "";
-                            break;
-                        case 20057:
-                            m.验收单名称 = "贵州省军区后勤部";
-                            m.验收单审核单位名称 = "中国人民解放军贵州省军区";
-                            m.印章底部文本 = "";
-                            break;
-                        case 20151:
-                            m.验收单名称 = "中国人民解放军77215部队";
-                            m.验收单审核单位名称 = "中国人民解放军77215部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20150:
-                            m.验收单名称 = "中国人民解放军77221部队";
-                            m.验收单审核单位名称 = "中国人民解放军77221部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20145:
-                            m.验收单名称 = "中国人民解放军77225部队";
-                            m.验收单审核单位名称 = "中国人民解放军77225部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20146:
-                            m.验收单名称 = "中国人民解放军77226部队";
-                            m.验收单审核单位名称 = "中国人民解放军77226部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20137:
-                            m.验收单名称 = "中国人民解放军77228部队";
-                            m.验收单审核单位名称 = "中国人民解放军77228部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20138:
-                            m.验收单名称 = "中国人民解放军77229部队";
-                            m.验收单审核单位名称 = "中国人民解放军77229部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20139:
-                            m.验收单名称 = "中国人民解放军77231部队";
-                            m.验收单审核单位名称 = "中国人民解放军77231部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20140:
-                            m.验收单名称 = "中国人民解放军77235部队";
-                            m.验收单审核单位名称 = "中国人民解放军77235部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20141:
-                            m.验收单名称 = "中国人民解放军77251部队";
-                            m.验收单审核单位名称 = "中国人民解放军77251部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20142:
-                            m.验收单名称 = "中国人民解放军77256部队";
-                            m.验收单审核单位名称 = "中国人民解放军77256部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20143:
-                            m.验收单名称 = "中国人民解放军77298部队";
-                            m.验收单审核单位名称 = "中国人民解放军77298部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20144:
-                            m.验收单名称 = "中国人民解放军77223部队";
-                            m.验收单审核单位名称 = "中国人民解放军77223部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20152:
-                            m.验收单名称 = "中国人民解放军77211部队";
-                            m.验收单审核单位名称 = "中国人民解放军77211部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20149:
-                            m.验收单名称 = "中国人民解放军77216部队";
-                            m.验收单审核单位名称 = "中国人民解放军77216部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20314:
-                            m.验收单名称 = "中国人民解放军77206部队";
-                            m.验收单审核单位名称 = "中国人民解放军77206部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20148:
-                            m.验收单名称 = "中国人民解放军77208部队";
-                            m.验收单审核单位名称 = "中国人民解放军77208部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
-                        case 20261: m.验收单名称 = "中国人民解放军西藏军区物资采购中心";
-                            m.验收单审核单位名称 = "中国人民解放军西藏军区物资采购中心";
-                            m.印章底部文本 = ""; break;
-                        case 20292: m.验收单名称 = "织金县人武部";
-                            m.验收单审核单位名称 = "织金县人武部";
-                            m.印章底部文本 = "物资采购专用章";
-                            m.单位信息.单位代号 = "织金县人武部";
-                            break;
-                        case 20254: m.验收单名称 = "贵州省贵阳警备区后勤部";
-                            m.验收单审核单位名称 = "贵州省贵阳警备区后勤部";
-                            m.印章底部文本 = "物资采购专用章";
-                            m.单位信息.单位代号 = "贵州省贵阳警备区后勤部";
-                            break;
-                        case 20306:
-                            m.验收单名称 = "中国人民解放军贵州省贵阳市观山湖区人武部";
-                            m.验收单审核单位名称 = "贵州省贵阳市观山湖区人武部";
-                            m.印章底部文本 = "";
-                            break;
-                        case 20317:
-                            m.验收单名称 = "中国人民解放军78655部队";
-                            m.验收单审核单位名称 = "中国人民解放军78655部队";
-                            m.印章底部文本 = "物资采购专用章";
-                            break;
+                        item.管理单位审核人签名 = "/Images/seal/77200签名.png";
                     }
-                    用户管理.更新用户<单位用户>(m);
+                    else if (item.审核数据.审核者.用户ID == k.Id && item.审核数据.审核者.用户ID == 10013 && item.审核数据.审核时间 > new DateTime(2015, 9, 18))
+                    {
+                        item.管理单位审核人签名 = "/Images/seal/14集团军签名.png";
+                    }
+                    else if (item.审核数据.审核者.用户ID == k.Id)
+                    {
+                        item.管理单位审核人签名 = k.签名图片链接;
+                    }
                 }
+                验收单管理.更新验收单(item);
+
             }
+
+
+
+            
+
+            //List<long> idlist = new List<long> { 10001, 10003,20317, 20306, 10004, 10005, 10007, 10008, 10009, 10011, 10012, 10013, 10014, 10015, 20057, 20151, 20150, 20145, 20146, 20137, 20138, 20139, 20140, 20141, 20142, 20143, 20144, 20152, 20149, 20314, 20148, 20261, 20292, 20254 };
+            //foreach (var item in idlist)
+            //{
+            //    单位用户 m = 用户管理.查找用户<单位用户>(item);
+            //    if (m != null)
+            //    {
+            //        switch (item)
+            //        {
+            //            case 10001:
+            //                m.验收单名称 = "成都军区联勤部军需物资油料部";
+            //                m.验收单审核单位名称 = "成都军区联勤部军需物资油料部(中标)";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 10003:
+            //                m.验收单名称 = "成都军区联勤部军需物资油料部";
+            //                m.验收单审核单位名称 = "成都军区联勤部军需物资油料部";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 10004:
+            //                m.验收单名称 = "中国人民解放军78006部队";
+            //                m.验收单审核单位名称 = "中国人民解放军78006部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 10005:
+            //                m.验收单名称 = "中国人民解放军四川省军区机关";
+            //                m.验收单审核单位名称 = "中国人民解放军四川省军区机关";
+            //                m.印章底部文本 = "物资集中采购办公室";
+            //                break;
+            //            case 10007:
+            //                m.验收单名称 = "成都总医院物资采购中心";
+            //                m.验收单审核单位名称 = "成都总医院物资采购中心";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 10008:
+            //                m.验收单名称 = "中国人民解放军77100部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77100部队";
+            //                m.印章底部文本 = "物资采购办公室";
+            //                break;
+            //            case 10009:
+            //                m.验收单名称 = "中国人民解放军重庆警备区";
+            //                m.验收单审核单位名称 = "中国人民解放军重庆警备区";
+            //                m.印章底部文本 = "物资采购办公室";
+            //                break;
+            //            case 10011:
+            //                m.验收单名称 = "中国人民解放军后勤工程学院物资采购";
+            //                m.验收单审核单位名称 = "中国人民解放军后勤工程学院";
+            //                m.印章底部文本 = "管理办公室";
+            //                break;
+            //            case 10012:
+            //                m.验收单名称 = "中国人民解放军第三二四医院";
+            //                m.验收单审核单位名称 = "中国人民解放军第三二四医院";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 10013:
+            //                m.验收单名称 = "中国人民解放军77200部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77200部队";
+            //                m.印章底部文本 = "物资采购办公室";
+            //                break;
+            //            case 10014:
+            //                m.验收单名称 = "云南省军区物资集中采购办公室";
+            //                m.验收单审核单位名称 = "中国人民解放军云南省军区";
+            //                m.印章底部文本 = "";
+            //                break;
+            //            case 10015:
+            //                m.验收单名称 = "昆明民族干部学院";
+            //                m.验收单审核单位名称 = "昆明民族干部学院";
+            //                m.印章底部文本 = "";
+            //                break;
+            //            case 20057:
+            //                m.验收单名称 = "贵州省军区后勤部";
+            //                m.验收单审核单位名称 = "中国人民解放军贵州省军区";
+            //                m.印章底部文本 = "";
+            //                break;
+            //            case 20151:
+            //                m.验收单名称 = "中国人民解放军77215部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77215部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20150:
+            //                m.验收单名称 = "中国人民解放军77221部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77221部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20145:
+            //                m.验收单名称 = "中国人民解放军77225部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77225部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20146:
+            //                m.验收单名称 = "中国人民解放军77226部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77226部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20137:
+            //                m.验收单名称 = "中国人民解放军77228部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77228部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20138:
+            //                m.验收单名称 = "中国人民解放军77229部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77229部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20139:
+            //                m.验收单名称 = "中国人民解放军77231部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77231部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20140:
+            //                m.验收单名称 = "中国人民解放军77235部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77235部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20141:
+            //                m.验收单名称 = "中国人民解放军77251部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77251部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20142:
+            //                m.验收单名称 = "中国人民解放军77256部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77256部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20143:
+            //                m.验收单名称 = "中国人民解放军77298部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77298部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20144:
+            //                m.验收单名称 = "中国人民解放军77223部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77223部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20152:
+            //                m.验收单名称 = "中国人民解放军77211部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77211部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20149:
+            //                m.验收单名称 = "中国人民解放军77216部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77216部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20314:
+            //                m.验收单名称 = "中国人民解放军77206部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77206部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20148:
+            //                m.验收单名称 = "中国人民解放军77208部队";
+            //                m.验收单审核单位名称 = "中国人民解放军77208部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //            case 20261: m.验收单名称 = "中国人民解放军西藏军区物资采购中心";
+            //                m.验收单审核单位名称 = "中国人民解放军西藏军区物资采购中心";
+            //                m.印章底部文本 = ""; break;
+            //            case 20292: m.验收单名称 = "织金县人武部";
+            //                m.验收单审核单位名称 = "织金县人武部";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                m.单位信息.单位代号 = "织金县人武部";
+            //                break;
+            //            case 20254: m.验收单名称 = "贵州省贵阳警备区后勤部";
+            //                m.验收单审核单位名称 = "贵州省贵阳警备区后勤部";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                m.单位信息.单位代号 = "贵州省贵阳警备区后勤部";
+            //                break;
+            //            case 20306:
+            //                m.验收单名称 = "中国人民解放军贵州省贵阳市观山湖区人武部";
+            //                m.验收单审核单位名称 = "贵州省贵阳市观山湖区人武部";
+            //                m.印章底部文本 = "";
+            //                break;
+            //            case 20317:
+            //                m.验收单名称 = "中国人民解放军78655部队";
+            //                m.验收单审核单位名称 = "中国人民解放军78655部队";
+            //                m.印章底部文本 = "物资采购专用章";
+            //                break;
+            //        }
+            //        用户管理.更新用户<单位用户>(m);
+               // }
+           // }
             //textBox1.Text = 合并账号(200000000626, "成都欣德隆商贸有限公司");
             //var x = 商品管理.查询商品(0, 0, Query<商品>.EQ(o => o.中标商品, false));
 
@@ -415,14 +441,30 @@ namespace Go81WebApp.ModuleTester
 
         private void Button_Click4(object sender, RoutedEventArgs e)
         {
-            var x = 单位用户.单位级别列表;
+            var ysdlist = 验收单管理.查询验收单(0, 0);
             var str = "";
-            var user = 用户管理.查询用户<单位用户>(0, 0, null, false, SortBy<单位用户>.Ascending(o => o.Id), includeDeleted: true);
-            foreach (var u in user)
+            var d = 验收单单位列表信息.验收单单位列表;
+
+            foreach (var item in d)
             {
-                str += u.Id + "\r\n";
+                str += item.Id + "," + item.验收单名称 + "----------------------   \r\n";
+                var list = 验收单管理.查询验收单(0, 0, Query<验收单>.Where(o => o.审核数据.审核者.用户ID == item.Id));
+                foreach (var k in list)
+                {
+                    str += k.Id + "  " + k.管理单位审核人签名 + "\r\n";
+                }
             }
             textBox1.Text = str;
+            MessageBox.Show("OK");
+
+            //var x = 单位用户.单位级别列表;
+            //var str = "";
+            //var user = 用户管理.查询用户<单位用户>(0, 0, null, false, SortBy<单位用户>.Ascending(o => o.Id), includeDeleted: true);
+            //foreach (var u in user)
+            //{
+            //    str += u.Id + "\r\n";
+            //}
+            //textBox1.Text = str;
 
             //var count = 0;
             //count = 商品管理.查询商品(0, 0, Query<商品>.Where(o => o.采购信息.参与协议采购 && o.审核数据.审核状态 == 审核状态.审核通过)).Count();
@@ -656,26 +698,26 @@ namespace Go81WebApp.ModuleTester
             #endregion
 
             #region 修改验收单回传字段类型
-            var ysd = Mongo.Coll<验收单>().FindAs<BsonDocument>(Query.Exists("验收单扫描件"));
-            foreach (var y in ysd)
-            {
-                var kp = new List<BsonDocument>();
-                var p = y["验收单扫描件"].AsBsonArray;
-                foreach (var item in p)
-                {
-                    var po = new _回传信息();
+            //var ysd = Mongo.Coll<验收单>().FindAs<BsonDocument>(Query.Exists("验收单扫描件"));
+            //foreach (var y in ysd)
+            //{
+            //    var kp = new List<BsonDocument>();
+            //    var p = y["验收单扫描件"].AsBsonArray;
+            //    foreach (var item in p)
+            //    {
+            //        var po = new _回传信息();
 
-                    if (!(item is BsonDocument))
-                    {
-                        po.回传单路径 = item.AsString;
-                        kp.Add(po.ToBsonDocument());
-                    }
+            //        if (!(item is BsonDocument))
+            //        {
+            //            po.回传单路径 = item.AsString;
+            //            kp.Add(po.ToBsonDocument());
+            //        }
 
-                }
-                Mongo.Coll<验收单>().Update(
-                   Query.EQ("_id", y["_id"]),
-                   Update.Set("验收单扫描件", new BsonArray(kp)));
-            }
+            //    }
+            //    Mongo.Coll<验收单>().Update(
+            //       Query.EQ("_id", y["_id"]),
+            //       Update.Set("验收单扫描件", new BsonArray(kp)));
+            //}
             #endregion
 
             #region 验收单添加回传单审核状态字段
@@ -687,97 +729,97 @@ namespace Go81WebApp.ModuleTester
             #endregion
 
             #region 修改专家证件字段类型
-            //var ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("学历信息.职称证书电子扫描件"));
-            //foreach (var y in ysd)
-            //{
-            //    var p = y["学历信息"]["职称证书电子扫描件"];
+            var ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("学历信息.职称证书电子扫描件"));
+            foreach (var y in ysd)
+            {
+                var p = y["学历信息"]["职称证书电子扫描件"];
 
-            //    if (!(p is BsonNull))
-            //    {
-            //        if (!(p is BsonArray))
-            //        {
-            //            Mongo.Coll<专家>().Update(
-            //           Query.EQ("_id", y["_id"]),
-            //           Update.Combine(
-            //           Update.Unset("学历信息.职称证书电子扫描件"))
-            //           );
+                if (!(p is BsonNull))
+                {
+                    if (!(p is BsonArray))
+                    {
+                        Mongo.Coll<专家>().Update(
+                       Query.EQ("_id", y["_id"]),
+                       Update.Combine(
+                       Update.Unset("学历信息.职称证书电子扫描件"))
+                       );
 
-            //            Mongo.Coll<专家>().Update(
-            //           Query.EQ("_id", y["_id"]),
-            //           Update.Combine(
-            //           Update.Set("学历信息.职称证书电子扫描件", new BsonArray(new List<string> { p.AsString })))
-            //           );
-            //        }
-            //    }
-            //    else
-            //    {
-            //        Mongo.Coll<专家>().Update(
-            //      Query.EQ("_id", y["_id"]),
-            //      Update.Combine(
-            //      Update.Unset("学历信息.职称证书电子扫描件"))
-            //      );
-            //        Mongo.Coll<专家>().Update(
-            //     Query.EQ("_id", y["_id"]),
-            //     Update.Combine(
-            //     Update.Set("学历信息.职称证书电子扫描件", new BsonArray(new List<string>())))
-            //     );
-            //    }
+                        Mongo.Coll<专家>().Update(
+                       Query.EQ("_id", y["_id"]),
+                       Update.Combine(
+                       Update.Set("学历信息.职称证书电子扫描件", new BsonArray(new List<string> { p.AsString })))
+                       );
+                    }
+                }
+                else
+                {
+                    Mongo.Coll<专家>().Update(
+                  Query.EQ("_id", y["_id"]),
+                  Update.Combine(
+                  Update.Unset("学历信息.职称证书电子扫描件"))
+                  );
+                    Mongo.Coll<专家>().Update(
+                 Query.EQ("_id", y["_id"]),
+                 Update.Combine(
+                 Update.Set("学历信息.职称证书电子扫描件", new BsonArray(new List<string>())))
+                 );
+                }
 
-            //}
+            }
 
-            //ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("身份信息.证件电子扫描件"));
-            //foreach (var y in ysd)
-            //{
-            //    var p = y["身份信息"]["证件电子扫描件"];
+            ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("身份信息.证件电子扫描件"));
+            foreach (var y in ysd)
+            {
+                var p = y["身份信息"]["证件电子扫描件"];
 
-            //    if (!(p is BsonNull))
-            //    {
-            //        Mongo.Coll<专家>().Update(
-            //       Query.EQ("_id", y["_id"]),
-            //       Update.Combine(
-            //       Update.Unset("身份信息.证件电子扫描件"))
-            //       );
+                if (!(p is BsonNull))
+                {
+                    Mongo.Coll<专家>().Update(
+                   Query.EQ("_id", y["_id"]),
+                   Update.Combine(
+                   Update.Unset("身份信息.证件电子扫描件"))
+                   );
 
-            //        Mongo.Coll<专家>().Update(
-            //       Query.EQ("_id", y["_id"]),
-            //       Update.Combine(
-            //       Update.Set("身份信息.专家证电子扫描件", new BsonArray(new List<string> { p.AsString })))
-            //       );
-            //    }
-            //    else
-            //    {
-            //        Mongo.Coll<专家>().Update(
-            //      Query.EQ("_id", y["_id"]),
-            //      Update.Combine(
-            //      Update.Unset("身份信息.证件电子扫描件"))
-            //      );
-            //        Mongo.Coll<专家>().Update(
-            //     Query.EQ("_id", y["_id"]),
-            //     Update.Combine(
-            //     Update.Set("身份信息.专家证电子扫描件", new BsonArray(new List<string>())))
-            //     );
-            //    }
+                    Mongo.Coll<专家>().Update(
+                   Query.EQ("_id", y["_id"]),
+                   Update.Combine(
+                   Update.Set("身份信息.专家证电子扫描件", new BsonArray(new List<string> { p.AsString })))
+                   );
+                }
+                else
+                {
+                    Mongo.Coll<专家>().Update(
+                  Query.EQ("_id", y["_id"]),
+                  Update.Combine(
+                  Update.Unset("身份信息.证件电子扫描件"))
+                  );
+                    Mongo.Coll<专家>().Update(
+                 Query.EQ("_id", y["_id"]),
+                 Update.Combine(
+                 Update.Set("身份信息.专家证电子扫描件", new BsonArray(new List<string>())))
+                 );
+                }
 
-            //}
+            }
             #endregion
 
             #region 修改专家单位地址字段类型
-            //var ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("工作经历信息.单位地址"));
-            //foreach (var y in ysd)
-            //{
-            //    Mongo.Coll<专家>().Update(
-            //    Query.EQ("_id", y["_id"]),
-            //    Update.Combine(
-            //    Update.Unset("工作经历信息.单位地址"))
-            //    );
+            var ysd1 = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("工作经历信息.单位地址"));
+            foreach (var y in ysd1)
+            {
+                Mongo.Coll<专家>().Update(
+                Query.EQ("_id", y["_id"]),
+                Update.Combine(
+                Update.Unset("工作经历信息.单位地址"))
+                );
 
-            //    Mongo.Coll<专家>().Update(
-            //    Query.EQ("_id", y["_id"]),
-            //    Update.Combine(
-            //    Update.Set("工作经历信息.单位地址", new BsonString("")))
-            //    );
+                Mongo.Coll<专家>().Update(
+                Query.EQ("_id", y["_id"]),
+                Update.Combine(
+                Update.Set("工作经历信息.单位地址", new BsonString("")))
+                );
 
-            //}
+            }
             #endregion
             #region 修改专家单位地址字段类型
             //var ysd = Mongo.Coll<商品>().FindAs<BsonDocument>(Query.Exists("商品信息.单位重量"));
@@ -795,6 +837,28 @@ namespace Go81WebApp.ModuleTester
             //    Update.Set("商品信息.单位重量", new BsonDouble(0))
             //    ));
 
+            //}
+            #endregion
+
+            #region 专家抽选数据准备
+            //var ZJ = 用户管理.查询用户<专家>(0, 0);
+            //foreach (var item in ZJ)
+            //{
+            //    var d = new 供应商._产品类别();
+            //    d.一级分类 = "后勤装备";
+            //    d.二级分类.Add("整车改装类装备");
+            //    d.二级分类.Add("方舱制造类装备");
+            //    d.二级分类.Add("机电设备制造类装备");
+            //    d.二级分类.Add("工程机械制造类装备");
+            //    d.二级分类.Add("管线制造类装备");
+            //    d.二级分类.Add("箱组类装备");
+            //    d.二级分类.Add("装具类装备");
+            //    d.二级分类.Add("指挥控制类装备");
+            //    d.二级分类.Add("营具类装备");
+            //    d.二级分类.Add("医疗器械类装备");
+            //    item.审核数据.审核状态 = 审核状态.审核通过;
+            //    item.可参评物资类别列表.Add(d);
+            //    用户管理.更新用户<专家>(item);
             //}
             #endregion
             MessageBox.Show("OK");
@@ -817,6 +881,8 @@ namespace Go81WebApp.ModuleTester
         {
             //textBox1.Text = 工具.ImpColl<办事指南>(true).ToString();
             textBox1.Text = 工具.ImpColl<单位用户>(true).ToString();
+            //textBox1.Text = 工具.ImpColl<供应商>(true).ToString();
+            //textBox1.Text = 工具.ImpColl<商品>(true).ToString();
             //textBox1.Text = 工具.ImpColl<登录统计>(true).ToString();
             //textBox1.Text = 工具.ImpColl<广告点击统计>(true).ToString();
             //textBox1.Text = 工具.ImpColl<培训资料>(true).ToString();

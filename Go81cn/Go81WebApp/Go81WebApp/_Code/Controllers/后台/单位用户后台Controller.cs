@@ -10271,6 +10271,10 @@ namespace Go81WebApp.Controllers.后台
             string type = Request.Params["sh_type"];
             string reason = Request.Params["reason"];
             var ysd = 验收单管理.查找验收单(long.Parse(id));
+
+            var ysduserlist = 验收单单位列表信息.验收单单位列表;
+            var ysduser = ysduserlist.Where(o => o.Id == currentUser.Id);
+
             if (type == "通过审核")
             {
                 ysd.验收单核对码 = RandomString.Generate(6, 3);
@@ -10278,6 +10282,8 @@ namespace Go81WebApp.Controllers.后台
                 ysd.审核数据.审核者.用户ID = currentUser.Id;
                 ysd.审核数据.审核时间 = DateTime.Now;
                 ysd.审核数据.审核不通过原因 = "";
+                ysd.管理单位审核人签名 = ysduser.Any() ? ysduser.First().签名图片链接 : "";
+
             }
             if (type == "不通过审核")
             {
@@ -10285,6 +10291,7 @@ namespace Go81WebApp.Controllers.后台
                 ysd.审核数据.审核者.用户ID = currentUser.Id;
                 ysd.审核数据.审核时间 = DateTime.Now;
                 ysd.审核数据.审核不通过原因 = reason;
+                ysd.管理单位审核人签名 = ysduser.Any() ? ysduser.First().签名图片链接 : "";
             }
             验收单管理.更新验收单(ysd);
         }

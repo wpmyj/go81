@@ -55,6 +55,7 @@ namespace Go81WebApp.Controllers.后台
     using MongoDB.Bson.Serialization;
     using Go81WebApp.Models.数据模型.竞标数据模型;
     using Go81WebApp.Models.管理器.内容管理;
+    using System.ComponentModel.DataAnnotations;
     [登录验证]
     [用户类型验证(typeof(运营团队))]
     public class 运营团队后台Controller : Controller
@@ -1751,9 +1752,10 @@ namespace Go81WebApp.Controllers.后台
             var hy = Request.QueryString["hy"];
             var keyword = Request.QueryString["keyword"];
             var time = Request.QueryString["time"];
+            var haspager = Request.QueryString["haspager"].Trim();
             ViewData["currentpage"] = 1;
             ViewData["pagecount"] = 1;
-
+            GG_PAGESIZE = int.Parse(haspager);
             var q = Query.Null;
             if (!string.IsNullOrWhiteSpace(adclass))
             {
@@ -1805,8 +1807,16 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["currentpage"] = page;
             ViewData["pagecount"] = maxpage;
-
-            ViewData["后台公告列表"] = 公告管理.查询公告(GG_PAGESIZE * (int.Parse(page.ToString()) - 1), GG_PAGESIZE, q.And(Query<公告>.Where(o => o.公告信息.是否撤回 == false)), false, SortBy.Descending("内容主体.发布时间"));
+            if (haspager == "0")
+            {
+                ViewData["后台公告列表"] = 公告管理.查询公告(0, 0,
+                    q.And(Query<公告>.Where(o => o.公告信息.是否撤回 == false)), false, SortBy.Descending("内容主体.发布时间"));
+            }
+            else
+            {
+                ViewData["后台公告列表"] = 公告管理.查询公告(GG_PAGESIZE * (int.Parse(page.ToString()) - 1), GG_PAGESIZE,
+                    q.And(Query<公告>.Where(o => o.公告信息.是否撤回 == false)), false, SortBy.Descending("内容主体.发布时间"));
+            }
             ViewData["行业列表"] = 商品分类管理.查找子分类();
             ViewBag.Provence = pro;
             ViewBag.City = city;
@@ -1815,6 +1825,7 @@ namespace Go81WebApp.Controllers.后台
             ViewBag.Adclass = adclass;
             ViewBag.keyword = keyword;
             ViewBag.time = time;
+            ViewBag.hasPager = haspager;
 
             return PartialView("Part_View/Part_Procure_AdList_Search");
         }
@@ -5490,6 +5501,144 @@ namespace Go81WebApp.Controllers.后台
             }
             JsonResult json = new JsonResult() { Data = dic };
             return Json(json, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Expert_Add()
+        {
+            ViewData["专家可评标类别"] = 专家可评标专业分类.评审专业;
+            return View();
+        }
+
+        public class ExpertApply
+        {
+            [Required(ErrorMessage = "密码必须填写")]
+            [StringLength(30, MinimumLength = 6, ErrorMessage = "长度为6-30")]
+            //[RegularExpression(@"^\w+$", ErrorMessage = "密码含有非法字符")]
+            [Display(Name = "密码")]
+            [DataType(DataType.Password)]
+            public string Pwd { get; set; }
+
+            [Required(ErrorMessage = "账号必须填写")]
+            [StringLength(30, MinimumLength = 6, ErrorMessage = "长度为6-30")]
+            [RegularExpression(@"^[a-zA-Z]\w+$", ErrorMessage = "以字母开头(可用字母、数字或_)")]
+            [Remote("CheckUserName", "注册", ErrorMessage = "该用户名已注册")]
+            public string LoginName { get; set; }
+
+            [Required(ErrorMessage = "姓名必须填写")]
+            public string Name { get; set; }
+
+            [Required(ErrorMessage = "手机号必须填写")]
+            public string MobilePhone { get; set; }
+            public string Major { get; set; }
+
+            //[DataType(DataType.Date)]
+            //public DateTime BornDate { get; set; }
+            public 专家 U { get; set; }
+            public ExpertApply() { U = new 专家(); }
+        }
+
+        [HttpPost]
+        public ActionResult AddExpert(ExpertApply model)
+        {
+            var kpbtype = Request.Form["可参评物资类别列表"];
+            if (!string.IsNullOrWhiteSpace(kpbtype))
+            {
+                var az = kpbtype.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                var cplb = new List<供应商._产品类别>();
+                foreach (var y in az)
+                {
+                    var yj = y.Split(':')[0];
+                    var ej = y.Split(':')[1].Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                    var cp = new 供应商._产品类别();
+                    var listr = new List<string>();
+                    foreach (var j in ej)
+                    {
+                        listr.Add(j);
+                    }
+                    cp.一级分类 = yj;
+                    cp.二级分类 = listr;
+                    cplb.Add(cp);
+                }
+                model.U.可参评物资类别列表 = cplb;
+            }
+
+            var zj = new 专家();
+            zj = model.U;
+            zj.登录信息.登录名 = model.LoginName;
+            zj.登录信息.密码 = model.Pwd;
+            //zj.身份信息.出生年月 = model.出生年月;
+            zj.身份信息.姓名 = model.Name;
+            zj.联系方式.手机 = model.MobilePhone;
+            zj.工作经历信息.从事专业 = model.Major;
+            用户管理.添加用户<专家>(zj);
+            return Content("<script>alert('添加成功！');window.location='Expert_Add';</script>");
+        }
+
+        public ActionResult Part_Expert_Edit()
+        {
+            try
+            {
+                if (Request.QueryString["id"] != null)
+                {
+                    long id = long.Parse(Request.QueryString["id"]);
+                    ViewData["goodType"] = 商品分类管理.查找子分类();
+                    var expert = 用户管理.查找用户<专家>(id);
+                    if (expert != null)
+                    {
+                        return PartialView("Part_View/Part_Expert_Edit",expert);
+                    }
+                    else
+                    {
+                        return Content("<script>window.location='/运营团队后台/expert_list");
+                    }
+                }
+                else
+                {
+                    return Content("<script>window.location='/运营团队后台/Expert_list';</script>");
+                }
+            }
+            catch
+            {
+                return Content("<script>window.location='/运营团队后台/Expert_list';</script>");
+            }
+        }
+        public ActionResult Expert_Edit()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult EditExpert(专家 model)
+        {
+            专家 m = 用户管理.查找用户<专家>(model.Id);
+            m.身份信息.姓名 = model.身份信息.姓名;
+            m.身份信息.性别 = model.身份信息.性别;
+            m.身份信息.出生年月 = model.身份信息.出生年月;
+            m.身份信息.民族 = model.身份信息.民族;
+            m.身份信息.政治面貌 = model.身份信息.政治面貌;
+            m.身份信息.专家类型 = model.身份信息.专家类型;
+            m.身份信息.专家类别 = model.身份信息.专家类别;
+            m.身份信息.证件号 = model.身份信息.证件号;
+            m.身份信息.专家证号 = model.身份信息.专家证号;
+            m.所属地域 = model.所属地域;
+            m.入库类型 = model.入库类型;
+            m.学历信息.专业技术职称 = model.学历信息.专业技术职称;
+            m.学历信息.毕业院校 = model.学历信息.毕业院校;
+            m.学历信息.取得现技术职称时间 = model.学历信息.取得现技术职称时间;
+            m.学历信息.最高学位 = model.学历信息.最高学位;
+            m.学历信息.最高学历 = model.学历信息.最高学历;
+            m.工作经历信息.参加工作时间 = model.工作经历信息.参加工作时间;
+            m.工作经历信息.从事专业 = model.工作经历信息.从事专业;
+            m.工作经历信息.从事专业起始年度 = model.工作经历信息.从事专业起始年度;
+            m.工作经历信息.工作单位 = model.工作经历信息.工作单位;
+            m.工作经历信息.健康状况 = model.工作经历信息.健康状况;
+            m.工作经历信息.现任职务 = model.工作经历信息.现任职务;
+            m.工作经历信息.单位地址 = model.工作经历信息.单位地址;
+            m.工作经历信息.本人专业领域研究及成果 = model.工作经历信息.本人专业领域研究及成果;
+            m.工作经历信息.本人参加过何种项目招标及评标 = model.工作经历信息.本人参加过何种项目招标及评标;
+            m.工作经历信息.社会兼聘职情况 = model.工作经历信息.社会兼聘职情况;
+            m.工作经历信息.主要工作经历 = model.工作经历信息.主要工作经历;
+            用户管理.更新用户<专家>(m);
+            return Redirect("/运营团队后台/Expert_Edit?id=" + model.Id);
         }
         public void CopyAttr()
         {
@@ -12322,14 +12471,16 @@ namespace Go81WebApp.Controllers.后台
                         var htmlfile = getHtmlString(model, time);
                         if (!string.IsNullOrWhiteSpace(htmlfile))
                         {
-                            zip.AddFile(htmlfile, model.内容主体.标题);
+                            zip.AddFile(htmlfile,
+                                (model.内容主体.标题.Length > 100 ? model.内容主体.标题.Substring(0, 100) : model.内容主体.标题));
                         }
 
                         //生成数据的JS文件
                         var JSfile = getCollJsFile(model, time);
                         if (!string.IsNullOrWhiteSpace(JSfile))
                         {
-                            zip.AddFile(JSfile, model.内容主体.标题);
+                            zip.AddFile(JSfile,
+                                (model.内容主体.标题.Length > 100 ? model.内容主体.标题.Substring(0, 100) : model.内容主体.标题));
                         }
 
                         //打包正文里面的图片
@@ -12341,7 +12492,7 @@ namespace Go81WebApp.Controllers.后台
                         {
                             foreach (var att in imgPaths)
                             {
-                                zip.AddFile(Server.MapPath(att), model.内容主体.标题 + Path.GetDirectoryName(att));
+                                zip.AddFile(Server.MapPath(att), (model.内容主体.标题.Length > 100 ? model.内容主体.标题.Substring(0, 100) : model.内容主体.标题) + Path.GetDirectoryName(att));
                             }
                         }
 
@@ -12350,7 +12501,7 @@ namespace Go81WebApp.Controllers.后台
                         {
                             foreach (var att in model.内容主体.附件)
                             {
-                                zip.AddFile(Server.MapPath(att), model.内容主体.标题 + Path.GetDirectoryName(att));
+                                zip.AddFile(Server.MapPath(att), (model.内容主体.标题.Length > 100 ? model.内容主体.标题.Substring(0, 100) : model.内容主体.标题) + Path.GetDirectoryName(att));
                                 //zip.AddFile(Server.MapPath(att), model.内容主体.标题 + "\\附件\\" + Path.GetDirectoryName(att));
                             }
                             //zip.AddFiles(model.内容主体.附件.Select(Server.MapPath), model.内容主体.标题 + "\\附件");
@@ -12361,7 +12512,7 @@ namespace Go81WebApp.Controllers.后台
                         {
                             foreach (var att in model.内容主体.图片)
                             {
-                                zip.AddFile(Server.MapPath(att), model.内容主体.标题 + Path.GetDirectoryName(att));
+                                zip.AddFile(Server.MapPath(att), (model.内容主体.标题.Length > 100 ? model.内容主体.标题.Substring(0, 100) : model.内容主体.标题) + Path.GetDirectoryName(att));
                                 //zip.AddFile(Server.MapPath(att), model.内容主体.标题 + "\\扫描件\\" + Path.GetDirectoryName(att));
                             }
                             //zip.AddFiles(model.内容主体.图片.Select(Server.MapPath), model.内容主体.标题 + "\\扫描件");
@@ -12407,7 +12558,8 @@ namespace Go81WebApp.Controllers.后台
                             .Replace("{14}", model.公告信息.公告版本.ToString())
                             .Replace("{15}", model.内容主体.内容);
                     var dir = Server.MapPath("/App_Uploads/公告下载/" + time + "/");
-                    var file = dir + model.内容主体.标题 + ".html";
+                    var file = dir + (model.内容主体.标题.Length > 100 ? model.内容主体.标题.Substring(0, 100) : model.内容主体.标题) +
+                               ".html";
 
                     if (!Directory.Exists(dir))
                     {
@@ -12810,6 +12962,29 @@ namespace Go81WebApp.Controllers.后台
             }
             验收单管理.更新验收单(ysd);
         }
+
+        /// <summary>
+        /// 作废验收单
+        /// </summary>
+        public void ToVoidYsd()
+        {
+            var id = Request.Params["id"];
+            var ysd = 验收单管理.查找验收单(long.Parse(id));
+            ysd.是否作废 = true;
+            验收单管理.更新验收单(ysd);
+        }
+
+        /// <summary>
+        /// 撤销验收单作废
+        /// </summary>
+        public void RevokeVoidYsd()
+        {
+            var id = Request.Params["id"];
+            var ysd = 验收单管理.查找验收单(long.Parse(id));
+            ysd.是否作废 = false;
+            验收单管理.更新验收单(ysd);
+        }
+
 
         public ActionResult AccepatnceSmj()
         {

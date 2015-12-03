@@ -1,5 +1,6 @@
 ﻿@using Go81WebApp.Models.数据模型.用户数据模型
 @using Go81WebApp.Models.数据模型.商品数据模型
+@using NPOI.SS.Formula.Functions
 @{
     ViewBag.Title = "供应商";
 }
@@ -250,6 +251,10 @@
                         <a onclick="checks(this,'.tb3')">联系方式</a>
                         <a onclick="checks(this,'.tb6')">企业产品<span style="color:red;">(@ViewData["sum"])</span></a>
                         <a onclick="checks(this,'.tb4')">参标记录</a>
+                        @*@if (WebApiApplication.IsIntranet)
+                        {
+                            <a onclick="checks(this,'.tb5')">资质证明</a>
+                        }*@
                     </div>
                     <div class="box">
                         <div class="tab tb2">
@@ -258,7 +263,7 @@
 
                                 <tr>
                                     <td valign="top" align="right">企业简介：</td>
-                                    <td colspan="7">@sp.企业基本信息.企业简介</td>
+                                    <td colspan="5">@sp.企业基本信息.企业简介</td>
                                 </tr>
                                 <tr>
                                     <td width="12%" align="right">企业名称：</td>
@@ -267,29 +272,24 @@
                                     <td width="15%">@sp.企业基本信息.注册地址</td>
                                     <td width="10%" align="right">成立时间：</td>
                                     <td width="10%">@sp.企业基本信息.成立时间.ToString("yyyy-MM-dd")</td>
-                                    <td width="13%" align="right">注册资本：</td>
-                                    @try
-                                    {
-                                        <td width="10%">@Convert.ToInt32(sp.营业执照信息.营业执照注册资金) 万元</td>
-                                    }
-                                    catch
-                                    {
-                                        <td width="10%">@sp.营业执照信息.营业执照注册资金 万元</td>
-                                    }
                                 </tr>
                                 <tr>
+                                    <td width="13%" align="right">注册资本：</td>
+                                    <td width="10%">@((int)sp.营业执照信息.营业执照注册资金)万元</td>
                                     <td align="right">经营类型：</td>
                                     <td>@sp.企业基本信息.经营类型</td>
                                     <td align="right">经营子类型：</td>
                                     <td>@sp.企业基本信息.经营子类型</td>
+                                </tr>
+                                <tr>
                                     <td align="right">注册号：</td>
                                     <td>@sp.营业执照信息.营业执照注册号</td>
                                     <td align="right">法定代表人：</td>
                                     <td>@sp.法定代表人信息.法定代表人姓名</td>
-                                </tr>
-                                <tr>
                                     <td align="right">员工人数：</td>
                                     <td>@sp.企业基本信息.员工人数</td>
+                                </tr>
+                                <tr>
                                     <td align="right">经济性质：</td>
                                     <td>@sp.企业基本信息.经济性质</td>
                                     <td align="right">企业网址：</td>
@@ -320,8 +320,6 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td align="right">邮政编码：</td>
-                                    <td>@sp.企业基本信息.邮政编码</td>
                                     <td align="right">是否是协议供货商：</td>
                                     @if (sp.供应商用户信息.协议供应商)
                                     {
@@ -355,10 +353,119 @@
                                 </tr>
                                 <tr>
                                     <td align="right">企业地址：</td>
-                                    <td colspan="7">
+                                    <td>
                                         @sp.企业基本信息.注册地址
                                     </td>
+                                    <td align="right">邮政编码：</td>
+                                    <td colspan="3">@sp.企业基本信息.邮政编码</td>
                                 </tr>
+                                @if(WebApiApplication.IsIntranet)
+                                {
+                                    <tr>
+                                        <td align="right">营业执照电子扫描件：</td>
+                                        <td colspan="5">
+                                            @if (System.IO.File.Exists(Server.MapPath(@sp.营业执照信息.营业执照电子扫描件)))
+                                            {
+                                                <a href="@sp.营业执照信息.营业执照电子扫描件" target="_blank">@sp.营业执照信息.营业执照电子扫描件</a>
+                                            }
+                                            else
+                                            {
+                                                <span>还没有上传营业执照电子扫描件</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">税务登记证电子扫描件：</td>
+                                        <td colspan="5">
+                                            @if (System.IO.File.Exists(Server.MapPath(@sp.营业执照信息.税务登记证电子扫描件)))
+                                            {
+                                                <a href="@sp.营业执照信息.税务登记证电子扫描件" target="_blank">@sp.营业执照信息.税务登记证电子扫描件</a>
+                                            }
+                                            else
+                                            {
+                                                <span>还没有上传税务登记证电子扫描件</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">近3年完税证明电子扫描件：</td>
+                                        <td colspan="5">
+                                            @if (System.IO.File.Exists(Server.MapPath(@sp.税务信息.近3年完税证明电子扫描件)))
+                                            {
+                                                <a href="@sp.税务信息.近3年完税证明电子扫描件" target="_blank">@sp.税务信息.近3年完税证明电子扫描件</a>
+                                            }
+                                            else
+                                            {
+                                                <span>还没有上传税务信息.近3年完税证明电子扫描件</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">基本账户开户银行资信证明电子扫描件：</td>
+                                        <td colspan="5">
+                                            @if (System.IO.File.Exists(Server.MapPath(@sp.工商注册信息.基本账户开户银行资信证明电子扫描件)))
+                                            {
+                                                <a href="@sp.工商注册信息.基本账户开户银行资信证明电子扫描件" target="_blank">@sp.工商注册信息.基本账户开户银行资信证明电子扫描件</a>
+                                            }
+                                            else
+                                            {
+                                                <span>还没有上传基本账户开户银行资信证明电子扫描件</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                     <tr>
+                                        <td align="right">近3年缴纳社会保证金证明电子扫描件：</td>
+                                        <td colspan="5">
+                                            @if (System.IO.File.Exists(Server.MapPath(@sp.工商注册信息.近3年缴纳社会保证金证明电子扫描件)))
+                                            {
+                                                <a href="@sp.工商注册信息.近3年缴纳社会保证金证明电子扫描件" target="_blank">@sp.工商注册信息.近3年缴纳社会保证金证明电子扫描件</a>
+                                            }
+                                            else
+                                            {
+                                                <span>还没有上传近3年缴纳社会保证金证明电子扫描件</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                     <tr>
+                                        <td align="right">近3年有无重大违法记录电子扫描件：</td>
+                                        <td colspan="5">
+                                            @if (System.IO.File.Exists(Server.MapPath(@sp.工商注册信息.近3年有无重大违法记录电子扫描件)))
+                                            {
+                                                <a href="@sp.工商注册信息.近3年有无重大违法记录电子扫描件" target="_blank">@sp.工商注册信息.近3年有无重大违法记录电子扫描件</a>
+                                            }
+                                            else
+                                            {
+                                                <span>还没有上传近3年有无重大违法记录电子扫描件</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                     <tr>
+                                        <td align="right">组织机构代码证电子扫描件：</td>
+                                        <td colspan="5">
+                                            @if (System.IO.File.Exists(Server.MapPath(@sp.工商注册信息.组织机构代码证电子扫描件)))
+                                            {
+                                                <a href="@sp.工商注册信息.组织机构代码证电子扫描件" target="_blank">@sp.工商注册信息.组织机构代码证电子扫描件</a>
+                                            }
+                                            else
+                                            {
+                                                <span>还没有上传组织机构代码证电子扫描件</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">法定代表人身份证电子扫描件：</td>
+                                        <td colspan="5">
+                                            @if (System.IO.File.Exists(Server.MapPath(@sp.法定代表人信息.法定代表人身份证电子扫描件)))
+                                            {
+                                                <a href="@sp.法定代表人信息.法定代表人身份证电子扫描件" target="_blank">@sp.法定代表人信息.法定代表人身份证电子扫描件</a>
+                                            }
+                                            else
+                                            {
+                                                <span>还没有上传法定代表人身份证电子扫描件</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
                                 @if (sp.供应商用户信息.供应商图片 != null && sp.供应商用户信息.供应商图片.Count() > 0)
                                 {
                                     bool hasPic = false;
@@ -373,7 +480,7 @@
                                     if (hasPic)
                                     {
                                         <tr>
-                                            <td colspan="8">
+                                            <td colspan="6">
                                                 <div style="width:720px; margin:0px auto 0px auto; overflow:hidden;">
                                                     <table id="picture" cellpadding="0" cellspacing="0" style="background-color:white; width:auto;">
                                                         <tr>
@@ -499,7 +606,7 @@
                                                             <span style="color:red;font-size:14px; padding-left:19px; height:25px; display:block; line-height:25px;">￥@(string.Format("{0:0.00}", Goods.ElementAt(number).销售信息.价格))</span>
                                                             <div style="text-indent:1.6em; color:gray">浏览量：@Goods.ElementAt(number).销售信息.点击量</div>
                                                         </td>
-                                                                    number++;
+                                                        number++;
                                                     }
                                                 </tr>
                                             }
@@ -522,7 +629,7 @@
                                                         <span style="color:red;font-size:14px; padding-left:19px; height:25px; display:block; line-height:25px;">￥@(string.Format("{0:0.00}", Goods.ElementAt(number).销售信息.价格))</span>
                                                         <div style="text-indent:1.6em; color:gray">浏览量：@Goods.ElementAt(number).销售信息.点击量</div>
                                                     </td>
-                                                        number++;
+                                                    number++;
                                                 }
                                             </tr>
                                         }
@@ -539,6 +646,16 @@
 
                             </div>
                         </div>
+                        
+                        @*<div class="tab tb4">
+                            <table cellspacing="1" width="98%" style="margin-top:30px; margin-left:auto; margin-right:auto; margin-bottom:10px; background-color:rgb(218, 218, 218);">
+                                    <tr>
+                                        <td style="background-color:white;" align="center">组织机构代码证电子扫描件:</td>
+                                        <td style="background-color:white;" align="center">@sp.工商注册信息.组织机构代码证电子扫描件</td>
+                                    </tr>
+                            </table>
+                        </div>*@
+
                     </div>
                 </div>
 

@@ -45,78 +45,51 @@
             </tr>
         </table>
     </div>
+    @{
+        IEnumerable<Go81WebApp.Models.数据模型.内容数据模型.公告> gglist=ViewData["公告管理"] as IEnumerable<Go81WebApp.Models.数据模型.内容数据模型.公告>;
+    }
     <div class="gys_ztbsearch_contentbox gys_znxx_box" id="conts">
         <div id="conts">
             <ul>
-                @foreach (var item in ViewData["公告管理"] as IEnumerable<Go81WebApp.Models.数据模型.内容数据模型.公告>)
+                @foreach (var item in  gglist)
                 {
                     <li><span>@item.内容主体.发布时间</span><a href="/供应商后台/Zb_Detail/@item.Id" title="">@item.内容主体.标题</a></li>
                 }
             </ul>
-            <div class="gys_znxx_content_detailbox">
-                @{
-                    int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
-                    int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
-                    if (Pagecount > 0)
+            @if (gglist.Count() != 0)
+            {
+                <div class="gys_znxx_content_detailbox">
+                    @{
+                int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                if (Pagecount > 0)
+                {
+                    if (CurrentPage != 1)
+                    {
+                        <a href='/供应商后台/Gys_Ztb_Search_Zb?page=1'>首页</a><a style="border-left:none;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@(CurrentPage-1)'>上一页</a>
+                    }
+                }
+                if (Pagecount <= 6)
+                {
+                    for (int i = 1; i <= Pagecount; i++)
+                    {
+                        if (CurrentPage == i)
+                        {
+                            <a style="border:1px solid red;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                        }
+                        else
+                        {
+                            <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                        }
+                    }
+                }
+                else
+                {
+                    if (CurrentPage < 6)
                     {
                         if (CurrentPage != 1)
                         {
-                            <a href='/供应商后台/Gys_Ztb_Search_Zb?page=1'>首页</a><a href='/供应商后台/Gys_Ztb_Search_Zb?page=@(CurrentPage-1)'>上一页</a>
-                        }
-                    }
-                    if (Pagecount <= 6)
-                    {
-                        for (int i = 1; i <= Pagecount; i++)
-                        {
-                            if (CurrentPage == i)
-                            {
-                                <a style="border:1px solid red;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
-                            }
-                            else
-                            {
-                                <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (CurrentPage < 6)
-                        {
-                            if (CurrentPage != 1)
-                            {
-                                for (int i = 1; i < 7; i++)
-                                {
-                                    if (CurrentPage == i)
-                                    {
-                                        <a style="border:1px solid red;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
-                                    }
-                                    else
-                                    {
-                                        <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
-                                    }
-                                }
-                                <span>...</span><a href="/供应商后台/Gys_Ztb_Search_Zb?page=@(Pagecount)">@Pagecount</a>
-                            }
-                            else
-                            {
-                                for (int i = 1; i < 7; i++)
-                                {
-                                    if (CurrentPage == i)
-                                    {
-                                        <a style="border:1px solid red;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
-                                    }
-                                    else
-                                    {
-                                        <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
-                                    }
-                                }
-                                <span>...</span><a href="/供应商后台/Gys_Ztb_Search_Zb?page=@(Pagecount)">@Pagecount</a>
-                            }
-                        }
-                        else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
-                        {
-                            <a href="/供应商后台/Gys_Ztb_Search_Zb?page=1">1</a><span>...</span>
-                            for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                            for (int i = 1; i < 7; i++)
                             {
                                 if (CurrentPage == i)
                                 {
@@ -129,10 +102,9 @@
                             }
                             <span>...</span><a href="/供应商后台/Gys_Ztb_Search_Zb?page=@(Pagecount)">@Pagecount</a>
                         }
-                        else if (CurrentPage >= Pagecount - 3)
+                        else
                         {
-                            <a href="/供应商后台/Gys_Ztb_Search_Zb?page=1">1</a><span>...</span>
-                            for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                            for (int i = 1; i < 7; i++)
                             {
                                 if (CurrentPage == i)
                                 {
@@ -143,19 +115,56 @@
                                     <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
                                 }
                             }
+                            <span>...</span><a href="/供应商后台/Gys_Ztb_Search_Zb?page=@(Pagecount)">@Pagecount</a>
                         }
                     }
-                    if (Pagecount > 0)
+                    else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
                     {
-                        if (CurrentPage != Pagecount)
+                        <a href="/供应商后台/Gys_Ztb_Search_Zb?page=1">1</a><span>...</span>
+                        for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
                         {
-                            <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@(CurrentPage+1)'>下一页</a><a href='/供应商后台/Gys_Ztb_Search_Zb?page=@(Pagecount)'>末页</a>
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                            }
+                            else
+                            {
+                                <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                            }
                         }
-                        <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                        <span>...</span><a href="/供应商后台/Gys_Ztb_Search_Zb?page=@(Pagecount)">@Pagecount</a>
+                    }
+                    else if (CurrentPage >= Pagecount - 3)
+                    {
+                        <a href="/供应商后台/Gys_Ztb_Search_Zb?page=1">1</a><span>...</span>
+                        for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                            }
+                            else
+                            {
+                                <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@i'>@i</a>
+                            }
+                        }
                     }
                 }
-            </div>
-
+                if (Pagecount > 0)
+                {
+                    if (CurrentPage != Pagecount)
+                    {
+                        <a href='/供应商后台/Gys_Ztb_Search_Zb?page=@(CurrentPage+1)' style="border-right:none;">下一页</a><a href='/供应商后台/Gys_Ztb_Search_Zb?page=@(Pagecount)'>末页</a>
+                    }
+                    <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                }
+                    }
+                </div>
+            }
+            else
+            {
+                <h1 style="text-align:center; color:#C7DEF8;">没有任何公告！</h1>
+            }
         </div>
     </div>
 </div>

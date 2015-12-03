@@ -25,7 +25,7 @@
                         <li>
                             @if (ts.TotalHours < 360)
                             {
-                                <img src="~/Images/newico.gif" />
+                                <img src="~/Images/newico.gif" style="float: left;margin-top: 6px;" />
                                 <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" class="new" href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
                             }
                             else
@@ -39,7 +39,7 @@
                         <li class="oddlinecolor">
                             @if (ts.TotalHours < 360)
                             {
-                                <img src="~/Images/newico.gif" />
+                                <img src="~/Images/newico.gif" style="float: left;margin-top: 6px;" />
                                 <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span><a target="_blank" class="new" href="~/通知/NoticeDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
                             }
                             else

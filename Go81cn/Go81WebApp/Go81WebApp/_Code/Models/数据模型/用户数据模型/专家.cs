@@ -15,6 +15,7 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
     {
         public 采购管理单位 所属管理单位 { get; set; }
         public _审核数据 审核数据 { get; set; }
+        public 入库类型 入库类型 { get; set; }
         public class _审核数据
         {
             public 审核状态 审核状态 { get; set; }
@@ -42,7 +43,7 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
             [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
             public DateTime 出生年月 { get; set; }
             public 证件类型 证件类型 { get; set; }
-            [Required(ErrorMessage = "请填写证件号！")]
+            //[Required(ErrorMessage = "请填写证件号！")]
             public string 证件号 { get; set; }
             [Required(ErrorMessage = "请上传扫描件！")]
             public string 证件电子扫描件 { get; set; }
@@ -135,6 +136,12 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
         技术 = 1,
         法律 = 2,
         经济 = 3,
+    }
+    public enum 入库类型
+    {
+        未设置 = 0,
+        入网= 1,
+        入库 = 2,
     }
     public enum 政治面貌
     {

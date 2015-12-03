@@ -833,43 +833,52 @@ namespace Go81WebApp.Controllers.基本功能
             }]  
        },  
       {  
-           ""name"":""优惠码"",
+            ""name"":""军采通"",  
            ""sub_button"":[  
-                {  
-                   ""type"":""click"",  
-                   ""name"":""获取优惠码"",  
-                    ""key"":""get""  
-                },
-                {  
-                   ""type"":""click"",  
-                   ""name"":""我的优惠码"",  
-                   ""key"":""my""  
-                }]  
-           }]  
+            {  
+               ""type"":""view"",  
+               ""name"":""会员中心"",  
+                ""url"":""http://go81.cn/jct""  
+            },  
+            {  
+               ""type"":""view"",  
+               ""name"":""已订购的服务"",  
+               ""url"":""http://go81.cn/wechat/MyService""  
+            },  
+            {  
+               ""type"":""view"",  
+               ""name"":""关于我们"",  
+               ""url"":""http://go81.cn/wechat/AboutUs""
+            },  
+            {  
+               ""type"":""view"",  
+               ""name"":""进入网站"",  
+               ""url"":""http://go81.cn""
+            }]  
  } ";
 
-           //  ""name"":""军采通"",  
+
+           // ""name"":""优惠码"",
            //""sub_button"":[  
-           // {  
-           //    ""type"":""view"",  
-           //    ""name"":""会员中心"",  
-           //     ""url"":""http://go81.cn/jct""  
-           // },  
-           // {  
-           //    ""type"":""view"",  
-           //    ""name"":""已订购的服务"",  
-           //    ""url"":""http://go81.cn/wechat/MyService""  
-           // },  
-           // {  
-           //    ""type"":""view"",  
-           //    ""name"":""关于我们"",  
-           //    ""url"":""http://go81.cn/wechat/AboutUs""
-           // },  
-           // {  
-           //    ""type"":""view"",  
-           //    ""name"":""进入网站"",  
-           //    ""url"":""http://go81.cn""
-           // }]  
+           //     {  
+           //        ""type"":""click"",  
+           //        ""name"":""获取优惠码"",  
+           //         ""key"":""get""  
+           //     },
+           //     {  
+           //        ""type"":""click"",  
+           //        ""name"":""我的优惠码"",  
+           //        ""key"":""my""  
+           //     }]  
+           //}] 
+
+
+
+
+
+
+
+             
 
 
 

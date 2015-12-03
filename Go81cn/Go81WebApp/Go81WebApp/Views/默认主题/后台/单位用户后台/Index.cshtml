@@ -5,7 +5,27 @@
     ViewBag.Title = "单位用户后台管理";
     Layout = "_Back_IntranetLayout.cshtml";
 }
-    <div class="bg_outdiv">
+
+<div id="indexpagemodal0" class="modal" style="display: block">
+    <div class="modal-dialog" style="margin: 3% auto;">
+        <div class="modal-content" style="height:500px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodal0').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">
+                    温馨提示
+                </div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div id="outlistdiv" style="height: 350px; overflow-y: scroll; line-height:25px;text-indent: 2em;">
+                    为了避免内、外网单位用户数据不一致的问题，各单位用户如需修改本账号相关信息，请到内网进行修改。修改后由网站客服人员从内网向外网同步数据，保证内外网单位用户数据的一致性。
+                </div>
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="关闭" onclick="$('#indexpagemodal0').hide();" /></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg_outdiv">
         <div class="bg_outdiv_left">
             @Html.Action("LeftMenu", "布局")
         </div>

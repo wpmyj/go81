@@ -314,7 +314,7 @@ namespace Go81WebApp.Controllers.基本功能
             }
             return View();
         }
-
+     
         public class RegInfo_Person
         {
             [Required(ErrorMessage = "密码必须填写")]

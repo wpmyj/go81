@@ -12,6 +12,8 @@ using System.Web;
 using System.Web.Mvc;
 using Go81WebApp.Models.数据模型.内容数据模型;
 using Go81WebApp.Models.数据模型.消息数据模型;
+using Newtonsoft.Json;
+using MongoDB.Driver;
 
 namespace Go81WebApp.Controllers.门户
 {
@@ -38,7 +40,7 @@ namespace Go81WebApp.Controllers.门户
 #endif
         }
 
-        #if INTRANET
+#if INTRANET
         private 单位用户 currentUser
         {
             get
@@ -46,7 +48,129 @@ namespace Go81WebApp.Controllers.门户
                 return this.HttpContext.获取当前用户<单位用户>();
             }
         }
-
+#if INTRANET
+        public class Expert
+        {
+            public long ID { get; set; }
+            /// <summary>
+            /// 姓名
+            /// </summary>
+            public string Name { get; set; }
+            /// <summary>
+            /// 民族
+            /// </summary>
+            public string Minzu { get; set; }
+            /// <summary>
+            /// 专家级别
+            /// </summary>
+            public string Zjjb { get; set; }
+            /// <summary>
+            /// 审核状态
+            /// </summary>
+            public string Shzt { get; set; }
+            public string rk { get; set; }
+        }
+        //根据专家姓名查找专家
+        public JsonResult SearchExpert()
+        {
+            try
+            {
+                IMongoQuery q = null;
+                var name = Request.Params["expertname"];
+                if(!string.IsNullOrWhiteSpace(Request.Params["pro"]))
+                {
+                    q = Query.And(Query<专家>.Where(m => m.所属地域.省份 == Request.Params["pro"]));
+                }
+                if(!string.IsNullOrWhiteSpace(Request.Params["c"]))
+                {
+                    q = Query.And(Query<专家>.Where(m => m.所属地域.城市 == Request.Params["c"]));
+                }
+                if(!string.IsNullOrWhiteSpace(Request.Params["a"]))
+                {
+                    q = Query.And(Query<专家>.Where(m => m.所属地域.区县 == Request.Params["a"]));
+                }
+                if(!string.IsNullOrWhiteSpace(name))
+                {
+                    q = Query.And(Query<专家>.Where(m => m.身份信息.姓名 == name));
+                }
+                string status=Request.Params["sta"];
+                List<Expert> elist = new List<Expert>();
+                long pageCount = 0;
+                int cpg = 1;
+                if (!string.IsNullOrWhiteSpace(Request.QueryString["cp"]))
+                {
+                    cpg = int.Parse(Request.QueryString["cp"]);
+                }
+                string names = name.Trim();
+                pageCount = 用户管理.计数用户<专家>(0, 0,q) / 15;
+                if (用户管理.计数用户<专家>(0, 0,q) % 15 > 0) 
+                {
+                    pageCount++;
+                }
+                IEnumerable<专家> _zj = 用户管理.查询用户<专家>(15 * (cpg - 1), 15,q);
+                foreach (var k in _zj)
+                {
+                    Expert exp = new Expert();
+                    exp.ID = k.Id;
+                    exp.Name=k.身份信息.姓名;
+                    exp.Zjjb=k.身份信息.专家级别.ToString();
+                    exp.Minzu = k.身份信息.民族.ToString();
+                    exp.Shzt = k.审核数据.审核状态.ToString();
+                    if(k.入库类型!= 入库类型.入库)
+                    {
+                        exp.rk = "未入库";
+                    }
+                    else
+                    {
+                        exp.rk = "已入库";
+                    }
+                    elist.Add(exp);
+                }
+                JsonResult json = new JsonResult() { Data = new { expert = elist,pCount=pageCount } };
+                return Json(json, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                JsonResult json = new JsonResult() { Data = new { expert = new List<Expert>(),pCount=0 } };
+                return Json(json, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult ExpertList()
+        {
+            IEnumerable<专家> exp = null;
+            try
+            {
+                long pgCount = 0;
+                int cpg = 0;
+                string area = Request.QueryString["area"];
+                if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+                {
+                    cpg = int.Parse(Request.QueryString["page"]);
+                }
+                if (cpg <= 0)
+                {
+                    cpg = 1;
+                }
+                long pc = 用户管理.计数用户<专家>(0, 0, Query<专家>.Where(m => m.所属地域.省份.Contains(area)));
+                pgCount = pc / 15;
+                if (pc % 15 > 0)
+                {
+                    pgCount++;
+                }
+                ViewData["Pagecount"] = pgCount;
+                ViewData["CurrentPage"] = cpg;
+                exp = 用户管理.查询用户<专家>(15 * (cpg - 1), 15, Query<专家>.Where(m => m.所属地域.省份.Contains(area)));
+                ViewData["supplier"] = exp;
+                ViewData["area"] = area;
+                return View();
+            }
+            catch
+            {
+                ViewData["supplier"] = exp;
+                return View();
+            }
+        }
+#endif
 
         /// <summary>
         /// 内网专家库首页
@@ -56,7 +180,19 @@ namespace Go81WebApp.Controllers.门户
         {
             return View();
         }
-
+        public long CountExpert()
+        {
+            try
+            {
+                string area = Request.QueryString["area"];
+                long count = 用户管理.计数用户<专家>(0, 0, Query<专家>.Where(m => m.所属地域.省份.Contains(area)));
+                return count;
+            }
+            catch
+            {
+                return -1;
+            }
+        }
         /// <summary>
         /// 内网专家库首页--分布页
         /// </summary>
@@ -134,7 +270,7 @@ namespace Go81WebApp.Controllers.门户
 
             //ViewData["专家特殊类别"] = 专家可评标专业.非商品分类评审专业;
             var 所属单位 = 用户管理.查找用户<单位用户>(currentUser.Id).单位信息.所属单位;
-            ViewData["所属单位"] = 所属单位==null?"":所属单位;
+            ViewData["所属单位"] = 所属单位 == null ? "" : 所属单位;
 
             return PartialView("Part_Expert/Part_Expert_Applay");
         }
@@ -350,33 +486,33 @@ namespace Go81WebApp.Controllers.门户
         public ActionResult Part_Expert_Applay_S()
         {
             int page = 1;
-                int pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
-                int pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
-                ViewData["pre_currentPage"] = page;
-                ViewData["pre_pagecount"] = pre_maxpage;
-                ViewData["专家抽取待批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+            int pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["pre_currentPage"] = page;
+            ViewData["pre_pagecount"] = pre_maxpage;
+            ViewData["专家抽取待批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
 
 
-                pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
-                pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
-                ViewData["ing_currentPage"] = page;
-                ViewData["ing_pagecount"] = pre_maxpage;
-                ViewData["专家抽取已批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+            pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["ing_currentPage"] = page;
+            ViewData["ing_pagecount"] = pre_maxpage;
+            ViewData["专家抽取已批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
 
-                pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
-                pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
-                ViewData["ed_currentPage"] = page;
-                ViewData["ed_pagecount"] = pre_maxpage;
-                ViewData["已完成的抽选列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+            pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["ed_currentPage"] = page;
+            ViewData["ed_pagecount"] = pre_maxpage;
+            ViewData["已完成的抽选列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
 
-                pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
-                pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
-                ViewData["no_currentPage"] = page;
-                ViewData["no_pagecount"] = pre_maxpage;
-                ViewData["专家抽取未获批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+            pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["no_currentPage"] = page;
+            ViewData["no_pagecount"] = pre_maxpage;
+            ViewData["专家抽取未获批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
 
-                return PartialView("Part_Expert/Part_Expert_Applay_S");
-            
+            return PartialView("Part_Expert/Part_Expert_Applay_S");
+
         }
 
         public ActionResult Part_Expert_Applay_S_pre(int? page)

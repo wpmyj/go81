@@ -85,11 +85,12 @@
                             </td>
                             <td>@item.基本数据.添加时间.ToString("yyyy-MM-dd")</td>
                             <td class="gys_znxx_content_tabletime">
-                                @if (item.审核数据.审核状态 != 审核状态.审核通过 || item.审核数据2.审核状态 != 审核状态.审核通过)
+                                <a href="~/单位用户后台/Procure_AdDetail?id=@item.Id&come=s" target="_blank">查看</a>
+                                @if (item.审核数据.审核状态 != 审核状态.审核通过)
                                 {
-                                    <a href="~/单位用户后台/Procure_AdModify?id=@item.Id&h=s" target="_blank">修改</a><span>|</span>
+                                    <span>|</span><a href="~/单位用户后台/Procure_AdModify?id=@item.Id&h=s" target="_blank">修改</a>
+                                    <span>|</span><a onclick="del(@item.Id)">删除</a>
                                 }
-                                <a href="~/单位用户后台/Procure_AdDetail?id=@item.Id&come=s" target="_blank">查看</a>|<a onclick="del(@item.Id)">删除</a>
                             </td>
                         </tr>
                 }

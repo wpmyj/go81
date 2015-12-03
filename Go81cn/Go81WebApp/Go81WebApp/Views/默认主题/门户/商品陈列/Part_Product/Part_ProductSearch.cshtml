@@ -275,7 +275,7 @@
                             <a href="~/商品陈列/Product_Detail?id=@arr.Id" title="@arr.商品信息.商品名.Replace("<font color=\"red\">", "").Replace("</font>", "")" target="_blank">
                                 @if (arr.商品信息.商品图片.Count > 0)
                                 {
-                                    <img src="@arr.商品信息.商品图片[0]" />
+                                    <img src="@arr.商品信息.商品图片[0].Replace("original", "150X150")" />
                                 }
                                 else
                                 {
@@ -319,7 +319,7 @@
                             </div>
                             @{ var GoodName = thisp_name.Length > 15 ? thisp_name.Substring(0, 15) : thisp_name; }
                             <div>
-                                +对比<input type="checkbox" value="@(arr.销售信息.价格)" id="@arr.Id" name="ck" alt="@GoodName" onclick=" showcontrast(this) " /><a class="consultPrice" href="/单位用户后台/ConsultPrice?id=@arr.Id"></a>
+                                +对比<input type="checkbox" value="@(arr.销售信息.价格)" id="@arr.Id" name="ck" alt="@GoodName" onclick=" showcontrast(this) " />@*<a class="consultPrice" href="/单位用户后台/ConsultPrice?id=@arr.Id"></a>*@
                             </div>
                         </div>
                     </div>

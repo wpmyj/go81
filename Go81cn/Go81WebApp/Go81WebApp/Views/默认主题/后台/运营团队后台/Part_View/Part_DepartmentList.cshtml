@@ -121,7 +121,7 @@
                         int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
                         if (Pagecount > 0 && CurrentPage != 1)
                         {
-                            <a href='/运营团队后台/DepartmentList?page=1'>首页</a><a href='/运营团队后台/DepartmentList?page=@(CurrentPage-1)'>上一页</a>
+                            <a href='/运营团队后台/DepartmentList?page=1'>首页</a><a style="border-left:none;" href='/运营团队后台/DepartmentList?page=@(CurrentPage-1)'>上一页</a>
                         }
                         if (Pagecount <= 6)
                         {
@@ -208,7 +208,7 @@
                         {
                             if (CurrentPage < Pagecount)
                             {
-                                <a href="/运营团队后台/DepartmentList?page=@(CurrentPage+1)">下一页</a><a href="/运营团队后台/DepartmentList?page=@Pagecount">末页</a>
+                                <a href="/运营团队后台/DepartmentList?page=@(CurrentPage+1)" style="border-right:none;">下一页</a><a href="/运营团队后台/DepartmentList?page=@Pagecount">末页</a>
                             }
                             <span>第 @(CurrentPage) 页/共 @(Pagecount) 页</span>
                         }
@@ -242,7 +242,14 @@
             success: function (data) {
                 var result = "<table width='100%' cellspacing='0' cellpadding='0'><tr><td colspan='7' style='text-align:right;'><a href='###' onclick='outPutExcelAll()'>导出所有用户信息</a></td></tr><tr><th align='center'>用户ID</th><th align='center'>登录名</th><th align='center'>所属单位</th><th align='center'>单位名称</th><th>联系人</th><th>审核状态</th><th>操作</th></tr>";
                 $.each(data.Data.deplist, function (index, item) {
-                    result += "<tr><td>" + item.Id + "</td><td><a href='/运营团队后台/Department_Detail?id=" + item.Id + "'>" + item.loginame + "</a></td><td>" + item.ssdw + "</td><td>"+item.unitname+"</td><td>"+item.contactuser+"</td><td>"+item.status+"</td><td><a onclick='del("+item.Id+")'>删除</a>|<a target='_blank' href='/运营团队后台/DepartmentModify?id=" + item.Id + "'>修改</a></td></tr>";
+                    if (item.contactuser!=null)
+                    {
+                        result += "<tr><td>" + item.Id + "</td><td><a href='/运营团队后台/Department_Detail?id=" + item.Id + "'>" + item.loginame + "</a></td><td>" + item.ssdw + "</td><td>" + item.unitname + "</td><td>" + item.contactuser + "</td><td>" + item.status + "</td><td><a onclick='del(" + item.Id + ")'>删除</a>|<a target='_blank' href='/运营团队后台/DepartmentModify?id=" + item.Id + "'>修改</a></td></tr>";
+                    }
+                    else
+                    {
+                        result += "<tr><td>" + item.Id + "</td><td><a href='/运营团队后台/Department_Detail?id=" + item.Id + "'>" + item.loginame + "</a></td><td>" + item.ssdw + "</td><td>" + item.unitname + "</td><td></td><td>" + item.status + "</td><td><a onclick='del(" + item.Id + ")'>删除</a>|<a target='_blank' href='/运营团队后台/DepartmentModify?id=" + item.Id + "'>修改</a></td></tr>";
+                    }
                 });
                 result += "</table>";
                 $("table#con").html(result);
@@ -257,18 +264,6 @@
     $(document).ready(function () {
         $("#单位列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
         $("#单位列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
-
-        $(".gys_znxx_content_detailbox a").each(function () {
-            if ($(this).text() == num) {
-                $(this).css("border","1px solid #ff0000");
-            }
-            if (num == j) {
-                $(".gys_znxx_content_detailbox a:last").addClass("endPage");
-            }
-            if (num == 1) {
-                $(".gys_znxx_content_detailbox a:first").addClass("endPage");
-            }
-        });
     });
     function setPage(pgCount, currentPage) {
         var str = '';

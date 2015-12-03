@@ -68,7 +68,19 @@
                         <div style="float: left;">
                             <input type="text" id="keyword" name="keyword" style=" height:23px; width:400px; line-height:20px;" />
                         </div>
-                        <input type="button" onclick="yytdggsearch();" value="搜索" class="gys_ztbsearch_search_botton " style=" height:30px; width:100px; float: left; margin-left: 105px;" />
+                        <div style="float: left;padding-top: 2px;">
+                            <label style="margin-left: 10px;font-size: 12px;font-weight: normal;">分页数量</label>
+                            <select id="hasPager" style="width: 50px;">
+                                <option>15</option>
+                                <option>30</option>
+                                <option>40</option>
+                                <option>50</option>
+                                <option>70</option>
+                                <option>85</option>
+                                <option>100</option>
+                            </select>
+                        </div>
+                        <input type="button" onclick="yytdggsearch();" value="搜索" class="gys_ztbsearch_search_botton " style=" height:30px; width:90px;margin-left: 5px;" />
                     </div>
 
                     @*<div style="width: 750px; height: 35px; ">
@@ -85,7 +97,8 @@
                         var hy = $("#hy").val();
                         var time = $("#time").val();
                         var keyword = $("#keyword").val();
-                        $.get("/运营团队后台/Part_Procure_AdList_Search?page=1&deliverprovince=" + encodeURI(pro) + "&delivercity=" + encodeURI(city) + "&deliverarea=" + encodeURI(area) + "&hy=" + encodeURI(hy) + "&adclass=" + encodeURI(adclass) + "&keyword=" + encodeURI(keyword) + "&time=" + encodeURI(time), function (response) {
+                        var haspager = $("#hasPager").find("option:selected").text();
+                        $.get("/运营团队后台/Part_Procure_AdList_Search?page=1&haspager=" + haspager + " &deliverprovince=" + encodeURI(pro) + "&delivercity=" + encodeURI(city) + "&deliverarea=" + encodeURI(area) + "&hy=" + encodeURI(hy) + "&adclass=" + encodeURI(adclass) + "&keyword=" + encodeURI(keyword) + "&time=" + encodeURI(time), function(response) {
                             $("#pagecontent").html(response);
                         });
                     }
@@ -143,7 +156,7 @@
                         <div class="gys_znxx_content_detailbox">
                             @if (int.Parse(ViewData["currentpage"].ToString()) != 1)
                             {
-                                <a id="1" onclick="changeMesspage(this) ">首页</a><a id="@(int.Parse(ViewData["currentpage"].ToString())-1)" onclick="changeMesspage(this) ">上一页</a>
+                                <a id="1" onclick="changeMesspage(this) ">首页</a><a style="border-left:none;" id="@(int.Parse(ViewData["currentpage"].ToString())-1)" onclick="changeMesspage(this) ">上一页</a>
                             }
                             @for (int i = 0; i <= 10; i++)
                             {
@@ -163,9 +176,9 @@
                                     }
                                 }
                             }
-                            @if (int.Parse(ViewData["currentpage"].ToString()) != int.Parse(ViewData["pagecount"].ToString()))
-                            {
-                                <a id="@(int.Parse(ViewData["currentpage"].ToString())+1)" onclick="changeMesspage(this) ">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeMesspage(this) ">末页</a>
+                                                        @if (int.Parse(ViewData["currentpage"].ToString()) != int.Parse(ViewData["pagecount"].ToString()))
+                                                        {
+                                                            <a id="@(int.Parse(ViewData["currentpage"].ToString())+1)" onclick="changeMesspage(this) " style="border-right:none;">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeMesspage(this) ">末页</a>
                             }
                             第@(ViewData["currentpage"].ToString())页/共@(ViewData["pagecount"].ToString())页
                         </div>
@@ -185,7 +198,8 @@
             var hy = $("#hy_t").val();
             var time = $("#time_t").val();
             var keyword = $("#keyword_t").val();
-            $.get("/运营团队后台/Part_Procure_AdList_Search?page="+page+"&deliverprovince=" + encodeURI(pro) + "&delivercity=" + encodeURI(city) + "&deliverarea=" + encodeURI(area) + "&hy=" + encodeURI(hy) + "&adclass=" + encodeURI(adclass) + "&keyword=" + encodeURI(keyword) + "&time=" + encodeURI(time), function (response) {
+            var haspager = $("#hasPager").val();
+            $.get("/运营团队后台/Part_Procure_AdList_Search?page=" + page + "&haspager=" + haspager + " &deliverprovince=" + encodeURI(pro) + "&delivercity=" + encodeURI(city) + "&deliverarea=" + encodeURI(area) + "&hy=" + encodeURI(hy) + "&adclass=" + encodeURI(adclass) + "&keyword=" + encodeURI(keyword) + "&time=" + encodeURI(time), function(response) {
                 $("#pagecontent").html(response);
             });
         }
@@ -200,7 +214,7 @@
                 window.location="/运营团队后台/Procure_AdDelete/"+num;
             }
         }
-        function getDownload(id) {
+        function getDownload() {
             var idstr = "";
             $("#tablecontent").find("input[name='download']:checked").each(function () {
                 idstr += $(this).attr("id") + "|";
@@ -208,7 +222,6 @@
             if (idstr == "") {
                 return;
             }
-
             $.ajax({
                 cache: false,
                 async: false,   // 太关键了，同步和异步的参数

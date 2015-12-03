@@ -1,0 +1,903 @@
+﻿@model Go81WebApp.Controllers.后台.运营团队后台Controller.ExpertApply
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+<script src="~/JS/provinceandcity_all.js"></script>
+<link href="~/css/css.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+
+@{
+    ViewBag.Title = "添加评审专家";
+    //Layout = "_BackLayout.cshtml";
+}
+<style>
+    .kpbtype {
+        padding: 0 6px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+        .kpbtype i {
+            margin-bottom: 3px;
+            vertical-align: middle;
+            background: url(../Images/delete.png) no-repeat center center;
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+        }
+
+    .kpbedit {
+        text-align: center;
+        display: inline-block;
+        width: 100px;
+        margin-left: 270px;
+        font-size: 20px;
+        background: #509783;
+        padding: 2px 5px;
+        color: #Fff;
+        cursor: pointer;
+    }
+
+
+    span.bx {
+        display: inline-block;
+        width: 100px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+        font-size: 12px;
+        background-color: gray;
+        border: 1px solid rgb(179, 179, 179);
+        cursor: pointer;
+    }
+
+    .box_header {
+        background-color: rgb(207, 207, 207);
+        text-align: left;
+    }
+
+        .box_header a {
+            display: inline-block;
+            width: 80px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            background-color: gray;
+            border: 1px solid white;
+        }
+
+    table tr td {
+        font-size: 12px;
+    }
+</style>
+
+<div id="modal0" class="modal fade">
+    <div class="modal-dialog" style="margin: 5% auto;width:790px;">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick='$("#modal0").hide();'>×</button>
+                <div style="margin:0; width:250px; float:left; font-size:16px; font-weight:bold; line-height:28px;">请选择评审专家可评标物质类别</div>
+                <div style=" width:340px; float:left;">
+                    关键字：<input id="dfzyml" class="checkboxclass2" type="text" name="（地方政府专家库评审专业目录）" onkeyup="do_kpbwzlbserch($(this).val());" style="line-height: 21px;" />
+                    @*<input id="adddfzy" type="button" class="btn-pri" style="width:95px;" value="未找到？添加" />*@
+                </div>
+                @*<div style="clear:both;font-size:14px;">注：所添加的分类只能添加到 <u>地方政府专家库评审专业目录</u> 分类下</div>*@
+            </div>
+            <div class="modal-body" id="othergysdiv">
+                <div style="width: 390px; height:350px; overflow-y: scroll; float: left;" id="selectconditionbox">
+                    @*@foreach (var item in ViewData["goodType"] as IEnumerable<商品分类>)
+                        {
+                            <div name="kpbwzlb">
+                                <div class="divclass1"><div name="treepic" class="tre_level1" value="@item.分类名" onclick="changeshow(this);"></div><input class="checkboxclass1" id="@item.分类名" type="checkbox" value="@item.分类名" name="@item.分类名" style="line-height: 21px;" onclick="get_ptype(this,1)" /><a class="classtype1" onclick="changeshow(this);" value="@item.分类名">@item.分类名</a></div>
+                                <div index="@item.分类名" style="display: none;padding-left: 28px;">
+                                    @foreach (var k in item.子分类)
+                                    {
+                                        <div class="divclass2">
+                                            <input class="checkboxclass2" type="checkbox" value="@k.分类名" name="@item.分类名" style="line-height: 21px;" onclick="get_ptype(this,2)" /><a class="classtype2" value="@k.分类名">@k.分类名</a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }*@
+
+                    @foreach (var item in ViewData["专家可评标类别"] as IEnumerable<专家可评标专业分类>)
+                    {
+                        <div name="kpbwzlb">
+                            <div class="divclass1"><div name="treepic" class="tre_level1" value="@item.分类名" onclick="changeshow(this);"></div><input class="checkboxclass1" id="@item.分类名" type="checkbox" value="@item.分类名" name="@item.分类名" style="line-height: 21px;" onclick="get_ptype(this,1)" /><a class="classtype1" onclick="changeshow(this);" value="@item.分类名">@item.分类名</a></div>
+                            <div index="@item.分类名" style="display: none;padding-left: 28px;">
+                                @foreach (var k in item.子分类)
+                                {
+                                    <div class="divclass2">
+                                        <input class="checkboxclass2" type="checkbox" value="@k" name="@item.分类名" style="line-height: 21px;" onclick="get_ptype(this,2)" /><a class="classtype2" value="@k">@k</a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                    @*<div name="kpbwzlb">
+                            <div class="divclass1"><div name="treepic" class="tre_level1" value="（地方政府专家库评审专业目录）" onclick="changeshow(this);"></div><input class="checkboxclass1" id="（地方政府专家库评审专业目录）" name="（地方政府专家库评审专业目录）" type="checkbox" value="（地方政府专家库评审专业目录）" style="line-height: 21px;" onclick="get_ptype(this,1)" /><a class="classtype1" onclick="changeshow(this);" value="（地方政府专家库评审专业目录）">（地方政府专家库评审专业目录）</a></div>
+                            <div index="（地方政府专家库评审专业目录）" style="display: none;padding-left: 28px;">
+                                @foreach (var k in (List<string>)ViewData["专家特殊类别"])
+                                {
+                                    <div class="divclass2">
+                                        <input class="checkboxclass2" type="checkbox" value="@k" name="（地方政府专家库评审专业目录）" style="line-height: 21px;" onclick="get_ptype(this,2)" /><a class="classtype2" value="@k">@k</a>
+                                    </div>
+                                }
+                            </div>
+                        </div>*@
+
+                </div>
+
+                <div style="width: 350px; height:350px; overflow-y: scroll; float: left; padding-left: 10px;">
+                    已选：
+                    <div id="selectcontent"></div>
+                </div>
+                <div style="width: 700px; margin: 0 auto; text-align: center;"><input type="button" class="index_online_btn" style="margin-top: 20px;" value="确定" onclick="send_ptype();" /></div>
+                <script type="text/javascript">
+                    function do_kpbwzlbserch(kpbwzlbkeyword) {
+                        //清空已有的em标签
+                        $("#selectconditionbox").find("em").each(function () {
+                            var xx = $(this).html();
+                            $(this).replaceWith(xx);
+                        });
+
+                        //输入框有值，进行循环判断
+                        if (kpbwzlbkeyword != "") {
+                            $("#selectconditionbox").find("div[name='kpbwzlb']").each(function () {
+                                var text = $(this).find(".classtype1").attr("value");
+                                var name = $(this).find(".classtype1").html();
+
+                                if (text.indexOf(kpbwzlbkeyword) > -1) {
+
+                                    //一级菜单控制
+                                    $(this).show();
+                                    $(this).find(".classtype1").html(name.replace(new RegExp(kpbwzlbkeyword, "g"), "<em>" + kpbwzlbkeyword + "</em>"));
+
+                                    //二级大div显示标记
+                                    var flag = false;
+                                    //二级菜单控制
+                                    $(this).find(".classtype2").each(function () {
+                                        var text2 = $(this).attr("value");
+                                        var name2 = $(this).html();
+
+                                        if (text2.indexOf(kpbwzlbkeyword) > -1) {
+                                            //一级有值，二级也有值     true
+                                            flag = true;
+
+                                            $(this).parent().show();
+                                            $(this).html(name2.replace(new RegExp(kpbwzlbkeyword, "g"), "<em>" + kpbwzlbkeyword + "</em>"));
+                                        } else {
+                                            $(this).parent().hide();
+                                        }
+
+                                    });
+
+
+                                    if (flag) {
+                                        //二级有，则显示二级大div
+                                        $(this).find("div").eq(2).show();
+                                        //控制三角形形状--展开
+                                        $(this).find("div").eq(1).attr("class", "tre_level2");
+                                    } else {
+                                        //二级没有，二级大div隐藏，各小div才显示
+                                        $(this).find(".divclass2").show();
+                                        $(this).find("div").eq(2).hide();
+                                        //控制三角形形状--关闭
+                                        $(this).find("div").eq(1).attr("class", "tre_level1");
+                                    }
+                                } else {
+                                    //大条件：一级没有
+
+                                    var f = false; //上级是否显示的标志
+
+                                    $(this).find(".classtype2").each(function () {
+                                        var text2 = $(this).attr("value");
+                                        var name2 = $(this).html();
+
+                                        if (text2.indexOf(kpbwzlbkeyword) > -1) {
+                                            //二级有，则一级也应该显示 置为true
+                                            f = true;
+                                            $(this).parent().show();
+                                            $(this).html(name2.replace(new RegExp(kpbwzlbkeyword, "g"), "<em>" + kpbwzlbkeyword + "</em>"));
+                                        } else {
+                                            $(this).parent().hide();
+                                        }
+                                    });
+
+                                    if (f) {
+                                        $(this).show();
+                                        $(this).find("div").eq(2).show();
+                                        //控制三角形形状--展开
+                                        $(this).find("div").eq(1).attr("class", "tre_level2");
+                                        //$(this).find("div").show();
+                                    } else {
+                                        $(this).hide();
+                                    }
+                                }
+                            });
+
+                        } else {
+                            //输入框无值，显示全部分类
+                            $("#selectconditionbox").find("div").each(function () {
+                                $(this).show();
+                                if (typeof ($(this).attr("index")) != "undefined") {
+                                    $(this).hide();
+                                }
+                                if ($(this).attr("name") == "treepic") {
+                                    $(this).attr("class", "tre_level1");
+                                }
+                            });
+                        }
+                    }
+
+                    function changeshow(obj) {
+                        //var name = $(obj).html();
+                        var name = $(obj).attr("value");
+                        var flag = $('div[index=' + name + ']').is(":hidden");
+                        if (flag) {
+                            $('div[index=' + name + ']').show();
+                            $(obj).parent().find("div").eq(0).attr("class", "tre_level2");
+                        } else {
+                            $('div[index=' + name + ']').hide();
+                            $(obj).parent().find("div").eq(0).attr("class", "tre_level1");
+                        }
+                    }
+                    function get_ptype(obj, num) {
+                        $("#selectcontent").html();
+                        var retstr = "";
+                        var str = "<p style='margin:3px;font-size:12px;height:auto;background:none;text-indent:0;font-weight:normal;'>";
+                        var strr = "";
+                        var name = $(obj).val();
+                        var yjfn = $(obj).attr("name");
+                        //一级类别选中事件--下级变为全选或全不选
+                        if (num == 1) {
+                            if ($(obj).is(':checked')) {
+                                $('div[index=' + name + ']').show();
+                                $(obj).parent().find("div").eq(0).attr("class", "tre_level2");
+                                $('div[index=' + name + ']').find("input").each(function () {
+                                    if (!$(this).is(":hidden")) {
+                                        $(this).prop("checked", true);
+                                    }
+                                });
+                            }
+                            else {
+                                $('div[index=' + name + ']').find("input").each(function () {
+                                    $(this).prop("checked", false);
+                                });
+                            }
+                        }
+                        //二级类别选中事件：使上级变为未选中
+                        if (num == 2) {
+                            $("#" + $(obj).attr("name")).prop("checked", false);
+                        }
+                        //遍历选中的复选框
+                        var arr = [];
+                        $("#selectconditionbox").find("input[name='" + yjfn + "']:checked").each(function () {
+                            if ($(this).attr("class") == "checkboxclass2") {
+                                strr += "<span class='kpbtype' style='color:#2B2B2B;' onclick='delthis(this)' name='2'>" + $(this).val() + "<i></i></span>";
+                                arr.push($(this).val());
+                            }
+                        });
+                        $("#selectconditionbox").find("input:checked").each(function () {
+                            if ($(this).attr("class") == "checkboxclass2") {
+                                retstr += "<div class='divclass2'><a name='" + $(this).attr("name") + "' class='classtype1'>" + $(this).val() + "</a></div>";
+                            }
+                        });
+                        str = str + strr + "</p>";
+                        $("#selectcontent").html(retstr);
+                        //判断该专家是否已经有该评标类别的一级分类
+                        var isExist = $(".kpbedit").parent().find("h5[name='" + yjfn + "']");
+                        if (isExist.length > 0) {
+                            for (xx in arr) {
+                                var aaa = $(".kpbedit").parent().find("h5[name='" + yjfn + "']").next().find("span:contains('" + arr[xx] + "')");
+                                if (aaa.length > 0) {
+                                    aaa.remove();
+                                }
+                            }
+                            $(".kpbedit").parent().find("h5[name='" + yjfn + "']").next().append(strr);
+                            if (strr == "") {
+                                $(".kpbedit").parent().find("h5[name='" + yjfn + "']").next().remove().end().remove();
+                            }
+                        }
+                        else {
+                            var pp = "<h5 style='margin:3px' name='" + yjfn + "'><span onclick='delthis(this)' name='1' class='kpbtype'>" + yjfn + "<i></i></span></h5>" + str;
+                            $(".kpbedit").before(pp);
+                        }
+
+                    }
+
+                    function send_ptype() {
+                        var namelist = new Array();
+                        $("#selectcontent").find("a").each(function () {
+                            namelist.push($(this).attr("name"));
+                        });
+                        namelist = uniQueue(namelist);
+                        var retstr = "";
+                        var text = "";//文本框的值
+
+                        $.each(namelist, function (i, item) {
+                            retstr += item;
+                            $("#selectcontent").find("a[name = '" + item + "']").each(function () {
+                                retstr += "*" + $(this).html();
+                                text += $(this).html() + ",";
+                            });
+                            retstr += "#";
+                        });
+
+                        //是否返回上级
+                        if (retstr != "") {
+                            if ($("#is_pre").is(":checked")) {
+                                retstr += "1";
+                            } else {
+                                retstr += "0";
+                            }
+                        }
+                        $("#可评标物质类别").val(text);
+                        $("#modal0").hide();
+
+                    }
+                    function uniQueue(array) {
+                        var arr = [];
+                        var m;
+                        while (array.length > 0) {
+                            m = array[0];
+                            arr.push(m);
+                            array = $.grep(array, function (n, i) {
+                                return n == m;
+                            }, true);
+                        }
+                        return arr;
+                    }
+                </script>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div style=" width:920px;   margin-left:10px; " class="bg_outdiv_right">
+
+        <div class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">评审专家添加</div>
+            </div>
+        </div>
+        <div class="expert" style="width: auto">
+            <div class="expert_no">
+                <div id="outbox">
+                    @using (Html.BeginForm("AddExpert", "运营团队后台", FormMethod.Post, new { name = "addexpert", enctype = "multipart/form-data" }))
+                    {
+                        Html.AntiForgeryToken();
+                        <!--第一步-->
+                        <div index="0" class="expert_identity">
+                            <table width="100%">
+                                <tr>
+                                    <td class="lab">账号：</td>
+                                    <td valign="top">
+                                        @Html.TextBoxFor(model => model.LoginName)<span style="color:red">*</span>
+                                        @Html.ValidationMessageFor(model => model.LoginName)
+                                    </td>
+                                    <td class="lab">密码：</td>
+                                    <td valign="top">
+                                        @Html.EditorFor(model => model.Pwd)<span style="color:red">*</span>
+                                        @Html.ValidationMessageFor(model => model.Pwd)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="lab">姓名：</td>
+                                    <td valign="top">
+                                        @Html.EditorFor(model => model.Name)<span style="color:red">*</span>
+                                        @Html.ValidationMessageFor(model => model.Name)
+                                    </td>
+                                    <td class="lab">性别：</td>
+                                    <td valign="top">
+                                        @Html.DropDownListFor(model => model.U.身份信息.性别, new SelectList(Enum.GetValues(typeof(性别))))<span style="color:red"></span>
+                                        @Html.ValidationMessageFor(model => model.U.身份信息.性别)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    @*<td class="lab">出生年月：</td>
+                                    <td valign="top">
+                                        @Html.TextBoxFor(model => model.BornDate, new { onfocus = "WdatePicker({dateFmt:'yyyy/MM/dd'})" })<span style="color:red"></span>
+                                        @Html.ValidationMessageFor(model => model.BornDate)
+                                    </td>*@
+                                    <td class="lab">专业技术职称：</td>
+                                    <td valign="top">
+                                        @Html.DropDownListFor(model => model.U.学历信息.专业技术职称, new SelectList(Enum.GetValues(typeof(专业技术职称))))<span style="color:red"></span>
+                                        @Html.ValidationMessageFor(model => model.U.学历信息.专业技术职称)
+                                    </td>
+                                    <td class="lab">手机：</td>
+                                    <td valign="top">
+                                        @Html.TextBoxFor(model => model.MobilePhone)<span style="color:red">*</span>
+                                        @Html.ValidationMessageFor(model => model.MobilePhone)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="lab">毕业院校：</td>
+                                    <td valign="top">
+                                        @Html.EditorFor(model => model.U.学历信息.毕业院校)<span style="color:red"></span>
+                                        @Html.ValidationMessageFor(model => model.U.学历信息.毕业院校)
+                                    </td>
+                                    <td class="lab">最高学历：</td>
+                                    <td valign="top">
+                                        @Html.EnumDropDownListFor(model => model.U.学历信息.最高学历)<span style="color:red"></span>
+                                        @Html.ValidationMessageFor(model => model.U.学历信息.最高学历)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:10%;" align="right">从事专业：</td>
+                                    <td style="width:35%;">
+                                        @Html.EditorFor(model => model.Major)<span style="color:red"></span>
+                                        @Html.ValidationMessageFor(model => model.Major)
+                                    </td>
+                                    <td align="right">工作单位：</td>
+                                    <td>
+                                        @Html.EditorFor(model => model.U.工作经历信息.工作单位)<span style="color:red"></span>
+                                        @Html.ValidationMessageFor(model => model.U.工作经历信息.工作单位)                
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:10%;" align="right">入库类型：</td>
+                                    <td style="width:35%;">
+                                        @Html.EnumDropDownListFor(model => model.U.入库类型)<span style="color:red"></span>
+                                        @Html.ValidationMessageFor(model => model.U.入库类型)
+                                    </td>
+                                </tr>
+                            </table>
+                            <table width="100%" style="margin-left:10px;">
+                                <tr>
+                                    <td valign="top" class="lab" style="width:120px;font-size: 14px;">
+                                        <label>可参评物资类别：</label>
+                                        <input name="可参评物资类别列表" type="hidden" class="kpblb" />
+                                    </td>
+                                    <td colspan="5" style="width: 645px;">
+                                        <a class="kpbedit" href="javascript:;">新增</a>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="4">
+                                        <table cellspacing="1" style="background-color:gray;" id="showtable" width="100%"></table>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td colspan="5">
+                                        <div style="color:red;font-size:16px;">
+                                            1. 请您根据您所上传的证书资料，职称专业，和评标经验，实事求是选择可参评类别，可多项选择。   <br />
+                                            2. 您所选择的可参评类别并非是最终可参评范围，最终参评范围以终审结果为准。
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: center">
+                                        <button class="front_login_rightbox_button" style="width:120px;" id="btn_sub" type="submit">提 &nbsp;&nbsp; 交</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    }
+                </div>
+            </div>
+        </div>
+        <table id="enbale_class_list"></table>
+
+
+    </div>
+</div>
+<script type="text/javascript">
+    //添加地方专业目录
+    $("#adddfzy").click(function () {
+        if (confirm("请确定要添加该分类吗？")) {
+            var _value = $("#dfzyml").val();
+            if (_value != "" && _value != null) {
+                var exist = false;
+                $("#selectconditionbox").find("div[name='kpbwzlb']").each(function () {
+                    var text = $(this).find(".classtype1").attr("value");
+                    if (text.trim() == _value.trim()) {
+                        exist = true;
+                    }
+                    $(this).find(".classtype2").each(function () {
+                        var text2 = $(this).attr("value");
+                        if (text2.trim() == _value.trim()) {
+                            exist = true;
+                        }
+                    });
+                });
+                if (exist) {
+                    alert("已存在该分类，请不要乱添加！！！");
+                }
+                else {
+                    var yjfn = $("#dfzyml").attr("name");
+                    $this = $(this);
+                    $("div[index='（地方政府专家库评审专业目录）']").append("<div class='divclass2'><input class='checkboxclass2' type='checkbox' checked='checked' value='" + _value + "' name='（地方政府专家库评审专业目录）' style='line-height: 21px;' onclick='get_ptype(this,2)' /><a class='classtype2' value='" + _value + "'>" + _value + "</a></div>");
+                    $("#selectcontent").append("<div class='divclass2'><a name='" + _value + "' class='classtype1'>" + _value + "</a></div>");
+                    var isExist = $("#" + $("#nowclick").val()).parent().find("h5[name='" + yjfn + "']");
+                    if (isExist.length > 0) {
+                        $("#" + $("#nowclick").val()).parent().find("h5[name='" + yjfn + "']").next().append("<span class='kpbtype' onclick='delthis(this)' name='2'>" + _value + "<i></i></span>");
+                    }
+                    else {
+                        var pp = "<h5 style='margin:3px' name='" + yjfn + "'><span onclick='delthis(this)' name='1' class='kpbtype'>" + yjfn + "<i></i></span></h5><p style='margin:3px;font-size:12px;'><span class='kpbtype' onclick='delthis(this)' name='2'>" + _value + "<i></i></span></p>";
+                        $("#" + $("#nowclick").val()).before(pp);
+                    }
+                    $.ajax({
+                        url: "/运营团队后台/AddDfzy",
+                        type: 'post',
+                        data: { zyml: _value },
+                        success: function (data) {
+                            if (data == "0") {
+                                alert("添加到数据库失败！");
+                            }
+                        },
+                        error: function () {
+                            alert("添加到数据库失败！");
+                        },
+                    });
+                    $("#dfzyml").val("");
+                    $("#dfzyml").keyup();
+                }
+            }
+            else { alert("请填写内容！"); }
+        }
+    });
+
+    //新增可评标类别
+    $(".kpbedit").click(function () {
+        //$("#nowclick").val($(this).attr("id"));
+        $("#selectconditionbox").find("input:checked").each(function () {
+            $(this).prop("checked", false);
+        });
+        $("#selectcontent").html("");
+        $("#modal0").show();
+    });
+    //删除某专家的可评标类别
+    function delthis(e) {
+        $this = $(e);
+        var t = $this.attr("name");
+        if (t == 1) {
+            $this.parent().next().remove().end().remove();
+        }
+        else {
+            var parent = $this.parent();
+            $this.remove();
+            if (parent.children().length <= 0) {
+                parent.prev().remove().end().remove();
+            }
+        }
+    }
+
+
+    function indexOf(arr, val) {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] == val) return i;
+        }
+        return -1;
+    }
+    var s = '';
+    var count = 0;
+    var str = "";
+    var strname2 = "按军队采购目录";
+    $("#btn_sub").click(function () {
+        var $kpblb = $(".kpblb");
+        var data = "";
+        var span = $kpblb.parent().next().find("span");
+        $.each(span, function () {
+            if ($(this).attr("name") == 1) {
+                data += ";" + $(this).text() + ":";
+            }
+            if ($(this).attr("name") == 2) {
+                data += $(this).text() + " ";
+            }
+        });
+        $kpblb.val(data);
+        $("form[name='addexpert']").submit();
+    });
+    function addData(th) {
+        if (strname2 != "按地方政府专家库") {
+            if (th.checked) {
+                var isHave = false;
+                var secName = $(th).val();
+                var v = $("#firstClass").val();
+                var tr = 0;
+                var td = 0;
+                var trCount = 0;
+                trCount = $("table#enbale_class_list tr").length;
+                if (v == -1) {
+                    alert("您还没有选择一级分类");
+                    return;
+                }
+                else {
+                    if (trCount == 0) {
+                        $("table#showtable").append("<tr><td style='background-color:white;'>" + v + "</td><td colspan='3'  style='background-color:white;'><span style='display:inline-block; margin-left:10px;'>" + secName + "</span></td></tr>");
+                        $("table#enbale_class_list").append("<tr><td><input id='" + trCount + "' name='可参评物资类别列表[" + trCount + "].一级分类' value='" + v + "' type='hidden'></td><td><input type='hidden' name='可参评物资类别列表[" + 0 + "].二级分类[" + 0 + "]' value='" + secName + "'/></td></td><td></td></tr>");
+                    }
+                    else {
+                        var isHave = false;
+                        var isHaveOne = false;
+                        for (var i = 0; i < trCount; i++) {
+                            var name = $("table#enbale_class_list tr:eq(" + i + ") td:first").children(":input:first").val();
+                            if (name == v) {
+                                isHaveOne = true;
+                                tr = i;
+                                break;
+                            }
+                        }
+                        if (isHaveOne == false) {
+                            $("table#showtable").append("<tr><td  style='background-color:white;'>" + v + "</td><td  style='background-color:white;'><span style='display:inline-block; margin-left:10px;'>" + secName + "</span></td></tr>");
+                            $("table#enbale_class_list").append("<tr><td><input id='" + trCount + "' name='可参评物资类别列表[" + trCount + "].一级分类' value='" + v + "' type='hidden'></td><td><input type='hidden' name='可参评物资类别列表[" + trCount + "].二级分类[" + 0 + "]' value='" + secName + "'/></td></td><td></td></tr>");
+                        }
+                        else {
+                            var td = $("table#enbale_class_list tr:eq(" + tr + ") td:eq(1)").children(":input").length;
+                            for (var j = 0; j < td; j++) {
+                                if ($("table#enbale_class_list tr:eq(" + tr + ") td:eq(1)").children(":input:eq(" + j + ")").val() == secName) {
+                                    isHave = true;
+                                    break;
+                                }
+                            }
+                            if (isHave == true) {
+                                alert("您已经添加过这个二级分类");
+                            }
+                            else {
+
+                                var last = $("table#enbale_class_list tr:eq(" + tr + ") td:eq(1)").children(":input").length;
+                                $("table#showtable tr:eq(" + tr + ") td:eq(1)").append("<span style='display:inline-block; margin-left:10px;'>" + secName + "</span>");
+                                $("table#enbale_class_list tr:eq(" + tr + ") td:eq(1)").append("<input type='hidden' name='可参评物资类别列表[" + tr + "].二级分类[" + last + "]' value='" + secName + "'/>");
+                            }
+                        }
+                    }
+                }
+                for (var k = 0; k < $("table#showtable tr").length; k++) {
+                    if ($("table#showtable tr:eq(" + k + ") td:eq(1) span").length == 0) {
+                        $("table#showtable tr:eq(" + k + ") td:eq(0)").hide();
+                        $("table#showtable tr:eq(" + k + ") td:eq(1)").hide();
+                    }
+                    else {
+                        $("table#showtable tr:eq(" + k + ") td:eq(0)").show();
+                        $("table#showtable tr:eq(" + k + ") td:eq(1)").show();
+                    }
+                }
+            }
+            else {
+                var trcount1 = $("table#showtable tr").length;
+                for (var m = 0; m < trcount1; m++) {
+                    $("table#showtable tr:eq(" + m + ") td:eq(1) span").each(function () {
+                        if ($(this).text() == th.value) {
+                            $(this).remove();
+                        }
+                    });
+                    if ($("table#showtable tr:eq(" + m + ") td:eq(1) span").length == 0) {
+                        $("table#showtable tr:eq(" + m + ") td:eq(0)").hide();
+                        $("table#showtable tr:eq(" + m + ") td:eq(1)").hide();
+                    }
+                    else {
+                        $("table#showtable tr:eq(" + m + ") td:eq(0)").show();
+                        $("table#showtable tr:eq(" + m + ") td:eq(1)").show();
+                    }
+                }
+                var trcount2 = $("table#enbale_class_list tr").length;
+                for (var n = 0; n < trcount2; n++) {
+                    $("table#enbale_class_list tr:eq(" + n + ") td:eq(1) :input").each(function () {
+                        if ($(this).val() == th.value) {
+                            $(this).val("");
+                        }
+                    });
+                }
+            }
+        }
+        else {
+            if (th.checked) {
+                var have = false;
+                if ($("table#showtable tr").length > 0) {
+                    for (var i = 0; i < $("table#showtable tr:first td:first span").length; i++) {
+                        if ($("table#showtable tr:first td:first span:eq(" + i + ")").text() == $(th).val()) {
+                            have = true;
+                            break;
+                        }
+                    }
+                    if (have) {
+                        alert("您已经添加过了");
+                    }
+                    else {
+                        $("table#showtable tr:first td:first").append("<span style='display:inline-block; margin-left:10px;'>" + $(th).val() + "</span>");
+                    }
+                }
+                else {
+                    $("table#showtable").append("<tr><td  style='background-color:white;'><span>" + $(th).val() + "</span></td></tr>");
+                }
+                if ($("table#enbale_class_list tr").length == 0) {
+                    $("table#enbale_class_list").append("<tr><td><input type='hidden' name='可参评物资类别列表[0].一级分类' value='" + $(th).val() + "'/></td><td><input type='hidden' name='可参评物资类别列表[" + 0 + "].二级分类[" + 0 + "]' value='-1'/></td></tr>");
+                }
+                else {
+                    if (have == false) {
+                        var val = "";
+                        val += $("table#enbale_class_list tr:first td:first :input:first").val() + ",";
+                        val += $(th).val();
+                        $("table#enbale_class_list tr:first td:first :input:first").val(val);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < $("table#showtable tr:first td:first span").length; i++) {
+                    if ($("table#showtable tr:first td:first span:eq(" + i + ")").text() == $(th).val()) {
+                        $("table#showtable tr:first td:first span:eq(" + i + ")").remove();
+                    }
+                    if ($("table#showtable tr:first td:first span").length == 0) {
+                        $("table#showtable tr:first td:first").hide();
+                    }
+                    else {
+                        $("table#showtable tr:first td:first").show();
+                    }
+                }
+                var strname = $("table#enbale_class_list tr:first td:first :input:first").val().split(',');
+                var strname1 = "";
+                for (var k = 0; k < strname.length - 1; k++) {
+                    if ($(th).val() != strname[k]) {
+                        strname1 += strname[k] + ",";
+                    }
+                }
+                $("table#enbale_class_list tr:first td:first :input:first").val(strname1);
+            }
+            if ($("table#showtable tr:first td:eq(0) span").length == 0) {
+                $("table#showtable").hide();
+            }
+            else {
+                $("table#showtable").show();
+            }
+        }
+    }
+    $("span.bx").click(function () {
+        $("span.bx").each(function () {
+            $(this).css({ "background-color": "gray", "color": "white" });
+        });
+        $(this).css({ "background-color": "white", "color": "red" });
+        if ($(this).text() == "按地方政府专家库") {
+            $(".secondtype").children().hide().last().show();
+            strname2 = "按地方政府专家库";
+            $("#first").hide();
+            $("#firstClass").hide();
+            $(".secondtype").show();
+            $("#txt").hide();
+            for (var i = 0; i < $("#firstClass option").length; i++) {
+                $("#firstClass option:eq(" + i + ")").remove();
+            }
+            $("#firstClass").html("<option index='-1' value='-1'>请选择一级分类</option><option index='22' value='非商品分类评审专业'>非商品分类评审专业</option>");
+        }
+        if ($(this).text() == "按军队采购目录") {
+            $(".secondtype").children().hide();
+            strname2 = "按军队采购目录";
+            $("#first").show();
+            $("#firstClass").show();
+            $(".secondtype").show();
+            $("#txt").hide();
+            $("#firstClass").html(str);
+        }
+        if ($(this).text() == "手动输入") {
+            $(".secondtype").children().hide();
+            strname2 = "手动输入";
+            $("#first").hide();
+            $("#firstClass").hide();
+            $(".secondtype").hide();
+            $("#txt").show();
+        }
+        $("#enbale_class_list").html("");
+        $("#showtable").html("");
+        $(":input[type='checkbox']").each(function () {
+            this.checked = false;
+        });
+    });
+    function searchtype(th) {
+        var index = $(th).find("option:selected").attr("index");
+        $(".secondtype").children().hide().eq(index).show();
+        $(".secondtype").children().eq(0).show();
+    }
+
+    function addFirst() {
+        var have = false;
+        if ($("table#showtable tr").length > 0) {
+            for (var i = 0; i < $("table#showtable tr:first td:first span").length; i++) {
+                if ($("table#showtable tr:first td:first span:eq(" + i + ")").text() == $("#fst").val()) {
+                    have = true;
+                    break;
+                }
+            }
+            if (have) {
+                alert("您已经添加过了");
+                $("#fst").val("");
+            }
+            else {
+                $("table#showtable tr:first td:first").append("<span style='display:inline-block; margin-left:10px;'>" + $("#fst").val() + "</span>");
+                alert("添加成功！");
+                $("#fst").val("");
+            }
+        }
+        else {
+            $("table#showtable").append("<tr><td  style='background-color:white;'><span>" + $("#fst").val() + "</span></td></tr>");
+            alert("添加成功！");
+            $("#fst").val("");
+        }
+        if ($("table#enbale_class_list tr").length == 0) {
+            $("table#enbale_class_list").append("<tr><td><input type='hidden' name='可参评物资类别列表[0].一级分类' value='" + $("#fst").val() + "'/></td><td><input type='hidden' name='可参评物资类别列表[" + 0 + "].二级分类[" + 0 + "]' value='-1'/></td></tr>");
+        }
+        else {
+            if (have == false) {
+                var val = "";
+                val += $("table#enbale_class_list tr:first td:first :input:first").val() + ",";
+                val += $("#fst").val();
+                $("table#enbale_class_list tr:first td:first :input:first").val(val);
+            }
+        }
+    }
+    $(function () {
+        $("#deliverprovince").change(function () {
+            $("#provence").val($(this).val());
+        });
+        $("#delivercity").change(function () {
+            $("#city").val($(this).val());
+        });
+        $("#deliverarea").change(function () {
+            $("#area").val($(this).val());
+        });
+
+        @*var gz_jingli = {
+            dwdz: "@Model.工作经历信息.单位地址",
+            gzdw: "@Model.工作经历信息.工作单位",
+            xrzw: "@Model.工作经历信息.现任职务"
+        };*@
+
+        //根据在职状态设置现任职务是否可填写
+        $("select[name='工作经历信息.在职状态']").change(function () {
+            if ($(this).val() == 2) {
+                $("input[name='工作经历信息.工作单位'],input[name='工作经历信息.现任职务'],input[name='工作经历信息.单位地址']").val("").attr({ "disabled": "disabled" }).next().html("");
+                $("tr[name='txz']").show();
+            }
+            else if ($(this).val() == 1) {
+                $("input[name='工作经历信息.工作单位'],input[name='工作经历信息.现任职务'],input[name='工作经历信息.单位地址']").removeAttr("disabled").next().html("*");
+                //$("input[name='工作经历信息.单位地址']").val(gz_jingli.dwdz);
+                //$("input[name='工作经历信息.工作单位']").val(gz_jingli.gzdw);
+                //$("input[name='工作经历信息.现任职务']").val(gz_jingli.xrzw);
+                $("tr[name='txz']").hide();
+            }
+            else {
+                $("tr[name='txz']").show();
+                $("input[name='工作经历信息.工作单位'],input[name='工作经历信息.现任职务'],input[name='工作经历信息.单位地址']").val("").removeAttr("disabled").next().html("*");
+            }
+        });
+
+        $(".secondtype").children().hide();
+        str = $("#firstClass").html();
+
+        $("span.bx:first").css({ "background-color": "white", "color": "red" });
+        $("#专家添加").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#专家添加").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+
+    //function delgt(number, num, th) {
+    //    $.get('/专家后台/delgt', { index: number, id: num }, function (data) {
+    //        if (data == 1) {
+    //            alert("删除成功！");
+    //            $(th).parent().parent().remove();
+    //        }
+    //        else {
+    //            alert("出错！");
+    //        }
+    //    });
+    //}
+
+
+    function showOutbox() {
+        $("#f").show(500);
+    }
+    function hideOutbox() {
+        $("#f").hide(500);
+    }
+</script> 

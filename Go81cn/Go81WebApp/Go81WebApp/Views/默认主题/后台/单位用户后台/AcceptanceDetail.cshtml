@@ -247,16 +247,17 @@
                                         {
                                             <td valign="top" style="width:200px; padding-top:5px;">
                                                 管理部门审核人：
-                                                @{
-                                            if (Model.审核数据.审核状态 == 审核状态.审核通过)
-                                            {
-                                                if (ysduser.Any())
-                                                {
-                                                    var user = ysduser.First();
-                                                    <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
-                                                }
-                                            }
-                                                }
+                                                @*@{
+                                                    if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                                    {
+                                                        if (ysduser.Any())
+                                                        {
+                                                            var user = ysduser.First();
+                                                            <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                                        }
+                                                    }
+                                                }*@
+                                                <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                             </td>
                                         }
                                         <td style="text-indent:2em;width:16%;text-align:right;padding-top:5px" valign="top">供货单位开票人：</td>
@@ -463,7 +464,7 @@
                                         {
                                             <td valign="top" style="width:200px; padding-top:5px;">
                                                 管理部门审核人：
-                                                @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                                @*@if (Model.审核数据.审核状态 == 审核状态.审核通过)
                                                 {
                                                     if (Model.审核数据.审核状态 == 审核状态.审核通过)
                                                     {
@@ -473,7 +474,8 @@
                                                             <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                                         }
                                                     }
-                                                }
+                                                }*@
+                                                <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                             </td>
                                         }
                                         <td style="text-indent:2em;width:16%;text-align:right;padding-top:5px" valign="top">供货单位开票人：</td>
@@ -536,7 +538,7 @@
                     </tr>
                     <tr>
                         <td align="right">生成日期：</td>
-                        <td align="left">@DateTime.Now</td>
+                        <td align="left">@Model.基本数据.添加时间</td>
                     </tr>
                 </table>
             </div>
@@ -645,7 +647,7 @@
                     </tr>
                     <tr>
                         <td align="right">生成日期：</td>
-                        <td align="left">@DateTime.Now</td>
+                        <td align="left">@Model.基本数据.添加时间</td>
                     </tr>
                 </table>
             </div>
@@ -709,14 +711,15 @@
                     else
                     {
                         <span>管理部门审核人：</span>
-                        if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                        @*if (Model.审核数据.审核状态 == 审核状态.审核通过)
                         {
                             if (ysduser.Any())
                             {
                                 var user = ysduser.First();
                                 <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
                             }
-                        }
+                        }*@
+                        <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />   
                     }
                 </td>
                 <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">供货单位开票人：@Model.供货单位开票人</td>

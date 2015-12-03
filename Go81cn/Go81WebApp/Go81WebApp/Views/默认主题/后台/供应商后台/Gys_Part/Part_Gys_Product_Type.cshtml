@@ -132,7 +132,7 @@
             可提供商品类别
             @if (!Model.供应商用户信息.已提交)
             {
-                if (Model.可提供产品类别列表.Count < 2)
+                if (Model.可提供产品类别列表.Count !=-1)//原来最多只能添加2个分类
                 {
                     <span><a id="addtype" style="cursor:pointer; text-decoration:underline;" onclick="$('#f2').show()">【新增】</a></span>
                 }

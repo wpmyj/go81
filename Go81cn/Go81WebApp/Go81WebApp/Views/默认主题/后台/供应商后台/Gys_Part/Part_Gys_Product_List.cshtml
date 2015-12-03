@@ -84,9 +84,11 @@
         @*<input type="checkbox" value="-100" onclick="return doShelves(this);" />上架/下架当前页所有商品<input type="checkbox" value="-200" style="margin-left:20px;" onclick="return doShelves(this);" />上架/下架所有商品*@
     </div>
     <p style="color:red;font-size:12px;margin-top:0;">注：1、修改价格与修改商品信息的区别在于，修改价格不会影响商品的状态，修改商品信息会将会使商品置为未审核状态！&nbsp;&nbsp;&nbsp;2、商品是上架状态才会显示在前台页面上！</p>
-
+    @{
+        IEnumerable<商品> goods = ViewData["供应商商品信息"] as IEnumerable<商品>;
+    }
     <div class="gys_znxx_box">
-        @foreach (var item in (IEnumerable<商品>)ViewData["供应商商品信息"])
+        @foreach (var item in goods)
         {
             var kk = (long)-2;
             if (item.审核数据.审核状态 == 审核状态.审核通过)
@@ -154,6 +156,8 @@
             </div>
         }
 
+        @if (goods.Count()!=0)
+        {
             <div class="gys_znxx_content_detailbox">
                 <div class="gys_znxx_content_detailbox">
                     @{
@@ -163,7 +167,7 @@
             {
                 if (CurrentPage != 1)
                 {
-                    <a href='/供应商后台/Gys_Product_List?page=1'>首页</a><a href='/供应商后台/Gys_Product_List?page=@(CurrentPage-1)'>上一页</a>
+                    <a href='/供应商后台/Gys_Product_List?page=1'>首页</a><a style="border-left:none;" href='/供应商后台/Gys_Product_List?page=@(CurrentPage-1)'>上一页</a>
                 }
             }
             if (Pagecount <= 6)
@@ -251,7 +255,7 @@
             {
                 if (CurrentPage != Pagecount)
                 {
-                    <a href='/供应商后台/Gys_Product_List?page=@(CurrentPage+1)'>下一页</a><a href='/供应商后台/Gys_Product_List?page=@(Pagecount)'>末页</a>
+                    <a href='/供应商后台/Gys_Product_List?page=@(CurrentPage+1)' style="border-right:none;">下一页</a><a href='/供应商后台/Gys_Product_List?page=@(Pagecount)'>末页</a>
                 }
                 <span>第@(CurrentPage)页/共@(Pagecount)页</span>
             }
@@ -261,7 +265,11 @@
                     跳转到<input id="jumpagetext" type="text" style="width:50px; height:20px; line-height:20px;" />页<input style="width:50px; height:25px; line-height:25px;" type="button" onclick="return Jumppage();" value="确定" />
                 </div>
             </div>
-        
+        }
+           else
+        {
+            <h1 style="text-align:center;color:#CEE5F9;">没有任何商品！</h1>
+        } 
     </div>
 </div>
 <script type="text/javascript" language="javascript">

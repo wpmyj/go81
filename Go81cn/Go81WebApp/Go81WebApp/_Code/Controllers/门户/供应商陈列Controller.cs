@@ -53,7 +53,7 @@ namespace Go81WebApp.Controllers.门户
                 if (supplier != null)
                 {
                     用户管理.增加浏览量(id);
-                    if (-1 != HttpContext.检查登录() || WebApiApplication.IsIntranet || (int)supplier.供应商用户信息.认证级别>=4)
+                    if (-1 != HttpContext.检查登录() || WebApiApplication.IsIntranet || (int)supplier.供应商用户信息.认证级别 >= 4)
                     {
                         ViewData["已登录"] = "1";
                     }
@@ -337,7 +337,7 @@ namespace Go81WebApp.Controllers.门户
                 }
                 else
                 {
-                    return Redirect("/供应商陈列/GysList");
+                    return Content("<script>alert('该供应商还没通过网站审核！');window.location='/供应商陈列/GysList';</script>");
                 }
 
             }
@@ -555,7 +555,7 @@ namespace Go81WebApp.Controllers.门户
                         g.name = item.商品信息.商品名;
                         if (item.商品信息.商品图片 != null && item.商品信息.商品图片.Count != 0)
                         {
-                            g.Picture = item.商品信息.商品图片[0].Replace("original","150X150");
+                            g.Picture = item.商品信息.商品图片[0].Replace("original", "150X150");
                         }
                         else
                         {
@@ -571,6 +571,38 @@ namespace Go81WebApp.Controllers.门户
             {
                 JsonResult json = new JsonResult() { Data = new { Newgood = new List<Goods>(), Pcount = 1, Cpage = 1 } };
                 return Json(json, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public ActionResult SupplierInArea()
+        {
+            try
+            {
+                string area = Request.QueryString["area"];
+                long pgCount = 0;
+                int cpg = 1;
+                if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+                {
+                    cpg = int.Parse(Request.QueryString["page"]);
+                }
+                if (cpg <= 0)
+                {
+                    cpg = 1;
+                }
+                long pc = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(m => m.所属地域.省份.Contains(area)));
+                pgCount = pc / 15;
+                if (pc % 15 > 0)
+                {
+                    pgCount++;
+                }
+                ViewData["Pagecount"] = pgCount;
+                ViewData["CurrentPage"] = cpg;
+                ViewData["area"] = area;
+                ViewData["supplier"] = 用户管理.查询用户<供应商>(15 * (cpg - 1), 15, Query<供应商>.Where(m => m.所属地域.省份.Contains(area)));
+                return View();
+            }
+            catch
+            {
+                return Redirect("/供应商陈列/GysList");
             }
         }
         public ActionResult Detail_info()
@@ -638,23 +670,23 @@ namespace Go81WebApp.Controllers.门户
                 }
                 if (!string.IsNullOrWhiteSpace(city))
                 {
-                    query = query.And(Query<供应商>.Matches(m=>m.所属地域.城市, new BsonRegularExpression(string.Format("/{0}/i", city))));
+                    query = query.And(Query<供应商>.Matches(m => m.所属地域.城市, new BsonRegularExpression(string.Format("/{0}/i", city))));
                 }
                 if (!string.IsNullOrWhiteSpace(area))
                 {
                     query = query.And(Query<供应商>.Matches(m => m.所属地域.区县, new BsonRegularExpression(string.Format("/{0}/i", area))));
                 }
-                if(!string.IsNullOrWhiteSpace(industry))
+                if (!string.IsNullOrWhiteSpace(industry))
                 {
-                    query = query.And(Query<供应商>.Matches(m=>m.企业基本信息.所属行业, new BsonRegularExpression(string.Format("/{0}/i", industry))));
+                    query = query.And(Query<供应商>.Matches(m => m.企业基本信息.所属行业, new BsonRegularExpression(string.Format("/{0}/i", industry))));
                 }
                 if (!string.IsNullOrWhiteSpace(name))
                 {
                     query = query.And(Query<供应商>.Matches(m => m.企业基本信息.企业名称, new BsonRegularExpression(string.Format("/{0}/i", name))));
                 }
-                IEnumerable<供应商> user = 用户管理.查询用户<供应商>(20*(skip-1),20,query.And(Query<供应商>.Where(m=>m.供应商用户信息.复审数据.审核状态== 审核状态.审核通过)));
+                IEnumerable<供应商> user = 用户管理.查询用户<供应商>(20 * (skip - 1), 20, query.And(Query<供应商>.Where(m => m.供应商用户信息.复审数据.审核状态 == 审核状态.审核通过)));
                 List<Industry> gys = new List<Industry>();
-                foreach(var item in user)
+                foreach (var item in user)
                 {
                     Industry a = new Industry();
                     a.Id = item.Id;
@@ -666,13 +698,13 @@ namespace Go81WebApp.Controllers.门户
                 {
                     pCount++;
                 }
-                JsonResult json = new JsonResult() { Data = new {u=gys,p=pCount } };
-                return Json(json,JsonRequestBehavior.AllowGet);
+                JsonResult json = new JsonResult() { Data = new { u = gys, p = pCount } };
+                return Json(json, JsonRequestBehavior.AllowGet);
             }
             catch
             {
                 List<Industry> gys = new List<Industry>();
-                JsonResult json = new JsonResult() { Data = new { u = gys} };
+                JsonResult json = new JsonResult() { Data = new { u = gys } };
                 return Json(json, JsonRequestBehavior.AllowGet);
             }
         }
@@ -1319,7 +1351,7 @@ namespace Go81WebApp.Controllers.门户
 
 
         }
-        
+
         public ActionResult Part_SearchByPage() //供应商列表
         {
             if (-1 != HttpContext.检查登录())
@@ -1342,7 +1374,90 @@ namespace Go81WebApp.Controllers.门户
             ViewData["供应商列表"] = 用户管理.查询用户<供应商>(PAGESIZE * (page - 1), PAGESIZE, q, false, SortBy<供应商>.Descending(o => o.供应商用户信息.认证级别).Descending(o => o.基本数据.修改时间), false);
             return PartialView("Part_Gys/Part_SearchByPage");
         }
-
+        public class Supplier
+        {
+            public long Id;
+            public string Name;
+            public string Industry;
+            public string Area;
+            public string number;
+            public string status;
+        }
+        public ActionResult Search_Supplier()
+        {
+            int skip = int.Parse(Request.QueryString["skip"]);
+            int pageSize = 0;
+            IMongoQuery condition = null;
+            List<Supplier> Slist = new List<Supplier>();
+            string name;
+            string factory;
+            int cls;
+            string province;
+            string city;
+            string area;
+            province = Request.QueryString["provice"];
+            city = Request.QueryString["city"];
+            area = Request.QueryString["area"];
+            name = Request.QueryString["name"];
+            factory = Request.QueryString["factory"];
+            if (province != "")
+            {
+                if (province != "不限省份")
+                {
+                    condition = condition.And(MongoDB.Driver.Builders.Query.EQ("所属地域.省份", new BsonRegularExpression(string.Format("/{0}/i", province))));
+                }
+            }
+            if (city != "")
+            {
+                if (city != "不限城市")
+                {
+                    condition = condition.And(MongoDB.Driver.Builders.Query.EQ("所属地域.城市", new BsonRegularExpression(string.Format("/{0}/i", city))));
+                }
+            }
+            if (area != "")
+            {
+                if (area != "不限区县")
+                {
+                    condition = condition.And(MongoDB.Driver.Builders.Query.EQ("所属地域.区县", new BsonRegularExpression(string.Format("/{0}/i", area))));
+                }
+            }
+            if (name != "")
+            {
+                condition = condition.And(MongoDB.Driver.Builders.Query.EQ("企业基本信息.企业名称", new BsonRegularExpression(string.Format("/{0}/i", name))));
+            }
+            if (factory != "")
+            {
+                condition = condition.And(MongoDB.Driver.Builders.Query.EQ("企业基本信息.所属行业", new BsonRegularExpression(string.Format("/{0}/i", factory))));
+            }
+            IEnumerable<供应商> supplier = null;
+            int maintain = 0;
+            supplier = 用户管理.查询用户<供应商>(0, 0, condition).Skip(15 * (skip - 1)).Take(15);
+            pageSize = (int)用户管理.计数用户<供应商>(0, 0, condition) / 15;
+            maintain = (int)用户管理.计数用户<供应商>(0, 0, condition) % 15;
+            if (maintain > 0)
+            {
+                pageSize++;
+            }
+            foreach (var item in supplier)
+            {
+                Supplier s = new Supplier();
+                s.Id = item.Id;
+                s.Name = item.企业基本信息.企业名称;
+                s.Area = item.所属地域.地域;
+                if (string.IsNullOrWhiteSpace(item.企业基本信息.所属行业))
+                {
+                    s.Industry = "";
+                }
+                else
+                {
+                    s.Industry = item.企业基本信息.所属行业;
+                }
+                s.status = item.审核数据.审核状态.ToString();
+                Slist.Add(s);
+            }
+            JsonResult js = new JsonResult() { Data = new { Slist = Slist, pageSize = pageSize } };
+            return Json(js, JsonRequestBehavior.AllowGet);
+        }
         public class Industry
         {
             /// <summary>

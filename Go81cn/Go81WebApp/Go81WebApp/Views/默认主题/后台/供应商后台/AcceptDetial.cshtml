@@ -140,7 +140,7 @@
                                 { @Model.收货单位}
                             </td>
                             @*<td colspan="3" style="text-align:right;font-family:'Times New Roman'">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>*@
-                            <td colspan="3" style="text-align:right;padding-right:20px">生成日期：@DateTime.Now</td>
+                            <td colspan="3" style="text-align:right;padding-right:20px">生成日期：@Model.基本数据.添加时间</td>
                             <td rowspan="12" style="padding-left:14px;padding-top:25px;"><span>第一联</span><br /><br /><span style="height:34px;">供货单位留存</span></td>
                         </tr>
                         <tr>
@@ -285,14 +285,15 @@
                                 {
                                     <td valign="top" style="width:250px; padding-top:5px;">
                                         管理部门审核人：
-                                        @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                        @*@if (Model.审核数据.审核状态 == 审核状态.审核通过)
                                         {
                                             if (ysduser.Any())
                                             {
                                                 var user = ysduser.First();
                                                 <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                             }
-                                        }
+                                        }*@
+                                        <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                     </td>
                                 }
                                 <td style="text-indent:2em;width:18%;text-align:right;padding-top:5px" valign="top">供货单位开票人：</td>
@@ -353,7 +354,7 @@
                                 { @Model.收货单位}
                             </td>
                             @*<td colspan="3" style="text-align:right;font-family:'Times New Roman'">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>*@
-                            <td colspan="3" style="text-align:right;padding-right:20px;">生成日期：@DateTime.Now</td>
+                            <td colspan="3" style="text-align:right;padding-right:20px;">生成日期：@Model.基本数据.添加时间</td>
                             <td rowspan="12" style="padding-left:14px;padding-top:25px;"> <span>第二联</span><br /><br /><span style="height:34px;">收货单位财务报销附件</span></td>
                         </tr>
                         <tr>
@@ -497,14 +498,15 @@
                                 {
                                     <td valign="top" style="width:250px; padding-top:5px;">
                                         管理部门审核人：
-                                        @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                        @*@if (Model.审核数据.审核状态 == 审核状态.审核通过)
                                         {
                                             if (ysduser.Any())
                                             {
                                                 var user = ysduser.First();
                                                 <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                             }
-                                        }
+                                        }*@
+                                        <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                     </td>
                                 }
                                 <td style="text-indent:2em;width:18%;text-align:right;padding-top:5px" valign="top">供货单位开票人：</td>
@@ -585,7 +587,7 @@
                         </tr>
                         <tr>
                             <td align="right">生成日期：</td>
-                            <td align="left">@DateTime.Now</td>
+                            <td align="left">@Model.基本数据.添加时间</td>
                         </tr>
                     </table>
                 </div>
@@ -678,7 +680,7 @@
                 <tr>
                     <td colspan="2" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">
                         管理部门审核人：
-                        @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                        @*@if (Model.审核数据.审核状态 == 审核状态.审核通过)
                         {
                             if (ysduser.Any())
                             {
@@ -688,7 +690,8 @@
                                     <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                                 }
                             }
-                        }
+                        }*@
+                        <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                     </td>
                     <td colspan="3" style="height:30px;border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">供货单位开票人：@Model.供货单位开票人</td>
                     <td colspan="3" style="height:30px;border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">收货单位验收人：@Model.收货单位验收人</td>
@@ -724,7 +727,7 @@
                     </tr>
                     <tr>
                         <td align="right">生成日期：</td>
-                        <td align="left">@DateTime.Now</td>
+                        <td align="left">@Model.基本数据.添加时间</td>
                     </tr>
                 </table>
             </div>
@@ -734,7 +737,32 @@
             <tr>
                 <th width="5%" style="line-height:34px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">序号</th>
                 <th width="30%" colspan="5" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">附件名称</th>
-                <th width="20%" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">金额</th>
+                <th width="20%" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc; position:relative;">金额
+                    <div style="position:absolute; top:10px;right: 35px;">
+                        @if (!Model.是否作废)
+                        {
+
+                            if (Model.审核数据.审核者.用户数据 != null)
+                            {
+                                if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                {
+                                    if (ysduser.Any())
+                                    {
+                                        var user = ysduser.First();
+                                        if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
+                                        {
+                                            <img src="@user.盖章图片链接" width="240" />
+                                        }
+                                        else
+                                        {
+                                            <img src="/供应商后台/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                </th>
             </tr>
             @{var num1 = 1;
             foreach (var k in Model.验收单附件)
@@ -782,7 +810,7 @@
             <tr>
                 <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">
                     管理部门审核人：
-                    @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                    @*@if (Model.审核数据.审核状态 == 审核状态.审核通过)
                     {
                         if (ysduser.Any())
                         {
@@ -792,7 +820,8 @@
                                 <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                             }
                         }
-                    }
+                    }*@
+                    <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
                 </td>
                 <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">供货单位开票人：@Model.供货单位开票人</td>
                 <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">
@@ -800,30 +829,6 @@
                 </td>
             </tr>
         </table>
-        <div style="position:absolute; bottom: 20px;right: 35px;">
-            @if (!Model.是否作废)
-            {
-
-                if (Model.审核数据.审核者.用户数据 != null)
-                {
-                    if (Model.审核数据.审核状态 == 审核状态.审核通过)
-                    {
-                        if (ysduser.Any())
-                        {
-                            var user = ysduser.First();
-                            if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
-                            {
-                                <img src="@user.盖章图片链接" width="240" />
-                            }
-                            else
-                            {
-                                <img src="/供应商后台/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
-                            }
-                        }
-                    }
-                }
-            }
-        </div>
         <div style="text-align:center;line-height:34px;">
             @if (Model.审核数据.审核状态 == 审核状态.审核通过)
             {
@@ -863,21 +868,27 @@
         //var fff=costTotalNum;
         //var ffff=0;
         //$(".costper")
-        SetPrintSettings();
+        //SetPrintSettings();
     });
     //打印物资清单
     function printList(e) {
         $(e).parent().hide();
         document.body.innerHTML = $("#good_list_detail").html();
         window.print();
-        window.reload();
+        var timer = setInterval(function () {
+            window.location.reload();
+            clearInterval(timer);
+        }, 300);
     };
     //打印附件
     function printattachList(e) {
         $(e).parent().hide();
         document.body.innerHTML = $("#good_attach_detail").html();
         window.print();
-        window.location.reload();
+        var timer = setInterval(function () {
+            window.location.reload();
+            clearInterval(timer);
+        }, 300);
     }
     function printready() {
         $("#tipsMess").fadeIn(200);
@@ -905,4 +916,7 @@
     $("#modal_clo").click(function () {
         $("#good_list").fadeOut();
     });
+    $("body").contextmenu(function(){
+    return false;
+    }); 
 </script>

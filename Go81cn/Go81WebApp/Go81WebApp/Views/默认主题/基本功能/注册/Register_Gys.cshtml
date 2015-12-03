@@ -5,6 +5,7 @@
 @using Go81WebApp.Models.数据模型.商品数据模型
 @using Go81WebApp.Models.数据模型.用户数据模型
 <script src="~/JS/provinceandcity_all.js"></script>
+
 @*<script src="~/JS/jquery-1.6.min.js"></script>*@
 <link href="~/css/Msg_Tips.css" rel="stylesheet" />
 @using (Html.BeginForm("Register_Gys", "注册", FormMethod.Post))
@@ -154,17 +155,17 @@
                         @Html.ValidationMessageFor(model => model.company_Name)
                     </td>
                 </tr>
-
+                
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">供应商类型：</td>
                     <td style="color:red;position:relative;" class="front_login_rightbox_inputdiv">
-                            @Html.DropDownListFor(model => model.gystype, new  SelectList(Enum.GetValues(typeof(供应商.供应商类型))), new { id = "gystype", @style = "width:150px" })
-                            @Html.DropDownListFor(model => model.gystypename, new SelectList(Enum.GetValues(typeof(供应商.供应商细分类型))), new { id = "gystypename", @style = "width:150px;display:none" })
+                        @Html.DropDownListFor(model => model.gystype, new  SelectList(Enum.GetValues(typeof(供应商.供应商类型))), new { id = "gystype", @style = "width:150px" })
+                        @Html.DropDownListFor(model => model.gystypename, new SelectList(Enum.GetValues(typeof(供应商.供应商细分类型))), new { id = "gystypename", @style = "width:150px;display:none" })
                         <span style="position:absolute;left:310px;top:5px;">*</span>
-                            <div class="out_box">
-                                <div class="arrow"></div>
-                                <div class="con_box">请选择供应商类型</div>
-                            </div>
+                        <div class="out_box">
+                            <div class="arrow"></div>
+                            <div class="con_box">请选择供应商类型</div>
+                        </div>
                     </td>
                 </tr>
                 <tr class="front_login_rightbox_listdiv">
@@ -192,8 +193,6 @@
                         <span id="place_error" style="color:red; display:none">请选择地域！</span>
                     </td>
                 </tr>
-
-
                 @*<tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_title">所属行业：</td>
                     <td class="front_login_rightbox_inputdiv">
@@ -242,7 +241,6 @@
                 <tr class="front_login_rightbox_listdiv">
                     <td class="front_login_rightbox_checkboxdiv" colspan="2">
                         <input type="checkbox" checked="checked" class="front_login_rightbox_checkbox" />我已阅读并同意<a id="agreement" href="#" style="text-decoration:underline;color:rgba(62, 139, 188, 1);">《西南物资采购网注册协议》</a>，<span style="border: solid 1px #f4a460; padding: 1px;">相关注册信息需提报成都军区物资采购管理部门审核</span><span id="error_agree" style="color:red; display:none; margin-left:10PX;">请阅读并同意《西南物资采购网注册协议》</span>
-
                     </td>
                 </tr>
                 <tr>
@@ -286,41 +284,42 @@
     </div>
 </div>
 <script type="text/javascript" language="javascript">
+
     window.onload = function () {
         new PCAS("deliverprovince", "delivercity", "deliverarea");
         var a = $("#hid_input").val();
         switch (a) {
-            case "成都军区物资采购机构（成都）":
-                $("#org").html(a);
-                //$("#org_re").html("成都军区物资采购机构(成都),张助理");
-                $("#org_phone").html("028-68308761；4006826181");
-                //$("#org_address").html("成都市武侯区高攀路38号");
-                break;
-            case "成都军区物资采购机构（昆明）":
-                $("#org").html(a);
-                //$("#org_re").html("成都军区物资采购机构（昆明）,谢渝,助理");
-                $("#org_phone").html("028-68308761；4006826181");
-                //$("#org_address").html("昆明市东郊八公里贵昆路287号");
-                break;
-            case "成都军区物资采购机构（贵阳）":
-                $("#org").html(a);
-                //$("#org_re").html("成都军区物资采购机构（贵阳）,田助理");
-                $("#org_phone").html("028-68308761；4006826181");
-                //$("#org_address").html("贵州省贵阳市油榨街东新区路1号");
-                break;
-            case "成都军区物资采购机构（重庆）":
-                $("#org").html(a);
-                //$("#org_re").html("成都军区物资采购机构（重庆）,丁文元,助理");
-                $("#org_phone").html("028-68308761；4006826181");
-                //$("#org_address").html("重庆市沙坪坝区石井坡216号");
-                break;
-            case "西藏军区物资采购中心":
-                $("#org").html(a);
-                //$("#org_re").html("成都军区物资采购机构（重庆）,丁文元,助理");
-                $("#org_phone").html("0891-6738571");
-                //$("#org_address").html("重庆市沙坪坝区石井坡216号");
-                break;
-            default:
+        case "成都军区物资采购机构（成都）":
+            $("#org").html(a);
+            //$("#org_re").html("成都军区物资采购机构(成都),张助理");
+            $("#org_phone").html("028-68308761；4006826181");
+            //$("#org_address").html("成都市武侯区高攀路38号");
+            break;
+        case "成都军区物资采购机构（昆明）":
+            $("#org").html(a);
+            //$("#org_re").html("成都军区物资采购机构（昆明）,谢渝,助理");
+            $("#org_phone").html("028-68308761；4006826181");
+            //$("#org_address").html("昆明市东郊八公里贵昆路287号");
+            break;
+        case "成都军区物资采购机构（贵阳）":
+            $("#org").html(a);
+            //$("#org_re").html("成都军区物资采购机构（贵阳）,田助理");
+            $("#org_phone").html("028-68308761；4006826181");
+            //$("#org_address").html("贵州省贵阳市油榨街东新区路1号");
+            break;
+        case "成都军区物资采购机构（重庆）":
+            $("#org").html(a);
+            //$("#org_re").html("成都军区物资采购机构（重庆）,丁文元,助理");
+            $("#org_phone").html("028-68308761；4006826181");
+            //$("#org_address").html("重庆市沙坪坝区石井坡216号");
+            break;
+        case "西藏军区物资采购中心":
+            $("#org").html(a);
+            //$("#org_re").html("成都军区物资采购机构（重庆）,丁文元,助理");
+            $("#org_phone").html("0891-6738571");
+            //$("#org_address").html("重庆市沙坪坝区石井坡216号");
+            break;
+        default:
         }
         var v = $("#gystype").find("option:selected").text();
         if (v == "服务供应商") {

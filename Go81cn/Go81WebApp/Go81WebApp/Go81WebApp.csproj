@@ -666,6 +666,8 @@
     <Content Include="Images\seal\云南省军区签名.png" />
     <Content Include="Images\seal\后勤工程学院签名.png" />
     <Content Include="Images\seal\四川省军区签名.png" />
+    <Content Include="Images\seal\四川预高师印章.png" />
+    <Content Include="Images\seal\四川预高师签名.png" />
     <Content Include="Images\seal\成都军区总医院签名.png" />
     <Content Include="Images\seal\昆明民族干部学院.png" />
     <Content Include="Images\seal\昆明民族干部学院章.png" />
@@ -1252,7 +1254,6 @@
     <Content Include="Views\默认主题\后台\运营团队后台\Suggestion.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Suggestion_NoPss.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Supplier_PssInfo.cshtml" />
-    <Content Include="Views\默认主题\后台\运营团队后台\Supplier_WaitInfo.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\User_Info_Detail.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Expert_List.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Ad_User_Infos.cshtml" />
@@ -1418,7 +1419,7 @@
     <Content Include="Views\默认主题\后台\专家抽选\Expert_list.cshtml" />
     <Content Include="Views\默认主题\后台\专家抽选\Part_Experts\Part_Expert_list.cshtml" />
     <Content Include="Views\默认主题\后台\专家抽选\Part_Experts\Part_Expert_TreeMenu.cshtml" />
-    <Content Include="Views\默认主题\后台\专家抽选\Part_Experts\Part_Expert_Edit.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_Expert_Edit.cshtml" />
     <Content Include="Views\默认主题\后台\专家抽选\Expert_Edit.cshtml" />
     <Content Include="Views\默认主题\后台\专家抽选\Expert_Add.cshtml" />
     <Content Include="Views\默认主题\后台\专家抽选\Expert_History.cshtml" />
@@ -1436,12 +1437,10 @@
     <Content Include="Views\默认主题\后台\运营团队后台\PushMessageDetail.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Msg_TemplateManage.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_MsgTemplate.cshtml" />
-    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_depart_info.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_single_info.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_manage_info.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_manage_info1.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_single_info1.cshtml" />
-    <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_depart_info1.cshtml" />
     <Content Include="Views\默认主题\门户\供应商陈列\Part_Gys\Part_GysSelect.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Add.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\Procure_Part\Part_Expert_Edit.cshtml" />
@@ -2209,6 +2208,11 @@
     <Content Include="Views\默认主题\门户\商品陈列\JcLife.cshtml" />
     <Content Include="Views\默认主题\门户\商品陈列\JcLifeIndex.cshtml" />
     <Content Include="Views\默认主题\门户\商品陈列\Part_Product\Part_Recommend1.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Expert_Edit.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\ModifiAnyUserPWD.cshtml" />
+    <Content Include="Views\默认主题\后台\运营团队后台\Expert_Add.cshtml" />
+    <Content Include="Views\默认主题\门户\专家库\ExpertList.cshtml" />
+    <Content Include="Views\默认主题\门户\供应商陈列\SupplierInArea.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

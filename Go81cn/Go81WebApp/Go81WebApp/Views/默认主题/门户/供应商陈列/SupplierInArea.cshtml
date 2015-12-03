@@ -1,0 +1,274 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    ViewBag.Title = "供应商列表";
+
+}
+<script src="~/JS/provinceandcity_all.js"></script>
+@{
+    IEnumerable<供应商> supplier = ViewData["supplier"] as IEnumerable<供应商>;
+}
+<style>
+    .gys_znxx_content {
+        width: 1130px;
+    }
+
+    div#pager {
+        text-align: center;
+    }
+
+        div#pager a, .gys_znxx_content_detailbox a {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+            line-height: 25px;
+            font-size: 12px;
+            height: 25px;
+            border: 1px solid rgb(204, 204, 204);
+            margin-top: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+            div#pager a:hover {
+                background-color: rgb(243, 243, 243);
+            }
+</style>
+<div class="bg_outdiv">
+    <div>
+        <table style="margin:10px auto;width:1130px;">
+            <tr>
+                <td align="right">供应商名称：</td>
+                <td>
+                    <input type="text" id="name" />
+                </td>
+                <td align="right">所属行业：</td>
+                <td><input type="text" id="factory" /></td>
+                <td align="right">地区：</td>
+                <td colspan="3">
+                    <select id="deliverprovince" name="deliverprovince" style="width:153px; margin-left:2px;"></select>
+                    <select id="delivercity" name="delivercity" style="width:153px;"></select>
+                    <select id="deliverarea" name="deliverarea" style="width:153px;"></select>
+                    <script>
+                        window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                    </script>
+                </td>
+            </tr>
+            <tr><td colspan="6" align="center" height="50"><input type="button" id="search" onclick="getSupplier(1)" style="width:100px; border:none; background-color:green; cursor:pointer; color:white; height:30px; font-size:15px;" value="查询" /></td></tr>
+        </table>
+    </div>
+    <div>
+        <div class="gys_znxx_content">
+            <div style="font-size:12px;" id="tb1">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr><th>序号</th><th>供应商名称</th><th>所在地区</th><th>所属行业</th><th>审核状态</th></tr>
+                    @for (int i = 0; i < supplier.Count(); i++)
+                    {
+                        <tr>
+                            <td style="text-align: center; width:5%;">@(i + 1)</td>
+                            <td style="text-align: center; width:14%;">
+                                <a target="_blank" href="/供应商陈列/Supplier_Destination?id=@supplier.ElementAt(i).Id">@supplier.ElementAt(i).企业基本信息.企业名称</a>
+                            </td>
+                            <td style="text-align: center; width:14%;">@(supplier.ElementAt(i).所属地域.地域)</td>
+                            <td style="text-align: center; width:12%;">@supplier.ElementAt(i).企业基本信息.所属行业</td>
+                            @if (supplier.ElementAt(i).供应商用户信息.复审数据.审核状态 != Go81WebApp.Models.数据模型.审核状态.审核通过)
+                            {
+                                <td style="text-align:center; color:red; width:6%; cursor:pointer" id="@supplier.ElementAt(i).Id" class="skan-exam">@supplier.ElementAt(i).审核数据.审核状态.ToString()</td>
+                            }
+                            else
+                            {
+                                <td style="text-align:center; width:6%;color:#1f9434;cursor:pointer;" id="@supplier.ElementAt(i).Id" class="skan-exam">@supplier.ElementAt(i).供应商用户信息.复审数据.审核状态.ToString()</td>
+                            }
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div id="pager">
+                @{
+                    int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                    int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                    if (Pagecount > 0)
+                    {
+                        if (CurrentPage != 1)
+                        {
+                            <a href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=1'>首页</a><a href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@(CurrentPage-1)' style="border-left:none;">上一页</a>
+                        }
+                    }
+                    if (Pagecount <= 6)
+                    {
+                        for (int i = 1; i <= Pagecount; i++)
+                        {
+                            if (CurrentPage == i)
+                            {
+                                <a style="border:1px solid red;" href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@i'>@i</a>
+                            }
+                            else
+                            {
+                                <a href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@i'>@i</a>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (CurrentPage < 6)
+                        {
+                            if (CurrentPage != 1)
+                            {
+                                for (int i = 1; i < 7; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/供应商陈列/SupplierInArea?area=@(ViewData["area"].ToString())&page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@(Pagecount)">@Pagecount</a>
+                            }
+                            else
+                            {
+                                for (int i = 1; i < 7; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@i'>@i</a>
+                                    }
+                                }
+                                <span>...</span><a href="/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@(Pagecount)">@Pagecount</a>
+                            }
+                        }
+                        else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                        {
+                            <a href="/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=1">1</a><span>...</span>
+                            for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@i'>@i</a>
+                                }
+                            }
+                            <span>...</span><a href="/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@(Pagecount)">@Pagecount</a>
+                        }
+                        else if (CurrentPage >= Pagecount - 3)
+                        {
+                            <a href="/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=1">1</a><span>...</span>
+                            for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                            {
+                                if (CurrentPage == i)
+                                {
+                                    <a style="border:1px solid red;" href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@i'>@i</a>
+                                }
+                                else
+                                {
+                                    <a href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@i'>@i</a>
+                                }
+                            }
+                        }
+                    }
+                    if (Pagecount > 0)
+                    {
+                        if (CurrentPage != Pagecount)
+                        {
+                            <a href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@(CurrentPage+1)' style="border-right:none;">下一页</a><a href='/供应商陈列/SupplierInArea?area=@ViewData["area"].ToString()&page=@(Pagecount)'>末页</a>
+                        }
+                        <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function getSupplier(cpg) {
+        $.get('/供应商陈列/Search_Supplier',
+            {
+                name: $("#name").val(),
+                factory: $("#factory").val(),
+                skip: cpg,
+                provice: $("select#deliverprovince").val(),
+                city: $("select#delivercity").val(),
+                area: $("select#deliverarea").val(),
+            },
+            function (data) {
+                var str = "<table width='100%' cellpadding='0' cellspacing='0'><tr><th>序号</th><th>供应商名称</th><th>所在地区</th><th>所属行业</th><th>审核状态</th></tr>";
+                for (var i = 0; i < data.Data.Slist.length; i++) {
+                    str += "<tr><td style='text-align: center; width:5%;'>" + (i + 1) + "</td><td style='text-align: center; width:14%;'><a target='_blank' href='/供应商陈列/Supplier_Destination?id=" + data.Data.Slist[i].Id + "'>" + data.Data.Slist[i].Name + "</a>" +
+                                "</td><td style='text-align: center; width:14%;'>" + data.Data.Slist[i].Area + "</td>" +
+                                "<td style='text-align: center; width:12%;'>" + data.Data.Slist[i].Industry + "</td>" +
+                                "<td style='text-align:center; color:red; width:6%; cursor:pointer' class='skan-exam'>" + data.Data.Slist[i].status + "</td></tr>";
+                }
+                str += "</table>";
+                $("#tb1").html(str);
+                setPage(data.Data.pageSize, cpg);
+            }
+        );
+    }
+    function setPage(pgCount, currentPage) {
+        var str = '';
+        if (pgCount > 0) {
+            if (currentPage != 1) {
+                str += "<a onclick='getSupplier(1)'>首页</a><a onclick='getSupplier(" + (currentPage - 1) + ")'>上一页</a>";
+            }
+        }
+        if (pgCount <= 6) {
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='getSupplier(" + i + ")'>" + i + "</a>";
+            }
+        }
+        else {
+            if (currentPage < 6) {
+                if (currentPage != 1) {
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a onclick='getSupplier(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a  onclick='getSupplier(" + pgCount + ")'>" + pgCount + "</a>";
+                }
+                else {
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a  onclick='getSupplier(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='getSupplier(" + pgCount + ")'>" + pgCount + "</a>";
+                }
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                str += "<a onclick='getSupplier(" + (1) + ")'>1</a>...";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='getSupplier(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='getSupplier(" + pgCount + ")'>" + pgCount + "</a>";
+            }
+            else if (currentPage >= pgCount - 3) {
+                str += "<a onclick='getSupplier(" + 1 + ")'>1</a>...";
+                for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
+                    str += "<a onclick='getSupplier(" + i + ")'>" + i + "</a>";
+                }
+            }
+        }
+        if (pgCount > 0) {
+            if (currentPage != pgCount) {
+                str += "<a onclick='getSupplier(" + (currentPage + 1) + ")'>下一页</a><a onclick='getSupplier(" + pgCount + ")'>末页</a>";
+            }
+            if (pgCount != 0) {
+                str += "<span>第"+currentPage+"/共"+pgCount+"页</span>";
+            }
+        }
+        $("div#pager").html(str);
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+        $("div#pager a").css("margin-left","5px");
+    }
+</script>

@@ -74,10 +74,10 @@ namespace Go81WebApp.Controllers.基本功能
                         //交易状态
                         string trade_status = Request.QueryString["trade_status"];
                         string ordercode="";
-                        if(!string.IsNullOrWhiteSpace(Request.QueryString["body"]))
+                        /*if(!string.IsNullOrWhiteSpace(Request.QueryString["body"]))
                         {
                             ordercode=Request.QueryString["body"];//优惠码
-                        }
+                        }*/
 
                         if (Request.QueryString["trade_status"] == "TRADE_FINISHED" || Request.QueryString["trade_status"] == "TRADE_SUCCESS")
                         {
@@ -91,13 +91,13 @@ namespace Go81WebApp.Controllers.基本功能
                                 订单 model = 订单管理.查找订单(long.Parse(id));
                                 if (!model.已付款)
                                 {
-                                    if (优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(m => m.Code == ordercode && m.已使用 == false)) > 0)
+                                    /*if (优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(m => m.Code == ordercode && m.已使用 == false)) > 0)
                                     {
                                         model.使用优惠码 = true;
                                         优惠码 yh = 优惠码管理.查询优惠码(0, 0, Query<优惠码>.Where(m => m.已使用 == false && m.Code == ordercode)).First();
                                         yh.已使用 = true;
                                         优惠码管理.更新优惠码(yh);
-                                    }
+                                    }*/
                                     model.已付款 = true;
                                     订单管理.更新订单(model);
                                     ViewData["userid"] = model.订单所属用户.用户ID;
@@ -160,10 +160,10 @@ namespace Go81WebApp.Controllers.基本功能
                     //请在这里加上商户的业务逻辑程序代码
                     var account = Request.Form["total_fee"];
                     string ordercode = "";
-                    if (!string.IsNullOrWhiteSpace(Request.Form["body"]))
+                    /*if (!string.IsNullOrWhiteSpace(Request.Form["body"]))
                     {
                         ordercode = Request.Form["body"];//优惠码
-                    }
+                    }*/
                     string id = Request.Form["extra_common_param"];//传回的商品id和采购数量
                     //——请根据您的业务逻辑来编写程序（以下代码仅作参考）——
                     //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表
@@ -186,13 +186,13 @@ namespace Go81WebApp.Controllers.基本功能
                             订单 model = 订单管理.查找订单(long.Parse(id));
                             if (!model.已付款)
                             {
-                                if (优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(m => m.Code == ordercode&&m.已使用==false))>0)
+                                /*if (优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(m => m.Code == ordercode&&m.已使用==false))>0)
                                 {
                                     model.使用优惠码 = true;
                                     优惠码 yh=优惠码管理.查询优惠码(0, 0, Query<优惠码>.Where(m => m.已使用 == false && m.Code == ordercode)).First();
                                     yh.已使用 = true;
                                     优惠码管理.更新优惠码(yh);
-                                }
+                                }*/
                                 model.已付款 = true;
                                 订单管理.更新订单(model);
                             }
@@ -220,12 +220,12 @@ namespace Go81WebApp.Controllers.基本功能
                 {
                     id = long.Parse(Request.Form["orderid"]);//订单Id
                 }
-                if (!string.IsNullOrWhiteSpace(Request.Form["yhm"]))
+                /*if (!string.IsNullOrWhiteSpace(Request.Form["yhm"]))
                 {
                     ordercode = Request.Form["yhm"];//订单优惠码
-                }
+                }*/
                 long counter=优惠码管理.计数优惠码(0, 0, Query<优惠码>.Where(m => m.Code == ordercode&&m.已使用==false));
-                long count = 订单管理.计数订单(0, 0, Query<订单>.Where(m => m.Id == id && m.已付款 == false && m.订单所属用户.用户ID == currentUser.Id));
+                long count = 订单管理.计数订单(0, 0, Query<订单>.Where(m => m.Id == id && m.已付款 == false && m.订单所属用户.用户ID == currentUser.Id&&m.订单总付款==decimal.Parse(amount.ToString())));
                 if (count != 0)
                 {
                     //支付类型

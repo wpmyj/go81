@@ -1,4 +1,7 @@
 ﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    ViewBag.Title = "专家列表";
+}
 <link href="~/css/index.css" rel="stylesheet" />
 <script src="~/JS/provinceandcity_all.js"></script>
 @{
@@ -85,6 +88,7 @@
                                     <th>民族</th>
                                     <th>专家级别</th>
                                     <th>审核状态</th>
+                                    <th>是否入库</th>
                                     <th colspan="2">操作</th>
                                     <th>Excel<input id="allCheck" name="parent" type="checkbox" value="" onclick="selectAll()" /></th>
                                 </tr>
@@ -92,11 +96,21 @@
                                 {
                                     <tr>
                                         <td style="text-align: center; width:12%;">@(i + 1)</td>
-                                        <td style="text-align: center; width:20%;"><a href="/专家抽选/Expert_Edit?id=@supplier.ElementAt(i).Id" target="_blank">@supplier.ElementAt(i).身份信息.姓名</a></td>
+                                        <td style="text-align: center; width:20%;"><a href="/运营团队后台/Expert_Edit?id=@supplier.ElementAt(i).Id" target="_blank">@(string.IsNullOrWhiteSpace(supplier.ElementAt(i).身份信息.姓名) ? "未填写" : supplier.ElementAt(i).身份信息.姓名)</a></td>
                                         <td style="text-align: center; width:12%;">@supplier.ElementAt(i).身份信息.民族</td>
                                         <td style="text-align: center; width:12%;">@supplier.ElementAt(i).身份信息.专家级别</td>
                                         <td style="text-align:center; width:10%;">@supplier.ElementAt(i).审核数据.审核状态.ToString()</td>
-                                        <td style="text-align: center; width:6%;"><a onclick="del(@supplier.ElementAt(i).Id)">删除</a></td>
+                                        <td style="text-align: center; width:9%;">
+                                            @if (supplier.ElementAt(i).入库类型!=入库类型.入库)
+                                            {
+                                                <span>未入库</span>
+                                            }
+                                            else
+                                            {
+                                                <span style="color:#ff0000;">已入库</span>
+                                            }
+                                        </td>
+                                        <td style="text-align: center; width:6%;"><a onclick="del(this,@supplier.ElementAt(i).Id)">删除</a></td>
                                         <td style="text-align: center; width:6%;"><a target="_blank" href="/运营团队后台/Print_Detail?id=@supplier.ElementAt(i).Id">打印</a></td>
                                         <td style="text-align: center; width:6%;"><input name="item" type="checkbox" value="@supplier.ElementAt(i).Id" onclick="selectThis()" /></td>
                                     </tr>
@@ -214,13 +228,28 @@
 </div>
 <script type="text/javascript" language="javascript">
     var s = "";
-    function del(num) {
+    function del(obj,num) {
         if (confirm("点击确定即将删除此用户！确定删除吗？")) {
-            window.location = "/运营团队后台/Supplier_Delete?id=" + num;
+            $.ajax({
+                url:'/运营团队后台/DelExpert',
+                data:{id:num},
+                success:function() {
+                    alert("删除成功！");
+                    $(obj).parents("tr").remove();
+                },
+                error:function() {
+                    alert("删除失败！");
+                },
+            });
         }
     }
     function searchExpert(e){
-        var expertname=$("#expertname").val();
+        var expertname = $("#expertname").val();
+        var status = $("#status").val();
+        var province =$("#deliverprovince").val();
+        var city = $().val();
+        var area = $().val();
+        if(expertname==""){alert("请输入专家姓名！"); return false;}
         $.ajax({
             url:'/运营团队后台/SearchExpert',
             data:{expertname:expertname},
@@ -230,7 +259,7 @@
                 str += " <tr><th>序号</th><th>专家姓名</th><th>民族</th><th>专家级别</th><th>审核状态</th><th colspan='2'>操作</th><th>Excel<input id='allCheck' name='parent' type='checkbox' value='' onclick='selectAll()' /></th></tr>";
                 $.each(data, function (index) {
                     str += "<tr><td style='text-align: center; width:12%;'>" + (index + 1) + "</td>";
-                    str += "<td style='text-align: center; width:20%;'><a href='/专家抽选/Expert_Edit?id="+data[index].ID+"' target='_blank'>" + data[index].Name + "</a></td>";
+                    str += "<td style='text-align: center; width:20%;'><a href='/运营团队后台/Expert_Edit?id="+data[index].ID+"' target='_blank'>" + data[index].Name + "</a></td>";
                     str += "<td style='text-align: center; width:12%;'>" + data[index].Minzu + "</td>";
                     str += "<td style='text-align: center; width:12%;'>" + data[index].Zjjb + "</td>";
                     str += "<td style='text-align:center; width:10%;'>" + data[index].Shzt + "</td>";

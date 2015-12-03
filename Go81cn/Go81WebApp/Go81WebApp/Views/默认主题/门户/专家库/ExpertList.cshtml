@@ -1,0 +1,304 @@
+﻿@using Go81WebApp.Models.数据模型.用户数据模型
+@{
+    ViewBag.Title = "专家列表";
+}
+<link href="~/css/index.css" rel="stylesheet" />
+<script src="~/JS/provinceandcity_all.js"></script>
+<style>
+    div#pager {
+        text-align: center;
+    }
+
+        div#pager a, .gys_znxx_content_detailbox a {
+            display: inline-block;
+            width: 50px;
+            text-align: center;
+            line-height: 25px;
+            font-size: 12px;
+            height: 25px;
+            border: 1px solid rgb(204, 204, 204);
+            margin-left:5px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+            div#pager a:hover {
+                background-color: rgb(243, 243, 243);
+            }
+</style>
+
+<div class="bg_outdiv">
+    <div style="width:1200px; margin:0px auto;">
+        <div>
+            <div class="gys_znxx_topbox" style="width:100%;">
+                <div class="gys_xttz_topbg">
+                    <div style="font-size: 25px;">@ViewData["area"]专家列表</div>
+                </div>
+            </div>
+            <div class="gys_znxx_box" style="width:100%;">
+                @{IEnumerable<专家> supplier = ViewData["supplier"] as IEnumerable<专家>;}
+                <div class="gys_znxx_contentbox" style="width:100%;">
+                    <table width="100%" style="margin-left:20px; margin-top:10px;">
+                        <tr>
+                            <td align="right">专家名称：</td>
+                            <td>
+                                <input type="text" id="expertname" />
+                            </td>
+                            <td align="right">审核状态：
+                                <select name="s" id="status" style="width:153px;">
+                                    <option value="1" selected="selected">已审核</option>
+                                    <option value="0">未审核</option>
+                                    <option value="2">审核未通过</option>
+                                </select>
+                            </td>
+                            <td align="right">地区：</td>
+                            <td>
+                                <select id="deliverprovince" name="deliverprovince" style="width:153px;"></select>
+                                <select id="delivercity" name="delivercity" style="width:153px;"></select>
+                                <select id="deliverarea" name="deliverarea" style="width:153px;"></select>
+                                <script>
+                                    window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                                </script>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" align="center" height="50">
+                                <input type="button" id="search" onclick="searchExpert(1)" style="width:100px; border:none; background-color:green; cursor:pointer; color:white; height:30px; font-size:15px;" value="查询" />
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="gys_znxx_content">
+                        <div style="font-size:12px;" id="tb1">
+                            <table width="100%" cellpadding="0" cellspacing="0" id="ExpertList">
+                                <tr>
+                                    <th>序号</th>
+                                    <th>专家姓名</th>
+                                    <th>民族</th>
+                                    <th>专家级别</th>
+                                    <th>审核状态</th>
+                                    <th>是否入库</th>
+                                </tr>
+                                @for (int i = 0; i < supplier.Count(); i++)
+                                {
+                                    <tr>
+                                        <td style="text-align: center; width:12%;">@(i + 1)</td>
+                                        <td style="text-align: center; width:20%;">@supplier.ElementAt(i).身份信息.姓名</td>
+                                        <td style="text-align: center; width:12%;">@supplier.ElementAt(i).身份信息.民族</td>
+                                        <td style="text-align: center; width:12%;">@supplier.ElementAt(i).身份信息.专家级别</td>
+                                        <td style="text-align:center; width:10%;">@supplier.ElementAt(i).审核数据.审核状态.ToString()</td>
+                                        <td style="text-align: center; width:9%;">
+                                            @if (supplier.ElementAt(i).入库类型 != 入库类型.入库)
+                                            {
+                                                <span>未入库</span>
+                                            }
+                                            else
+                                            {
+                                                <span style="color:#ff0000;">已入库</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                            <div id="pager">
+                                @{
+                                    if (supplier.Count() != 0)
+                                    {
+                                        int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                                        int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                                        if (Pagecount > 0)
+                                        {
+                                            if (CurrentPage != 1)
+                                            {
+                                                <a href='/专家库/ExpertList?area=@ViewData["area"]&page=1'>首页</a><a href='/专家库/ExpertList?area=@ViewData["area"]&page=@(CurrentPage-1)'>上一页</a>
+                                            }
+                                        }
+                                        if (Pagecount <= 6)
+                                        {
+                                            for (int i = 1; i <= Pagecount; i++)
+                                            {
+                                                if (CurrentPage == i)
+                                                {
+                                                    <a style="border:1px solid red;" href='/专家库/ExpertList?area=@ViewData["area"]&page=@i'>@i</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href='/专家库/ExpertList?area=@ViewData["area"]&page=@i'>@i</a>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (CurrentPage < 6)
+                                            {
+                                                if (CurrentPage != 1)
+                                                {
+                                                    for (int i = 1; i < 7; i++)
+                                                    {
+                                                        if (CurrentPage == i)
+                                                        {
+                                                            <a style="border:1px solid red;" href='/专家库/ExpertList?area=@ViewData["area"]&page=@i'>@i</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href='/专家库/ExpertList?area=@ViewData["area"]&page=@i'>@i</a>
+                                                        }
+                                                    }
+                                                    <span>...</span><a href="/专家库/ExpertList?area=@ViewData["area"]&page=@(Pagecount)">@Pagecount</a>
+                                                }
+                                                else
+                                                {
+                                                    for (int i = 1; i < 7; i++)
+                                                    {
+                                                        if (CurrentPage == i)
+                                                        {
+                                                            <a style="border:1px solid red;" href='/专家库/ExpertList?area=@ViewData["area"]&page=@i'>@i</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href='/专家库/ExpertList?area=@ViewData["area"]&page=@i'>@i</a>
+                                                        }
+                                                    }
+                                                    <span>...</span><a href="/专家库/ExpertList?area=@ViewData["area"]&page=@(Pagecount)">@Pagecount</a>
+                                                }
+                                            }
+                                            else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                                            {
+                                                <a href="/专家库/ExpertList?area=@ViewData["area"]&page=1">1</a><span>...</span>
+                                                for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                                                {
+                                                    if (CurrentPage == i)
+                                                    {
+                                                        <a style="border:1px solid red;" href='/专家库/ExpertList?area=@ViewData["area"]&page=@i'>@i</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href='/专家库/ExpertList?area=@ViewData["area"]&page=@i'>@i</a>
+                                                    }
+                                                }
+                                                <span>...</span><a href="/专家库/ExpertList?area=@ViewData["area"]&page=@(Pagecount)">@Pagecount</a>
+                                            }
+                                            else if (CurrentPage >= Pagecount - 3)
+                                            {
+                                                <a href="/专家库/ExpertList?area=@ViewData["area"]&page=1">1</a><span>...</span>
+                                                for (int i = Pagecount - 5 + 1; i <= Pagecount; i++)
+                                                {
+                                                    if (CurrentPage == i)
+                                                    {
+                                                        <a style="border:1px solid red;" href='/专家库/ExpertList?area=@ViewData["area"]&page=@i'>@i</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href='/专家库/ExpertList?area=@ViewData["area"]&page=@i'>@i</a>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (Pagecount > 0)
+                                        {
+                                            if (CurrentPage != Pagecount)
+                                            {
+                                                <a href='/专家库/ExpertList?area=@ViewData["area"]&page=@(CurrentPage+1)'>下一页</a><a href='/专家库/ExpertList?area=@ViewData["area"]&page=@Pagecount'>末页</a>
+                                            }
+                                        }
+                                        <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" language="javascript">
+    function searchExpert(cpg) {
+
+        var expertname = $("#expertname").val();
+        var status = $("#status").val();
+        var province =$("#deliverprovince").val();
+        var city = $("#delivercity").val();
+        var area = $("deliverarea").val();
+        $.get("/专家库/SearchExpert", { expertname: expertname, pro: province, sta: status, c: city, a: area,cp:cpg }, function (data) {
+            var str = "<table>";
+            str += " <tr><th>序号</th><th>专家姓名</th><th>民族</th><th>专家级别</th><th>审核状态</th><th>是否入库</th></tr>";
+            for (var i = 0; i < data.Data.expert.length; i++)
+            {
+                str += "<tr><td style='text-align: center; width:12%;'>" + (i + 1) + "</td>";
+                str += "<td style='text-align: center; width:20%;'>" + data.Data.expert[i].Name + "</td>";
+                str += "<td style='text-align: center; width:12%;'>" + data.Data.expert[i].Minzu + "</td>";
+                str += "<td style='text-align: center; width:12%;'>" + data.Data.expert[i].Zjjb + "</td>";
+                str += "<td style='text-align:center; width:10%;'>" + data.Data.expert[i].Shzt + "</td>";
+                str += "<td style='text-align:center; width:10%;'>" + data.Data.expert[i].rk + "</td></tr>";
+            }
+            str += "</table>";
+            $("#ExpertList").html(str);
+            setPage(data.Data.pCount, cpg);
+        });
+    }
+    function setPage(pgCount, currentPage) {
+        var str = '';
+        if (pgCount > 0) {
+            if (currentPage != 1) {
+                str += "<a onclick='searchExpert(1)'>首页</a><a onclick='searchExpert(" + (currentPage - 1) + ")'>上一页</a>";
+            }
+        }
+        if (pgCount <= 6) {
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='searchExpert(" + i + ")'>" + i + "</a>";
+            }
+        }
+        else {
+            if (currentPage < 6) {
+                if (currentPage != 1) {
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a onclick='searchExpert(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a  onclick='searchExpert(" + pgCount + ")'>" + pgCount + "</a>";
+                }
+                else {
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a  onclick='searchExpert(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='searchExpert(" + pgCount + ")'>" + pgCount + "</a>";
+                }
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                str += "<a onclick='searchExpert(" + (1) + ")'>1</a>...";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='searchExpert(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='searchExpert(" + pgCount + ")'>" + pgCount + "</a>";
+            }
+            else if (currentPage >= pgCount - 3) {
+                str += "<a onclick='searchExpert(" + 1 + ")'>1</a>...";
+                for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
+                    str += "<a onclick='searchExpert(" + i + ")'>" + i + "</a>";
+                }
+            }
+        }
+        if (pgCount > 0) {
+            if (currentPage != pgCount) {
+                str += "<a onclick='searchExpert(" + (currentPage + 1) + ")'>下一页</a><a onclick='searchExpert(" + pgCount + ")'>末页</a>";
+            }
+            if (pgCount != 0) {
+                str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
+            }
+        }
+        $("div#pager").html(str);
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#专家列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#专家列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+</script>

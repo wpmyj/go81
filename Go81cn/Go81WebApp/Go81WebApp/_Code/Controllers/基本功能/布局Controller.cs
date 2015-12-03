@@ -522,7 +522,7 @@ namespace Go81WebApp.Controllers.基本功能
                         //{"历史报价项目","供应商后台/OnlineBiddingHistory"},
                         //{"我的订购服务","供应商后台/MyServices"},
                     });
-            m.Add("订单管理", new Dictionary<string, object> { { "我的订单", "供应商后台/PurchaseInfo" } });
+            //m.Add("订单管理", new Dictionary<string, object> { { "我的订单", "供应商后台/PurchaseInfo" } });
 
 #endif
             if (HttpContext.获取当前用户<供应商>().Id == 200000001522)
@@ -799,12 +799,12 @@ namespace Go81WebApp.Controllers.基本功能
                             //{"全部采购公告列表", "单位用户后台/Procure_AdList"},
                         }
                     },
-                    {
-                       "订单管理", new Dictionary<string, object>
-                       {
-                       { "我的订单", "单位用户后台/PurchaseInfo" },
-                       }
-                    },
+                    //{
+                    //   "订单管理", new Dictionary<string, object>
+                    //   {
+                    //   { "我的订单", "单位用户后台/PurchaseInfo" },
+                    //   }
+                    //},
                     {
                         "验收单管理", new Dictionary<string, object>
                         {
@@ -933,11 +933,13 @@ namespace Go81WebApp.Controllers.基本功能
                         {"全部附属账号的验收单列表", "单位用户后台/SubUnit_Manage?comes=ysd"},
                     });
 #endif
+#if INTRANET
                 m.Add("本账号信息/维护", new Dictionary<string, object>
                     {
                         {"修改登录密码", "单位用户后台/MessageKeyword"},
                         {"修改联系人信息", "单位用户后台/MessageModify"},
                     });
+#endif
                 //m.Add("询价采购", new Dictionary<string, object>
                 //    {
                 //        {"询价采购历史", "单位用户后台/ConsultList"},
@@ -1526,6 +1528,7 @@ namespace Go81WebApp.Controllers.基本功能
                                 {"单位列表", "运营团队后台/DepartmentList"},
                                 {"单位添加", "运营团队后台/DepartmentAdd"},
                                 {"单位审核", "运营团队后台/DepartmentAuditList"},
+                                {"单位密码修改", "运营团队后台/ModifiAnyUserPWD"},
                                 {"打印用户名单", "运营团队后台/Print_UserList"},
                             }
                         },
@@ -1536,6 +1539,7 @@ namespace Go81WebApp.Controllers.基本功能
                                 #if INTRANET
                                       {"专家批量修改", "运营团队后台/ExpertBatchmodify"},
                                 #endif
+                                {"专家添加", "运营团队后台/Expert_Add"},
                             }
                          
                         },

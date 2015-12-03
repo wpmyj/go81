@@ -5623,7 +5623,7 @@ namespace Go81WebApp.Controllers.后台
                     List<商品> goods = 商品管理.查询供应商商品(currentUser.Id).ToList<商品>();
                     if (goods == null || goods.Count() < 5)
                     {
-                        return Content("<script>alert('您至少需要添加5件商品才能提交预审');window.location='/供应商后台/Gys_Product_AddStep1';</script>");
+                        return Content("<script>alert('您至少需要添加5件商品才能提交预审');window.location='/供应商后台/Gys_Product_AddStep1?id=0';</script>");
                     }
                     else if (model.可提供产品类别列表 == null || model.可提供产品类别列表.Count() == 0)
                     {
@@ -6048,7 +6048,6 @@ namespace Go81WebApp.Controllers.后台
                         }
                         else
                         {
-                            Newmodel.可提供产品类别列表.Clear();
                             Newmodel.可提供产品类别列表.Add(product);
                         }
                     }
@@ -6063,7 +6062,6 @@ namespace Go81WebApp.Controllers.后台
                     {
                         if (oldfirst == "医疗设备" || oldfirst == "油料设备器材" || oldfirst == "给养器材" || oldfirst == "军用食品" || oldfirst == "被装材料" || oldfirst == "后勤装备" || oldfirst == "药品" || oldfirst == "被装" || oldfirst == "医用耗材" || oldfirst == "军事交通器材" || oldfirst == "基建营房工程器材")
                         {
-                            Newmodel.可提供产品类别列表.Clear();
                             Newmodel.可提供产品类别列表.Add(product);
                         }
                         else
@@ -6977,12 +6975,12 @@ namespace Go81WebApp.Controllers.后台
                 {
                     if(number=="0")
                     {
-                        for (int i = 0; i < model.商品信息.商品图片.Count(); i++)
+                    for (int i = 0; i < model.商品信息.商品图片.Count(); i++)
+                    {
+                        if (model.商品信息.商品图片[i] == strname)
                         {
-                            if (model.商品信息.商品图片[i] == strname)
-                            {
-                                model.商品信息.商品图片.Remove(strname);
-                                break;
+                            model.商品信息.商品图片.Remove(strname);
+                            break;
                             }
                         }
                     }
@@ -6994,8 +6992,8 @@ namespace Go81WebApp.Controllers.后台
                             {
                                 model.商品信息.商品型号图片.Remove(strname);
                                 break;
-                            }
                         }
+                    }
                     }
                     商品管理.更新商品(model);
                 }

@@ -69,7 +69,7 @@
                 </script>
             </td>
         </tr>
-        <tr class="gys_ztbsearch_classbox">
+        @*<tr class="gys_ztbsearch_classbox">
             <td class="gys_ztbsearch_class" style="margin-left:0;">地理位置：</td>
             <td style="position:relative" class="direction">
                 <input type="hidden" id="hidloc_h" />
@@ -88,7 +88,7 @@
                     </div>
                 </div>
             </td>
-        </tr>
+        </tr>*@
         <tr class="gys_ztbsearch_search">
             <td class="gys_ztbsearch_class" style="margin-left:0;">所属行业：</td>
             <td class="">
@@ -816,7 +816,11 @@
             $("#userlist").html(response);
         });
     }
-
+    $(".action_link").each(function () {
+        if ($(this).text() == "应急采购") {
+            $(this).parent("div").addClass("on");
+        }
+    });
     $(function () {
         $('.wrap').marquee({
             auto: true,
@@ -984,12 +988,4 @@
     function closeInfo(){
         $(".loc_div_out").fadeOut();
     };
-</script>
-<script type="text/javascript" language="javascript">
-    $(document).ready(function () {$(".action_link").each(function () {
-        if ($(this).text() == "应急采购") {
-            $(this).parent("div").addClass("on");
-        }
-    });
-    });
 </script>

@@ -59,7 +59,7 @@
                         int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
                         if (Pagecount > 0 && CurrentPage != 1)
                         {
-                            <a href='/运营团队后台/ZNXX_Sended?page=1'>首页</a><a href='/运营团队后台/ZNXX_Sended?page=@(CurrentPage-1)'>上一页</a>
+                            <a href='/运营团队后台/ZNXX_Sended?page=1'>首页</a><a style="border-left:none;" href='/运营团队后台/ZNXX_Sended?page=@(CurrentPage-1)'>上一页</a>
                         }
                         if (Pagecount <= 6)
                         {
@@ -146,7 +146,7 @@
                         {
                             if (CurrentPage < Pagecount)
                             {
-                                <a href="/运营团队后台/ZNXX_Sended?page=@(CurrentPage+1)">下一页</a><a href="/运营团队后台/ZNXX_Sended?page=@Pagecount">末页</a>
+                                <a href="/运营团队后台/ZNXX_Sended?page=@(CurrentPage+1)" style="border-right:none;">下一页</a><a href="/运营团队后台/ZNXX_Sended?page=@Pagecount">末页</a>
                             }
                             <span>第@(CurrentPage)页/共@(Pagecount)页</span>
                         }

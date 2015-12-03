@@ -30,7 +30,13 @@
                 }
                 else
                 {
-                    foreach (var plnk in k.物资服务列表) { vl.Add(Tuple.Create(plnk.商品链接.商品.商品信息.商品名, plnk.规格型号, plnk.采购合同号, plnk.计量单位, plnk.数量, plnk.单价, plnk.总价)); }
+                    foreach (var plnk in k.物资服务列表)
+                    {
+                        if (plnk.商品链接.商品 != null)
+                        {
+                            vl.Add(Tuple.Create(plnk.商品链接.商品.商品信息.商品名, plnk.规格型号, plnk.采购合同号, plnk.计量单位, plnk.数量, plnk.单价, plnk.总价));
+                        }
+                    }
                 }
                 if (k.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0, k.运费, k.运费)); }
                 if (k.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0, k.服务费, k.服务费)); }
@@ -99,7 +105,7 @@
                     {
                         <td style="color:red" title="请等待供应商打印">未打印</td>
                     }
-                    @if (k.验收单扫描件.Count>0)
+                    @if (k.验收单扫描件.Count > 0)
                     {
                         <td @*onclick="ShowYsd(this)" id="@k.验收单扫描件"*@ style="color:#1f9434;cursor:pointer">已验收</td>
                     }
@@ -121,45 +127,45 @@
 </table>
 
 @if (ViewData["currentpage"] != null)
-    {
-        <div class="gys_znxx_content_detailbox">
-            @if (int.Parse(ViewData["currentpage"].ToString()) != 1)
+{
+    <div class="gys_znxx_content_detailbox">
+        @if (int.Parse(ViewData["currentpage"].ToString()) != 1)
+        {
+            <a id="1" class="page">首页</a><a id="@(int.Parse(ViewData["currentpage"].ToString()) - 1)" class="page" style="border-left:none;">上一页</a>
+        }
+        @for (int i = 0; i <= 10; i++)
+        {                       //一共最多显示10个页码，前面5个，后面5个
+            if ((int.Parse(ViewData["currentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentpage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
             {
-                <a id="1" class="page">首页</a><a id="@(int.Parse(ViewData["currentpage"].ToString()) - 1)" class="page">上一页</a>
-            }
-            @for (int i = 0; i <= 10; i++)
-            {                       //一共最多显示10个页码，前面5个，后面5个
-                if ((int.Parse(ViewData["currentpage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["currentpage"].ToString()) + i - 5) <= int.Parse(ViewData["pagecount"].ToString()))
-                {
-                    if (5 == i)
-                    {                               //当前页处理
-                        <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentpage"].ToString())</a>
-                    }
-                    else
-                    {                               //一般页处理
-                        <a class="page" id="@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)">@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)</a>
+                if (5 == i)
+                {                               //当前页处理
+                    <a style="border:1px solid #ff0000;">@int.Parse(ViewData["currentpage"].ToString())</a>
+                }
+                else
+                {                               //一般页处理
+                    <a class="page" id="@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)">@(int.Parse(ViewData["currentpage"].ToString()) + i - 5)</a>
 
-                    }
                 }
             }
-            @if (int.Parse(ViewData["currentpage"].ToString()) != int.Parse(ViewData["pagecount"].ToString()))
-            {
-                <a id="@(int.Parse(ViewData["currentpage"].ToString()) + 1)" class="page">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+        }
+        @if (int.Parse(ViewData["currentpage"].ToString()) != int.Parse(ViewData["pagecount"].ToString()))
+        {
+            <a id="@(int.Parse(ViewData["currentpage"].ToString()) + 1)" class="page" style="border-right:none;">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" class="page">末页</a>
+        }
+        <span style="font-size:12px;">第@(ViewData["currentpage"].ToString())页/共@(ViewData["pagecount"].ToString())页</span>
+    </div>
+}
+<script>
+    $("a.page").click(function () {
+        var is_void = $("#isviod").find("option:selected").text();
+        var sl = $("#ysd_status").find("option:selected").html();
+        $.ajax({
+            type: "POST",
+            url: "/单位用户后台/Part_SearchByCondit",
+            data: { page: $(this).attr("id"), status: sl, isvoid: is_void },
+            success: function (data) {
+                $("#acceptlist").html(data);
             }
-            <span style="font-size:12px;">第@(ViewData["currentpage"].ToString())页/共@(ViewData["pagecount"].ToString())页</span>
-        </div>
-    }
-    <script>
-        $("a.page").click(function () {
-            var is_void=$("#isviod").find("option:selected").text();
-            var sl=$("#ysd_status").find("option:selected").html();
-            $.ajax({
-                type: "POST",
-                url: "/单位用户后台/Part_SearchByCondit",
-                data: { page: $(this).attr("id"),status:sl,isvoid:is_void},
-                success: function (data) {
-                    $("#acceptlist").html(data);
-                }
-            });
         });
-    </script>
+    });
+</script>

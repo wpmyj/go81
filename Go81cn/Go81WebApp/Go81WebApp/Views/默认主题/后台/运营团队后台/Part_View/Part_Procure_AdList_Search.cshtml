@@ -6,6 +6,7 @@
     <input type="hidden" name="adclass_t" id="adclass_t" value="@ViewBag.Adclass" />
     <input type="hidden" name="keyword_t" id="keyword_t" value="@ViewBag.keyword" />
     <input type="hidden" name="time_t" id="time_t" value="@ViewBag.time" />
+    <input type="hidden" name="hasPager" id="hasPager" value="@ViewBag.haspager" />
 
 <div style="padding-bottom:5px; width: 900px; margin:0 auto; height: 30px;"><input type="button" value="下载选中公告" style="width: 100px; height: 30px; float: right;" onclick="getDownload()" /></div>
     <table width="100%" cellpadding="0" cellspacing="0" id="tablecontent">
@@ -54,7 +55,7 @@
         <div class="gys_znxx_content_detailbox">
             @if (int.Parse(ViewData["currentpage"].ToString()) != 1)
             {
-                <a id="1" onclick="changeMesspage(this) ">首页</a><a id="@(int.Parse(ViewData["currentpage"].ToString())-1)" onclick="changeMesspage(this) ">上一页</a>
+                <a id="1" onclick="changeMesspage(this) ">首页</a><a style="border-left:none;" id="@(int.Parse(ViewData["currentpage"].ToString())-1)" onclick="changeMesspage(this) ">上一页</a>
             }
             @for (int i = 0; i <= 10; i++)
             {
@@ -74,9 +75,9 @@
                     }
                 }
             }
-            @if (int.Parse(ViewData["currentpage"].ToString()) != int.Parse(ViewData["pagecount"].ToString()))
-            {
-                <a id="@(int.Parse(ViewData["currentpage"].ToString())+1)" onclick="changeMesspage(this) ">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeMesspage(this) ">末页</a>
+                        @if (int.Parse(ViewData["currentpage"].ToString()) != int.Parse(ViewData["pagecount"].ToString()))
+                        {
+                            <a id="@(int.Parse(ViewData["currentpage"].ToString())+1)" onclick="changeMesspage(this)" style="border-right:none;">下一页</a><a id="@int.Parse(ViewData["pagecount"].ToString())" onclick="changeMesspage(this) ">末页</a>
             }
             第@(ViewData["currentpage"].ToString())页/共@(ViewData["pagecount"].ToString())页
         </div>
