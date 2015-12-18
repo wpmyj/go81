@@ -65,6 +65,7 @@ namespace Go81WebApp.ModuleTester
         private void Button_Click1(object sender, RoutedEventArgs e)
         {
             IEnumerable<验收单> ysd=验收单管理.查询验收单(0,0);
+            
             foreach(var item in ysd)
             {
                 foreach(var k in 验收单单位列表信息.验收单单位列表)
@@ -72,6 +73,11 @@ namespace Go81WebApp.ModuleTester
                     if (item.审核数据.审核者.用户ID == k.Id && item.审核数据.审核者.用户ID == 10013 && item.审核数据.审核时间 >= new DateTime(2015, 7, 9) && item.审核数据.审核时间<=new DateTime(2015,9,18))
                     {
                         item.管理单位审核人签名 = "/Images/seal/77200签名.png";
+                    }
+                    else if (item.审核数据.审核者.用户ID == k.Id && item.审核数据.审核者.用户ID == 10013 &&
+                             item.审核数据.审核时间 < new DateTime(2015, 7, 9))
+                    {
+                        item.管理单位审核人签名 = "/Images/seal/77200A签名.png";
                     }
                     else if (item.审核数据.审核者.用户ID == k.Id && item.审核数据.审核者.用户ID == 10013 && item.审核数据.审核时间 > new DateTime(2015, 9, 18))
                     {
@@ -441,8 +447,32 @@ namespace Go81WebApp.ModuleTester
 
         private void Button_Click4(object sender, RoutedEventArgs e)
         {
-            var ysdlist = 验收单管理.查询验收单(0, 0);
+            var ysd = 验收单管理.查询验收单(0, 0,
+                Query<验收单>.Where(o => o.审核数据.审核时间 < new DateTime(2015, 7, 9) && o.审核数据.审核者.用户ID == 10013));
+            var ysd1 = 验收单管理.查询验收单(0, 0,
+                Query<验收单>.Where(
+                    o =>
+                        o.审核数据.审核时间 >= new DateTime(2015, 7, 9) && o.审核数据.审核时间 <= new DateTime(2015, 9, 18) &&
+                        o.审核数据.审核者.用户ID == 10013));
+            var ysd2 = 验收单管理.查询验收单(0, 0,
+                Query<验收单>.Where(o => o.审核数据.审核时间 > new DateTime(2015, 9, 18) && o.审核数据.审核者.用户ID == 10013));
+            
+
+
             var str = "";
+
+            foreach (var A in ysd)
+            {
+                str += A.审核数据.审核时间 + "   ------------    " + A.管理单位审核人签名 + "\r\n";
+            }
+            foreach (var A in ysd1)
+            {
+                str += A.审核数据.审核时间 + "   ------------    " + A.管理单位审核人签名 + "\r\n";
+            }
+            foreach (var A in ysd2)
+            {
+                str += A.审核数据.审核时间 + "   ------------    " + A.管理单位审核人签名 + "\r\n";
+            }
             var d = 验收单单位列表信息.验收单单位列表;
 
             foreach (var item in d)
@@ -821,7 +851,7 @@ namespace Go81WebApp.ModuleTester
 
             }
             #endregion
-            #region 修改专家单位地址字段类型
+            #region 修改商品单位重量字段类型
             //var ysd = Mongo.Coll<商品>().FindAs<BsonDocument>(Query.Exists("商品信息.单位重量"));
             //foreach (var y in ysd)
             //{
@@ -866,16 +896,16 @@ namespace Go81WebApp.ModuleTester
         private void ButtonExpColl_Click(object sender, RoutedEventArgs e)
         {
             //textBox1.Text = 工具.ExpColl<办事指南>().ToString();
-            textBox1.Text = 工具.ExpColl<单位用户>().ToString();
+            //textBox1.Text = 工具.ExpColl<单位用户>().ToString();
             //textBox1.Text = 工具.ExpColl<登录统计>().ToString();
             //textBox1.Text = 工具.ExpColl<广告点击统计>().ToString();
             //textBox1.Text = 工具.ExpColl<培训资料>().ToString();
             //textBox1.Text = 工具.ExpColl<通知>().ToString();
             //textBox1.Text = 工具.ExpColl<下载>().ToString();
             //textBox1.Text = 工具.ExpColl<政策法规>().ToString();
-            //textBox1.Text = 工具.ExpColl<专家>().ToString();
-            ////textBox1.Text = 工具.ExpColl<专家抽选记录>().ToString();
-            //textBox1.Text = 工具.ExpColl<专家可评标专业>().ToString();
+            textBox1.Text = 工具.ExpColl<专家>().ToString();
+            //textBox1.Text = 工具.ExpColl<专家抽选记录>().ToString();
+            textBox1.Text = 工具.ExpColl<专家可评标专业分类>().ToString();
         }
         private void ButtonImpColl_Click(object sender, RoutedEventArgs e)
         {
@@ -895,7 +925,19 @@ namespace Go81WebApp.ModuleTester
         }
         private void Button31_OnClick(object sender, RoutedEventArgs e)
         {
+            var count = 0;
             var zjnamestr = "";
+
+            var zjlblist1 = new List<string>();
+            var zjlblist2 = new List<string>();
+            var zjclasslist = 专家可评标专业分类.评审专业;
+            foreach (var zjclass in zjclasslist)
+            {
+                zjlblist1.Add(zjclass.分类名);
+                zjlblist2 = zjlblist2.Concat(zjclass.子分类).ToList();
+            }
+
+
             var zjlist = 用户管理.查询用户<专家>(0, 0, includeDisabled: false);
             //foreach (var zj in zjlist)
             //{
@@ -920,10 +962,27 @@ namespace Go81WebApp.ModuleTester
                 }
                 zjnamestr += item.身份信息.姓名 + "       " + item.身份信息.出生年月.ToString("yyyy-MM-dd") + "      " + item.学历信息.专业技术职称 + "      " + item.身份信息.专家级别 + "      " + item.联系方式.手机 + "      " + item.学历信息.毕业院校 + "      " +"可评标类别："+ temp +"\r\n";
             }
+            MessageBox.Show(count.ToString());
             textBox1.Text = zjnamestr;
         }
         private void Button32_OnClick(object sender, RoutedEventArgs e)
         {
+            var retstr = "";
+            var plist = new List<string>();
+            var dlist = 用户管理.查询用户<单位用户>(0, 0);
+            foreach (var d in dlist)
+            {
+                if (d.联系方式.手机!=null)
+                plist.Add(d.联系方式.手机);
+            }
+            plist.RemoveAll(o => o.Length < 10 || o.Contains("88888"));
+            plist = plist.Distinct().ToList();
+            foreach (var p in plist)
+            {
+                retstr += p + "\r\n";
+            }
+
+            textBox1.Text = retstr;
         }
         private void Button33_OnClick(object sender, RoutedEventArgs e)
         {

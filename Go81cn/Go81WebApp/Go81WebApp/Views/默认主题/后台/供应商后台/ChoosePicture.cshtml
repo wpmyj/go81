@@ -56,30 +56,31 @@
         @Html.Action("LeftMenu", "布局")
     </div>
     <div style="width:940px;margin-bottom:50px;" class="bg_outdiv_right">
-        <div id="title_div" class="gys_xttz_topbg">
-
-            <div class="index_bottom_zb_top_title">
-                选择展示商品
-                @if (ViewData["name"].ToString() == "商务会员")
-                {
-                    <span style="color:red;">【您最多可以选择6个展示商品】</span>
-                }
-                else if (ViewData["name"].ToString() == "标准会员")
-                {
-                    <span style="color:red;">【您最多可以选择3个展示商品】</span>
-                }
-                else if (ViewData["name"].ToString() == "企业推广服务B1-2位置")
-                {
-                    <span style="color:red;">【您最多可以选择6个展示商品】</span>
-                }
-                else if (ViewData["name"].ToString() == "企业推广服务B1-1位置")
-                {
-                    <span style="color:red;">【您最多可以选择3个展示商品】</span>
-                }
-                else
-                {
-                    <span></span>
-                }
+        <div id="title_div" class="title-base-out">
+            <div class="title-base-middle">
+                <div class="title-base-inner">
+                    选择展示商品
+                    @if (ViewData["name"].ToString() == "商务会员")
+                    {
+                        <span style="color:red;">【您最多可以选择6个展示商品】</span>
+                    }
+                    else if (ViewData["name"].ToString() == "标准会员")
+                    {
+                        <span style="color:red;">【您最多可以选择3个展示商品】</span>
+                    }
+                    else if (ViewData["name"].ToString() == "企业推广服务B1-2位置")
+                    {
+                        <span style="color:red;">【您最多可以选择6个展示商品】</span>
+                    }
+                    else if (ViewData["name"].ToString() == "企业推广服务B1-1位置")
+                    {
+                        <span style="color:red;">【您最多可以选择3个展示商品】</span>
+                    }
+                    else
+                    {
+                        <span></span>
+                    }
+                </div>
             </div>
         </div>
         <div id="good">

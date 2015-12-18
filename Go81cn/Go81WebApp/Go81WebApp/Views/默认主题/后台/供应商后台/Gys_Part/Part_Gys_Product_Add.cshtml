@@ -657,7 +657,12 @@
                                     $("#contenerror").html("商品描述-->商品详情必须填写");
                                     return false;
                                 }
-
+                                editor2.sync("content2");
+                                if ($.trim($("#content2").val())=="")
+                                {
+                                    $("#contenerror").html("售后服务为必填项");
+                                    return false;
+                                }
 
 
 
@@ -798,7 +803,7 @@
             <ul>
                 <li>
                     <div class="product_add_textarabox">
-                        <div class="product_add_toptitle">售后服务：</div>
+                        <div class="product_add_toptitle" style="width:150px;">售后服务<span style="color:#ff0000;">(必填项)</span>：</div>
                         @Html.TextAreaFor(model => model.商品数据.售后服务, new { style = "width: 698px; height: 400px; visibility: hidden; padding-left: 110px;", id = "content2" })
                     </div>
                     <div style="width: 700px; float: right;padding:20px 0 20px 0; margin: 0 auto;">

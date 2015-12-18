@@ -94,14 +94,15 @@
                     <tr>
                         <td>@m.Id</td>
                         <td><a href="/单位用户后台/Department_Detail?id=@item.Id">@item.登录信息.登录名</a></td>
-                        <td><a href="/单位用户后台/Department_Detail?id=@item.Id">@m.单位信息.单位代号</a></td>
-                        <td>@m.联系方式.联系人</td>
-                        <td>@m.联系方式.手机</td>
+                        <td><a href="/单位用户后台/Department_Detail?id=@item.Id">@m.单位信息.单位代号 &nbsp;</a></td>
+                        <td>@m.联系方式.联系人 &nbsp;</td>
+                        <td>@m.联系方式.手机 &nbsp;</td>
                         <td>
                             @foreach(var k in m.用户组)
                             {
                                 <label>@k</label><br />
                             }
+
                         </td>
                         @if (m.审核数据.审核状态 == 审核状态.审核通过)
                         {

@@ -149,7 +149,7 @@
             </tr>
         }
         <tr style="line-height:30px;">
-            <td width="10%" align="right">所属地区：</td>
+            <td width="12%" align="right">所属地区：</td>
             <td width="90%">
                 <select id="deliverprovince" name="deliverprovince"></select>
                 <select id="delivercity" name="delivercity"></select>
@@ -757,7 +757,7 @@
             url: '/供应商陈列/Part_GysSelect_pagechange?page=' + $(a).attr("id") + str,
             success: function (data) {
                 $("#gys_manage").html(data);
-            },
+            }
         });
     }
     $(function () {
@@ -807,7 +807,7 @@
                 },
                 error: function () {
                     $("#userlist").empty().append('根据条件未找到相关信息');
-                },
+                }
             });
         });
 

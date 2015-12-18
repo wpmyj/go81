@@ -258,7 +258,7 @@
         }
 
 .layout_other_imgbox #produserchtext {
-    width:450px;
+    width:550px;
     height: 42px;
     line-height:42px\9;
     float:left;
@@ -756,6 +756,7 @@ ul li a:hover {
     letter-spacing: 0;
     width: 100%;
     float: left;
+    margin-top:4px;
 }
 
 .tabmenu_small {
@@ -1420,6 +1421,13 @@ a {
         background-position: 5px 0;
         padding-left: 22px;
         border-bottom: 1px solid #EFEFEF;
+        padding-bottom:3px;
+        padding-bottom:1px\9;
+        _padding-bottom:5px;
+        *padding-bottom:5px;
+        padding-top:3px;
+        _padding-top:5px;
+        *padding-top:5px;
     }
 
         .index_content_news ul li span {
@@ -2403,14 +2411,14 @@ a {
     }
 
     .product_tabmenu_tabmenu li {
-          cursor:pointer;
+        cursor:pointer;
         float: left;
-list-style-type: none;
-width: auto;
-text-align: center;
-height: 25px;
-padding: 1px 8px 2px;
-line-height: 1.5;
+        list-style-type: none;
+        width: auto;
+        text-align: center;
+        height: 25px;
+        padding: 1px 8px 2px;
+        line-height: 1.5;
 
 
         /*cursor: pointer;

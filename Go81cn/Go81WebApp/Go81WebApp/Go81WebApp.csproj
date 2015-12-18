@@ -637,6 +637,8 @@
     <Content Include="Images\right.jpg" />
     <Content Include="Images\ruku.png" />
     <Content Include="Images\sczfcg.png" />
+    <Content Include="Images\seal\77200A签名.png" />
+    <Content Include="Images\seal\成都军区总医院签名0.png" />
     <Content Include="Images\seal\14集团军签名.png" />
     <Content Include="Images\seal\324医院签名.png" />
     <Content Include="Images\seal\77100签名.png" />
@@ -2178,7 +2180,6 @@
     <Content Include="Views\默认主题\后台\单位用户后台\AddattachInfo.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\OrderInfo.cshtml" />
     <Content Include="Views\默认主题\后台\单位用户后台\OrderContract.cshtml" />
-    <Content Include="Views\默认主题\后台\单位用户后台\CreateInfo.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\_BackLayout.cshtml" />
     <Content Include="Views\默认主题\后台\运营团队后台\Part_View\Part_BackHead.cshtml" />
     <Content Include="Views\默认主题\门户\商品陈列\ProductAllList.cshtml" />

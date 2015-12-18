@@ -98,37 +98,44 @@ namespace Go81WebApp.Controllers.门户
             ViewData["searchtext"] = Request.Form["searchtext"];
 
             TopDocs serchalllist = SearchIndex("/Lucene.Net/IndexDic/News", Request.Form["searchtext"]);
-            int page = 1;
-            ViewData["currentpage"] = page;
-            ViewData["pagecount"] = page;
-            IList<新闻> serchlist = new List<新闻>();
-            var listcount = serchalllist.totalHits > 1000 ? 1000 : serchalllist.totalHits;
-            if (serchalllist != null && listcount > 0)
+            if(serchalllist!=null)
             {
-                int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
-
-                int length = PAGESIZE;
-                if (maxpage == page && listcount % PAGESIZE != 0)
-                    length = listcount % PAGESIZE;
-
-                //IndexSearcher search = new IndexSearcher(IndexDic("/Lucene.Net/IndexDic/News"), true);
-                IndexSearcher search = new IndexSearcher(new Lucene.Net.Store.SimpleFSDirectory(new System.IO.DirectoryInfo(IndexDic("/Lucene.Net/IndexDic/News"))), true);
-                Dictionary<string, string> dic = new Dictionary<string, string>();
-                dic.Add("title", Request.Form["searchtext"]);
-                for (int i = 0; i < length; i++)
+                int page = 1;
+                ViewData["currentpage"] = page;
+                ViewData["pagecount"] = page;
+                IList<新闻> serchlist = new List<新闻>();
+                var listcount = serchalllist.totalHits > 1000 ? 1000 : serchalllist.totalHits;
+                if (serchalllist != null && listcount > 0)
                 {
-                    新闻 model = new 新闻();
-                    model.Id = long.Parse(search.Doc(serchalllist.scoreDocs[i].doc).Get("NumId"));
-                    model.内容主体.标题 = search.Doc(serchalllist.scoreDocs[i].doc).Get("Title");
-                    model.内容主体.发布时间 = Convert.ToDateTime(search.Doc(serchalllist.scoreDocs[i].doc).Get("AddTime"));
-                    serchlist.Add(SetHighlighter(dic, model));
-                }
-                //ViewData["currentpage"] = page;
-                ViewData["pagecount"] = maxpage;
-            }
-            ViewData["新闻搜索显示列表"] = serchlist;
+                    int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
 
-            return PartialView("Part_News/Part_NewsSearch");
+                    int length = PAGESIZE;
+                    if (maxpage == page && listcount % PAGESIZE != 0)
+                        length = listcount % PAGESIZE;
+
+                    //IndexSearcher search = new IndexSearcher(IndexDic("/Lucene.Net/IndexDic/News"), true);
+                    IndexSearcher search = new IndexSearcher(new Lucene.Net.Store.SimpleFSDirectory(new System.IO.DirectoryInfo(IndexDic("/Lucene.Net/IndexDic/News"))), true);
+                    Dictionary<string, string> dic = new Dictionary<string, string>();
+                    dic.Add("title", Request.Form["searchtext"]);
+                    for (int i = 0; i < length; i++)
+                    {
+                        新闻 model = new 新闻();
+                        model.Id = long.Parse(search.Doc(serchalllist.scoreDocs[i].doc).Get("NumId"));
+                        model.内容主体.标题 = search.Doc(serchalllist.scoreDocs[i].doc).Get("Title");
+                        model.内容主体.发布时间 = Convert.ToDateTime(search.Doc(serchalllist.scoreDocs[i].doc).Get("AddTime"));
+                        serchlist.Add(SetHighlighter(dic, model));
+                    }
+                    //ViewData["currentpage"] = page;
+                    ViewData["pagecount"] = maxpage;
+                }
+                ViewData["新闻搜索显示列表"] = serchlist;
+
+                return PartialView("Part_News/Part_NewsSearch");
+            }
+            else
+            {
+                return Content("<script>window.location='/新闻/NewsList';</script>");
+            }
         }
         public ActionResult Part_SearchByCondition()
         {

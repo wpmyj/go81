@@ -20,7 +20,7 @@
             {
                 for (int i = 0; i < goodclass.Count; i++)
                 { 
-                    <a style="display:inline-block;margin-bottom: 5px; width:auto; height:20px; border:1px solid #FAC1C1; padding:3px 15px;" class="brand" href="##" name="@goodclass[i]">@goodclass[i]<span>@*(@Model.商品属性模板[i][s].值.Count)*@</span></a>
+                    <a style="display:inline-block;margin-bottom: 5px; width:auto; height:20px; border:1px solid #FAC1C1; padding:3px 15px;" class="brand" href="javascript:void;" name="@goodclass[i]">@goodclass[i]<span>@*(@Model.商品属性模板[i][s].值.Count)*@</span></a>
                 }
             }
             else
@@ -102,7 +102,7 @@
                     url: '/商品陈列/ProductContrast?Contrastparmer=' + str,
                     success: function () {
                         window.location.href = "/商品陈列/ProductContrast?Contrastparmer=" + str;
-                    },
+                    }
                 });
             }
         }
@@ -125,7 +125,7 @@
             },
             error: function () {
                 alert("查找失败！");
-            },
+            }
         });
     });
     $(".brand").click(function () {
@@ -191,7 +191,7 @@
             },
             error: function () {
                 $(".agreement_good_class").empty().append('根据条件未找到相关信息');
-            },
+            }
         });
     });
 

@@ -162,23 +162,26 @@
                     } <a style="display:inline-block;-webkit-vertical-align:middle; color:black; text-decoration:underline; margin-top:-10px;" href="###">查看积分</a>
                 </div>
                 <div class="prodtpage_detail_topbox_right_contentlist">
-                    <div class="purchase">
-                        <input type="text" value="1" id="purchase_num" />
-                        <a class="purchase_bt" id="add">+</a>
-                        <a class="purchase_bt" id="diff" style="top:19px;border-bottom:none;height:16px;">-</a>
+                    <div>
+                        <div class="purchase" style="float:left">
+                            <input type="text" value="1" id="purchase_num" />
+                            <a class="purchase_bt" id="add">+</a>
+                            <a class="purchase_bt" id="diff" style="top:19px;border-bottom:none;height:16px;">-</a>
+                        </div>
+
+                        <div style="display:inline-block;"><a id="car" lang="@Model.Id"></a></div>
+
+                        @if (Model.Id == 123)
+                        {
+                            //褚橙限购
+                            <div style="display:inline-block;color:red">*本商品为限购商品，每人最高限购9箱</div>
+                        }
+                        @if (Model.销售信息.销售地域.地域.Contains("成都"))
+                        {
+                            //限地区
+                            <div style="display:inline-block;color:red">*本商品仅限成都地区供货</div>
+                        }
                     </div>
-                    <div style="display:inline-block;"><a id="car" lang="@Model.Id"></a></div>
-                    
-                    @if (Model.Id == 123)
-                    {
-                        //褚橙限购
-                        <div style="display:inline-block;color:red">*本商品为限购商品，每人最高限购9箱</div>
-                    }
-                    @if (Model.销售信息.销售地域.地域.Contains("成都"))
-                    {
-                        //限地区
-                        <div style="display:inline-block;color:red">*本商品仅限成都地区供货</div>
-                    }
                     <div><a href="/商品陈列/purchaseinfo" style="color:#4da3ff;">去购物车结算>></a></div>
                     
                   

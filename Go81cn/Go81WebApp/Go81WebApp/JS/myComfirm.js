@@ -49,7 +49,7 @@
         content: "你确定要这样做吗？",  //提示信息内容 必须
         iscomfirm: false, //是否提交数据，true 为是  false 为否
         onComfirm: function () { }, //点击确定按钮时触发事件 必须
-        onCancel: function () { }, //点击取消按钮时触发事件 必须
+        onCancel: function () { } //点击取消按钮时触发事件 必须
     };
     $.fn.setHtml = function (opts) {
         if (opts.iscomfirm) {
@@ -60,7 +60,7 @@
         }
         $("#" + opts.index).find('h3').html(opts.title);
         $("#" + opts.index).find('.my-comfirm-modal-content > .my-comfirm-info > img').css({
-            background: opts.img,
+            background: opts.img
         }).end().find('.my-comfirm-modal-content > .my-comfirm-info >p').html(opts.content);
     };
     $.fn.myComfirm.close = function (callback) {

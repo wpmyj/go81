@@ -70,7 +70,7 @@
                             }
                         }
                     }
-                    <tr><td><button style="border:none; height:20px; width:100px; background:#3e905e; cursor:pointer;">网上订购</button></td></tr>
+                    <tr><td><button style="border:none; height:20px; width:100px;*line-height:normal; background:#3e905e; cursor:pointer;">网上订购</button></td></tr>
             </table>
         </div>
     </div>
@@ -121,6 +121,7 @@
                                             {
                                                 @k <span> </span>
                                             }
+                                            &nbsp;
                                         </td>
                                     </tr>
                                 }
@@ -668,7 +669,7 @@
                 data: 'review=' + $("#review_content").val(),
                 success: function () {
                     $("#success").html("评论成功！").css({ "color": "red" });
-                },
+                }
             });
         });
 
@@ -738,7 +739,7 @@
                 },
                 error: function () {
                     $(".screening table").css({ "border-top": "none", "border-left": "none" }).empty().append("无该地区数据！");
-                },
+                }
             });
         });
     });

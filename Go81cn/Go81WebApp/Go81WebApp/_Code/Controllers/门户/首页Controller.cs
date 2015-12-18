@@ -948,7 +948,7 @@ namespace Go81WebApp.Controllers.门户
             ViewData["图片新闻动态"] = picnews;
             //ViewData["listcount"] = picnews.Count();
             //政策法规部分
-            ViewData["政策法规"] = 政策法规管理.查询政策法规(0, 9, Query<政策法规>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false, SortBy.Descending("内容主体.发布时间"), false);
+            ViewData["政策法规"] = 政策法规管理.查询政策法规(0, 8, Query<政策法规>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false, SortBy.Descending("内容主体.发布时间"), false);
 
 
             //公开招标部分 
@@ -993,7 +993,7 @@ namespace Go81WebApp.Controllers.门户
             //新闻动态部分
             ViewData["新闻动态"] = 新闻管理.查询新闻(0, 9, Query<新闻>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false, SortBy.Descending("内容主体.发布时间"), false);
             //政策法规部分
-            ViewData["政策法规"] = 政策法规管理.查询政策法规(0, 9, Query<政策法规>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false, SortBy.Descending("内容主体.发布时间"), false);
+            ViewData["政策法规"] = 政策法规管理.查询政策法规(0, 8, Query<政策法规>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过), false, SortBy.Descending("内容主体.发布时间"), false);
             ViewData["服务指南"] = 办事指南管理.查询办事指南(0, 8, null, false, SortBy.Descending("内容主体.发布时间"), false);
             ViewData["网上竞标"] = 网上竞标管理.查询网上竞标(0, 6);
             //采购部分

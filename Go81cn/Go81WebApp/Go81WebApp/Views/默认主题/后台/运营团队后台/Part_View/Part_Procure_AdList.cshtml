@@ -135,7 +135,16 @@
                                 <td><a href="~/运营团队后台/AdListDetail?id=@item.Id&link=公告列表" target="_blank">@item.内容主体.标题</a></td>
                                 <td>@item.公告信息.公告性质</td>
                                 <td>@item.公告信息.公告类别</td>
-                                <td>@item.审核数据.审核状态</td>
+                                <td>
+                                    @if (item.审核数据.审核状态!= Go81WebApp.Models.数据模型.审核状态.审核通过)
+                                    {
+                                        <span style="color:#ff0000;">@item.审核数据.审核状态</span>
+                                    }
+                                    else
+                                    {
+                                        <span>@item.审核数据.审核状态</span>
+                                    }
+                                </td>
                                 <td>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</td>
                                 <td class="gys_znxx_content_tabletime">
                                     @Html.ActionLink("修改", "Procure_AdModify", new { id = item.Id })|<a onclick="del(@item.Id)">删除</a>|

@@ -7,7 +7,16 @@
 	/*background:#ccd2b0;*/
 	background-repeat: repeat-x;
 }
-.st_tree_first_tittle span{ margin-left:30px; width:10px; height:10px;background:url('../Images/tree_icons.png') -99px -4px; text-align:center; display:inline-block;padding-right:0;}
+.st_tree_first_tittle span{ 
+    margin-left:30px; 
+    width:10px; 
+    height:10px;
+    background:url('../Images/tree_icons.png') -99px -4px; 
+    text-align:center; 
+    display:inline-block;
+    padding-right:0;
+    *vertical-align:middle;
+}
 /* 超链接 */
 .st_tree_first_tittle a {
 	color: #222;
@@ -46,6 +55,7 @@
 	font-weight: normal;
 }
 .st_tree_second_title span{
+    *background:none;
     margin-left:40px; 
     width:10px;
     height:10px;

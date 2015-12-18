@@ -8,9 +8,9 @@
 <link href="~/css/index.css" rel="stylesheet" />
 <link href="~/css/Msg_Tips.css" rel="stylesheet" />
 <script src="~/JS/provinceandcity_all.js"></script>
-<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
-<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
-<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src="/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="/JS/My97DatePicker/WdatePicker.js"></script>
 <style>
     table tr td span {
         font-size: 12px;
@@ -163,16 +163,15 @@
         <div style="width:400px; border:1px solid red;position:relative; margin:0px auto;z-index:12; height:auto; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
             <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#f')">×</a></div>
             <div style="float:right; width:100%; height:240px; text-align:center; font-size:12px;">
-                <form action="/运营团队后台/Supplier_Refused" method="post">
-                    @Html.HiddenFor(m=>m.Id)
+                <form>
                     <table style="margin-top:50px; font-size:15px;">
                         <tr><td align="left">请填写审核不通过原因：</td></tr>
                         <tr>
                             <td align="center">
-                                @Html.TextAreaFor(m => m.审核数据.审核不通过原因, new { rows = "5", cols = "50",style="resize:none;" })
+                                <textarea rows="5" cols="50" style="resize:none;" id="fillreason"></textarea>
                             </td>
                         </tr>
-                        <tr><td align="center"><input style="width:100px; height:40px; border:none; font-size:16px; font-weight:bolder; color:white; background-color:#506605; line-height:40px; text-align:center;" type="submit" value="确定" /></td></tr>
+                        <tr><td align="center"><input style="width:100px; height:40px; border:none; font-size:16px; font-weight:bolder; color:white; background-color:#506605; line-height:40px; text-align:center;" type="button" onclick="setReason('#fillreason')" value="确定" /></td></tr>
                     </table>
                 </form>
             </div>
@@ -210,17 +209,17 @@
                             </td>
                             <td height="50" style="text-align:right;">年检日期：</td>
                             <td>
-                                <input onfocus="WdatePicker({ isShowWeek: true })" placeholder="年检日期" type="text" style="display:inline-block; width:150px;" value="" name="资质证书列表[0].年检日期" />
+                                <input onfocus="WdatePicker({isShowWeek:true})" placeholder="年检日期" type="text" style="display:inline-block; width:150px;" value="" name="资质证书列表[0].年检日期" />
                             </td>
                         </tr>
                         <tr>
                             <td height="50" style="text-align:right;">有效起始日期：</td>
                             <td>
-                                <input onfocus="WdatePicker({ isShowWeek: true })" placeholder="证书有效起始日期" type="text" style="display:inline-block; width:150px;" value="" name="资质证书列表[0].有效期起始日期" />
+                                <input onfocus="WdatePicker({isShowWeek:true})" placeholder="证书有效起始日期" type="text" style="display:inline-block; width:150px;" value="" name="资质证书列表[0].有效期起始日期" />
                             </td>
                             <td height="50" style="text-align:right;">有效结束日期：</td>
                             <td>
-                                <input placeholder="证书有效结束日期" onfocus="WdatePicker({isShowWeek: true })" type="text" style="display:inline-block; width:150px;" value="" name="资质证书列表[0].有效期结束日期" />
+                                <input placeholder="证书有效结束日期" onfocus="WdatePicker({isShowWeek:true})" type="text" style="display:inline-block; width:150px;" value="" name="资质证书列表[0].有效期结束日期" />
                             </td>
                         </tr>
                         <tr><td height="50" style="text-align:right;">扫描件名称：</td><td><input placeholder="资质证书扫描件名称" style="display:inline-block; width:150px;" type="text" name="资质证书列表[0].资质证书电子扫描件[0].名称" /></td><td style="text-align:right;" height="50">扫描件说明：</td><td><input placeholder="扫描件简要说明" class="form-control" type="text" style="display:inline-block; width:150px;" name="资质证书列表[0].资质证书电子扫描件[0].说明" /></td></tr>
@@ -433,7 +432,7 @@
                 <div class="gys_znxx_box" style="border:none;">
                     <div style="width:940px;overflow: hidden;margin:8px auto;">
                         <div class="list">
-                            <a onclick="checks(this, '.First_Page')">企业基本信息</a><a onclick="checks(this, '.Second_Page')">联系人信息</a><a onclick="checks(this, '.Fifth_Page')">法人代表</a><a onclick="checks(this, '.Third_Page')">营业信息</a><a onclick="checks(this, '.Forth_Page')">财务信息</a><a onclick="checks(this, '.six_Page')">税务信息</a><a onclick="checks(this, '.seven_Page')">参标经历</a><a onclick="checks(this, '.eight_Page')">出资人信息</a><a onclick="checks(this, '.nine_Page')" style="border-right:none;">售后服务机构</a>
+                        <a onclick="checks(this, '.First_Page')">企业基本信息</a><a onclick="checks(this, '.Second_Page')">联系人信息</a><a onclick="checks(this, '.Fifth_Page')">法定代表人</a><a onclick="checks(this, '.Third_Page')">营业信息</a><a onclick="checks(this, '.Forth_Page')">财务信息</a><a onclick="checks(this, '.six_Page')">税务信息</a><a onclick="checks(this, '.seven_Page')">参标经历</a><a onclick="checks(this, '.eight_Page')">出资人信息</a><a onclick="checks(this, '.nine_Page')" style="border-right:none;">售后服务机构</a>
                         </div>
                         <div class="First_Page" style="margin-left:0px; border:1px solid rgb(202, 195, 195); margin-top:0px;">
                             <div>
@@ -474,7 +473,6 @@
                                             </td>
                                             <td align="right">成立时间：</td>
                                             <td>
-
                                                 @Html.TextBoxFor(m => m.企业基本信息.成立时间, new { onfocus = "WdatePicker({isShowWeek:true})" })
 
                                                 @Html.ValidationMessageFor(m => m.企业基本信息.成立时间)
@@ -539,7 +537,7 @@
                                         </tr>
                                         <tr>
                                             <td align="right">所属管理单位：</td>
-                                            <td >@Html.EnumDropDownListFor(m => m.供应商用户信息.所属管理单位)</td>
+                                        <td>@Html.EnumDropDownListFor(m => m.供应商用户信息.所属管理单位)</td>
                                             <td align="right" class="lab">供应商类型：</td>
                                             <td>
                                                 @Html.EnumDropDownListFor(m => m.供应商用户信息.供应商类型, new { @style = "width:153px; margin-left:2px;" })
@@ -676,7 +674,7 @@
                                                                 <td width="20%">@Model.资质证书列表[i].等级</td>
                                                                 <td width="20%">@Model.资质证书列表[i].发证机构</td>
                                                                 <td width="20%">
-                                                                    @if (Model.资质证书列表[i].年检日期==default(DateTime))
+                                                                @if (Model.资质证书列表[i].年检日期 == default(DateTime))
                                                                     {
                                                                         <span>无需年检</span>
                                                                     }
@@ -725,7 +723,7 @@
                                     <div id="Service1" style="font-size:14px;">
                                         <div id="title_div" class="gys_xttz_topbg" style="border-bottom:none;">
                                             <div class="other_title">协议供应商所属地域<a href="###" onclick="showBox('#gysarea')">【新增】</a></div>
-                                        </div>
+                                            </div>
                                         <div class="gys_znxx_content" style="width:auto">
                                             <table id="oldarea" width="100%" cellpadding="0" cellspacing="0">
                                                 <tr><th>省份</th><th>城市</th><th>区县</th><th>操作</th></tr>
@@ -744,7 +742,7 @@
                             <div>
                                 <div id="title_div" class="other_title title_addsupplier">其他信息</div>
                                 <div class="gys_znxx_box" style="width:95%; height:auto; margin-left:auto; margin-right:auto; margin-bottom:10px;">
-                                    <table width="80%" style="margin-left:20px; margin-top:10px; margin-bottom:10px;">
+                                <table width="100%" style="margin-left:10px; margin-top:10px; margin-bottom:10px;">
                                         <tr>
                                             <td>@Html.CheckBoxFor(m => m.供应商用户信息.协议供应商, new { @type = "checkbox", id = "area1" })</td>
                                             <td align="left">是否是协议供应商</td>
@@ -763,7 +761,9 @@
                                             }
                                             <td align="left">是否通过年检</td>
                                             <td>@Html.CheckBoxFor(m => m.供应商用户信息.符合入库标准, new { @type = "checkbox", id = "rkbz" })是否符合入库标准</td>
-                                            <td><input type="checkbox" name="Sendmsg" id="msg" value="-1" onclick="message(this)"/>发送短信</td>
+                                        <td><input type="checkbox" name="Sendmsg" id="msg" value="-1" onclick="message(this)" />发送短信</td>
+                                        <td>预审状态：@Html.EnumDropDownListFor(m => m.审核数据.审核状态, new { onchange = "Reason(this)" })</td>
+                                        @Html.HiddenFor(m => m.审核数据.审核不通过原因, new { id = "reason" })
                                         </tr>
                                     </table>
                                     <table width="100%" style="margin-left:20px; margin-top:10px; margin-bottom:10px;">
@@ -976,6 +976,26 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                        <td width="30%" align="right">三证合一扫描件：</td>
+                                        <td width="70%" colspan="3">
+                                            <span style="display:none;">
+                                                <input type="file" style="display:inline; width:120px;" name="together" />
+                                                <em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em>
+                                            </span>
+                                            @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.三证合一扫描件)))
+                                            {
+                                                <a href="###" onclick="modify(this)">修改</a>
+                                                <span>
+                                                    <a href="@Model.营业执照信息.三证合一扫描件" target="_blank" title="点击查看大图"><img width="50" height="30" src="@Model.营业执照信息.三证合一扫描件" /></a>
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <a href="###" onclick="modify(this)">点击添加</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
                                             <td width="30%" align="right">组织机构代码证电子扫描件：</td>
                                             <td width="70%" colspan="3">
                                                 <span style="display:none;">
@@ -1413,10 +1433,10 @@
                     </div>
                 </div>
                 <div style="text-align:center;">
-                    <a lang="/运营团队后台/Accept?id=@Model.Id" onclick="sendmsg(this)" style="display:inline-block; width:100px; height:40px; font-size:16px; color:white; font-weight:bolder; background-color:#506605; border:none; line-height:40px; text-align:center;">审核通过</a>
-                    <input class="front_login_rightbox_button" style="width:100px;background:#506605" type="submit" value="保存修改" />
+                @*<a lang="/运营团队后台/Accept?id=@Model.Id" onclick="sendmsg(this)" style="display:inline-block; width:100px; height:40px; font-size:16px; color:white; font-weight:bolder; background-color:#506605; border:none; line-height:40px; text-align:center;">审核通过</a>*@
+                <input class="front_login_rightbox_button" style="width:100px;" type="submit" value="保存修改" />
                     <a href="/运营团队后台/ReSubmit?id=@Model.Id&code=1" style="display:inline-block; width:100px; height:40px; color:white; border:none; background-color:#506605; line-height:40px; text-align:center; font-size:16px;">重新提交</a>
-                    <a href="###" style="display:inline-block; width:100px; height:40px; border:none; font-weight:bolder; font-size:16px; color:white; background-color:#506605; line-height:40px; text-align:center;" onclick="showBox('#f')">不通过</a>
+                @*<a href="###" style="display:inline-block; width:100px; height:40px; border:none; font-weight:bolder; font-size:16px; color:white; background-color:#506605; line-height:40px; text-align:center;" onclick="showBox('#f')">不通过</a>*@
                     <a href="/运营团队后台/Check?id=@Model.Id&time=1" style="display:inline-block; width:100px; height:40px; color:white; border:none; background-color:#506605; line-height:40px; text-align:center; font-size:16px;">初审通过</a>
                     <a href="/运营团队后台/Check?id=@Model.Id&time=2" style="display:inline-block; width:100px; height:40px; border:none; font-weight:bolder; font-size:16px; color:white; background-color:#506605; line-height:40px; text-align:center;">复审通过</a>
                 </div>
@@ -1778,4 +1798,17 @@
         function hidebox(th) {
             $(th).hide(500);
         }
+    function Reason(th)
+    {
+        if($(th).val()=="2")
+        {
+            $("#f").show();
+        }
+    }
+    function setReason(obj)
+    {
+        var r=$(obj).val();
+        $("#reason").val(r);
+        $("#f").hide();
+    }
     </script>

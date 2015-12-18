@@ -59,14 +59,18 @@
     .lb-tab ul {
         position: absolute;
         bottom: 0;
+        left:0;
     }
 
     .lb-tab li {
         width: 180px;
+        _width:176px;
+        *width:176px;
         height: 36px;
         text-align: center;
         line-height: 36px;
         background-color: rgba(0,0,0,0.5);
+        filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr=#66000000,endColorStr=#66000000);
         color: #cdccce;
         cursor: pointer;
     }
@@ -139,7 +143,7 @@
     }
 </style>
 
-<div id="kef" style="display: none; position: fixed;top: 50%;width: 160px;height: 330px;background: #fff;z-index: 3;border: 1px solid #CBB;margin-top: -165px;box-shadow: 0 0 8px #ccc;padding: 0 0 0 15px;border-radius: 3px;">
+<div id="kef" style="display: none; position: fixed;top: 50%;width: 160px;height: 330px;background: #fff;z-index: 3;border: 1px solid #CBB;margin-top: -165px;box-shadow: 0 0 8px #ccc;padding: 0 0 0 15px;*padding:15px;_padding:15px;border-radius: 3px;_position: absolute;_top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop +(documentElement.clientHeight/2) - 1 : document.body.scrollTop+(document.body.clientHeight/2) - 1); ">
     <h4>客服专线：</h4>
     <p>028-86790237</p>
     <h4>工作时间：</h4>
@@ -147,8 +151,8 @@
     <img width="140" height="140" src="/Images/mgqrcode.jpg" />
     <span onclick="$('#kef').hide(); $('#kfu').show();"   style="cursor: pointer; position: absolute;font-size: 25px;display: inline-block;width: 25px;height: 25px;color: #1F1E1E;top: 2px;right: 2px;">×</span>
 </div>
-<div id="kfu" onclick="$('#kef').show(); $('#kfu').hide();" style=" cursor: pointer; line-height: 19px;position: fixed;top: 50%;width: 28px;height: 135px;background: #fff;z-index: 3;border: 1px solid #CBB;margin-top: -75px;box-shadow: 0 0 8px #ccc;padding: 28px 0 0 15px;border-radius: 3px;">麦歌客服热线</div>
-<div id="layout" style="background:#00917c;min-width: 1200px;height: 6240px;">
+<div id="kfu" onclick="$('#kef').show(); $('#kfu').hide();" style="cursor: pointer; line-height: 19px;position: fixed;top: 50%;width: 28px;height: 135px;background: #fff;z-index: 3;border: 1px solid #CBB;margin-top: -75px;box-shadow: 0 0 8px #ccc;padding: 28px 0 0 15px;*padding:28px 10px 28px 15px;_padding:28px 10px 28px 15px;  border-radius: 3px;_position: absolute;_top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop +(documentElement.clientHeight/2) - 1 : document.body.scrollTop+(document.body.clientHeight/2) - 1);  ">麦歌客服热线</div>
+<div id="layout" style="background:#00917c;min-width: 1200px; text-align:center;height:6240px;*height:6340px; _height:6340px;overflow:hidden;">
     <div style="position: relative">
         <img src="/Images/mgcxbg.jpg" width="100%" height="698px" style="min-width: 1200px;" />
     </div>
@@ -159,16 +163,16 @@
                 <div class="lb-tab">
                     <div style="height:100%;position:relative;overflow:hidden;background:#fff">
                         <div style="display:block;height:100%">
-                            <a href="javascript:void;" style="background:url(/Images/mgzt.png) -949px -1923px; "></a>
+                            <a href="/商品陈列/Product_Inmall?id=14620" style="background:url(/Images/mgzt.png) -949px -1923px; "></a>
                         </div>
                         <div style="display:none;height:100%">
-                            <a href="javascript:void;" style="background:url(/Images/mgzt.png) -949px -1286px; "></a>
+                            <a href="/商品陈列/Product_Inmall?id=14621" style="background:url(/Images/mgzt.png) -949px -1286px; "></a>
                         </div>
                         <div style="display:none;height:100%">
-                            <a href="javascript:void;" style="background:url(/Images/mgzt.png) -949px -664px; "></a>
+                            <a href="/商品陈列/Product_Inmall?id=14622" style="background:url(/Images/mgzt.png) -949px -664px; "></a>
                         </div>
                         <div style="display:none;height:100%">
-                            <a href="javascript:void;" style="background:url(/Images/mgzt.png) -949px -87px; "></a>
+                            <a href="/商品陈列/Product_Inmall?id=14623" style="background:url(/Images/mgzt.png) -949px -87px; "></a>
                         </div>
 
                     </div>
@@ -215,7 +219,7 @@
                         <div name="yyzc" class="packagedetail" style="display:block">
                             <div style="font-size:36px;font-family:'微软雅黑';color:#484848;margin-left:18px; float:left">套餐详情</div>
                             <div style="padding-top:6px; height: 45px;line-height:20px; margin-left: 32px;width: 810px;font-family: '宋体';font-size: 14px;float: left;">
-                                <div style="float:left;color:#646464">
+                                <div style="float:left;color:#646464;text-align:left">
                                     <p>牛油果的不饱和脂肪酸遇上有机蛋白质，更易吸收的健康！</p>
                                     <p><span style="font-weight:bold">包含单品：</span>牛油果3个 + 荷高有机牛奶3盒 + 一点田放养土鸡蛋12枚装1盒</p>
                                 </div>
@@ -225,13 +229,13 @@
                                 </div>
                             </div>
                             <div style="float:right;">
-                                <a href="javascript:void;" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
+                                <a href="/商品陈列/Product_Inmall?id=14620" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
                             </div>
                         </div>
                         <div name="ttrsc" class="packagedetail">
                             <div style="font-size:36px;font-family:'微软雅黑';color:#484848;margin-left:18px; float:left">套餐详情</div>
                             <div style="padding-top:6px; height: 45px;line-height:20px; margin-left: 32px;width: 810px;font-family: '宋体';font-size: 14px;float: left;">
-                                <div style="float:left;color:#646464">
+                                <div style="float:left;color:#646464;text-align:left">
                                     <p>大块吃肉后来点纤维素，口腹满足不长胖，保家卫国有力量。</p>
                                     <p><span style="font-weight:bold">包含单品：</span>岗子峪有机糙米2袋 + 冬枣4kg + 科尔沁去骨腹肉1kg</p>
                                 </div>
@@ -241,13 +245,13 @@
                                 </div>
                             </div>
                             <div style="float:right;">
-                                <a href="javascript:void;" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
+                                <a href="/商品陈列/Product_Inmall?id=14621" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
                             </div>
                         </div>
                         <div name="jtyyc" class="packagedetail">
                             <div style="font-size:36px;font-family:'微软雅黑';color:#484848;margin-left:18px; float:left">套餐详情</div>
                             <div style="padding-top:6px; height: 45px;line-height:20px; margin-left: 32px;width: 810px;font-family: '宋体';font-size: 14px;float: left;">
-                                <div style="float:left;color:#646464">
+                                <div style="float:left;color:#646464;text-align:left">
                                     <p>橄榄油纯净、里脊肉嫩滑、红玫瑰苹果芳香，这就是家的味道，温暖的味道。 </p>
                                     <p><span style="font-weight:bold">包含单品：</span>高金里脊肉块1盒 + 皇家莎萝茉有机特级初榨橄榄油1罐 + 红玫瑰苹果2.5kg </p>
                                 </div>
@@ -257,13 +261,13 @@
                                 </div>
                             </div>
                             <div style="float:right;">
-                                <a href="javascript:void;" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
+                                <a href="/商品陈列/Product_Inmall?id=14622" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
                             </div>
                         </div>
                         <div name="xxxsg" class="packagedetail">
                             <div style="font-size:36px;font-family:'微软雅黑';color:#484848;margin-left:18px; float:left">套餐详情</div>
                             <div style="padding-top:6px; height: 45px;line-height:20px; margin-left: 32px;width: 810px;font-family: '宋体';font-size: 14px;float: left;">
-                                <div style="float:left;color:#646464">
+                                <div style="float:left;color:#646464;text-align:left">
                                     <p>全家齐聚时，不让嘴巴停下来，吃完坚果后，一杯蜂蜜润肠道。</p>
                                     <p><span style="font-weight:bold">包含单品：</span>松子仁1罐 + 夏威夷果1罐 + 康维他MANUKAHEALTH蜂蜜1瓶 </p>
                                 </div>
@@ -273,7 +277,7 @@
                                 </div>
                             </div>
                             <div style="float:right;">
-                                <a href="javascript:void;" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
+                                <a href="/商品陈列/Product_Inmall?id=14623" style="display:inline-block; width:152px;height:52px;background:url(/Images/btnbg.png);font-size:20px;color:#fff;text-align:center;line-height:52px">了解详情</a>
                             </div>
                         </div>
                     </div>
@@ -349,8 +353,8 @@
                             <div style="text-align:center;padding:25px;line-height:30px;">
                                 <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="/商品陈列/Product_Inmall?id=14542">冬枣</a></p>
                                 <p>
-                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥18.00</del></span>
-                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥13.5/kg</label></span>
+                                    <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥36</del></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥27/kg</label></span>
                                 </p>
                                 <p>
                                     <a href="/商品陈列/Product_Inmall?id=14542" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
@@ -359,16 +363,16 @@
                         </div>
                         <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;">
                             <div style="height:218px;">
-                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                                <a href="/商品陈列/Product_Inmall?id=14608"><img src="/App_Uploads/商品/图片/2015/11/7/original/30d308b7-d5b8-4499-a83b-7193c100fd36主图2.jpg" width="100%" height="100%" /></a>
                             </div>
                             <div style="text-align:center;padding:25px;line-height:30px;">
-                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">科尔沁去骨腹肉</a></p>
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="/商品陈列/Product_Inmall?id=14608">科尔沁去骨腹肉</a></p>
                                 <p>
                                     <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥118</del></span>
-                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥103.2/kg</label></span>
+                                    <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥106.2/kg</label></span>
                                 </p>
                                 <p>
-                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                    <a href="/商品陈列/Product_Inmall?id=14608" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
                                 </p>
                             </div>
                         </div>
@@ -376,16 +380,16 @@
                     <div name="jtyyc" style="display: none">
                         <div style="width:393px;height:360px;background:#fff;float:left">
                             <div style="height:218px;">
-                                <a href="javascript:void;"><img src="/Images/otherh1.jpg" width="100%" height="100%" /></a>
+                                <a href="/商品陈列/Product_Inmall?id=14606"><img src="/App_Uploads/商品/图片/2015/11/7/original/02518b96-3bff-48b6-aa98-34ef9c9fee96主图2.jpg" width="100%" height="100%" /></a>
                             </div>
                             <div style="text-align:center;padding:25px;line-height:30px;">
-                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">高金里脊肉块</a></p>
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="/商品陈列/Product_Inmall?id=14606">高金里脊肉块</a></p>
                                 <p>
                                     <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥26.8</del></span>
                                     <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥24.12/盒</label></span>
                                 </p>
                                 <p>
-                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                    <a href="/商品陈列/Product_Inmall?id=14606" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
                                 </p>
                             </div>
                         </div>
@@ -423,46 +427,46 @@
                     <div name="xxxsg" style="display: none">
                         <div style="width:393px;height:360px;background:#fff;float:left">
                             <div style="height:218px;">
-                                <a href="javascript:void;"><img src="/Images/otherh2.jpg" width="100%" height="100%" /></a>
+                                <a href="/商品陈列/Product_Inmall?id=14612"><img src="/App_Uploads/商品/图片/2015/11/7/original/e1fd07d0-3ac2-4ef7-a874-bfb92074a6a7主图1.jpg" width="100%" height="100%" /></a>
                             </div>
                             <div style="text-align:center;padding:25px;line-height:30px;">
-                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">松子仁</a></p>
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="/商品陈列/Product_Inmall?id=14612">松子仁</a></p>
                                 <p>
                                     <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥328</del></span>
                                     <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥246/罐</label></span>
                                 </p>
                                 <p>
-                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                    <a href="/商品陈列/Product_Inmall?id=14612" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
                                 </p>
                             </div>
                         </div>
                         <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;">
                             <div style="height:218px;">
-                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                                <a href="/商品陈列/Product_Inmall?id=14613"><img src="/App_Uploads/商品/图片/2015/11/7/original/0e98cd32-9d65-4214-99e0-f70bd770a72e主图1.jpg" width="100%" height="100%" /></a>
                             </div>
                             <div style="text-align:center;padding:25px;line-height:30px;">
-                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">夏威夷果</a></p>
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="/商品陈列/Product_Inmall?id=14613">夏威夷果</a></p>
                                 <p>
                                     <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥36</del></span>
                                     <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥27/罐</label></span>
                                 </p>
                                 <p>
-                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                    <a href="/商品陈列/Product_Inmall?id=14613" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
                                 </p>
                             </div>
                         </div>
                         <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;">
                             <div style="height:218px;">
-                                <a href="javascript:void;"><img src="/Images/sp.jpg" width="100%" height="100%" /></a>
+                                <a href="/商品陈列/Product_Inmall?id=14607"><img src="/App_Uploads/商品/图片/2015/11/7/original/c8f35c8f-04de-42c5-859f-a857d6abb7fd主图.jpg" width="100%" height="100%" /></a>
                             </div>
                             <div style="text-align:center;padding:25px;line-height:30px;">
-                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="javascript:void;">康维他MANUKAHEALTH蜂蜜</a></p>
+                                <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="/商品陈列/Product_Inmall?id=14607">康维他MANUKAHEALTH蜂蜜</a></p>
                                 <p>
                                     <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥178</del></span>
                                     <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥148/kg</label></span>
                                 </p>
                                 <p>
-                                    <a href="javascript:void;" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                    <a href="/商品陈列/Product_Inmall?id=14607" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
                                 </p>
                             </div>
                         </div>
@@ -645,16 +649,16 @@
                     </div>
                     <div style="width:393px;height:360px;background:#fff;float:left;margin-left:10px;margin-bottom: 10px;">
                         <div style="height:218px;">
-                            <a href="/商品陈列/Product_Inmall?id=14540"><img src="/App_Uploads/商品/图片/2015/11/7/original/6a6e86d9-6953-4542-86b7-0dca2314c07a主图1.jpg" width="100%" height="100%" /></a>
+                            <a href="/商品陈列/Product_Inmall?id=14614"><img src="/App_Uploads/商品/图片/2015/11/7/original/6a6e86d9-6953-4542-86b7-0dca2314c07a主图1.jpg" width="100%" height="100%" /></a>
                         </div>
                         <div style="text-align:center;padding:25px;line-height:30px;">
-                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="/商品陈列/Product_Inmall?id=14540">澳柑</a></p>
+                            <p><a style="font-family:'微软雅黑';font-size:20px;color:#484848" href="/商品陈列/Product_Inmall?id=14614">澳柑</a></p>
                             <p>
-                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥56.00</del></span>
-                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥42.00/kg</label></span>
+                                <span style="font-size:14px;color:#a9a9a9"><del>零售价：￥30</del></span>
+                                <span style="font-size:16px;color:#646464">零售价：<label style="color:#914e07;font-weight:bold">￥22.5/kg</label></span>
                             </p>
                             <p>
-                                <a href="/商品陈列/Product_Inmall?id=14540" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
+                                <a href="/商品陈列/Product_Inmall?id=14614" style="display:inline-block; width:116px;height:30px;line-height:30px;color:#fff;background:url(/Images/btnbg.png)">立即购买</a>
                             </p>
                         </div>
                     </div>
@@ -868,7 +872,7 @@
                 <div class="floorname" style="margin: 10px 0; background: url(/Images/xnmg.png) no-repeat center center">西南物资采购网携麦歌倾情奉上</div>
                 <p style="font-size: 16px;font-family:'宋体';text-indent: 2em;color: #fff;line-height: 25px;">西南物资采购网（www.go81.cn）是由成都军区联勤部军需物资油料部正式授权发布，主要面向整个成都军区部队单位和官兵个人进行招标采购信息发布、物资采购以及个人会员服务等综合服务保障的国际互联网平台系统，是成都军区物资招标采购信息的专业发布平台，也是成都军区物资采购供应商和评审专家入库申请的网上通道。</p>
                 <div style="height: 392px;background: url(/Images/logoqrcode.png) no-repeat center center;margin: 20px 0;"></div>
-                <div style="height: 180px;margin-top: 40px; background: url(/Images/step.jpg)"></div>
+                <div style="width:1002px;height: 180px;margin: 40px auto; background: url(/Images/step.jpg)"></div>
             </div>
         </div>
     </div>

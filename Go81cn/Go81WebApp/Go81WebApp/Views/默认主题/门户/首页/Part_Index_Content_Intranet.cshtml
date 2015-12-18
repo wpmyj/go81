@@ -106,8 +106,8 @@
                         <div class="tabmenu_zb">
                             <ul>
                                 <li index="1" class="changetab">发标公告</li>
-                                <li index="2" class="changetab">需求公告</li>
-                                <li index="3" class="changetab">其他</li>
+                                <li index="2" class="changetab">预公告</li>
+                                <li index="3" class="changetab">技术公告</li>
                             </ul>
                         </div><a target="_blank" href="~/公告/AnnounceList/公开招标" class="more" style="color:#fff;">更多+</a>
                     </div>
@@ -559,8 +559,8 @@
                         <div class="tabmenu_zb" style="margin-left:10px;">
                             <ul>
                                 <li index="1" class="changetab">邀请招标</li>
-                                <li index="2" class="changetab">竞争性谈判</li>
-                                <li index="3" class="changetab">询价采购</li>
+                                <li index="2" class="changetab">询价采购</li>
+                                <li index="3" class="changetab">竞争性谈判</li>
                                 @*<li index="4" class="changetab">单一来源</li>*@
                             </ul>
                         </div><a target="_blank" href="~/公告/AnnounceList/采购公告" class="more" style="color:#fff;">更多+</a>
@@ -668,7 +668,7 @@
                     <ul>
                         @{
                             i = 0;
-                            Message = ViewData["竞争性谈判"] as IEnumerable<公告>;
+                            Message = ViewData["询价采购"] as IEnumerable<公告>;
                         }
                         @if (Message.Count() == 0)
                         {
@@ -676,7 +676,7 @@
                         }
                         else
                         {
-                            foreach (var item in (IEnumerable<公告>)ViewData["竞争性谈判"])
+                            foreach (var item in (IEnumerable<公告>)ViewData["询价采购"])
                             {
                                 TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
                                 if (i % 2 == 0)
@@ -686,7 +686,7 @@
                                         {
                                             <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
-                                            <a class="new" style="width:210px" @*style="width:195px;"*@ target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                            <a class="new" style="width:210px" @*style="width: 195px;"*@ target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
                                         }
                                         else
                                         {
@@ -718,7 +718,7 @@
                     <ul>
                         @{
                             i = 0;
-                            Message = ViewData["询价采购"] as IEnumerable<公告>;
+                            Message = ViewData["竞争性谈判"] as IEnumerable<公告>;
                         }
                         @if (Message.Count() == 0)
                         {
@@ -726,7 +726,7 @@
                         }
                         else
                         {
-                            foreach (var item in (IEnumerable<公告>)ViewData["询价采购"])
+                            foreach (var item in (IEnumerable<公告>)ViewData["竞争性谈判"])
                             {
                                 TimeSpan ts = DateTime.Now - item.内容主体.发布时间;
                                 if (i % 2 == 0)
@@ -736,7 +736,7 @@
                                         {
                                             <img style="float: left; padding-right: 5px;" src="~/Images/newico.gif" />
                                             <span>@item.内容主体.发布时间.ToString("yyyy.MM.dd")</span>
-                                            <a class="new" style="width:210px" @*style="width: 195px;"*@ target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
+                                            <a class="new" style="width:210px" @*style="width:195px;"*@ target="_blank" href="~/公告/AnnounceDetail?id=@item.Id" title="@item.内容主体.标题">@item.内容主体.标题</a>
                                         }
                                         else
                                         {
@@ -895,7 +895,7 @@
                     <div style="margin: 0 auto;width: 260px;height:55px;" class="loginspan">
                         <label style="font-weight:normal;font-size:12px;font-family:STSong;width:48px;text-align:right">用户名：</label>
                         <div style="*width:193px;_width:193px; height: 30px;display: inline-block; *display:inline;_display:inline; background: #fff;border: 1px solid #ccc;">
-                            <i style="padding-right: 8px;border-right: 1px solid #ccc;vertical-align: middle;display: inline-block;width: 14px;height: 20px;background: url('../Images/login_user.jpg') no-repeat center left;margin-left: 10px;"></i>
+                            <i style="padding:0 8px;border-right: 1px solid #ccc;vertical-align: middle;display: inline-block;width: 14px;height: 20px;background: url('../Images/login_user.jpg') no-repeat center center;"></i>
                             @Html.TextBoxFor(model => model.LoginName, new { @style = "*vertical-align:middle;_vertical-align:middle;text-indent: 1em;padding: 2px 0 3px;width:150px; height: 25px; line-height:25px;border: none;", placeholder = "请输入用户名", autocomplete = "off" })
                         </div>
                         <div style="padding-left:56px;">
@@ -905,7 +905,7 @@
                     <div style="margin: 0 auto;width: 260px;height:55px;" class="loginspan">
                         <label style="font-weight:normal;font-size:12px;font-family:STSong;width:48px;text-align:right;">密&nbsp;&nbsp;码：</label>
                         <div style="*width:193px;_width:193px;height: 30px;display: inline-block; *display:inline;_display:inline;background: #fff;border: 1px solid #ccc;">
-                            <i style="padding-right: 8px;border-right: 1px solid #ccc;vertical-align: middle;display: inline-block;width: 14px;height: 20px;background: url('../Images/login_pwd.jpg') no-repeat center left;margin-left: 10px;"></i>
+                            <i style="padding:0 8px;border-right: 1px solid #ccc;vertical-align: middle;display: inline-block;width: 14px;height: 20px;background: url('../Images/login_pwd.jpg') no-repeat center center;"></i>
                             @Html.PasswordFor(model => model.LoginPwd, new { @style = "*vertical-align:middle;_vertical-align:middle;text-indent: 1em;padding: 2px 0 3px;width:150px; height: 25px; line-height:25px;border: none;", placeholder = "请输入密码", autocomplete = "off" })
                         </div>
                         <div style="padding-left:56px;">
@@ -915,8 +915,8 @@
                     <div style="margin: 0 auto;width: 260px; height:55px;" class="loginspan">
                         <label style="font-weight:normal;font-size:12px;font-family:STSong;width:48px;text-align:right;">验证码：</label>
                         <img id="yzcode" src=@Url.Action("NewVCodeImage", "登录") style="cursor:pointer; vertical-align:middle;height:32px;" title="看不清，换一张" alt="看不清，换一张" onclick='$(this).attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());' />
-                        <div style="*width:193px;_width:193px;height: 30px;display: inline-block; *display:inline;_display:inline;background: #fff;border: 1px solid #ccc;vertical-align:middle">
-                            @Html.TextBoxFor(model => model.VerifyCode, new { @style = "text-indent: 1em;padding: 2px 0 3px;height: 25px;line-height:25px; border: none;width:109px;", placeholder = "请输入验证码" })
+                        <div style="*width:188px;_width:188px;height: 30px;display: inline-block; *display:inline;_display:inline;background: #fff;border: 1px solid #ccc;vertical-align:middle">
+                            @Html.TextBoxFor(model => model.VerifyCode, new { @style = "text-indent: 1em;padding: 2px 0 3px;height: 25px;line-height:25px; border: none;width:109px;*width:103px;_width:103px;", placeholder = "请输入验证码" })
                         </div>
                         <div style="padding-left:56px;">
                             <span>@ViewBag.WrongLoginMessage</span>

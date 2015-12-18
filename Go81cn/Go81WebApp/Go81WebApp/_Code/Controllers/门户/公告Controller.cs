@@ -249,6 +249,10 @@ namespace Go81WebApp.Controllers.门户
                 {
                     query = query.And(Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.公开招标 ));    
                 }
+                else if (adclass == "结果公示")
+                {
+                    query = query.And(Query<公告>.Where(o => o.公告信息.公告性质 == 公告.公告性质.废标公告 || o.公告信息.公告性质 == 公告.公告性质.中标结果公示 || o.公告信息.公告性质 == 公告.公告性质.流标公告));
+                }
                 else if(adclass=="采购公告")
                 {
                     query = query.And(Query<公告>.Where(o => o.公告信息.公告类别 == 公告.公告类别.邀请招标 || o.公告信息.公告类别 == 公告.公告类别.询价采购 || o.公告信息.公告类别 == 公告.公告类别.竞争性谈判));
@@ -299,7 +303,7 @@ namespace Go81WebApp.Controllers.门户
                     query =
                         query.And(
                             Query<公告>.Where(
-                                o => o.内容主体.发布时间.ToShortDateString() == exactdatetime.ToShortDateString()));
+                                o => o.内容主体.发布时间 >= exactdatetime && o.内容主体.发布时间 < exactdatetime.AddDays(1)));
                 }
             }
 
@@ -310,7 +314,8 @@ namespace Go81WebApp.Controllers.门户
             }
             if (!string.IsNullOrWhiteSpace(enddate))
             {
-                query = query.And(Query<公告>.Where(o => o.内容主体.发布时间 <= Convert.ToDateTime(enddate)));
+                var EndDate = Convert.ToDateTime(startdate) == Convert.ToDateTime(enddate) ? Convert.ToDateTime(enddate).AddDays(1) : Convert.ToDateTime(enddate);
+                query = query.And(Query<公告>.Where(o => o.内容主体.发布时间 <= EndDate));
             }
             
             var listcount = (int)公告管理.计数公告(0, 0, query);

@@ -5119,8 +5119,22 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult Procure_AdModify()
         {
-            //return View("Procure_AdList");
-            return View();
+            try
+            {
+                公告 model = 公告管理.查找公告(long.Parse(Request.QueryString["id"]));
+                if(model.审核数据.审核状态!= 审核状态.审核通过)
+                {
+                    return View();
+                }
+                else
+                {
+                    return Redirect("/单位用户后台/Procure_AdSendList_S");
+                }
+            }
+            catch
+            {
+                return Redirect("/单位用户后台/Procure_AdSendList_S");
+            }
         }
         public ActionResult Procure_NewsModify()
         {
@@ -5659,13 +5673,14 @@ namespace Go81WebApp.Controllers.后台
                 {
                     model.内容主体.图片 = null;
                 }
-
+                model.内容主体.发布时间 = DateTime.Now;
                 //model.公告信息.一级分类 = Request.Form["hy"];
                 //model.公告信息.所属地域.省份 = Request.Form["deliverprovince"];
                 //model.公告信息.所属地域.城市 = Request.Form["delivercity"];
                 //model.公告信息.所属地域.区县 = Request.Form["deliverarea"];
 
                 //赋值公告所有者
+                
                 model.内容基本信息.所有者.用户ID = currentUser.Id;
 #if INTRANET
                 //如果是采购处或者更高级别的用户，直接审核通过进行发布，创建lucene（成都采购站，西藏采购站或者采购处及其助理员）

@@ -313,14 +313,7 @@ namespace Go81WebApp.Controllers.后台
                 }
                 else
                 {
-                    foreach (var item in Newmodel.资质证书列表)
-                    {
-                        if (item.已填写完整 == false)
-                        {
-                            ViewBag.qualify = false;
-                            break;
-                        }
-                    }
+                    ViewBag.qualify = true;
                 }
             }
             else
@@ -455,7 +448,6 @@ namespace Go81WebApp.Controllers.后台
                     ViewData["批量上传"] = "1";
                 }
             }
-
             return View();
         }
 
@@ -896,7 +888,31 @@ namespace Go81WebApp.Controllers.后台
                                 {
                                     System.IO.File.Delete(Server.MapPath(@model.营业执照信息.税务登记证电子扫描件));
                                 }
+                                if (System.IO.File.Exists(Server.MapPath(@model.营业执照信息.三证合一扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@model.营业执照信息.三证合一扫描件));
+                                }
                                 model.营业执照信息.税务登记证电子扫描件 = path1;
+                            }
+                            else if (name == "together")
+                            {
+                                if (System.IO.File.Exists(Server.MapPath(@model.营业执照信息.三证合一扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@model.营业执照信息.三证合一扫描件));
+                                }
+                                if (System.IO.File.Exists(Server.MapPath(@model.营业执照信息.税务登记证电子扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@model.营业执照信息.税务登记证电子扫描件));
+                                }
+                                if (System.IO.File.Exists(Server.MapPath(@model.营业执照信息.营业执照电子扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@model.营业执照信息.营业执照电子扫描件));
+                                }
+                                if (System.IO.File.Exists(Server.MapPath(@model.工商注册信息.组织机构代码证电子扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@model.工商注册信息.组织机构代码证电子扫描件));
+                                }
+                                model.营业执照信息.三证合一扫描件 = path1;
                             }
                             else if (name == "tax")
                             {
@@ -911,6 +927,10 @@ namespace Go81WebApp.Controllers.后台
                                 if (System.IO.File.Exists(Server.MapPath(@model.工商注册信息.组织机构代码证电子扫描件)))
                                 {
                                     System.IO.File.Delete(Server.MapPath(@model.工商注册信息.组织机构代码证电子扫描件));
+                                }
+                                if (System.IO.File.Exists(Server.MapPath(@model.营业执照信息.三证合一扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@model.营业执照信息.三证合一扫描件));
                                 }
                                 model.工商注册信息.组织机构代码证电子扫描件 = path1;
                             }
@@ -943,6 +963,10 @@ namespace Go81WebApp.Controllers.后台
                                 if (System.IO.File.Exists(Server.MapPath(@model.营业执照信息.营业执照电子扫描件)))
                                 {
                                     System.IO.File.Delete(Server.MapPath(@model.营业执照信息.营业执照电子扫描件));
+                                }
+                                if (System.IO.File.Exists(Server.MapPath(@model.营业执照信息.三证合一扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@model.营业执照信息.三证合一扫描件));
                                 }
                                 model.营业执照信息.营业执照电子扫描件 = path1;
                             }
@@ -5515,7 +5539,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 foreach (var item in Newmodel.资质证书列表)
                 {
-                    if (string.IsNullOrWhiteSpace(item.名称) || string.IsNullOrWhiteSpace(item.发证机构) || string.IsNullOrWhiteSpace(item.等级))
+                    if (string.IsNullOrWhiteSpace(item.名称) || string.IsNullOrWhiteSpace(item.发证机构))
                     {
                         item.已填写完整 = false;
                         break;
@@ -6117,6 +6141,7 @@ namespace Go81WebApp.Controllers.后台
             string str = Newmodel.工商注册信息.近3年有无重大违法记录电子扫描件;
             string sales = Newmodel.营业执照信息.营业执照电子扫描件;
             string Tax = Newmodel.营业执照信息.税务登记证电子扫描件;
+            string together = Newmodel.营业执照信息.三证合一扫描件;
             Newmodel.营业执照信息 = model.营业执照信息;
             Newmodel.工商注册信息 = model.工商注册信息;
             Newmodel.工商注册信息.组织机构代码证电子扫描件 = gs_Reg;
@@ -6125,6 +6150,7 @@ namespace Go81WebApp.Controllers.后台
             Newmodel.工商注册信息.近3年有无重大违法记录电子扫描件 = str;
             Newmodel.营业执照信息.营业执照电子扫描件 = sales;
             Newmodel.营业执照信息.税务登记证电子扫描件 = Tax;
+            Newmodel.营业执照信息.三证合一扫描件 = together;
             if (string.IsNullOrWhiteSpace(Newmodel.工商注册信息.基本账户开户银行) ||
                 string.IsNullOrWhiteSpace(Newmodel.工商注册信息.基本账户开户银行资信证明电子扫描件) ||
                 string.IsNullOrWhiteSpace(Newmodel.工商注册信息.基本账户银行帐号) ||

@@ -57,9 +57,13 @@ namespace Go81WebApp.Controllers.门户
             /// </summary>
             public string Name { get; set; }
             /// <summary>
-            /// 民族
+            /// 职称
             /// </summary>
             public string Minzu { get; set; }
+            /// <summary>
+            /// 专家类别
+            /// </summary>
+            public string type { get; set; }
             /// <summary>
             /// 专家级别
             /// </summary>
@@ -77,23 +81,15 @@ namespace Go81WebApp.Controllers.门户
             {
                 IMongoQuery q = null;
                 var name = Request.Params["expertname"];
-                if(!string.IsNullOrWhiteSpace(Request.Params["pro"]))
+                string status = Request.Params["sta"];
+                if(!string.IsNullOrWhiteSpace(status)&&status!="0")
                 {
-                    q = Query.And(Query<专家>.Where(m => m.所属地域.省份 == Request.Params["pro"]));
-                }
-                if(!string.IsNullOrWhiteSpace(Request.Params["c"]))
-                {
-                    q = Query.And(Query<专家>.Where(m => m.所属地域.城市 == Request.Params["c"]));
-                }
-                if(!string.IsNullOrWhiteSpace(Request.Params["a"]))
-                {
-                    q = Query.And(Query<专家>.Where(m => m.所属地域.区县 == Request.Params["a"]));
+                    q = Query.And(Query<专家>.Where(m => (int)m.身份信息.专家类型 == int.Parse(status)));
                 }
                 if(!string.IsNullOrWhiteSpace(name))
                 {
                     q = Query.And(Query<专家>.Where(m => m.身份信息.姓名 == name));
                 }
-                string status=Request.Params["sta"];
                 List<Expert> elist = new List<Expert>();
                 long pageCount = 0;
                 int cpg = 1;
@@ -115,6 +111,7 @@ namespace Go81WebApp.Controllers.门户
                     exp.Name=k.身份信息.姓名;
                     exp.Zjjb=k.身份信息.专家级别.ToString();
                     exp.Minzu = k.身份信息.民族.ToString();
+                    exp.type = k.身份信息.专家类型.ToString();
                     exp.Shzt = k.审核数据.审核状态.ToString();
                     if(k.入库类型!= 入库类型.入库)
                     {

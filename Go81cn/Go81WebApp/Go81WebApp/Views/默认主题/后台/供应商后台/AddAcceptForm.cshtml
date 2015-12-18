@@ -901,6 +901,7 @@ else
                     content: "请输入数字！",  //提示信息内容 必须
                     iscomfirm: false,
                     onComfirm: function () {
+                        $(ev).val("");
                         $("#comfirm-lk").fadeOut(200);
                     },
                 });

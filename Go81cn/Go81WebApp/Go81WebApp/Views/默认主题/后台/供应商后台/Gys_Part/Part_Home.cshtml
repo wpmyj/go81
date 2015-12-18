@@ -105,10 +105,14 @@
             </ol>
         </div>
         <em>温馨提示：</em>
-        @if (Model.供应商用户信息.已提交)
+        @if (Model.供应商用户信息.已提交 && Model.审核数据.审核状态 != Go81WebApp.Models.数据模型.审核状态.审核通过)
         {
-            <em>您已提交过所有信息。如需修改，请联系网站管理员。</em>
+            <em>您已提交过所有信息，请等待网站审核。如需修改，请联系网站客服。</em>
         }
+        else if (Model.审核数据.审核状态 == Go81WebApp.Models.数据模型.审核状态.审核通过)
+         {
+             <em style="color:#ff0000;">您已成功通过网站审核</em>
+         }
         @if (ViewBag.BaseInfo == false || ViewBag.VipInfo == false || ViewBag.SalesInfo == false || ViewBag.Busniss == false || ViewBag.TaxInfo == false || ViewBag.LawPerson == false || ViewBag.Financial == false || ViewBag.servicedepart == false || ViewBag.qualify == false || ViewBag.goodType == 0 || ViewBag.GoodCount < 5)
         {
             <div style="width:100%; text-indent:20px; border:1px dashed black; margin-top:5px;">

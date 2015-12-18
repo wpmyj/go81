@@ -4,6 +4,6 @@
         cache: false,
         async: false,
         url: "/首页/clickStatistics",
-        data: parm,
+        data: parm
     });
 }

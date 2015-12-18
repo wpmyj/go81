@@ -352,6 +352,7 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
         {
             public bool 已填写完整 { get; set; }
             public string 营业执照电子扫描件 { get; set; }
+            public string 三证合一扫描件 { get; set; }//营业执照，组织机构代码和税务登记证
             public string 营业执照发证机关 { get; set; }
             public string 营业执照注册号 { get; set; }
             public string 税务登记证电子扫描件 { get; set; }

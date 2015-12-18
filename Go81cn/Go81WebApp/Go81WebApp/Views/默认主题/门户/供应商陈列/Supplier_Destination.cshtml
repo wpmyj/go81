@@ -97,7 +97,7 @@
                 background-color: rgb(243, 243, 243);
             }
             table.img_box{
-                margin-left:40px;
+                margin:40px;
             }
                 table.img_box tr td {
                     width: 202px;
@@ -958,15 +958,9 @@
         var icon = new BMap.Icon("http://app.baidu.com/map/images/us_mk_icon.png", new BMap.Size(json.w, json.h), { imageOffset: new BMap.Size(-json.l, -json.t), infoWindowOffset: new BMap.Size(json.lb + 5, 1), offset: new BMap.Size(json.x, json.h) })
         return icon;
     }
-
     initMap();//创建和初始化地图
 </script>
 <script type="text/javascript" language="javascript">
-    //window.onload= function() {
-        
-    //}
-
-    //$(document).ready(function () { $("div.Page1").css("background-color", "#990808"); });
     $(document).ready(function() {
         $(".action_link").each(function () {
             if($(this).text()=="供应商库")

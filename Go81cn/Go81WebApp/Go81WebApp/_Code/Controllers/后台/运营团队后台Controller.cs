@@ -103,11 +103,10 @@ namespace Go81WebApp.Controllers.后台
             var pwd = Request.Form["pwd"];
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(pwd) || pwd.Length<6)
             return Content("<script>alert('登录名和密码必须填写,密码不少于6个字符！');window.location='/运营团队后台/ModifiAnyUserPWD';</script>");
-            var usernameuUpper = username.ToUpper();
-            var userUnit = 用户管理.查询用户<单位用户>(0, 0, Query<单位用户>.Where(o => o.登录信息.登录名 == usernameuUpper));
+            var userUnit = 用户管理.查询用户<单位用户>(0, 0, Query.Matches("登录信息.登录名", new BsonRegularExpression(string.Format("/^{0}$/i", username))));
             if (!userUnit.Any())
             {
-                var userGys = 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.登录信息.登录名 == usernameuUpper));
+                var userGys = 用户管理.查询用户<供应商>(0, 0, Query.Matches("登录信息.登录名", new BsonRegularExpression(string.Format("/^{0}$/i", username))));
                 if (!userGys.Any())
                 {
                     return Content("<script>alert('没有该用户，请核实！');window.location='/运营团队后台/ModifiAnyUserPWD';</script>");
@@ -1062,6 +1061,7 @@ namespace Go81WebApp.Controllers.后台
                 string LawPersonPic = NewModel.法定代表人信息.法定代表人身份证电子扫描件;
                 string TaxPic = NewModel.税务信息.近3年完税证明电子扫描件;
                 string Taxregister = NewModel.营业执照信息.税务登记证电子扫描件;
+                string together = NewModel.营业执照信息.三证合一扫描件;
                 for (int i = 0; i < Request.Files.Count; i++)
                 {
                     HttpPostedFileBase img = Request.Files[i];
@@ -1073,40 +1073,80 @@ namespace Go81WebApp.Controllers.后台
                         switch (i)
                         {
                             case 0: showPic.Add(file_name); break;
-                            case 1: OrganizePic = file_name;
+                            case 1: together = file_name;
                                 if (System.IO.File.Exists(Server.MapPath(@NewModel.工商注册信息.组织机构代码证电子扫描件)))
                                 {
                                     System.IO.File.Delete(Server.MapPath(@NewModel.工商注册信息.组织机构代码证电子扫描件));
                                 }
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.营业执照信息.税务登记证电子扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@NewModel.营业执照信息.税务登记证电子扫描件));
+                                }
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.营业执照信息.营业执照电子扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@NewModel.营业执照信息.营业执照电子扫描件));
+                                }
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.营业执照信息.三证合一扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@NewModel.营业执照信息.三证合一扫描件));
+                                }
                                 break;
-                            case 2: BankPic = file_name; if (System.IO.File.Exists(Server.MapPath(@NewModel.工商注册信息.基本账户开户银行资信证明电子扫描件)))
+                            case 2: OrganizePic = file_name;
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.工商注册信息.组织机构代码证电子扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@NewModel.工商注册信息.组织机构代码证电子扫描件));
+                                }
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.营业执照信息.三证合一扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@NewModel.营业执照信息.三证合一扫描件));
+                                }
+                                break;
+                            case 3: BankPic = file_name; 
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.工商注册信息.基本账户开户银行资信证明电子扫描件)))
                                 {
                                     System.IO.File.Delete(Server.MapPath(@NewModel.工商注册信息.基本账户开户银行资信证明电子扫描件));
                                 } break;
-                            case 3: SocialPic = file_name; if (System.IO.File.Exists(Server.MapPath(@NewModel.工商注册信息.近3年缴纳社会保证金证明电子扫描件)))
+                            case 4: SocialPic = file_name; 
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.工商注册信息.近3年缴纳社会保证金证明电子扫描件)))
                                 {
                                     System.IO.File.Delete(Server.MapPath(@NewModel.工商注册信息.近3年缴纳社会保证金证明电子扫描件));
                                 } break;
-                            case 4: LawPic = file_name; if (System.IO.File.Exists(Server.MapPath(@NewModel.工商注册信息.近3年有无重大违法记录电子扫描件)))
+                            case 5: LawPic = file_name;
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.工商注册信息.近3年有无重大违法记录电子扫描件)))
                                 {
                                     System.IO.File.Delete(Server.MapPath(@NewModel.工商注册信息.近3年有无重大违法记录电子扫描件));
                                 } break;
-                            case 5: SalePic = file_name; if (System.IO.File.Exists(Server.MapPath(@NewModel.营业执照信息.营业执照电子扫描件)))
+                            case 6: SalePic = file_name;
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.营业执照信息.营业执照电子扫描件)))
                                 {
                                     System.IO.File.Delete(Server.MapPath(@NewModel.营业执照信息.营业执照电子扫描件));
-                                } break;
-                            case 6: Taxregister = file_name; if (System.IO.File.Exists(Server.MapPath(@NewModel.营业执照信息.税务登记证电子扫描件)))
+                                }
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.营业执照信息.三证合一扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@NewModel.营业执照信息.三证合一扫描件));
+                                }
+                                break;
+                            case 7: Taxregister = file_name;
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.营业执照信息.税务登记证电子扫描件)))
                                 {
                                     System.IO.File.Delete(Server.MapPath(@NewModel.营业执照信息.税务登记证电子扫描件));
-                                } break;
-                            case 7: LawPersonPic = file_name; if (System.IO.File.Exists(Server.MapPath(@NewModel.法定代表人信息.法定代表人身份证电子扫描件)))
+                                }
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.营业执照信息.三证合一扫描件)))
+                                {
+                                    System.IO.File.Delete(Server.MapPath(@NewModel.营业执照信息.三证合一扫描件));
+                                }
+                                break;
+                            case 8: LawPersonPic = file_name;
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.法定代表人信息.法定代表人身份证电子扫描件)))
                                 {
                                     System.IO.File.Delete(Server.MapPath(@NewModel.法定代表人信息.法定代表人身份证电子扫描件));
                                 } break;
-                            case 8: TaxPic = file_name; if (System.IO.File.Exists(Server.MapPath(@NewModel.税务信息.近3年完税证明电子扫描件)))
+                            case 9: TaxPic = file_name;
+                                if (System.IO.File.Exists(Server.MapPath(@NewModel.税务信息.近3年完税证明电子扫描件)))
                                 {
                                     System.IO.File.Delete(Server.MapPath(@NewModel.税务信息.近3年完税证明电子扫描件));
-                                } break;
+                                } 
+                                break;
                         }
                     }
                 }
@@ -1123,6 +1163,11 @@ namespace Go81WebApp.Controllers.后台
                 NewModel.所属地域 = model.所属地域;
                 NewModel.法定代表人信息 = model.法定代表人信息;
                 NewModel.工商注册信息 = model.工商注册信息;
+                NewModel.审核数据 = model.审核数据;
+                if (model.审核数据.审核状态== 审核状态.审核未通过)
+                {
+                    model.供应商用户信息.已提交 = false;
+                }
                 NewModel.供应商用户信息 = model.供应商用户信息;
                 NewModel.供应商用户信息.U盾信息 = u;
                 NewModel.联系方式 = model.联系方式;
@@ -1138,8 +1183,11 @@ namespace Go81WebApp.Controllers.后台
                 NewModel.法定代表人信息.法定代表人身份证电子扫描件 = LawPersonPic;
                 NewModel.营业执照信息.营业执照电子扫描件 = SalePic;
                 NewModel.营业执照信息.税务登记证电子扫描件 = Taxregister;
+                NewModel.营业执照信息.三证合一扫描件 = together;
                 NewModel.工商注册信息.基本账户开户银行资信证明电子扫描件 = BankPic;
                 NewModel.税务信息.近3年完税证明电子扫描件 = TaxPic;
+                NewModel.审核数据.审核时间 = DateTime.Now;
+                NewModel.审核数据.审核者.用户ID = currentUser.Id;
                 if (model.供应商用户信息.协议供应商)
                 {
                     if (model.供应商用户信息.协议供应商所属地区 != null && model.供应商用户信息.协议供应商所属地区.Count() != 0)
@@ -1210,12 +1258,40 @@ namespace Go81WebApp.Controllers.后台
                     }
                 }
                 用户管理.更新用户<供应商>(NewModel, false);
-                deleteIndex("/Lucene.Net/IndexDic/Gys", NewModel.Id.ToString());
-                //deleteIndex_ProductCatalog("/Lucene.Net/IndexDic/GysCatalog", NewModel.企业基本信息.企业名称);
+                if (Request.QueryString["msg"] != null && Request.QueryString["msg"] == "1")
+                {
+                    var UserNumber = model.企业联系人信息.联系人手机;//收信人列表
+                    string MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往成都物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询028-86686673（张助理）或028-69759681（王老师） 。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+                    if (model.供应商用户信息.符合入库标准)
+                    {
+                        if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_重庆)
+                        {
+                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往重庆物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询023-68778041（丁文元,助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+                        }
+                        else if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_昆明)
+                        {
+                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往昆明物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询0871-64783672（谢渝,助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+                        }
+                        else if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_贵阳)
+                        {
+                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往贵阳物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询0851-85508963（田助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+                        }
+                        else if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.西藏军区物资采购中心)
+                        {
+                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往西藏物资采购中心提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询0891-6738571（梁助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+                        }
+                    }
+                    else
+                    {
+                        MessageContent = "供应商您好，恭喜您已经成为西南物资采购网的入网供应商。由于您所提供的资料还不符合申请入库的标准，故不能打印入库申请表格。如有任何疑问，请拨打网站客服电话咨询，谢谢。回复TD拒收";//短信内容
+                    }
+                    //供应商您好，贵企业基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往{xxxxx}物资采购站提交申请表及核验原件{xx}具体请查看供应商注册及须知{xx}预约电话请咨询{xxxxxxxxxxxxxxxxxxxxxxxxxxx}已通过部队审核的供应商{xx}无需重复提审{xx}请及时录入商品信息{x}
+                    string retstr = MailApiPost.PostDataGetHtml(UserNumber, MessageContent);
+                }
+                deleteIndex("/Lucene.Net/IndexDic/Gys", model.Id.ToString());
                 if (NewModel.审核数据.审核状态 == 审核状态.审核通过)
                 {
                     CreateIndex_gys(用户管理.查找用户<供应商>(NewModel.Id), "/Lucene.Net/IndexDic/Gys");
-                    //CreateIndex_ProductCatalog(NewModel.企业基本信息.企业名称, "/Lucene.Net/IndexDic/GysCatalog");
                 }
                 return Content("<script>if(confirm('成功修改信息，点击确定返回供应商列表,点击取消，继续修改')){window.location='/运营团队后台/Supplier_PssInfo';}else{window.location='/运营团队后台/Modify_Supplier_Info?id=" + model.Id + "';}</script>");
             }
@@ -4921,7 +4997,7 @@ namespace Go81WebApp.Controllers.后台
             //{
             //    //CreateIndex_ProductCatalog(g.企业基本信息.企业名称, "/Lucene.Net/IndexDic/GysCatalog");
             //    CreateIndex_gys(g, "/Lucene.Net/IndexDic/Gys");
-            //    Count++;
+            //    //Count++;
             //}
 
             //foreach (var g in catlog)
@@ -6400,17 +6476,17 @@ namespace Go81WebApp.Controllers.后台
             ViewData["我的建议"] = 建议管理.查询建议(20 * (int.Parse(page.ToString()) - 1), 20, Query.EQ("处理状态", 处理状态.未处理)).OrderByDescending(m => m.基本数据.修改时间);
             return PartialView("Part_View/Requestion_Part_No_Replied");
         }
-        public ActionResult Supplier_Refused(供应商 model)//拒绝供应商的加入
-        {
-            供应商 Newmodel = 用户管理.查找用户<供应商>(model.Id);
-            Newmodel.审核数据.审核不通过原因 = model.审核数据.审核不通过原因;
-            Newmodel.审核数据.审核状态 = 审核状态.审核未通过;
-            Newmodel.供应商用户信息.已提交 = false;
-            用户管理.更新用户<供应商>(Newmodel);
-            deleteIndex("/Lucene.Net/IndexDic/Gys", model.Id.ToString());
-            //deleteIndex_ProductCatalog("/Lucene.Net/IndexDic/GysCatalog", Newmodel.企业基本信息.企业名称);
-            return Content("<script>window.location='/运营团队后台/Supplier_PssInfo';</script>");
-        }
+        //public ActionResult Supplier_Refused(供应商 model)//拒绝供应商的加入
+        //{
+        //    供应商 Newmodel = 用户管理.查找用户<供应商>(model.Id);
+        //    Newmodel.审核数据.审核不通过原因 = model.审核数据.审核不通过原因;
+        //    Newmodel.审核数据.审核状态 = 审核状态.审核未通过;
+        //    Newmodel.供应商用户信息.已提交 = false;
+        //    用户管理.更新用户<供应商>(Newmodel);
+        //    deleteIndex("/Lucene.Net/IndexDic/Gys", model.Id.ToString());
+        //    //deleteIndex_ProductCatalog("/Lucene.Net/IndexDic/GysCatalog", Newmodel.企业基本信息.企业名称);
+        //    return Content("<script>window.location='/运营团队后台/Supplier_PssInfo';</script>");
+        //}
         public ActionResult Msg_Sent()
         {
             return View();
@@ -6523,56 +6599,56 @@ namespace Go81WebApp.Controllers.后台
             }
             return Content("<script>window.location='/运营团队后台/Supplier_PssInfo';</script>");
         }
-        public ActionResult Accept()
-        {
-            try
-            {
-                long id = long.Parse(Request.QueryString["id"]);
-                供应商 model = 用户管理.查找用户<供应商>(id);
-                model.审核数据.审核时间 = DateTime.Now;
-                model.审核数据.审核者.用户ID = currentUser.Id;
-                model.审核数据.审核状态 = 审核状态.审核通过;
-                model.供应商用户信息.已提交 = true;
-                用户管理.更新用户<供应商>(model);
-                if (Request.QueryString["msg"] != null && Request.QueryString["msg"] == "1")
-                {
-                    var UserNumber = model.企业联系人信息.联系人手机;//收信人列表
-                    string MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往成都物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询028-86686673（张助理）或028-69759681（王老师） 。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
-                    if (model.供应商用户信息.符合入库标准)
-                    {
-                        if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_重庆)
-                        {
-                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往重庆物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询023-68778041（丁文元,助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
-                        }
-                        else if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_昆明)
-                        {
-                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往昆明物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询0871-64783672（谢渝,助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
-                        }
-                        else if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_贵阳)
-                        {
-                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往贵阳物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询0851-85508963（田助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
-                        }
-                        else if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.西藏军区物资采购中心)
-                        {
-                            MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往西藏物资采购中心提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询0891-6738571（梁助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
-                        }
-                    }
-                    else
-                    {
-                        MessageContent = "供应商您好，恭喜您已经成为西南物资采购网的入网供应商。由于您所提供的资料还不符合申请入库的标准，故不能打印入库申请表格。如有任何疑问，请拨打网站客服电话咨询，谢谢。回复TD拒收";//短信内容
-                    }
-                    //供应商您好，贵企业基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往{xxxxx}物资采购站提交申请表及核验原件{xx}具体请查看供应商注册及须知{xx}预约电话请咨询{xxxxxxxxxxxxxxxxxxxxxxxxxxx}已通过部队审核的供应商{xx}无需重复提审{xx}请及时录入商品信息{x}
-                    string retstr = MailApiPost.PostDataGetHtml(UserNumber, MessageContent);
-                }
-                deleteIndex("/Lucene.Net/IndexDic/Gys", model.Id.ToString());
-                CreateIndex_gys(model, "/Lucene.Net/IndexDic/Gys");
-                return Content("<script>alert('成功审核供应商！');window.location='/运营团队后台/Modify_Supplier_Info?id=" + id.ToString() + "';</script>");
-            }
-            catch
-            {
-                return Redirect("/运营团队后台/");
-            }
-        }
+        //public ActionResult Accept()
+        //{
+        //    try
+        //    {
+        //        long id = long.Parse(Request.QueryString["id"]);
+        //        供应商 model = 用户管理.查找用户<供应商>(id);
+        //        model.审核数据.审核时间 = DateTime.Now;
+        //        model.审核数据.审核者.用户ID = currentUser.Id;
+        //        model.审核数据.审核状态 = 审核状态.审核通过;
+        //        model.供应商用户信息.已提交 = true;
+        //        用户管理.更新用户<供应商>(model);
+        //        if (Request.QueryString["msg"] != null && Request.QueryString["msg"] == "1")
+        //        {
+        //            var UserNumber = model.企业联系人信息.联系人手机;//收信人列表
+        //            string MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往成都物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询028-86686673（张助理）或028-69759681（王老师） 。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+        //            if (model.供应商用户信息.符合入库标准)
+        //            {
+        //                if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_重庆)
+        //                {
+        //                    MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往重庆物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询023-68778041（丁文元,助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+        //                }
+        //                else if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_昆明)
+        //                {
+        //                    MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往昆明物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询0871-64783672（谢渝,助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+        //                }
+        //                else if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.成都军区物资采购机构_贵阳)
+        //                {
+        //                    MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往贵阳物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询0851-85508963（田助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+        //                }
+        //                else if (model.供应商用户信息.所属管理单位 == 供应商.采购管理单位.西藏军区物资采购中心)
+        //                {
+        //                    MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往西藏物资采购中心提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询0891-6738571（梁助理）。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
+        //                }
+        //            }
+        //            else
+        //            {
+        //                MessageContent = "供应商您好，恭喜您已经成为西南物资采购网的入网供应商。由于您所提供的资料还不符合申请入库的标准，故不能打印入库申请表格。如有任何疑问，请拨打网站客服电话咨询，谢谢。回复TD拒收";//短信内容
+        //            }
+        //            //供应商您好，贵企业基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往{xxxxx}物资采购站提交申请表及核验原件{xx}具体请查看供应商注册及须知{xx}预约电话请咨询{xxxxxxxxxxxxxxxxxxxxxxxxxxx}已通过部队审核的供应商{xx}无需重复提审{xx}请及时录入商品信息{x}
+        //            string retstr = MailApiPost.PostDataGetHtml(UserNumber, MessageContent);
+        //        }
+        //        deleteIndex("/Lucene.Net/IndexDic/Gys", model.Id.ToString());
+        //        CreateIndex_gys(model, "/Lucene.Net/IndexDic/Gys");
+        //        return Content("<script>alert('成功审核供应商！');window.location='/运营团队后台/Modify_Supplier_Info?id=" + id.ToString() + "';</script>");
+        //    }
+        //    catch
+        //    {
+        //        return Redirect("/运营团队后台/");
+        //    }
+        //}
         [HttpPost]
         public ActionResult Supplier_Accept_Detail(供应商 model)//接受供应商的加入
         {
