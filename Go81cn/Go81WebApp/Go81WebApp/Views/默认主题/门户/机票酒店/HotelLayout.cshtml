@@ -1,0 +1,58 @@
+﻿@{
+    Layout = null;
+}
+<html>
+    <head>
+        <title>@ViewBag.Title</title>
+        <link href="~/css/hotel.css" rel="stylesheet" />
+        <script src="~/JS/jquery-1.6.min.js"></script>
+    </head>
+<body>
+    <div>
+        <div style="border-bottom:1px solid #838485;">
+            <div id="header">
+                <div id="welcome">欢迎来到绒旅网</div>
+                <div id="logininfo">
+                    <span>admin</span>
+                    <span>退出</span>
+                    <span>消息（5）</span>
+                    <span>我的订单</span>
+                    <span><img src="/Images/heart1.png" style="vertical-align: middle;" />加入收藏</span>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+        </div>
+        <div id="navigater">
+            <div id="logo1"></div>
+            <div id="navBtbox">
+                <div id="navBtcontainer">
+                    <a style="background-color: #3d9adb;color:#ffffff;" href="/机票酒店/">首页</a>
+                    <a href="/机票酒店/SearchResult" target="_blank">酒店预订</a>
+                    <a>RL VIP</a>
+                    <a>My RongLv</a>
+                </div>
+                <div id="searchbox">
+                    <form>
+                        <input type="text" value="" placeholder="请输入查询地址" /><input type="button" />
+                    </form>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+            <div class="clearbox"></div>
+        </div>
+        <div id="Contentcontainer">
+            @RenderBody()
+        </div>
+        <div id="footer" style="text-align: center;height:90px;margin-top:30px;">
+            <div>
+                <a class="linkbt" href="###">公司简介</a>
+                <a class="linkbt" href="###">联系我们</a>
+                <a class="linkbt" href="###">招聘信息</a>
+                <a class="linkbt" href="###">常见问题</a>
+            </div>	
+            <div>技术支持：成都精睿信息技术有限公司 成都军区物资采购网.All Rights Reserved</div>
+            <div>ICP备案编号:蜀ICP备14016694号-1</div>
+        </div>
+    </div>
+</body>
+</html>

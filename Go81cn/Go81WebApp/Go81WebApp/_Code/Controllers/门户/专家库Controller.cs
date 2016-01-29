@@ -28,7 +28,9 @@ namespace Go81WebApp.Controllers.门户
             ViewData["techSum"] = 用户管理.计数用户<专家>(0, 0, MongoDB.Driver.Builders.Query.EQ("身份信息.专家类型", 专家类型.技术));
             ViewData["lawSum"] = 用户管理.计数用户<专家>(0, 0, MongoDB.Driver.Builders.Query.EQ("身份信息.专家类型", 专家类型.法律));
             ViewData["comSum"] = 用户管理.计数用户<专家>(0, 0, MongoDB.Driver.Builders.Query.EQ("身份信息.专家类型", 专家类型.经济));
-
+            ViewData["all"] = 用户管理.计数用户<专家>(0,0);
+            ViewData["inlib"] = 用户管理.计数用户<专家>(0, 0,Query<专家>.Where(m=>m.入库类型== 入库类型.入库));
+            ViewData["noinlib"] = 用户管理.计数用户<专家>(0, 0, Query<专家>.Where(m => m.入库类型 != 入库类型.入库));
             //通知部分
 
             通知 model = 通知管理.查找通知(30);

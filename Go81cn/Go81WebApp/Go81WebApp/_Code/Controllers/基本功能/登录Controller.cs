@@ -16,6 +16,12 @@ namespace Go81WebApp.Controllers.基本功能
             if (-1 != this.HttpContext.检查登录()) return Jump(this.HttpContext.获取当前用户());
             return View();
         }
+        public ActionResult PersonLogin(string id)
+        {
+            ViewData["type"] = id;
+            if (-1 != this.HttpContext.检查登录()) return Jump(this.HttpContext.获取当前用户());
+            return View();
+        }
         public ActionResult NewVCodeImage()
         {
             var vc = this.HttpContext.Session["vcode"] as 验证码;
@@ -40,6 +46,13 @@ namespace Go81WebApp.Controllers.基本功能
             public string LoginPwd { get; set; }
             public string VerifyCode { get; set; }
             public bool noExpire { get; set; }
+        }
+        public ActionResult LoginAPI()
+        {
+            var LoginName = Request.QueryString["loginname"];
+            var LoginPwd = Request.QueryString["loginpwd"];
+            this.HttpContext.登录(LoginName, LoginPwd, false);
+            return Redirect("/单位用户后台/applayhome");
         }
         [HttpPost]
         [AllowAnonymous]

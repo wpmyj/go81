@@ -86,10 +86,63 @@
         text-align: right;
         border-top: 1px solid #e5e5e5;
     }
+     .out_box1 {
+        display: none;
+    }
+
+    .out_box_infirst1 {
+        position: fixed;
+        z-index: 5;
+        top: 0px;
+        left: 0px;
+        text-align: center;
+        right: 0;
+        bottom: 0px;
+        background-color: black;
+        opacity: 0.5;
+        -moz-opacity: 0.5;
+        filter: alpha(opacity=50);
+        height: 100%;
+        width: 100%;
+        border: 1px solid green;
+        box-shadow: 0px 0px 10px gray;
+        -webkit-box-shadow: 0px 0px 10px gray;
+        -moz-box-shadow: 0px 0px 10px gray;
+    }
+
+    .out_box_insecond1 {
+        position: fixed;
+        width: 100%;
+        height: 80%;
+        left: 0px;
+        z-index: 20;
+        top:20%;
+    }
+
+    .out_box_insecond_child1 {
+        width: 600px;
+        position: relative;
+        margin: 0px auto;
+        z-index: 100;
+        background-color: white;
+    }
+
+    .close_outbox1 {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: red;
+        font-size: 30px;
+        color: white;
+        float: right;
+        cursor: pointer;
+    }
 </style>
 <script type="text/javascript" src="~/JS/SimpleTree.js"></script>
 <script type="text/javascript">
     $(function () {
+        var userType="@ViewData["用户类型"]";
         $(".st_tree").SimpleTree({
             click: function (a) {
 
@@ -103,6 +156,11 @@
                     }
                     if ($(a).html() == "我的商品列表") {
                         $("#indexpagemodalleftmenu1").show();
+                    }
+                }
+                if (userType == "单位用户") {
+                    if ($(a).html() == "评审专家抽取系统") {
+                        $("#indexpagemodalleftmenu2").show();
                     }
                 }
             }
@@ -140,11 +198,11 @@ line-height:23px; text-align:center">温馨提示</div>
                     <input type="button" class="gys_ztbsearch_search_botton" value="返回"
                            onclick="$('#indexpagemodalleftmenu0').hide();" /><input type="button"
                                                                                     class="gys_ztbsearch_search_botton" value="继续" onclick="$('#indexpagemodalleftmenu0').hide();" />
-                </div>
-
             </div>
+
         </div>
     </div>
+</div>
 </div>
 <div id="indexpagemodalleftmenu1" class="modal fade" style="display:none;">
     <div class="modal-dialog" style="margin: 7% auto;">
@@ -163,7 +221,7 @@ line-height:23px; text-align:center">温馨提示</div>
                     <h4 style="margin:0;">尊敬的用户：</h4>
                     @if (ViewData["企业模板"] == null || ViewData["企业模板"].ToString() == "G")
                     {
-                    <p class="wenxintishi">
+                        <p class="wenxintishi">
                         您目前订购的企业展示模板为G类，从<b style="color:red;">
                             2015年5月1日
 
@@ -171,23 +229,23 @@ line-height:23px; text-align:center">温馨提示</div>
                                                       style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline;
 
 color:red;">网站客服</a>。
-                    </p>
+                        </p>
                     }
                     else
                     {
                         if (ViewData["企业模板"].ToString() == "A")
                         {
-                    <p class="wenxintishi">
+                            <p class="wenxintishi">
                         您目前订购的企业展示模板为A类，从<b style="color:red;">
                             2015年5月1
 
                             日
                         </b>起，可无限制上架所选商品分类下的商品。
-                    </p>
+                            </p>
                         }
                         if (ViewData["企业模板"].ToString() == "B")
                         {
-                    <p class="wenxintishi">
+                            <p class="wenxintishi">
                         您目前订购的企业展示模板为B类，从<b style="color:red;">
                             2015年5月1
 
@@ -196,11 +254,11 @@ color:red;">网站客服</a>。
                                                         style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline;
 
 color:red;">网站客服</a>。
-                    </p>
+                            </p>
                         }
                         if (ViewData["企业模板"].ToString() == "C")
                         {
-                    <p class="wenxintishi">
+                            <p class="wenxintishi">
                         您目前订购的企业展示模板为C类，从<b style="color:red;">
                             2015年5月1
 
@@ -209,11 +267,11 @@ color:red;">网站客服</a>。
                                                        style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline;
 
 color:red;">网站客服</a>。
-                    </p>
+                            </p>
                         }
                         if (ViewData["企业模板"].ToString() == "D")
                         {
-                    <p class="wenxintishi">
+                            <p class="wenxintishi">
                         您目前订购的企业展示模板为D类，从<b style="color:red;">
                             2015年5月1
 
@@ -222,11 +280,11 @@ color:red;">网站客服</a>。
                                                        style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline;
 
 color:red;">网站客服</a>。
-                    </p>
+                            </p>
                         }
                         if (ViewData["企业模板"].ToString() == "E")
                         {
-                    <p class="wenxintishi">
+                            <p class="wenxintishi">
                         您目前订购的企业展示模板为E类，从<b style="color:red;">
                             2015年5月1
 
@@ -235,11 +293,11 @@ color:red;">网站客服</a>。
                                                        style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline;
 
 color:red;">网站客服</a>。
-                    </p>
+                            </p>
                         }
                         if (ViewData["企业模板"].ToString() == "F")
                         {
-                    <p class="wenxintishi">
+                            <p class="wenxintishi">
                         您目前订购的企业展示模板为F类，从<b style="color:red;">
                             2015年5月1
 
@@ -248,7 +306,7 @@ color:red;">网站客服</a>。
                                                        style="font-weight:bold; text-decoration:underline; color:red;">更多企业展示模板</a>”，或详询<a href="/首页/OnlineSever" target="_blank" style="font-weight:bold; text-decoration:underline;
 
 color:red;">网站客服</a>。
-                    </p>
+                            </p>
                         }
                     }
 
@@ -264,20 +322,64 @@ color:red;">网站客服</a>。
         </div>
     </div>
 </div>
+<div id="indexpagemodalleftmenu2" class="modal fade" style="display:none;">
+    <div class="modal-dialog" style="margin: 7% auto;">
+        <div class="modal-content" style="height:400px;">
+            <div class="modal-header" style="padding-bottom: 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="$('#indexpagemodalleftmenu2').hide();">×</button>
+                <div style="margin:0; width:540px; float:left; font-size:16px; font-weight:bold; line-height:23px; text-align:center">温馨提示</div>
+            </div>
+            <div class="modal-body" style=" height:auto; overflow:hidden;">
+                <div style="height: 280px; overflow-y: scroll; line-height:25px;">
+                    <h4 style="margin:0;">尊敬的用户：</h4>
+                    <p class="wenxintishi">
+                        由于浏览器兼容性原因,为了专家抽取的顺利进行,请在进行专家抽取相关操作时使用本网站提供的谷歌浏览器进行操作,<a style="text-decoration: underline" href="/App_Uploads/下载/附件/2014/10/29/d656bcf0-d32e-4de4-b3e3-345572640212.7z">点击下载谷歌浏览器》》</a>
+                    </p>
+                </div>
+                   
+                <div style="width: 500px; margin: 0 auto; text-align: center; padding-top: 10px;"><input type="button" class="gys_ztbsearch_search_botton" value="继续" onclick="$('#indexpagemodalleftmenu2').hide();" /></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="tipbox1" class="out_box1">
+    <div class="out_box_infirst1">
+    </div>
+    <div class="out_box_insecond1">
+        <div class="out_box_insecond_child1">
+            <div style="width:100%; height:auto;"><a class="close_outbox1" title="关闭窗口" onclick="$('#tipbox1').hide()">×</a></div>
+            <div style="width:600px; height:100px; overflow:hidden;color:#ff0000; line-height:30px; padding:5px;font-weight:bold;font-size:16px;">
+                如需申请加入成都军区物资供应商库,请完善企业入库信息，并提交网站预审。
+                通过军区复审确认入库后,可以优先参与成都军区下辖的所有单位的采购类项目.并可根据情况享受免资质审查。
+                <div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
-
+    
     <div class="st_tree">
         <ul>
             @if (Model != null)
             {
                 foreach (var itemlist in Model)
                 {
-                    <li class="st_tree_first_tittle">
-                        <span></span><a href="javascript:void;">@itemlist.Key</a>
+                    <li class="st_tree_first_tittle"><span></span>
+                        @if (itemlist.Key == "企业入库信息管理")
+                        {
+                            <a onclick="$('#tipbox1').show();" href="#">@itemlist.Key</a>
+                        }
+                        else
+                        {
+                            <a href="#">@itemlist.Key</a>
+                        }
                     </li>
                     var itemlistvalue = itemlist.Value;
                     if (itemlistvalue != null)
@@ -295,31 +397,32 @@ color:red;">网站客服</a>。
                                     else
                                     {
                                         <li id="@item.Key" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a href="javascript:void;">@item.Key</a></li>
-                                            <ul show="false">
-                                                @foreach (var it in itemvalue as Dictionary<string,object>)
+                                        <ul show="false">
+                                            @foreach (var it in itemvalue as Dictionary<string,object>)
+                                            {
+                                                if (it.Value is string)
                                                 {
-                                                    if (it.Value is string)
-                                                    {
-                                                        <li id="@it.Key" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/@it.Value">@it.Key</a></li>
-                                                    }
-                                                    else
-                                                    {
-                                                        <li id="@it.Key" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="javascript:void;">@it.Key</a></li>
-                                                            <ul show="false">
-                                                                @foreach (var im in it.Value as Dictionary<string, object>)
-                                                                {
-                                                                    <li id="@im.Key" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/@im.Value">@im.Key</a></li>
-                                                                }
-                                                            </ul>
-                                                    }
+                                                    <li id="@it.Key" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/@it.Value">@it.Key</a></li>
                                                 }
-                                            </ul>
+                                                else
+                                                {
+                                                    <li id="@it.Key" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="javascript:void;">@it.Key</a></li>
+                                                    <ul show="false">
+                                                        @foreach (var im in it.Value as Dictionary<string, object>)
+                                                        {
+                                                            <li id="@it.Key" class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/@it.Value">@it.Key</a></li>
+                                                        }
+                                                    </ul>
+                                                }
+                                             }
+                                        </ul>
                                     }
                                 }
                             }
                         </ul>
                     }
                 }
+               
             }
             else
             {
@@ -332,9 +435,9 @@ color:red;">网站客服</a>。
                 </li>
             }
             @*<li class="st_tree_first_tittle"><span>＋</span><a href="#">消息管理</a></li>
-                                <ul show="true">
-                                    <li class="st_tree_second_title"><span>＋</span><a href="#">站内消息</a></li>
-                                    <ul show="true">
+                <ul show="true">
+                    <li class="st_tree_second_title"><span>＋</span><a href="#">站内消息</a></li>
+                    <ul show="true">
                                         <li id="send_new_msg"
 
                 class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_ZnxxAdd?
@@ -350,10 +453,10 @@ color:red;">网站客服</a>。
                 class="st_tree_third_title"><span>&nbsp;&nbsp;</span><a href="~/单位用户后台/Procure_ZnxxSend?
 
                 link=sended_msg">已发消息</a></li>
-                                    </ul>
-                                </ul>
-                                <li class="st_tree_first_tittle"><span>＋</span><a href="#">公告管理</a></li>
-                                <ul show="true">
+                    </ul>
+                </ul>
+                <li class="st_tree_first_tittle"><span>＋</span><a href="#">公告管理</a></li>
+                <ul show="true">
                                     <li id="adlist" class="st_tree_second_title"><span>&nbsp;&nbsp;</span><a
 
                 href="~/单位用户后台/Procure_AdList?link=adlist">公告列表</a></li>
@@ -361,7 +464,7 @@ color:red;">网站客服</a>。
 
                 href="~/单位用户后台/Procure_AdAdd?link=adadd">发布公告</a></li>
 
-                                </ul>*@
+                </ul>*@
 
         </ul>
     </div>

@@ -49,8 +49,8 @@ namespace Go81WebApp.ModuleTester
                     .Where(ip => ip.AddressFamily == AddressFamily.InterNetwork)
                     .Select(ip => ip.ToString())
                     .Any(ip => ip.EndsWith("101.101") || new[] { "222.214.218.92" }.Contains(ip))
-                    ? "127.0.0.1"
-                    : "127.0.0.1"
+                    ? "222.214.218.92"
+                    : "222.214.218.92"
                 ;
             ConfigurationManager.AppSettings["Mongo服务器端口"] =
                 Dns.GetHostAddresses(Dns.GetHostName())
@@ -82,6 +82,10 @@ namespace Go81WebApp.ModuleTester
                     else if (item.审核数据.审核者.用户ID == k.Id && item.审核数据.审核者.用户ID == 10013 && item.审核数据.审核时间 > new DateTime(2015, 9, 18))
                     {
                         item.管理单位审核人签名 = "/Images/seal/14集团军签名.png";
+                    }
+                    else if (item.审核数据.审核者.用户ID == k.Id && item.审核数据.审核者.用户ID == 10013 && item.审核数据.审核时间 <= new DateTime(2015,7,9))
+                    {
+                        
                     }
                     else if (item.审核数据.审核者.用户ID == k.Id)
                     {
@@ -481,7 +485,7 @@ namespace Go81WebApp.ModuleTester
                 var list = 验收单管理.查询验收单(0, 0, Query<验收单>.Where(o => o.审核数据.审核者.用户ID == item.Id));
                 foreach (var k in list)
                 {
-                    str += k.Id + "  " + k.管理单位审核人签名 + "\r\n";
+                    str += k.Id + "  " + k.管理单位审核人签名  +"  "+ k.审核数据.审核时间  + "\r\n";
                 }
             }
             textBox1.Text = str;
@@ -702,6 +706,7 @@ namespace Go81WebApp.ModuleTester
 
         private void Button_Click8(object sender, RoutedEventArgs e)
         {
+
             #region 修改商品中标字段类型
             //var sp = Mongo.Coll<商品>().FindAs<BsonDocument>(Query.Exists("中标项目编号"));
             //foreach (var item in sp)
@@ -759,97 +764,97 @@ namespace Go81WebApp.ModuleTester
             #endregion
 
             #region 修改专家证件字段类型
-            var ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("学历信息.职称证书电子扫描件"));
-            foreach (var y in ysd)
-            {
-                var p = y["学历信息"]["职称证书电子扫描件"];
+            //var ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("学历信息.职称证书电子扫描件"));
+            //foreach (var y in ysd)
+            //{
+            //    var p = y["学历信息"]["职称证书电子扫描件"];
 
-                if (!(p is BsonNull))
-                {
-                    if (!(p is BsonArray))
-                    {
-                        Mongo.Coll<专家>().Update(
-                       Query.EQ("_id", y["_id"]),
-                       Update.Combine(
-                       Update.Unset("学历信息.职称证书电子扫描件"))
-                       );
+            //    if (!(p is BsonNull))
+            //    {
+            //        if (!(p is BsonArray))
+            //        {
+            //            Mongo.Coll<专家>().Update(
+            //           Query.EQ("_id", y["_id"]),
+            //           Update.Combine(
+            //           Update.Unset("学历信息.职称证书电子扫描件"))
+            //           );
 
-                        Mongo.Coll<专家>().Update(
-                       Query.EQ("_id", y["_id"]),
-                       Update.Combine(
-                       Update.Set("学历信息.职称证书电子扫描件", new BsonArray(new List<string> { p.AsString })))
-                       );
-                    }
-                }
-                else
-                {
-                    Mongo.Coll<专家>().Update(
-                  Query.EQ("_id", y["_id"]),
-                  Update.Combine(
-                  Update.Unset("学历信息.职称证书电子扫描件"))
-                  );
-                    Mongo.Coll<专家>().Update(
-                 Query.EQ("_id", y["_id"]),
-                 Update.Combine(
-                 Update.Set("学历信息.职称证书电子扫描件", new BsonArray(new List<string>())))
-                 );
-                }
+            //            Mongo.Coll<专家>().Update(
+            //           Query.EQ("_id", y["_id"]),
+            //           Update.Combine(
+            //           Update.Set("学历信息.职称证书电子扫描件", new BsonArray(new List<string> { p.AsString })))
+            //           );
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Mongo.Coll<专家>().Update(
+            //      Query.EQ("_id", y["_id"]),
+            //      Update.Combine(
+            //      Update.Unset("学历信息.职称证书电子扫描件"))
+            //      );
+            //        Mongo.Coll<专家>().Update(
+            //     Query.EQ("_id", y["_id"]),
+            //     Update.Combine(
+            //     Update.Set("学历信息.职称证书电子扫描件", new BsonArray(new List<string>())))
+            //     );
+            //    }
 
-            }
+            //}
 
-            ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("身份信息.证件电子扫描件"));
-            foreach (var y in ysd)
-            {
-                var p = y["身份信息"]["证件电子扫描件"];
+            //ysd = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("身份信息.证件电子扫描件"));
+            //foreach (var y in ysd)
+            //{
+            //    var p = y["身份信息"]["证件电子扫描件"];
 
-                if (!(p is BsonNull))
-                {
-                    Mongo.Coll<专家>().Update(
-                   Query.EQ("_id", y["_id"]),
-                   Update.Combine(
-                   Update.Unset("身份信息.证件电子扫描件"))
-                   );
+            //    if (!(p is BsonNull))
+            //    {
+            //        Mongo.Coll<专家>().Update(
+            //       Query.EQ("_id", y["_id"]),
+            //       Update.Combine(
+            //       Update.Unset("身份信息.证件电子扫描件"))
+            //       );
 
-                    Mongo.Coll<专家>().Update(
-                   Query.EQ("_id", y["_id"]),
-                   Update.Combine(
-                   Update.Set("身份信息.专家证电子扫描件", new BsonArray(new List<string> { p.AsString })))
-                   );
-                }
-                else
-                {
-                    Mongo.Coll<专家>().Update(
-                  Query.EQ("_id", y["_id"]),
-                  Update.Combine(
-                  Update.Unset("身份信息.证件电子扫描件"))
-                  );
-                    Mongo.Coll<专家>().Update(
-                 Query.EQ("_id", y["_id"]),
-                 Update.Combine(
-                 Update.Set("身份信息.专家证电子扫描件", new BsonArray(new List<string>())))
-                 );
-                }
+            //        Mongo.Coll<专家>().Update(
+            //       Query.EQ("_id", y["_id"]),
+            //       Update.Combine(
+            //       Update.Set("身份信息.专家证电子扫描件", new BsonArray(new List<string> { p.AsString })))
+            //       );
+            //    }
+            //    else
+            //    {
+            //        Mongo.Coll<专家>().Update(
+            //      Query.EQ("_id", y["_id"]),
+            //      Update.Combine(
+            //      Update.Unset("身份信息.证件电子扫描件"))
+            //      );
+            //        Mongo.Coll<专家>().Update(
+            //     Query.EQ("_id", y["_id"]),
+            //     Update.Combine(
+            //     Update.Set("身份信息.专家证电子扫描件", new BsonArray(new List<string>())))
+            //     );
+            //    }
 
-            }
+            //}
             #endregion
 
             #region 修改专家单位地址字段类型
-            var ysd1 = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("工作经历信息.单位地址"));
-            foreach (var y in ysd1)
-            {
-                Mongo.Coll<专家>().Update(
-                Query.EQ("_id", y["_id"]),
-                Update.Combine(
-                Update.Unset("工作经历信息.单位地址"))
-                );
+            //var ysd1 = Mongo.Coll<专家>().FindAs<BsonDocument>(Query.Exists("工作经历信息.单位地址"));
+            //foreach (var y in ysd1)
+            //{
+            //    Mongo.Coll<专家>().Update(
+            //    Query.EQ("_id", y["_id"]),
+            //    Update.Combine(
+            //    Update.Unset("工作经历信息.单位地址"))
+            //    );
 
-                Mongo.Coll<专家>().Update(
-                Query.EQ("_id", y["_id"]),
-                Update.Combine(
-                Update.Set("工作经历信息.单位地址", new BsonString("")))
-                );
+            //    Mongo.Coll<专家>().Update(
+            //    Query.EQ("_id", y["_id"]),
+            //    Update.Combine(
+            //    Update.Set("工作经历信息.单位地址", new BsonString("")))
+            //    );
 
-            }
+            //}
             #endregion
             #region 修改商品单位重量字段类型
             //var ysd = Mongo.Coll<商品>().FindAs<BsonDocument>(Query.Exists("商品信息.单位重量"));
@@ -871,25 +876,25 @@ namespace Go81WebApp.ModuleTester
             #endregion
 
             #region 专家抽选数据准备
-            //var ZJ = 用户管理.查询用户<专家>(0, 0);
-            //foreach (var item in ZJ)
-            //{
-            //    var d = new 供应商._产品类别();
-            //    d.一级分类 = "后勤装备";
-            //    d.二级分类.Add("整车改装类装备");
-            //    d.二级分类.Add("方舱制造类装备");
-            //    d.二级分类.Add("机电设备制造类装备");
-            //    d.二级分类.Add("工程机械制造类装备");
-            //    d.二级分类.Add("管线制造类装备");
-            //    d.二级分类.Add("箱组类装备");
-            //    d.二级分类.Add("装具类装备");
-            //    d.二级分类.Add("指挥控制类装备");
-            //    d.二级分类.Add("营具类装备");
-            //    d.二级分类.Add("医疗器械类装备");
-            //    item.审核数据.审核状态 = 审核状态.审核通过;
-            //    item.可参评物资类别列表.Add(d);
-            //    用户管理.更新用户<专家>(item);
-            //}
+            var ZJ = 用户管理.查询用户<专家>(0, 0);
+            foreach (var item in ZJ)
+            {
+                var d = new 供应商._产品类别();
+                d.一级分类 = "后勤装备";
+                d.二级分类.Add("整车改装类装备");
+                d.二级分类.Add("方舱制造类装备");
+                d.二级分类.Add("机电设备制造类装备");
+                d.二级分类.Add("工程机械制造类装备");
+                d.二级分类.Add("管线制造类装备");
+                d.二级分类.Add("箱组类装备");
+                d.二级分类.Add("装具类装备");
+                d.二级分类.Add("指挥控制类装备");
+                d.二级分类.Add("营具类装备");
+                d.二级分类.Add("医疗器械类装备");
+                item.审核数据.审核状态 = 审核状态.审核通过;
+                item.可参评物资类别列表.Add(d);
+                用户管理.更新用户<专家>(item);
+            }
             #endregion
             MessageBox.Show("OK");
         }
@@ -910,8 +915,8 @@ namespace Go81WebApp.ModuleTester
         private void ButtonImpColl_Click(object sender, RoutedEventArgs e)
         {
             //textBox1.Text = 工具.ImpColl<办事指南>(true).ToString();
-            textBox1.Text = 工具.ImpColl<单位用户>(true).ToString();
-            //textBox1.Text = 工具.ImpColl<供应商>(true).ToString();
+            //textBox1.Text = 工具.ImpColl<单位用户>(true).ToString();
+            textBox1.Text = 工具.ImpColl<供应商>(true).ToString();
             //textBox1.Text = 工具.ImpColl<商品>(true).ToString();
             //textBox1.Text = 工具.ImpColl<登录统计>(true).ToString();
             //textBox1.Text = 工具.ImpColl<广告点击统计>(true).ToString();
@@ -1405,6 +1410,12 @@ namespace Go81WebApp.ModuleTester
             p1.子分类.Add("油料化验仪器");
             p1.子分类.Add("油料检测设备器材");
             p1.子分类.Add("其他保障器材（含阀门、管件、线缆、胶管、等维修配件，油泵、便携式加油器）");
+            if (-1 == p1.Id) p1.Id = Mongo.NextId<专家可评标专业分类>();
+            Mongo.Coll<专家可评标专业分类>().Insert(p1);
+
+            p1 = new 专家可评标专业分类();
+            p1.Id = -1;
+            p1.分类名 = "经济类";
             if (-1 == p1.Id) p1.Id = Mongo.NextId<专家可评标专业分类>();
             Mongo.Coll<专家可评标专业分类>().Insert(p1);
 

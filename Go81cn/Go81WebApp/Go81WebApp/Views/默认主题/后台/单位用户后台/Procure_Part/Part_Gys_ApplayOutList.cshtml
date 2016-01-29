@@ -43,11 +43,31 @@
             <tr>
                 <td id="@item["_id"].ToString()"><input type="checkbox" id="@item["企业基本信息"]["企业名称"].ToString()" value="@item["_id"].ToString()" />@item["企业基本信息"]["企业名称"].ToString()</td>
 
-                <td>@if (!item["所属地域"]["省份"].IsBsonNull){<span>@item["所属地域"]["省份"].ToString()</span>if (!item["所属地域"]["城市"].IsBsonNull){<span>@item["所属地域"]["城市"].ToString()</span>if (!item["所属地域"]["区县"].IsBsonNull){<span>@item["所属地域"]["区县"].ToString()</span>}}}</td>
+                <td>@if (!item["所属地域"]["省份"].IsBsonNull)
+                    {
+                        <span>@item["所属地域"]["省份"].ToString()</span>
+                        if (!item["所属地域"]["城市"].IsBsonNull)
+                        {
+                            <span>@item["所属地域"]["城市"].ToString()</span>
+                            if (!item["所属地域"]["区县"].IsBsonNull)
+                            {
+                                <span>@item["所属地域"]["区县"].ToString()</span>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <span>&nbsp;</span>
+                    }
+                </td>
                 <td>
                     @if (!item["企业联系人信息"]["联系人姓名"].IsBsonNull)
                     {
                         @item["企业联系人信息"]["联系人姓名"].ToString()
+                    }
+                    else
+                    {
+                        <span>&nbsp;</span>
                     }
                 </td>
                 <td>
@@ -55,11 +75,19 @@
                     {
                         @item["企业联系人信息"]["联系人固定电话"].ToString()
                     }
+                    else
+                    {
+                        <span>&nbsp;</span>
+                    }
                 </td>
                 <td>
                     @if (!item["企业联系人信息"]["联系人手机"].IsBsonNull)
                     {
                         @item["企业联系人信息"]["联系人手机"].ToString()
+                    }
+                    else
+                    {
+                        <span>&nbsp;</span>
                     }
                 </td>
             </tr>

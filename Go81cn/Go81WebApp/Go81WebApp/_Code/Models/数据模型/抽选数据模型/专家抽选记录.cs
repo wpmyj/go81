@@ -8,7 +8,7 @@ using MongoDB.Bson.Serialization.Options;
 
 namespace Go81WebApp.Models.数据模型
 {
-#if INTRANET
+//#if INTRANET
     public class 专家抽选记录 : 基本数据模型
     {
         public string 操作人姓名 { get; set; }
@@ -116,5 +116,5 @@ namespace Go81WebApp.Models.数据模型
         不好 = -1,
         非常不好 = -5
     }
-#endif
+//#endif
 }

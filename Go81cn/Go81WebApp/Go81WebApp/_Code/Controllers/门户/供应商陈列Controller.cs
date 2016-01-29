@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
+using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using Go81WebApp.Models.管理器;
 using Go81WebApp.Models.管理器.推广业务管理;
 using Go81WebApp.Models.数据模型;
@@ -46,7 +49,7 @@ namespace Go81WebApp.Controllers.门户
                 long id = long.Parse(Request.QueryString["id"].ToString());
                 供应商 supplier = 用户管理.查找用户(id) as 供应商;
                 //防止未审核的供应商出现在前台页面上
-                if (supplier.审核数据.审核状态 != 审核状态.审核通过)
+                if (supplier.入网审核数据.审核状态 != 审核状态.审核通过 && supplier.审核数据.审核状态 != 审核状态.审核通过)
                 {
                     supplier = null;
                 }
@@ -647,6 +650,12 @@ namespace Go81WebApp.Controllers.门户
         public ActionResult Part_GysList_Inlib() //供应商列表
         {
             ViewData["行业列表"] = 商品分类管理.查找子分类();
+            string status = "1";
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["status"]))
+            {
+                status = Request.QueryString["status"]; 
+            }
+            ViewData["status"] =status;
             return PartialView("Part_Gys/Part_GysList_Inlib");
         }
         public ActionResult SearchGys()
@@ -658,6 +667,7 @@ namespace Go81WebApp.Controllers.门户
                 {
                     skip = int.Parse(Request.QueryString["skip"]);
                 }
+                string status = Request.QueryString["status"];//1、已入库供应商，2、待入库供应商
                 string province = Request.QueryString["province"];
                 string city = Request.QueryString["city"];
                 string area = Request.QueryString["area"];
@@ -684,17 +694,29 @@ namespace Go81WebApp.Controllers.门户
                 {
                     query = query.And(Query<供应商>.Matches(m => m.企业基本信息.企业名称, new BsonRegularExpression(string.Format("/{0}/i", name))));
                 }
-                IEnumerable<供应商> user = 用户管理.查询用户<供应商>(20 * (skip - 1), 20, query.And(Query<供应商>.Where(m => m.供应商用户信息.复审数据.审核状态 == 审核状态.审核通过)));
+                if (status == "1")
+                {
+                    query = query.And(Query<供应商>.Where(m => m.供应商用户信息.入库级别 == 供应商.入库级别.成都军区库 || m.供应商用户信息.入库级别 == 供应商.入库级别.全军库));
+                }
+                else if (status == "2")
+                {
+                    query = query.And(Query<供应商>.Where(m =>m.入网审核数据.审核状态== 审核状态.审核通过&&m.审核数据.审核状态== 审核状态.审核通过&&m.供应商用户信息.入库级别 != 供应商.入库级别.成都军区库 && m.供应商用户信息.入库级别 != 供应商.入库级别.全军库));
+                }
+                else
+                {
+                    query = query.And(Query<供应商>.Where(m => m.供应商用户信息.入库级别 == 供应商.入库级别.成都军区库 || m.供应商用户信息.入库级别 == 供应商.入库级别.全军库));
+                }
+                IEnumerable<供应商> user = 用户管理.查询用户<供应商>(20 * (skip - 1), 20,query);
                 List<Industry> gys = new List<Industry>();
                 foreach (var item in user)
                 {
                     Industry a = new Industry();
-                    a.Id = item.Id;
                     a.Name = item.企业基本信息.企业名称;
+                    a.Id = item.Id;
                     gys.Add(a);
                 }
-                long pCount = 用户管理.计数用户<供应商>(0, 0, query.And(Query<供应商>.Where(m => m.供应商用户信息.复审数据.审核状态 == 审核状态.审核通过))) / 20;
-                if (用户管理.计数用户<供应商>(0, 0, query.And(Query<供应商>.Where(m => m.供应商用户信息.复审数据.审核状态 == 审核状态.审核通过))) % 20 > 0)
+                long pCount = 用户管理.计数用户<供应商>(0, 0,query) / 20;
+                if (用户管理.计数用户<供应商>(0, 0, query) % 20 > 0)
                 {
                     pCount++;
                 }
@@ -1144,7 +1166,8 @@ namespace Go81WebApp.Controllers.门户
         public ActionResult Part_HotProduct()//热销商品
         {
             List<供应商> supplierList = new List<供应商>();
-            List<long> ids = new List<long>();
+            Random rd=new Random();
+            List<long> ids = new List<long>();//包含已订购服务的供应商id
             IEnumerable<供应商增值服务申请记录> supplier = 供应商增值服务申请记录管理.查询供应商增值服务申请记录(0, 10, Query<供应商增值服务申请记录>.Where(o => o.所申请项目名 == "企业推广服务A3位置" && o.是否通过 == 通过状态.通过 && o.结束时间 > DateTime.Now));
             if (supplier != null && supplier.Count() != 0)
             {
@@ -1156,13 +1179,20 @@ namespace Go81WebApp.Controllers.门户
             }
             if (supplierList.Count < 10)
             {
-                IEnumerable<供应商> gys = 用户管理.查询用户<供应商>(0, 10 - supplierList.Count, Query<供应商>.Where(
-                o => o.审核数据.审核状态 == 审核状态.审核通过
+            int Count =(int)用户管理.计数用户<供应商>(0,0, Query<供应商>.Where(
+                o => (o.审核数据.审核状态 == 审核状态.审核通过||o.入网审核数据.审核状态== 审核状态.审核通过)
                 && o.供应商用户信息.供应商图片.Count > 0
                 && o.所属地域.省份 != null
                 && o.企业基本信息.所属行业 != null
                     && !o.供应商用户信息.协议供应商
                     && !o.供应商用户信息.应急供应商).And(Query<供应商>.NotIn(o => o.Id, ids)), includeDisabled: false);
+                IEnumerable<供应商> gys = 用户管理.查询用户<供应商>(rd.Next(0,Count-(10 - supplierList.Count)), 10 - supplierList.Count, Query<供应商>.Where(
+                o =>(o.审核数据.审核状态 == 审核状态.审核通过||o.入网审核数据.审核状态== 审核状态.审核通过)
+                && o.供应商用户信息.供应商图片.Count > 0
+                && o.所属地域.省份 != null
+                && o.企业基本信息.所属行业 != null
+                    && !o.供应商用户信息.协议供应商
+                    && !o.供应商用户信息.应急供应商 && !o.供应商用户信息.供应商图片.Contains("/Images/logo_O.png")).And(Query<供应商>.NotIn(o => o.Id, ids)), includeDisabled: false);
                 if (gys != null && gys.Count() != 0)
                 {
                     supplierList = ((IEnumerable<供应商>)supplierList.Concat(gys)).ToList();
@@ -1338,7 +1368,7 @@ namespace Go81WebApp.Controllers.门户
             else
             {
                 //未付费
-                var q = MongoDB.Driver.Builders.Query<供应商>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过);
+                var q = MongoDB.Driver.Builders.Query<供应商>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过||o.入网审核数据.审核状态== 审核状态.审核通过);
                 long listcount = (int)用户管理.计数用户<供应商>(0, 0, q, false);
                 long maxpagesize = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
                 ViewData["currentpage"] = 1;
@@ -1468,6 +1498,10 @@ namespace Go81WebApp.Controllers.门户
             /// 分类名
             /// </summary>
             public string Name { get; set; }
+            /// <summary>
+            /// 是否为网站添加
+            /// </summary>
+            public bool IsNet { get; set; }
         }
 
         public JsonResult 查找行业分类()

@@ -139,10 +139,11 @@
 
 
 @model Go81WebApp.Models.数据模型.专家抽选记录
-@using (Html.BeginForm())
+@using (Html.BeginForm("Expert_Scoring","专家抽选",FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
+    @Html.HiddenFor(m=>m.Id)
     <div class="title-base-out">
         <div class="title-base-middle">
             <div class="title-base-inner">历史抽取评审专家评分</div>

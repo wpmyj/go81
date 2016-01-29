@@ -254,7 +254,7 @@ namespace Go81WebApp.Controllers.门户
 
             var sp2 = new List<商品>();
             List<long> gids = new List<long>();
-            List<long> ids = new List<long>();
+            List<long> ids = new List<long> { 200000000003 };
             var now = DateTime.Now;
 
             var 供应商服务记录 = 供应商服务记录管理.查询供应商服务记录(0, 0, null, false, SortBy<供应商服务记录>.Ascending(o => o.基本数据.修改时间));
@@ -291,60 +291,104 @@ namespace Go81WebApp.Controllers.门户
                 }
             }
             var count = sp2.Count();
+            Random rd = new Random();
+            int index = 0;
+            int counter = 0;
             ViewData["A2类别"] = "1";
             if (count < 10) //如果推广商品小于10个，则按点击量排序选择一定量的占位商品
             {
+                List<long> gysids = new List<long>();
                 var 补充商品 = 商品管理.查询商品(0, 0, p_q.And(Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过)).And(Query<商品>.NotIn(o => o.Id, gids)), false, SortBy.Descending("销售信息.点击量"), false);
-                foreach (var sp1 in 补充商品)
+                IEnumerable<IGrouping<long, 商品>> group = 补充商品.GroupBy(m => m.商品信息.所属供应商.用户ID);
+                IEnumerable<long> gysid = 补充商品.GroupBy(m => m.商品信息.所属供应商.用户ID).Select(m => m.Key);
+                while (gysids.Count < 10 - count)
                 {
-                    if (ids.Contains(sp1.商品信息.所属供应商.用户ID)) continue;
-                    sp2.Add(sp1);
-                    gids.Add(sp1.Id);
-                    ids.Add(sp1.商品信息.所属供应商.用户ID);
-                    ++count;
-                    if (count == 10) break;
+                    index = rd.Next(0, gysid.Count());
+                    if (!gysids.Contains(gysid.ElementAt(index)) && !ids.Contains(gysid.ElementAt(index)))
+                    {
+                        gysids.Add(gysid.ElementAt(index));
+                    }
                 }
+                foreach (var id in gysids)
+                {
+                    sp2.Add(group.Single(m => m.Key == id).First());
+                }
+                //foreach (var sp1 in 补充商品)
+                //{
+                //    if (ids.Contains(sp1.商品信息.所属供应商.用户ID)) continue;
+                //    sp2.Add(sp1);
+                //    gids.Add(sp1.Id);
+                //    ids.Add(sp1.商品信息.所属供应商.用户ID);
+                //    ++count;
+                //    if (count == 10) break;
+                //}
             }
             else if (count > 10 && count <= 20) //如果推广商品>10 <20，则按点击量排序选择一定量的占位商品
             {
                 ViewData["A2类别"] = "2";
-                if (count < 20)
+                var 补充商品 = 商品管理.查询商品(0, 0, p_q.And(Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过)).And(Query<商品>.NotIn(o => o.Id, gids)), false, SortBy.Descending("销售信息.点击量"), false);
+                int sum = 补充商品.Count();
+                while (sp2.Count < 20)
                 {
-                    var 补充商品 = 商品管理.查询商品(0, 0, p_q.And(Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过)).And(Query<商品>.NotIn(o => o.Id, gids)), false, SortBy.Descending("销售信息.点击量"), false);
-                    foreach (var sp1 in 补充商品)
+                    index = rd.Next(0, sum);
+                    商品 temp = 补充商品.ElementAt(index);
+                    if (ids.Contains(temp.商品信息.所属供应商.用户ID) && !gids.Contains(temp.Id))
                     {
-                        if (ids.Contains(sp1.商品信息.所属供应商.用户ID)) continue;
-                        sp2.Add(sp1);
-                        gids.Add(sp1.Id);
-                        ids.Add(sp1.商品信息.所属供应商.用户ID);
-                        ++count;
-                        if (count == 20) break;
+                        sp2.Add(temp);
+                        gids.Add(temp.Id);
+                        ids.Add(temp.商品信息.所属供应商.用户ID);
                     }
                 }
+                //if (count < 20)
+                //{
+                //    var 补充商品 = 商品管理.查询商品(0, 0, p_q.And(Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过)).And(Query<商品>.NotIn(o => o.Id, gids)), false, SortBy.Descending("销售信息.点击量"), false);
+                //    foreach (var sp1 in 补充商品)
+                //    {
+                //        if (ids.Contains(sp1.商品信息.所属供应商.用户ID)) continue;
+                //        sp2.Add(sp1);
+                //        gids.Add(sp1.Id);
+                //        ids.Add(sp1.商品信息.所属供应商.用户ID);
+                //        ++count;
+                //        if (count == 20) break;
+                //    }
+                //}
             }
             else
             {
                 ViewData["A2类别"] = "3";
-                if (count < 30)
+                var 补充商品 = 商品管理.查询商品(0, 0, p_q.And(Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过)).And(Query<商品>.NotIn(o => o.Id, gids)), false, SortBy.Descending("销售信息.点击量"), false);
+                int sum = 补充商品.Count();
+                while (sp2.Count < 30)
                 {
-                    var 补充商品 = 商品管理.查询商品(0, 0, p_q.And(Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过)).And(Query<商品>.NotIn(o => o.Id, gids)), false, SortBy.Descending("销售信息.点击量"), false);
-                    foreach (var sp1 in 补充商品)
+                    index = rd.Next(0, sum);
+                    商品 temp = 补充商品.ElementAt(index);
+                    if (ids.Contains(temp.商品信息.所属供应商.用户ID) && !gids.Contains(temp.Id))
                     {
-                        if (ids.Contains(sp1.商品信息.所属供应商.用户ID)) continue;
-                        sp2.Add(sp1);
-                        gids.Add(sp1.Id);
-                        ids.Add(sp1.商品信息.所属供应商.用户ID);
-                        ++count;
-                        if (count == 30) break;
+                        sp2.Add(temp);
+                        gids.Add(temp.Id);
+                        ids.Add(temp.商品信息.所属供应商.用户ID);
                     }
                 }
-                if (count > 30)
-                {
-                    sp2 = sp2.Take(30).ToList();
-                }
+                //if (count < 30)
+                //{
+                //    var 补充商品 = 商品管理.查询商品(0, 0, p_q.And(Query<商品>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过)).And(Query<商品>.NotIn(o => o.Id, gids)), false, SortBy.Descending("销售信息.点击量"), false);
+                //    foreach (var sp1 in 补充商品)
+                //    {
+                //        if (ids.Contains(sp1.商品信息.所属供应商.用户ID)) continue;
+                //        sp2.Add(sp1);
+                //        gids.Add(sp1.Id);
+                //        ids.Add(sp1.商品信息.所属供应商.用户ID);
+                //        ++count;
+                //        if (count == 30) break;
+                //    }
+                //}
+                //if (count > 30)
+                //{
+                //    sp2 = sp2.Take(30).ToList();
+                //}
             }
             ViewData["首页主推商品信息"] = (IEnumerable<商品>)sp2;
-
+            ViewData["counter"] = counter;
 
             /////////////////////////原网上竞价处修改
             var sp_add = new List<商品>();
@@ -391,7 +435,7 @@ namespace Go81WebApp.Controllers.门户
             ViewData["新增推荐商品"] = (IEnumerable<商品>)sp_add;
             /////////////////////////原网上竞价处修改
             List<供应商> supplierList = new List<供应商>();
-            ids = new List<long>();
+            ids = new List<long> { 200000000003 };
             IEnumerable<供应商增值服务申请记录> supplier = 供应商增值服务申请记录管理.查询供应商增值服务申请记录(0, 0, Query<供应商增值服务申请记录>.Where(o => o.所申请项目名 == "企业推广服务A3位置" && o.是否通过 == 通过状态.通过 && o.签订时间 < now && o.结束时间 > now), false, SortBy<供应商增值服务申请记录>.Ascending(o => o.基本数据.修改时间));
             if (supplier != null && supplier.Count() != 0)
             {
@@ -412,7 +456,7 @@ namespace Go81WebApp.Controllers.门户
                 && o.企业基本信息.所属行业 != null
                     && !o.供应商用户信息.协议供应商
                     && o.Id != 200000000462
-                    && !o.供应商用户信息.应急供应商).And(Query<供应商>.NotIn(o => o.Id, ids)), includeDisabled: false);
+                    && !o.供应商用户信息.应急供应商 && !o.供应商用户信息.供应商图片.Contains("/Images/logo_O.png")).And(Query<供应商>.NotIn(o => o.Id, ids)), includeDisabled: false);
                 if (gys != null && gys.Count() != 0)
                 {
                     foreach (var item in gys)
@@ -433,7 +477,7 @@ namespace Go81WebApp.Controllers.门户
                && o.企业基本信息.所属行业 != null
                    && !o.供应商用户信息.协议供应商
                    && o.Id != 200000000462
-                   && !o.供应商用户信息.应急供应商).And(Query<供应商>.NotIn(o => o.Id, ids)), includeDisabled: false);
+                   && !o.供应商用户信息.应急供应商 && !o.供应商用户信息.供应商图片.Contains("/Images/logo_O.png")).And(Query<供应商>.NotIn(o => o.Id, ids)), includeDisabled: false);
                     if (gys != null && gys.Count() != 0)
                     {
                         foreach (var item in gys)
@@ -455,7 +499,7 @@ namespace Go81WebApp.Controllers.门户
                && o.企业基本信息.所属行业 != null
                    && !o.供应商用户信息.协议供应商
                    && o.Id != 200000000462
-                   && !o.供应商用户信息.应急供应商).And(Query<供应商>.NotIn(o => o.Id, ids)), includeDisabled: false);
+                   && !o.供应商用户信息.应急供应商 && !o.供应商用户信息.供应商图片.Contains("/Images/logo_O.png")).And(Query<供应商>.NotIn(o => o.Id, ids)), includeDisabled: false);
                     if (gys != null && gys.Count() != 0)
                     {
                         foreach (var item in gys)
@@ -544,7 +588,7 @@ namespace Go81WebApp.Controllers.门户
 
             var sp2 = new List<商品>();
             List<long> gids = new List<long>();
-            List<long> ids = new List<long>();
+            List<long> ids = new List<long>() { 200000000003 };
             var now = DateTime.Now;
 
             var 供应商服务记录 = 供应商服务记录管理.查询供应商服务记录(0, 0, null, false, SortBy<供应商服务记录>.Ascending(o => o.基本数据.修改时间));
@@ -681,7 +725,7 @@ namespace Go81WebApp.Controllers.门户
             ViewData["新增推荐商品"] = (IEnumerable<商品>)sp_add;
             /////////////////////////原网上竞价处修改
             List<供应商> supplierList = new List<供应商>();
-            ids = new List<long>();
+            ids = new List<long>() { 200000000003 };
             IEnumerable<供应商增值服务申请记录> supplier = 供应商增值服务申请记录管理.查询供应商增值服务申请记录(0, 0, Query<供应商增值服务申请记录>.Where(o => o.所申请项目名 == "企业推广服务A3位置" && o.是否通过 == 通过状态.通过 && o.签订时间 < now && o.结束时间 > now), false, SortBy<供应商增值服务申请记录>.Ascending(o => o.基本数据.修改时间));
             if (supplier != null && supplier.Count() != 0)
             {
@@ -1023,7 +1067,7 @@ namespace Go81WebApp.Controllers.门户
 
             var sp2 = new List<商品>();
             List<long> gids = new List<long>();
-            List<long> ids = new List<long>();
+            List<long> ids = new List<long>() { 200000000003 };
             var now = DateTime.Now;
 
             var 供应商服务记录 = 供应商服务记录管理.查询供应商服务记录(0, 0, null, false, SortBy<供应商服务记录>.Ascending(o => o.基本数据.修改时间));
@@ -1115,7 +1159,7 @@ namespace Go81WebApp.Controllers.门户
             ViewData["首页主推商品信息"] = (IEnumerable<商品>)sp2;
 
             List<供应商> supplierList = new List<供应商>();
-            ids = new List<long>();
+            ids = new List<long>() { 200000000003 };
             IEnumerable<供应商增值服务申请记录> supplier = 供应商增值服务申请记录管理.查询供应商增值服务申请记录(0, 0, Query<供应商增值服务申请记录>.Where(o => o.所申请项目名 == "企业推广服务A3位置" && o.是否通过 == 通过状态.通过 && o.签订时间 < now && o.结束时间 > now), false, SortBy<供应商增值服务申请记录>.Ascending(o => o.基本数据.修改时间));
             if (supplier != null && supplier.Count() != 0)
             {

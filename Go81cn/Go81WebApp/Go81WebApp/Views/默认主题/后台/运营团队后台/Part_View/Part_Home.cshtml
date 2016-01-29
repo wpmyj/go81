@@ -22,7 +22,7 @@
 <div id="tip" style="background-color:rgb(117, 117, 85); padding:10px; color:white;position:fixed;right:0px;bottom:-170px; text-align:center; line-height:30px;">
     @if (ViewData["suplier"].ToString() != "0")
     {
-        <a style="color:white; display:block; text-decoration:underline;" href="/运营团队后台/Supplier_PssInfo">已有@(int.Parse(ViewData["suplier"].ToString()))家已提交未审核供应商</a>
+        <a style="color:white; display:block; text-decoration:underline;" href="/运营团队后台/Supplier_PssInfo">已有@(int.Parse(ViewData["suplier"].ToString()))家已提交待审核供应商</a>
     }
     @if (ViewData["pro_count"].ToString() != "0")
     {

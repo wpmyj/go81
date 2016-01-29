@@ -19,7 +19,16 @@
                 }
             }
         </td>
-        <td>@Model[0].所属地域.地域</td>
+        <td>
+            @if (!string.IsNullOrWhiteSpace(Model[0].所属地域.地域) && Model[0].所属地域.地域!="不限省份不限城市不限区县")
+            {
+                <span>@Model[0].所属地域.地域</span>
+            }
+            else
+            {
+                <span>&nbsp;</span>
+            }
+        </td>
         <td>@Model[0].学历信息.专业技术职称</td>
         <td>@Model[0].身份信息.专家类别</td>
         <td>@Model[0].身份信息.专家类型</td>

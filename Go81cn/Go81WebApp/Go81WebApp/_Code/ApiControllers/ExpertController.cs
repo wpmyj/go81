@@ -17,6 +17,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using NPOI.SS.Formula.Functions;
+using System.Web.Mvc;
+using Newtonsoft.Json;
 
 namespace Go81WebApp.ApiControllers
 {
@@ -61,7 +63,40 @@ namespace Go81WebApp.ApiControllers
             Api登录管理.更新Api登录信息(loginInfo);
             return loginInfo.登录用户链接.用户ID;
         }
-       
+
+
+
+        [System.Web.Mvc.HttpPost]
+        public object PostLoginWinForm()
+        {
+            //192.168.1.177/api/Expert/PostLogin
+            var prs = HttpContext.Current.Request.Params;
+            var LoginName = prs["LoginName"];
+            var LoginPwd = prs["LoginPwd"];
+            if (string.IsNullOrWhiteSpace(LoginName) || string.IsNullOrWhiteSpace(LoginPwd)) return "marchError";
+            //HttpContextBase context = (HttpContextBase)Request.Properties["MS_HttpContext"];//获取传统context
+            var u = Api登录管理.登录(LoginName, LoginPwd, false);
+            if (null != u)
+            {
+                if (!(u is 单位用户))
+                {
+                    return "typeError";
+                }
+                //将登录信息写入数据库
+                var dateNow = DateTime.Now;
+                var loginMessage = new Api登录信息();
+                loginMessage.tokenId = Guid.NewGuid().ToString();
+                loginMessage.登录时间 = dateNow;
+                loginMessage.上次登录时间 = dateNow;
+                loginMessage.登录用户链接.用户ID = u.Id;
+                Api登录管理.添加Api登录信息(loginMessage);
+                //将登录信息写入数据库
+                return loginMessage.登录用户链接.用户数据;
+            }
+            return "marchError";
+        }
+
+
         /// <summary>
         /// 登陆
         /// </summary>
@@ -71,6 +106,7 @@ namespace Go81WebApp.ApiControllers
         [System.Web.Mvc.HttpPost]
         public string PostLogin()
         {
+            //192.168.1.177/api/Expert/PostLogin
             var prs = HttpContext.Current.Request.Params;
             var LoginName = prs["LoginName"];
             var LoginPwd = prs["LoginPwd"];

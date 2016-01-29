@@ -234,15 +234,7 @@
                     <tr>
                         <td valign="top" align="right">经营范围（主营）：</td>
                         <td colspan="3">
-                            @if (string.IsNullOrWhiteSpace(Model.营业执照信息.经营范围))
-                            {
-                                <div id="tip1" style="position:absolute;margin-top:30px; color:#aaa;margin-left:100px; z-index:9;">最多可以添加100个字符</div>
-                            }
-                            else
-                            {
-                                <div id="tip1" style="position:absolute;margin-top:30px; display:none; color:#aaa;margin-left:100px; z-index:9;">最多可以添加100个字符</div>
-                            }
-                            @Html.TextAreaFor(m => m.营业执照信息.经营范围, new { rows = "5", cols = "90", style = "resize:none;", onfocus = "hideTip(this,'#tip1')", onblur = "showTip(this,'#tip1')", onkeyup = "showOrHide(this,'#tip1')" })
+                            @Html.TextAreaFor(m => m.营业执照信息.经营范围, new { rows = "5", cols = "90", style = "resize:none;" })
                             <div class="out_box">
                                 <div class="arrow"></div>
                                 <div class="con_box">请填写企业主营范围</div>
@@ -256,15 +248,7 @@
                     <tr>
                         <td valign="top" align="right">经营范围（兼营）：</td>
                         <td colspan="3">
-                            @if (string.IsNullOrWhiteSpace(Model.营业执照信息.兼营范围))
-                            {
-                                <div id="tip2" style="position:absolute;margin-top:30px; color:#aaa;margin-left:100px; z-index:9;">最多可以添加100个字符</div>
-                            }
-                            else
-                            {
-                                <div id="tip2" style="position:absolute;margin-top:30px;display: none; color:#aaa;margin-left:100px; z-index:9;">最多可以添加100个字符</div>
-                            }
-                            @Html.TextAreaFor(m => m.营业执照信息.兼营范围, new { rows = "5", cols = "90", style = "resize:none;", onfocus = "hideTip(this,'#tip2')", onblur = "showTip(this,'#tip2')", onkeyup = "showOrHide(this,'#tip2')" })
+                            @Html.TextAreaFor(m => m.营业执照信息.兼营范围, new { rows = "5", cols = "90", style = "resize:none;" })
                             <div class="out_box">
                                 <div class="arrow"></div>
                                 <div class="con_box">请填写企业兼营范围</div>
@@ -875,32 +859,6 @@
         //$("#f").show();
         $("#f1").show();
         $(target).prev("span").hide();
-    }
-    function hideTip(th, tip) {
-        $(tip).hide();
-    }
-    function showTip(th, tip) {
-        if (th.value == "") {
-            $(tip).show();
-        }
-        else {
-            if (th.value.length > 100) {
-                $(tip).show();
-                $(th).blur();
-            }
-            else if (th.value.length > 0 && th.value.length <= 100) {
-                $(tip).hide();
-            }
-        }
-    }
-    function showOrHide(th, tip) {
-        if (th.value.length > 100) {
-            $(tip).show();
-            $(th).blur();
-        }
-        else {
-            $(tip).hide();
-        }
     }
 </script>
 <script type="text/javascript" language="javascript">

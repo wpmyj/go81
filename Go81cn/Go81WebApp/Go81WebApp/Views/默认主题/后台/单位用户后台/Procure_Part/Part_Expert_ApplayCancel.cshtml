@@ -139,7 +139,7 @@
 </style>
 @using Go81WebApp.Models.数据模型.用户数据模型
 @model Go81WebApp.Models.数据模型.专家抽选记录
-@using (Html.BeginForm())
+@using (Html.BeginForm("Expert_ApplayCancelAction", "专家抽选", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
@@ -470,7 +470,7 @@
                                     </div>
 
                                 </div>
-                                <div style="width: 700px; margin: 0 auto; text-align: center;"><input type="button" class="index_online_btn" value="关闭" onclick='$("#modal").hide();' /></div>
+                                <div style="width:700px; margin: 0 auto; text-align: center;"><input type="button" class="index_online_btn" value="关闭" onclick='$("#modal").hide();' /></div>
                                 <script type="text/javascript">
                                 </script>
                             </div>
@@ -483,7 +483,7 @@
                 {
                     <div id="ExpertTurndiv">
                         <div style=" margin:0 auto; margin-top:20px; text-align:center;">
-                            <input type="button" value="撤销本次申请" class="front_login_rightbox_button" onclick="window.location.href = '/专家抽选/Expert_ApplayCancelAction/@Model.Id'">
+                            <input type="button" value="撤销本次申请" class="front_login_rightbox_button" onclick="window.location.href = '/专家抽选/Expert_ApplayCancelAction?Id=@Model.Id'">
                         </div>
                     </div>
                 }

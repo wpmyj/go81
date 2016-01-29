@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "登录";
+    Layout = null;
+}
+@model Go81WebApp.Controllers.基本功能.登录Controller.LoginInfo
+<html>
+<head>
+    <title>军人登录</title>
+    <script src="~/JS/jquery-1.6.min.js"></script>
+    <link href="~/css/hotel.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="outer">
+        <div id="header">
+            <div id="headerLeftimg"></div>
+            <div id="save"><img src="/Images/heart.png" title="收藏" />加入收藏</div>
+            <div class="clearbox"></div>
+        </div>
+        <div id="verticalCenterbox">
+            <div style="position: relative;">
+                <div><img src="/Images/loginbk.jpg" width="100%" /></div>
+                <div style="left:0px;top: 0px;width:100%;position: absolute;">
+                    <div style="width: 1200px;margin:0px auto;">
+                        @using (Html.BeginForm("Login", "登录", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            <div id="loginbox">
+                                <div id="loginHeader">军采生活</div>
+                                <div id="loginboxIn">
+                                    <div class="inputdiv" style="margin-top:0px;">用户名</div>
+                                    <div class="inputdiv">
+                                        @Html.TextBoxFor(model => model.LoginName, new { placeholder = "请输入用户名", @class = "textstyle", autocomplete = "off" })
+                                        @Html.ValidationMessageFor(model => model.LoginName)
+                                    </div>
+                                    <div class="inputdiv">
+                                        <div class="pwdtext" style="width:30%;">密码</div>
+                                        <div class="pwdtext linkbt" style="width:70%; float:right;text-align: right;">忘记密码？</div>
+                                        <div class="clearbox"></div>
+                                    </div>
+                                    <div class="inputdiv">
+                                        @Html.PasswordFor(model => model.LoginPwd, new { placeholder = "请输入密码", @class = "textstyle", autocomplete = "off" })
+                                        @Html.ValidationMessageFor(model => model.LoginPwd)
+                                    </div>
+                                    <div class="inputdiv">验证码</div>
+                                    <div class="inputdiv">
+                                        @Html.TextBoxFor(model => model.VerifyCode, new { placeholder = "请输入验证码", id = "verify" })
+                                        <img id="yzcode" src=@Url.Action("NewVCodeImage", "登录") style="cursor:pointer; position:absolute; margin-left:10px;height:30px; width:70px;" title="看不清，换一张" alt="看不清，换一张" onclick='$(this).attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());' />
+                                        <a class="linkbt" style="cursor:pointer; margin-left:90px;height:36px; width:150px; font-size: 14px;" onclick='$("#yzcode").attr("src", "@Url.Action("NewVCodeImage", "登录")?" + Math.random());'>换一张</a>
+                                    </div>
+                                    <div class="inputdiv">
+                                        <input type="submit" id="sub" value="登    录" />
+                                        <span><a class="linkbt">立即注册</a></span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                @*<div id="scrollbt">
+                    <div style="width:670px;height:30px;margin:0px auto;">
+                        <div class="scrbt"></div>
+                        <div class="scrbt"></div>
+                    </div>
+                </div>*@
+            </div>
+        </div>
+        <div id="footer">
+            <div class="reserve">技术支持：成都精睿信息技术有限公司&nbsp;成都军区物资采购网.All Rights Reserved</div>
+            <div class="reserve" style="padding: 0px;">ICP备案编号:蜀ICP备14016694号-1</div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            var ipt = $("input");
+            ipt.each(function (index, domEle) {
+                if ($(domEle).val() == null || $(domEle).val() == "") {
+                    $(domEle).parent().children(".tipmessages").show();
+                }
+                else {
+                    $(domEle).parent().children(".tipmessages").hide();
+                }
+            });
+        });
+        $("input").focus(function () {
+            if ($(this).attr("type") != "checkbox") {
+                $(this).parent().children(".tipmessages").hide();
+            }
+        }).blur(function () {
+            if ($(this).val() == null || $(this).val() == "") {
+                $(this).parent().children(".tipmessages").show();
+            }
+            else
+                $(this).parent().children(".tipmessages").hide();
+        });
+    </script>
+</body>
+</html>

@@ -1,898 +1,832 @@
 ﻿@model Go81WebApp.Models.数据模型.项目数据模型.验收单
-@using Go81WebApp.Controllers.后台
 @using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.项目数据模型
+@using Go81WebApp.Controllers.后台
 @{
-    Layout = null;
+    ViewBag.Title = "验收单详情";
+    Layout =null;
 }
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>成都军区物资集中采购验收单</title>
-    <link href="~/css/css.css" rel="stylesheet" />
-    <style type="text/css">
-        #accept_con table tr td.align {
-            text-align: right;
-        }
-    </style>
-</head>
-<body>
-    <div class="bg_outdiv">
-        <div id="accept_con" style="width:1000px;margin:0px auto 20px;">
-            <div style="width:970px;margin:0 auto; padding:15px 10px 30px 30px;border-left:1px dashed #222222">
-                <div style="font-size:14px;margin:0 auto;width:900px;">
-                    <table width="100%">
-                        <tr>
-                            <td rowspan="3" width="30%">
-                                <div style="height:25px;">验收单号：@Model.验收单号</div>
-                                <div style="text-indent:12px;height:25px;">核对码：@Model.验收单核对码</div>
-                                <div style="height:25px;">生成日期：@DateTime.Now</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="display:block;width:500px;font-size:32px;margin-top:22px; position:relative;">
-                                成都军区物资集中采购验收单
-                                @if (Model.审核数据.审核者.用户ID == 10003)
-                                {
-                                    <img src="~/Images/chapter.png" style="position:absolute;left:137px;top:-18px;width:139px;" />
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            @*<td style="width:600px;margin:0 auto; text-align:right"><span style="margin-right:176px;">N<u>o</u></span></td>*@
-                            <td rowspan="3" style="width:600px;margin:0 auto; text-align:right">
-                                <img src="/首页/OutPutQrCode?str=@Model.审核数据.审核者.用户ID" style=" margin-right:60px;margin-top:-73px;" />
-                                @*<div class="code" style=" float:right; margin-right: 110px; margin-top: -60px;"></div>*@
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div style="margin:0 auto;width:900px;">
-                    <table style="width:97%; font-size:14px;" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td colspan="6" style="height:33px; text-indent:5px;">收货单位：@Model.收货单位</td>
-                            <td colspan="2" style="text-align:right">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
-                            <td rowspan="12" style="padding-left:14px;padding-top:25px;"> <span>第一联</span><br /><br /><span style="height:33px;">供货单位留存</span></td>
-                        </tr>
-                        <tr>
-                            <td colspan="8" style="height:33px; border:1px solid black; border-bottom:none; text-indent:5px;">供货单位：@Model.供应商链接.用户数据.企业基本信息.企业名称</td>
-                        </tr>
-                        <tr>
-                            <td style="height:33px;line-height:33px; border:1px solid black; padding-left:5px;padding-right:5px;" align="center" width="5%">序号</td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="20%">物资名称</td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">规格型号</td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">采购合同号</td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="10%">计量单位</td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="6%">
-                                数量
-                                <div style="position:absolute; width:200px; height:200px; margin-left:50px;margin-top:-30px;">
-                                    @if (!Model.是否作废)
-                                    {
-                                        if (Model.审核数据.审核者.用户数据 != null)
-                                        {
-                                            if (Model.审核数据.审核者.用户ID == 10005)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资集中采购办公室&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            if (Model.审核数据.审核者.用户ID == 10003)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购专用章&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10004)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购专用章&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10011)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购管理办公室&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10013)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购办公室&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10015)
-                                            {
-                                                <img src="~/Images/seal/昆明民族干部学院章.png" width="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10012)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购专用章&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10007)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购专用章&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10014)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购专用章&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10009)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购办公室&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <img src="~/Images/avoid.png" />
-                                    }
-                                </div>
-                            </td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">
-                                单价（元）
-                            </td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">
-                                金额（元）
-                            </td>
-                        </tr>
-                        @{int m = 1;}
-                        @if (Model.物资服务列表 != null && Model.物资服务列表.Count() > 5)
-                        {
-                            for (int i = 0; i < 5; i++)
-                            {
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(i + 1)</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="left">
-                                        @if (i == 0)
-                                        {
-                                            <span onclick="showList()" style="cursor:pointer">@Model.某批物资名称 (点击查看物资清单)</span>
-                                        }
-                                    </td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            foreach (var k in Model.物资服务列表)
-                            {
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@m</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="left">
-                                        @if (k.商品链接.商品 != null)
-                                        {
-                                            <span>@k.商品链接.商品.商品信息.商品名</span>
-                                        }
-                                    </td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@k.规格型号</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@k.采购合同号</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@k.计量单位</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@k.数量</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">￥@k.单价</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">￥@k.总价</td>
-                                </tr>
-                                        m++;
-                            }
-                            switch (m)
-                            {
-                                case 1:
-                                    <tr>
-                                        <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">1</td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">2</td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">3</td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">4</td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">5</td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr> break;
-                                case 2:
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">2</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">3</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">4</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">5</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr> break;
-                                case 3:
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">3</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">4</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">5</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr> break;
-                                case 4:
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">4</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">5</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr> break;
-                            }
-                        }
-                        <tr>
-                            <td style="height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">6</td>
-                            <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（大写）</td>
-                            <td colspan="3" style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; text-align:right;padding-right:5px; letter-spacing:2px;">
-                                @{
-                                    decimal total1 = 0;
-                                    if (Model.验收单附件 != null && Model.验收单附件.Count > 0)
-                                    {
-
-                                        foreach (var k1 in Model.验收单附件)
-                                        {
-                                            total1 += k1.价格;
-                                        }
-                                    }
-                                    total1 += Model.总金额;
-                                    <span>@供应商后台Controller.MoneyToUpper(total1.ToString())</span>
-                                }
-                            </td>
-                            <td colspan="2" style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（小写）</td>
-                            <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">
-                                @{
-                                    decimal total2 = 0;
-                                    if (Model.验收单附件 != null && Model.验收单附件.Count > 0)
-                                    {
-
-                                        foreach (var k1 in Model.验收单附件)
-                                        {
-                                            total2 += k1.价格;
-                                        }
-                                    }
-                                    total2 += Model.总金额;
-                                    <span>￥@total2.ToString()</span>
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style=" border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center" rowspan="5">意见反馈</td>
-                            <td colspan="7" style=" border-right: 1px solid black; border-bottom: 1px solid black;">
-                                <table style="width:100%;" cellpadding="0" cellspacing="0">
-                                    <tr>
-                                        <td style="width:21.1%;border-bottom: 1px solid black; border-right:1px solid black;height:33px;" align="center">用户通知时间</td>
-                                        <td style="width:28.9% ;border-bottom: 1px solid black;border-right:1px solid black;height:33px;" colspan="2"></td>
-                                        <td style="width:17.2%;border-bottom: 1px solid black; border-right:1px solid black;height:33px;" align="center" colspan="2">实际到达时间</td>
-                                        <td style="height:33px;border-bottom: 1px solid black;" align="center" colspan="3"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;width:25%" align="center" colspan="2">产品销售（维修）情况</td>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; width:10%" align="center">非常满意</td>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; width:7%" align="center">满意</td>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; width:7%" align="center">一般</td>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; width:8%" align="center">不满意</td>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; width:11%" align="center">非常不满意</td>
-                                        <td width="21%" style="height:33px; border-bottom: 1px solid black;" align="center">军区投诉咨询电话</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center" colspan="2">服务态度</td>
-                                        <td colspan="5" style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td rowspan="3" align="center">0821-683369</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center" colspan="2">产品的熟悉程度</td>
-                                        <td colspan="5" style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height:33px; border-right: 1px solid black;" align="center" colspan="2">产品价格及其他</td>
-                                        <td style="height:33px; border-right: 1px solid black;" align="center" colspan="5"></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                    <div style="margin-top:3px;">
-                        <table style="width:100%; font-size:14px;margin-left:5px;" cellpadding="0" cellspacing="0">
-                            <tr style="height:33px;">
-                                <td>
-                                    管理部门审核人：
-                                    @if (Model.审核数据.审核者.用户ID == 10015)
-                                    {
-                                        <img src="~/Images/seal/昆明民族干部学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10003)
-                                    {
-                                        <img src="~/Images/seal/采购处签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10004)
-                                    {
-                                        <img src="~/Images/seal/78006签名.png" style="position:absolute; width:100px; height:80px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10011)
-                                    {
-                                        <img src="~/Images/seal/后勤工程学院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10013)
-                                    {
-                                        <img src="~/Images/seal/77200签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10007)
-                                    {
-                                        <img src="~/Images/seal/成都军区总医院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10005)
-                                    {
-                                        <img src="~/Images/seal/四川省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10012)
-                                    {
-                                        <img src="~/Images/seal/324医院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10014)
-                                    {
-                                        <img src="~/Images/seal/云南省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10009)
-                                    {
-                                        <img src="~/Images/seal/重庆警备区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                </td>
-                                <td colspan="2"></td>
-                                <td style="text-indent:2em;">供货单位开票人：@Model.供货单位开票人</td>
-                                <td colspan="2"></td>
-                                <td style="text-indent:2em;">收货单位验收人：</td>
-                                <td colspan="2"></td>
-                            </tr>
-                            <tr style="height:33px;">
-                                <td></td>
-                                <td colspan="2"></td>
-                                <td>供货单位开票人电话：</td>
-                                <td colspan="2"></td>
-                                <td>收货单位验收人电话：</td>
-                                <td colspan="2"></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-                @*<div style="position:absolute; width:150px; height:150px; margin-left:50px; margin-top:-30px;">
-
-                </div>*@
-                @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+<link href="~/css/index.css" rel="stylesheet" />
+<script src="~/JS/jquery-1.6.min.js"></script>
+<style type="text/css">
+    #accept_con table tr td.align {
+        text-align: right;
+    }
+</style>
+@{
+    var ysduserlist = 验收单单位列表信息.验收单单位列表;
+    var ysduser = ysduserlist.Where(o => o.Id == Model.审核数据.审核者.用户ID);
+}
+    <div class="bg_outdiv_right">
+        <div id="accept_con" style="width:100%;margin:0 auto 20px;">
+            @{
+                var vl = new List<Tuple<string, string, string, string, double, decimal, decimal>>();
+                if (Model.物资服务列表.Count > 8)
                 {
-                    <img src="/首页/SealWithText?txt=@Model.验收单号&base=@Model.验收单核对码&id=@Model.审核数据.审核者.用户ID" style="position:absolute; margin-top:-40px; width:150px; height:150px;" />
+                    decimal price_total = Model.物资服务列表.Sum(o => o.总价);
+                    vl.Add(Tuple.Create(Model.某批物资名称.ToString() + "(点击查看)", (string)null, (string)null, "批", 1.0, price_total, price_total));
                 }
-                <div style="width:100%;border-bottom:1px dashed #222222;padding-top:30px; margin-left:-31px;"></div>
-
-
-                <div style="font-size:14px;margin:0 auto;width:900px;">
-                    <table width="100%">
-                        <tr>
-                            <td rowspan="3" width="30%">
-                                <div style="height:25px;">验收单号：@Model.验收单号</div>
-                                <div style="text-indent:12px; height:25px;">核对码：@Model.验收单核对码</div>
-                                <div style="height:25px;">生成日期：@DateTime.Now</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="display:block;width:500px;font-size:32px;margin-top:30px; position:relative">
-                                成都军区物资集中采购验收单
-                                @if (Model.审核数据.审核者.用户ID == 10003)
-                                {
-                                    <img src="~/Images/chapter.png" style="position:absolute;left:137px;top:-18px;width:139px;" />
-                                }
-
-                            </td>
-                        </tr>
-                        <tr>
-                            @*<td style="width:600px;margin:0 auto; text-align:right"><span style="margin-right:176px;">N<u>o</u></span></td>*@
-
-                            <td rowspan="3" style="width:600px;margin:0 auto; text-align:right">
-                                <img src="/首页/OutPutQrCode?str=@Model.审核数据.审核者.用户ID" style=" margin-right:60px;margin-top:-73px;" />
-                                @*<div class="code" style=" float:right; margin-right: 110px; margin-top: -60px;"></div>*@
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div style="margin:0 auto;width:900px;">
-                    <table style="width:97%; font-size:14px;" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td colspan="6" style="height:33px; line-height:33px; text-indent:5px;">收货单位：@Model.收货单位</td>
-                            <td colspan="2" style="text-align:right">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>
-                            <td rowspan="14" style="padding-left:14px;" id="ticNum"><span>第二联</span><br /><br /><span>收货单位财务报销附件</span></td>
-                        </tr>
-                        <tr>
-                            <td colspan="8" style="height:33px; line-height:33px; border:1px solid black; border-bottom:none; text-indent:5px;">供货单位：@Model.供应商链接.用户数据.企业基本信息.企业名称</td>
-                        </tr>
-                        <tr>
-                            <td style=" height:33px;line-height:33px; border:1px solid black; padding-left:5px;padding-right:5px; " align="center" width="5%">序号</td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="20%">物资名称</td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">规格型号</td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">采购合同号</td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="10%">计量单位</td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="6%">
-                                数量
-                                <div style="position:absolute; width:200px; height:200px; margin-left:50px;margin-top:-30px;">
-                                    @if (!Model.是否作废)
-                                    {
-                                        if (Model.审核数据.审核者.用户数据 != null)
-                                        {
-                                            if (Model.审核数据.审核者.用户ID == 10005)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资集中采购办公室&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10003)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购专用章&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10004)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购专用章&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10015)
-                                            {
-                                                <img src="~/Images/seal/昆明民族干部学院章.png" width="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10011)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购管理办公室&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10013)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购办公室&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10012)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购专用章&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10007)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购专用章&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10014)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购专用章&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                            else if (Model.审核数据.审核者.用户ID == 10009)
-                                            {
-                                                <img src="/首页/SealWithText?txt=@Model.审核数据.审核者.用户数据.单位信息.单位名称&base=物资采购办公室&id=@Model.审核数据.审核者.用户ID" width="240" height="240" />
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <img src="~/Images/avoid.png" />
-                                    }
-                                </div>
-                            </td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">单价（元）</td>
-                            <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">金额（元）</td>
-                        </tr>
-                        @{int n = 1;}
-                        @if (Model.物资服务列表 != null && Model.物资服务列表.Count() > 5)
+                else if (Model.物资服务列表.Count == 0 && Model.验收单附件.Count > 0)
+                {
+                    decimal price_total = Model.验收单附件.Sum(o => o.价格);
+                    vl.Add(Tuple.Create(Model.某批物资名称.ToString() + "(点击查看)", (string)null, (string)null, "批", 1.0, price_total, price_total));
+                }
+                else
+                {
+                    foreach (var plnk in Model.物资服务列表)
+                    {
+                        if (plnk.商品链接.商品 != null)
                         {
-                            for (int i = 0; i < 5; i++)
-                            {
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(i + 1)</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="left">
-                                        @if (i == 0)
-                                        {
-                                            <span onclick="showList()" style="cursor:pointer">@Model.某批物资名称 (点击查看物资清单)</span>
-                                        }
-                                    </td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr>
-                            }
+                            vl.Add(Tuple.Create(plnk.商品链接.商品.商品信息.商品名, plnk.规格型号, plnk.采购合同号, plnk.计量单位, plnk.数量, plnk.单价, plnk.总价));
                         }
                         else
                         {
-                            foreach (var k in Model.物资服务列表)
-                            {
+                            vl.Add(Tuple.Create("商品不存在", plnk.规格型号, plnk.采购合同号, plnk.计量单位, plnk.数量, plnk.单价, plnk.总价));
+                        }
+                    }
+                }
+                if (Model.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0.0, Model.运费, Model.运费)); }
+                if (Model.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0.0, Model.服务费, Model.服务费)); }
+                if (Model.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0.0, Model.维修费, Model.维修费)); }
+                foreach (var k in Model.其他费用) { vl.Add(Tuple.Create(k.费用名称, string.Empty, string.Empty, string.Empty, 0.0, k.金额, k.金额)); }
+
+                var vl_all = new List<Tuple<string, string, string, string, double, decimal, decimal>[]>();
+                for (var n_all = 0; n_all < vl.Count; n_all += 8) { vl_all.Add(vl.Skip(n_all).Take(8).ToArray()); }
+            }
+            @for (var yn = 1; yn <= vl_all.Count; ++yn)
+            {
+                <div style="width:970px;margin:0 auto; padding:0 10px 30px 30px;border-left:1px dashed #222222">
+                    @{{
+                        <div style="font-size:14px;margin:0 auto;width:900px;">
+                            <table width="100%" style="margin-top:30px;font-size:14px;">
                                 <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@n</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="left">
-                                        @if (k.商品链接.商品 != null)
+                                    <td rowspan="3" width="33%">
+                                        <div style="height:25px;margin-top:20px;">验收单号：@Model.验收单号 - @yn</div>
+                                        <div style="text-indent:16px;height:25px;">核对码：@Model.验收单核对码</div>
+                                        @*<div style="height:25px;">生成日期：@DateTime.Now</div>*@
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3" style="width:85%;font-size:32px;margin-top:35px; position:relative;">
+                                        成都军区物资集中采购验收单
+                                        @if (Model.审核数据.审核者.用户数据 != null)
                                         {
-                                            <span>@k.商品链接.商品.商品信息.商品名</span>
+                                            if (Model.审核数据.审核状态 == 审核状态.审核通过 && Model.审核数据.审核者.用户数据.单位信息.单位名称.Contains("成都军区联勤部军需物资油料部"))
+                                            {
+                                                <img src="~/Images/chapter.png" style="position:absolute;left:137px;top:-4px;width:139px;" />
+                                            }
                                         }
                                     </td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@k.规格型号</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@k.采购合同号</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@k.计量单位</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@k.数量</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">￥@k.单价</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">￥@k.总价</td>
-                                </tr>
-                                        n++;
-                            }
-                            switch (n)
-                            {
-                                case 1:
-                                    <tr>
-                                        <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">1</td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">2</td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">3</td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">4</td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">5</td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr> break;
-                                case 2:
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">2</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
                                 </tr>
                                 <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">3</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
+                                    <td rowspan="3" style="width:100%;margin:0 auto; text-align:right">
+                                        <img src="/首页/OutPutQrCode?str=@Model.Id" style=" margin-right:60px;margin-top:-8px;" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div style="margin:0 auto;width:900px;">
+                            <table style="width:97%; font-size:14px;" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td colspan="5" style="height:27px; text-indent:5px;">
+                                        收货单位：@if (Model.收货单位 != null)
+                                        { @Model.收货单位}
+                                    </td>
+                                    @*<td colspan="3" style="text-align:right;font-family:'Times New Roman'">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>*@
+                                    <td colspan="3" style="text-align:right;padding-right:20px">生成日期：@Model.基本数据.添加时间</td>
+                                    <td rowspan="12" style="padding-left:14px;padding-top:25px;"> <span>第一联</span><br /><br /><span style="height:27px;">供货单位留存</span></td>
                                 </tr>
                                 <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">4</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
+                                    <td colspan="8" style="height:27px; border:1px solid black; border-bottom:none; text-indent:5px;">供货单位：@Model.供应商链接.用户数据.企业基本信息.企业名称</td>
                                 </tr>
                                 <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">5</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr> break;
-                                case 3:
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">3</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
+                                    <td style="height:27px;line-height:27px; border:1px solid black; padding-left:5px;padding-right:5px;" align="center" width="5%">序号</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="30%">物资名称</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">规格型号</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="10%">采购合同号</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="4%">计量单位</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="6%">数量</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="13%">单价（元）</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="14%">金额（元）</td>
                                 </tr>
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">4</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">5</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr> break;
-                                case 4:
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">4</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr>
-                                <tr>
-                                    <td style=" height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">5</td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    <td style=" height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                </tr> break;
-                            }
-                        }
-                        <tr>
-                            <td style="height:33px; line-height:33px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">6</td>
-                            <td style="height:33px; line-height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（大写）</td>
-                            <td colspan="3" style="height:33px; line-height:33px; border-right: 1px solid black; border-bottom: 1px solid black; text-align:right;padding-right:5px; letter-spacing:2px;">
-                                @{
-                                    decimal total3 = 0;
-                                    if (Model.验收单附件 != null && Model.验收单附件.Count > 0)
-                                    {
 
-                                        foreach (var k1 in Model.验收单附件)
-                                        {
-                                            total3 += k1.价格;
-                                        }
-                                    }
-                                    total3 += Model.总金额;
-                                    <span>@供应商后台Controller.MoneyToUpper(total3.ToString())</span>
-                                }
-                            </td>
-                            <td colspan="2" style="height:33px; line-height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（小写）</td>
-                            <td style="height:33px; line-height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">
                                 @{
-                                    decimal total4 = 0;
-                                    if (Model.验收单附件 != null && Model.验收单附件.Count > 0)
-                                    {
-
-                                        foreach (var k1 in Model.验收单附件)
+                                        var totalcost = 0M;
+                                        for (var vl_n = 1; vl_n <= 8; ++vl_n)
                                         {
-                                            total4 += k1.价格;
+                                            var vl_content = vl_all[yn - 1].Length + 1 > vl_n
+                                                ? vl_all[yn - 1][vl_n - 1]
+                                                : Tuple.Create((string)null, (string)null, (string)null, (string)null, 0.0, -1M, -1M);
+                                            if (vl_content.Item7 > 0) { totalcost += vl_content.Item7; }
+                                            var sp = vl_content.Item1 != null && vl_content.Item1.EndsWith("(点击查看)") ? "cursor:pointer;color:red" : string.Empty;
+                                            var evt_clk = "";
+                                            if (Model.物资服务列表.Count > 0 && vl_n == 1)
+                                            {
+                                                //evt_clk = "$('#good_list').fadeIn()";
+                                                evt_clk = "$('#good_list').show()";
+                                            }
+                                            if (Model.验收单附件.Count > 0 && vl_n == 1)
+                                            {
+                                                //evt_clk = "$('#attach_list').fadeIn(200);";
+                                                evt_clk = "$('#attach_list').show();";
+                                            }
+                                            <tr>
+                                                <td style="height: 27px; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@vl_n</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center" onclick="@evt_clk">@(string.IsNullOrWhiteSpace(vl_content.Item1) ? " " : vl_content.Item1)</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(string.IsNullOrWhiteSpace(vl_content.Item2) ? " " : vl_content.Item2)</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(string.IsNullOrWhiteSpace(vl_content.Item3) ? " " : vl_content.Item3)</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(string.IsNullOrWhiteSpace(vl_content.Item4) ? " " : vl_content.Item4)</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 == vl_content.Item5 ? " " : vl_content.Item5.ToString())</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 > vl_content.Item6 ? " " : "￥" + string.Format("{0:0.00}", vl_content.Item6))</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 > vl_content.Item7 ? " " : "￥" + string.Format("{0:0.00}", vl_content.Item7))</td>
+                                            </tr>
                                         }
-                                    }
-                                    total4 += Model.总金额;
-                                    <span>￥@total4.ToString()</span>
                                 }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style=" border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">意见反馈</td>
-                            <td colspan="7" style=" border-right: 1px solid black; border-bottom: 1px solid black;">
-                                <table style="width:100%;" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="height:27px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">9</td>
+                                    <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; position:relative" align="center">
+                                        金额合计（大写）
+                                        <div style="position:absolute;top:15px; width:200px; height:200px;">
+                                            @if (!Model.是否作废)
+                                            {
+                                                if (Model.审核数据.审核者.用户数据 != null)
+                                                {
+                                                    if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                                    {
+                                                        if (Model.审核数据.审核者.用户数据 != null)
+                                                        {
+                                                            if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                                            {
+                                                                if (ysduser.Any())
+                                                                {
+                                                                    var user = ysduser.First();
+                                                                    if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
+                                                                    {
+                                                                        <img src="@user.盖章图片链接" width="240" />
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <img src="/首页/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <img src="~/Images/avoid.png" />
+                                            }
+                                        </div>
+
+                                    </td>
+                                    <td colspan="3" style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; text-align:right;padding-right:5px; letter-spacing:2px;">
+                                        <span>@供应商后台Controller.MoneyToUpper(totalcost.ToString())</span>
+                                    </td>
+                                    <td colspan="2" style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（小写）</td>
+                                    <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">
+                                        <span>￥@(string.Format("{0:0.00}", totalcost))</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style=" border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center" rowspan="5">意见反馈</td>
+                                    <td colspan="7" style=" border-right: 1px solid black; border-bottom: 1px solid black;">
+                                        <table style="width:100%;font-size:14px;" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="width:21.9%;border-bottom: 1px solid black; border-right:1px solid black;height:27px;" align="center">用户通知时间</td>
+                                                <td style="width:28.9% ;border-bottom: 1px solid black;border-right:1px solid black;height:27px;" colspan="3">&nbsp;</td>
+                                                <td style="width:15%;border-bottom: 1px solid black; border-right:1px solid black;height:27px;" align="center" colspan="2">实际验收时间</td>
+                                                <td style="height:27px;border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                                <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                                <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;width:18%" align="center">供货情况满意度评价</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; width:9%" align="center">满意</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; width:9.3%" align="center">一般</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; width:9.3%" align="center">不满意</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; width:39%;text-indent:-45px;" align="center" colspan="4">不满意原因</td>
+                                                <td rowspan="3" align="center" style="padding-left:2px;">
+                                                    军区投诉咨询电话:<br />
+                                                    0821-683369
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">服务态度</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; " align="center" colspan="4">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="height:27px; border-right: 1px solid black;" align="center">产品价格及其他</td>
+                                                <td style="height:27px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black;" align="center" colspan="4">&nbsp;</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div style="margin-top:3px;">
+                                <table style="width:100%; font-size:14px;margin-left:5px;" cellpadding="0" cellspacing="0">
                                     <tr>
-                                        <td style="width:21.1%;border-bottom: 1px solid black; border-right:1px solid black;height:33px; line-height:33px;" align="center">用户通知时间</td>
-                                        <td style="width:28.9% ;border-bottom: 1px solid black;border-right:1px solid black;height:33px;line-height:33px; " colspan="2"></td>
-                                        <td style="width:17.2%;border-bottom: 1px solid black; border-right:1px solid black;height:33px; line-height:33px;" align="center" colspan="2">实际到达时间</td>
-                                        <td style="height:33px; line-height:33px;border-bottom: 1px solid black;" align="center" colspan="3"></td>
+                                        <td colspan="4" style="height:30px;text-align:right;padding-right:54px;">（收货单位验收人已确认此票据与所供货物一致，无虚假现象）</td>
                                     </tr>
-                                    <tr>
-                                        <td style="height:33px;line-height:33px; border-right: 1px solid black; border-bottom: 1px solid black;width:25%" align="center" colspan="2">产品销售（维修）情况</td>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; width:10%" align="center">非常满意</td>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; width:7%" align="center">满意</td>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; width:7%" align="center">一般</td>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; width:8%" align="center">不满意</td>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black; width:11%" align="center">非常不满意</td>
-                                        <td width="21%" style="height:33px;line-height:33px; border-bottom: 1px solid black;" align="center">军区投诉咨询电话</td>
+                                    <tr style="height:27px;">
+                                        @if (Model.审核数据.审核者.用户ID == 10003)
+                                        {
+                                            <td valign="top" style="width:220px; padding-top:5px;">管理审核部门：</td>
+                                        }
+                                        else
+                                        {
+                                            <td valign="top" style="width:220px; padding-top:5px;">
+                                                管理部门审核人：
+                                                @*@if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                                    {
+                                                        if (ysduser.Any())
+                                                        {
+                                                            var user = ysduser.First();
+                                                            if (user.Id != 10003)
+                                                            {
+                                                                <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                                            }
+                                                        }
+                                                    }*@
+                                                <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            </td>
+                                        }
+                                        <td style="text-indent:2em;width:16%;text-align:right">供货单位开票人：</td>
+                                        <td>@Model.供货单位开票人</td>
+                                        <td style="text-indent:2em;">收货单位验收人：</td>
+                                        <td colspan="2"></td>
                                     </tr>
-                                    <tr>
-                                        <td style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center" colspan="2">服务态度</td>
-                                        <td colspan="5" style="height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                        <td rowspan="3" align="center">0821-683369</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height:33px;line-height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center" colspan="2">产品的熟悉程度</td>
-                                        <td colspan="5" style="height:33px;line-height:33px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center"></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="height:33px;line-height:33px; border-right: 1px solid black;" align="center" colspan="2">产品价格及其他</td>
-                                        <td style="height:33px;line-height:33px; border-right: 1px solid black;" align="center" colspan="5"></td>
+                                    <tr style="height:27px;">
+                                        <td colspan="2" style="text-align:right">供货单位开票人电话：</td>
+                                        <td></td>
+                                        <td>收货单位验收人电话：</td>
+                                        <td colspan="2"></td>
                                     </tr>
                                 </table>
-                            </td>
-                        </tr>
-                    </table>
-                    <div style="margin-top:3px;">
-                        <table style="width:100%; font-size:14px;margin-left:5px;" cellpadding="0" cellspacing="0">
-                            <tr style="height:33px">
-                                <td>
-                                    管理部门审核人：
-                                    @if (Model.审核数据.审核者.用户ID == 10015)
-                                    {
-                                        <img src="~/Images/seal/昆明民族干部学院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10003)
-                                    {
-                                        <img src="~/Images/seal/采购处签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10004)
-                                    {
-                                        <img src="~/Images/seal/78006签名.png" style="position:absolute; width:100px; height:80px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10011)
-                                    {
-                                        <img src="~/Images/seal/后勤工程学院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10013)
-                                    {
-                                        <img src="~/Images/seal/77200签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10007)
-                                    {
-                                        <img src="~/Images/seal/成都军区总医院签名.png" style="position:absolute; width:100px; height:80px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10005)
-                                    {
-                                        <img src="~/Images/seal/四川省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10012)
-                                    {
-                                        <img src="~/Images/seal/324医院签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10014)
-                                    {
-                                        <img src="~/Images/seal/云南省军区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                    else if (Model.审核数据.审核者.用户ID == 10009)
-                                    {
-                                        <img src="~/Images/seal/重庆警备区签名.png" style="position:absolute; width:100px; height:60px; margin-top:-15px;" />
-                                    }
-                                </td>
-                                <td colspan="2"></td>
-                                <td style="text-indent:2em;">供货单位开票人：@Model.供货单位开票人</td>
-                                <td colspan="2"></td>
-                                <td style="text-indent:2em;">收货单位验收人：</td>
-                                <td colspan="2"></td>
-                            </tr>
-                            <tr style="height:33px;">
-                                <td></td>
-                                <td colspan="2"></td>
-                                <td>供货单位开票人电话：</td>
-                                <td colspan="2"></td>
-                                <td>收货单位验收人电话：</td>
-                                <td colspan="2"></td>
-                            </tr>
-                        </table>
-                    </div>
+                            </div>
+                        </div>
+                    }}
+                    @if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                    {
+                        <img src="/首页/SealWithText?txt=@Model.验收单号&base=@Model.验收单核对码&id=@Model.审核数据.审核者.用户ID" style="position:absolute; margin-top:-40px; width:150px; height:150px;" />
+                    }
+                    <div style="width:100%;border-bottom:1px dashed #222222;padding-top:30px; margin-left:-31px;"></div>
+                    @{{
+                        <div style="font-size:14px;margin:0 auto;width:900px;">
+                            <table width="100%" style="margin-top:30px;font-size:14px;">
+                                <tr>
+                                    <td rowspan="3" width="33%">
+                                        <div style="height:25px; margin-top:20px;">验收单号：@Model.验收单号 - @yn</div>
+                                        <div style="text-indent:16px;height:25px;">核对码：@Model.验收单核对码</div>
+                                        @*<div style="height:25px;">生成日期：@DateTime.Now</div>*@
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3" style="width:85%;font-size:32px;margin-top:35px; position:relative;">
+                                        成都军区物资集中采购验收单
+                                        @if (Model.审核数据.审核者.用户数据 != null)
+                                        {
+                                            if (Model.审核数据.审核状态 == 审核状态.审核通过 && Model.审核数据.审核者.用户数据.单位信息.单位名称.Contains("成都军区联勤部军需物资油料部"))
+                                            {
+                                                <img src="~/Images/chapter.png" style="position:absolute;left:137px;top:-4px;width:139px;" />
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="3" style="width:100%;margin:0 auto; text-align:right">
+                                        <img src="/首页/OutPutQrCode?str=@Model.Id" style=" margin-right:60px;margin-top:-8px;" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div style="margin:0 auto;width:900px;">
+                            <table style="width:97%; font-size:14px;" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td colspan="5" style="height:27px; text-indent:5px;">
+                                        收货单位：@if (Model.收货单位 != null)
+                                        { @Model.收货单位}
+                                    </td>
+                                    @*<td colspan="3" style="text-align:right;font-family:'Times New Roman'">时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日</td>*@
+                                    <td colspan="3" style="text-align:right;padding-right:20px;">生成日期：@Model.基本数据.添加时间</td>
+                                    <td rowspan="12" style="padding-left:14px;padding-top:25px;"> <span>第二联</span><br /><br /><span style="height:27px;">收货单位财务报销附件</span></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8" style="height:27px; border:1px solid black; border-bottom:none; text-indent:5px;">供货单位：@Model.供应商链接.用户数据.企业基本信息.企业名称</td>
+                                </tr>
+                                <tr>
+                                    <td style="height:27px;line-height:27px; border:1px solid black; padding-left:5px;padding-right:5px;" align="center" width="5%">序号</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="30%">物资名称</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="15%">规格型号</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="10%">采购合同号</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="4%">计量单位</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="6%">数量</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="13%">单价（元）</td>
+                                    <td style=" border-top:1px solid black; border-bottom: 1px solid black; border-right: 1px solid black;" align="center" width="14%">金额（元）</td>
+                                </tr>
+
+                                @{
+                                        var totalcost = 0M;
+                                        for (var vl_n = 1; vl_n <= 8; ++vl_n)
+                                        {
+                                            var vl_content = vl_all[yn - 1].Length + 1 > vl_n
+                                                ? vl_all[yn - 1][vl_n - 1]
+                                                : Tuple.Create((string)null, (string)null, (string)null, (string)null, 0.0, -1M, -1M);
+                                            if (vl_content.Item7 > 0) { totalcost += vl_content.Item7; }
+                                            var sp = vl_content.Item1 != null && vl_content.Item1.EndsWith("(点击查看)") ? "cursor:pointer;color:red" : string.Empty;
+                                            var evt_clk = "";
+                                            if (Model.物资服务列表.Count > 0 && vl_n == 1)
+                                            {
+                                                //evt_clk = "$('#good_list').fadeIn()";
+                                                evt_clk = "$('#good_list').show()";
+                                            }
+                                            if (Model.验收单附件.Count > 0 && vl_n == 1)
+                                            {
+                                                //evt_clk = "$('#attach_list').fadeIn(200);";
+                                                evt_clk = "$('#attach_list').show();";
+                                            }
+                                            <tr>
+                                                <td style="height: 27px; border-left: 1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@vl_n</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black; @sp" align="center" onclick="@evt_clk">@(string.IsNullOrWhiteSpace(vl_content.Item1) ? " " : vl_content.Item1)</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(string.IsNullOrWhiteSpace(vl_content.Item2) ? " " : vl_content.Item2)</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(string.IsNullOrWhiteSpace(vl_content.Item3) ? " " : vl_content.Item3)</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(string.IsNullOrWhiteSpace(vl_content.Item4) ? " " : vl_content.Item4)</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 == vl_content.Item5 ? " " : vl_content.Item5.ToString())</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 > vl_content.Item6 ? " " : "￥" + string.Format("{0:0.00}", vl_content.Item6))</td>
+                                                <td style="height: 27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">@(0 > vl_content.Item7 ? " " : "￥" + string.Format("{0:0.00}", vl_content.Item7))</td>
+                                            </tr>
+                                        }
+                                }
+                                <tr>
+                                    <td style="height:27px; border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">9</td>
+                                    <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; position:relative" align="center">
+                                        金额合计（大写）
+                                        <div style="position:absolute;top:15px; width:200px; height:200px;">
+                                            @if (!Model.是否作废)
+                                            {
+                                                if (Model.审核数据.审核者.用户数据 != null)
+                                                {
+                                                    if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                                    {
+                                                        if (ysduser.Any())
+                                                        {
+                                                            var user = ysduser.First();
+                                                            if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
+                                                            {
+                                                                <img src="@user.盖章图片链接" width="240" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="/首页/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <img src="~/Images/avoid.png" />
+                                            }
+                                        </div>
+
+                                    </td>
+                                    <td colspan="3" style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; text-align:right;padding-right:5px; letter-spacing:2px;">
+                                        <span>@供应商后台Controller.MoneyToUpper(totalcost.ToString())</span>
+                                    </td>
+                                    <td colspan="2" style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">金额合计（小写）</td>
+                                    <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">
+                                        <span>￥@(string.Format("{0:0.00}", totalcost))</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style=" border-left:1px solid black; border-right: 1px solid black; border-bottom: 1px solid black;" align="center" rowspan="5">意见反馈</td>
+                                    <td colspan="7" style=" border-right: 1px solid black; border-bottom: 1px solid black;">
+                                        <table style="width:100%;font-size:14px;" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="width:21.9%;border-bottom: 1px solid black; border-right:1px solid black;height:27px;" align="center">用户通知时间</td>
+                                                <td style="width:28.9% ;border-bottom: 1px solid black;border-right:1px solid black;height:27px;" colspan="3">&nbsp;</td>
+                                                <td style="width:15%;border-bottom: 1px solid black; border-right:1px solid black;height:27px;" align="center" colspan="2">实际验收时间</td>
+                                                <td style="height:27px;border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                                <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                                <td style="border-bottom: 1px solid black;">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;width:18%" align="center">供货情况满意度评价</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; width:9%" align="center">满意</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; width:9.3%" align="center">一般</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; width:9.3%" align="center">不满意</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; width:39%;text-indent:-45px;" align="center" colspan="4">不满意原因</td>
+                                                <td rowspan="3" align="center" style="padding-left:2px;">
+                                                    军区投诉咨询电话:<br />
+                                                    0821-683369
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">服务态度</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black; border-bottom: 1px solid black; " align="center" colspan="4">&nbsp;</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="height:27px; border-right: 1px solid black;" align="center">产品价格及其他</td>
+                                                <td style="height:27px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black;" align="center">&nbsp;</td>
+                                                <td style="height:27px; border-right: 1px solid black;" align="center" colspan="4">&nbsp;</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div style="margin-top:3px;">
+                                <table style="width:100%; font-size:14px;margin-left:5px;" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td colspan="4" style="height:30px;text-align:right;padding-right:54px;">（收货单位验收人已确认此票据与所供货物一致，无虚假现象）</td>
+                                    </tr>
+                                    <tr style="height:27px;">
+                                        @if (Model.审核数据.审核者.用户ID == 10003)
+                                        {
+                                            <td valign="top" style="width:220px; padding-top:5px;">管理审核部门：</td>
+                                        }
+                                        else
+                                        {
+                                            <td valign="top" style="width:220px; padding-top:5px;">
+                                                管理部门审核人：
+                                                @*@if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                                    {
+                                                        if (ysduser.Any())
+                                                        {
+                                                            var user = ysduser.First();
+                                                            if (user.Id != 10003)
+                                                            {
+                                                                <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                                            }
+                                                        }
+                                                    }*@
+                                                <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                            </td>
+                                        }
+                                        <td style="text-indent:2em;width:16%;text-align:right">供货单位开票人：</td>
+                                        <td>@Model.供货单位开票人</td>
+                                        <td style="text-indent:2em;">收货单位验收人：</td>
+                                        <td colspan="2"></td>
+                                    </tr>
+                                    <tr style="height:27px;">
+                                        <td colspan="2" style="text-align:right">供货单位开票人电话：</td>
+                                        <td></td>
+                                        <td>收货单位验收人电话：</td>
+                                        <td colspan="2"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    }}
                 </div>
+            }
+        </div>
+
+
+        @if (Model.审核数据.审核状态 == 审核状态.审核未通过)
+        {
+            <div style="margin-top:20px;color:#ff0000;text-align: center">审核未通过原因：@Model.审核数据.审核不通过原因</div>
+        }
+    </div>
+<!--物资清单-->
+<div id="good_list" class="modal_out" style="display:none">
+    <div class="modal_in" style="background:#000"></div>
+    <div id="good_list_detail" style="width: 900px; height: auto; margin: 2% auto;padding:10px; background: #FFF; border: 6px solid #D5D5D5;border-radius:4px; position: relative; max-height:85%; overflow-y: scroll; ">
+        <div style="display:inline-block;height:65px; width:100%;text-align:center;position:relative;">
+            <div style="width:280px;display:inline-block;position:absolute;left:10px;">
+                <table width="100%">
+                    <tr>
+                        <td align="right">关联验收单号：</td>
+                        <td align="left">@Model.验收单号</td>
+                    </tr>
+                    <tr>
+                        <td align="right">核对码：</td>
+                        <td align="left">@Model.验收单核对码</td>
+                    </tr>
+                    <tr>
+                        <td align="right">生成日期：</td>
+                        <td align="left">@Model.基本数据.添加时间</td>
+                    </tr>
+                </table>
             </div>
+
+            <div style="display:inline-block; font-size:32px; line-height:65px;">采购物资清单</div>
+        </div>
+        <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #ccc; border-left:1px solid #ccc;margin-top:10px;">
+            <tr>
+                <th width="5%" style="line-HEIGHT:35PX;border-right:1px solid #ccc;border-bottom:1px solid #ccc">序号</th>
+                <th width="35%" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">物资名称</th>
+                <th width="8%" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">规格型号</th>
+                <th width="9%" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">
+                    采购合同号
+
+                </th>
+                <th width="8%" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">计量单位</th>
+                <th width="5%" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">数量</th>
+                <th width="5%" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">单价</th>
+                <th width="5%" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">金额</th>
+            </tr>
+            @{var num = 1;
+            foreach (var k in Model.物资服务列表)
+            {
+                <tr>
+                    <td style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@(num++)</td>
+                    <td style=" border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">
+                        @if (k.商品链接.商品 != null)
+                        { <span>@k.商品链接.商品.商品信息.商品名</span>}
+                        else
+                        { <span>商品不存在</span>}
+                    </td>
+                    <td style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.规格型号</td>
+                    <td style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.采购合同号</td>
+                    <td style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.计量单位</td>
+                    <td style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@k.数量</td>
+                    <td style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", k.单价))</td>
+                    <td style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", k.总价))</td>
+                </tr>
+
+            }
+            }
+            <tr>
+                <td colspan="5" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">运费</td>
+                <td colspan="3" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.运费))</td>
+            </tr>
+            <tr>
+                <td colspan="5" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">服务费</td>
+                <td colspan="3" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.服务费))</td>
+            </tr>
+            <tr>
+                <td colspan="5" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">维修费</td>
+                <td colspan="3" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.维修费))</td>
+            </tr>
+            <tr>
+                <td colspan="5" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">其他费用</td>
+                <td colspan="3" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">
+                    @{
+                        decimal cost = 0;
+                        if (Model.其他费用 != null && Model.其他费用.Count() > 0)
+                        {
+                            foreach (var mmm in Model.其他费用)
+                            {
+                                cost += mmm.金额;
+                            }
+                        }
+                    }
+                    ￥@(string.Format("{0:0.00}", cost))
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc"></td>
+                <td colspan="3" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.总金额))</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">
+                    <div style="position:absolute; margin-top:-250px; margin-left:500px;">
+                        @if (!Model.是否作废)
+                        {
+                            if (Model.审核数据.审核者.用户数据 != null)
+                            {
+                                if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                {
+                                    if (Model.审核数据.审核者.用户数据 != null)
+                                    {
+                                        if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                        {
+                                            if (ysduser.Any())
+                                            {
+                                                var user = ysduser.First();
+                                                if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
+                                                {
+                                                    <img src="@user.盖章图片链接" width="240" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="/单位用户后台/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                    @if (Model.审核数据.审核者.用户ID == 10003)
+                    {
+                        <span>管理审核部门：</span>
+                    }
+                    else
+                    {
+                        <span>管理部门审核人：</span>
+                        @*if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                            {
+                                if (ysduser.Any())
+                                {
+                                    var user = ysduser.First();
+                                    <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                                }
+                            }*@
+                        <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                    }
+                </td>
+                <td colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">供货单位开票人：@Model.供货单位开票人</td>
+                <td colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">收货单位验收人：@Model.收货单位验收人</td>
+            </tr>
+        </table>
+        <div style="text-align:center;padding:20px 0">
+            <input type="button" id="modal_clo" class="btn-base" value="关闭" />
         </div>
     </div>
-</body>
-</html>
+</div>
 
+<!--附件列表-->
+<div id="attach_list" class="modal_out" style="display:none">
+    <div class="modal_in" style="background:#000"></div>
+    <div id="good_attach_detail" style="width: 900px; height: auto; margin: 2% auto;padding:10px; background: #FFF; border: 6px solid #D5D5D5;border-radius:4px; position: relative; max-height: 500px; overflow-y: scroll; ">
+        <div style="display:inline-block; width:100%;text-align:center;position:relative;height:65px;">
+            <div style="width:280px;display:inline-block;position:absolute;left:10px;">
+                <table width="100%">
+                    <tr>
+                        <td align="right">关联验收单号：</td>
+                        <td align="left">@Model.验收单号</td>
+                    </tr>
+                    <tr>
+                        <td align="right">核对码：</td>
+                        <td align="left">@Model.验收单核对码</td>
+                    </tr>
+                    <tr>
+                        <td align="right">生成日期：</td>
+                        <td align="left">@Model.基本数据.添加时间</td>
+                    </tr>
+                </table>
+            </div>
+            <div style="display:inline-block; font-size:32px;line-height:65px;">附件清单</div>
+        </div>
+        <table width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #ccc; border-left:1px solid #ccc;margin-top:10px;">
+            <tr>
+                <th width="5%" style="line-height:30px;border-right:1px solid #ccc;border-bottom:1px solid #ccc">序号</th>
+                <th width="30%" colspan="5" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">附件名称</th>
+                <th width="20%" style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">金额</th>
+            </tr>
+            @{var num1 = 1;
+            foreach (var k in Model.验收单附件)
+            {
+                <tr>
+                    <td style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">@(num1++)</td>
+                    <td width="30%" colspan="5" style="text-align: left; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc"><a href="@k.附件路径" style="text-decoration:underline;" target="_blank">@k.附件路径.Substring(k.附件路径.LastIndexOf('/') + 1)</a><span style="color:red;">(点击/下载查看清单)</span></td>
+                    <td width="20%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", k.价格))</td>
+                </tr>
+
+            }
+            }
+            <tr>
+                <td colspan="6" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">运费</td>
+                <td colspan="2" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.运费))</td>
+            </tr>
+            <tr>
+                <td colspan="6" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">服务费</td>
+                <td colspan="2" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.服务费))</td>
+            </tr>
+            <tr>
+                <td colspan="6" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">维修费</td>
+                <td colspan="2" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.维修费))</td>
+            </tr>
+            <tr>
+                <td colspan="6" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">其他费用</td>
+                <td colspan="2" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">
+                    @{
+                        decimal cost1 = 0;
+                        if (Model.其他费用 != null)
+                        {
+                            foreach (var mmm in Model.其他费用)
+                            {
+                                cost1 += mmm.金额;
+                            }
+                        }
+                    }
+                    ￥@(string.Format("{0:0.00}", cost1))
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" width="10%" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">总金额</td>
+                <td colspan="2" style="text-align: center; border-right: 1px solid #ccc; border-bottom: 1px solid #ccc">￥@(string.Format("{0:0.00}", Model.总金额))</td>
+            </tr>
+            <tr>
+                <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">
+                    <div style="position:absolute;bottom: 20px;right: 35px;">
+                        @if (!Model.是否作废)
+                        {
+                            if (Model.审核数据.审核者.用户数据 != null)
+                            {
+                                if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                {
+                                    if (Model.审核数据.审核者.用户数据 != null)
+                                    {
+                                        if (Model.审核数据.审核状态 == 审核状态.审核通过)
+                                        {
+                                            if (ysduser.Any())
+                                            {
+                                                var user = ysduser.First();
+                                                if (!string.IsNullOrWhiteSpace(user.盖章图片链接))
+                                                {
+                                                    <img src="@user.盖章图片链接" width="240" />
+                                                }
+                                                else
+                                                {
+                                                    <img src="/首页/SealWithText?txt=@user.验收单名称&base=@user.印章底部文本&id=@user.Id" width="240" height="240" />
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                    @if (Model.审核数据.审核者.用户ID == 10003)
+                    {
+                        <span>管理审核部门：</span>
+                    }
+                    else
+                    {
+                        <span>管理部门审核人：</span>
+                        @*if (ysduser.Any())
+                            {
+                                var user = ysduser.First();
+                                <img src="@user.签名图片链接" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                            }*@
+                        <img src="@Model.管理单位审核人签名" style="position:absolute; width:100px; height:60px; margin-top:-25px;" />
+                    }
+                </td>
+                <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">供货单位开票人：@Model.供货单位开票人</td>
+                <td width="25%" colspan="3" style="border-bottom:1px solid #ccc;border-right:1px solid #ccc;text-indent:4px;">收货单位验收人：@Model.收货单位验收人</td>
+            </tr>
+        </table>
+        <div style="text-align:center;line-height:30px;">
+
+            @*<button type="button" onclick="$('#attach_list').fadeOut(200)">关闭</button>*@
+            <button type="button" onclick="$('#attach_list').hide()">关闭</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function showList() {
+        $("#good_list").fadeIn();
+    };
+    $(function () {
+        $("input:button").click(function () {
+            var type = $(this).attr("name");
+            var id = $(this).attr("id");
+            if (type == "作废") {
+                if (confirm("您确认需要作废此验收单？")) {
+
+                    $.ajax({
+                        url: "/运营团队后台/ToVoidYsd",
+                        data: { id: id },
+                        success: function () {
+                            alert("作废成功！");
+                            window.location.reload();
+                        },
+                        error: function () {
+                            alert("操作出错！");
+                        },
+                    });
+                }
+            }
+            else if (type == "撤销作废") {
+                if (confirm("您确认需要撤销此验收单的作废操作？")) {
+                    $.ajax({
+                        url: "/运营团队后台/RevokeVoidYsd",
+                        data: { id: id },
+                        success: function () {
+                            alert("撤销成功！");
+                            window.location.reload();
+                        },
+                        error: function () {
+                            alert("操作出错！");
+                        },
+                    });
+                }
+            }
+
+
+
+        });
+
+
+        $("#验收单列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#验收单列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+
+</script>

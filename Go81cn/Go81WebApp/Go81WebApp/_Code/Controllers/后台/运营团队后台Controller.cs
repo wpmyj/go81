@@ -133,24 +133,6 @@ namespace Go81WebApp.Controllers.后台
             return PartialView("Part_View/Part_BackHead", m);
         }
 
-        [HttpPost]
-        public ActionResult Uploadtest()
-        {
-
-            var da = Request.Files.Count;
-            HttpPostedFileBase file = Request.Files[0];
-            string filePath = 上传管理.获取上传路径<供应商>(媒体类型.图片, 路径类型.不带域名根路径);
-            string fname = UploadAttachment(file);
-            var path = filePath + fname;
-            return RedirectToAction("DbExport");
-        }
-        public void GetZj()
-        {
-            var zj = 用户管理.查询用户<专家>(0, 0);
-            var json = JsonConvert.SerializeObject(zj);
-            var ssss = 0;
-        }
-
         public class Department
         {
             /// <summary>
@@ -897,42 +879,6 @@ namespace Go81WebApp.Controllers.后台
                 return "-1";
             }
         }
-        public ActionResult ReSubmit()
-        {
-            try
-            {
-                int code = int.Parse(Request.QueryString["code"]);
-                long id = long.Parse(Request.QueryString["id"]);
-                供应商 model = 用户管理.查找用户<供应商>(id);
-                if (model != null)
-                {
-                    model.供应商用户信息.已提交 = false;
-                    model.审核数据.审核状态 = 审核状态.未审核;
-                    model.供应商用户信息.初审数据.审核状态 = 审核状态.未审核;
-                    model.供应商用户信息.复审数据.审核状态 = 审核状态.未审核;
-                    model.供应商用户信息.符合入库标准 = false;
-                    用户管理.更新用户<供应商>(model);
-                    deleteIndex("/Lucene.Net/IndexDic/Gys", model.Id.ToString());
-                    //deleteIndex_ProductCatalog("/Lucene.Net/IndexDic/GysCatalog", model.企业基本信息.企业名称);
-                    if (code == 0)
-                    {
-                        return Redirect("/运营团队后台/Modify_Supplier_Info?id=" + id.ToString());
-                    }
-                    else
-                    {
-                        return Redirect("/运营团队后台/Modify_Supplier_Info?id=" + id.ToString());
-                    }
-                }
-                else
-                {
-                    return Redirect("/运营团队后台/Supplier_PssInfo");
-                }
-            }
-            catch
-            {
-                return Redirect("/运营团队后台/Supplier_PssInfo");
-            }
-        }
         public ActionResult Delete_Qualify()
         {
             try
@@ -1163,11 +1109,8 @@ namespace Go81WebApp.Controllers.后台
                 NewModel.所属地域 = model.所属地域;
                 NewModel.法定代表人信息 = model.法定代表人信息;
                 NewModel.工商注册信息 = model.工商注册信息;
+                NewModel.入网审核数据 = model.入网审核数据;
                 NewModel.审核数据 = model.审核数据;
-                if (model.审核数据.审核状态== 审核状态.审核未通过)
-                {
-                    model.供应商用户信息.已提交 = false;
-                }
                 NewModel.供应商用户信息 = model.供应商用户信息;
                 NewModel.供应商用户信息.U盾信息 = u;
                 NewModel.联系方式 = model.联系方式;
@@ -1258,7 +1201,7 @@ namespace Go81WebApp.Controllers.后台
                     }
                 }
                 用户管理.更新用户<供应商>(NewModel, false);
-                if (Request.QueryString["msg"] != null && Request.QueryString["msg"] == "1")
+                if (Request.Form["msg"] != null && Request.Form["msg"] == "1")
                 {
                     var UserNumber = model.企业联系人信息.联系人手机;//收信人列表
                     string MessageContent = "供应商您好，贵公司基本信息已经通过预审，请登录后台在线打印申报材料，请于工作时间内前往成都物资采购站提交申请表及核验原件，具体请查看供应商注册及须知。预约电话请咨询028-86686673（张助理）或028-69759681（王老师） 。（已通过部队审核的供应商，无需重复提审，请及时录入商品信息）";//短信内容
@@ -1289,7 +1232,7 @@ namespace Go81WebApp.Controllers.后台
                     string retstr = MailApiPost.PostDataGetHtml(UserNumber, MessageContent);
                 }
                 deleteIndex("/Lucene.Net/IndexDic/Gys", model.Id.ToString());
-                if (NewModel.审核数据.审核状态 == 审核状态.审核通过)
+                if ((NewModel.审核数据.审核状态 == 审核状态.审核通过 || NewModel.入网审核数据.审核状态 == 审核状态.审核通过) && NewModel.Id != 200000000003)
                 {
                     CreateIndex_gys(用户管理.查找用户<供应商>(NewModel.Id), "/Lucene.Net/IndexDic/Gys");
                 }
@@ -4272,21 +4215,22 @@ namespace Go81WebApp.Controllers.后台
                         for (int i = 0; i < Request.Files.Count; i++)
                         {
                             HttpPostedFileBase file = Request.Files[i];
-                            if (file != null && ((file.ContentLength / 1024) / 1024) < 2 && file.ContentType == "image/jpeg")
+                            if (file != null && ((file.ContentLength / 1024) / 1024) < 2)
                             {
                                 string filePath = 上传管理.获取上传路径<供应商>(媒体类型.图片, 路径类型.不带域名根路径);
                                 string fname = UploadAttachment(file);
                                 string file_name = filePath + fname;
                                 switch (i)
                                 {
-                                    case 0: model.供应商用户信息.供应商图片.Add(file_name); break;
-                                    case 1: model.工商注册信息.组织机构代码证电子扫描件 = file_name; break;
-                                    case 2: model.工商注册信息.基本账户开户银行资信证明电子扫描件 = file_name; break;
-                                    case 3: model.工商注册信息.近3年缴纳社会保证金证明电子扫描件 = file_name; break;
-                                    case 4: model.工商注册信息.近3年有无重大违法记录电子扫描件 = file_name; break;
+                                    case 0: model.供应商用户信息.供应商图片.Add("/Images/logo_O.png"); break;
+                                    case 1: model.工商注册信息.近3年有无重大违法记录电子扫描件 = file_name; break;
+                                    case 2: model.工商注册信息.组织机构代码证电子扫描件 = file_name; break;
+                                    case 3: model.工商注册信息.基本账户开户银行资信证明电子扫描件 = file_name; break;
+                                    case 4: model.工商注册信息.近3年缴纳社会保证金证明电子扫描件 = file_name; break;
                                     case 5: model.营业执照信息.营业执照电子扫描件 = file_name; break;
-                                    case 6: model.法定代表人信息.法定代表人身份证电子扫描件 = file_name; break;
-                                    case 7: model.税务信息.近3年完税证明电子扫描件 = file_name; break;
+                                    case 6: model.营业执照信息.三证合一扫描件 = file_name; break;
+                                    case 7: model.法定代表人信息.法定代表人身份证电子扫描件 = file_name; break;
+                                    case 8: model.税务信息.近3年完税证明电子扫描件 = file_name; break;
                                 }
                             }
                         }
@@ -4356,7 +4300,7 @@ namespace Go81WebApp.Controllers.后台
             ViewData["tickets"] = 机票代售点管理.计数机票代售点(0, 0, Query.EQ("审核数据.审核状态", 审核状态.未审核));
             ViewData["hotel"] = 酒店管理.计数酒店(0, 0, Query.EQ("审核数据.审核状态", 审核状态.未审核));
             //待审核供应商数
-            ViewData["suplier"] = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(o => o.审核数据.审核状态 == 审核状态.未审核 && o.供应商用户信息.已提交));
+            ViewData["suplier"] = 用户管理.计数用户<供应商>(0, 0,Query<供应商>.Where(o => (o.审核数据.审核状态 == 审核状态.未审核 && o.供应商用户信息.已提交)||(o.入网审核数据.审核状态== 审核状态.未审核&&o.供应商用户信息.提交入网)));
             //待审核商品数
             var l = 用户管理.列表用户<供应商>(0, 0,
                Fields<供应商>.Include(o => o.Id),
@@ -4992,7 +4936,7 @@ namespace Go81WebApp.Controllers.后台
             //}
             //catlog = catlog.Distinct().ToList();
             //var Count = 0;
-            //IEnumerable<供应商> gys = 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过), includeDisabled: false);
+            //IEnumerable<供应商> gys = 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过 || o.入网审核数据.审核状态 == 审核状态.审核通过), includeDisabled: false).Where(m => !m.供应商用户信息.供应商图片.Contains("/Images/logo_O.png"));
             //foreach (var g in gys)
             //{
             //    //CreateIndex_ProductCatalog(g.企业基本信息.企业名称, "/Lucene.Net/IndexDic/GysCatalog");
@@ -5602,7 +5546,6 @@ namespace Go81WebApp.Controllers.后台
 
             [Required(ErrorMessage = "姓名必须填写")]
             public string Name { get; set; }
-
             [Required(ErrorMessage = "手机号必须填写")]
             public string MobilePhone { get; set; }
             public string Major { get; set; }
@@ -5730,11 +5673,11 @@ namespace Go81WebApp.Controllers.后台
 
             var l = 用户管理.列表用户<供应商>(0, 0,
                 Fields<供应商>.Include(o => o.Id),
-                Query<供应商>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过)
+                Query<供应商>.EQ(o => o.审核数据.审核状态, 审核状态.审核通过).Or(Query<供应商>.Where(m=>m.入网审核数据.审核状态== 审核状态.审核通过))
                 ).Select(o => o["_id"]);
             var q = Query.And(
-                    Query.In("商品信息.所属供应商.用户ID", l),
-                    Query.EQ("审核数据.审核状态", 审核状态.未审核)
+                Query.In("商品信息.所属供应商.用户ID", l),
+                Query.EQ("审核数据.审核状态", 审核状态.未审核)
                 );
 
             string name = "";
@@ -5754,7 +5697,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 cpg = 1;
             }
-            long pc =商品管理.计数商品(0, 0, q);
+            long pc = 商品管理.计数商品(0, 0,q);
             pgCount = pc /10;
             if (pc %10 > 0)
             {
@@ -5762,7 +5705,7 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            ViewData["商品信息"] = 商品管理.查询商品(10 * (cpg - 1),10, q);
+            ViewData["商品信息"] = 商品管理.查询商品(10 * (cpg - 1), 10,q);
 
             return PartialView("Part_View/Part_GoodExamine");
         }
@@ -5873,7 +5816,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 var g = 用户管理.列表用户<供应商>(0, 0,
                     Fields<供应商>.Include(o => o.Id),
-                    Query<供应商>.EQ(o => o.审核数据.审核状态, (审核状态)int.Parse(gys_auditval))
+                    Query<供应商>.Where(o => o.审核数据.审核状态 == (审核状态)int.Parse(gys_auditval) || o.入网审核数据.审核状态 == (审核状态)int.Parse(gys_auditval))
                     );
                 q = q.And(Query<商品>.In(o => o.商品信息.所属供应商.用户ID, g.Select(o => o["_id"].AsInt64)));
             }
@@ -6010,11 +5953,11 @@ namespace Go81WebApp.Controllers.后台
             int page = 1;
             if (!string.IsNullOrEmpty(Request.QueryString["page"]))
             {
-                page =int.Parse(Request.QueryString["page"]);
+                page = int.Parse(Request.QueryString["page"]);
             }
             ViewData["CurrentPage"] = page;
-            int PageCount = (int)用户管理.计数用户<供应商>(0, 0) /15;
-            if ((用户管理.计数用户<供应商>(0, 0) %15) > 0)
+            int PageCount = (int)用户管理.计数用户<供应商>(0, 0) / 15;
+            if ((用户管理.计数用户<供应商>(0, 0) % 15) > 0)
             {
                 PageCount++;
             }
@@ -6024,7 +5967,7 @@ namespace Go81WebApp.Controllers.后台
             ViewData["nopassSupplier"] = 用户管理.计数用户<供应商>(0, 0, Query<供应商>.Where(m => m.审核数据.审核状态 == 审核状态.审核未通过));
             ViewData["Pagecount"] = PageCount;
             ViewData["supplier"] = 用户管理.查询用户<供应商>(15 * (int.Parse(page.ToString()) - 1), 15).OrderBy(m => m.基本数据.添加时间);
-            ViewData["gys"] = 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => o.审核数据.审核状态 == 审核状态.未审核 && o.供应商用户信息.已提交));
+            ViewData["gys"] = 用户管理.查询用户<供应商>(0, 0, Query<供应商>.Where(o => (o.审核数据.审核状态 == 审核状态.未审核 && o.供应商用户信息.已提交)||(o.入网审核数据.审核状态== 审核状态.未审核&&o.供应商用户信息.提交入网)));
             return PartialView("Part_View/Supplier_Info_List");
         }
         public ActionResult Ad_User_Infos()//添加网站用户右侧页面
@@ -6712,8 +6655,6 @@ namespace Go81WebApp.Controllers.后台
             {
                 return Redirect("/运营团队后台/Supplier_PssInfo");
             }
-
-
             return Content("<script>window.location='/运营团队后台/Supplier_PssInfo';</script>");
         }
 
@@ -6735,6 +6676,7 @@ namespace Go81WebApp.Controllers.后台
             public string Cls;
             public string status;
             public string number;
+            public string url="";
         }
         [HttpPost]
         public ActionResult AddFinancial(供应商 model)
@@ -6813,6 +6755,7 @@ namespace Go81WebApp.Controllers.后台
             //deleteIndex_ProductCatalog("/Lucene.Net/IndexDic/GysCatalog", Newmodel.企业基本信息.企业名称);
             return Redirect("/运营团队后台/Modify_Supplier_Info?id=" + model.Id.ToString());
         }
+
         [HttpPost]
         public ActionResult AddToubiao(供应商 model)
         {
@@ -7139,6 +7082,7 @@ namespace Go81WebApp.Controllers.后台
             name = Request.QueryString["name"];
             factory = Request.QueryString["factory"];
             cls = int.Parse(Request.QueryString["cls"]);
+            int rw = int.Parse(Request.QueryString["rw"]);
             if (province != "")
             {
                 if (province != "不限省份")
@@ -7167,6 +7111,10 @@ namespace Go81WebApp.Controllers.后台
             if (sta != -1)
             {
                 condition = condition.And(Query.EQ("审核数据.审核状态", sta));
+            }
+            if (rw != -1)
+            {
+                condition = condition.And(Query.EQ("入网审核数据.审核状态", rw));
             }
             if (name != "")
             {
@@ -7219,6 +7167,10 @@ namespace Go81WebApp.Controllers.后台
                 }
                 s.status = item.审核数据.审核状态.ToString();
                 s.IsSubmit = item.供应商用户信息.已提交;
+                if(item.供应商用户信息.供应商图片.Contains("/Images/logo_O.png"))
+                {
+                    s.url="网站添加";
+                }
                 Slist.Add(s);
             }
             JsonResult js = new JsonResult() { Data = new { Slist = Slist, pageSize = pageSize } };

@@ -138,16 +138,16 @@
             }
 
             //验证商品简介
-            stepcheckparm = $('textarea[name="商品数据.商品简介"]');
-            if ($.trim(stepcheckparm.val()) == "") {
-                $("#p_des").show();
-                $(stepcheckparm).focus();
-                return false;
-            } else {
-                //$("#Uppicture").css({ "display": "inline", "height": "20px" });
-                //$("#product_tabmenu_content").css({ "height": "auto" });
-                $("#p_des").hide();
-            }
+            //stepcheckparm = $('textarea[name="商品数据.商品简介"]');
+            //if ($.trim(stepcheckparm.val()) == "") {
+            //    $("#p_des").show();
+            //    $(stepcheckparm).focus();
+            //    return false;
+            //} else {
+            //    //$("#Uppicture").css({ "display": "inline", "height": "20px" });
+            //    //$("#product_tabmenu_content").css({ "height": "auto" });
+            //    $("#p_des").hide();
+            //}
 
             //验证商品详情
             editor1.sync("content1");
@@ -389,13 +389,27 @@
                         @if (Model.商品信息.所属商品分类.商品分类.分类性质 == 商品分类性质.专用物资)
                         {
                             <span style="color:black;font-size:13px;">
-                                : @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.分类名
+                                @if (Model.商品信息.所属商品分类.商品分类 != null && Model.商品信息.所属商品分类.商品分类.父分类.商品分类!=null)
+                                {
+                                    <span>: @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.分类名</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.商品信息.所属商品分类.商品分类.分类名</span>
+                                }
                             </span>
                         }
                         else
                         {
                             <span style="color:black;font-size:13px;">
-                                : @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.分类名
+                                @if (Model.商品信息.所属商品分类.商品分类 != null && Model.商品信息.所属商品分类.商品分类.父分类.商品分类 != null && Model.商品信息.所属商品分类.商品分类.父分类.商品分类.父分类.商品分类 != null)
+                                {
+                                    <span>: @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.分类名</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.商品信息.所属商品分类.商品分类.分类名</span>
+                                }
                             </span>
                         }
                     </div>
@@ -510,10 +524,10 @@
                         </div>
                     }
 
-                    <div class="product_add_textarabox">
+                    @*<div class="product_add_textarabox">
                         <div class="product_add_toptitle">商品简介：</div>
                         @Html.TextAreaFor(model => model.商品数据.商品简介)<span>*</span><span id="p_des" style="display: none;">请输入商品简介</span>
-                    </div>
+                    </div>*@
 
                     <div class="product_add_detailbox" style="margin-bottom: 10px;">
                         <div class="product_add_toptitle">商品详情：</div>
@@ -1046,11 +1060,11 @@
         }
 
         //验证商品简介
-        stepcheckparm = $('textarea[name="商品数据.商品简介"]');
-        if ($.trim(stepcheckparm.val()) == "") {
-            $("#contenerror").html("商品描述-->商品简介必须填写");
-            return false;
-        }
+        //stepcheckparm = $('textarea[name="商品数据.商品简介"]');
+        //if ($.trim(stepcheckparm.val()) == "") {
+        //    $("#contenerror").html("商品描述-->商品简介必须填写");
+        //    return false;
+        //}
 
         //var pricerg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
         editor1.sync("content1");

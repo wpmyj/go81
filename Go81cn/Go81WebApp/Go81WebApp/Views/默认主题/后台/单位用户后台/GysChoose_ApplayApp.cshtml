@@ -1,0 +1,44 @@
+﻿@{
+    Layout = null;
+}
+<html>
+<head>
+    <title>评审专家抽选系统</title>
+    <script src="~/JS/jquery-1.6.min.js"></script>
+    <script src="~/JS/applayapp.js" type="text/javascript"></script> 
+    <link href="~/css/Intranet_p.css" rel="stylesheet" />
+    <link href="~/css/index.css" rel="stylesheet" />
+    <style>
+        .bg_outdiv_right {
+            float: none;
+        }
+    </style>
+</head>
+    <body style="text-align: center;">
+        <div id="modal1" class="modal fade" style="height:100%;position:relative;*+top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop + (documentElement.clientHeight/25) - 70 : document.body.scrollTop + (document.body.clientHeight/25) - 70);">
+            <div class="modal-dialog" style="margin: 5% auto; width:900px;">
+                <div class="modal-content" style="height:320px;">
+                    <div class="modal-header" style="padding-bottom: 20px;">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick='$("#modal1").hide();'>×</button>
+                        <div style="margin-top:10px; width:120px; float:left; font-size:16px; font-weight:bold; line-height:23px;">选择回避名单</div>
+                        <div style="width:610px; padding-right:20px;">供应商企业名称关键字：<input id="gysname" type="text" value="" style="margin-right:10px; width:150px; height:26px; line-height:26px;" /><input id="gyssearchbtn_out" type="button" value="查找" onclick="changeMesspage(1, $('#gysname').val());" style="width:80px; height:26px; cursor:pointer;" /></div>
+                    </div>
+                    <div class="modal-body">
+                        <div id="outlistdiv" style="height: 350px; overflow-y:scroll;">
+                            @Html.Action("Part_Gys_ApplayOutList", "专家抽选")
+                        </div>
+                        <div style="width: 700px; margin: 0 auto; text-align: center;padding:10px 0;"><input type="button" class="index_online_btn" value="确定" onclick="send_outlist();" /></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="bg_outdiv_right" style="margin:0px auto;">
+                <div>
+                    @Html.Action("Part_GysChoose_ApplayApp", "专家抽选")
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

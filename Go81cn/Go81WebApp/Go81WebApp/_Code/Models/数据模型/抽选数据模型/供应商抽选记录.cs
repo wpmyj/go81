@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Go81WebApp.Models.数据模型
 {
-#if INTRANET
+//#if INTRANET
     public class 供应商抽选记录 : 基本数据模型
     {
         public string 操作人姓名 { get; set; }
@@ -65,5 +65,5 @@ namespace Go81WebApp.Models.数据模型
             this.回避供应商列表 = new List<用户链接<供应商>>();
         }
     }
-#endif
+//#endif
 }

@@ -148,20 +148,32 @@
                 <li>
                     <div class="product_add_textarabox">
                         <div class="product_add_toptitle">所属分类</div>
-
                         @if (Model.商品信息.所属商品分类.商品分类.分类性质 == 商品分类性质.专用物资)
                         {
                             <span style="color:black;font-size:13px;">
-                                : @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.分类名
+                                @if (Model.商品信息.所属商品分类.商品分类 != null && Model.商品信息.所属商品分类.商品分类.父分类.商品分类 != null)
+                                {
+                                    <span>: @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.分类名</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.商品信息.所属商品分类.商品分类.分类名</span>
+                                }
                             </span>
                         }
                         else
                         {
                             <span style="color:black;font-size:13px;">
-                                : @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.分类名
+                                @if (Model.商品信息.所属商品分类.商品分类 != null && Model.商品信息.所属商品分类.商品分类.父分类.商品分类 != null && Model.商品信息.所属商品分类.商品分类.父分类.商品分类.父分类.商品分类 != null)
+                                {
+                                    <span>: @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.父分类.商品分类.分类名 > @Model.商品信息.所属商品分类.商品分类.分类名</span>
+                                }
+                                else
+                                {
+                                    <span>@Model.商品信息.所属商品分类.商品分类.分类名</span>
+                                }
                             </span>
                         }
-
                     </div>
                     
                     @if (Model.中标商品)
@@ -241,12 +253,11 @@
                         @Html.ValidationMessageFor(model => model.销售信息.价格)
                     </div>
 
-                    <div class="product_add_textarabox">
+                    @*<div class="product_add_textarabox">
                         <div class="product_add_toptitle">商品简介：</div>
                         @Html.TextAreaFor(model => model.商品数据.商品简介)<span>*</span>
                         @Html.ValidationMessageFor(model => model.商品数据.商品简介)
-                        @*<div class="product_add_textarabox_tipbox">500字(还剩499字)<a href="#" class="product_add_textarabox_tip">参考格式</a></div>*@
-                    </div>
+                    </div>*@
 
                     <div class="product_add_detailbox" style="margin-bottom: 10px;">
                         <div class="product_add_toptitle">商品详情：</div>

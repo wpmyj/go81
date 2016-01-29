@@ -28,7 +28,12 @@
 }
 </style>
 
-<p>@Model.企业基本信息.企业名称 审核进度：</p>
+<p>@Model.企业基本信息.企业名称 审核进度：
+@if (Model.入网审核数据.审核状态 == 审核状态.审核通过)
+{
+    <span style="color:#1f9434;">(已是入网供应商)</span>
+}
+</p>
 <div>
     <div style="display:inline-block;line-height:normal;text-indent:0;vertical-align:middle;text-align:center;position:relative">
         @if(Model.审核数据.审核状态== 审核状态.审核通过)

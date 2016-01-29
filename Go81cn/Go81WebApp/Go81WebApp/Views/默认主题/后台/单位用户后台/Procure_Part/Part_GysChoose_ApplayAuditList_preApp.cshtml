@@ -1,0 +1,76 @@
+﻿@using Go81WebApp.Models.数据模型
+<script src="~/JS/jquery-1.6.min.js"></script>
+<script src="~/JS/applayapp.js" type="text/javascript"></script> 
+<table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <th width="16%">申请人</th>
+        <th width="16%">项目名称</th>
+        <th width="10%">项目编号</th>
+        <th width="17%">评标时间</th>
+        <th width="17%">申请时间</th>
+        <th width="12%">申请状态</th>
+        <th width="12%">操作</th>
+    </tr>
+    @{
+        IEnumerable<供应商抽选记录> basedata = ViewData["供应商抽取待批准列表"] as IEnumerable<供应商抽选记录>;
+        if (basedata != null && basedata.Any())
+        {
+            foreach (var i in basedata)
+            {
+                <tr>
+                    @if (i.经办人 != null && i.经办人.用户数据 != null && i.经办人.用户数据.联系方式 != null && !string.IsNullOrWhiteSpace(i.经办人.用户数据.联系方式.联系人))
+                    {
+                        <td>@i.经办人.用户数据.联系方式.联系人</td>
+                    }
+                    else
+                    {
+                        <td>未填写</td>
+                    }
+                    <td>@i.项目名称</td>
+                    <td>@i.项目编号</td>
+                    <td>@i.评标时间.ToString()</td>
+                    <td>@i.申请时间.ToString()</td>
+                    <td>@i.申请抽选状态</td>
+                    <td class="gys_znxx_content_tabletime">
+                        @Html.ActionLink("查看", "GysChoose_ApplayAuditApp", new { id = i.Id }, new { @class = "btn_target" })|@Html.ActionLink("审核", "GysChoose_ApplayAuditApp", new { id = i.Id }, new { @class = "btn_target" })
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7">暂无相关列表</td>
+            </tr>
+        }
+    }
+</table>
+@if (basedata.Any())
+{
+    <div class="gys_znxx_content_detailbox">
+        @if (int.Parse(ViewData["pre_currentPage"].ToString()) != 1)
+        {
+            <a id="1" onclick="changepre_page(this)">首页</a><a id="@(int.Parse(ViewData["pre_currentPage"].ToString())-1)" onclick="changepre_page(this)">上一页</a>
+        }
+        @for (int i = 0; i <= 10; i++)
+        {                       //一共最多显示10个页码，前面5个，后面5个
+            if ((int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["pre_pagecount"].ToString()))
+            {
+                if (5 == i)
+                {                               //当前页处理
+                    <a style="border:1px solid #ff0000;">@int.Parse(ViewData["pre_currentPage"].ToString())</a>
+                }
+                else
+                {                               //一般页处理
+                    <a id="@(int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5)" onclick="changepre_page(this)">@(int.Parse(ViewData["pre_currentPage"].ToString()) + i - 5)</a>
+
+                }
+            }
+        }
+        @if (int.Parse(ViewData["pre_currentPage"].ToString()) != int.Parse(ViewData["pre_pagecount"].ToString()))
+        {
+            <a id="@(int.Parse(ViewData["pre_currentPage"].ToString())+1)" onclick="changepre_page(this)">下一页</a><a id="@int.Parse(ViewData["pre_pagecount"].ToString())" onclick="changepre_page(this)">末页</a>
+        }
+        <span style="font-size:12px;">第@(ViewData["pre_currentPage"])页/共@(ViewData["pre_pagecount"])页</span>
+    </div>
+}

@@ -1,0 +1,365 @@
+﻿@{
+    Layout = "HotelLayout.cshtml";
+    ViewBag.Title = "酒店列详情";
+}
+<link href="~/css/hotel.css" rel="stylesheet" />
+<style>
+    ul.selectionCondition {
+        border: none;
+    }
+    table.houseInfo tr td{
+        border-bottom: 1px solid #ccc;
+    }
+</style>
+<script type="text/javascript" src="http://api.map.baidu.com/api?key=&v=1.2&services=true"></script>
+<div style="width:auto;margin-top:30px;background-color:#F3F1F1;">
+    <div style="background-color: #fff;">
+        <div class="hotelleftbox">
+            <div class="hotelimgbox">
+                <img src="/Images/hotelinfo.jpg" style="width:480px;height:320px;" />
+            </div>
+            <div class="moreimg">
+                <ul class="selectionCondition" style="margin:10px 0px;">
+                    <li><img src="/Images/hotel1.jpg" style="width:114px;height:70px;" /></li>
+                    <li><img src="/Images/hotel1.jpg" style="width:114px;height:70px;" /></li>
+                    <li><img src="/Images/hotel1.jpg" style="width:114px;height:70px;" /></li>
+                    <li><img src="/Images/hotel1.jpg" style="width:114px;height:70px;" /></li>
+                </ul>
+            </div>
+        </div>
+        <div class="hotelrightbox">
+            <div class="address">[杜甫草堂地区]锦江之星成都杜甫草堂店</div>
+            <div class="addressDetail">成都市青羊区百花西路17号</div>
+            <div class="addressDetail" style="margin:20px 0px;">
+                <span class="pricepic">¥</span><span class="hotelprice">200</span><span class="pricepic">起</span>
+            </div>
+            <div class="latestComment">最新评论：“酒店离青羊宫很近。是在一个小院子里。非常清静。住过很多次锦江之星。这次是最划算的。只要100元。性价比高到令人发指。房间宽敞，干净，舒适。前台小姐服务态度很好。非常满意！”</div>
+        </div>
+        <div class="clearbox"></div>
+    </div>
+    <div class="roomType">
+        <div class="headTab">
+            <ul class="selectionCondition">
+                <li><a class="taber" onclick="showinfo(this,0)" style="background-color:#1ba9ba;color:#ffffff;">房型信息</a></li>
+                <li><a class="taber" onclick="showinfo(this,1)">酒店设施</a></li>
+                <li><a class="taber" onclick="showinfo(this,2)">交通位置</a></li>
+                <li><a class="taber" onclick="showinfo(this,3)">顾客点评</a></li>
+            </ul>
+        </div>
+        <div class="tabinfo" style="display:block;">
+            <table class="houseInfo" cellpadding="0" cellspacing="0">
+                <tr style="background-color:#eaf8fa;">
+                    <td width="25%">房型信息</td>
+                    <td width="10%">有无窗</td>
+                    <td width="10%">早餐</td>
+                    <td width="25%">有效期</td>
+                    <td width="30%">价格</td>
+                </tr>
+                <tr>
+                    <td class="housetd">
+                        <div class="itembox">
+                            <div class="itemboxleft">
+                                <div>商务房A</div>
+                                <div>
+                                    <img src="/Images/hotel1.jpg" style="width:100px;height:50px;" />
+                                </div>
+                            </div>
+                            <div class="itemboxright">
+                                <div style="height:30px;"></div>
+                                <i class="facility" style=" background-position: -36px -27px;"></i>
+                                <i class="facility" style=" background-position:-70px -27px"></i>
+                                <i class="facility" style=" background-position:-3px -50px"></i>
+                                <i class="facility" style=" background-position:-36px -49px"></i>
+                                <i class="facility" style=" background-position:-70px -50px"></i>
+                            </div>
+                            <div class="clearbox"></div>
+                        </div>
+                    </td>
+                    <td class="housetd">2个窗户</td>
+                    <td class="housetd">无早餐</td>
+                    <td class="housetd">2015.12.10至2016.1.5</td>
+                    <td class="housetd" style="border-right:none;">
+                        <div class="itembox">
+                            <div class="itemboxleft">
+                                <span class="pricepic">¥</span><span class="hotelprice">200</span>
+                            </div>
+                            <div class="itemboxright">
+                                <a class="Buyaction" href="/机票酒店/PayForHouse" target="_blank">立即订购</a>
+                            </div>
+                            <div class="clearbox"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="housetd">
+                        <div class="itembox">
+                            <div class="itemboxleft">
+                                <div>商务房A</div>
+                                <div>
+                                    <img src="/Images/hotel1.jpg" style="width:100px;height:50px;" />
+                                </div>
+                            </div>
+                            <div class="itemboxright">
+                                <div style="height:30px;"></div>
+                                <i class="facility" style=" background-position: -36px -27px;"></i>
+                                <i class="facility" style=" background-position:-70px -27px"></i>
+                                <i class="facility" style=" background-position:-3px -50px"></i>
+                                <i class="facility" style=" background-position:-36px -49px"></i>
+                                <i class="facility" style=" background-position:-70px -50px"></i>
+                            </div>
+                            <div class="clearbox"></div>
+                        </div>
+                    </td>
+                    <td class="housetd">2个窗户</td>
+                    <td class="housetd">无早餐</td>
+                    <td class="housetd">2015.12.10至2016.1.5</td>
+                    <td class="housetd" style="border-right:none;">
+                        <div class="itembox">
+                            <div class="itemboxleft">
+                                <span class="pricepic">¥</span><span class="hotelprice">200</span>
+                            </div>
+                            <div class="itemboxright">
+                                <a class="Buyaction" href="/机票酒店/PayForHouse" target="_blank">立即订购</a>
+                            </div>
+                            <div class="clearbox"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="housetd">
+                        <div class="itembox">
+                            <div class="itemboxleft">
+                                <div>商务房A</div>
+                                <div>
+                                    <img src="/Images/hotel1.jpg" style="width:100px;height:50px;" />
+                                </div>
+                            </div>
+                            <div class="itemboxright">
+                                <div style="height:30px;"></div>
+                                <i class="facility" style=" background-position: -36px -27px;"></i>
+                                <i class="facility" style=" background-position:-70px -27px"></i>
+                                <i class="facility" style=" background-position:-3px -50px"></i>
+                                <i class="facility" style=" background-position:-36px -49px"></i>
+                                <i class="facility" style=" background-position:-70px -50px"></i>
+                            </div>
+                            <div class="clearbox"></div>
+                        </div>
+                    </td>
+                    <td class="housetd">2个窗户</td>
+                    <td class="housetd">无早餐</td>
+                    <td class="housetd">2015.12.10至2016.1.5</td>
+                    <td class="housetd" style="border-right:none;">
+                        <div class="itembox">
+                            <div class="itemboxleft">
+                                <span class="pricepic">¥</span><span class="hotelprice">200</span>
+                            </div>
+                            <div class="itemboxright">
+                                <a class="Buyaction" href="/机票酒店/PayForHouse" target="_blank">立即订购</a>
+                            </div>
+                            <div class="clearbox"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="housetd">
+                        <div class="itembox">
+                            <div class="itemboxleft">
+                                <div>商务房A</div>
+                                <div>
+                                    <img src="/Images/hotel1.jpg" style="width:100px;height:50px;" />
+                                </div>
+                            </div>
+                            <div class="itemboxright">
+                                <div style="height:30px;"></div>
+                                <i class="facility" style=" background-position: -36px -27px;"></i>
+                                <i class="facility" style=" background-position:-70px -27px"></i>
+                                <i class="facility" style=" background-position:-3px -50px"></i>
+                                <i class="facility" style=" background-position:-36px -49px"></i>
+                                <i class="facility" style=" background-position:-70px -50px"></i>
+                            </div>
+                            <div class="clearbox"></div>
+                        </div>
+                    </td>
+                    <td class="housetd">2个窗户</td>
+                    <td class="housetd">无早餐</td>
+                    <td class="housetd">2015.12.10至2016.1.5</td>
+                    <td class="housetd" style="border-right:none;">
+                        <div class="itembox">
+                            <div class="itemboxleft">
+                                <span class="pricepic">¥</span><span class="hotelprice">200</span>
+                            </div>
+                            <div class="itemboxright">
+                                <a class="Buyaction" href="/机票酒店/PayForHouse" target="_blank">立即订购</a>
+                            </div>
+                            <div class="clearbox"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="housetd">
+                        <div class="itembox">
+                            <div class="itemboxleft">
+                                <div>商务房A</div>
+                                <div>
+                                    <img src="/Images/hotel1.jpg" style="width:100px;height:50px;" />
+                                </div>
+                            </div>
+                            <div class="itemboxright">
+                                <div style="height:30px;"></div>
+                                <i class="facility" style=" background-position: -36px -27px;"></i>
+                                <i class="facility" style=" background-position:-70px -27px"></i>
+                                <i class="facility" style=" background-position:-3px -50px"></i>
+                                <i class="facility" style=" background-position:-36px -49px"></i>
+                                <i class="facility" style=" background-position:-70px -50px"></i>
+                            </div>
+                            <div class="clearbox"></div>
+                        </div>
+                    </td>
+                    <td class="housetd">2个窗户</td>
+                    <td class="housetd">无早餐</td>
+                    <td class="housetd">2015.12.10至2016.1.5</td>
+                    <td class="housetd" style="border-right:none;">
+                        <div class="itembox">
+                            <div class="itemboxleft">
+                                <span class="pricepic">¥</span><span class="hotelprice">200</span>
+                            </div>
+                            <div class="itemboxright">
+                                <a class="Buyaction" href="/机票酒店/PayForHouse" target="_blank">立即订购</a>
+                            </div>
+                            <div class="clearbox"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="tabinfo">
+            <div class="facilityDiscription">
+                <table class="houseInfo" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="20%" align="center" valign="top">联系方式</td>
+                        <td width="80%" align="left" valign="top">电话：028-86675858</td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">基本信息</td>
+                        <td align="left" valign="top">连锁品牌 2013年开业 2013年装修 84间客房</td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">酒店简介</td>
+                        <td align="left" valign="top">锦江之星（成都杜甫草堂店）地处成都市风水宝地——浣花溪，坐拥浣花溪、百花潭及文化公园，环境非常幽美怡人。步行5分钟即到著名的旅游景点杜甫草堂、四川博物馆及川西第一道观“青羊宫”；5--10分钟车程即到武侯祠、锦里、宽窄巷子、金沙遗址等标志性景点及天府广场、春熙路、盐市口等商业中心。 酒店周边聚集四川多所知名学府及医疗机构：西南财经大学、成都体育学院、成都中医药大学和四川电力职业技术学院及四川省人民医院、成都中医药大学和四川骨科医院等近在咫尺。酒店毗邻的公交百花中心站及地铁2号线，出行经济方便。 酒店特色：酒店物业为独立四合院，环境优雅，夜间几乎“零噪音”；独有的露天平台。让您即刻体验“慢成都、最休闲”；锦江之星4代客房产品，保证舒适的住宿环境。 美味休闲：火锅代表“蜀九香”、川菜代表“晶泽印象私房菜”及“随和家宴”、各类街边小吃地道滋味；芳邻路及少陵路人气酒吧街，送仙桥古玩市场，让您切实感受成都“闲滋味”。 商务功能：市话全免费、传真、光纤宽带、快递服务、自助早餐及特色商务套餐、多功能会议室。 酒店提供免费公交卡及自行车让您的出行更简单，酒店专用停车场，24小时专人值守。 慢成都、最休闲，但杜甫依然很忙！</td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">停车场</td>
+                        <td align="left" valign="top"><div class="itemIcon"></div>酒店提供停车位</td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">房间设施</td>
+                        <td align="left" valign="top">
+                            <div class="facilityitem"><div class="itemIcon"></div>宽带上网</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>免费市内电话</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>空调</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>国际长途电话</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>免费国内长途电话</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>吹风机</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>24小时热水</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>暖气</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">酒店服务</td>
+                        <td align="left" valign="top">
+                            <div class="facilityitem"><div class="itemIcon"></div>早餐服务</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>接站服务</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>接机服务</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>接待外宾</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>洗衣服务</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>行李寄存</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>看护小孩服务</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>租车</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>携带宠物</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>叫醒服务</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">酒店设施</td>
+                        <td align="left" valign="top">
+                            <div class="facilityitem"><div class="itemIcon"></div>西式餐厅</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>中式餐厅</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>残疾人设施</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>室外游泳池</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>室内游泳池</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>会议室</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>健身房</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>SPA</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>无烟房</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>商务中心</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>酒吧</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>桑拿</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>温泉</div>
+                            <div class="facilityitem"><div class="itemIcon"></div>棋牌室</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="tabinfo">
+            <div class="mapContainer">
+                <div class="locationLeft">
+                    <div class="address">[杜甫草堂地区]锦江之星成都杜甫草堂店</div>
+                    <div class="addressDetail">成都市青羊区百花西路17号</div>
+                </div>
+                <div class="locationRight">
+                    <div id="allmap"></div>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+        </div>
+        <div class="tabinfo">
+            <div class="commentTitle">环境很好</div>
+            <div class="commentContent">
+                酒店离青羊宫很近。是在一个小院子里。非常清静。住过很多次锦江之星。这次是最划算的。只要100元。性价比高到令人发指。房间宽敞，干净，舒适。前台小姐服务态度很好。非常满意！
+            </div>
+            <div class="commentTitle">环境很好</div>
+            <div class="commentContent">
+                酒店离青羊宫很近。是在一个小院子里。非常清静。住过很多次锦江之星。这次是最划算的。只要100元。性价比高到令人发指。房间宽敞，干净，舒适。前台小姐服务态度很好。非常满意！
+            </div>
+            <div class="commentTitle">环境很好</div>
+            <div class="commentContent">
+                酒店离青羊宫很近。是在一个小院子里。非常清静。住过很多次锦江之星。这次是最划算的。只要100元。性价比高到令人发指。房间宽敞，干净，舒适。前台小姐服务态度很好。非常满意！
+            </div>
+            <div class="commentTitle">环境很好</div>
+            <div class="commentContent">
+                酒店离青羊宫很近。是在一个小院子里。非常清静。住过很多次锦江之星。这次是最划算的。只要100元。性价比高到令人发指。房间宽敞，干净，舒适。前台小姐服务态度很好。非常满意！
+            </div>
+            <div class="commentTitle">环境很好</div>
+            <div class="commentContent">
+                酒店离青羊宫很近。是在一个小院子里。非常清静。住过很多次锦江之星。这次是最划算的。只要100元。性价比高到令人发指。房间宽敞，干净，舒适。前台小姐服务态度很好。非常满意！
+            </div>
+            <div class="commentTitle">环境很好</div>
+            <div class="commentContent">
+                酒店离青羊宫很近。是在一个小院子里。非常清静。住过很多次锦江之星。这次是最划算的。只要100元。性价比高到令人发指。房间宽敞，干净，舒适。前台小姐服务态度很好。非常满意！
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function showinfo(th, index) {
+        $(".taber").css({ "background-color": "#fff", "color": "#666" });
+        $(".tabinfo").hide();
+        $(th).css({ "background-color": "#1ba9ba", "color": "#fff" });
+        $(".tabinfo:eq(" + index + ")").show();
+        if (index=="2") {
+            showMap();
+        }
+    }
+    function showMap() {
+        // 百度地图API功能
+        var map = new BMap.Map("allmap");    // 创建Map实例
+        map.centerAndZoom(new BMap.Point(104.06, 30.67), 10);  // 初始化地图,设置中心点坐标和地图级别
+        map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+        map.setCurrentCity("成都");          // 设置地图显示的城市 此项是必须设置的
+        map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+        var marker = new BMap.Marker(new BMap.Point(104.06, 30.67));
+        map.addOverlay(marker);
+    }
+   
+</script>

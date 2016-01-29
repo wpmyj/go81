@@ -80,6 +80,13 @@ namespace Go81WebApp.Controllers.后台
         {
             return View();
         }
+
+
+        public ActionResult Error()
+        {
+            return View();
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateInput(false)]
@@ -550,6 +557,7 @@ namespace Go81WebApp.Controllers.后台
         {
             public string name { get; set; }
             public string time { get; set; }
+            public string unit { get; set; }
             public long id { get; set; }
         }
         public class ysd
@@ -667,6 +675,7 @@ namespace Go81WebApp.Controllers.后台
                 c.id = item.Id;
                 c.name = item.内容主体.标题;
                 c.time = item.基本数据.添加时间.ToString("yyyy/MM/dd");
+                c.unit = item.公告信息.需求单位;
                 ct.Add(c);
             }
             JsonResult json = new JsonResult() { Data = new { info = ct, p = pageCount } };
@@ -742,6 +751,7 @@ namespace Go81WebApp.Controllers.后台
                     Content c = new Content();
                     c.id = item.Id;
                     c.name = item.内容主体.标题;
+                    c.unit = item.公告信息.需求单位;
                     c.time = item.基本数据.添加时间.ToString("yyyy/MM/dd");
                     ct.Add(c);
                 }
@@ -796,6 +806,7 @@ namespace Go81WebApp.Controllers.后台
                     Content c = new Content();
                     c.id = item.Id;
                     c.name = item.内容主体.标题;
+                    c.unit = item.公告信息.需求单位;
                     c.time = item.基本数据.添加时间.ToString("yyyy/MM/dd");
                     ct1.Add(c);
                 }
@@ -10350,6 +10361,11 @@ namespace Go81WebApp.Controllers.后台
             catch
             {
             }
+        }
+
+        public ActionResult ApplayHome()
+        {
+            return View();
         }
 
         public static bool GetQRCode(string strContent, MemoryStream ms)

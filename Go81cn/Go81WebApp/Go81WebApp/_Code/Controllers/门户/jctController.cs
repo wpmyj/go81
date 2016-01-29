@@ -881,7 +881,7 @@ namespace Go81WebApp._Code.Controllers.门户
             sParaTemp.Add("subject", subject);
             sParaTemp.Add("total_fee", total_fee);
             sParaTemp.Add("body", body);
-
+            
             //建立请求
             string sHtmlText = Submit.BuildRequest(sParaTemp, "get", "确认");
             Response.Write(sHtmlText);

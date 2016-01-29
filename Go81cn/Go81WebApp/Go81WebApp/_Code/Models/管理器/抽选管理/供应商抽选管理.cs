@@ -11,7 +11,7 @@ using System.Web;
 
 namespace Go81WebApp.Models.管理器.抽选管理
 {
-#if INTRANET
+//#if INTRANET
     public class 供应商抽选管理
     {
         public static List<供应商> 抽选供应商(int count, IMongoQuery conditions, IEnumerable<long> selected, IEnumerable<long> avoid)
@@ -72,5 +72,5 @@ namespace Go81WebApp.Models.管理器.抽选管理
             return Mongo.更新(p);
         }
     }
-#endif
+//#endif
 }

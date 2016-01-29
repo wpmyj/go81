@@ -673,12 +673,12 @@
     </div>
 
 
-    <div class="title-base-out">
+    <div class="title-base-out" style="margin-bottom:10px;width:1000px;">
         <div class="title-base-middle">
             <div class="title-base-inner">申请抽取评审专家</div>
         </div>
     </div>
-    <div class="gys_znxx_box">
+    <div class="gys_znxx_box" style="width:1000px;border:none;">
         <div class="gys_znxx_contentbox">
             <div class="gys_znxx_content">
                 <div class="expert_condition">
@@ -723,8 +723,8 @@
 
 
                             @*<div class="expert_condition_innerrightlist" style="margin-top:10px; height: 20px;">
-                                    <span class="tipmessage" id="toptipmessage"></span>
-                                </div>*@
+                        <span class="tipmessage" id="toptipmessage"></span>
+                    </div>*@
                         </div>
                     </div>
 
@@ -789,7 +789,7 @@
                                                     }
                                                 }
                                             </div>
-                                            
+
                                             <div class="expert_condition_innerrightlist" style="margin-top:10px; width: 660px;height: 36px; line-height: 36px;">
                                                 <div class="expert_condition_innerrightlist_title">专家级别</div>
                                                 @foreach (var a in (Dictionary<string, int>)ViewData["专家级别"])
@@ -892,7 +892,7 @@
                                             <div style="width:150px;text-align:right; float:left; font-weight:bold">专家类别：</div>
                                             <div id="detailconition3" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
                                         </div>
-                                        
+
                                         <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
                                             <div style="width:150px;text-align:right; float:left; font-weight:bold">专家级别：</div>
                                             <div id="detailconition4" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
@@ -1002,7 +1002,7 @@
                             var leixing = "";
                             var xueli = "";
                             var xuewei = "";
-                           
+
 
                             var thiscount = $("#list").find("input[name='专家类别']:checked").length;
                             if (thiscount != 2 && thiscount != 0) {
@@ -1102,7 +1102,7 @@
                                 var leixing = "";
                                 var xueli = "";
                                 var xuewei = "";
-                              
+
                                 var thiscount = $("#list").find("input[name='专家类别']:checked").length;
                                 if (thiscount != 2 && thiscount != 0) {
                                     $("#list").find("input[name='专家类别']:checked").each(function () {
@@ -1305,6 +1305,9 @@
                         <input type="submit" value="提交本次申请" style="width:100px; height:30px; float:right;" onclick="return checkform()" />
                     </div>
                 </div>
+
+
+
 
 
                 <script type="text/javascript">

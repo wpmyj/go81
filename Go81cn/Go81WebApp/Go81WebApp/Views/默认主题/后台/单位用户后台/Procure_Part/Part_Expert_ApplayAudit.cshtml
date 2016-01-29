@@ -143,6 +143,7 @@
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
+    @Html.HiddenFor(m => m.Id)
     <div class="title-base-out">
         <div class="title-base-middle">
             <div class="title-base-inner">审核评审专家抽取申请</div>

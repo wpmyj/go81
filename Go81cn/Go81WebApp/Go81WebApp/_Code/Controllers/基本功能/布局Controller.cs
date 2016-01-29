@@ -189,11 +189,11 @@ namespace Go81WebApp.Controllers.基本功能
                   }
                 },
                 {
-                "申请表下载与打印", new Dictionary<string, object>
+                "申请表打印", new Dictionary<string, object>
                 {
                     {"打印须知","专家后台/NoticeAboutApply"},
                     {"在线打印","专家后台/Print"},
-                    {"下载表格","专家后台/Download"}
+                    //{"下载表格","专家后台/Download"}
                   }
                 },
             };
@@ -219,11 +219,11 @@ namespace Go81WebApp.Controllers.基本功能
                     }
                 },
                 {
-                    "申请表下载与打印", new Dictionary<string, object>
+                    "申请表打印", new Dictionary<string, object>
                     {
                         {"打印须知","专家后台/NoticeAboutApply"},
                         {"在线打印","专家后台/Print"},
-                        {"下载表格","专家后台/Download"}
+                        //{"下载表格","专家后台/Download"}
                     }
                 },
             };
@@ -497,6 +497,42 @@ namespace Go81WebApp.Controllers.基本功能
                     }
                 },
                 {
+                    "企业入网信息管理", new Dictionary<string, object>
+                    {
+                        {"入网信息管理", "供应商后台/Modify_Supplier_Info"},
+                    }
+                },
+                {
+                    "企业入库信息管理", new Dictionary<string, object>
+                    {
+                        {"联系人信息", "供应商后台/Vip_Manage"},
+                        {"企业基本信息", "供应商后台/Gys_Manage"},
+                        {"法定代表人信息", "供应商后台/Law_Person"},
+                        {"营业信息", "供应商后台/Gys_Sales_Manage"},
+                        {"资质证书信息", "供应商后台/Qualify_Management"},
+                        {"售后服务机构信息", "供应商后台/Service_Management"},
+                        {"出资人信息", "供应商后台/Investor_Management"},
+                        {"财务信息", "供应商后台/Gys_Financial_Manage"},
+                        {"税务信息", "供应商后台/Tax_Management"},
+                        {"招投标经历", "供应商后台/Toubiao"},
+                        //{
+                          //  "地理位置", "供应商后台/Location"
+                       // },
+                        {"提交预审", "供应商后台/SubmitAndCheck"},
+                        {"打印资料",new Dictionary<string,object> {
+                        {"打印申请表","供应商后台/Print_Detail"},
+                        {"打印须知","供应商后台/NoticeAboutApply"}
+                        }},
+                    }
+                },
+                {
+                    "商品管理", new Dictionary<string, object>
+                    {
+                        {"可提供商品类别", "供应商后台/Gys_Product_Type"},
+                        {"商品列表","供应商后台/Gys_Product_List"},
+                    }
+                },
+                {
                     "消息管理", new Dictionary<string, object>
                     {
                         {"系统通知", "供应商后台/Gys_Xttz"},
@@ -550,17 +586,17 @@ namespace Go81WebApp.Controllers.基本功能
                         {"已上传验收单", "供应商后台/ProjectService_List"},
                         {"验收单管理流程", "通知/NoticeDetail?id=32"},
                     });
-                    m.Add("商品管理", new Dictionary<string, object>
-                    {
-                        {
-                            "我的商品库",new Dictionary<string,object>
-                            {
-                                {"商品列表","供应商后台/Gys_Product_List"},
-                                //{"添加新商品" , "供应商后台/Gys_Product_AddStep1"},
-                                //{"可提供商品类别", "供应商后台/Gys_Product_Type"}
-                            }
-                        },
-                    });
+                    //m.Add("商品管理", new Dictionary<string, object>
+                    //{
+                    //    {
+                    //        "我的商品库",new Dictionary<string,object>
+                    //        {
+                    //            {"商品列表","供应商后台/Gys_Product_List"},
+                    //            //{"添加新商品" , "供应商后台/Gys_Product_AddStep1"},
+                    //            //{"可提供商品类别", "供应商后台/Gys_Product_Type"}
+                    //        }
+                    //    },
+                    //});
                     break;
                 case 供应商.供应商细分类型.酒店:
                     m.Add("酒店管理", new Dictionary<string, object>(){
@@ -589,28 +625,28 @@ namespace Go81WebApp.Controllers.基本功能
                     });
                     break;
             }
-            m.Add("企业信息管理", k = new Dictionary<string, object>
-                    {
-                        {"联系人信息", "供应商后台/Vip_Manage"},
-                        {"企业基本信息", "供应商后台/Gys_Manage"},
-                        {"法定代表人信息", "供应商后台/Law_Person"},
-                        {"营业信息", "供应商后台/Gys_Sales_Manage"},
-                        {"资质证书信息", "供应商后台/Qualify_Management"},
-                        {"售后服务机构信息", "供应商后台/Service_Management"},
-                        {"出资人信息", "供应商后台/Investor_Management"},
-                        {"财务信息", "供应商后台/Gys_Financial_Manage"},
-                        {"税务信息", "供应商后台/Tax_Management"},
-                        {"招投标经历", "供应商后台/Toubiao"},
-                        //{
-                          //  "地理位置", "供应商后台/Location"
-                       // },
-                        {"可提供商品类别", "供应商后台/Gys_Product_Type"},
-                        {"提交预审", "供应商后台/SubmitAndCheck"},
-                        {"打印资料",new Dictionary<string,object> {
-                        {"打印申请表","供应商后台/Print_Detail"},
-                        {"打印须知","供应商后台/NoticeAboutApply"}
-                        }},
-                    });
+            //m.Add("企业入库信息管理", k = new Dictionary<string, object>
+            //        {
+            //            {"联系人信息", "供应商后台/Vip_Manage"},
+            //            {"企业基本信息", "供应商后台/Gys_Manage"},
+            //            {"法定代表人信息", "供应商后台/Law_Person"},
+            //            {"营业信息", "供应商后台/Gys_Sales_Manage"},
+            //            {"资质证书信息", "供应商后台/Qualify_Management"},
+            //            {"售后服务机构信息", "供应商后台/Service_Management"},
+            //            {"出资人信息", "供应商后台/Investor_Management"},
+            //            {"财务信息", "供应商后台/Gys_Financial_Manage"},
+            //            {"税务信息", "供应商后台/Tax_Management"},
+            //            {"招投标经历", "供应商后台/Toubiao"},
+            //            //{
+            //              //  "地理位置", "供应商后台/Location"
+            //           // },
+            //            {"可提供商品类别", "供应商后台/Gys_Product_Type"},
+            //            {"提交预审", "供应商后台/SubmitAndCheck"},
+            //            {"打印资料",new Dictionary<string,object> {
+            //            {"打印申请表","供应商后台/Print_Detail"},
+            //            {"打印须知","供应商后台/NoticeAboutApply"}
+            //            }},
+            //        });
             //m.Add("招标采购预报名", k = new Dictionary<string, object>
             //        {
             //            {"我的预报名", "供应商后台/gys_enroll?page=1"},
@@ -742,7 +778,7 @@ namespace Go81WebApp.Controllers.基本功能
                     {"未审核的附属账号", new Tuple<权限[], bool>(new[]{权限.未审核的附属账号}, false)}, 
                     {"已审核的附属账号", new Tuple<权限[], bool>(new[]{权限.已审核的附属账号}, false)}, 
                     {"全部附属账号列表", new Tuple<权限[], bool>(new[]{权限.全部附属账号列表}, false)}, 
-                    {"全部附属账号的采购公告列表", new Tuple<权限[], bool>(new[]{权限.全部附属账号的采购公告列表}, false)}, 
+                    {"附属账号的采购公告与验收单", new Tuple<权限[], bool>(new[]{权限.全部附属账号的采购公告列表}, false)}, 
                     {"全部附属账号的验收单列表", new Tuple<权限[], bool>(new[]{权限.全部附属账号的验收单列表}, false)}, 
 
                     {"修改登录密码", new Tuple<权限[], bool>(new[]{权限.修改登录密码}, false)}, 
@@ -870,7 +906,7 @@ namespace Go81WebApp.Controllers.基本功能
                     //},
                 };
 #if INTRANET
-                m.Add("评审专家抽取系统", new Dictionary<string, object>
+                m.Add("在库评审专家抽取系统", new Dictionary<string, object>
                         {
                             
                             //{"评审专家列表", "专家抽选/Expert_list"},
@@ -881,14 +917,14 @@ namespace Go81WebApp.Controllers.基本功能
                             {"全部抽取记录列表", "专家抽选/Expert_History"},
                         });
 #endif
-                //m.Add("在库供应商抽取系统", new Dictionary<string, object>
-                //{
-                //    {"新增抽取申请", "专家抽选/GysChoose_Applay"},
-                //    {"我可进行的抽取申请", "专家抽选/GysChoose_Applay_S"},//包含历史我的历史抽取记录
-                //    {"我已完成的抽取申请", "专家抽选/GysChoose_Applay_S"},//包含历史我的历史抽取记录
-                //    {"我可审核的抽取申请", "专家抽选/GysChoose_ApplayAuditList"},
-                //    {"全部抽取记录列表", "专家抽选/GysChoose_HistoryList"},
-                //});
+                m.Add("在库供应商抽取系统", new Dictionary<string, object>
+                {
+                    {"新增抽取申请", "专家抽选/GysChoose_Applay"},
+                    {"我可进行的抽取申请", "专家抽选/GysChoose_Applay_S"},//包含历史我的历史抽取记录
+                    {"我已完成的抽取申请", "专家抽选/GysChoose_Applay_S"},//包含历史我的历史抽取记录
+                    {"我可审核的抽取申请", "专家抽选/GysChoose_ApplayAuditList"},
+                    {"全部抽取记录列表", "专家抽选/GysChoose_HistoryList"},
+                });
 
                 //m.Add("评审专家入库管理", new Dictionary<string, object>
                 //{
@@ -918,21 +954,28 @@ namespace Go81WebApp.Controllers.基本功能
                         //{"审核推荐的评审专家", "单位用户后台/Recommend_ExpertList_Audit"},
                         //{"打印已审核推荐的评审专家", "单位用户后台/Print_Expert"},
                     });
-#if DEBUG
-                m.Add("附属帐号管理", new Dictionary<string, object>
+                if (!WebApiApplication.IsDebug)
+                {
+                    if (HttpContext.获取当前用户<单位用户>().Id == 10)
+                    {
+                        //#if DEBUG
+                        m.Add("附属帐号管理", new Dictionary<string, object>
                         {
-                        {"新增附属账号",new Dictionary<string,object>
+                        /*{"新增附属账号",new Dictionary<string,object>
                          {
                                 {"新建附属账号", "单位用户后台/DepartmentAdd"},
                                 {"未审核的附属账号", "单位用户后台/DepartmentAuditList"},
                                 {"已审核的附属账号", "单位用户后台/DepartmentList"},
                         }
-                        },
-                        {"全部附属账号列表", "单位用户后台/Print_UserList"}, 
-                        {"全部附属账号的采购公告列表", "单位用户后台/SubUnit_Manage?comes=ad"}, 
-                        {"全部附属账号的验收单列表", "单位用户后台/SubUnit_Manage?comes=ysd"},
+                        },*/
+                        //{"全部附属账号列表", "单位用户后台/Print_UserList"}, 
+                        {"附属账号的采购公告与验收单", "单位用户后台/SubUnit_Manage?comes=ad"}, 
+                        //{"全部附属账号的验收单列表", "单位用户后台/SubUnit_Manage?comes=ysd"},
                     });
-#endif
+                        //#endif
+                    }
+                    
+                }
 #if INTRANET
                 m.Add("本账号信息/维护", new Dictionary<string, object>
                     {

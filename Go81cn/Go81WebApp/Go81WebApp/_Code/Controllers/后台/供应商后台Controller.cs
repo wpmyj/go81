@@ -22,6 +22,7 @@ using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.PanGu;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
+using Microsoft.Ajax.Utilities;
 using MongoDB;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -131,7 +132,7 @@ namespace Go81WebApp.Controllers.后台
             }
             if (status == "1")
             {
-                long pc = 订单管理.计数订单(0, 0, Query<订单>.Where(m =>m.已付款 == true));
+                long pc = 订单管理.计数订单(0, 0, Query<订单>.Where(m => m.已付款 == true));
                 pgCount = pc / 2;
                 if (pc % 2 > 0)
                 {
@@ -139,12 +140,12 @@ namespace Go81WebApp.Controllers.后台
                 }
                 ViewData["Pagecount"] = pgCount;
                 ViewData["CurrentPage"] = cpg;
-                IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2, Query<订单>.Where(m =>m.已付款 == true));
+                IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2, Query<订单>.Where(m => m.已付款 == true));
                 return View(orders);
             }
             else if (status == "0")
             {
-                long pc = 订单管理.计数订单(0, 0, Query<订单>.Where(m =>m.已付款 == false));
+                long pc = 订单管理.计数订单(0, 0, Query<订单>.Where(m => m.已付款 == false));
                 pgCount = pc / 2;
                 if (pc % 2 > 0)
                 {
@@ -152,7 +153,7 @@ namespace Go81WebApp.Controllers.后台
                 }
                 ViewData["Pagecount"] = pgCount;
                 ViewData["CurrentPage"] = cpg;
-                IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2, Query<订单>.Where(m =>m.已付款 == false));
+                IEnumerable<订单> orders = 订单管理.查询订单(2 * (cpg - 1), 2, Query<订单>.Where(m => m.已付款 == false));
                 return View(orders);
             }
             else
@@ -181,7 +182,7 @@ namespace Go81WebApp.Controllers.后台
                     code = Request.Form["yhm"];
                 }
                 string[] ids = Request.Form["gId"].ToString().Split('|');
-                if(!string.IsNullOrWhiteSpace(code))
+                if (!string.IsNullOrWhiteSpace(code))
                 {
                     订单 order = 订单管理.查找订单(id);
                     foreach (var item in order.商品订单列表)
@@ -192,7 +193,7 @@ namespace Go81WebApp.Controllers.后台
                             {
                                 item.已发货 = true;
                                 item.发货时间 = DateTime.Now;
-                                item.运单号 =code;
+                                item.运单号 = code;
                             }
                         }
                     }
@@ -242,7 +243,7 @@ namespace Go81WebApp.Controllers.后台
             int xjorderCount = 0;//确认订单数量
             foreach (var item in xjModel)
             {
-                if (item.采购单位.用户数据!=null&&item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id && o.议价 != 0 && o.回复价格 == 0 && o.交易状态 == false).Count() != 0)
+                if (item.采购单位.用户数据 != null && item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id && o.议价 != 0 && o.回复价格 == 0 && o.交易状态 == false).Count() != 0)
                 {
                     xjCount++;
                 }
@@ -365,9 +366,9 @@ namespace Go81WebApp.Controllers.后台
         {
             IEnumerable<询价采购> model = 询价采购管理.查询询价采购(0, 10);
             List<询价采购> newmodel = new List<询价采购>();
-            foreach(var item in model)
+            foreach (var item in model)
             {
-                if(item.议价列表.Where(m=>m.供应商.用户ID==currentUser.Id).Count()!=0)
+                if (item.议价列表.Where(m => m.供应商.用户ID == currentUser.Id).Count() != 0)
                 {
                     newmodel.Add(item);
                 }
@@ -382,7 +383,7 @@ namespace Go81WebApp.Controllers.后台
                 long id = long.Parse(Request.QueryString["id"]);
                 询价采购 model = 询价采购管理.查找询价采购(id);
                 ViewData["id"] = currentUser.Id;
-                if(model==null)
+                if (model == null)
                 {
                     return Redirect("/供应商后台/ConsultList");
                 }
@@ -393,19 +394,69 @@ namespace Go81WebApp.Controllers.后台
                 return Redirect("/供应商后台/ConsultList");
             }
         }
+        public ActionResult Modify_Supplier_Info()
+        {
+            try
+            {
+                ViewData["行业列表"] = 商品分类管理.查找子分类();
+                供应商 model = 用户管理.查找用户<供应商>(currentUser.Id);
+                if (model == null)
+                {
+                    return Redirect("/供应商后台/");
+                }
+                return View(model);
+            }
+            catch
+            {
+                return Redirect("/供应商后台/");
+            }
+        }
+        [HttpPost]
+        public ActionResult Modify_SupplierInfo(供应商 model)
+        {
+            供应商 Newmodel = 用户管理.查找用户<供应商>(model.Id);
+            Newmodel.企业基本信息.企业名称 = model.企业基本信息.企业名称;
+            Newmodel.企业基本信息.英文名称 = model.企业基本信息.英文名称;
+            Newmodel.企业基本信息.简称 = model.企业基本信息.简称;
+            Newmodel.企业基本信息.注册地址 = model.企业基本信息.注册地址;
+            Newmodel.企业基本信息.邮政编码 = model.企业基本信息.邮政编码;
+            Newmodel.企业基本信息.成立时间 = model.企业基本信息.成立时间;
+            Newmodel.企业基本信息.网站网址 = model.企业基本信息.网站网址;
+            Newmodel.企业基本信息.经营类型 = model.企业基本信息.经营类型;
+            Newmodel.企业基本信息.经营子类型 = model.企业基本信息.经营子类型;
+            Newmodel.企业基本信息.员工人数 = model.企业基本信息.员工人数;
+            Newmodel.企业基本信息.经济性质 = model.企业基本信息.经济性质;
+            Newmodel.所属地域 = model.所属地域;
+            Newmodel.企业基本信息.企业简介 = model.企业基本信息.企业简介;
+            Newmodel.企业联系人信息 = model.企业联系人信息;
+            Newmodel.营业执照信息.营业执照注册号 = model.营业执照信息.营业执照注册号;
+            Newmodel.营业执照信息.营业执照注册资金 = model.营业执照信息.营业执照注册资金;
+            Newmodel.法定代表人信息.法定代表人姓名 = model.法定代表人信息.法定代表人姓名;
+            HttpPostedFileBase img = Request.Files[0];
+            if (img != null && img.FileName != "" && ((img.ContentLength / 1024) / 1024) < 2 && img.ContentType == "image/jpeg")
+            {
+                string filePath = 上传管理.获取上传路径<供应商>(媒体类型.图片, 路径类型.不带域名根路径);
+                string fname = UploadAttachment(img);
+                string file_name = filePath + fname;
+                Newmodel.供应商用户信息.供应商图片.Add(file_name);
+            }
+            Newmodel.供应商用户信息.提交入网 = true;
+            用户管理.更新用户<供应商>(Newmodel);
+            return Content("<script>alert('您已完善了入网部分信息，如需成功入网，您还需添加至少5个商品。现在可以去添加可供商品类别');window.location='/供应商后台/Gys_Product_Type';</script>");
+        }
         public int ChangePrice()
         {
             try
             {
                 long id = long.Parse(Request.QueryString["id"]);
-                decimal hj =decimal.Parse(Request.QueryString["h"]);
+                decimal hj = decimal.Parse(Request.QueryString["h"]);
                 decimal jc = decimal.Parse(Request.QueryString["jc"]);
                 decimal fw = decimal.Parse(Request.QueryString["fw"]);
                 decimal gx = decimal.Parse(Request.QueryString["gx"]);
                 询价采购 model = 询价采购管理.查找询价采购(id);
-                foreach(var item in model.议价列表)
+                foreach (var item in model.议价列表)
                 {
-                    if(item.供应商.用户ID==currentUser.Id)
+                    if (item.供应商.用户ID == currentUser.Id)
                     {
                         item.服务费 = fw;
                         item.管线费 = gx;
@@ -413,7 +464,7 @@ namespace Go81WebApp.Controllers.后台
                         item.集成费 = jc;
                     }
                 }
-                return 询价采购管理.更新询价采购(model)?1:-1;
+                return 询价采购管理.更新询价采购(model) ? 1 : -1;
             }
             catch
             {
@@ -473,7 +524,7 @@ namespace Go81WebApp.Controllers.后台
             int xjorderCount = 0;//确认订单数量
             foreach (var item in xjModel)
             {
-                if (item.采购单位.用户数据!=null&&item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id && o.议价 != 0 && o.回复价格 == 0 && o.交易状态 == false).Count() != 0)
+                if (item.采购单位.用户数据 != null && item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id && o.议价 != 0 && o.回复价格 == 0 && o.交易状态 == false).Count() != 0)
                 {
                     xjCount++;
                 }
@@ -767,16 +818,16 @@ namespace Go81WebApp.Controllers.后台
                 string name = "";
                 long id = long.Parse(Request.QueryString["id"]);
                 int CurrentPage = int.Parse(Request.QueryString["p"]);
-                if(!string.IsNullOrWhiteSpace(Request.QueryString["name"]))
+                if (!string.IsNullOrWhiteSpace(Request.QueryString["name"]))
                 {
-                    name=Request.QueryString["name"];
+                    name = Request.QueryString["name"];
                 }
-                long PageCount = 商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled :true) / 20;
-                if (商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled :true) % 20 > 0)
+                long PageCount = 商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled: true) / 20;
+                if (商品管理.计数供应商商品(id, 0, 0, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled: true) % 20 > 0)
                 {
                     PageCount++;
                 }
-                IEnumerable<商品> goods = 商品管理.查询供应商商品(id, 20 * (CurrentPage - 1), 20, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled : true);
+                IEnumerable<商品> goods = 商品管理.查询供应商商品(id, 20 * (CurrentPage - 1), 20, Query.EQ("商品信息.商品名", new BsonRegularExpression(string.Format("/{0}/i", name))).And(Query.EQ("审核数据.审核状态", 审核状态.审核通过)), includeDisabled: true);
                 if (goods != null)
                 {
                     foreach (var item in goods)
@@ -866,7 +917,7 @@ namespace Go81WebApp.Controllers.后台
                             {
                                 model.供应商用户信息.供应商图片.Add(filePath + fname);
                             }
-                            else if(name=="photo")
+                            else if (name == "photo")
                             {
                                 if (System.IO.File.Exists(Server.MapPath(@model.登录信息.头像)))
                                 {
@@ -1001,7 +1052,7 @@ namespace Go81WebApp.Controllers.后台
                         return View();
                     }
                 }
-                if (name == "showPic"||name=="ysd")
+                if (name == "showPic" || name == "ysd")
                 {
                     ViewBag.type = "2";
                 }
@@ -1045,10 +1096,13 @@ namespace Go81WebApp.Controllers.后台
         [HttpPost]
         public ActionResult Toubiao_Manage(供应商 m)
         {
-            供应商 model = 用户管理.查找用户<供应商>(currentUser.Id);
-            model.历史参标记录.Add(m.历史参标记录[0]);
-            用户管理.更新用户<供应商>(model);
-            deleteIndex("/Lucene.Net/IndexDic/Gys", model.Id.ToString());
+            if (ModelState.IsValid)
+            {
+                供应商 model = 用户管理.查找用户<供应商>(currentUser.Id);
+                model.历史参标记录.Add(m.历史参标记录[0]);
+                用户管理.更新用户<供应商>(model);
+                deleteIndex("/Lucene.Net/IndexDic/Gys", model.Id.ToString());
+            }
             //deleteIndex_ProductCatalog("/Lucene.Net/IndexDic/GysCatalog", model.企业基本信息.企业名称);
             return Content("<script>if(confirm('请确保招投标信息已完善，点击确定请等待审核，点击取消继续完善。')){window.location='/供应商后台/Gys_Product_Type';} else{window.location='/供应商后台/toubiao';}</script>");
         }
@@ -1247,6 +1301,72 @@ namespace Go81WebApp.Controllers.后台
             //供应商 model = (供应商)currentUser;
             return View(Newmodel);
         }
+        public class Product
+        {
+            public long Id { get; set; }
+            public string name { get; set; }
+            public decimal price { get; set; }
+            public string IsChecked { get; set; }
+            public string IsRefused { get; set; }
+            public string url { get; set; }
+        }
+        public ActionResult Searchproduct()
+        {
+            List<Product> products=new List<Product>();
+            string name = Request.QueryString["name"];
+            long pgCount = 0;
+            int cpg = 1;
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["page"]))
+            {
+                cpg = int.Parse(Request.QueryString["page"]);
+            }
+            if (cpg <= 0)
+            {
+                cpg = 1;
+            }
+            long pc = 商品管理.计数供应商商品(currentUser.Id, 0, 0,Query<商品>.Matches(m => m.商品信息.商品名, new BsonRegularExpression(string.Format("/{0}/i", name))));
+            pgCount = pc / 15;
+            if (pc % 15 > 0)
+            {
+                pgCount++;
+            }
+            IEnumerable<商品> sp = 商品管理.查询供应商商品(currentUser.Id, 15 * (cpg - 1), 15, Query<商品>.Matches(m => m.商品信息.商品名, new BsonRegularExpression(string.Format("/{0}/i", name))));
+            foreach (var item in sp)
+            {
+                Product p=new Product();
+                p.Id = item.Id;
+                p.name = item.商品信息.商品名;
+                p.price = item.销售信息.价格;
+                if (item.商品信息.商品图片.Count != 0)
+                {
+                    p.url=item.商品信息.商品图片.First();
+                }
+                if (item.审核数据.审核状态 == 审核状态.未审核)
+                {
+                    p.IsChecked = "未审核";
+                }
+                else if (item.审核数据.审核状态 == 审核状态.审核未通过)
+                {
+                    p.IsChecked = "审核未通过<span style='color:red;'>(" + item.审核数据.审核不通过原因 + ")</span>";
+                }
+                else
+                {
+                    p.IsChecked = "审核通过";
+                }
+                if (item.基本数据.已屏蔽)
+                {
+                    p.IsRefused = "<span style='color:red'>未上架</span>";
+                }
+                else
+                {
+
+                    p.IsRefused = "已上架";
+                }
+                products.Add(p);
+            }
+            JsonResult json = new JsonResult(){Data = new{u=products,p=pgCount}};
+            return Json(json, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult NoticeAboutApply()
         {
             return View();
@@ -1274,7 +1394,7 @@ namespace Go81WebApp.Controllers.后台
                 }
                 供应商服务记录管理.添加供应商服务记录(_t);
             }
-            
+
             ViewData["供应商服务"] = _t;
             ViewData["会员级别"] = currentUser.供应商用户信息.认证级别;
             ViewData["已申请服务"] = _t.申请中的服务;
@@ -1438,7 +1558,7 @@ namespace Go81WebApp.Controllers.后台
         {
             var wsjb = 网上竞标管理.查询网上竞标(0, 0, Query<网上竞标>.Where(o => o.报价结束时间 < DateTime.Now));
             var jb = new List<网上竞标>();
-            foreach (var k in wsjb) 
+            foreach (var k in wsjb)
             {
                 var t = k.报价供应商列表.Find(o => o.报价供应商.用户ID == currentUser.Id);
                 if (t != null)
@@ -1483,20 +1603,20 @@ namespace Go81WebApp.Controllers.后台
 
         public ActionResult OnlineBiddingHistory()
         {
-            var jblist=网上竞标管理.查询网上竞标(0,0,Query<网上竞标>.Where(o=>o.报价结束时间 < DateTime.Now && o.所属行业 == currentUser.企业基本信息.所属行业.Replace(";","")));
+            var jblist = 网上竞标管理.查询网上竞标(0, 0, Query<网上竞标>.Where(o => o.报价结束时间 < DateTime.Now && o.所属行业 == currentUser.企业基本信息.所属行业.Replace(";", "")));
             return View(jblist);
         }
 
         public string GysQuote()
         {
-            var id=Request.Params["id"];//报价项目ID
-            var price=Request.Params["price"];//供应商报价
+            var id = Request.Params["id"];//报价项目ID
+            var price = Request.Params["price"];//供应商报价
             var notes = Request.Params["notes"];//报价备注
             var tax = Request.Params["tax"];//税率
             var other = Request.Params["other"];//其他费用
             var frei = Request.Params["frei"];//供应商报价
             var shfu = Request.Params["shfu"];//售后服务
-            var saddress=Request.Params["sadress"];//发货地点
+            var saddress = Request.Params["sadress"];//发货地点
             var bj = 网上竞标管理.查找网上竞标(long.Parse(id));
             var ybj = bj.报价供应商列表.Find(o => o.报价供应商.用户ID == currentUser.Id);
             if (ybj != null)
@@ -1564,7 +1684,7 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            ViewData["站内消息列表"] = 站内消息管理.查询收信人的站内消息(10 * (cpg- 1), 10, currentUser.Id).OrderByDescending(m => m.重要程度);
+            ViewData["站内消息列表"] = 站内消息管理.查询收信人的站内消息(10 * (cpg - 1), 10, currentUser.Id).OrderByDescending(m => m.重要程度);
             return PartialView("Gys_Part/Part_Gys_Znxx");
         }
         [ValidateInput(false)]
@@ -1648,7 +1768,7 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            ViewData["站内消息列表"] = 站内消息管理.查询发起者的站内消息(10 * (cpg- 1),10, currentUser.Id).OrderByDescending(m => m.重要程度).OrderByDescending(m => m.基本数据.修改时间);
+            ViewData["站内消息列表"] = 站内消息管理.查询发起者的站内消息(10 * (cpg - 1), 10, currentUser.Id).OrderByDescending(m => m.重要程度).OrderByDescending(m => m.基本数据.修改时间);
             return PartialView("Gys_Part/Part_Msg_Sent");
         }
         public ActionResult Part_Zb_Detail(int? id)
@@ -1798,7 +1918,7 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            ViewData["通知管理"] = 通知管理.查询通知(10 * (cpg- 1), 10);
+            ViewData["通知管理"] = 通知管理.查询通知(10 * (cpg - 1), 10);
             return PartialView("Gys_Part/Part_Gys_Xttz");
         }
 
@@ -1816,7 +1936,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 cpg = 1;
             }
-            long pc =公告管理.计数公告(0, 0, q);
+            long pc = 公告管理.计数公告(0, 0, q);
             pgCount = pc / 20;
             if (pc % 20 > 0)
             {
@@ -1824,7 +1944,7 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            ViewData["公告管理"] = 公告管理.查询公告(20 * (cpg- 1), 20, q);
+            ViewData["公告管理"] = 公告管理.查询公告(20 * (cpg - 1), 20, q);
             return PartialView("Gys_Part/Part_Gys_Ztb_Search_Zb");
         }
 
@@ -1957,7 +2077,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 cpg = 1;
             }
-            long pc =商品管理.计数供应商商品(this.currentUser.Id, 0, 0);
+            long pc = 商品管理.计数供应商商品(this.currentUser.Id, 0, 0);
             pgCount = pc / 15;
             if (pc % 15 > 0)
             {
@@ -1967,7 +2087,7 @@ namespace Go81WebApp.Controllers.后台
             ViewData["CurrentPage"] = cpg;
 
 
-            ViewData["供应商商品信息"] = 商品管理.查询供应商商品(this.currentUser.Id, 15* (cpg- 1),15);
+            ViewData["供应商商品信息"] = 商品管理.查询供应商商品(this.currentUser.Id, 15 * (cpg - 1), 15);
 
             //判断是否能使用批量上传工具
             ViewData["批量上传"] = "0";
@@ -1979,7 +2099,7 @@ namespace Go81WebApp.Controllers.后台
                     ViewData["批量上传"] = "1";
                 }
             }
-           
+
             //判断是否能选择展示商品
             ViewData["选择展示商品"] = "0";
             if (增值服务记录 != null && 增值服务记录.已开通的服务.Any())
@@ -2048,7 +2168,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 cpg = 1;
             }
-            long pc =商品管理.计数供应商商品(this.currentUser.Id, 0, 0, q);
+            long pc = 商品管理.计数供应商商品(this.currentUser.Id, 0, 0, q);
             pgCount = pc / 10;
             if (pc % 10 > 0)
             {
@@ -2056,7 +2176,7 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            ViewData["供应商商品信息"] = 商品管理.查询供应商商品(this.currentUser.Id, 10 * (cpg- 1), 10, q);
+            ViewData["供应商商品信息"] = 商品管理.查询供应商商品(this.currentUser.Id, 10 * (cpg - 1), 10, q);
 
             //判断是否能使用批量上传工具
             ViewData["批量上传"] = "0";
@@ -2219,7 +2339,7 @@ namespace Go81WebApp.Controllers.后台
                     可上架商品总数 = 企业主页商品个数A.Any() ? Int32.MaxValue : 企业主页商品个数B.Any() ? 200 : 企业主页商品个数C.Any() ? 80 : 企业主页商品个数D.Any() ? 60 : 企业主页商品个数E.Any() ? 40 : 企业主页商品个数F.Any() ? 20 : 8;
                 }
                 //已达到个数，不能再进行上架
-                if (已上架商品总数 >= 可上架商品总数 && status=="1")
+                if (已上架商品总数 >= 可上架商品总数 && status == "1")
                 {
                     return Content("您目前订购的企业展示模板可上架" + 可上架商品总数 + "个商品，已达到" + 可上架商品总数 + "个，如需上架更多商品，请前往军采通查看“更多企业展示模板”，或详询网站客服。！");
                 }
@@ -2242,7 +2362,7 @@ namespace Go81WebApp.Controllers.后台
                             {
                                 if (s.审核数据.审核状态 == 审核状态.审核通过)
                                 {
-                                    if(已上架商品总数 >= 可上架商品总数)
+                                    if (已上架商品总数 >= 可上架商品总数)
                                     {
                                         return Content("overflow");
                                     }
@@ -2273,7 +2393,7 @@ namespace Go81WebApp.Controllers.后台
                             {
                                 if (sp.审核数据.审核状态 == 审核状态.审核通过)
                                 {
-                                     if(已上架商品总数 >= 可上架商品总数)
+                                    if (已上架商品总数 >= 可上架商品总数)
                                     {
                                         return Content("overflow");
                                     }
@@ -2301,8 +2421,8 @@ namespace Go81WebApp.Controllers.后台
                     return Content("0");
                 }
 
-               
-               
+
+
             }
             catch
             {
@@ -2402,7 +2522,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 cpg = 1;
             }
-            long pc =投诉管理.计数投诉(0, 0, Query.EQ("发起者.用户ID", currentUser.Id));
+            long pc = 投诉管理.计数投诉(0, 0, Query.EQ("发起者.用户ID", currentUser.Id));
             pgCount = pc / 10;
             if (pc % 10 > 0)
             {
@@ -2410,7 +2530,7 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["Pagecount"] = pgCount;
             ViewData["CurrentPage"] = cpg;
-            ViewData["投诉管理"] = 投诉管理.查询发起者的投诉(10 * (cpg- 1), 10, currentUser.Id, 处理状态.全部).OrderByDescending(m => m.基本数据.修改时间);
+            ViewData["投诉管理"] = 投诉管理.查询发起者的投诉(10 * (cpg - 1), 10, currentUser.Id, 处理状态.全部).OrderByDescending(m => m.基本数据.修改时间);
             return PartialView("Gys_Part/Part_Gys_ComplainList");
         }
 
@@ -2578,7 +2698,7 @@ namespace Go81WebApp.Controllers.后台
                 {
                     ViewData["comes"] = "已审核的商品信息";
                 }
-                else if(comes=="s")
+                else if (comes == "s")
                 {
                     ViewData["comes"] = "未审核的商品信息";
                 }
@@ -2607,7 +2727,7 @@ namespace Go81WebApp.Controllers.后台
         {
             try
             {
-                    var p_id = long.Parse(Request.Form["p_id"]);
+                var p_id = long.Parse(Request.Form["p_id"]);
                 var p_price = decimal.Parse(Request.Form["price"]);
                 var att_march = new 商品._价格属性组合();
 
@@ -2670,7 +2790,7 @@ namespace Go81WebApp.Controllers.后台
                 {
                     ViewData["comes"] = "已审核的商品信息";
                 }
-                else if(comes=="s")
+                else if (comes == "s")
                 {
                     ViewData["comes"] = "未审核的商品信息";
                 }
@@ -2850,7 +2970,7 @@ namespace Go81WebApp.Controllers.后台
                 var allclass = 商品分类管理.查找子分类();
                 return PartialView("Gys_Part/Part_Gys_Product_AddStep1", allclass);
             }
-            
+
             //ViewData["类别列表"] = 用户管理.查找用户<供应商>(currentUser.Id).可提供产品类别列表;
 
             //return PartialView("Gys_Part/Part_Gys_Product_AddStep1", firstclass);
@@ -3095,7 +3215,7 @@ namespace Go81WebApp.Controllers.后台
         {
             try
             {
-                if(currentUser.审核数据.审核状态== 审核状态.审核通过)
+                if (currentUser.审核数据.审核状态 == 审核状态.审核通过)
                 {
                     return Content("<script>alert('审核通过的用户不能再修改信息！');window.location='/供应商后台/';</script>");
                 }
@@ -3652,7 +3772,7 @@ namespace Go81WebApp.Controllers.后台
                 }
                 else
                 {
-                    if (long.Parse(id) == 10005 || long.Parse(id) == 10009 || long.Parse(id) == 10008 || long.Parse(id) == 10013 || long.Parse(id) == 20151 || long.Parse(id) == 20150 || long.Parse(id) == 20145 || long.Parse(id) == 20146 || long.Parse(id) == 20137 || long.Parse(id) == 20138 || long.Parse(id) == 20139 || long.Parse(id) == 20140 || long.Parse(id) == 20141 || long.Parse(id) == 20142 || long.Parse(id) == 20143 || long.Parse(id) == 20144 || long.Parse(id) == 20152 || long.Parse(id) == 20149 || long.Parse(id) == 20147 || long.Parse(id) == 20148 || long.Parse(id) == 20261 || long.Parse(id)==20254)
+                    if (long.Parse(id) == 10005 || long.Parse(id) == 10009 || long.Parse(id) == 10008 || long.Parse(id) == 10013 || long.Parse(id) == 20151 || long.Parse(id) == 20150 || long.Parse(id) == 20145 || long.Parse(id) == 20146 || long.Parse(id) == 20137 || long.Parse(id) == 20138 || long.Parse(id) == 20139 || long.Parse(id) == 20140 || long.Parse(id) == 20141 || long.Parse(id) == 20142 || long.Parse(id) == 20143 || long.Parse(id) == 20144 || long.Parse(id) == 20152 || long.Parse(id) == 20149 || long.Parse(id) == 20147 || long.Parse(id) == 20148 || long.Parse(id) == 20261 || long.Parse(id) == 20254)
                     {
                         t.自动计算签名字体大小 = false;
                         t.业务签名.字体大小 = 15.6F;
@@ -3722,7 +3842,7 @@ namespace Go81WebApp.Controllers.后台
             }
             string[] url = Request.Form["picture"].ToString().Split('|');
             Newmodel.供应商用户信息.供应商图片.Clear();
-            for (int i = 0; i < url.Length - 1;i++ )
+            for (int i = 0; i < url.Length - 1; i++)
             {
                 Newmodel.供应商用户信息.供应商图片.Add(url[i]);
             }
@@ -3768,7 +3888,7 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult Part_Service_Evaluate()
         {
-            
+
             if (currentUser.审核数据.审核状态 == 审核状态.审核通过)
             {
                 ViewBag.Shen = true;
@@ -3780,14 +3900,14 @@ namespace Go81WebApp.Controllers.后台
             ViewData["行业列表"] = 商品分类管理.查找子分类();
             IEnumerable<招标采购项目> l = 招标采购项目管理.查询招标采购项目(0, 0, MongoDB.Driver.Builders.Query.EQ("审核数据.审核状态", 审核状态.审核通过).And(MongoDB.Driver.Builders.Query.NE("中标公告链接.公告ID", -1)));
             ViewData["需求列表"] = l;
-            验收单 item = new 验收单();  
+            验收单 item = new 验收单();
 
 
             var Iysd = new List<验收单>();
             var ysd_number = 验收单管理.查询验收单(0, 0, Query<验收单>.Where(o => o.是否已经打印 && !o.是否作废 && o.供应商链接.用户ID == currentUser.Id));
             foreach (var k in ysd_number)
             {
-                if ((k.打印信息.Count > 0 && k.打印信息.Last().打印时间.AddDays(20) > DateTime.Now) || k.扫描件审核状态=="审核未通过")
+                if ((k.打印信息.Count > 0 && k.打印信息.Last().打印时间.AddDays(20) > DateTime.Now) || k.扫描件审核状态 == "审核未通过")
                 {
                     Iysd.Add(k);
                 }
@@ -3838,40 +3958,47 @@ namespace Go81WebApp.Controllers.后台
         }
         public ActionResult AddAcceptForm()
         {
-            List<ysdData> ds = new List<ysdData>();
-            foreach(var item in 验收单单位列表信息.验收单单位列表)
+            if (currentUser.Id == 200000000033 || currentUser.Id == 200000000840 || currentUser.Id == 200000000033 || currentUser.Id == 200000000626 || currentUser.Id == 200000000642 || currentUser.Id == 200000000202)
             {
-                ysdData yd=new ysdData();
-                yd.Id=item.Id;
-                yd.name=item.验收单审核单位名称;
-                ds.Add(yd);
+                return Content("<script>alert('由于贵公司没有入围协议供应商，暂时不能添加验收单！');window.location='/供应商后台/';</script>");
             }
-            ViewData["审核单位列表"] = ds;// 用户管理.查询用户<单位用户>(0, 0, q);
-
-            ViewData["商品列表"] = 商品管理.查询供应商商品(currentUser.Id, 0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过));
-            ViewBag.user = currentUser.企业联系人信息.联系人姓名;
-
-            //TD:先检查用户是否持有U盾，且未过期
-            var payysd = "0";
-            var gys = 用户管理.查找用户<供应商>(currentUser.Id);
-            if (!string.IsNullOrWhiteSpace(gys.供应商用户信息.U盾信息.序列号) && !string.IsNullOrWhiteSpace(gys.供应商用户信息.U盾信息.加密参数) && gys.供应商用户信息.U盾信息.年检结束时间 > DateTime.Now)
+            else
             {
-                payysd = "1";
-            }
+                List<ysdData> ds = new List<ysdData>();
+                foreach (var item in 验收单单位列表信息.验收单单位列表)
+                {
+                    ysdData yd = new ysdData();
+                    yd.Id = item.Id;
+                    yd.name = item.验收单审核单位名称;
+                    ds.Add(yd);
+                }
+                ViewData["审核单位列表"] = ds;// 用户管理.查询用户<单位用户>(0, 0, q);
 
-            ViewData["是否持有U盾"] = payysd;
-            if (payysd == "1")
-            {
-                Random randomGenerator = new Random(DateTime.Now.Millisecond);
-                String RndStr = "";
-                for (int i = 0; i < 32; i++)
-                    RndStr += Convert.ToChar(randomGenerator.Next(97, 122));
-                ViewData["Message"] = RndStr;
+                ViewData["商品列表"] = 商品管理.查询供应商商品(currentUser.Id, 0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过));
+                ViewBag.user = currentUser.企业联系人信息.联系人姓名;
+
+                //TD:先检查用户是否持有U盾，且未过期
+                var payysd = "0";
+                var gys = 用户管理.查找用户<供应商>(currentUser.Id);
+                if (!string.IsNullOrWhiteSpace(gys.供应商用户信息.U盾信息.序列号) && !string.IsNullOrWhiteSpace(gys.供应商用户信息.U盾信息.加密参数) && gys.供应商用户信息.U盾信息.年检结束时间 > DateTime.Now)
+                {
+                    payysd = "1";
+                }
+
+                ViewData["是否持有U盾"] = payysd;
+                if (payysd == "1")
+                {
+                    Random randomGenerator = new Random(DateTime.Now.Millisecond);
+                    String RndStr = "";
+                    for (int i = 0; i < 32; i++)
+                        RndStr += Convert.ToChar(randomGenerator.Next(97, 122));
+                    ViewData["Message"] = RndStr;
+                }
+                ViewData["供应商ID"] = currentUser.Id;
+                //先检查用户是否持有U盾，且未过期
+                //return PartialView("Gys_Part/AddAcceptForm");
+                return View();
             }
-            ViewData["供应商ID"] = currentUser.Id;
-            //先检查用户是否持有U盾，且未过期
-            //return PartialView("Gys_Part/AddAcceptForm");
-            return View();
         }
 
         public ActionResult CheckSecurity()
@@ -3939,17 +4066,21 @@ namespace Go81WebApp.Controllers.后台
 
             if (flage)
             {
-                var type= Request.Params["type"];
-                if(string.IsNullOrWhiteSpace(type) || (type!="Add" && type!="Upload" && type!="UploadList")){
+                var type = Request.Params["type"];
+                if (string.IsNullOrWhiteSpace(type) || (type != "Add" && type != "Upload" && type != "UploadList"))
+                {
                     return Content("参数错误,请不要修改url");
                 }
-                if(type =="List"){
+                if (type == "List")
+                {
                     return AddAcceptanceForm();
                 }
-                else if(type =="Upload"){
+                else if (type == "Upload")
+                {
                     return Service_Evaluate();
                 }
-                else if(type =="Upload"){
+                else if (type == "Upload")
+                {
                     return ProjectService_List();
                 }
                 else if (type == "Add")
@@ -3963,7 +4094,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 return Content(returnstr);
             }
-           
+
         }
 
         [HttpPost]
@@ -3979,7 +4110,7 @@ namespace Go81WebApp.Controllers.后台
             var keyValue = currentUser.供应商用户信息.U盾信息.加密参数;
 
             //用户可能持有多个U盾
-            var Sequencenumber = currentUser.供应商用户信息.U盾信息.序列号.Split(new char[] {'|'},
+            var Sequencenumber = currentUser.供应商用户信息.U盾信息.序列号.Split(new char[] { '|' },
                 StringSplitOptions.RemoveEmptyEntries);
 
             //判断JS读取的U盾序列号和数据库的序列号是否匹配
@@ -4040,7 +4171,7 @@ namespace Go81WebApp.Controllers.后台
                 ViewData["comes"] = "全部验收单列表";
             }
             //var q = Query.Or(Query.EQ("单位信息.单位名称", "采购处"), Query.EQ("单位信息.单位名称", "13军"), Query.EQ("单位信息.单位名称", "14军"), Query.EQ("单位信息.单位名称", "云南省军区"));
-            var q = Query.Or(Query<单位用户>.In(o => o.Id, 验收单单位列表信息.验收单单位列表.Select(o=>o.Id)));
+            var q = Query.Or(Query<单位用户>.In(o => o.Id, 验收单单位列表信息.验收单单位列表.Select(o => o.Id)));
             long p = 用户管理.计数用户<单位用户>(0, 0);
             ViewData["商品列表"] = 商品管理.查询供应商商品(currentUser.Id, 0, 0, Query<商品>.Where(o => o.审核数据.审核状态 == 审核状态.审核通过));
             ViewData["审核单位列表"] = 用户管理.查询用户<单位用户>(0, 0, q);
@@ -4083,7 +4214,7 @@ namespace Go81WebApp.Controllers.后台
             }
             ViewData["供应商ID"] = currentUser.Id;
             var 是否有未上传验收单 = false;
-            var cc = 验收单管理.查询验收单(0, 0, Query<验收单>.Where(o => o.供应商链接.用户ID == currentUser.Id && o.是否已经打印 && !o.是否作废 && o.验收单扫描件.Count<=0));
+            var cc = 验收单管理.查询验收单(0, 0, Query<验收单>.Where(o => o.供应商链接.用户ID == currentUser.Id && o.是否已经打印 && !o.是否作废 && o.验收单扫描件.Count <= 0));
             foreach (var k in cc)
             {
                 if (k.打印信息.Count > 0 && k.打印信息.Last().打印时间.AddDays(20) < DateTime.Now)
@@ -4107,7 +4238,7 @@ namespace Go81WebApp.Controllers.后台
             int page = 1;
             ViewData["currentpage"] = page;
             ViewData["pagecount"] = maxpagesize;
-            ViewData["验收单列表"] = 机票验收单管理.查询机票验收单(ACCEPTA_PAGESIZE * (page - 1), ACCEPTA_PAGESIZE, Query<机票验收单>.Where(o=>o.供应商链接.用户ID==currentUser.Id && !o.是否作废), false, SortBy.Descending("基本数据.添加时间"));
+            ViewData["验收单列表"] = 机票验收单管理.查询机票验收单(ACCEPTA_PAGESIZE * (page - 1), ACCEPTA_PAGESIZE, Query<机票验收单>.Where(o => o.供应商链接.用户ID == currentUser.Id && !o.是否作废), false, SortBy.Descending("基本数据.添加时间"));
             if (currentUser.审核数据.审核状态 == 审核状态.审核通过)
             {
                 ViewBag.Shen = true;
@@ -4163,16 +4294,16 @@ namespace Go81WebApp.Controllers.后台
             return PartialView("Gys_Part/Part_AcceptanceTicketList");
         }
 
-        public ActionResult AddAcceptFormTicket() 
+        public ActionResult AddAcceptFormTicket()
         {
             return View();
         }
-        
+
         public ActionResult Part_AcceptSkan()
         {
             var id = Request.Params["id"];//验收单id
             var ysd = 机票验收单管理.查找机票验收单(long.Parse(id));
-            return PartialView("Gys_Part/Part_AcceptSkan",ysd);
+            return PartialView("Gys_Part/Part_AcceptSkan", ysd);
         }
 
         public ActionResult AcceptDetialTicket()
@@ -4214,7 +4345,7 @@ namespace Go81WebApp.Controllers.后台
             catch
             {
                 return Redirect("/供应商后台/AcceptanceTicketList");
-            } 
+            }
         }
 
         [HttpPost]
@@ -4241,7 +4372,7 @@ namespace Go81WebApp.Controllers.后台
             y.服务列表 = list;
             y.供货单位承办人 = ysd.供货单位承办人;
             y.供货单位承办人电话 = ysd.供货单位承办人电话;
-            
+
             机票验收单管理.更新机票验收单(y);
             return Redirect("/供应商后台/EditFormTicket?id=" + ysd.Id);
         }
@@ -4330,7 +4461,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 throw new Exception("信息不完善！");
             }
-            return Redirect("/供应商后台/AddAcceptanceForm?comes=w");
+            return Redirect("/供应商后台/AddAcceptanceForm");
 
         }
         public void EditPrint()
@@ -4549,7 +4680,7 @@ namespace Go81WebApp.Controllers.后台
             List<_其他费用> other_cost = new List<_其他费用>();
             foreach (var mm in ysd.其他费用)
             {
-                if (!string.IsNullOrWhiteSpace(mm.费用名称)&&mm.金额!=0)
+                if (!string.IsNullOrWhiteSpace(mm.费用名称) && mm.金额 != 0)
                 {
                     other_cost.Add(mm);
                 }
@@ -4671,7 +4802,7 @@ namespace Go81WebApp.Controllers.后台
                 ViewBag.Shen = false;
             }
             //ViewData["待评分项目服务列表"] = 项目服务记录管理.查询项目服务记录(15 * (int.Parse(page.ToString()) - 1), 15, Query.EQ("供应商链接.用户ID", currentUser.Id));
-            ViewData["验收单列表"] = 验收单管理.查询验收单(20*(cpg-1), 20, Query<验收单>.EQ(o => o.供应商链接.用户ID, currentUser.Id).And(Query<验收单>.Where(o => o.验收单扫描件.Count>0)));
+            ViewData["验收单列表"] = 验收单管理.查询验收单(20 * (cpg - 1), 20, Query<验收单>.EQ(o => o.供应商链接.用户ID, currentUser.Id).And(Query<验收单>.Where(o => o.验收单扫描件.Count > 0)));
 
             //TD:先检查用户是否持有U盾，且未过期
             var payysd = "0";
@@ -4717,7 +4848,7 @@ namespace Go81WebApp.Controllers.后台
             return PartialView("Gys_Part/Part_ProjectService_Detail", model);
         }
 
-        public class YsdSmj 
+        public class YsdSmj
         {
             public long id { get; set; } //所属供应商ID
             public string path { get; set; }//扫描件路径
@@ -4725,11 +4856,11 @@ namespace Go81WebApp.Controllers.后台
 
             public string reason { get; set; }//未通过理由
         }
-        public string GetSmj() 
+        public string GetSmj()
         {
-            var id=Request.Params["id"];
+            var id = Request.Params["id"];
             var list = new List<YsdSmj>();
-            if (id!="请选择验收单号")
+            if (id != "请选择验收单号")
             {
                 var ysd = 验收单管理.查找验收单(long.Parse(id));
                 foreach (var k in ysd.验收单扫描件)
@@ -4773,19 +4904,19 @@ namespace Go81WebApp.Controllers.后台
 
         }
 
-        public int DelYsdSmj() 
+        public int DelYsdSmj()
         {
             string uri = Request.QueryString["n"];
             long id = long.Parse(Request.QueryString["gid"].ToString());
             var model = 验收单管理.查找验收单(id);
-            if (model.验收单扫描件.Count>0 && !string.IsNullOrWhiteSpace(uri))
+            if (model.验收单扫描件.Count > 0 && !string.IsNullOrWhiteSpace(uri))
             {
                 var item = model.验收单扫描件.Find(o => o.回传单路径 == uri);
                 model.验收单扫描件.Remove(item);
                 if (System.IO.File.Exists(Server.MapPath(@uri)))
                 {
                     System.IO.File.Delete(Server.MapPath(@uri));
-                    
+
                 }
                 验收单管理.更新验收单(model);
                 return 1;
@@ -4801,13 +4932,12 @@ namespace Go81WebApp.Controllers.后台
             try
             {
                 string uri = Request.QueryString["n"];
-                long id =long.Parse(Request.QueryString["gid"].ToString());
-                供应商 model = 用户管理.查找用户<供应商>(id);
-                if(model.供应商用户信息.供应商图片!=null)
+                供应商 model = 用户管理.查找用户<供应商>(currentUser.Id);
+                if (model.供应商用户信息.供应商图片 != null)
                 {
                     foreach (var item in model.供应商用户信息.供应商图片)
                     {
-                        if(item==uri)
+                        if (item == uri)
                         {
                             model.供应商用户信息.供应商图片.Remove(item);
                             break;
@@ -4949,7 +5079,7 @@ namespace Go81WebApp.Controllers.后台
                     {
                         ysd.验收单扫描件.Add(new _回传信息 { 回传单路径 = item });
                     }
-                    
+
 
                     //if (!string.IsNullOrEmpty(Request.Form["zb_contact"]))
                     //{
@@ -5246,7 +5376,7 @@ namespace Go81WebApp.Controllers.后台
             int xjorderCount = 0;//确认订单数量
             foreach (var item in xjModel)
             {
-                if (item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id &&o.议价!=0&& o.回复价格 == 0 && o.交易状态 == false).Count() != 0)
+                if (item.议价列表.Where(o => o.供应商.用户ID == currentUser.Id && o.议价 != 0 && o.回复价格 == 0 && o.交易状态 == false).Count() != 0)
                 {
                     xjCount++;
                 }
@@ -5326,7 +5456,7 @@ namespace Go81WebApp.Controllers.后台
             {
                 ViewBag.qualify = false;
             }
-            ViewBag.ysd = 验收单管理.查询验收单(0, 0, Query<验收单>.Where(o => o.供应商链接.用户ID == currentUser.Id && (o.审核数据.审核状态 == 审核状态.审核未通过 || o.是否已经打印 == false || o.验收单扫描件.Count>0)));
+            ViewBag.ysd = 验收单管理.查询验收单(0, 0, Query<验收单>.Where(o => o.供应商链接.用户ID == currentUser.Id && (o.审核数据.审核状态 == 审核状态.审核未通过 || o.是否已经打印 == false || o.验收单扫描件.Count > 0)));
             if (Newmodel.供应商用户信息.U盾信息 == null || string.IsNullOrWhiteSpace(Newmodel.供应商用户信息.U盾信息.加密参数) || string.IsNullOrWhiteSpace(Newmodel.供应商用户信息.U盾信息.序列号))
             {
                 ViewData["U_message"] = "您还没有<a href='/jct/ApplyVip' style='text-decoration:underline; font-weight:bold;' target='_blank'>申请安全认证和办理U盾</a>";
@@ -6472,7 +6602,7 @@ namespace Go81WebApp.Controllers.后台
                     {
                         if (System.IO.File.Exists(Server.MapPath(@item)))
                         {
-                            if (Pro_Model.商品信息.商品型号图片!=null)
+                            if (Pro_Model.商品信息.商品型号图片 != null)
                             {
                                 Pro_Model.商品信息.商品型号图片.Add(item);
                             }
@@ -6644,13 +6774,14 @@ namespace Go81WebApp.Controllers.后台
                 {
                     Pro_Model.基本数据.已屏蔽 = false;
                     Pro_Model.中标商品 = true;
-                    var pronamelist = proliststr.Split(new[] {'|'}, StringSplitOptions.RemoveEmptyEntries);
+                    var pronamelist = proliststr.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var proname in pronamelist)
                     {
-                        Pro_Model.中标信息.Add(new 商品._中标信息 { 
+                        Pro_Model.中标信息.Add(new 商品._中标信息
+                        {
                             中标项目编号 = Request.Form["pronum___" + proname],
                             中标数量 = int.Parse(Request.Form["procount___" + proname]),
-                            中标金额 =decimal.Parse(Request.Form["proprice___" + proname])
+                            中标金额 = decimal.Parse(Request.Form["proprice___" + proname])
                         });
                     }
                 }
@@ -6658,13 +6789,13 @@ namespace Go81WebApp.Controllers.后台
                 {
                     List<string> imglist = new List<string>();
                     string[] img = Request.Form["pro_typeimgstr"].Split('|');
-                    for (int i = 0; i < img.Length - 1;i++ )
+                    for (int i = 0; i < img.Length - 1; i++)
                     {
                         imglist.Add(img[i]);
                     }
                     Pro_Model.商品信息.商品型号图片 = imglist;
                 }
-                商品管理.添加商品(Pro_Model,long.Parse(Request.Form["idsttrsrr"]), currentUser.Id);
+                商品管理.添加商品(Pro_Model, long.Parse(Request.Form["idsttrsrr"]), currentUser.Id);
                 //CreateIndex(Pro_Model, "/Lucene.Net/IndexDic/Product");
 
                 return RedirectToAction("Gys_Product_List", "供应商后台");
@@ -6854,12 +6985,12 @@ namespace Go81WebApp.Controllers.后台
                         string filePath1 = "";
                         if (!string.IsNullOrWhiteSpace(url))
                         {
-                            if(url=="机票")
+                            if (url == "机票")
                             {
                                 filePath = 上传管理.获取上传路径<订购合同上传记录>(媒体类型.图片, 路径类型.服务器本地路径);
                                 filePath1 = 上传管理.获取上传路径<订购合同上传记录>(媒体类型.图片, 路径类型.不带域名根路径);
                             }
-                            else if(url=="gtype")
+                            else if (url == "gtype")
                             {
                                 filePath = 上传管理.获取上传路径<商品>(媒体类型.图片, 路径类型.服务器本地路径);
                                 filePath1 = 上传管理.获取上传路径<商品>(媒体类型.图片, 路径类型.不带域名根路径);
@@ -6999,14 +7130,14 @@ namespace Go81WebApp.Controllers.后台
                 商品 model = 商品管理.查找商品(id);
                 if (model != null)
                 {
-                    if(number=="0")
+                    if (number == "0")
                     {
-                    for (int i = 0; i < model.商品信息.商品图片.Count(); i++)
-                    {
-                        if (model.商品信息.商品图片[i] == strname)
+                        for (int i = 0; i < model.商品信息.商品图片.Count(); i++)
                         {
-                            model.商品信息.商品图片.Remove(strname);
-                            break;
+                            if (model.商品信息.商品图片[i] == strname)
+                            {
+                                model.商品信息.商品图片.Remove(strname);
+                                break;
                             }
                         }
                     }
@@ -7018,8 +7149,8 @@ namespace Go81WebApp.Controllers.后台
                             {
                                 model.商品信息.商品型号图片.Remove(strname);
                                 break;
+                            }
                         }
-                    }
                     }
                     商品管理.更新商品(model);
                 }
@@ -7159,10 +7290,10 @@ namespace Go81WebApp.Controllers.后台
                 {
                     str += "<li id=" + k.Id + " lang='third' onclick='GetClass(this);'>" + k.分类名 + "</li>";
                 }
-               
+
             }
             str += "</ul>";
-            return str; 
+            return str;
         }
 
         public class FindUsers
@@ -7935,7 +8066,7 @@ namespace Go81WebApp.Controllers.后台
             string Digest = Request.Params["HidDigest"];// this.HidDigest.Value;
 
             var keyValue = currentUser.供应商用户信息.U盾信息.加密参数;
-            var Sequencenumber = currentUser.供应商用户信息.U盾信息.序列号.Split(new char[] {'|'},
+            var Sequencenumber = currentUser.供应商用户信息.U盾信息.序列号.Split(new char[] { '|' },
                 StringSplitOptions.RemoveEmptyEntries);
 
             //判断JS读取的U盾序列号和数据库的序列号是否匹配

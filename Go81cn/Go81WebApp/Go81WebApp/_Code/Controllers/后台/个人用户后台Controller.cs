@@ -272,7 +272,7 @@ namespace Go81WebApp.Controllers.后台
             if (fileData != null)
             {
                 string fileName = fileData.FileName;
-                string filePath = 上传管理.获取上传路径<个人用户>(媒体类型.头像, 路径类型.服务器本地路径);
+                string filePath = 上传管理.获取上传路径<个人用户>(媒体类型.视频, 路径类型.服务器本地路径);
 
                 //string extension = fileData.FileName.Substring(fileData.FileName.LastIndexOf("."), (fileData.FileName.Length - fileData.FileName.LastIndexOf(".")));
 
@@ -282,7 +282,7 @@ namespace Go81WebApp.Controllers.后台
                     Directory.CreateDirectory(filePath);
                 }
                 fileData.SaveAs(string.Format("{0}\\{1}", filePath, fileName));
-                return Content(string.Format("{0}{1}", 上传管理.获取上传路径<个人用户>(媒体类型.头像, 路径类型.不带域名根路径), fileName));
+                return Content(string.Format("{0}{1}", 上传管理.获取上传路径<个人用户>(媒体类型.视频, 路径类型.不带域名根路径), fileName));
             }
             else
             {

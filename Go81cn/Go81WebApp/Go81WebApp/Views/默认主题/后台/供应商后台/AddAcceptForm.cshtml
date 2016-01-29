@@ -309,7 +309,7 @@
                         <td align="right">审核单位：</td>
                         <td class="left_none">
                             @Html.HiddenFor(model => model.管理单位审核人.用户ID, new { @id = "unit_user_sh" })
-                            <select style="width:200px;" name="checker" id="selectSh_unit">
+                            <select style="width:266px;" name="checker" id="selectSh_unit">
                                 @{
                                     <option value="">请选择审核单位</option>
             var sh_unit = ViewData["审核单位列表"] as List<Go81WebApp.Controllers.后台.供应商后台Controller.ysdData>;
@@ -321,7 +321,7 @@
                             </select>
                         </td>
                         <td class="left_none" align="center">收货单位：</td>
-                        <td style="width:315px;" class="left_none">
+                        <td style="width:260px;" class="left_none">
                             @Html.HiddenFor(model => model.收货单位, new { @id = "unit_user_id" })
                             @*<select onchange="showtext(this)" id="unit_user" style="width:130px;">
                                     @{
@@ -886,28 +886,28 @@ else
         getChecked();
     };
 
-    function checkNum(ev) {
-        var reg = new RegExp("^[1-9]+[0-9]*]*$");
-        if (!reg.test($(ev).val())) {
-            if ($("#comfirm-lk").length > 0) {
-                $("#comfirm-lk").fadeIn(200);
-            }
-            else {
-                $("body").myComfirm({
-                    index: "comfirm-lk",
-                    btncloseid: "btnclose13",
-                    btnsubid: "btnsub13",
-                    img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
-                    content: "请输入数字！",  //提示信息内容 必须
-                    iscomfirm: false,
-                    onComfirm: function () {
-                        $(ev).val("");
-                        $("#comfirm-lk").fadeOut(200);
-                    },
-                });
-            }
-        }
-    }
+    //function checkNum(ev) {
+    //    var reg = new RegExp("^[1-9]+[0-9]*]*$");
+    //    if (!reg.test($(ev).val())) {
+    //        if ($("#comfirm-lk").length > 0) {
+    //            $("#comfirm-lk").fadeIn(200);
+    //        }
+    //        else {
+    //            $("body").myComfirm({
+    //                index: "comfirm-lk",
+    //                btncloseid: "btnclose13",
+    //                btnsubid: "btnsub13",
+    //                img: "url('../Images/alert-comfirm.png') -80px 70px", //提示信息相应图片  必须
+    //                content: "请输入数字！",  //提示信息内容 必须
+    //                iscomfirm: false,
+    //                onComfirm: function () {
+    //                    $(ev).val("");
+    //                    $("#comfirm-lk").fadeOut(200);
+    //                },
+    //            });
+    //        }
+    //    }
+    //}
 
     //物资列表
     var t = "<tr>";
@@ -915,7 +915,7 @@ else
     t += "<td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='物资服务列表[`].规格型号' value='' type='text'></td>";
     t += "<td style='text-align:center'><input placeholder='可不填' class='text-box single-line' name='物资服务列表[`].采购合同号' value='' type='text'></td>";
     t += "<td style='text-align:center'><input placeholder='必填' class='text-box single-line' name='物资服务列表[`].计量单位' value='' type='text' style='width:60px;'></td>";
-    t += "<td style='text-align:center'><input placeholder='必填' style='width:70px;' class='text-box single-line' data-val='true' data-val-number='字段 数量 必须是一个数字。' data-val-required='数量 字段是必需的。' name='物资服务列表[`].数量' value='' type='number' onkeyup='checkNum(this)' min='1'></td>";
+    t += "<td style='text-align:center'><input placeholder='必填' style='width:70px;' class='text-box single-line' data-val='true' data-val-number='字段 数量 必须是一个数字。' data-val-required='数量 字段是必需的。' name='物资服务列表[`].数量' value='' type='number' min='1'></td>";
     t += "<td style='text-align:center'><input placeholder='必填' style='width:70px;' class='text-box single-line' data-val='true' data-val-number='字段 单价 必须是一个数字。' data-val-required='单价 字段是必需的。' name='物资服务列表[`].单价' value='' type='text' title='`'  onkeyup='checkPrice(this)' ></td>";
     t += "<td style='text-align:center;border-right:1px solid #aaa'><a class='del_good_list'onclick='DelGoodList(this)' id='`'>删除</a></td>";
     t += "</tr>";

@@ -1,0 +1,62 @@
+﻿@using Go81WebApp.Models.数据模型
+<table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <th width="24%">项目名称</th>
+        <th width="27%">项目编号</th>
+        <th width="17%">评标时间</th>
+        <th width="27%">操作</th>
+    </tr>
+    @{
+        IEnumerable<供应商抽选记录> edlist = ViewData["供应商抽取已抽选列表"] as IEnumerable<供应商抽选记录>;
+        if (edlist != null && edlist.Any())
+        {
+            foreach (var i in edlist)
+            {
+                <tr>
+                    <td>@i.项目名称</td>
+                    <td>@i.项目编号</td>
+                    <td>@i.评标时间.ToString()</td>
+                    <td>
+                        <a class="btn_target" href="/专家抽选/Gys_Choose_PrintApp?id=@i.Id&c=s" >打印名单</a>|
+                        <a class="btn_target" href="/专家抽选/GysChoose_HistoryDetailApp?id=@i.Id&c=s">查看详情</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4">暂无相关列表</td>
+            </tr>
+        }
+    }
+</table>
+@if (edlist.Any())
+{
+    <div class="gys_znxx_content_detailbox">
+        @if (int.Parse(ViewData["ed_currentPage"].ToString()) != 1)
+        {
+            <a id="1" onclick="changeed_page(this)">首页</a><a id="@(int.Parse(ViewData["ed_currentPage"].ToString())-1)" onclick="changeed_page(this)">上一页</a>
+        }
+        @for (int i = 0; i <= 10; i++)
+        {                       //一共最多显示10个页码，前面5个，后面5个
+            if ((int.Parse(ViewData["ed_currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["ed_currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["ed_pagecount"].ToString()))
+            {
+                if (5 == i)
+                {                               //当前页处理
+                    <a style="border:1px solid #ff0000;">@int.Parse(ViewData["ed_currentPage"].ToString())</a>
+                }
+                else
+                {                               //一般页处理
+                    <a id="@(int.Parse(ViewData["ed_currentPage"].ToString()) + i - 5)" onclick="changeed_page(this)">@(int.Parse(ViewData["ed_currentPage"].ToString()) + i - 5)</a>
+
+                }
+            }
+        }
+        @if (int.Parse(ViewData["ed_currentPage"].ToString()) != int.Parse(ViewData["ed_pagecount"].ToString()))
+        {
+            <a id="@(int.Parse(ViewData["ed_currentPage"].ToString()) + 1)" onclick="changeed_page(this)">下一页</a><a id="@int.Parse(ViewData["ed_pagecount"].ToString())" onclick="changeed_page(this)">末页</a>
+        }
+        <span style="font-size:12px;">第@(ViewData["ed_pagecount"])页/共@(ViewData["ed_pagecount"])页</span>
+    </div>
+}

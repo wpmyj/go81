@@ -1,4 +1,7 @@
-﻿using Go81WebApp.Models.管理器;
+﻿using System.Net.Http.Headers;
+using DTAPI;
+using DTAPI.Basic;
+using Go81WebApp.Models.管理器;
 using Go81WebApp.Models.数据模型;
 using Go81WebApp.Models.数据模型.用户数据模型;
 using MongoDB;
@@ -29,9 +32,11 @@ namespace Go81WebApp.Controllers.门户
             string range = Request.Params["range"];//范围
             //string num = Request.Params["num"];//数量
 
-            IEnumerable<酒店> enhotel = (hname != null && hname != "" && hname != "undefined")
-                ? 酒店管理.查询酒店(0, 10, Query.EQ("酒店基本信息.酒店名", hname))
-                : 酒店管理.查询酒店(0, 10, Query.WithinCircle("酒店基本信息.地理位置", double.Parse(location.Split(',')[0]), double.Parse(location.Split(',')[1]), double.Parse(range)));
+            //IEnumerable<酒店> enhotel = (hname != null && hname != "" && hname != "undefined")
+            //    ? 酒店管理.查询酒店(0, 10, Query.EQ("酒店基本信息.酒店名", hname))
+            //    : 酒店管理.查询酒店(0, 10, Query.WithinCircle("酒店基本信息.地理位置", double.Parse(location.Split(',')[0]), double.Parse(location.Split(',')[1]), double.Parse(range)));
+
+            var enhotel = 酒店管理.查询酒店(0, 0);
             if (enhotel != null)
             {
                 return View(enhotel);
@@ -56,6 +61,33 @@ namespace Go81WebApp.Controllers.门户
             }
 
             return View(h);
+        }
+        public ActionResult Index()
+        {
+            List<HotelInfo> hotels=new List<HotelInfo>();
+            hotels.Add(new HotelInfo() { CityCode = "324", CountyCode = "3730"});
+            string result =BasicUtil.GetHotelInfo(hotels);
+            ViewData["r"] = result;
+            return View();
+        }
+
+        public ActionResult HotelInfo()
+        {
+            return View();
+        }
+
+        public ActionResult PayForHouse()
+        {
+            return View();
+        }
+
+        public ActionResult ConfirmCost()
+        {
+            return View();
+        }
+        public ActionResult SearchResult()
+        {
+            return View();
         }
         public ActionResult TicketFilter()
         {
@@ -114,5 +146,15 @@ namespace Go81WebApp.Controllers.门户
             JsonResult json = new JsonResult() { Data = k };
             return Json(json,JsonRequestBehavior.AllowGet);
         }
+
+
+        //混沌数据
+        public void GetHotel()
+        {
+            
+            var t = CommonUtil.GetCommonResponseData("GetOsii_Province");
+            
+        }
+
     }
 }

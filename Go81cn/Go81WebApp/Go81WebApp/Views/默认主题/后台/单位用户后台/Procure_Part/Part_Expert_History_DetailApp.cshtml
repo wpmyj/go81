@@ -1,0 +1,359 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.专家
+<link href="~/css/css.css" type="text/css" rel="stylesheet" />
+<script src="~/JS/provinceandcity_all.js"></script>
+<style type="text/css">
+        .expert p {
+            background: #E1E1E1;
+            font-weight: bold;
+            text-indent: 2em;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .expert table {
+            border: 1px solid #aaa;
+            border-bottom: none;
+            border-right: none;
+        }
+
+    .expert_identity table tr td {
+        width: 300px;
+        height: 30px;
+        text-indent: 10px;
+        border-bottom: 1px solid #aaa;
+        border-right: 1px solid #aaa;
+    }
+    .expert_identity table tr th {
+        width: 300px;
+        height: 30px;
+        text-indent: 10px;
+        border-bottom: 1px solid #aaa;
+        border-right: 1px solid #aaa;
+    }
+
+        .expert_identity table tr td input {
+            width: 180px;
+        }
+
+        .expert_identity table tr td select {
+            width: 185px;
+            text-align: center;
+        }
+
+        .expert_identity table tr td.lab {
+            width: 150px;
+            text-align: right;
+            padding-right: 5px;
+        }
+
+    .expert textarea {
+        width: 638px;
+        height: 100px;
+    }
+
+    .tabletable tr td.lac {
+        width: 90px;
+        text-align: right;
+        border: none;
+    }
+
+    .tabletable tr td.lad {
+        width: 264px;
+        border: none;
+    }
+
+    .expert span {
+        font-size: 12px;
+        color: red;
+    }
+
+    .expert img {
+        width: 200px;
+        height: 150px;
+    }
+</style>
+<div class="expert">
+    <div class="expert_no">
+        <!--身份信息-->
+        <p class="title">身份信息</p>
+        <div class="expert_identity">
+            <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="lab">姓名</td>
+                    <td>@Model.身份信息.姓名</td>
+                    <td class="lab">性别</td>
+                    <td>@Model.身份信息.性别</td>
+
+                </tr>
+                <tr>
+                    <td class="lab">民族</td>
+                    <td>@Model.身份信息.民族</td>
+                    <td class="lab">出生年月</td>
+                    <td>@Model.身份信息.出生年月.ToString("yyyy-MM-dd")</td>
+
+                </tr>
+                <tr>
+                    <td class="lab">政治面貌</td>
+                    <td>@Model.身份信息.政治面貌</td>
+                    <td class="lab">评审专家类型</td>
+                    <td>@Model.身份信息.专家类型</td>
+                </tr>
+                <tr>
+                    <td class="lab">所在地区</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(Model.所属地域.地域))
+                        {
+                            <span>@Model.所属地域.地域</span>
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                    </td>
+                    <td class="lab">评审专家类别</td>
+                    <td>@Model.身份信息.专家类别</td>
+                </tr>
+                <tr>
+                    @*<td class="lab">证件类型</td>
+                    <td>@Model.身份信息.证件类型</td>*@
+                    <td class="lab">身份证号</td>
+                    <td colspan="3">
+                        @if (!string.IsNullOrWhiteSpace(Model.身份信息.证件号))
+                        {
+                            <span>@Model.身份信息.证件号</span>
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab" valign="top">证件电子扫描件</td>
+                    <td>
+                        <img src="@Model.身份信息.证件电子扫描件" alt="证件电子扫描件" />
+                    </td>
+                    <td class="lab" valign="top">本人照片电子扫描件</td>
+                    <td><img src="@Model.身份信息.本人照片电子扫描件" alt="本人照片电子扫描件" /></td>
+                </tr>
+            </table>
+        </div>
+
+        <!--学历信息-->
+
+        <p>学历信息</p>
+        <div class="expert_identity">
+            <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="lab">毕业院校</td>
+                    <td>@Model.学历信息.毕业院校</td>
+                    <td class="lab">专业技术职称</td>
+                    <td>@Model.学历信息.专业技术职称</td>
+                </tr>
+                <tr>
+                    <td class="lab">最高学历</td>
+                    <td>@Model.学历信息.最高学历</td>
+                    <td class="lab">最高学位</td>
+                    <td>@Model.学历信息.最高学位</td>
+                </tr>
+                <tr>
+                    <td class="lab" valign="top">取得现技术职称时间</td>
+                    <td valign="top">@Model.学历信息.取得现技术职称时间.ToString("yyyy-MM-dd")</td>
+                    <td class="lab" valign="top">职称证书电子扫描件</td>
+                    <td><img src="@Model.学历信息.职称证书电子扫描件" alt="职称证书电子扫描件" /></td>
+                </tr>
+            </table>
+        </div>
+
+        <!--工作经历-->
+
+        <p>工作经历</p>
+        <div class="expert_identity">
+            <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <td class="lab">参加工作时间</td>
+                    <td>@Model.工作经历信息.参加工作时间.ToString("yyyy-MM-dd")</td>
+                    <td class="lab">从事专业</td>
+                    <td>@Model.工作经历信息.从事专业</td>
+                </tr>
+                <tr>
+                    <td class="lab">从事专业起始年度</td>
+                    <td>@Model.工作经历信息.从事专业起始年度</td>
+                    <td class="lab">工作单位</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(Model.工作经历信息.工作单位))
+                        {
+                            <span>@Model.工作经历信息.工作单位</span>
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab">健康状况</td>
+                    <td>@Model.工作经历信息.健康状况</td>
+                    <td class="lab">现任职务</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(Model.工作经历信息.现任职务))
+                        {
+                            <span>@Model.工作经历信息.现任职务</span>
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab">单位地址</td>
+                    <td colspan="3">
+                        @if (!string.IsNullOrWhiteSpace(Model.工作经历信息.单位地址))
+                        {
+                            <span>@Model.工作经历信息.单位地址</span>
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        
+                        @*<table class="tabletable" cellpadding="0" cellspacing="0" style="border:none;">
+                            <tr>
+                                <td class="lac">地址类型</td>
+                                <td class="lad">@Model.工作经历信息.单位地址.地址类型</td>
+                                <td class="lac">联系人</td>
+                                <td class="lad">@Model.工作经历信息.单位地址.联系人</td>
+                            </tr>
+                            <tr>
+                                <td class="lac">手机</td>
+                                <td class="lad">@Model.工作经历信息.单位地址.手机</td>
+                                <td class="lac">固定电话</td>
+                                <td class="lad">@Model.工作经历信息.单位地址.固定电话</td>
+                            </tr>
+                            <tr>
+                                <td class="lac">电子邮件</td>
+                                <td class="lad">@Model.工作经历信息.单位地址.电子邮件</td>
+                                <td class="lac">省份</td>
+                                <td class="lad">@Model.工作经历信息.单位地址.省份</td>
+                            </tr>
+                            <tr>
+                                <td class="lac">城市</td>
+                                <td class="lad">@Model.工作经历信息.单位地址.城市</td>
+                                <td class="lac">区县</td>
+                                <td class="lad">@Model.工作经历信息.单位地址.区县</td>
+                            </tr>
+                            <tr>
+                                <td class="lac">街道</td>
+                                <td class="lad">@Model.工作经历信息.单位地址.街道</td>
+                                <td class="lac">邮政编码</td>
+                                <td class="lad">@Model.工作经历信息.单位地址.邮政编码</td>
+                            </tr>
+                        </table>*@
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab" valign="top">可参评的物资类别</td>
+                    <td colspan="3">
+                        @foreach(var p in Model.可参评物资类别列表)
+                        {
+                            <div>@p.一级分类</div>
+                            <div style="text-indent:2em">
+                                @foreach(var t in p.二级分类)
+                                {
+                                    <small>@t ,</small>
+                                }
+                            </div>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab">主要工作经历</td>
+                    <td colspan="3">
+                        @if (!string.IsNullOrWhiteSpace(Model.工作经历信息.主要工作经历))
+                        {
+                            <span>@Model.工作经历信息.主要工作经历</span>
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab">社会兼聘职情况</td>
+                    <td colspan="3">
+                        @if (!string.IsNullOrWhiteSpace(Model.工作经历信息.社会兼聘职情况))
+                        {
+                            <span>@Model.工作经历信息.社会兼聘职情况</span>
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab">本人参加过何种项目招标及评标</td>
+                    <td colspan="3">
+                        @if (!string.IsNullOrWhiteSpace(Model.工作经历信息.本人参加过何种项目招标及评标))
+                        {
+                            <span>@Model.工作经历信息.本人参加过何种项目招标及评标</span>
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td class="lab">本人专业领域研究及成果</td>
+                    <td colspan="3">
+                        @if (!string.IsNullOrWhiteSpace(Model.工作经历信息.本人专业领域研究及成果))
+                        {
+                            <span>@Model.工作经历信息.本人专业领域研究及成果</span>
+                        }
+                        else
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <p>本平台参标经历</p>
+        <div class="expert_identity">
+            <table cellpadding="0" cellspacing="0">
+                <tr>
+                    <th style="width: 20%">项目名称</th>
+                    <th style="width: 20%">项目编号</th>
+                    <th style="width: 30%">公告名称</th>
+                    <th style="width: 15%">是否出席</th>
+                    <th style="width: 15%">抽选时间</th>
+                </tr>
+                <tr>
+                    <td>项目名称</td>
+                    <td>公告名称</td>
+                    <td>公告名称</td>
+                    <td>是否出席</td>
+                    <td>时间</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#评审专家列表").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#评审专家列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+    });
+</script>

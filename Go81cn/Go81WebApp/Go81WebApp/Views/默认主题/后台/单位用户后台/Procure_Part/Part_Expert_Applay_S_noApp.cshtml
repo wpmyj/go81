@@ -1,0 +1,74 @@
+﻿@using Go81WebApp.Models.数据模型
+<table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <th width="16%">申请人</th>
+        <th width="16%">项目名称</th>
+        <th width="10%">项目编号</th>
+        <th width="17%">评标时间</th>
+        <th width="17%">申请时间</th>
+        <th width="12%">申请状态</th>
+        <th width="12%">操作</th>
+    </tr>
+    @{
+        IEnumerable<专家抽选记录> temp = ViewData["专家抽取未获批准列表"] as IEnumerable<专家抽选记录>;
+        if (temp != null && temp.Any())
+        {
+            foreach (var i in temp)
+            {
+                <tr>
+                    @if (i.经办人 != null && i.经办人.用户数据 != null && i.经办人.用户数据.联系方式 != null && !string.IsNullOrWhiteSpace(i.经办人.用户数据.联系方式.联系人))
+                    {
+                        <td>@i.经办人.用户数据.联系方式.联系人</td>
+                    }
+                    else
+                    {
+                        <td>未填写</td>
+                    }
+                    <td>@i.项目名称</td>
+                    <td>@i.项目编号</td>
+                    <td>@i.评标时间.ToString()</td>
+                    <td>@i.申请时间.ToString()</td>
+                    <td>@i.申请抽选状态</td>
+                    <td class="gys_znxx_content_tabletime">
+                        ///////@*@Html.ActionLink("进行抽选", "Part_Expert_Select", new { id = i.Id })*@
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7">暂无相关列表</td>
+            </tr>
+        }
+    }
+</table>
+@if (temp.Count() != 0)
+{
+    <div class="gys_znxx_content_detailbox">
+        @if (int.Parse(ViewData["no_currentPage"].ToString()) != 1)
+        {
+            <a id="1" href="javascript:void" onclick="changeno_page(this)">首页</a><a href="javascript:void" id="@(int.Parse(ViewData["no_currentPage"].ToString()) - 1)" onclick="changeno_page(this)">上一页</a>
+        }
+        @for (int i = 0; i <= 10; i++)
+        {                       //一共最多显示10个页码，前面5个，后面5个
+            if ((int.Parse(ViewData["no_currentPage"].ToString()) + i - 5) >= 1 && (int.Parse(ViewData["no_currentPage"].ToString()) + i - 5) <= int.Parse(ViewData["no_pagecount"].ToString()))
+            {
+                if (5 == i)
+                {                               //当前页处理
+                    <a href="javascript:void" style="border:1px solid #ff0000;">@int.Parse(ViewData["no_currentPage"].ToString())</a>
+                }
+                else
+                {                               //一般页处理
+                    <a href="javascript:void" id="@(int.Parse(ViewData["no_currentPage"].ToString()) + i - 5)" onclick="changeno_page(this)">@(int.Parse(ViewData["no_currentPage"].ToString()) + i - 5)</a>
+
+                }
+            }
+        }
+        @if (int.Parse(ViewData["no_currentPage"].ToString()) != int.Parse(ViewData["no_pagecount"].ToString()))
+        {
+            <a href="javascript:void" id="@(int.Parse(ViewData["no_currentPage"].ToString()) + 1)" onclick="changeno_page(this)">下一页</a><a href="javascript:void" id="@int.Parse(ViewData["no_pagecount"].ToString())" onclick="changeno_page(this)">末页</a>
+        }
+        <span style="font-size:12px;">第@(ViewData["no_currentPage"])页/共@(ViewData["no_pagecount"])页</span>
+    </div>
+}   

@@ -10,10 +10,47 @@
                 <div>@item.一级分类</div>
             }
         </td>
-        <td>@Model[0].所属地域.地域</td>
-        <td>@Model[0].企业联系人信息.联系人姓名</td>
-        <td>@Model[0].企业联系人信息.联系人固定电话</td>
-        <td>@Model[0].企业联系人信息.联系人手机</td>
+        <td>@{
+                if (!string.IsNullOrWhiteSpace(Model[0].所属地域.地域))
+                {
+                    <span>@Model[0].所属地域.地域</span>
+                }
+                else
+                {
+                    <span>&nbsp;</span>
+                }
+            }</td>
+        <td>@{
+                if (!string.IsNullOrWhiteSpace(Model[0].企业联系人信息.联系人姓名))
+                {
+                    <span>@Model[0].企业联系人信息.联系人姓名</span>
+                }
+                else
+                {
+                    <span>&nbsp;</span>
+                }        
+    
+            }</td>
+        <td>@{
+                if (!string.IsNullOrWhiteSpace(Model[0].企业联系人信息.联系人固定电话))
+                {
+                    <span>@Model[0].企业联系人信息.联系人固定电话</span>
+                }
+                else
+                {
+                    <span>&nbsp;</span>
+                }
+            }</td>
+        <td>@{
+                if (!string.IsNullOrWhiteSpace(Model[0].企业联系人信息.联系人手机))
+                {
+                    <span>@Model[0].企业联系人信息.联系人手机</span>
+                }
+                else
+                {
+                    <span>&nbsp;</span>
+                }
+        }</td>
         <td>
             <div style="display:none; float:left;">
                 <input type="radio" id="@(Model[0].Id)_n" name="@Model[0].Id" />

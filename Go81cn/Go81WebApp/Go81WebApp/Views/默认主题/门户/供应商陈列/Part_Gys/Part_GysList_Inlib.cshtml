@@ -14,13 +14,26 @@
             margin-bottom: 10px;
             width: 95%;
             line-height: 25px;
-            border-bottom: 1px dashed #808080;
+            border-bottom: 1px dotted #808080;
+        }
+        #userContent div:hover {
+            border-bottom: 1px dotted #ff0000;
         }
 </style>
 <div class="gys_xttz_box">
     <div class="title-base-out">
         <div class="title-base-middle">
-            <div class="title-base-inner">入库供应商列表</div>
+            <div class="title-base-inner">
+
+                @if (@ViewData["status"].ToString() != "2")
+                {
+                    <span>已入供应商列表</span>
+                }
+                else
+                {
+                    <span>待入库供应商</span>
+                }
+            </div>
         </div>
     </div>
     <table width="100%" style="margin-top:20px;" class="gyslisttable">
@@ -48,7 +61,7 @@
                 @{
                     IEnumerable<商品分类>
                         goodclass = ViewData["行业列表"] as IEnumerable<商品分类>
-                            ;
+                        ;
                     if (goodclass != null && goodclass.Any())
                     {
                         <select id="yjfn" class="yjfn" style="width:154px;">
@@ -70,6 +83,9 @@
             </td>
         </tr>
     </table>
+    <form>
+        <input type="hidden" value="@ViewData["status"].ToString()" id="status" />
+    </form>
     @if (WebApiApplication.IsIntranet)
     {
         <div id="userContent">
@@ -92,7 +108,7 @@
                 str += "<a onclick='GysList(" + i + ")'>" + i + "</a>";
             }
             if (pgCount != 0) {
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
             }
             $("div#pager").html(str);
         }
@@ -104,7 +120,7 @@
                         str += "<a onclick='GysList(" + i + ")'>" + i + "</a>";
                     }
                     str += "...<a  onclick='GysList(" + pgCount + ")'>" + pgCount + "</a><a onclick='GysList(" + (currentPage + 1) + ")'>下一页</a>";
-                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
                     $("div#pager").html(str);
                 }
                 else {
@@ -113,7 +129,7 @@
                         str += "<a  onclick='GysList(" + i + ")'>" + i + "</a>";
                     }
                     str += "...<a onclick='GysList(" + pgCount + ")'>" + pgCount + "</a><a onclick='GysList(" + (currentPage + 1) + ")'>下一页</a>";
-                    str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                    str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
                     $("div#pager").html(str);
                 }
             }
@@ -123,7 +139,7 @@
                     str += "<a onclick='GysList(" + i + ")'>" + i + "</a>";
                 }
                 str += "...<a onclick='GysList(" + pgCount + ")'>" + pgCount + "</a><a onclick='GysList(" + (currentPage + 1) + ")'>下一页</a>";
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
                 $("div#pager").html(str);
             }
             else if (currentPage >= pgCount - 3) {
@@ -131,7 +147,7 @@
                 for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
                     str += "<a onclick='GysList(" + i + ")'>" + i + "</a>";
                 }
-                str += "<span>" + currentPage + "/" + pgCount + "页</span>";
+                str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
                 $("div#pager").html(str);
             }
         }
@@ -151,11 +167,12 @@
             area: $("#deliverarea").val(),
             factory: $("#yjfn").val(),
             name: $("#search_text").val(),
+            status: $("#status").val(),
             skip: cpage
         }, function (data) {
             if (data.Data.u.length != 0) {
                 for (var i = 0; i < data.Data.u.length; i++) {
-                    str += "<div onmouseover='setColor(this)' onmouseout='setOrigin(this)'>" + (i + 1) + "、<a href='/供应商陈列/Supplier_Destination?id=" + data.Data.u[i].Id + "'>" + data.Data.u[i].Name + "</div>";
+                        str += "<div>" + (i + 1) + "、<a href='/供应商陈列/Supplier_Destination?id=" + data.Data.u[i].Id + "'>" + data.Data.u[i].Name + "</div>";
                 }
                 $("#userContent").html(str);
                 setPage(data.Data.p, cpage);

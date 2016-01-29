@@ -5,7 +5,7 @@
 @using Go81WebApp.Models.数据模型
 @{
     ViewBag.Title = "验收单列表";
-    Layout = "_BackLayout.cshtml";
+    //Layout = "_BackLayout.cshtml";
 }
 
 <link href="~/css/css.css" rel="stylesheet" />
@@ -97,16 +97,16 @@
                     {
                         foreach (var k in gd)
                         {
-                            var vl = new List<Tuple<string, string, string, string, int, decimal, decimal>>();
+                            var vl = new List<Tuple<string, string, string, string, double, decimal, decimal>>();
                             if (k.物资服务列表.Count > 5)
                             {
                                 decimal price_total = k.物资服务列表.Sum(o => o.总价);
-                                vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1, price_total, price_total));
+                                vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1.0, price_total, price_total));
                             }
                             else if (k.物资服务列表.Count == 0 && k.验收单附件.Count > 0)
                             {
                                 decimal price_total = k.验收单附件.Sum(o => o.价格);
-                                vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1, price_total, price_total));
+                                vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1.0, price_total, price_total));
                             }
                             else
                             {
@@ -118,12 +118,12 @@
                                     }
                                 }
                             }
-                            if (k.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0, k.运费, k.运费)); }
-                            if (k.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0, k.服务费, k.服务费)); }
-                            if (k.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0, k.维修费, k.维修费)); }
-                            foreach (var hj in k.其他费用) { vl.Add(Tuple.Create(hj.费用名称, string.Empty, string.Empty, string.Empty, 0, hj.金额, hj.金额)); }
+                            if (k.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0.0, k.运费, k.运费)); }
+                            if (k.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0.0, k.服务费, k.服务费)); }
+                            if (k.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0.0, k.维修费, k.维修费)); }
+                            foreach (var hj in k.其他费用) { vl.Add(Tuple.Create(hj.费用名称, string.Empty, string.Empty, string.Empty, 0.0, hj.金额, hj.金额)); }
 
-                            var vl_all = new List<Tuple<string, string, string, string, int, decimal, decimal>[]>();
+                            var vl_all = new List<Tuple<string, string, string, string, double, decimal, decimal>[]>();
                             for (var n_all = 0; n_all < vl.Count; n_all += 5) { vl_all.Add(vl.Skip(n_all).Take(5).ToArray()); }
                             <tr>
                                 <td title="@k.基本数据.添加时间">@k.基本数据.添加时间</td>
@@ -159,18 +159,26 @@
                                 
                                 @if (k.管理单位审核人.用户数据!=null)
                                 {
-                                    if (!string.IsNullOrWhiteSpace(k.管理单位审核人.用户数据.验收单名称) && k.管理单位审核人.用户数据.验收单名称.Length > 8)
+                                    var userExam = 验收单单位列表信息.验收单单位列表;
+                                    var examiner = userExam.Find(o => o.Id == k.管理单位审核人.用户ID);
+                                    
+                                    if (!string.IsNullOrWhiteSpace(examiner.验收单审核单位名称) && examiner.验收单审核单位名称.Length > 8)
+                                    {
+                                        <td class="name" title="@examiner.验收单审核单位名称"> @examiner.验收单审核单位名称.Substring(0, 8) ... </td>
+                                    }
+                                    else
+                                    {
+                                        <td title="@examiner.验收单审核单位名称">@examiner.验收单审核单位名称</td>
+                                    }
+
+                                    @*if (!string.IsNullOrWhiteSpace(k.管理单位审核人.用户数据.验收单名称) && k.管理单位审核人.用户数据.验收单名称.Length > 8)
                                     {
                                         <td class="name" title="@k.管理单位审核人.用户数据.验收单名称"> @k.管理单位审核人.用户数据.验收单名称.Substring(0, 8) ... </td>
                                     }
                                     else
                                     {
                                         <td title="@k.管理单位审核人.用户数据.验收单名称">@k.管理单位审核人.用户数据.验收单名称</td>
-                                    }    
-                                }
-                                else
-                                {
-                                    <td>审核单位不存在</td>
+                                    }*@    
                                 }       
                                 @if (k.是否作废)
                                 {

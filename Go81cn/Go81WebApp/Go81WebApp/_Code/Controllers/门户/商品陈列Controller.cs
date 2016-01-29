@@ -1277,6 +1277,7 @@ namespace Go81WebApp.Controllers.门户
             List<商品> Recommend_Good = new List<商品>();
             List<long> ids = new List<long>();
             List<long> gid = new List<long>();
+            Random rd = new Random();
             try
             {
                 IEnumerable<供应商增值服务申请记录> model = 供应商增值服务申请记录管理.查询供应商增值服务申请记录(0, 10, Query<供应商增值服务申请记录>.Where(o => o.所申请项目名 == "企业推广服务C2位置" && o.是否通过 == 通过状态.通过 && o.结束时间 > DateTime.Now));
@@ -1311,20 +1312,15 @@ namespace Go81WebApp.Controllers.门户
                         }
                     }
                 }
-                if (Recommend_Good.Count < 10)
+                while (Recommend_Good.Count < 10)
                 {
-                    int remain = Recommend_Good.Count;
-                    for (int i = remain; i < 10; i++)
+                    int Count = (int)商品管理.计数商品(0, 0, Query<商品>.Where(o => !o.采购信息.参与协议采购 && !o.采购信息.参与应急采购 && o.审核数据.审核状态 == 审核状态.审核通过).And(Query<商品>.NotIn(h => h.Id, ids)).And(Query<商品>.NotIn(h => h.商品信息.所属供应商.用户ID, gid)));
+                    int r = rd.Next(0, Count + 1);
+                    IEnumerable<商品> Temp_Good = 商品管理.查询商品(r, 1, Query<商品>.Where(o => !o.采购信息.参与协议采购 && !o.采购信息.参与应急采购 && o.审核数据.审核状态 == 审核状态.审核通过).And(Query<商品>.NotIn(h => h.Id, ids)).And(Query<商品>.NotIn(h => h.商品信息.所属供应商.用户ID, gid)), includeDisabled: false).OrderByDescending(u => u.销售信息.点击量);
+                    if (Temp_Good != null && Temp_Good.Count() != 0)
                     {
-                        IEnumerable<商品> Temp_Good = 商品管理.查询商品(0, 1, Query<商品>.Where(o => !o.采购信息.参与协议采购 && !o.采购信息.参与应急采购 && o.审核数据.审核状态 == 审核状态.审核通过).And(Query<商品>.NotIn(h => h.Id, ids)).And(Query<商品>.NotIn(h => h.商品信息.所属供应商.用户ID, gid)), includeDisabled: false).OrderByDescending(u => u.销售信息.点击量);
-                        if (Temp_Good != null && Temp_Good.Count() != 0)
-                        {
-                            if (!gid.Contains(Temp_Good.First().商品信息.所属供应商.用户ID))
-                            {
-                                gid.Add(Temp_Good.First().商品信息.所属供应商.用户ID);
-                                Recommend_Good.Add(Temp_Good.First());
-                            }
-                        }
+                        gid.Add(Temp_Good.First().商品信息.所属供应商.用户ID);
+                        Recommend_Good.Add(Temp_Good.First());
                     }
                 }
                 Recommend_Good = Recommend_Good.OrderBy(m => m.销售信息.价格).ToList();

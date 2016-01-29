@@ -24,6 +24,7 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
             { 认证级别.军采通标准会员, 5 },
             { 认证级别.军采通商务会员, 6 },
         };
+        public _审核数据 入网审核数据 { get; set; }
         public _审核数据 审核数据 { get; set; }
         public class _审核数据
         {
@@ -38,6 +39,8 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
         public class _供应商用户信息
         {
             public bool 已填写完整 { get; set; }
+            public bool 提交入网 { get; set; }
+            public bool 实地考察 { get; set; }
             public bool 已提交 { get; set; }
             public 入库级别 入库级别 { get; set; }
             public 采购管理单位 所属管理单位 { get; set; }
@@ -153,6 +156,7 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
             酒店 = 11,
             机票代售点 = 12,
             租车企业 = 13,
+            其他=14,
         }
         public enum 采购管理单位
         {
@@ -522,6 +526,7 @@ namespace Go81WebApp.Models.数据模型.用户数据模型
         public 供应商()
         {
             审核数据 = new _审核数据();
+            入网审核数据=new _审核数据();
             供应商用户信息 = new _供应商用户信息();
             历史参标记录 = new List<_历史参标记录>();
             消息订阅信息 = new _消息订阅信息();

@@ -27,16 +27,16 @@
         </div>
         <div id="accept_con" style="width:100%;margin:0 auto 20px;">
             @{
-                var vl = new List<Tuple<string, string, string, string, int, decimal, decimal>>();
+                var vl = new List<Tuple<string, string, string, string, double, decimal, decimal>>();
                 if (Model.物资服务列表.Count > 8)
                 {
                     decimal price_total = Model.物资服务列表.Sum(o => o.总价);
-                    vl.Add(Tuple.Create(Model.某批物资名称.ToString() + "(点击查看)", (string)null, (string)null, "批", 1, price_total, price_total));
+                    vl.Add(Tuple.Create(Model.某批物资名称.ToString() + "(点击查看)", (string)null, (string)null, "批", 1.0, price_total, price_total));
                 }
                 else if (Model.物资服务列表.Count == 0 && Model.验收单附件.Count > 0)
                 {
                     decimal price_total = Model.验收单附件.Sum(o => o.价格);
-                    vl.Add(Tuple.Create(Model.某批物资名称.ToString() + "(点击查看)", (string)null, (string)null, "批", 1, price_total, price_total));
+                    vl.Add(Tuple.Create(Model.某批物资名称.ToString() + "(点击查看)", (string)null, (string)null, "批", 1.0, price_total, price_total));
                 }
                 else
                 {
@@ -52,12 +52,12 @@
                         }
                     }
                 }
-                if (Model.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0, Model.运费, Model.运费)); }
-                if (Model.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0, Model.服务费, Model.服务费)); }
-                if (Model.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0, Model.维修费, Model.维修费)); }
-                foreach (var k in Model.其他费用) { vl.Add(Tuple.Create(k.费用名称, string.Empty, string.Empty, string.Empty, 0, k.金额, k.金额)); }
+                if (Model.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0.0, Model.运费, Model.运费)); }
+                if (Model.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0.0, Model.服务费, Model.服务费)); }
+                if (Model.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0.0, Model.维修费, Model.维修费)); }
+                foreach (var k in Model.其他费用) { vl.Add(Tuple.Create(k.费用名称, string.Empty, string.Empty, string.Empty, 0.0, k.金额, k.金额)); }
 
-                var vl_all = new List<Tuple<string, string, string, string, int, decimal, decimal>[]>();
+                var vl_all = new List<Tuple<string, string, string, string, double, decimal, decimal>[]>();
                 for (var n_all = 0; n_all < vl.Count; n_all += 8) { vl_all.Add(vl.Skip(n_all).Take(8).ToArray()); }
             }
             @for (var yn = 1; yn <= vl_all.Count; ++yn)
@@ -123,7 +123,7 @@
                                         {
                                             var vl_content = vl_all[yn - 1].Length + 1 > vl_n
                                                 ? vl_all[yn - 1][vl_n - 1]
-                                                : Tuple.Create((string)null, (string)null, (string)null, (string)null, 0, -1M, -1M);
+                                                : Tuple.Create((string)null, (string)null, (string)null, (string)null, 0.0, -1M, -1M);
                                             if (vl_content.Item7 > 0) { totalcost += vl_content.Item7; }
                                             var sp = vl_content.Item1 != null && vl_content.Item1.EndsWith("(点击查看)") ? "cursor:pointer;color:red" : string.Empty;
                                             var evt_clk = "";
@@ -340,7 +340,7 @@
                                         {
                                             var vl_content = vl_all[yn - 1].Length + 1 > vl_n
                                                 ? vl_all[yn - 1][vl_n - 1]
-                                                : Tuple.Create((string)null, (string)null, (string)null, (string)null, 0, -1M, -1M);
+                                                : Tuple.Create((string)null, (string)null, (string)null, (string)null, 0.0, -1M, -1M);
                                             if (vl_content.Item7 > 0) { totalcost += vl_content.Item7; }
                                             var sp = vl_content.Item1 != null && vl_content.Item1.EndsWith("(点击查看)") ? "cursor:pointer;color:red" : string.Empty;
                                             var evt_clk = "";

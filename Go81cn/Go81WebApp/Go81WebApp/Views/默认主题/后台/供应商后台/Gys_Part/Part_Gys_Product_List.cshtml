@@ -5,6 +5,7 @@
 @using Go81WebApp.Models.数据模型.推广业务数据模型
 <script type="text/javascript" src="~/JS/GetProductClass.js"></script>
 <link rel="stylesheet" href="~/css/index.css" type="text/css">
+<link href="~/css/css.css" rel="stylesheet" />
 
 <div id="expertchoosewaitblock" class="modal_out">
     <div class="modal_in"></div>
@@ -87,196 +88,291 @@
     @{
         IEnumerable<商品> goods = ViewData["供应商商品信息"] as IEnumerable<商品>;
     }
+    <div class="gys_znxx_box" >
+        <form style="margin:5px 0px 5px 5px;">
+            <span>商品名称：</span><input type="text" value="" name="pname" style="border:1px solid #000080;border-right:none;" id="proname"/><input type="button" name="bt" value="搜索" style="border:1px solid #000080;border-left:none;background-color:#ffffff;cursor: pointer;" onclick="ProductList(1)" />
+        </form>
+    </div>
     <div class="gys_znxx_box">
-        @foreach (var item in goods)
-        {
-            var kk = (long)-2;
-            if (item.审核数据.审核状态 == 审核状态.审核通过)
+        <div id="ContentBox">
+            @foreach (var item in goods)
             {
-                kk = item.Id;
+                var kk = (long)-2;
+                if (item.审核数据.审核状态 == 审核状态.审核通过)
+                {
+                    kk = item.Id;
+                }
+                <div class="gyspage_list_content" key="@kk">
+                    <div class="gyspage_list_content_imgdiv">
+                        <a href="/供应商后台/Gys_Product_Detail?id=@item.Id">
+                            @if (item.商品信息.商品图片.Count > 0)
+                            {
+                                <img src="@item.商品信息.商品图片[0].Replace("original/", "150X150/")" width="100" height="100" />
+                            }
+                            else
+                            {
+                                <img src="~/images/noimage.jpg" width="100" height="100" />
+                            }
+                        </a>
+                    </div>
+                    <div class="gyspage_list_content_listdiv">
+                        <div class="gyspage_list_content_list">
+                            <div class="gyspage_list_content_list_cont">名称：@item.商品信息.商品名</div>
+                            <div class="gyspage_list_content_list_cont">价格：￥@item.销售信息.价格</div>
+                            @if (long.Parse(ViewData["userId"].ToString()) == 200000001522)
+                            {
+                                <div class="gyspage_list_content_list_cont">军采价：￥@item.销售信息.军采价</div>
+                            }
+                            <div class="gyspage_list_content_list_cont">
+                                状态：<font color="green">@item.审核数据.审核状态</font>@if (item.审核数据.审核状态 == 审核状态.审核未通过)
+                                                                             {<font color="red">(@item.审核数据.审核不通过原因)</font>}
+                            </div>
+                            <div class="gyspage_list_content_list_cont" id="sjShelves__@item.Id">
+                                上架：@if (item.基本数据.已屏蔽)
+                                   {<font color="red">未上架</font>}
+                                   else
+                                   {<font color="green">已上架</font>}
+                            </div>
+                        </div>
+                        <div class="gyspage_list_content_list">
+                            <a href="~/供应商后台/Gys_Product_Detail?id=@item.Id" style="padding:0 10px 0 0;">预览</a>
+                            <a href="~/供应商后台/Gys_Product_Modify_Price?id=@item.Id&comes=s" style="padding:0 10px 0 0;">修改价格</a>
+                            <a href="~/供应商后台/Gys_Product_Modify?id=@item.Id&comes=s" style="padding:0 10px 0 10px;">修改商品信息</a>
+                            <a href="~/供应商后台/Gys_Product_Delete?id=@item.Id" style="padding:0 10px 0 10px;">删除</a>
+                        </div>
+
+                        <div class="gyspage_list_content_list">
+                            @if (item.审核数据.审核状态 == 审核状态.审核通过)
+                            {
+                                if (item.基本数据.已屏蔽)
+                                {
+                                    <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" onclick="return doShelves(this);" title="点击上架" /><span>上架</span>
+                                }
+                                else
+                                {
+                                    <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" checked="checked" onclick="return doShelves(this);" title="点击下架" /><span>上架</span>
+                                }
+                            }
+                            else
+                            {
+                                <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" disabled="disabled" title="未审核通过，不能上架" /><span>上架</span>
+                            }
+                        </div>
+
+                    </div>
+                </div>
             }
-            <div class="gyspage_list_content" key="@kk">
-                <div class="gyspage_list_content_imgdiv">
-                    <a href="/供应商后台/Gys_Product_Detail?id=@item.Id">
-                        @if (item.商品信息.商品图片.Count > 0)
-                        {
-                            <img src="@item.商品信息.商品图片[0].Replace("original/", "150X150/")" width="100" height="100" />
-                        }
-                        else
-                        {
-                            <img src="~/images/noimage.jpg" width="100" height="100" />
-                        }
-                    </a>
-                </div>
-                <div class="gyspage_list_content_listdiv">
-                    <div class="gyspage_list_content_list">
-                        <div class="gyspage_list_content_list_cont">名称：@item.商品信息.商品名</div>
-                        <div class="gyspage_list_content_list_cont">价格：￥@item.销售信息.价格</div>
-                        @if (long.Parse(ViewData["userId"].ToString()) == 200000001522)
-                        {
-                          <div class="gyspage_list_content_list_cont">军采价：￥@item.销售信息.军采价</div>  
-                        }
-                        <div class="gyspage_list_content_list_cont">
-                            状态：<font color="green">@item.审核数据.审核状态</font>@if (item.审核数据.审核状态 == 审核状态.审核未通过)
-                            {<font color="red">(@item.审核数据.审核不通过原因)</font>}
-                        </div>
-                        <div class="gyspage_list_content_list_cont" id="sjShelves__@item.Id">
-                            上架：@if (item.基本数据.已屏蔽)
-                            {<font color="red">未上架</font>}
-                            else
-                            {<font color="green">已上架</font>}
-                        </div>
-                    </div>
-                    <div class="gyspage_list_content_list">
-                        <a href="~/供应商后台/Gys_Product_Detail?id=@item.Id" style="padding:0 10px 0 0;">预览</a>
-                        <a href="~/供应商后台/Gys_Product_Modify_Price?id=@item.Id&comes=s" style="padding:0 10px 0 0;">修改价格</a>
-                        <a href="~/供应商后台/Gys_Product_Modify?id=@item.Id&comes=s" style="padding:0 10px 0 10px;">修改商品信息</a>
-                        <a href="~/供应商后台/Gys_Product_Delete?id=@item.Id" style="padding:0 10px 0 10px;">删除</a>
-                    </div>
 
-                    <div class="gyspage_list_content_list">
-                        @if (item.审核数据.审核状态 == 审核状态.审核通过)
-                        {
-                            if (item.基本数据.已屏蔽)
-                            {
-                                <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" onclick="return doShelves(this);" title="点击上架" /><span>上架</span>
-                            }
-                            else
-                            {
-                                <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" checked="checked" onclick="return doShelves(this);" title="点击下架" /><span>上架</span>
-                            }
-                        }
-                        else
-                        {
-                            <input id="Shelves__@item.Id" type="checkbox" value="@item.Id" disabled="disabled" title="未审核通过，不能上架" /><span>上架</span>
-                        }
-                    </div>
-
-                </div>
-            </div>
-        }
-
-        @if (goods.Count()!=0)
-        {
-            <div class="gys_znxx_content_detailbox">
+            @if (goods.Count() != 0)
+            {
                 <div class="gys_znxx_content_detailbox">
-                    @{
-            int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
-            int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
-            if (Pagecount > 0)
-            {
-                if (CurrentPage != 1)
-                {
-                    <a href='/供应商后台/Gys_Product_List?page=1'>首页</a><a style="border-left:none;" href='/供应商后台/Gys_Product_List?page=@(CurrentPage-1)'>上一页</a>
-                }
-            }
-            if (Pagecount <= 6)
-            {
-                for (int i = 1; i <= Pagecount; i++)
-                {
-                    if (CurrentPage == i)
-                    {
-                        <a style="border:1px solid red;" href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
-                    }
-                    else
-                    {
-                        <a href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
-                    }
-                }
+                    <div class="gys_znxx_content_detailbox">
+                        @{
+                            int Pagecount = int.Parse(ViewData["Pagecount"].ToString());
+                            int CurrentPage = int.Parse(ViewData["CurrentPage"].ToString());
+                            if (Pagecount > 0)
+                            {
+                                if (CurrentPage != 1)
+                                {
+                                    <a href='/供应商后台/Gys_Product_List?page=1'>首页</a><a style="border-left:none;" href='/供应商后台/Gys_Product_List?page=@(CurrentPage-1)'>上一页</a>
+                                }
+                            }
+                            if (Pagecount <= 6)
+                            {
+                                for (int i = 1; i <= Pagecount; i++)
+                                {
+                                    if (CurrentPage == i)
+                                    {
+                                        <a style="border:1px solid red;" href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (CurrentPage < 6)
+                                {
+                                    if (CurrentPage != 1)
+                                    {
+                                        for (int i = 1; i < 7; i++)
+                                        {
+                                            if (CurrentPage == i)
+                                            {
+                                                <a style="border:1px solid red;" href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
+                                            }
+                                            else
+                                            {
+                                                <a href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
+                                            }
+                                        }
+                                        <span>...</span><a href="/供应商后台/Gys_Product_List?page=@(Pagecount)">@Pagecount</a>
+                                    }
+                                    else
+                                    {
+                                        for (int i = 1; i < 7; i++)
+                                        {
+                                            if (CurrentPage == i)
+                                            {
+                                                <a style="border:1px solid red;" href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
+                                            }
+                                            else
+                                            {
+                                                <a href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
+                                            }
+                                        }
+                                        <span>...</span><a href="/供应商后台/Gys_Product_List?page=@(Pagecount)">@Pagecount</a>
+                                    }
+                                }
+                                else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
+                                {
+                                    <a href="/供应商后台/Gys_Product_List?page=1">1</a><span>...</span>
+                                    for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
+                                        }
+                                    }
+                                    <span>...</span><a href="/供应商后台/Gys_Product_List?page=@(Pagecount)">@Pagecount</a>
+                                }
+                                else if (CurrentPage >= Pagecount - 3)
+                                {
+                                    <a href="/供应商后台/Gys_Product_List?page=1">1</a><span>...</span>
+                                    for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
+                                    {
+                                        if (CurrentPage == i)
+                                        {
+                                            <a style="border:1px solid red;" href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
+                                        }
+                                        else
+                                        {
+                                            <a href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
+                                        }
+                                    }
+                                }
+                            }
+                            if (Pagecount > 0)
+                            {
+                                if (CurrentPage != Pagecount)
+                                {
+                                    <a href='/供应商后台/Gys_Product_List?page=@(CurrentPage+1)' style="border-right:none;">下一页</a><a href='/供应商后台/Gys_Product_List?page=@(Pagecount)'>末页</a>
+                                }
+                                <span>第@(CurrentPage)页/共@(Pagecount)页</span>
+                            }
+                        }
+                    </div>
+                    <div style="padding-top:10px;">
+                        跳转到<input id="jumpagetext" type="text" style="width:50px; height:20px; line-height:20px;" />页<input style="width:50px; height:25px; line-height:25px;" type="button" onclick="return Jumppage();" value="确定" />
+                    </div>
+                </div>
             }
             else
             {
-                if (CurrentPage < 6)
-                {
-                    if (CurrentPage != 1)
-                    {
-                        for (int i = 1; i < 7; i++)
-                        {
-                            if (CurrentPage == i)
-                            {
-                                <a style="border:1px solid red;" href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
-                            }
-                            else
-                            {
-                                <a href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
-                            }
-                        }
-                        <span>...</span><a href="/供应商后台/Gys_Product_List?page=@(Pagecount)">@Pagecount</a>
-                    }
-                    else
-                    {
-                        for (int i = 1; i < 7; i++)
-                        {
-                            if (CurrentPage == i)
-                            {
-                                <a style="border:1px solid red;" href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
-                            }
-                            else
-                            {
-                                <a href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
-                            }
-                        }
-                        <span>...</span><a href="/供应商后台/Gys_Product_List?page=@(Pagecount)">@Pagecount</a>
-                    }
-                }
-                else if (CurrentPage >= 6 && CurrentPage < Pagecount - 3)
-                {
-                    <a href="/供应商后台/Gys_Product_List?page=1">1</a><span>...</span>
-                    for (int i = (CurrentPage - 4 + 1); i <= CurrentPage + 1; i++)
-                    {
-                        if (CurrentPage == i)
-                        {
-                            <a style="border:1px solid red;" href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
-                        }
-                        else
-                        {
-                            <a href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
-                        }
-                    }
-                    <span>...</span><a href="/供应商后台/Gys_Product_List?page=@(Pagecount)">@Pagecount</a>
-                }
-                else if (CurrentPage >= Pagecount - 3)
-                {
-                    <a href="/供应商后台/Gys_Product_List?page=1">1</a><span>...</span>
-                    for (int i = Pagecount - 6 + 1; i <= Pagecount; i++)
-                    {
-                        if (CurrentPage == i)
-                        {
-                            <a style="border:1px solid red;" href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
-                        }
-                        else
-                        {
-                            <a href='/供应商后台/Gys_Product_List?page=@i'>@i</a>
-                        }
-                    }
-                }
+                <h1 style="text-align:center;color:#CEE5F9;">没有任何商品！</h1>
             }
-            if (Pagecount > 0)
-            {
-                if (CurrentPage != Pagecount)
-                {
-                    <a href='/供应商后台/Gys_Product_List?page=@(CurrentPage+1)' style="border-right:none;">下一页</a><a href='/供应商后台/Gys_Product_List?page=@(Pagecount)'>末页</a>
-                }
-                <span>第@(CurrentPage)页/共@(Pagecount)页</span>
-            }
-                    }
-                </div>
-                <div style="padding-top:10px;">
-                    跳转到<input id="jumpagetext" type="text" style="width:50px; height:20px; line-height:20px;" />页<input style="width:50px; height:25px; line-height:25px;" type="button" onclick="return Jumppage();" value="确定" />
-                </div>
-            </div>
-        }
-           else
-        {
-            <h1 style="text-align:center;color:#CEE5F9;">没有任何商品！</h1>
-        } 
-    </div>
+        </div>
+        <div id="pager"></div>
+        </div>
 </div>
 <script type="text/javascript" language="javascript">
     $(document).ready(function () {
-        $("#未审核的商品信息").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#未审核的商品信息").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#商品列表").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#商品列表").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
+    function setPage(pgCount, currentPage) {
+        if (pgCount <= 6) {
+            var str = '';
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='ProductList(" + i + ")'>" + i + "</a>";
+            }
+            if (pgCount != 0) {
+                str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
+            }
+            $("div#pager").html(str);
+        }
+        else {
+            if (currentPage < 6) {
+                if (currentPage != 1) {
+                    var str = "<a onclick='ProductList(" + (currentPage - 1) + ")'>上一页</a>";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a onclick='ProductList(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a  onclick='ProductList(" + pgCount + ")'>" + pgCount + "</a><a onclick='ProductList(" + (currentPage + 1) + ")'>下一页</a>";
+                    str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
+                    $("div#pager").html(str);
+                }
+                else {
+                    var str = "";
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a  onclick='ProductList(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "...<a onclick='ProductList(" + pgCount + ")'>" + pgCount + "</a><a onclick='ProductList(" + (currentPage + 1) + ")'>下一页</a>";
+                    str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
+                    $("div#pager").html(str);
+                }
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                var str = "<a onclick='ProductList(" + (currentPage - 1) + ")'>上一页</a><a onclick='ProductList(" + (1) + ")'>1</a>...";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='ProductList(" + i + ")'>" + i + "</a>";
+                }
+                str += "...<a onclick='ProductList(" + pgCount + ")'>" + pgCount + "</a><a onclick='ProductList(" + (currentPage + 1) + ")'>下一页</a>";
+                str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+            else if (currentPage >= pgCount - 3) {
+                var str = "<a onclick='ProductList(" + (currentPage - 1) + ")'>上一页</a><a onclick='ProductList(" + 1 + ")'>1</a>...";
+                for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
+                    str += "<a onclick='ProductList(" + i + ")'>" + i + "</a>";
+                }
+                str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
+                $("div#pager").html(str);
+            }
+        }
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css("border", "1px solid red");
+                }
+            }
+        );
+    }
+    function ProductList(cpage) {
+        var str = "";
+        $.get("/供应商后台/Searchproduct", {
+            name: $("#proname").val(),
+            page: cpage
+        }, function (data) {
+            if (data.Data.u.length != 0) {
+                for (var i = 0; i < data.Data.u.length; i++) {
+                    if (data.Data.u[i].IsChecked == "审核通过") {
+                        if (data.Data.u[i].IsRefused=="下架") {
+                            str += '<div class="gyspage_list_content" key="10"><div class="gyspage_list_content_imgdiv"><a href="/供应商后台/Gys_Product_Detail?id=' + data.Data.u[i].Id + '"><img src="' + data.Data.u[i].url + '" width="100" height="100"></a></div><div class="gyspage_list_content_listdiv"><div class="gyspage_list_content_list"><div class="gyspage_list_content_list_cont">' + data.Data.u[i].name + '</div><div class="gyspage_list_content_list_cont">价格：￥' + data.Data.u[i].price + '</div><div class="gyspage_list_content_list_cont">状态：<font color="green">' + data.Data.u[i].IsChecked + '</font></div><div class="gyspage_list_content_list_cont" id="sjShelves__10">上架：<font color="green">' + data.Data.u[i].IsRefused + '</font></div></div><div class="gyspage_list_content_list"><a href="/供应商后台/Gys_Product_Detail?id=' + data.Data.u[i].Id + '" style="padding:0 10px 0 0;">预览</a><a href="/供应商后台/Gys_Product_Modify_Price?id=' + data.Data.u[i].Id + '&amp;comes=s" style="padding:0 10px 0 0;">修改价格</a><a href="/供应商后台/Gys_Product_Modify?id=10&amp;comes=s" style="padding:0 10px 0 10px;">修改商品信息</a><a href="/供应商后台/Gys_Product_Delete?id=' + data.Data.u[i].Id + '" style="padding:0 10px 0 10px;">删除</a></div><div class="gyspage_list_content_list"><input id="Shelves__' + data.Data.u[i].Id + '" type="checkbox" value="' + data.Data.u[i].Id + '" checked="checked" onclick="return doShelves(this);" title="点击上架"><span>上架</span></div></div></div>';
+                        } else {
+                            str += '<div class="gyspage_list_content" key="10"><div class="gyspage_list_content_imgdiv"><a href="/供应商后台/Gys_Product_Detail?id=' + data.Data.u[i].Id + '"><img src="' + data.Data.u[i].url + '" width="100" height="100"></a></div><div class="gyspage_list_content_listdiv"><div class="gyspage_list_content_list"><div class="gyspage_list_content_list_cont">' + data.Data.u[i].name + '</div><div class="gyspage_list_content_list_cont">价格：￥' + data.Data.u[i].price + '</div><div class="gyspage_list_content_list_cont">状态：<font color="green">' + data.Data.u[i].IsChecked + '</font></div><div class="gyspage_list_content_list_cont" id="sjShelves__10">上架：<font color="green">' + data.Data.u[i].IsRefused + '</font></div></div><div class="gyspage_list_content_list"><a href="/供应商后台/Gys_Product_Detail?id=' + data.Data.u[i].Id + '" style="padding:0 10px 0 0;">预览</a><a href="/供应商后台/Gys_Product_Modify_Price?id=' + data.Data.u[i].Id + '&amp;comes=s" style="padding:0 10px 0 0;">修改价格</a><a href="/供应商后台/Gys_Product_Modify?id=10&amp;comes=s" style="padding:0 10px 0 10px;">修改商品信息</a><a href="/供应商后台/Gys_Product_Delete?id=' + data.Data.u[i].Id + '" style="padding:0 10px 0 10px;">删除</a></div><div class="gyspage_list_content_list"><input id="Shelves__' + data.Data.u[i].Id + '" type="checkbox" value="' + data.Data.u[i].Id + '" checked="checked" onclick="return doShelves(this);" title="点击下架"><span>上架</span></div></div></div>';
+                        }
+                    } else {
+                        str += '<div class="gyspage_list_content" key="10"><div class="gyspage_list_content_imgdiv"><a href="/供应商后台/Gys_Product_Detail?id=' + data.Data.u[i].Id + '"><img src="' + data.Data.u[i].url + '" width="100" height="100"></a></div><div class="gyspage_list_content_listdiv"><div class="gyspage_list_content_list"><div class="gyspage_list_content_list_cont">' + data.Data.u[i].name + '</div><div class="gyspage_list_content_list_cont">价格：￥' + data.Data.u[i].price + '</div><div class="gyspage_list_content_list_cont">状态：<font color="green">' + data.Data.u[i].IsChecked + '</font></div><div class="gyspage_list_content_list_cont" id="sjShelves__10">上架：<font color="green">' + data.Data.u[i].IsRefused + '</font></div></div><div class="gyspage_list_content_list"><a href="/供应商后台/Gys_Product_Detail?id=' + data.Data.u[i].Id + '" style="padding:0 10px 0 0;">预览</a><a href="/供应商后台/Gys_Product_Modify_Price?id=' + data.Data.u[i].Id + '&amp;comes=s" style="padding:0 10px 0 0;">修改价格</a><a href="/供应商后台/Gys_Product_Modify?id=10&amp;comes=s" style="padding:0 10px 0 10px;">修改商品信息</a><a href="/供应商后台/Gys_Product_Delete?id=' + data.Data.u[i].Id + '" style="padding:0 10px 0 10px;">删除</a></div><div class="gyspage_list_content_list"><input id="Shelves__' + data.Data.u[i].Id + '" type="checkbox" value="' + data.Data.u[i].Id + '" disabled="disabled" onclick="return doShelves(this);" title="点击下架"><span>上架</span></div></div></div>';
+                    }
+                }
+                $("#ContentBox").html(str);
+                setPage(data.Data.p, cpage);
+            }
+            else {
+                str += '<h1 style="text-align:center;color:#CEE5F9;">没有任何商品！</h1>';
+                $("#ContentBox").html(str);
+                setPage(0, cpage);
+            }
+        }
+        );
+    }
     function Jumppage(){
         var jumpage =  $("#jumpagetext").val();
         if(jumpage==""){

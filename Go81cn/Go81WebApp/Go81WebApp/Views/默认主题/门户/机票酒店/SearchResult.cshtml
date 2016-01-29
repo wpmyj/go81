@@ -1,0 +1,422 @@
+﻿@{
+    Layout = "HotelLayout.cshtml";
+    ViewBag.Title = "酒店列表";
+}
+<link href="~/css/hotel.css" rel="stylesheet" />
+<style>
+    ul.selectionCondition {
+        line-height: 40px;
+    }
+</style>
+<div>
+    <div class="searchboxContainer" style="font-family: '微软雅黑'">
+        <div id="container">
+            <form target="_blank" method="GET">
+                <div style="margin-top:20px;width: 730px;margin: 0px auto;">
+                    <div class="floatleft"><span>目的地</span><input type="text" value="" placeholder="请输入目的地" /></div>
+                    <div class="floatleft"><span>酒店名</span><input type="text" value="" placeholder="酒店名称" /></div>
+                    <div class="floatleft" style="border:none;background-color:transparent;padding:0px;text-align:left;"><input class="submitbutton" style="margin-top:0px;height:36px;" type="submit" value="立即搜索" /></div>
+                    <div class="clearbox"></div>
+                </div>
+            </form>
+        </div>
+        <div class="condition">
+            <div>
+                <ul class="selectionCondition">
+                    <li style="margin-right:20px;"><span>酒店位置</span></li>
+                    <li class="selectionitem" style="text-align:left;">
+                        <div onclick="showItem(this,0)" style="text-align: center;">区域<span class="itemArrow"></span></div>
+
+                    </li>
+                    <li class="selectionitem">
+                        <div onclick="showItem(this,1)" style="text-align: center;">行政区<span class="itemArrow"></span></div>
+
+                    </li>
+                    <li class="selectionitem">
+                        <div onclick="showItem(this,2)" style="text-align: center;">地铁线路<span class="itemArrow"></span></div>
+
+                    </li>
+                    <li class="selectionitem">
+                        <div onclick="showItem(this,3)" style="text-align: center;">车站机场<span class="itemArrow"></span></div>
+
+                    </li>
+                    <li class="selectionitem">
+                        <div onclick="showItem(this,4)" style="text-align: center;">观光景点<span class="itemArrow"></span></div>
+
+                    </li>
+                    <li class="selectionitem">
+                        <div onclick="showItem(this,5)" style="text-align: center;">医院<span class="itemArrow"></span></div>
+
+                    </li>
+                    <li class="selectionitem">
+                        <div onclick="showItem(this,6)" style="text-align: center;">大学<span class="itemArrow"></span></div>
+
+                    </li>
+                    <li class="selectionitem">
+                        <div onclick="showItem(this,7)" style="text-align: center;">郊游景点<span class="itemArrow"></span></div>
+
+                    </li>
+                </ul>
+                <ul style="list-style: none;padding:0px;margin:0px;">
+                    <li style="display:block;margin-left:40px;">
+                        <div class="itemcondition">
+                            nnnnnnnnnnnnnnnnnnnnn
+                        </div>
+                        <div class="itemcondition">
+                            jjjjjjjjjjjjjjjjjj
+                        </div>
+                        <div class="itemcondition">
+                            ssssssssssssssssssssss
+                        </div>
+                        <div class="itemcondition">
+                            cccccccccccc
+                        </div>
+                        <div class="itemcondition">
+                            fffffffffffffffff
+                        </div>
+                        <div class="itemcondition">
+                            rrrrrrrrrrrr
+                        </div>
+                        <div class="itemcondition">
+                            2222222222
+                        </div>
+                        <div class="itemcondition">
+                            111111111111
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <ul class="selectionCondition">
+                    <li style="margin-right:20px;"><div>价格范围</div></li>
+                    <li class="selectionitem" style="width:50px;"><div><a>不限</a></div></li>
+                    <li class="selectionitem">
+                        <div class="conditionSelect">
+                            <label>
+                                <i></i><input type="checkbox" />
+                                <span>¥200以下</span>
+                            </label>
+                        </div>
+                    </li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>¥200-¥300</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>¥300-¥500</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>¥500以上</span></label></div></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="selectionCondition">
+                    <li style="margin-right:20px;"><div>酒店级别</div></li>
+                    <li class="selectionitem" style="width:50px;"><div><a>不限</a></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>经济型</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>二星级/其他</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>三星级/舒适</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>四星级/高档</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>五星级/豪华</span></label></div></li>
+                </ul>
+            </div>
+            <div id="chain">
+                <ul class="selectionCondition">
+                    <li style="margin-right:20px;"><div>连锁品牌</div></li>
+                    <li class="selectionitem" style="width:50px;"><div class="conditionSelect"><a>不限</a></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>7天酒店</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>如家快捷</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>汉庭酒店</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>布丁</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>速8</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>嘉立连锁</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>99连锁</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>怡家</span></label></div></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="selectionCondition">
+                    <li style="margin-right:20px;"><div>酒店类型</div></li>
+                    <li class="selectionitem" style="width:50px;"><div><a>不限</a></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>客栈</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>连锁品牌</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>酒店式公寓</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>青年旅舍</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>家庭旅馆</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>商务型酒店</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>招待所</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>奢华酒店</span></label></div></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="selectionCondition" style="border-bottom:none;">
+                    <li style="margin-right:20px;"><div>入住要求</div></li>
+                    <li class="selectionitem" style="width:50px;"><div><a>不限</a></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>免费宽带</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>游泳池</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>新开业/装修</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>餐厅</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>商务中心</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>健身房</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>会议室</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>接待外宾</span></label></div></li>
+                    <li class="selectionitem"><div class="conditionSelect"><label><i></i><input type="checkbox" /><span>可携带宠物</span></label></div></li>
+                </ul>
+            </div>
+        </div>
+        <div id="hotelDetail">
+            <div class="jiesao">
+                <div class="imgbox">
+                    <a href="/机票酒店/HotelInfo" target="_blank"><img src="/Images/hotel1.jpg" /></a>
+                </div>
+                <div class="hotelIntroduce">
+                    <div class="hotelName"><a href="/机票酒店/HotelInfo" target="_blank">成都安仁镇乐述言公馆</a><span style="color:#555;font-size:12px;padding-left:10px;">经济型</span></div>
+                    <div class="hotelName" style="font-size:12px;color:#555;">位于大邑县，四川省安仁镇红星街西口，在安仁中学附近</div>
+                    <div class="hotelName" style="font-size:12px;">查看地图</div>
+                </div>
+                <div class="pinglun" style="text-align: center; font-size: 13px;color:#cccccc; vertical-align: middle;">
+                    <div class="contract">暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评</div>
+                </div>
+                <div class="pinglun" style="text-align: right;border-right:none;">
+                    <div><span class="pricepic">¥</span><span class="hotelprice">200</span><span class="pricepic">起</span></div>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+            <div class="jiesao">
+                <div class="imgbox">
+                    <a href="/机票酒店/HotelInfo" target="_blank"><img src="/Images/hotel1.jpg" /></a>
+                </div>
+                <div class="hotelIntroduce">
+                    <div class="hotelName"><a href="/机票酒店/HotelInfo" target="_blank">成都安仁镇乐述言公馆</a><span style="color:#555;font-size:12px;padding-left:10px;">经济型</span></div>
+                    <div class="hotelName" style="font-size:12px;color:#555;">位于大邑县，四川省安仁镇红星街西口，在安仁中学附近</div>
+                    <div class="hotelName" style="font-size:12px;">查看地图</div>
+                </div>
+                <div class="pinglun" style="text-align: center; font-size: 13px;color:#cccccc; vertical-align: middle;">
+                    <div class="contract">暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评</div>
+                </div>
+                <div class="pinglun" style="text-align: right;border-right:none;">
+                    <div><span class="pricepic">¥</span><span class="hotelprice">200</span><span class="pricepic">起</span></div>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+            <div class="jiesao">
+                <div class="imgbox">
+                    <a href="/机票酒店/HotelInfo" target="_blank"><img src="/Images/hotel1.jpg" /></a>
+                </div>
+                <div class="hotelIntroduce">
+                    <div class="hotelName"><a href="/机票酒店/HotelInfo" target="_blank">成都安仁镇乐述言公馆</a><span style="color:#555;font-size:12px;padding-left:10px;">经济型</span></div>
+                    <div class="hotelName" style="font-size:12px;color:#555;">位于大邑县，四川省安仁镇红星街西口，在安仁中学附近</div>
+                    <div class="hotelName" style="font-size:12px;">查看地图</div>
+                </div>
+                <div class="pinglun" style="text-align: center; font-size: 13px;color:#cccccc; vertical-align: middle;">
+                    <div class="contract">暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评</div>
+                </div>
+                <div class="pinglun" style="text-align: right;border-right:none;">
+                    <div><span class="pricepic">¥</span><span class="hotelprice">200</span><span class="pricepic">起</span></div>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+            <div class="jiesao">
+                <div class="imgbox">
+                    <a href="/机票酒店/HotelInfo" target="_blank"><img src="/Images/hotel1.jpg" /></a>
+                </div>
+                <div class="hotelIntroduce">
+                    <div class="hotelName"><a href="/机票酒店/HotelInfo" target="_blank">成都安仁镇乐述言公馆</a><span style="color:#555;font-size:12px;padding-left:10px;">经济型</span></div>
+                    <div class="hotelName" style="font-size:12px;color:#555;">位于大邑县，四川省安仁镇红星街西口，在安仁中学附近</div>
+                    <div class="hotelName" style="font-size:12px;">查看地图</div>
+                </div>
+                <div class="pinglun" style="text-align: center; font-size: 13px;color:#cccccc; vertical-align: middle;">
+                    <div class="contract">暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评</div>
+                </div>
+                <div class="pinglun" style="text-align: right;border-right:none;">
+                    <div><span class="pricepic">¥</span><span class="hotelprice">200</span><span class="pricepic">起</span></div>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+            <div class="jiesao">
+                <div class="imgbox">
+                    <a href="/机票酒店/HotelInfo" target="_blank"><img src="/Images/hotel1.jpg" /></a>
+                </div>
+                <div class="hotelIntroduce">
+                    <div class="hotelName"><a href="/机票酒店/HotelInfo" target="_blank">成都安仁镇乐述言公馆</a><span style="color:#555;font-size:12px;padding-left:10px;">经济型</span></div>
+                    <div class="hotelName" style="font-size:12px;color:#555;">位于大邑县，四川省安仁镇红星街西口，在安仁中学附近</div>
+                    <div class="hotelName" style="font-size:12px;">查看地图</div>
+                </div>
+                <div class="pinglun" style="text-align: center; font-size: 13px;color:#cccccc; vertical-align: middle;">
+                    <div class="contract">
+                        暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评
+                        论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂
+                        论暂无评论暂无评论暂无评论暂无评论暂论暂无评论暂无评论暂无
+                        评论暂无评论暂无评论暂无评论
+                    </div>
+                </div>
+                <div class="pinglun" style="text-align: right;border-right:none;">
+                    <div><span class="pricepic">¥</span><span class="hotelprice">200</span><span class="pricepic">起</span></div>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+            <div class="jiesao">
+                <div class="imgbox">
+                    <a href="/机票酒店/HotelInfo" target="_blank"><img src="/Images/hotel1.jpg" /></a>
+                </div>
+                <div class="hotelIntroduce">
+                    <div class="hotelName"><a href="/机票酒店/HotelInfo" target="_blank">成都安仁镇乐述言公馆</a><span style="color:#555;font-size:12px;padding-left:10px;">经济型</span></div>
+                    <div class="hotelName" style="font-size:12px;color:#555;">位于大邑县，四川省安仁镇红星街西口，在安仁中学附近</div>
+                    <div class="hotelName" style="font-size:12px;">查看地图</div>
+                </div>
+                <div class="pinglun" style="text-align: center; font-size: 13px;color:#cccccc; vertical-align: middle;">
+                    <div class="contract">暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评</div>
+                </div>
+                <div class="pinglun" style="text-align: right;border-right:none;">
+                    <div><span class="pricepic">¥</span><span class="hotelprice">200</span><span class="pricepic">起</span></div>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+            <div class="jiesao">
+                <div class="imgbox">
+                    <a href="/机票酒店/HotelInfo" target="_blank"><img src="/Images/hotel1.jpg" /></a>
+                </div>
+                <div class="hotelIntroduce">
+                    <div class="hotelName"><a href="/机票酒店/HotelInfo" target="_blank">成都安仁镇乐述言公馆</a><span style="color:#555;font-size:12px;padding-left:10px;">经济型</span></div>
+                    <div class="hotelName" style="font-size:12px;color:#555;">位于大邑县，四川省安仁镇红星街西口，在安仁中学附近</div>
+                    <div class="hotelName" style="font-size:12px;">查看地图</div>
+                </div>
+                <div class="pinglun" style="text-align: center; font-size: 13px;color:#cccccc; vertical-align: middle;">
+                    <div class="contract">
+                        暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评
+                        论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂
+                        论暂无评论暂无评论暂无评论暂无评论暂论暂无评论暂无评论暂无
+                        评论暂无评论暂无评论暂无评论
+                    </div>
+                </div>
+                <div class="pinglun" style="text-align: right;border-right:none;">
+                    <div><span class="pricepic">¥</span><span class="hotelprice">200</span><span class="pricepic">起</span></div>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+            <div class="jiesao">
+                <div class="imgbox">
+                    <a href="/机票酒店/HotelInfo" target="_blank"><img src="/Images/hotel1.jpg" /></a>
+                </div>
+                <div class="hotelIntroduce">
+                    <div class="hotelName"><a href="/机票酒店/HotelInfo" target="_blank">成都安仁镇乐述言公馆</a><span style="color:#555;font-size:12px;padding-left:10px;">经济型</span></div>
+                    <div class="hotelName" style="font-size:12px;color:#555;">位于大邑县，四川省安仁镇红星街西口，在安仁中学附近</div>
+                    <div class="hotelName" style="font-size:12px;">查看地图</div>
+                </div>
+                <div class="pinglun" style="text-align: center; font-size: 13px;color:#cccccc; vertical-align: middle;">
+                    <div class="contract">暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评</div>
+                </div>
+                <div class="pinglun" style="text-align: right;border-right:none;">
+                    <div><span class="pricepic">¥</span><span class="hotelprice">200</span><span class="pricepic">起</span></div>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+            <div class="jiesao">
+                <div class="imgbox">
+                    <a href="/机票酒店/HotelInfo" target="_blank"><img src="/Images/hotel1.jpg" /></a>
+                </div>
+                <div class="hotelIntroduce">
+                    <div class="hotelName"><a href="/机票酒店/HotelInfo" target="_blank">成都安仁镇乐述言公馆</a><span style="color:#555;font-size:12px;padding-left:10px;">经济型</span></div>
+                    <div class="hotelName" style="font-size:12px;color:#555;">位于大邑县，四川省安仁镇红星街西口，在安仁中学附近</div>
+                    <div class="hotelName" style="font-size:12px;">查看地图</div>
+                </div>
+                <div class="pinglun" style="text-align: center; font-size: 13px;color:#cccccc; vertical-align: middle;">
+                    <div class="contract">
+                        暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评
+                        论暂无评论暂无评论暂无评论暂无评论暂无评论暂无评论暂
+                        论暂无评论暂无评论暂无评论暂无评论暂论暂无评论暂无评论暂无
+                        评论暂无评论暂无评论暂无评论
+                    </div>
+                </div>
+                <div class="pinglun" style="text-align: right;border-right:none;">
+                    <div><span class="pricepic">¥</span><span class="hotelprice">200</span><span class="pricepic">起</span></div>
+                </div>
+                <div class="clearbox"></div>
+            </div>
+        </div>
+        <div id="pager" style="font-size:0px;">
+        </div>
+    </div>
+</div>
+<script>
+    function setPage(pgCount, currentPage) {
+        var str = '';
+        if (pgCount > 0) {
+            if (currentPage != 1) {
+                str += "<a onclick='getGoods(1)'>首页</a><a onclick='getGoods(" + (currentPage - 1) + ")'>上一页</a>";
+            }
+        }
+        if (pgCount <= 6) {
+            for (var i = 1; i <= pgCount; i++) {
+                str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+            }
+        }
+        else {
+            if (currentPage < 6) {
+                if (currentPage != 1) {
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "<span>...</span><a  onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a>";
+                }
+                else {
+                    for (var i = 1; i < 7; i++) {
+                        str += "<a  onclick='getGoods(" + i + ")'>" + i + "</a>";
+                    }
+                    str += "<span>...</span><a onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a>";
+                }
+            }
+            else if (currentPage >= 6 && currentPage < pgCount - 3) {
+                str += "<a onclick='getGoods(" + (1) + ")'>1</a><span>...</span>";
+                for (var i = (currentPage - 4 + 1) ; i <= currentPage + 1; i++) {
+                    str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                }
+                str += "<span>...</span><a onclick='getGoods(" + pgCount + ")'>" + pgCount + "</a>";
+            }
+            else if (currentPage >= pgCount - 3) {
+                str += "<a onclick='getGoods(" + 1 + ")'>1</a><span>...</span>";
+                for (var i = pgCount - 6 + 1; i <= pgCount; i++) {
+                    str += "<a onclick='getGoods(" + i + ")'>" + i + "</a>";
+                }
+            }
+        }
+        if (pgCount > 0) {
+            if (currentPage != pgCount) {
+                str += "<a onclick='getGoods(" + (currentPage + 1) + ")'>下一页</a><a onclick='getGoods(" + pgCount + ")'>末页</a>";
+            }
+            /*if (pgCount != 0) {
+                str += "<span>第" + currentPage + "/共" + pgCount + "页</span>";
+            }*/
+        }
+        $("div#pager").html(str);
+        $("div#pager a").each(
+            function () {
+                if ($(this).text() == currentPage.toString()) {
+                    $(this).css({ "background-color": "#1fa3c2", "color": "#fff" });
+                }
+            }
+        );
+    }
+    function getGoods(num) {
+        setPage(20,num);
+    }
+    $(document).ready(function () {
+        setPage(20, 9);
+        $("ul.selectionCondition:eq(0) li div").css({ "width": "auto", "margin-right": "20px" });
+        $("ul.selectionCondition:eq(0)").css("line-height","33px");
+    });
+    function showItem(th, index) {
+        var bk = $(th).css("background-color");
+        $(".selectionitem div").css({ "border": "none", "color": "#000" });
+        $(th).css({ "border-bottom": "1px solid #00a3c2", "color": "#00a3c2" });
+        $(".itemcondition").hide();
+        $(".itemcondition:eq(" + index + ")").show();
+    }
+
+    $(".conditionSelect").click(function () {
+        var elem = $(this).find("input[type='checkbox']");
+        if ($(this).find(":input[type='checkbox']").is(":checked")) {
+            $(this).find("i").css({ "background-image": "url('/Images/selected.jpg')" });
+            $(this).css({ "background-color": "#00a3c2", "color": "#fff" });
+
+        }
+        else {
+            $(this).find("i").css({ "background-image": "url('/Images/noselected.jpg')" });
+            $(this).css({ "background-color": "#fff", "color": "#000" });
+        }
+    });
+</script>

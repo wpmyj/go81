@@ -138,7 +138,13 @@
             <div class="index_content_zcfg_content" style=" width:238px; height:auto; overflow:hidden;" id="tabcontent_zcfg">
                 <ul>
                     <li>
-                        <a title="成都军区物资采购评审专家总计人数：130">成都军区物资采购评审专家总计人数：130</a>
+                        <a title="全部评审专家总计人数：@ViewData["all"].ToString()">全部评审专家总计人数：@ViewData["all"].ToString()</a>
+                    </li>
+                    <li>
+                        <a title="已入库评审专家总计人数：@ViewData["inlib"].ToString()">已入库评审专家总计人数：@ViewData["inlib"].ToString()</a>
+                    </li>
+                    <li>
+                        <a title="待入库评审专家总计人数：@ViewData["noinlib"].ToString()">待入库评审专家总计人数：@ViewData["noinlib"].ToString()</a>
                     </li>
                     @*<li>
                             <a title="成都军区技术评审专家人数：40">成都军区技术评审专家人数：40</a>

@@ -1,0 +1,963 @@
+﻿@using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
+@using Go81WebApp.Models.管理器.抽选管理
+<script src="~/JS/provinceandcity_all.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="~/JS/My97DatePicker/WdatePicker.js"></script>
+<link href="~/css/css.css" type="text/css" rel="stylesheet">
+<style type="text/css">
+    .expert_condition {
+        width: 898px;
+        border: solid 1px #ccd2b0;
+        height: auto;
+        overflow: hidden;
+        padding: 10px 0 20px 0;
+    }
+
+    .expert_condition {
+        width: 898px;
+        border: solid 1px #ccd2b0;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .expert_condition_inner {
+        width: 800px;
+        margin: 0 auto;
+        height: auto;
+        overflow: hidden;
+        margin-top: 10px;
+        border: solid 1px #ccd2b0;
+        padding: 10px;
+    }
+
+    .expert_condition_innerleft {
+        width: 100px;
+        float: left;
+        height: auto;
+        overflow: hidden;
+        font-size: 14px;
+        color: rgb(51, 51, 51);
+        padding-bottom: 10px;
+    }
+
+    .expert_condition_innerright {
+        width: 700px;
+        float: left;
+        font-size: 14px;
+        color: rgb(51, 51, 51);
+        padding-bottom: 10px;
+    }
+
+    .expert_condition_innerrightlist {
+        width: 350px;
+        float: left;
+        height: 36px;
+    }
+
+    .expert_condition_innerrightlist_title {
+        width: 130px;
+        text-align: right;
+        float: left;
+        line-height: 35px;
+        padding-right: 5px;
+    }
+
+    .expert_condition_input {
+        height: 30px;
+        width: 150px;
+        float: left;
+        /*margin-right: 60px;*/
+    }
+
+    .expert_condition_button1 {
+        border: 1px solid #f00;
+        color: #f00;
+    }
+
+    .expert_condition_reason {
+        width: 150px;
+        height: 28px;
+        margin: 2px;
+        display: none;
+    }
+
+    .expert_condition_button2 {
+        border: 1px solid #55f;
+        color: #55f;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*可以出席-选中*/
+    .expert_condition_button2_y_sel {
+        border: 1px solid #5f5;
+        background-color: #5f5;
+        color: #fff;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*可以出席-未选中*/
+    .expert_condition_button2_y_unsel {
+        border: 1px solid #f55;
+        color: #55f;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*不能出席-选中*/
+    .expert_condition_button2_n_sel {
+        border: 1px solid #f55;
+        background-color: #f55;
+        color: #fff;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+    /*不能出席-未选中*/
+    .expert_condition_button2_n_unsel {
+        border: 1px solid #5f5;
+        color: #55f;
+        float: left;
+        width: 30px;
+        padding: 0px 2px;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: 800px;
+        margin: 10% auto;
+    }
+
+    .classtype1 {
+        cursor: pointer;
+    }
+
+        .classtype1:hover {
+            text-decoration: underline;
+        }
+
+    .classtype2 {
+        cursor: pointer;
+        /*text-decoration: underline;
+        padding-left: 20px;*/
+    }
+
+        .classtype2:hover {
+            text-decoration: underline;
+        }
+
+    .checkboxclass1 {
+    }
+
+    .checkboxclass2 {
+    }
+
+    .divclass1 {
+        width: 330px;
+    }
+
+    .divclass2 {
+        width: 310px;
+        padding-left: 20px;
+    }
+
+    em {
+        color: red;
+        font-style: normal;
+    }
+    .tre_level2 {
+        float: left;
+    }
+    .tre_level1 {
+        float: left;
+    }
+</style>
+@using (Html.BeginForm("GysChoose_Applay", "专家抽选"))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div id="modal0" class="modal fade" style="position:relative;height:100%;*+top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop + (documentElement.clientHeight/25) - 70 : document.body.scrollTop + (document.body.clientHeight/25) - 70);">
+        <div class="modal-dialog" style="margin: 5% auto;">
+            <div class="modal-content" style="height:500px;text-align:left;">
+                <div class="modal-header" style="height:16px;">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick='$("#modal0").hide();'>×</button>
+                    <div style="margin-top:10px; width:250px; float:left; font-size:16px; font-weight:bold; line-height:23px;">请选择可提供产品类别</div>
+                    <div style="width:460px; float:right; padding-right:20px;">关键字：<input id="kpbwzlb_keyword" type="text" value="" style="margin-right:10px; width:150px; height:26px; line-height:26px;" /><input id="gyssearchbtn" type="button" value="查找" onclick="do_kpbwzlbserch($('#kpbwzlb_keyword').val());" style="width:80px; height:26px; cursor:pointer;" /></div>
+
+                </div>
+                <div class="modal-body" id="othergysdiv">
+                    <div style="width: 390px; height:350px; overflow-y: scroll; float: left;" id="selectconditionbox">
+                        @foreach (var item in ViewData["goodType"] as IEnumerable<商品分类>
+                        )
+                        {
+                            <div name="kpbwzlb">
+                                <div class="divclass1"><div name="treepic" class="tre_level1" value="@item.分类名" onclick="changeshow(this);"></div><input class="checkboxclass1" id="@item.分类名" type="checkbox" value="@item.分类名" style="line-height: 21px;" onclick="get_ptype(this,1)" /><a class="classtype1" onclick="changeshow(this);" value="@item.分类名">@item.分类名 (@专家抽选管理.计数分类下供应商数(1, item.分类名)个)</a></div>
+                                <div index="@item.分类名" style="display: none;">
+                                    @foreach (var k in item.子分类)
+                                    {
+                                        <div class="divclass2">
+                                            <input class="checkboxclass2" type="checkbox" value="@k.分类名" name="@item.分类名" style="line-height: 21px;" onclick="get_ptype(this,2)" /><a class="classtype2" value="@k.分类名">@k.分类名 (@专家抽选管理.计数分类下供应商数(2, k.分类名)个)</a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+
+                    <div style="width: 350px; height:350px; overflow-y: scroll; float: left; padding-left: 10px;">
+                        已选：
+                        <div id="selectcontent"></div>
+                    </div>
+                    <div style="width: 700px; margin: 0 auto; text-align: center;"><input type="button" class="index_online_btn" style="margin-top: 20px;" value="确定" onclick="send_ptype();" /></div>
+                    <script type="text/javascript">
+                        function do_kpbwzlbserch(kpbwzlbkeyword) {
+                            //清空已有的em标签
+                            $("#selectconditionbox").find("em").each(function () {
+                                var xx = $(this).html();
+                                $(this).replaceWith(xx);
+                            });
+
+                            //输入框有值，进行循环判断
+                            if (kpbwzlbkeyword != "") {
+                                $("#selectconditionbox").find("div[name='kpbwzlb']").each(function () {
+                                    var text = $(this).find(".classtype1").attr("value");
+                                    var name = $(this).find(".classtype1").html();
+                                    if (text.indexOf(kpbwzlbkeyword) > -1) {
+
+                                        //一级菜单控制
+                                        $(this).show();
+                                        $(this).find(".classtype1").html(name.replace(new RegExp(kpbwzlbkeyword, "g"), "<em>" + kpbwzlbkeyword + "</em>"));
+
+                                        //二级大div显示标记
+                                        var flag = false;
+                                        //二级菜单控制
+                                        $(this).find(".classtype2").each(function () {
+                                            var text2 = $(this).attr("value");
+                                            var name2 = $(this).html();
+
+                                            if (text2.indexOf(kpbwzlbkeyword) > -1) {
+                                                //一级有值，二级也有值     true
+                                                flag = true;
+
+                                                $(this).parent().show();
+                                                $(this).html(name2.replace(new RegExp(kpbwzlbkeyword, "g"), "<em>" + kpbwzlbkeyword + "</em>"));
+                                            } else {
+                                                $(this).parent().hide();
+                                            }
+
+                                        });
+
+
+                                        if (flag) {
+                                            //二级有，则显示二级大div
+                                            $(this).find("div").eq(2).show();
+                                            //控制三角形形状--展开
+                                            $(this).find("div").eq(1).attr("class", "tre_level2");
+                                        } else {
+                                            //二级没有，二级大div隐藏，各小div才显示
+                                            $(this).find(".divclass2").show();
+                                            $(this).find("div").eq(2).hide();
+                                            //控制三角形形状--关闭
+                                            $(this).find("div").eq(1).attr("class", "tre_level1");
+                                        }
+                                    } else {
+                                        //大条件：一级没有
+
+                                        var f = false; //上级是否显示的标志
+
+                                        $(this).find(".classtype2").each(function () {
+                                            var text2 = $(this).attr("value");
+                                            var name2 = $(this).html();
+
+                                            if (text2.indexOf(kpbwzlbkeyword) > -1) {
+                                                //二级有，则一级也应该显示 置为true
+                                                f = true;
+                                                $(this).parent().show();
+                                                $(this).html(name2.replace(new RegExp(kpbwzlbkeyword, "g"), "<em>" + kpbwzlbkeyword + "</em>"));
+                                            } else {
+                                                $(this).parent().hide();
+                                            }
+                                        });
+
+                                        if (f) {
+                                            $(this).show();
+                                            $(this).find("div").eq(2).show();
+                                            //控制三角形形状--展开
+                                            $(this).find("div").eq(1).attr("class", "tre_level2");
+                                            //$(this).find("div").show();
+                                        } else {
+                                            $(this).hide();
+                                        }
+                                    }
+                                });
+                            } else {
+                                //输入框无值，显示全部分类
+                                $("#selectconditionbox").find("div").each(function () {
+                                    $(this).show();
+                                    if (typeof ($(this).attr("index")) != "undefined") {
+                                        $(this).hide();
+                                    }
+                                    if ($(this).attr("name") == "treepic") {
+                                        $(this).attr("class", "tre_level1");
+                                    }
+                                });
+                            }
+                            //alert(kpbwzlbkeyword);
+                            //$(".divclass1 a:contains(" + kpbwzlbkeyword + ")").css("color", "red");
+
+                        }
+
+                        function changeshow(obj) {
+                            //var name = $(obj).html();
+                            var name = $(obj).attr("value");
+                            var flag = $('div[index=' + name + ']').is(":hidden");
+                            if (flag) {
+                                $('div[index=' + name + ']').show();
+                                $(obj).parent().find("div").eq(0).attr("class", "tre_level2");
+                            } else {
+                                $('div[index=' + name + ']').hide();
+                                $(obj).parent().find("div").eq(0).attr("class", "tre_level1");
+                            }
+                        }
+                        function get_ptype(obj, num) {
+
+                            var firstname = $("#p_type_ed").val();
+
+
+                            $("#selectcontent").html();
+                            var retstr = "";
+                            var name = $(obj).val();
+                            //一级类别选中事件--下级变为全选或全不选
+                            if (num == 1) {
+                                if (firstname != "" && firstname != name) {
+                                    alert("一个条件只能选择一个大类，移除已选大类才能选择另外一个大类！");
+                                    $(obj).prop("checked", false);
+                                    return false;
+                                }
+                                if ($(obj).is(':checked')) {
+
+                                    $('div[index=' + name + ']').show();
+                                    $(obj).parent().find("div").eq(0).attr("class", "tre_level2");
+
+                                    if (firstname == "") {
+                                        firstname = name;
+                                        $("#p_type_ed").val(firstname);
+                                    }
+                                    $('div[index=' + name + ']').find("input").each(function () {
+                                        if (!$(this).is(":hidden")) {
+                                            $(this).prop("checked", true);
+                                            //$(this).attr("checked", true);
+                                        }
+                                    });
+                                }
+                                else {
+                                    $("#p_type_ed").val("");
+                                    $('div[index=' + name + ']').find("input").each(function () {
+                                        //$(this).removeAttr("checked");
+                                        $(this).prop("checked", false);
+                                    });
+                                }
+                            }
+
+                            //二级类别选中事件：使上级变为未选中
+                            if (num == 2) {
+                                if ($(obj).is(":checked")) {
+                                    if (firstname != "" && firstname != $(obj).attr("name")) {
+                                        alert("一个条件只能选择一个大类，移除已选大类才能选择另外一个大类！");
+                                        $(obj).prop("checked", false);
+                                        return false;
+                                    }
+                                    else {
+                                        firstname = $(obj).attr("name");
+                                        $("#p_type_ed").val(firstname);
+                                    }
+                                }
+
+                                $("#" + $(obj).attr("name")).prop("checked", false);
+                            }
+
+
+
+                            //遍历选中的复选框
+                            $("#selectconditionbox").find("input:checked").each(function () {
+                                //if ($(this).attr("class") == "checkboxclass1") {
+                                //    retstr += "<div class='divclass1'><a name='1' class='classtype1' onclick='changeshow(this);'>" + $(this).val() + "</a></div>";
+                                //}
+                                if ($(this).attr("class") == "checkboxclass2") {
+                                    retstr += "<div class='divclass2'><a name='" + $(this).attr("name") + "' class='classtype1'>" + $(this).val() + "</a></div>";
+                                }
+                            });
+                            if (retstr != "") {
+                                retstr += "<input type='checkbox' name='is_pre' id='is_pre'  checked='checked' style='margin-top:10px;' />二级分类可用供应商不足返回一级分类";
+                            } else {
+                                $("#p_type_ed").val("");
+                            }
+
+                            $("#selectcontent").html(retstr);
+                        }
+
+                        function send_ptype() {
+                            var namelist = new Array();
+                            $("#selectcontent").find("a").each(function () {
+                                namelist.push($(this).attr("name"));
+                            });
+                            namelist = uniQueue(namelist);
+                            var retstr = "";
+                            var text = "";//文本框的值
+
+                            $.each(namelist, function (i, item) {
+                                retstr += item;
+                                $("#selectcontent").find("a[name = '" + item + "']").each(function () {
+                                    retstr += "*" + $(this).html();
+                                    text += $(this).html() + ",";
+                                });
+                                retstr += "#";
+                            });
+
+                            //是否返回上级
+                            if (retstr != "") {
+                                if ($("#is_pre").is(":checked")) {
+                                    retstr += "1";
+                                } else {
+                                    retstr += "0";
+                                }
+                            }
+
+                            $("#p_type").val(retstr);
+                            $("#可评标物质类别").val(text);
+                            $("#modal0").hide();
+
+                        }
+                        function uniQueue(array) {
+                            var arr = [];
+                            var m;
+                            while (array.length > 0) {
+                                m = array[0];
+                                arr.push(m);
+                                array = $.grep(array, function (n, i) {
+                                    return n == m;
+                                }, true);
+                            }
+                            return arr;
+                        }
+                    </script>
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <input type="hidden" id="p_type" name="p_type" />
+    <input type="hidden" id="p_type_ed" name="p_type_ed" />
+    <input type="hidden" id="outlistcontent_t" name="outlistcontent_t" />
+    <input type="hidden" id="outlistcontent" name="outlistcontent" />
+    <input type="hidden" id="outlistcontent_name" name="outlistcontent_name" />
+    <script type="text/javascript">
+        function changeMesspage(pagenum, gysname) {
+            //已经选择的行
+            var oldlist = $("#outlistcontent_t").val().split('|');
+            var oldlistname = $("#outlistcontent_name").val().split(',');
+
+            //把当前页的加进去,并去除重复的值
+            $("#outlistdiv").find("input").each(function () {
+
+                //选中的加入
+                if ($(this).is(':checked')) {
+                    //数组不存在该值才计入数组
+                    if ($.inArray($(this).val(), oldlist) == -1) {
+                        $("#outlistcontent_t").val($("#outlistcontent_t").val() + $(this).val() + "|");
+                        $("#outlistcontent_name").val($("#outlistcontent_name").val() + "<tr>" + $(this).parent().parent().html() + "</tr>");
+                    }
+                } else {
+                    //未选中的去除
+                    if ($.inArray($(this).val(), oldlist) != -1) {
+                        $("#outlistcontent_t").val($("#outlistcontent_t").val().replace($(this).val() + "|", ""));
+                        $("#outlistcontent_name").val($("#outlistcontent_name").val().replace("<tr>" + $(this).parent().parent().html() + "</tr>", ""));
+                    }
+                }
+            });
+
+
+            $.get("/专家抽选/Part_Gys_ApplayOutList?page=" + encodeURI(pagenum) + "&name=" + gysname, function (response) {
+
+                $("#outlistdiv").html(response);
+                //进行循环绑定赋值,已选的勾上
+                $("#outlistdiv").find("input").each(function () {
+                    if ($.inArray($(this).val(), oldlist) != -1) {
+                        $(this).prop("checked", true);
+                    }
+                });
+            });
+        }
+        function send_outlist() {
+            $("#outlisttable").html("<tr><th>企业名称</th><th>所在地域</th><th>联系人</th><th>固定电话</th><th>手机</th></tr>");
+
+            var oldlist = $("#outlistcontent_t").val().split('|');
+            var oldlistname = $("#outlistcontent_name").val().split(',');
+            //把当前页的加进去,并去除重复的值
+            $("#outlistdiv").find("input").each(function () {
+
+                //选中的加入
+                if ($(this).is(':checked')) {
+                    //数组不存在该值才计入数组
+                    if ($.inArray($(this).val(), oldlist) == -1) {
+                        $("#outlistcontent_t").val($("#outlistcontent_t").val() + $(this).val() + "|");
+                        $("#outlistcontent_name").val($("#outlistcontent_name").val() + "<tr>" + $(this).parent().parent().html() + "</tr>");
+                    }
+                } else {
+                    //未选中的去除
+                    if ($.inArray($(this).val(), oldlist) != -1) {
+                        $("#outlistcontent_t").val($("#outlistcontent_t").val().replace($(this).val() + "|", ""));
+                        $("#outlistcontent_name").val($("#outlistcontent_name").val().replace("<tr>" + $(this).parent().parent().html() + "</tr>", ""));
+                    }
+                }
+            });
+            $("#outlistcontent").val($("#outlistcontent_t").val());
+            if ($("#outlistcontent").val() != "") {
+                $("#outlisttable").append($("#outlistcontent_name").val());
+
+                $("#outlisttable").find("input").each(function () {
+                    $(this).remove();
+                });
+
+                $("#outlisttable").show();
+            } else {
+                $("#outlisttable").hide();
+            }
+            $("#modal1").hide();
+
+        }
+    </script>
+
+
+    <div id="modal3" class="modal fade" style="position:relative;*+top:expression(eval(document.compatMode && document.compatMode=='CSS1Compat') ? documentElement.scrollTop + (documentElement.clientHeight/25) - 70 : document.body.scrollTop + (document.body.clientHeight/25) - 70);">
+        <div class="modal-dialog" style="margin: 5% auto;">
+            <div class="modal-content" style="height:500px;text-align:left">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick='$("#modal3").hide();'>×</button>
+                    <h4 style="margin:0;">条件详情</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="height: 380px; overflow-y:scroll;">
+                        <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                            <div style="width:150px;text-align:right; float:left; font-weight:bold">可提供产品类别：</div>
+                            <div id="detailconition0" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                        </div>
+
+                        <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                            <div style="width:150px;text-align:right; float:left; font-weight:bold">所在地域：</div>
+                            <div id="detailconition1" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                        </div>
+
+                        <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                            <div style="width:150px;text-align:right; float:left; font-weight:bold">描述：</div>
+                            <div id="detailconition2" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                        </div>
+
+                        <div style="width:750px; height:auto; overflow:hidden; padding-bottom:10px;">
+                            <div style="width:150px;text-align:right; float:left; font-weight:bold">抽取个数：</div>
+                            <div id="detailconition3" style="width:600px; float:left; height:auto; overflow:hidden;"></div>
+                        </div>
+
+                    </div>
+                    <div style="width: 700px; margin: 0 auto; text-align: center;"><input type="button" class="index_online_btn" value="关闭" onclick='$("#modal3").hide();' /></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="gys_znxx_box">
+        <div class="gys_znxx_contentbox" style="height:auto;">
+            <div class="gys_znxx_content">
+                <div class="expert_condition" style="border:none; text-align: left;">
+                        <input type="hidden" id="app" name="app" value="1"  />
+                    <div class="expert_condition_inner">
+                        <div style=" width: 800px; height: 30px; color:rgb(51, 51, 51);">
+                            项目信息（经办人：@if (ViewData["经办人"] != null && !string.IsNullOrWhiteSpace(ViewData["经办人"].ToString()))
+                            {<span>@ViewData["经办人"].ToString()</span>}
+                            else
+                            { <span>未填写</span>}）<span class="tipmessage" style="float: right;" id="toptipmessage"></span>
+                        </div>
+                        <div class="expert_condition_innerleft">&nbsp;</div>
+                        <div class="expert_condition_innerright">
+                            <div class="expert_condition_innerrightlist">
+                                <div class="expert_condition_innerrightlist_title">项目名称</div><input type="text" name="pro_name" id="pro_name" class="expert_condition_input" /><span class="tipmessage" style="line-height: 36px; padding-left: 5px;">*</span>
+                            </div>
+                            <div class="expert_condition_innerrightlist">
+                                <div class="expert_condition_innerrightlist_title">
+                                    项目编号
+                                </div><input type="text" name="pro_num" id="pro_num" class="expert_condition_input" /><span class="tipmessage" style="line-height: 36px; padding-left: 5px;">*</span>
+                            </div>
+                            <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                                <div class="expert_condition_innerrightlist_title">
+                                    评标时间
+                                </div><input id="pro_time" name="pro_time" type="text" class="expert_condition_input" onfocus="WdatePicker({ dateFmt: 'yyyy/MM/dd HH:mm:ss' })" /><span class="tipmessage" style="line-height: 36px; padding-left: 5px;">*</span>
+                            </div>
+                            <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                                <div class="expert_condition_innerrightlist_title">
+                                    预定抽选总数
+                                </div><input type="text" name="预定抽选总数" id="预定抽选总数" class="expert_condition_input" /><span class="tipmessage" style="line-height: 36px; padding-left: 5px;">*</span>
+                            </div>
+                            <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                                <div class="expert_condition_innerrightlist_title">操作人姓名</div><input type="text" name="prooperate_name" id="prooperate_name" class="expert_condition_input" /><span class="tipmessage" style="line-height: 36px; padding-left: 5px;">*</span>
+                            </div>
+                            <div class="expert_condition_innerrightlist" style="margin-top:10px;">
+                                <div class="expert_condition_innerrightlist_title">
+                                    操作人电话
+                                </div><input type="text" name="prooperate_tel" id="prooperate_tel" class="expert_condition_input" /><span class="tipmessage" style="line-height: 36px; padding-left: 5px;">*</span>
+                            </div>
+                            @*<div class="expert_condition_innerrightlist" style="margin-top:10px; height: 20px;">
+                        <span class="tipmessage" id="toptipmessage"></span>
+                    </div>*@
+                        </div>
+                    </div>
+
+                    <div class="expert_condition_inner">
+                        <div style=" width: 800px; height: 30px; color:rgb(51, 51, 51); padding-bottom: 20px;">选择回避名单<input type="button" value="点击添加" style="height: 30px;" onclick='$("#modal1").show(); $("#gysname").focus();' /></div>
+                        <table width="95%" style="margin: 0 auto; display: none;" cellspacing="0" cellpadding="0" id="outlisttable"></table>
+                    </div>
+
+
+
+                    <div id="ExpertTurndiv">
+                        <div id="list">
+                            <div class="expert_condition_inner" id="turndivid__0">
+
+                                <div style=" width: 800px; height: 30px; color:rgb(51, 51, 51);">抽选条件</div>
+
+
+                                @*<div style=" width: 800px; height: 30px; color:rgb(51, 51, 51);" id="number__0">抽选条件</div>*@
+                                @*<div class="expert_condition_innerleft">&nbsp;</div>*@
+                                <div style="height: auto; overflow: hidden; position: relative;">
+                                    <div class="expert_condition_innerright" style="height: auto; overflow:hidden; border:solid 1px #ccd2b0; width: 660px;">
+
+                                        <div class="expert_condition_innerrightlist" style="width:660px; padding-top: 10px;">
+                                            <div class="expert_condition_innerrightlist_title">可提供产品类别</div><input type="text" name="可评标物质类别" id="可评标物质类别" class="expert_condition_input" style="width:500px;" onclick="$('#modal0').show(); $('#kpbwzlb_keyword').focus();" /><span class="tipmessage" style="line-height: 36px; padding-left: 5px;">*</span>
+                                        </div>
+
+                                        <div class="expert_condition_innerrightlist" style="width:660px;margin-top:10px;">
+                                            <div class="expert_condition_innerrightlist_title">所在地域</div>
+                                            <select id="deliverprovince" name="deliverprovince" style=" height:36px; width:165px;"></select>
+                                            <select id="delivercity" name="delivercity" style=" height: 36px; width: 165px;"></select>
+                                            <select id="deliverarea" name="deliverarea" style=" height: 36px; width: 165px;"></select>
+                                            <script>
+                                                window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                                            </script>
+
+                                        </div>
+
+
+                                        <div class="expert_condition_innerrightlist" style="width: 660px; margin-top: 10px; height: 105px;">
+                                            <div class="expert_condition_innerrightlist_title">抽选描述</div>
+                                            <textarea id="抽选描述" name="抽选描述" style=" width:500px; height:100px; float:left"></textarea>
+                                        </div>
+                                        <div class="expert_condition_innerrightlist" style="width: 660px; margin-top: 10px;">
+                                            <div class="expert_condition_innerrightlist_title">预定抽选个数</div>
+                                            <input id="预定抽选个数" name="预定抽选个数" type="text" class="expert_condition_input" /><span class="tipmessage" style="line-height: 36px; padding-left: 5px;">*</span>
+                                        </div>
+                                    </div>
+
+                                    <div style="width: 125px; float: right; position:absolute; bottom:50px; text-align:center;">
+                                        <div style="color: red; font-size: 22px; margin-bottom: 50px;" id="tempnum"></div>
+                                        <input type="button" style="float: right;vertical-align: bottom; height:30px; width: 120px; font-size:12px; margin-bottom: 10px;" value="查询供应商个数" onclick="gettempnum()" />
+                                        <input type="button" style="float: right;vertical-align: bottom; height:30px; width: 120px;font-size:12px;" value="确定当前条件" onclick="confirmthis()" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <input type="hidden" value="0" name="条件总数" id="条件总数" />
+                    <table width="95%" style="margin: 10px auto;" cellpadding="0" cellspacing="0" id="resettable">
+                        <tr>
+                            <th style="width:64%">可提供产品类别</th>
+                            <th style="width:20%">所在地域</th>
+                            <th style="display:none;">描述</th>
+                            <th style="width:8%">个数</th>
+                            <th style="width:8%">详细</th>
+                            <th style="display: none;">条件</th>
+                        </tr>
+                    </table>
+                    <script type="text/javascript">
+                        function showdetailcondition(obj) {
+                            for (var detailid = 0; detailid < 4; detailid++) {
+                                $("#detailconition" + detailid).html($(obj).parent().parent().find("td").eq(detailid).html());
+                            }
+                            $("#modal3").show();
+                        }
+
+                        function gettempnum() {
+                            $("#tempnum").html("");
+                            if ($("#可评标物质类别").val() == "") {
+                                alert("可评标物质类别必须选择");
+                                //$("#modal0").show();
+                                return false;
+                            }
+
+                            //此处进行条件判断（满足当前条件专家个数不足时不能提交当前条件）
+                            var tempparm = "kpbwzlb=" + encodeURIComponent($("#p_type").val());
+                            tempparm += "&province=" + encodeURIComponent($("#deliverprovince").val());
+                            tempparm += "&city=" + encodeURIComponent($("#delivercity").val());
+                            tempparm += "&area=" + encodeURIComponent($("#deliverarea").val());
+                            tempparm += "&outlist=" + encodeURIComponent($("#outlistcontent").val());
+
+                            $.ajax({
+                                cache: false,
+                                async: false,   // 太关键了，同步和异步的参数
+                                //dataType: 'json', type: 'post',
+                                type: 'POST',
+                                url: "/专家抽选/SearchByCondition_Temp_Gys",
+                                data: tempparm,
+                                success: function (data) {
+                                    $("#tempnum").html(data);
+                                }
+                            });
+                        }
+
+
+                        function confirmthis() {
+                            //alert($("#datebasecount").html());
+
+
+                            if ($("#可评标物质类别").val() == "") {
+                                alert("可评标物质类别必须选择");
+                                $("#modal0").show();
+                                return false;
+                            }
+                            var reg = /^\d+$/;
+                            if ($("#预定抽选个数").val() == "" || $("#预定抽选个数").val() == null) {
+                                alert("预定抽选个数必须填写!");
+                                $("#预定抽选个数").focus();
+                                return false;
+                            }
+                            else if (!($("#预定抽选个数").val().match(reg))) {
+                                alert("请输入正确的抽选个数!");
+                                $("#预定抽选个数").focus();
+                                return false;
+                            }
+                            else if ($("#预定抽选个数").val() == "0") {
+                                alert("预定抽选个数必须大于0!");
+                                $("#预定抽选个数").focus();
+                                return false;
+                            }
+                            if (confirm("确定本次条件无误？")) {
+
+                                //此处进行条件判断（满足当前条件专家个数不足时不能提交当前条件）
+
+                                var tempparm = "kpbwzlb=" + encodeURIComponent($("#p_type").val());
+                                tempparm += "&province=" + encodeURIComponent($("#deliverprovince").val());
+                                tempparm += "&city=" + encodeURIComponent($("#delivercity").val());
+                                tempparm += "&area=" + encodeURIComponent($("#deliverarea").val());
+                                tempparm += "&outlist=" + encodeURIComponent($("#outlistcontent").val());
+                                //alert(tempparm);
+
+                                var flag = true;
+                                $.ajax({
+                                    cache: false,
+                                    async: false,   // 太关键了，同步和异步的参数
+                                    //dataType: 'json', type: 'post',
+                                    type: 'POST',
+                                    url: "/专家抽选/SearchByCondition_Temp_Gys",
+                                    data: tempparm,
+                                    success: function (data) {
+                                        //alert(data);
+                                        //alert($("#预定抽选个数").val());
+                                        if (parseInt($("#预定抽选个数").val()) > parseInt(data)) {
+                                            alert("满足当前抽选条件的供应商个数不足（" + data + "个），请重新填写条件！");
+                                            flag = false;
+                                        }
+                                    }
+                                });
+
+                                if (!flag) {
+                                    return false;
+                                }
+                                //此处进行条件判断（满足当前条件专家个数不足时不能提交当前条件）---结束
+
+                                var count = $("#resettable").find("tr").length;
+
+                                var str = "<tr>";
+                                str += "<td>" + $("#可评标物质类别").val() + "</td>";
+                                if ($("#deliverprovince").val() == "") {
+                                    str += "<td>不限</td>";
+                                }
+                                else {
+                                    str += "<td>" + $("#deliverprovince").val() + $("#delivercity").val() + $("#deliverarea").val() + "</td>";
+                                }
+
+                                str += "<td style='display:none;'>" + $("#抽选描述").val() + "</td>";
+                                str += "<td name ='numofpertime'>" + $("#预定抽选个数").val() + "</td>";
+                                str += "<td><a onclick='showdetailcondition(this);'>查看</a></td>";
+                                //条件列
+                                str += "<td style='display: none;'>";
+
+                                //可评标物质类别
+                                str += "<input type='hidden' name='可评标物质类别__" + count + "' value='" + $("#p_type").val() + "' />";
+                                //地域
+                                str += "<input type='hidden' name='省份__" + count + "' value='" + $("#deliverprovince").val() + "' />";
+                                str += "<input type='hidden' name='城市__" + count + "' value='" + $("#delivercity").val() + "' />";
+                                str += "<input type='hidden' name='区县__" + count + "' value='" + $("#deliverarea").val() + "' />";
+
+                                //抽选描述
+                                str += "<input type='hidden' name='抽选描述__" + count + "' value='" + $("#抽选描述").val() + "' />";
+
+                                //预定抽选个数
+                                str += "<input type='hidden' name='预定抽选个数__" + count + "' value='" + $("#预定抽选个数").val() + "' />";
+
+                                str += "</td>";
+                                str += "</tr>";
+                                $("#条件总数").val(count);
+                                $("#resettable").append(str);
+
+                                //清空表单以后数据
+
+                                //清空可评标类别
+                                $("#selectconditionbox").find("input:checked").each(function () {
+                                    $(this).prop("checked", false);
+                                });
+                                $("#selectcontent").html("");
+                                $("#可评标物质类别").val("");
+                                $("#p_type").val("");
+                                $("#p_type_ed").val("");
+
+                                //清空描述
+                                $("#抽选描述").val("");
+
+                                //清空预定抽选个数
+                                $("#预定抽选个数").val("");
+
+                                alert("本次条件添加完成，您可以继续添加！");
+                                $("#tempnum").html("");
+                            }
+                        }
+                    </script>
+
+
+
+                    <div class="expert_condition_inner" style="border:none; font-size:14px;">
+                        <input type="button" value="返回列表" style="width:100px; height:30px;font-size:12px; float:right;margin-left:10px;" onclick="window.location = '/专家抽选/GysChoose_Applay_Sapp'" />
+                        <input type="submit" value="提交本次申请" style="margin-left:10PX;font-size:12px; height:30px; float:right;padding:0 2px;" onclick="return checkform()" />                        
+                    </div>
+                </div>
+
+
+                <script type="text/javascript">
+                    //var count = 1;
+                    //function AddExpertTurn() {
+                    //    $("#ExpertTurndiv").append($("#list").html().replace(/__0/g, "__" + count));
+                    //    //$("#deleteid__" + count)
+                    //    document.  getElementById("deleteid__" + count).style.display = "block";
+                    //    $("#number__" + count).html("第" + (++count) + "轮抽取");
+                    //    $("#count").val(count);
+                    //}
+
+                    function checkform() {
+
+                        var reg = /^\d+$/;
+                        var objRegExp = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+                        if ($("#pro_name").val() == "" || $("#pro_name").val() == null) {
+                            $("#toptipmessage").html("请填写项目名称!");
+                            $("#pro_name").focus();
+                            return false;
+                        }
+
+                        if ($("#pro_num").val() == "" || $("#pro_num").val() == null) {
+                            $("#toptipmessage").html("请填写项目编号!");
+                            $("#pro_num").focus();
+                            return false;
+                        }
+
+                        if ($("#pro_time").val() == "" || $("#pro_time").val() == null) {
+                            $("#toptipmessage").html("请填写评标时间!");
+                            $("#pro_time").focus();
+                            return false;
+                        }
+                        //else if (!RQcheck($("#pro_time").val())) {
+                        //    $("#toptipmessage").html("评标时间格式不正确!格式:2014-07-16");
+                        //    $("#pro_time").focus();
+                        //    return false;
+                        //}
+
+                        if ($("#预定抽选总数").val() == "" || $("#预定抽选总数").val() == null) {
+                            $("#toptipmessage").html("请填写预定抽选总数!");
+                            $("#预定抽选总数").focus();
+                            return false;
+                        }
+                        else if (!($("#预定抽选总数").val().match(reg))) {
+                            $("#toptipmessage").html("请输入正确的抽选总数(数字)");
+                            $("#预定抽选总数").focus();
+                            return false;
+                        }
+                        else if ($("#预定抽选总数").val() == "0") {
+                            $("#toptipmessage").html("预定抽选总数必须大于0");
+                            $("#预定抽选总数").focus();
+                            return false;
+                        }
+
+                        if ($("#prooperate_name").val() == "" || $("#prooperate_name").val() == null) {
+                            $("#toptipmessage").html("请填写操作人姓名!");
+                            $("#prooperate_name").focus();
+                            return false;
+                        }
+
+                        if ($("#prooperate_tel").val() == "" || $("#prooperate_tel").val() == null) {
+                            $("#toptipmessage").html("请填写操作人电话!");
+                            $("#prooperate_tel").focus();
+                            return false;
+                        }
+
+                        if ($("#条件总数").val() == "" || $("#条件总数").val() == "0") {
+                            alert("请至少选择一个条件后再提交!");
+                            return false;
+                        }
+
+                        var prechoosecount = parseInt($("#预定抽选总数").val());
+                        var tempchoosecount = 0;
+                        $("#resettable").find("td[name='numofpertime']").each(function () {
+                            tempchoosecount += parseInt($(this).html());
+                        });
+                        if (prechoosecount != tempchoosecount) {
+                            alert("各条件抽取个数总和与预定抽选总数不一致，请检查后再提交数据");
+                            return false;
+                        }
+                        if (confirm("确定提交本次抽选申请？")) {
+                            $("#toptipmessage").html("");
+                            return true;
+                        }
+                        else {
+                            return false;
+                        }
+                    }
+                    function RQcheck(RQ) {
+                        var date = RQ;
+                        var result = date.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+
+                        if (result == null)
+                            return false;
+                        var d = new Date(result[1], result[3] - 1, result[4]);
+                        return (d.getFullYear() == result[1] && (d.getMonth() + 1) == result[3] && d.getDate() == result[4]);
+
+                    }
+
+                    $(function () {
+                        $("#kpbwzlb_keyword").keydown(function (e) {
+                            BindEnter(event, 'gyssearchbtn');
+                        });
+});
+                </script>
+            </div>
+        </div>
+    </div>
+}

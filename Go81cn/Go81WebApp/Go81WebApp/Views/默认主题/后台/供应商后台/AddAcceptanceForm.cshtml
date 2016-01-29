@@ -5,7 +5,7 @@
 @using Go81WebApp.Models.数据模型
 @{
     ViewBag.Title = "验收单列表";
-    Layout = "_BackLayout.cshtml";
+    //Layout = "_BackLayout.cshtml";
 }
 <link href="~/css/css.css" rel="stylesheet" />
 <script src="~/JS/myComfirm.js" type="text/javascript"></script>
@@ -167,16 +167,16 @@
                      {
                          foreach (var k in gd)
                          {
-                             var vl = new List<Tuple<string, string, string, string, int, decimal, decimal>>();
+                             var vl = new List<Tuple<string, string, string, string, double, decimal, decimal>>();
                              if (k.物资服务列表.Count > 5)
                              {
                                  decimal price_total = k.物资服务列表.Sum(o => o.总价);
-                                 vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1, price_total, price_total));
+                                 vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1.0, price_total, price_total));
                              }
                              else if (k.物资服务列表.Count == 0 && k.验收单附件.Count > 0)
                              {
                                  decimal price_total = k.验收单附件.Sum(o => o.价格);
-                                 vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1, price_total, price_total));
+                                 vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1.0, price_total, price_total));
                              }
                              else
                              {
@@ -188,12 +188,12 @@
                                      }
                                  }
                              }
-                             if (k.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0, k.运费, k.运费)); }
-                             if (k.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0, k.服务费, k.服务费)); }
-                             if (k.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0, k.维修费, k.维修费)); }
-                             foreach (var hj in k.其他费用) { vl.Add(Tuple.Create(hj.费用名称, string.Empty, string.Empty, string.Empty, 0, hj.金额, hj.金额)); }
+                             if (k.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0.0, k.运费, k.运费)); }
+                             if (k.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0.0, k.服务费, k.服务费)); }
+                             if (k.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0.0, k.维修费, k.维修费)); }
+                             foreach (var hj in k.其他费用) { vl.Add(Tuple.Create(hj.费用名称, string.Empty, string.Empty, string.Empty, 0.0, hj.金额, hj.金额)); }
 
-                             var vl_all = new List<Tuple<string, string, string, string, int, decimal, decimal>[]>();
+                             var vl_all = new List<Tuple<string, string, string, string, double, decimal, decimal>[]>();
                              for (var n_all = 0; n_all < vl.Count; n_all += 5) { vl_all.Add(vl.Skip(n_all).Take(5).ToArray()); }
 
                             <tr>
@@ -586,8 +586,8 @@ else
 
         var u=$("#hideuser").val();
         $("#sender").val(u);
-        $("#@ViewData["comes"]").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
-        $("#@ViewData["comes"]").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({"background":"url('../Images/tree_icons.png') -115px -4px"});
+        $("#新增及打印验收单").css({ "background": "#537E2B" }).children("a").css({ "color": "#fff" });
+        $("#新增及打印验收单").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
     });
 </script>
 }

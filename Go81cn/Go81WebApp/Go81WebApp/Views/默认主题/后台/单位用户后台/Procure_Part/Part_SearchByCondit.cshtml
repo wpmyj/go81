@@ -17,16 +17,16 @@
         {
             foreach (var k in gd)
             {
-                var vl = new List<Tuple<string, string, string, string, int, decimal, decimal>>();
+                var vl = new List<Tuple<string, string, string, string, double, decimal, decimal>>();
                 if (k.物资服务列表.Count > 5)
                 {
                     decimal price_total = k.物资服务列表.Sum(o => o.总价);
-                    vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1, price_total, price_total));
+                    vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1.0, price_total, price_total));
                 }
                 else if (k.物资服务列表.Count == 0 && k.验收单附件.Count > 0)
                 {
                     decimal price_total = k.验收单附件.Sum(o => o.价格);
-                    vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1, price_total, price_total));
+                    vl.Add(Tuple.Create(k.某批物资名称.ToString(), (string)null, (string)null, "批", 1.0, price_total, price_total));
                 }
                 else
                 {
@@ -38,12 +38,12 @@
                         }
                     }
                 }
-                if (k.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0, k.运费, k.运费)); }
-                if (k.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0, k.服务费, k.服务费)); }
-                if (k.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0, k.维修费, k.维修费)); }
-                foreach (var hj in k.其他费用) { vl.Add(Tuple.Create(hj.费用名称, string.Empty, string.Empty, string.Empty, 0, hj.金额, hj.金额)); }
+                if (k.运费 > 0) { vl.Add(Tuple.Create("运费", string.Empty, string.Empty, string.Empty, 0.0, k.运费, k.运费)); }
+                if (k.服务费 > 0) { vl.Add(Tuple.Create("服务费", string.Empty, string.Empty, string.Empty, 0.0, k.服务费, k.服务费)); }
+                if (k.维修费 > 0) { vl.Add(Tuple.Create("维修费", string.Empty, string.Empty, string.Empty, 0.0, k.维修费, k.维修费)); }
+                foreach (var hj in k.其他费用) { vl.Add(Tuple.Create(hj.费用名称, string.Empty, string.Empty, string.Empty, 0.0, hj.金额, hj.金额)); }
 
-                var vl_all = new List<Tuple<string, string, string, string, int, decimal, decimal>[]>();
+                var vl_all = new List<Tuple<string, string, string, string, double, decimal, decimal>[]>();
                 for (var n_all = 0; n_all < vl.Count; n_all += 5) { vl_all.Add(vl.Skip(n_all).Take(5).ToArray()); }
                 <tr>
                     <td>@k.基本数据.添加时间</td>
@@ -114,7 +114,7 @@
                         <td style="color:red">未验收</td>
                     }
                     <td>
-                        <a href="/单位用户后台/AcceptancedDetail?id=@k.Id">查看详情</a>
+                        <a href="/单位用户后台/AcceptancedDetail?id=@k.Id&comes=验收单">查看详情</a>
                         @if (k.是否作废)
                         {
                             <span style="color: red;">已作废</span>

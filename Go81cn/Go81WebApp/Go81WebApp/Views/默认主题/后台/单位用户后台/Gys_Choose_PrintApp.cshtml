@@ -1,0 +1,26 @@
+﻿
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <title>评审专家抽选系统</title>
+    <script src="~/JS/jquery-1.6.min.js"></script>
+    <link href="~/css/Intranet_p.css" rel="stylesheet" />
+    <link href="~/css/index.css" rel="stylesheet" />
+    <style>
+        .bg_outdiv_right {
+            float: none;
+        }
+    </style>
+</head>
+<body style="text-align: center;">
+    <div>
+        <div class="bg_outdiv_right" style="margin:0px auto;">
+            <div>
+                @Html.Action("Part_Gys_Choose_PrintApp", "专家抽选")
+            </div>
+        </div>
+    </div>
+</body>
+</html>

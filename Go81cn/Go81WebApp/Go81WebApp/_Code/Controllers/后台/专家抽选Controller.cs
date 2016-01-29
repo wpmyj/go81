@@ -20,10 +20,9 @@ using Go81WebApp.Models.管理器.抽选管理;
 using MongoDB.Driver.Linq;
 using Go81WebApp.Models.数据模型.商品数据模型;
 using Go81WebApp.Models.数据模型.消息数据模型;
-
 namespace Go81WebApp.Controllers.后台
 {
-#if INTRANET
+//#if INTRANET
     [登录验证]
     [用户类型验证(typeof(单位用户),typeof(运营团队))]
     public class 专家抽选Controller : Controller
@@ -57,10 +56,20 @@ namespace Go81WebApp.Controllers.后台
             ViewData["历史专家"] = 用户管理.查询用户<专家>(0, 0, Query.Null);
             return View("/Views/默认主题/后台/单位用户后台/Expert_History.cshtml");
         }
+        public ActionResult Expert_HistoryApp()
+        {
+            ViewData["历史专家"] = 用户管理.查询用户<专家>(0, 0, Query.Null);
+            return View("/Views/默认主题/后台/单位用户后台/Expert_HistoryApp.cshtml");
+        }
         public ActionResult Expert_History_Detail(long id)
         {
             ViewData["id"] = id;
             return View("/Views/默认主题/后台/单位用户后台/Expert_History_Detail.cshtml");
+        }
+        public ActionResult Expert_History_DetailApp(long id)
+        {
+            ViewData["id"] = id;
+            return View("/Views/默认主题/后台/单位用户后台/Expert_History_DetailApp.cshtml");
         }
         public ActionResult Expert_HistoryDetail()
         {
@@ -120,6 +129,10 @@ namespace Go81WebApp.Controllers.后台
         {
             return View("/Views/默认主题/后台/单位用户后台/Expert_Choose_Print.cshtml");
         }
+        public ActionResult Expert_Choose_PrintApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/Expert_Choose_PrintApp.cshtml");
+        }
         public ActionResult Part_Expert_Choose_Print(int? id)
         {
             if (Request.QueryString["c"] != null && Request.QueryString["c"] == "s")
@@ -159,9 +172,52 @@ namespace Go81WebApp.Controllers.后台
                 return Content("<script>window.location='/专家抽选/Expert_ApplayAuditList'</script>");
             }
         }
+        public ActionResult Part_Expert_Choose_PrintApp(int? id)
+        {
+            if (Request.QueryString["c"] != null && Request.QueryString["c"] == "s")
+            {
+                ViewData["come"] = "我可进行的抽取申请";
+            }
+            else if (Request.QueryString["c"] != null && Request.QueryString["c"] == "d")
+            {
+                ViewData["come"] = "我已完成的抽取申请";
+            }
+            else
+            {
+                ViewData["come"] = "全部抽取记录列表";
+            }
+
+            try
+            {
+                if (id == null)
+                {
+                    return Content("<script>window.location='/Views/默认主题/后台/单位用户后台/Expert_ApplayApp'</script>");
+                }
+                else
+                {
+                    专家抽选记录 model = 专家抽选管理.查找专家抽选记录((long)id);
+                    if (model != null)
+                    {
+                        return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Choose_PrintApp.cshtml", model);
+                    }
+                    else
+                    {
+                        return Content("<script>window.location='/Views/默认主题/后台/单位用户后台/Expert_ApplayApp'</script>");
+                    }
+                }
+            }
+            catch
+            {
+                return Content("<script>window.location='/Views/默认主题/后台/单位用户后台/Expert_ApplayApp'</script>");
+            }
+        }
         public ActionResult Gys_Choose_Print()
         {
             return View("/Views/默认主题/后台/单位用户后台/Gys_Choose_Print.cshtml");
+        }
+        public ActionResult Gys_Choose_PrintApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/Gys_Choose_PrintApp.cshtml");
         }
         public ActionResult Part_Gys_Choose_Print(int? id)
         {
@@ -197,6 +253,40 @@ namespace Go81WebApp.Controllers.后台
                 return Content("<script>window.location='/专家抽选/GysChoose_ApplayAuditList'</script>");
             }
         }
+        public ActionResult Part_Gys_Choose_PrintApp(int? id)
+        {
+            if (Request.QueryString["c"] != null && Request.QueryString["c"] == "s")
+            {
+                ViewData["come"] = "我提交的供应商抽取申请";
+            }
+            else
+            {
+                ViewData["come"] = "供应商历史抽取记录";
+            }
+            try
+            {
+                if (id == null)
+                {
+                    return Content("<script>window.location='/专家抽选/GysChoose_ApplayAuditListApp'</script>");
+                }
+                else
+                {
+                    供应商抽选记录 model = 供应商抽选管理.查找供应商抽选历史记录((long)id);
+                    if (model != null)
+                    {
+                        return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Gys_Choose_PrintApp.cshtml", model);
+                    }
+                    else
+                    {
+                        return Content("<script>window.location='/专家抽选/GysChoose_ApplayAuditListApp'</script>");
+                    }
+                }
+            }
+            catch
+            {
+                return Content("<script>window.location='/专家抽选/GysChoose_ApplayAuditListApp'</script>");
+            }
+        }
         public ActionResult Expert_Select()
         {
             return View("/Views/默认主题/后台/单位用户后台/Expert_Select.cshtml");
@@ -204,6 +294,10 @@ namespace Go81WebApp.Controllers.后台
         public ActionResult Expert_Choose()
         {
             return View("/Views/默认主题/后台/单位用户后台/Expert_Choose.cshtml");
+        }
+        public ActionResult Expert_ChooseApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/Expert_ChooseApp.cshtml");
         }
         public ActionResult Part_Expert_TreeMenu()
         {
@@ -293,6 +387,32 @@ namespace Go81WebApp.Controllers.后台
             ViewData["历史抽选专家列表"] = 专家抽选管理.查询专家抽选记录(pagesize * (int.Parse(page.ToString()) - 1), pagesize, q);
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_History.cshtml");
         }
+        public ActionResult Part_Expert_HistoryApp(int? page)
+        {
+            var q = Query<专家抽选记录>.EQ(o => o.申请抽选状态, 申请抽选状态.已完成抽选);
+            if (Request.Params["isscore"] != null)
+            {
+                var 是否评分 = false;
+                if (Request.Params["是否评分"] == "1")
+                {
+                    是否评分 = true;
+                }
+                q = q.And(Query<专家抽选记录>.EQ(o => o.是否已评分, 是否评分));
+            }
+
+            int listcount = 专家抽选管理.查询专家抽选记录(0, 0, q).Count();
+            int pagesize = 15;
+            int maxpagesize = Math.Max((listcount + pagesize - 1) / pagesize, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpagesize)
+            {
+                page = 1;
+            }
+
+            ViewData["currentpage"] = page;
+            ViewData["pagecount"] = maxpagesize;
+            ViewData["历史抽选专家列表"] = 专家抽选管理.查询专家抽选记录(pagesize * (int.Parse(page.ToString()) - 1), pagesize, q);
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_HistoryApp.cshtml");
+        }
         public ActionResult Part_Expert_History_Page(int? page)
         {
             var q = Query<专家抽选记录>.EQ(o => o.申请抽选状态, 申请抽选状态.已完成抽选);
@@ -336,6 +456,25 @@ namespace Go81WebApp.Controllers.后台
             catch
             {
                 return Content("<script>window.location='/专家抽选/Expert_list';</script>");
+            }
+        }
+        public ActionResult Part_Expert_History_DetailApp(long id)
+        {
+            try
+            {
+                专家 expertdetail = 用户管理.查找用户<专家>(id);
+                if (expertdetail != null)
+                {
+                    return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_History_DetailApp.cshtml", expertdetail);
+                }
+                else
+                {
+                    return Content("<script>window.location='/专家抽选/Expert_listApp';</script>");
+                }
+            }
+            catch
+            {
+                return Content("<script>window.location='/专家抽选/Expert_listApp';</script>");
             }
         }
         public ActionResult Part_Expert_Select(int? id)
@@ -411,6 +550,25 @@ namespace Go81WebApp.Controllers.后台
                 return Content("<script>alert('页面有误');location.href='javascript:history.go(-1)';</script>");
             }
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Choose.cshtml", model);
+        }
+        public ActionResult Part_Expert_ChooseApp(int? id)
+        {
+            专家抽选记录 model = new 专家抽选记录();
+            try
+            {
+                model = 专家抽选管理.查找专家抽选记录((long)id);
+                var str = "";
+                foreach (var m in model.专家抽选条件)
+                {
+                    str += m.需要专家数量 + ",";
+                }
+                ViewData["抽取总数列表"] = str.Substring(0, str.Length - 1);
+            }
+            catch
+            {
+                return Content("<script>alert('页面有误');location.href='javascript:history.go(-1)';</script>");
+            }
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ChooseApp.cshtml", model);
         }
         public class SearchParam
         {
@@ -1541,15 +1699,96 @@ namespace Go81WebApp.Controllers.后台
 
             //ViewData["专家特殊类别"] = 专家可评标专业.非商品分类评审专业;
             var 所属单位 = 用户管理.查找用户<单位用户>(currentUser.Id).单位信息.所属单位;
-            ViewData["所属单位"] = 所属单位 == null ? "" : 所属单位;
+            ViewData["所属单位"] = 所属单位 == null ? "成都军区联勤部军需物资油料部" : 所属单位;
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay.cshtml");
+        }
+        
+        public ActionResult Part_Expert_ApplayApp()
+        {
+            ViewData["goodType"] = 专家可评标专业分类.评审专业;// 商品分类管理.查找子分类();
+            ViewData["经办人"] = HttpContext.获取当前用户<单位用户>().联系方式.联系人;
+
+            var t = typeof(专业技术职称);
+            var vs = Enum.GetValues(t);
+            var d = new Dictionary<string, int>();
+            foreach (var v in vs)
+            {
+                d.Add(Enum.GetName(t, v), (int)v);
+            }
+            ViewData["专业技术职称"] = d;
+
+            t = typeof(学位);
+            vs = Enum.GetValues(t);
+            d = new Dictionary<string, int>();
+            foreach (var v in vs)
+            {
+                d.Add(Enum.GetName(t, v), (int)v);
+            }
+            ViewData["最高学位"] = d;
+
+            t = typeof(学历);
+            vs = Enum.GetValues(t);
+            d = new Dictionary<string, int>();
+            foreach (var v in vs)
+            {
+                d.Add(Enum.GetName(t, v), (int)v);
+            }
+            ViewData["最高学历"] = d;
+
+            t = typeof(专家类型);
+            vs = Enum.GetValues(t);
+            d = new Dictionary<string, int>();
+            foreach (var v in vs)
+            {
+                d.Add(Enum.GetName(t, v), (int)v);
+            }
+            ViewData["专家类型"] = d;
+
+            t = typeof(专家类别);
+            vs = Enum.GetValues(t);
+            d = new Dictionary<string, int>();
+            foreach (var v in vs)
+            {
+                d.Add(Enum.GetName(t, v), (int)v);
+            }
+            ViewData["专家类别"] = d;
+
+            t = typeof(专家级别);
+            vs = Enum.GetValues(t);
+            d = new Dictionary<string, int>();
+            foreach (var v in vs)
+            {
+                d.Add(Enum.GetName(t, v), (int)v);
+            }
+            ViewData["专家级别"] = d;
+
+            //ViewData["专家特殊类别"] = 专家可评标专业.非商品分类评审专业;
+            var 所属单位 = 用户管理.查找用户<单位用户>(currentUser.Id).单位信息.所属单位;
+            ViewData["所属单位"] = 所属单位 == null ? "" : 所属单位;
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayApp.cshtml");
         }
 
         [单一权限验证(权限.新增评审专家抽取申请)]
         public ActionResult Expert_Applay()
         {
             return View("/Views/默认主题/后台/单位用户后台/Expert_Applay.cshtml");
+        }
+       
+
+        public ActionResult Expert_ApplayApp()
+        {
+            var 用户组 = currentUser.用户组;
+            if (用户组.Contains("抽取系统操作"))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/Expert_ApplayApp.cshtml");
+            }
+            if (用户组.Contains("抽取系统审核"))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/Expert_ApplayAuditListApp.cshtml");
+            }
+            return View("/Views/默认主题/后台/单位用户后台/Error.cshtml");
         }
 
         [HttpPost]
@@ -1712,14 +1951,21 @@ namespace Go81WebApp.Controllers.后台
             Talk.消息主体.标题 = "待审核抽取评审专家";
             Talk.消息主体.内容 = "有一条待审核的申请抽取评审专家未处理，<a style='color:red;text-decoration:underline;' href='/专家抽选/Expert_ApplayAuditList'>点击这里进行审核</a>";
             对话消息管理.添加对话消息(Talk, Msg);
-
-
+            if (!string.IsNullOrWhiteSpace(Request.Form["hide"]))
+            {
+                return Redirect("/专家抽选/Expert_Applay_SApp");
+            }
             return RedirectToAction("Expert_Applay_S");
         }
         [单一权限验证(权限.我可审核的评审专家抽取申请)]
         public ActionResult Expert_ApplayAuditList()
         {
             return View("/Views/默认主题/后台/单位用户后台/Expert_ApplayAuditList.cshtml");
+        }
+        [单一权限验证(权限.我可审核的评审专家抽取申请)]
+        public ActionResult Expert_ApplayAuditListApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/Expert_ApplayAuditListApp.cshtml");
         }
         public ActionResult Part_Expert_ApplayAuditList()
         {
@@ -1745,7 +1991,30 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayAuditList.cshtml");
         }
+        public ActionResult Part_Expert_ApplayAuditListApp()
+        {
+            int page = 1;
 
+            int pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query<专家抽选记录>.Where(o => o.申请抽选状态 == 申请抽选状态.已提交待批准 && !o.是否一体机抽取 && !o.基本数据.已屏蔽)).Count();
+            int pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["pre_currentPage"] = page;
+            ViewData["pre_pagecount"] = pre_maxpage;
+            ViewData["专家抽取待批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query<专家抽选记录>.Where(o => o.申请抽选状态 == 申请抽选状态.已提交待批准 && !o.是否一体机抽取 && !o.基本数据.已屏蔽));
+
+            pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选)).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["ing_currentPage"] = page;
+            ViewData["ing_pagecount"] = pre_maxpage;
+            ViewData["专家抽取已批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选));
+
+            pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.未获批准)).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["no_currentPage"] = page;
+            ViewData["no_pagecount"] = pre_maxpage;
+            ViewData["专家抽取未获批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.未获批准));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayAuditListApp.cshtml");
+        }
         public ActionResult Part_Expert_ApplayAuditList_pre(int? page)
         {
             int listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query<专家抽选记录>.Where(o => o.申请抽选状态 == 申请抽选状态.已提交待批准 && !o.是否一体机抽取 && !o.基本数据.已屏蔽)).Count();
@@ -1760,6 +2029,21 @@ namespace Go81WebApp.Controllers.后台
             ViewData["专家抽取待批准列表"] = 专家抽选管理.查询专家抽选记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query<专家抽选记录>.Where(o => o.申请抽选状态 == 申请抽选状态.已提交待批准 && !o.是否一体机抽取 && !o.基本数据.已屏蔽));
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayAuditList_pre.cshtml");
+        }
+        public ActionResult Part_Expert_ApplayAuditList_preApp(int? page)
+        {
+            int listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query<专家抽选记录>.Where(o => o.申请抽选状态 == 申请抽选状态.已提交待批准 && !o.是否一体机抽取 && !o.基本数据.已屏蔽)).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+
+            ViewData["pre_currentPage"] = page;
+            ViewData["pre_pagecount"] = maxpage;
+            ViewData["专家抽取待批准列表"] = 专家抽选管理.查询专家抽选记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query<专家抽选记录>.Where(o => o.申请抽选状态 == 申请抽选状态.已提交待批准 && !o.是否一体机抽取 && !o.基本数据.已屏蔽));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayAuditList_preApp.cshtml");
         }
 
         public ActionResult Part_Expert_ApplayAuditList_ing(int? page)
@@ -1777,6 +2061,21 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayAuditList_ing.cshtml");
         }
+        public ActionResult Part_Expert_ApplayAuditList_ingApp(int? page)
+        {
+            int listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选)).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+            ViewData["ing_currentPage"] = page;
+            ViewData["ing_pagecount"] = maxpage;
+            ViewData["专家抽取已批准列表"] = 专家抽选管理.查询专家抽选记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayAuditList_ingApp.cshtml");
+        }
 
         public ActionResult Part_Expert_ApplayAuditList_no(int? page)
         {
@@ -1792,9 +2091,27 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayAuditList_no.cshtml");
         }
+        public ActionResult Part_Expert_ApplayAuditList_noApp(int? page)
+        {
+            int listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.未获批准)).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+            ViewData["no_currentPage"] = page;
+            ViewData["no_pagecount"] = maxpage;
+            ViewData["专家抽取未获批准列表"] = 专家抽选管理.查询专家抽选记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.未获批准));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayAuditList_noApp.cshtml");
+        }
         public ActionResult Expert_ApplayAudit()
         {
             return View("/Views/默认主题/后台/单位用户后台/Expert_ApplayAudit.cshtml");
+        }
+        public ActionResult Expert_ApplayAuditApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/Expert_ApplayAuditApp.cshtml");
         }
         public ActionResult Part_Expert_ApplayAudit(int? id)
         {
@@ -1805,19 +2122,32 @@ namespace Go81WebApp.Controllers.后台
             }
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayAudit.cshtml", model);
         }
-        [HttpPost]
-        public ActionResult Expert_ApplayAudit(string action, int? id)
+        public ActionResult Part_Expert_ApplayAuditApp(int? id)
         {
+            专家抽选记录 model = new 专家抽选记录();
+            if (id != null)
+            {
+                model = 专家抽选管理.查找专家抽选记录((long)id);
+            }
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayAuditApp.cshtml", model);
+        }
+        [HttpPost]
+        public ActionResult Expert_ApplayAudit(专家抽选记录 record)
+        {
+            string action = Request.Form["action"];
             if (action == "审核通过")
             {
-                专家抽选管理.批准专家抽选申请((long)id, this.HttpContext.获取当前用户<单位用户>().Id, 申请抽选状态.已批准待抽选);
+                专家抽选管理.批准专家抽选申请(record.Id, this.HttpContext.获取当前用户<单位用户>().Id, 申请抽选状态.已批准待抽选);
             }
 
             if (action == "审核不通过")
             {
-                专家抽选管理.批准专家抽选申请((long)id, this.HttpContext.获取当前用户<单位用户>().Id, 申请抽选状态.未获批准);
+                专家抽选管理.批准专家抽选申请(record.Id, this.HttpContext.获取当前用户<单位用户>().Id, 申请抽选状态.未获批准);
             }
-
+            if (!string.IsNullOrWhiteSpace(Request.Form["have"]))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/Expert_ApplayAuditListApp.cshtml");
+            }
             return View("/Views/默认主题/后台/单位用户后台/Expert_ApplayAuditList.cshtml");
         }
 
@@ -1828,12 +2158,24 @@ namespace Go81WebApp.Controllers.后台
         {
             return View("/Views/默认主题/后台/单位用户后台/GysChoose_Applay.cshtml");
         }
+
+        public ActionResult GysChoose_ApplayApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/GysChoose_ApplayApp.cshtml");
+        }
         public ActionResult Part_GysChoose_Applay()
         {
             ViewData["goodType"] = 商品分类管理.查找子分类();
             ViewData["经办人"] = HttpContext.获取当前用户<单位用户>().联系方式.联系人;
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_Applay.cshtml");
+        }
+        public ActionResult Part_GysChoose_ApplayApp()
+        {
+            ViewData["goodType"] = 商品分类管理.查找子分类();
+            ViewData["经办人"] = HttpContext.获取当前用户<单位用户>().联系方式.联系人;
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayApp.cshtml");
         }
         [HttpPost]
 
@@ -1916,7 +2258,10 @@ namespace Go81WebApp.Controllers.后台
             }
             model.供应商抽选条件 = condition;
             供应商抽选管理.添加供应商抽选历史(model);
-
+            if (!string.IsNullOrWhiteSpace(Request.Form["app"]))
+            {
+                return RedirectToAction("GysChoose_Applay_SApp");
+            }
             return RedirectToAction("GysChoose_Applay_S");
         }
 
@@ -1924,6 +2269,20 @@ namespace Go81WebApp.Controllers.后台
         public ActionResult GysChoose_ApplayAuditList()
         {
             return View("/Views/默认主题/后台/单位用户后台/GysChoose_ApplayAuditList.cshtml");
+        }
+
+        public ActionResult GysChoose_ApplayAuditListApp()
+        {
+            var 用户组 = currentUser.用户组;
+            if (用户组.Contains("抽取系统操作"))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/GysChoose_ApplayApp.cshtml");
+            }
+            if (用户组.Contains("抽取系统审核"))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/GysChoose_ApplayAuditListApp.cshtml");
+            }
+            return View("/Views/默认主题/后台/单位用户后台/Error.cshtml");
         }
         public ActionResult Part_GysChoose_ApplayAuditList()
         {
@@ -1950,6 +2309,31 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList.cshtml");
         }
+        public ActionResult Part_GysChoose_ApplayAuditListApp()
+        {
+            int page = 1;
+
+            int pre_listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<供应商抽选记录>.EQ(o => o.基本数据.已屏蔽, false))).Count();
+            int pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["pre_currentPage"] = page;
+            ViewData["pre_pagecount"] = pre_maxpage;
+            ViewData["供应商抽取待批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<供应商抽选记录>.EQ(o => o.基本数据.已屏蔽, false)));
+
+
+            pre_listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选)).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["ing_currentPage"] = page;
+            ViewData["ing_pagecount"] = pre_maxpage;
+            ViewData["供应商抽取已批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选));
+
+            pre_listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.未获批准)).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["no_currentPage"] = page;
+            ViewData["no_pagecount"] = pre_maxpage;
+            ViewData["供应商抽取未获批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.未获批准));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditListApp.cshtml");
+        }
         public ActionResult Part_GysChoose_ApplayAuditList_pre(int? page)
         {
             int listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<供应商抽选记录>.EQ(o => o.基本数据.已屏蔽, false))).Count();
@@ -1964,6 +2348,21 @@ namespace Go81WebApp.Controllers.后台
             ViewData["供应商抽取待批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<供应商抽选记录>.EQ(o => o.基本数据.已屏蔽, false)));
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_pre.cshtml");
+        }
+        public ActionResult Part_GysChoose_ApplayAuditList_preApp(int? page)
+        {
+            int listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<供应商抽选记录>.EQ(o => o.基本数据.已屏蔽, false))).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+
+            ViewData["pre_currentPage"] = page;
+            ViewData["pre_pagecount"] = maxpage;
+            ViewData["供应商抽取待批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<供应商抽选记录>.EQ(o => o.基本数据.已屏蔽, false)));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_preApp.cshtml");
         }
 
         public ActionResult Part_GysChoose_ApplayAuditList_ing(int? page)
@@ -1981,6 +2380,21 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_ing.cshtml");
         }
+        public ActionResult Part_GysChoose_ApplayAuditList_ingApp(int? page)
+        {
+            int listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选)).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+            ViewData["ing_currentPage"] = page;
+            ViewData["ing_pagecount"] = maxpage;
+            ViewData["供应商抽取已批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_ingApp.cshtml");
+        }
 
         public ActionResult Part_GysChoose_ApplayAuditList_no(int? page)
         {
@@ -1996,11 +2410,30 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_no.cshtml");
         }
+        public ActionResult Part_GysChoose_ApplayAuditList_noApp(int? page)
+        {
+            int listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.未获批准)).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+            ViewData["no_currentPage"] = page;
+            ViewData["no_pagecount"] = maxpage;
+            ViewData["供应商抽取未获批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.未获批准));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_noApp.cshtml");
+        }
 
         public ActionResult GysChoose_ApplayAudit()
         {
             return View("/Views/默认主题/后台/单位用户后台/GysChoose_ApplayAudit.cshtml");
         }
+        public ActionResult GysChoose_ApplayAuditApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/GysChoose_ApplayAuditApp.cshtml");
+        }
+
         public ActionResult Part_GysChoose_ApplayAudit(int? id)
         {
             供应商抽选记录 model = new 供应商抽选记录();
@@ -2010,9 +2443,19 @@ namespace Go81WebApp.Controllers.后台
             }
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAudit.cshtml", model);
         }
+        public ActionResult Part_GysChoose_ApplayAuditApp(int? id)
+        {
+            供应商抽选记录 model = new 供应商抽选记录();
+            if (id != null)
+            {
+                model = 供应商抽选管理.查找供应商抽选历史记录((long)id);
+            }
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditApp.cshtml", model);
+        }
+
         [HttpPost]
 
-        public ActionResult GysChoose_ApplayAudit(string action, int? id)
+        public ActionResult GysChoose_ApplayAudit(string action, int? id,string app)
         {
             if (action == "审核通过")
             {
@@ -2023,7 +2466,10 @@ namespace Go81WebApp.Controllers.后台
             {
                 供应商抽选管理.批准供应商抽选申请((long)id, this.HttpContext.获取当前用户<单位用户>().Id, 申请抽选状态.未获批准);
             }
-
+            if (!string.IsNullOrWhiteSpace(app))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/GysChoose_ApplayAuditListApp.cshtml");
+            }
             return View("/Views/默认主题/后台/单位用户后台/GysChoose_ApplayAuditList.cshtml");
         }
 
@@ -2031,7 +2477,13 @@ namespace Go81WebApp.Controllers.后台
         {
             return View("/Views/默认主题/后台/单位用户后台/GysChoose.cshtml");
         }
-        public ActionResult Part_GysChoose(int? id)
+
+        public ActionResult GysChooseApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/GysChooseApp.cshtml");
+        }
+
+        public ActionResult Part_GysChooseApp(int? id)
         {
             供应商抽选记录 model = new 供应商抽选记录();
             try
@@ -2049,7 +2501,7 @@ namespace Go81WebApp.Controllers.后台
                 return Content("<script>alert('页面有误');location.href='javascript:history.go(-1)';</script>");
             }
 
-            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose.cshtml", model);
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChooseApp.cshtml", model);
         }
 
         [HttpPost]
@@ -2179,7 +2631,7 @@ namespace Go81WebApp.Controllers.后台
 
             供应商抽选管理.更新供应商抽选历史记录(model);
 
-            return View("/Views/默认主题/后台/单位用户后台/GysChoose_ApplayAuditList.cshtml");
+            return View("/Views/默认主题/后台/单位用户后台/GysChoose_ApplayAuditListApp.cshtml");
         }
         //public ActionResult SearchByCondition_Gys()
         //{
@@ -2202,6 +2654,11 @@ namespace Go81WebApp.Controllers.后台
         {
             return View("/Views/默认主题/后台/单位用户后台/GysChoose_HistoryList.cshtml");
         }
+        [单一权限验证(权限.供应商全部抽取记录列表)]
+        public ActionResult GysChoose_HistoryListApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/GysChoose_HistoryListApp.cshtml");
+        }
         public ActionResult Part_GysChoose_HistoryList()
         {
             IEnumerable<供应商抽选记录> hisrecord = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选));
@@ -2223,6 +2680,28 @@ namespace Go81WebApp.Controllers.后台
             ViewData["Pagecount"] = PageCount;
             ViewData["历史抽选供应商列表"] = 供应商抽选管理.查询供应商抽选历史记录(10 * (page- 1), 10, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选));
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_HistoryList.cshtml");
+        }
+        public ActionResult Part_GysChoose_HistoryListApp()
+        {
+            IEnumerable<供应商抽选记录> hisrecord = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选));
+            int page = 0;
+            if (string.IsNullOrEmpty(Request.QueryString["page"]))
+            {
+                page = 1;
+            }
+            else
+            {
+                page = int.Parse(Request.QueryString["page"]);
+            }
+            int PageCount = hisrecord.Count() / 10;
+            if (hisrecord.Count() % 10 > 0)
+            {
+                PageCount++;
+            }
+            ViewData["CurrentPage"] = page;
+            ViewData["Pagecount"] = PageCount;
+            ViewData["历史抽选供应商列表"] = 供应商抽选管理.查询供应商抽选历史记录(10 * (page - 1), 10, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选));
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_HistoryListApp.cshtml");
         }
         public ActionResult Part_GysChoose_HistoryDetail(int? id)
         {
@@ -2258,14 +2737,56 @@ namespace Go81WebApp.Controllers.后台
                 return Content("<script>window.location='/专家抽选/GysChoose_HistoryList'</script>");
             }
         }
+        public ActionResult Part_GysChoose_HistoryDetailApp(int? id)
+        {
+            if (Request.QueryString["c"] != null && Request.QueryString["c"] == "s")
+            {
+                ViewData["come"] = "我提交的供应商抽取申请";
+            }
+            else
+            {
+                ViewData["come"] = "供应商历史抽取记录";
+            }
+            try
+            {
+                if (id == null)
+                {
+                    return Content("<script>window.location='/专家抽选/GysChoose_HistoryList'</script>");
+                }
+                else
+                {
+                    供应商抽选记录 model = 供应商抽选管理.查找供应商抽选历史记录((long)id);
+                    if (model != null)
+                    {
+                        return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_HistoryDetailApp.cshtml", model);
+                    }
+                    else
+                    {
+                        return Content("<script>window.location='/专家抽选/GysChoose_HistoryListApp'</script>");
+                    }
+                }
+            }
+            catch
+            {
+                return Content("<script>window.location='/专家抽选/GysChoose_HistoryListApp'</script>");
+            }
+        }
         public ActionResult GysChoose_HistoryDetail()
         {
             return View("/Views/默认主题/后台/单位用户后台/GysChoose_HistoryDetail.cshtml");
+        }
+        public ActionResult GysChoose_HistoryDetailApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/GysChoose_HistoryDetailApp.cshtml");
         }
 
         public ActionResult Expert_Scoring()
         {
             return View("/Views/默认主题/后台/单位用户后台/Expert_Scoring.cshtml");
+        }
+        public ActionResult Expert_ScoringApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/Expert_ScoringApp.cshtml");
         }
         public ActionResult Part_Expert_Scoring(long? id)
         {
@@ -2305,14 +2826,52 @@ namespace Go81WebApp.Controllers.后台
                 return Content("<script>window.location='/专家抽选/Expert_History'</script>");
             }
         }
+        public ActionResult Part_Expert_ScoringApp(long? id)
+        {
+            if (Request.QueryString["c"] != null && Request.QueryString["c"] == "s")
+            {
+                ViewData["come"] = "我可进行的抽取申请";
+            }
+            else if (Request.QueryString["c"] != null && Request.QueryString["c"] == "d")
+            {
+                ViewData["come"] = "我已完成的抽取申请";
+            }
+            else
+            {
+                ViewData["come"] = "全部抽取记录列表";
+            }
+            try
+            {
+                if (id == null)
+                {
+                    return Content("<script>window.location='/专家抽选/Expert_HistoryApp'</script>");
+                }
+                else
+                {
+                    专家抽选记录 model = 专家抽选管理.查找专家抽选记录((long)id);
+                    if (model != null)
+                    {
+                        return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ScoringApp.cshtml", model);
+                    }
+                    else
+                    {
+                        return Content("<script>window.location='/专家抽选/Expert_HistoryApp'</script>");
+                    }
+                }
+            }
+            catch
+            {
+                return Content("<script>window.location='/专家抽选/Expert_HistoryApp'</script>");
+            }
+        }
 
         [HttpPost]
-        public ActionResult Expert_Scoring(long? id)
+        public ActionResult Expert_Scoring(专家抽选记录 record)
         {
             try
             {
                 var parmstr = Request.Form["parmstr"];
-                专家抽选记录 model = 专家抽选管理.查找专家抽选记录((long)id);
+                专家抽选记录 model = 专家抽选管理.查找专家抽选记录(record.Id);
                 if (!string.IsNullOrWhiteSpace(parmstr) && !model.是否已评分 && model.抽选专家列表 != null)
                 {
                     var scoretemplist = parmstr.Split(new[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
@@ -2335,12 +2894,27 @@ namespace Go81WebApp.Controllers.后台
             {
 
             }
-            return RedirectToAction("Expert_Applay_S");
+            return RedirectToAction("Expert_Applay_SApp");
         }
         [单一权限验证(权限.我可进行的评审专家抽取申请)]
         public ActionResult Expert_Applay_S()
         {
             return View("/Views/默认主题/后台/单位用户后台/Expert_Applay_S.cshtml");
+        }
+
+
+        public ActionResult Expert_Applay_SApp()
+        {
+            var 用户组 = currentUser.用户组;
+            if (用户组.Contains("抽取系统操作"))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/Expert_Applay_SApp.cshtml");
+            }
+            if (用户组.Contains("抽取系统审核"))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/Expert_ApplayAuditListApp.cshtml");
+            }
+            return View("/Views/默认主题/后台/单位用户后台/Error.cshtml");
         }
         public ActionResult Part_Expert_Applay_S()
         {
@@ -2369,11 +2943,49 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_S.cshtml");
         }
+        public ActionResult Part_Expert_Applay_SApp()
+        {
+            int page = 1;
+
+            int pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<专家抽选记录>.EQ(o => o.是否一体机抽取, false)).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["pre_currentPage"] = page;
+            ViewData["pre_pagecount"] = pre_maxpage;
+            ViewData["专家抽取待批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<专家抽选记录>.EQ(o => o.是否一体机抽取, false)).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+
+            pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["ing_currentPage"] = page;
+            ViewData["ing_pagecount"] = pre_maxpage;
+            ViewData["专家抽取已批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+
+
+            pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["no_currentPage"] = page;
+            ViewData["no_pagecount"] = pre_maxpage;
+            ViewData["专家抽取未获批准列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+            pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["ed_currentPage"] = page;
+            ViewData["ed_pagecount"] = pre_maxpage;
+            ViewData["已完成的抽选列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_SApp.cshtml");
+        }
 
         [单一权限验证(权限.我已完成的评审专家抽取申请)]
         public ActionResult Expert_Applay_ed()
         {
             return View("/Views/默认主题/后台/单位用户后台/Expert_Applay_ed.cshtml");
+        }
+        [单一权限验证(权限.我已完成的评审专家抽取申请)]
+        public ActionResult Expert_Applay_edApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/Expert_Applay_edApp.cshtml");
         }
         public ActionResult Part_Expert_Applay_ed()
         {
@@ -2385,8 +2997,44 @@ namespace Go81WebApp.Controllers.后台
             ViewData["已完成的抽选列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_ed.cshtml");
         }
+        public ActionResult Part_Expert_Applay_edApp()
+        {
+            int page = 1;
+            int  pre_listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int  pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["ed_currentPage"] = page;
+            ViewData["ed_pagecount"] = pre_maxpage;
+            ViewData["已完成的抽选列表"] = 专家抽选管理.查询专家抽选记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_edApp.cshtml");
+        }
+        public ActionResult Part_Expert_Applay_S_ed(int? page)
+        {
+            int listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+            ViewData["ed_currentPage"] = page;
+            ViewData["ed_pagecount"] = maxpage;
+            ViewData["已完成的抽选列表"] = 专家抽选管理.查询专家抽选记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
 
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_S_ed.cshtml");
+        }
+        public ActionResult Part_Expert_Applay_S_edApp(int? page)
+        {
+            int listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+            ViewData["ed_currentPage"] = page;
+            ViewData["ed_pagecount"] = maxpage;
+            ViewData["已完成的抽选列表"] = 专家抽选管理.查询专家抽选记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
 
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_S_edApp.cshtml");
+        }
         public ActionResult Part_Expert_Applay_S_pre(int? page)
         {
             int listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<专家抽选记录>.EQ(o => o.是否一体机抽取, false)).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
@@ -2401,6 +3049,21 @@ namespace Go81WebApp.Controllers.后台
             ViewData["专家抽取待批准列表"] = 专家抽选管理.查询专家抽选记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<专家抽选记录>.EQ(o => o.是否一体机抽取, false)).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_S_pre.cshtml");
+        }
+        public ActionResult Part_Expert_Applay_S_preApp(int? page)
+        {
+            int listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<专家抽选记录>.EQ(o => o.是否一体机抽取, false)).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+
+            ViewData["pre_currentPage"] = page;
+            ViewData["pre_pagecount"] = maxpage;
+            ViewData["专家抽取待批准列表"] = 专家抽选管理.查询专家抽选记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<专家抽选记录>.EQ(o => o.是否一体机抽取, false)).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_S_preApp.cshtml");
         }
 
         public ActionResult Part_Expert_Applay_S_ing(int? page)
@@ -2418,6 +3081,21 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_S_ing.cshtml");
         }
+        public ActionResult Part_Expert_Applay_S_ingApp(int? page)
+        {
+            int listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+            ViewData["ing_currentPage"] = page;
+            ViewData["ing_pagecount"] = maxpage;
+            ViewData["专家抽取已批准列表"] = 专家抽选管理.查询专家抽选记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_S_ingApp.cshtml");
+        }
 
         public ActionResult Part_Expert_Applay_S_no(int? page)
         {
@@ -2433,24 +3111,27 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_S_no.cshtml");
         }
-
-        public ActionResult Part_Expert_Applay_S_ed(int? page)
+        public ActionResult Part_Expert_Applay_S_noApp(int? page)
         {
-            int listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int listcount = 专家抽选管理.查询专家抽选记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
             int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
             if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
             {
                 page = 1;
             }
-            ViewData["ed_currentPage"] = page;
-            ViewData["ed_pagecount"] = maxpage;
-            ViewData["已完成的抽选列表"] = 专家抽选管理.查询专家抽选记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+            ViewData["no_currentPage"] = page;
+            ViewData["no_pagecount"] = maxpage;
+            ViewData["专家抽取未获批准列表"] = 专家抽选管理.查询专家抽选记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<专家抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
 
-            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_S_ed.cshtml");
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_Applay_S_noApp.cshtml");
         }
         public ActionResult Expert_ApplayCancel()
         {
             return View("/Views/默认主题/后台/单位用户后台/Expert_ApplayCancel.cshtml");
+        }
+        public ActionResult Expert_ApplayCancelApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/Expert_ApplayCancelApp.cshtml");
         }
         public ActionResult Part_Expert_ApplayCancel(int? id)
         {
@@ -2461,17 +3142,31 @@ namespace Go81WebApp.Controllers.后台
             }
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayCancel.cshtml", model);
         }
-        public ActionResult Expert_ApplayCancelAction(long? id)
+        public ActionResult Part_Expert_ApplayCancelApp(int? id)
+        {
+            专家抽选记录 model = new 专家抽选记录();
+            if (id != null)
+            {
+                model = 专家抽选管理.查找专家抽选记录((long)id);
+            }
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Expert_ApplayCancelApp.cshtml", model);
+        }
+        public ActionResult Expert_ApplayCancelAction()
         {
             try
             {
-                var model = 专家抽选管理.查找专家抽选记录((long)id);
+                long id = long.Parse(Request.QueryString["Id"]);
+                var model = 专家抽选管理.查找专家抽选记录(id);
                 model.基本数据.已屏蔽 = true;
                 专家抽选管理.更新专家抽选记录(model, false);
             }
             catch
             {
 
+            }
+            if (!string.IsNullOrWhiteSpace(Request.QueryString["s"]))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/Expert_Applay_SApp.cshtml");
             }
             return View("/Views/默认主题/后台/单位用户后台/Expert_Applay_S.cshtml");
         }
@@ -2480,6 +3175,20 @@ namespace Go81WebApp.Controllers.后台
         public ActionResult GysChoose_Applay_S()
         {
             return View("/Views/默认主题/后台/单位用户后台/GysChoose_Applay_S.cshtml");
+        }
+        
+        public ActionResult GysChoose_Applay_SApp()
+        {
+            var 用户组 = currentUser.用户组;
+            if (用户组.Contains("抽取系统操作"))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/GysChoose_Applay_SApp.cshtml");
+            }
+            if (用户组.Contains("抽取系统审核"))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/GysChoose_ApplayAuditListApp.cshtml");
+            }
+            return View("/Views/默认主题/后台/单位用户后台/Error.cshtml");
         }
         public ActionResult Part_GysChoose_Applay_S()
         {
@@ -2512,6 +3221,37 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_Applay_S.cshtml");
         }
+        public ActionResult Part_GysChoose_Applay_SApp()
+        {
+            int page = 1;
+
+            int pre_listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["pre_currentPage"] = page;
+            ViewData["pre_pagecount"] = pre_maxpage;
+            ViewData["供应商抽取待批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+
+            pre_listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["ing_currentPage"] = page;
+            ViewData["ing_pagecount"] = pre_maxpage;
+            ViewData["供应商抽取已批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+            pre_listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["no_currentPage"] = page;
+            ViewData["no_pagecount"] = pre_maxpage;
+            ViewData["供应商抽取未获批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+            pre_listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            pre_maxpage = Math.Max((pre_listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            ViewData["ed_currentPage"] = page;
+            ViewData["ed_pagecount"] = pre_maxpage;
+            ViewData["供应商抽取已抽选列表"] = 供应商抽选管理.查询供应商抽选历史记录(0, PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_Applay_SApp.cshtml");
+        }
 
         public ActionResult Part_GysChoose_ApplayAuditList_pre_S(int? page)
         {
@@ -2529,6 +3269,23 @@ namespace Go81WebApp.Controllers.后台
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_pre_S.cshtml");
         }
 
+        public ActionResult Part_GysChoose_ApplayAuditList_pre_SApp(int? page)
+        {
+            int listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+
+            ViewData["pre_currentPage"] = page;
+            ViewData["pre_pagecount"] = maxpage;
+            ViewData["供应商抽取待批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已提交待批准).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_pre_SApp.cshtml");
+        }
+
+
         public ActionResult Part_GysChoose_ApplayAuditList_ing_S(int? page)
         {
             int listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
@@ -2545,6 +3302,22 @@ namespace Go81WebApp.Controllers.后台
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_ing_S.cshtml");
         }
 
+        public ActionResult Part_GysChoose_ApplayAuditList_ing_SApp(int? page)
+        {
+            int listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+            ViewData["ing_currentPage"] = page;
+            ViewData["ing_pagecount"] = maxpage;
+            ViewData["供应商抽取已批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已批准待抽选).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_ing_SApp.cshtml");
+        }
+
         public ActionResult Part_GysChoose_ApplayAuditList_no_S(int? page)
         {
             int listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
@@ -2558,6 +3331,21 @@ namespace Go81WebApp.Controllers.后台
             ViewData["供应商抽取未获批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_no_S.cshtml");
+        }
+
+        public ActionResult Part_GysChoose_ApplayAuditList_no_SApp(int? page)
+        {
+            int listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+            ViewData["no_currentPage"] = page;
+            ViewData["no_pagecount"] = maxpage;
+            ViewData["供应商抽取未获批准列表"] = 供应商抽选管理.查询供应商抽选历史记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.未获批准).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_no_SApp.cshtml");
         }
         public ActionResult Part_GysChoose_ApplayAuditList_ed_S(int? page)
         {
@@ -2573,9 +3361,28 @@ namespace Go81WebApp.Controllers.后台
 
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_ed_S.cshtml");
         }
+
+        public ActionResult Part_GysChoose_ApplayAuditList_ed_SApp(int? page)
+        {
+            int listcount = 供应商抽选管理.查询供应商抽选历史记录(0, 0, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id))).Count();
+            int maxpage = Math.Max((listcount + PAGESIZE - 1) / PAGESIZE, 1);
+            if (string.IsNullOrEmpty(page.ToString()) || page < 0 || page > maxpage)
+            {
+                page = 1;
+            }
+            ViewData["ed_currentPage"] = page;
+            ViewData["ed_pagecount"] = maxpage;
+            ViewData["供应商抽取已抽选列表"] = 供应商抽选管理.查询供应商抽选历史记录(PAGESIZE * (int.Parse(page.ToString()) - 1), PAGESIZE, Query.EQ("申请抽选状态", 申请抽选状态.已完成抽选).And(Query<供应商抽选记录>.EQ(o => o.经办人.用户ID, HttpContext.获取当前用户<单位用户>().Id)));
+
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_GysChoose_ApplayAuditList_ed_SApp.cshtml");
+        }
         public ActionResult Gys_ApplayCancel()
         {
             return View("/Views/默认主题/后台/单位用户后台/Gys_ApplayCancel.cshtml");
+        }
+        public ActionResult Gys_ApplayCancelApp()
+        {
+            return View("/Views/默认主题/后台/单位用户后台/Gys_ApplayCancelApp.cshtml");
         }
         public ActionResult Part_Gys_ApplayCancel(int? id)
         {
@@ -2586,11 +3393,23 @@ namespace Go81WebApp.Controllers.后台
             }
             return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Gys_ApplayCancel.cshtml", model);
         }
-        public ActionResult Gys_ApplayCancelAction(long? id)
+
+        public ActionResult Part_Gys_ApplayCancelApp(int? id)
+        {
+            供应商抽选记录 model = new 供应商抽选记录();
+            if (id != null)
+            {
+                model = 供应商抽选管理.查找供应商抽选历史记录((long)id);
+            }
+            return PartialView("/Views/默认主题/后台/单位用户后台/Procure_Part/Part_Gys_ApplayCancelApp.cshtml", model);
+        }
+
+        public ActionResult Gys_ApplayCancelAction()
         {
             try
             {
-                var model = 供应商抽选管理.查找供应商抽选历史记录((long)id);
+                var id = long.Parse(Request.Params["id"]);
+                var model = 供应商抽选管理.查找供应商抽选历史记录(id);
                 model.基本数据.已屏蔽 = true;
                 供应商抽选管理.更新供应商抽选历史记录(model);
             }
@@ -2598,8 +3417,12 @@ namespace Go81WebApp.Controllers.后台
             {
 
             }
+            if (!string.IsNullOrWhiteSpace(Request.Params["app"]))
+            {
+                return View("/Views/默认主题/后台/单位用户后台/GysChoose_Applay_SApp.cshtml");
+            }
             return View("/Views/默认主题/后台/单位用户后台/GysChoose_Applay_S.cshtml");
         }
     }
-#endif
+//#endif
 }

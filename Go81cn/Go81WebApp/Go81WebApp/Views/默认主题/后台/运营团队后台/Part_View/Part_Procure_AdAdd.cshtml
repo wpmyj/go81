@@ -367,7 +367,7 @@
                         @*<div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "协议采购", new { @class = "procure_radioinput" })协议采购</div>*@
                         <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "单一来源", new { @class = "procure_radioinput" })单一来源</div>
                         <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "网上竞标", new { @class = "procure_radioinput" })网上竞价</div>
-                        @*<div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "其他", new { @class = "procure_radioinput", @checked = "checked" })其他</div>*@
+                        <div class="procure_selectlist">@Html.RadioButtonFor(model => model.公告信息.公告类别, "其他", new { @class = "procure_radioinput"})其他</div>
                     </div>
                 </div>
                 <div class="procureinputdiv">
@@ -421,6 +421,8 @@
                             <option value="~/JS/kindeditor-4.1.10/plugins/template/html/7.html">邀请招标公告模板</option>
                             <option value="~/JS/kindeditor-4.1.10/plugins/template/html/6.html">询价采购公告模板</option>
                             <option value="~/JS/kindeditor-4.1.10/plugins/template/html/4.html">竞争性谈判公告模板</option>
+                            <option value="~/JS/kindeditor-4.1.10/plugins/template/html/9.html">中标公告模板</option>
+                            <option value="~/JS/kindeditor-4.1.10/plugins/template/html/8.html">更正公告模板</option>
                         </select>
                     </div>
                 </div>

@@ -136,14 +136,14 @@
             }
 
             //验证商品简介
-            stepcheckparm = $('textarea[name="商品数据.商品简介"]');
+            /*stepcheckparm = $('textarea[name="商品数据.商品简介"]');
             if ($.trim(stepcheckparm.val()) == "") {
                 $("#p_des").show();
                 $(stepcheckparm).focus();
                 return false;
             } else {
                 $("#p_des").hide();
-            }
+            }*/
 
             //验证商品详情
             editor1.sync("content1");
@@ -395,12 +395,11 @@
                         @*@Html.ValidationMessageFor(model => model.销售信息.价格)*@<span style="padding-right: 20px;">*</span><span id="p_price" style="display: none;">请输入正确的价格(只能为数字或小数)</span>
                     </div>
                     }
-                    <div class="product_add_textarabox">
+                    @*<div class="product_add_textarabox">
                         <div class="product_add_toptitle">商品简介：</div>
                         @Html.TextAreaFor(model => model.商品数据.商品简介)
-                        @*@Html.ValidationMessageFor(model => model.商品数据.商品简介)*@<span>*</span><span id="p_des" style="display: none;">请输入商品简介</span>
-                        @*<div class="product_add_textarabox_tipbox">500字(还剩499字)<a href="#" class="product_add_textarabox_tip">参考格式</a></div>*@
-                    </div>
+                        <span>*</span><span id="p_des" style="display: none;">请输入商品简介</span>
+                    </div>*@
 
                     <div class="product_add_detailbox" style="margin-bottom: 10px;">
                         <div class="product_add_toptitle">商品详情：</div>
@@ -645,11 +644,11 @@
                                 }
 
                                 //验证商品简介
-                                stepcheckparm = $('textarea[name="商品数据.商品简介"]');
-                                if ($.trim(stepcheckparm.val()) == "") {
-                                    $("#contenerror").html("商品描述-->商品简介必须填写");
-                                    return false;
-                                }
+                                //stepcheckparm = $('textarea[name="商品数据.商品简介"]');
+                                //if ($.trim(stepcheckparm.val()) == "") {
+                                //    $("#contenerror").html("商品描述-->商品简介必须填写");
+                                //    return false;
+                                //}
 
                                 //var pricerg = /^(:?(:?\d+.\d+)|(:?\d+))$/;
                                 editor1.sync("content1");

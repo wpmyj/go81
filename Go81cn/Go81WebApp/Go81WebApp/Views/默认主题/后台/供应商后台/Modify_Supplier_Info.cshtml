@@ -1,0 +1,966 @@
+﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
+@using Go81WebApp.Models.数据模型
+@using Go81WebApp.Models.数据模型.商品数据模型
+@{
+    ViewBag.Title = "修改供应商信息";
+}
+<link href="~/css/css.css" rel=" stylesheet" />
+<link href="~/css/index.css" rel="stylesheet" />
+<link href="~/css/Msg_Tips.css" rel="stylesheet" />
+<script src="~/JS/provinceandcity_all.js"></script>
+<script type="text/javascript" src="/JS/My97DatePicker/calendar.js"></script>
+<script type="text/javascript" src="/JS/My97DatePicker/config.js"></script>
+<script type="text/javascript" src="/JS/My97DatePicker/WdatePicker.js"></script>
+<style>
+    table tr td span {
+        font-size: 12px;
+        color: red;
+    }
+
+    table tr td {
+        font-size: 14px;
+    }
+
+    select {
+        position: relative;
+    }
+
+    .good_link {
+        color: red;
+    }
+
+    .good_link:hover {
+        text-decoration: underline;
+        color: red;
+    }
+
+    .list {
+        font-size: 14px;
+        width: 1003px;
+        background-image: url(/images/index_content_bg.jpg);
+    }
+
+    .list a {
+        width: 100px;
+        cursor: pointer;
+        height: 30px;
+        color: #336;
+        display: inline-block;
+        text-align: center;
+        line-height: 30px;
+    }
+
+    .submenulist li h3 a.on {
+        width: 241px;
+        color: #006400;
+        border: 1px solid #aaa;
+        border-right: none;
+        border-left: none;
+        overflow: hidden;
+        margin: 0;
+        height: 30px;
+        font-size: 14px;
+        line-height: 30px;
+        background: #fff;
+        box-shadow: -10px 0 14px #ccc;
+        z-index: 9999;
+        text-decoration: none;
+    }
+    .marker {
+        color: #ff0000;
+    }
+</style>
+<div id="f1" class="modal_out">
+    <div class="modal_in"></div>
+    <div class="modal_content_loading">
+        <img src="~/Images/ajax-loader.gif" />
+        <span>正在上传，请稍等...</span>
+    </div>
+</div>
+<div id="Toubiao" style="display:none;">
+    <div style="position:fixed; z-index:20; top:0px; left:0px; opacity:0.5;-moz-opacity:0.5;filter:alpha(opacity=50); text-align:center; right:0; bottom:0px; background-color:black; height:100%; width:100%;border:1px solid green; box-shadow:0px 0px 10px gray; -webkit-box-shadow:0px 0px 10px gray;-moz-box-shadow:0px 0px 10px gray;">
+    </div>
+    <div style="width:100%;position:fixed; z-index:21; left:0px;top:20%;min-height:330px; font-size:18px; text-align:left; padding-left:20px; line-height:30px;">
+        <div style="width:600px;position:relative; border:1px solid red; margin:0px auto; height:300px; font-size:18px; text-align:left; padding-left:20px; line-height:30px; background-color:white;">
+            <div style="width:100%; height:auto;"><a style="width:30px; height:30px; line-height:30px; text-align:center; margin-top:5px; margin-right:5px; background-color:red; font-size:30px; color:white; float:right;cursor:pointer;" title="关闭窗口" onclick="hidebox('#Toubiao')">×</a></div>
+            <div style="float:right; width:100%; font-size:12px;">
+                <h2 style="text-align:center;">新增招投标经历</h2>
+                <form action="/供应商后台/Toubiao_Manage" method="post">
+                    @Html.HiddenFor(m => m.Id)
+                    <table width="90%">
+                        <tr>
+                            <td width="20%" height="30" align="right">项目名称：</td>
+                            <td width="30%" height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="历史参标记录[0].项目名称" /></td>
+
+                            <td width="20%" height="30" align="right">招标方：</td>
+                            <td width="30%" height="30"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="历史参标记录[0].招标方" /></td>
+
+                        </tr>
+                        <tr>
+                            <td align="right" height="30">参标结果：</td>
+                            <td style="position:relative;"><select onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="历史参标记录[0].参标结果"><option value="0">请选择参标结果</option><option value="1">中标</option><option value="2">落标</option><option value="3">流标</option><option value="4">废标</option><option value="9999">其他</option></select><div class="out_box" style="left:155px;"><div class="arrow"></div><div class="con_box">请选择参标结果</div></div></td>
+
+                            <td align="right" height="30">参标时间：</td>
+                            <td><input onmouseout="hide_tip(this)" onmouseover="show_tip(this)" onfocus="WdatePicker({ isShowWeek: true })" type="text" name="历史参标记录[0].参标时间" /></td>
+                        </tr>
+                        <tr><td align="right" style="position:relative;"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" value="true" type="checkbox" name="历史参标记录[0].本平台项目" /><div class="out_box" style="left:155px;"><div class="arrow"></div><div class="con_box" style="min-width:120px;">是本平台项目，请选择，否则，不用选</div></div></td><td>是否是本平台项目</td></tr>
+                    </table>
+                    <table width="100%" style="margin-top:20px;"><tr><td style="display:block;height:50px; text-align:center;"><input type="submit" id="submit_btn" value="保  存" /></td></tr></table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="bg_outdiv">
+    <div class="bg_outdiv_left">
+        @Html.Action("LeftMenu", "布局")
+    </div>
+    <div class="bg_outdiv_right" style="z-index:1;">
+        <div class="gys_znxx_topbox">
+            <div class="gys_xttz_topbg">
+                <div class="index_bottom_zb_top_title">
+                    企业入网信息管理
+                                @if (Model.供应商用户信息.提交入网)
+                                {
+                                    <span style="color: #ff0000;">（您已成功提交入网，如需修改信息，请联系网站客服）</span>
+                                }
+                </div>
+            </div>
+        </div>
+        <div id="containerbox">
+            @if (!Model.供应商用户信息.提交入网)
+            {
+                <div style="border: 1px solid #ff0000;margin-top: 10px;padding:5px;">
+                    <span style="color: #ff0000;">
+                        请您完善企业入网信息,并提交审核。
+                        供应商完善入网信息后,将成为西南物资采购网的入网供应商,部队单位用户即可在网站上查询了解您的企业和产品信息。
+                    </span>
+                </div>
+            }
+            @using (Html.BeginForm("Modify_SupplierInfo", "供应商后台", FormMethod.Post, new { enctype = "multipart/form-data", name = "data" }))
+            {
+                if (Model.审核数据.审核状态 != 审核状态.审核通过)
+                {
+                    if (Model.供应商用户信息.提交入网)
+                    {
+                        <input type="hidden" value="1" name="IsSubmit" id="IsSubmit" />
+                    }
+                    else
+                    {
+                        <input type="hidden" value="2" name="IsSubmit" id="IsSubmit" />
+                    }
+                }
+                else
+                {
+                    <input type="hidden" value="1" name="IsSubmit" id="IsSubmit" />
+                }
+                @Html.HiddenFor(m => m.Id)
+                <div class="gys_znxx_box" style="border:none;">
+                    <div style="width:940px;overflow: hidden;margin:8px auto;">
+                        <div style="margin-left:0px; border:1px solid rgb(202, 195, 195); margin-top:0px;margin-bottom:10px;">
+                            <div>
+                                <div id="title_div" class="index_bottom_zb_top_title title_addsupplier">企业基本信息</div>
+                                <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto;margin-bottom:10px;">
+                                    <table width="90%" style="margin-left:30px;">
+                                        <tr>
+                                            <td width="15%" align="right">企业中文名称：</td>
+                                            <td width="35%">
+                                                @Html.TextBoxFor(m => m.企业基本信息.企业名称,new{@class="info"})<span class="marker">*</span>
+                                            </td>
+                                            <td width="25%" align="right" class="lab">企业英文名称：</td>
+                                            <td width="25%">
+                                            @Html.TextBoxFor(m => m.企业基本信息.英文名称)
+                                        </tr>
+                                        <tr>
+                                            <td width="25%" align="right" class="lab">企业简称：</td>
+                                            <td width="25%">
+                                                @Html.TextBoxFor(m => m.企业基本信息.简称)
+                                            </td>
+                                            <td width="15%" align="right">注册地址：</td>
+                                            <td width="35%">
+                                                @Html.TextBoxFor(m => m.企业基本信息.注册地址, new { @class = "info" })<span class="marker">*</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab">邮政编码：</td>
+                                            <td>
+                                                @Html.TextBoxFor(m => m.企业基本信息.邮政编码, new { @class = "info" })<span class="marker">*</span>
+                                            </td>
+                                            <td align="right">成立时间：</td>
+                                            <td>
+                                                @Html.TextBoxFor(m => m.企业基本信息.成立时间, new { onfocus = "WdatePicker({isShowWeek:true})", @class = "info" })<span class="marker">*</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab">网站地址：</td>
+                                            <td>
+                                                @Html.TextBoxFor(m => m.企业基本信息.网站网址)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab">经营类型：</td>
+                                            <td>
+
+                                                @Html.EnumDropDownListFor(m => m.企业基本信息.经营类型, new { @style = "width:171px; margin-left:2px;", @class = "info" })<span class="marker">*</span>
+                                            </td>
+                                            <td align="right" class="lab">经营子类型：</td>
+                                            <td>
+                                                @Html.EnumDropDownListFor(m => m.企业基本信息.经营子类型, new { @style = "width:171px; margin-left:2px;", @class = "info" })<span class="marker">*</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab">员工人数：</td>
+                                            <td style="position: relative;">
+
+                                                @Html.EnumDropDownListFor(m => m.企业基本信息.员工人数, new { @style = "width:171px; margin-left:2px;", @class = "info" })<span class="marker">*</span>
+                                            </td>
+                                            <td align="right" class="lab">经济性质：</td>
+                                            <td>
+                                                @Html.EnumDropDownListFor(m => m.企业基本信息.经济性质, new { @style = "width:171px; margin-left:2px;", @class = "info" })<span class="marker">*</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab">所属地域：</td>
+                                            <td colspan="3">
+                                                @Html.HiddenFor(m => m.所属地域.省份, new { id = "provence",@class="info"})
+                                                @Html.HiddenFor(m => m.所属地域.城市, new { id = "city",@class="info" })
+                                                @Html.HiddenFor(m => m.所属地域.区县, new { id = "area",@class="info" })
+                                                <select id="deliverprovince" name="deliverprovince" style="width:171px; margin-left:2px;" class="info"></select>
+                                                <select id="delivercity" name="delivercity" style="width:171px; margin-left:2px;" class="info"></select>
+                                                <select id="deliverarea" name="deliverarea" style="width:171px; margin-left:2px;" class="info"></select><span class="marker">*</span>
+                                                <script>
+                                                    window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea", "@Model.所属地域.省份", "@Model.所属地域.城市", "@Model.所属地域.区县"); }
+
+                                                </script>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top">展示图片：</td>
+                                            <td colspan="3">
+                                                @if (Model.供应商用户信息.供应商图片 != null && Model.供应商用户信息.供应商图片.Count() != 0)
+                                                {
+                                                    for (int i = 0; i < Model.供应商用户信息.供应商图片.Count(); i++)
+                                                    {
+                                                        if (System.IO.File.Exists(Server.MapPath(@Model.供应商用户信息.供应商图片[i])))
+                                                        {
+                                                            <span style="display:inline-block;">
+                                                                <a style="display:block; position:absolute; width:15px;height:15px; margin-left:85px; background-color:red; cursor:pointer; line-height:15px; text-align:center; color:white;" title="删除" lang="@Model.供应商用户信息.供应商图片[i]" onclick="delPic(this)">×</a>
+                                                                <a target="_blank" title="点击查看大图" href="@(Model.供应商用户信息.供应商图片[i])"><img height="50" width="100" src="@(Model.供应商用户信息.供应商图片[i])" /></a>
+                                                            </span>
+                                                        }
+                                                    }
+
+
+                                                }
+                                                <span style="display:none;">
+                                                    <input type="file" style="display:inline; width:120px;" name="file" />
+                                                    <em style="color:red;">注：请上传2M以下的jpg格式的彩色图片</em>
+                                                </span>
+                                                <a href="###" onclick="modify(this)" style="color:red; font-size:16px; text-decoration:underline;">添加展示图</a>
+                                                <span></span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td align="right" class="lab" valign="top">企业简介：</td>
+                                            <td align="left" colspan="3">
+
+                                                @Html.TextAreaFor(m => m.企业基本信息.企业简介, new { cols = "80", rows = "5", style = "resize:none;", @class = "info" })<span class="marker">*</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-left:0px;border-color:rgb(207, 197, 197); margin-top:0px;margin-bottom: 10px; border-style:solid; border-width:1px;">
+                            <div id="title_div" class="index_bottom_zb_top_title title_addsupplier">联系人信息</div>
+                            <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto; margin-bottom:10px;">
+                                <table width="80%" style="margin-bottom:10px;" cellspacing="5">
+                                    <tr>
+                                    <td width="20%" align="right">
+                                        联系人：
+                                    </td>
+                                    <td width="25%">
+
+                                        @Html.TextBoxFor(m => m.企业联系人信息.联系人姓名, new { @class = "info" })<span class="marker">*</span>
+                                    </td>
+                                    <td width="25%" align="right">
+                                        性别：
+                                    </td>
+                                    <td width="25%">
+                                        @Html.EnumDropDownListFor(m => m.企业联系人信息.联系人性别, new { @style = "width:171px; margin-left:2px;", @class = "info" })<span class="marker">*</span>
+                                    </td>
+                                    <tr>
+                                    <td align="right">
+
+                                        电子邮件：
+                                    </td>
+                                    <td>
+
+                                        @Html.TextBoxFor(m => m.企业联系人信息.联系人邮箱, new { @class = "info" })<span class="marker">*</span>
+                                    </td>
+                                    <td align="right">
+                                        手机：
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.企业联系人信息.联系人手机, new { @class = "info" })<span class="marker">*</span>
+
+                                    </td>
+                                    <tr>
+                                        <td align="right">
+                                            固定电话：
+                                        </td>
+                                        <td>
+
+                                            @Html.TextBoxFor(m => m.企业联系人信息.联系人固定电话, new { @class = "info" })<span class="marker">*</span>
+
+                                        </td>
+                                        <td align="right">
+                                            微信：
+                                        </td>
+                                        <td>
+                                            @Html.TextBoxFor(m => m.企业联系人信息.联系人传真, new { @class = "info" })<span class="marker">*</span>
+                                        </td>
+                                    </tr>
+                                    <tr><td align="right">联系人地址：</td><td colspan="3">@Html.TextBoxFor(m => m.企业联系人信息.联系人地址, new { @class = "info" })<span class="marker">*</span></td></tr>
+                                </table>
+                            </div>
+
+                        </div>
+                        <div style="margin-left:0px;border-color:rgb(207, 197, 197); margin-top:0px;margin-bottom: 10px; border-style:solid; border-width:1px;">
+                            <div id="title_div" class="index_bottom_zb_top_title title_addsupplier">营业信息</div>
+                            <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-bottom:10px; margin-right:auto;">
+                                <div style="margin-left:20px;">
+                                    <table width="100%" style="margin-left:-30px; margin-top:10px; margin-bottom:10px;">
+                                        <tr>
+                                            <td width="25%" align="right">营业执照注册号：</td>
+                                            <td width="25%">
+                                                @Html.TextBoxFor(m => m.营业执照信息.营业执照注册号, new { @class = "info" })<span class="marker">*</span>
+                                            </td>
+                                            <td width="25%" align="right">营业执照注册资金：</td>
+                                            <td width="25%">
+                                                @Html.TextBoxFor(m => m.营业执照信息.营业执照注册资金, new { @class = "info" })万元<span class="marker">*</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <h2 style="color:red;">注：如果你的企业证件是三证合一的，请勾选三证合一，否则不勾选</h2>
+                                    <div>
+                                        @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.三证合一扫描件)))
+                                        {
+                                            <input type="checkbox" value="together" onclick="checkThis(this)" id="together" checked="checked" /><span style="font-size:18px;">三证合一</span>
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" value="together" onclick="checkThis(this)" id="together" /><span style="font-size:18px;">三证合一</span>
+                                        }
+                                        <form action="/供应商后台/SavePicture" name="upload0" method="post" enctype="multipart/form-data" target="showPic0">
+                                            @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.三证合一扫描件)))
+                                            {
+                                                <div id="allpic" style="margin-right:10px;">
+                                                    <div id="box0" style="border:1px solid green; margin-top:10px; border-bottom:none;">
+
+                                                        <input type="hidden" value="together" name="pic1" />
+                                                        <table width="100%" style="font-size:14px; margin-left:30px;">
+                                                            <tr>
+                                                                <td style="width:120px;" align="right">三证合一扫描件：</td>
+                                                                <td style="width:300px;">
+                                                                    @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.三证合一扫描件)))
+                                                                    {
+                                                                        <a href="@Model.营业执照信息.三证合一扫描件" title="点击查看大图" target="_blank" style="color:red; margin-right:30px; text-decoration:underline;"><img src="@Model.营业执照信息.三证合一扫描件" height="30" width="50" /></a>
+                                                                        if (!Model.供应商用户信息.已提交)
+                                                                        {
+                                                                            <a href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this,'file0')">修改</a>
+                                                                        }
+                                                                        <input type="file" style="display:none;width:72px;" value="123456" onchange="fileChange(this, '#box0', 'upload0')" accept="image/jpeg" multiple="multiple" name="file0" />
+                                                                        <div class="out_box">
+                                                                            <div class="arrow"></div>
+                                                                            <div class="con_box">请选择并上传三证合一扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                        </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span style="color:red;">
+                                                                            没有上传三证合一扫描件，
+                                                                            @if (!Model.供应商用户信息.已提交)
+                                                                            {
+                                                                                <a href="###" onclick="showButton(this, 'file0')" style="color:red;">【点击添加】</a>
+                                                                            }
+                                                                        </span>
+                                                                        <input type="file" style="display:none;width:72px;" onchange="fileChange(this, '#box0', 'upload0')" accept="image/jpeg" multiple="multiple" name="file0" size="40" />
+                                                                        <div class="out_box">
+                                                                            <div class="arrow"></div>
+                                                                            <div class="con_box">请选择并上传三证合一扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                        </div>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+
+                                                        <div id="framebox" style="display:none;margin-left:150px; width:700px;  margin-right: auto;">
+                                                            <iframe name="showPic0" id="showPic0" frameborder="0" height="150" width="100%"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="depart" style="display:none;margin-right:10px;">
+                                                    <div id="box1" style="border:1px solid green; margin-top:10px;">
+                                                        <form action="/供应商后台/SavePicture" name="upload1" method="post" enctype="multipart/form-data" target="showPic1">
+                                                            <input type="hidden" value="orgnize" name="pic1" />
+                                                            <table width="100%" style="font-size:14px; margin-left:30px;">
+                                                                <tr>
+                                                                    <td style="width:120px;" align="right">组织机构代码证电子扫描件：</td>
+                                                                    <td style="width:300px;">
+                                                                        @if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.组织机构代码证电子扫描件)))
+                                                                        {
+                                                                            <a href="@Model.工商注册信息.组织机构代码证电子扫描件" title="点击查看大图" target="_blank" style="color:red; margin-right:30px; text-decoration:underline;"><img src="@Model.工商注册信息.组织机构代码证电子扫描件" height="30" width="50" /></a>
+                                                                            if (!Model.供应商用户信息.已提交)
+                                                                            {
+                                                                                <a href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this,'file5')">修改</a>
+                                                                            }
+                                                                            <input type="file" style="display:none;width:72px;" onchange="fileChange(this, '#box1', 'upload1')" accept="image/jpeg" multiple="multiple" name="file5" />
+                                                                            <div class="out_box">
+                                                                                <div class="arrow"></div>
+                                                                                <div class="con_box">请选择并上传组织机构代码证电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                            </div>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span style="color:red;">
+                                                                                没有上传组织机构代码证电子扫描件，
+                                                                                @if (!Model.供应商用户信息.已提交)
+                                                                                {
+                                                                                    <a href="###" onclick="showButton(this, 'file5')" style="color:red;">【点击添加】</a>
+                                                                                }
+                                                                            </span>
+                                                                            <input type="file" style="display:none;width:72px;" onchange="fileChange(this, '#box1', 'upload1')" accept="image/jpeg" multiple="multiple" name="file5" size="40" />
+                                                                            <div class="out_box">
+                                                                                <div class="arrow"></div>
+                                                                                <div class="con_box">请选择并上传组织机构代码证电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                            </div>
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </form>
+                                                        <div id="framebox" style="display:none;margin-left:150px; width:700px;  margin-right: auto;">
+                                                            <iframe name="showPic1" id="showPic1" frameborder="0" height="150" width="100%"></iframe>
+                                                        </div>
+                                                    </div>
+                                                    <div id="box5" style="border:1px solid green; border-top:none;">
+                                                        <form action="/供应商后台/SavePicture" method="post" name="upload5" enctype="multipart/form-data" target="showPic5">
+                                                            <input type="hidden" value="sale" name="pic1" />
+                                                            <table width="100%" style="font-size:14px; margin-left:30px;">
+                                                                <tr>
+                                                                    <td style="width:120px;" align="right">营业执照电子扫描件：</td>
+                                                                    <td style="width:300px;">
+                                                                        @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.营业执照电子扫描件)))
+                                                                        {
+                                                                            <a title="点击查看大图" href="@Model.营业执照信息.营业执照电子扫描件" target="_blank" style="color:red; margin-right:30px; text-decoration:underline;"><img width="50" height="30" src="@Model.营业执照信息.营业执照电子扫描件" title="查看大图" /></a>
+                                                                            if (!Model.供应商用户信息.已提交)
+                                                                            {
+                                                                                <a title="点击查看大图" href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this, 'file1')">修改</a>
+                                                                            }
+                                                                            <input type="file" style="display:none; width:72px;" onchange="fileChange(this, '#box5', 'upload5')" accept="image/jpeg" name="file1" />
+                                                                            <div class="out_box">
+                                                                                <div class="arrow"></div>
+                                                                                <div class="con_box">请选择并上传营业执照电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                            </div>
+                                                                    @*<input type="button" id="bt5" style="display:none;" value="上传图片" onclick="" />*@
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span style="color:red;">
+                                                                                您还没有上传营业执照电子扫描件
+                                                                                @if (!Model.供应商用户信息.已提交)
+                                                                                {
+                                                                                    <a href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this, 'file1')">【点击添加】</a>
+                                                                                }
+                                                                            </span>
+                                                                            <input type="file" style="display:none;" onchange="fileChange(this, '#box5', 'upload5')" accept="image/jpeg" name="file1" size="40" />
+                                                                            <div class="out_box">
+                                                                                <div class="arrow"></div>
+                                                                                <div class="con_box">请选择并上传营业执照电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                            </div>
+                                                                    @*<input type="button" id="bt5" style="display:none;" value="上传图片" onclick="" />*@
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </form>
+                                                        <div id="framebox" style="display:none;margin-left:150px; width:700px; margin-right: auto;">
+                                                            <iframe name="showPic5" id="showPic5" frameborder="0" height="150" width="100%"></iframe>
+                                                        </div>
+                                                    </div>
+                                                    <div id="box6" style="border:1px solid green; border-top:none;border-bottom: none;">
+                                                        <form action="/供应商后台/SavePicture" method="post" name="upload6" enctype="multipart/form-data" target="showPic6">
+                                                            <input type="hidden" value="taxRegister" name="pic1" />
+                                                            <table width="100%" style="font-size:14px; margin-left:30px;">
+                                                                <tr>
+                                                                    <td style="width:120px;" align="right">税务登记证电子扫描件：</td>
+                                                                    <td style="width:300px;">
+                                                                        @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.税务登记证电子扫描件)))
+                                                                        {
+                                                                            <a title="点击查看大图" href="@Model.营业执照信息.税务登记证电子扫描件" target="_blank" style="color:red; margin-right:30px; text-decoration:underline;"><img width="50" height="30" src="@Model.营业执照信息.税务登记证电子扫描件" title="查看大图" /></a>
+                                                                            if (!Model.供应商用户信息.已提交)
+                                                                            {
+                                                                                <a title="点击查看大图" href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this, 'file6')">修改</a>
+                                                                            }
+                                                                            <input type="file" style="display:none; width:72px;" onchange="fileChange(this, '#box6', 'upload6')" accept="image/jpeg" name="file6" />
+                                                                            <div class="out_box">
+                                                                                <div class="arrow"></div>
+                                                                                <div class="con_box">请选择并上传税务登记证电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                            </div>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span style="color:red;">
+                                                                                您还没有上传税务登记证电子扫描件
+                                                                                @if (!Model.供应商用户信息.已提交)
+                                                                                {
+                                                                                    <a href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this, 'file6')">【点击添加】</a>
+                                                                                }
+                                                                            </span>
+                                                                            <input type="file" style="display:none;" onchange="fileChange(this, '#box6', 'upload6')" accept="image/jpeg" name="file6" size="40" />
+                                                                            <div class="out_box">
+                                                                                <div class="arrow"></div>
+                                                                                <div class="con_box">请选择并上传税务登记证电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                            </div>
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </form>
+                                                        <div id="framebox" style="display:none;margin-left:150px; width:700px; margin-right: auto;">
+                                                            <iframe name="showPic6" id="showPic6" frameborder="0" height="150" width="100%"></iframe>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </form>
+                                        @if (!System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.三证合一扫描件)))
+                                        {
+                                            <div id="allpic" style="display:none;margin-right:10px;">
+                                                <div id="box0" style="border:1px solid green; margin-top:10px; border-bottom:none;">
+                                                    <form action="/供应商后台/SavePicture" name="upload0" method="post" enctype="multipart/form-data" target="showPic0">
+                                                        <input type="hidden" value="together" name="pic1" />
+                                                        <table width="100%" style="font-size:14px; margin-left:30px;">
+                                                            <tr>
+                                                                <td style="width:120px;" align="right">三证合一扫描件：</td>
+                                                                <td style="width:300px;">
+                                                                    @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.三证合一扫描件)))
+                                                                    {
+                                                                        <a href="@Model.营业执照信息.三证合一扫描件" title="点击查看大图" target="_blank" style="color:red; margin-right:30px; text-decoration:underline;"><img src="@Model.营业执照信息.三证合一扫描件" height="30" width="50" /></a>
+                                                                        if (!Model.供应商用户信息.已提交)
+                                                                        {
+                                                                            <a href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this,'file0')">修改</a>
+                                                                        }
+                                                                        <input type="file" style="display:none;width:72px;" value="123456" onchange="fileChange(this, '#box0', 'upload0')" accept="image/jpeg" multiple="multiple" name="file0" />
+                                                                        <div class="out_box">
+                                                                            <div class="arrow"></div>
+                                                                            <div class="con_box">请选择并上传三证合一扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                        </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span style="color:red;">
+                                                                            没有上传三证合一扫描件，
+                                                                            @if (!Model.供应商用户信息.已提交)
+                                                                            {
+                                                                                <a href="###" onclick="showButton(this, 'file0')" style="color:red;">【点击添加】</a>
+                                                                            }
+                                                                        </span>
+                                                                        <input type="file" style="display:none;width:72px;" onchange="fileChange(this, '#box0', 'upload0')" accept="image/jpeg" multiple="multiple" name="file0" size="40" />
+                                                                        <div class="out_box">
+                                                                            <div class="arrow"></div>
+                                                                            <div class="con_box">请选择并上传三证合一扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                        </div>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </form>
+                                                    <div id="framebox" style="display:none;margin-left:150px; width:700px;  margin-right: auto;">
+                                                        <iframe name="showPic0" id="showPic0" frameborder="0" height="150" width="100%"></iframe>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="depart" style="margin-right:10px;">
+                                                <div id="box1" style="border:1px solid green; margin-top:10px;">
+                                                    <form action="/供应商后台/SavePicture" name="upload1" method="post" enctype="multipart/form-data" target="showPic1">
+                                                        <input type="hidden" value="orgnize" name="pic1" />
+                                                        <table width="100%" style="font-size:14px; margin-left:30px;">
+                                                            <tr>
+                                                                <td style="width:120px;" align="right">组织机构代码证电子扫描件：</td>
+                                                                <td style="width:300px;">
+                                                                    @if (System.IO.File.Exists(Server.MapPath(@Model.工商注册信息.组织机构代码证电子扫描件)))
+                                                                    {
+                                                                        <a href="@Model.工商注册信息.组织机构代码证电子扫描件" title="点击查看大图" target="_blank" style="color:red; margin-right:30px; text-decoration:underline;"><img src="@Model.工商注册信息.组织机构代码证电子扫描件" height="30" width="50" /></a>
+                                                                        if (!Model.供应商用户信息.已提交)
+                                                                        {
+                                                                            <a href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this,'file5')">修改</a>
+                                                                        }
+                                                                        <input type="file" style="display:none;width:72px;" onchange="fileChange(this, '#box1', 'upload1')" accept="image/jpeg" multiple="multiple" name="file5" />
+                                                                        <div class="out_box">
+                                                                            <div class="arrow"></div>
+                                                                            <div class="con_box">请选择并上传组织机构代码证电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                        </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span style="color:red;">
+                                                                            没有上传组织机构代码证电子扫描件，
+                                                                            @if (!Model.供应商用户信息.已提交)
+                                                                            {
+                                                                                <a href="###" onclick="showButton(this, 'file5')" style="color:red;">【点击添加】</a>
+                                                                            }
+                                                                        </span>
+                                                                        <input type="file" style="display:none;width:72px;" onchange="fileChange(this, '#box1', 'upload1')" accept="image/jpeg" multiple="multiple" name="file5" size="40" />
+                                                                        <div class="out_box">
+                                                                            <div class="arrow"></div>
+                                                                            <div class="con_box">请选择并上传组织机构代码证电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                        </div>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </form>
+                                                    <div id="framebox" style="display:none;margin-left:150px; width:700px;  margin-right: auto;">
+                                                        <iframe name="showPic1" id="showPic1" frameborder="0" height="150" width="100%"></iframe>
+                                                    </div>
+                                                </div>
+                                                <div id="box5" style="border:1px solid green; border-top:none;">
+                                                    <form action="/供应商后台/SavePicture" method="post" name="upload5" enctype="multipart/form-data" target="showPic5">
+                                                        <input type="hidden" value="sale" name="pic1" />
+                                                        <table width="100%" style="font-size:14px; margin-left:30px;">
+                                                            <tr>
+                                                                <td style="width:120px;" align="right">营业执照电子扫描件：</td>
+                                                                <td style="width:300px;">
+                                                                    @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.营业执照电子扫描件)))
+                                                                    {
+                                                                        <a title="点击查看大图" href="@Model.营业执照信息.营业执照电子扫描件" target="_blank" style="color:red; margin-right:30px; text-decoration:underline;"><img width="50" height="30" src="@Model.营业执照信息.营业执照电子扫描件" title="查看大图" /></a>
+                                                                        if (!Model.供应商用户信息.已提交)
+                                                                        {
+                                                                            <a title="点击查看大图" href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this, 'file1')">修改</a>
+                                                                        }
+                                                                        <input type="file" style="display:none; width:72px;" onchange="fileChange(this, '#box5', 'upload5')" accept="image/jpeg" name="file1" />
+                                                                        <div class="out_box">
+                                                                            <div class="arrow"></div>
+                                                                            <div class="con_box">请选择并上传营业执照电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                        </div>
+                                                                        @*<input type="button" id="bt5" style="display:none;" value="上传图片" onclick="" />*@
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span style="color:red;">
+                                                                            您还没有上传营业执照电子扫描件
+                                                                            @if (!Model.供应商用户信息.已提交)
+                                                                            {
+                                                                                <a href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this, 'file1')">【点击添加】</a>
+                                                                            }
+                                                                        </span>
+                                                                        <input type="file" style="display:none;" onchange="fileChange(this, '#box5', 'upload5')" accept="image/jpeg" name="file1" size="40" />
+                                                                        <div class="out_box">
+                                                                            <div class="arrow"></div>
+                                                                            <div class="con_box">请选择并上传营业执照电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                        </div>
+                                                                        @*<input type="button" id="bt5" style="display:none;" value="上传图片" onclick="" />*@
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </form>
+                                                    <div id="framebox" style="display:none;margin-left:150px; width:700px; margin-right: auto;">
+                                                        <iframe name="showPic5" id="showPic5" frameborder="0" height="150" width="100%"></iframe>
+                                                    </div>
+                                                </div>
+                                                <div id="box6" style="border:1px solid green; border-top:none;border-bottom: none;">
+                                                    <form action="/供应商后台/SavePicture" method="post" name="upload6" enctype="multipart/form-data" target="showPic6">
+                                                        <input type="hidden" value="taxRegister" name="pic1" />
+                                                        <table width="100%" style="font-size:14px; margin-left:30px;">
+                                                            <tr>
+                                                                <td style="width:120px;" align="right">税务登记证电子扫描件：</td>
+                                                                <td style="width:300px;">
+                                                                    @if (System.IO.File.Exists(Server.MapPath(@Model.营业执照信息.税务登记证电子扫描件)))
+                                                                    {
+                                                                        <a title="点击查看大图" href="@Model.营业执照信息.税务登记证电子扫描件" target="_blank" style="color:red; margin-right:30px; text-decoration:underline;"><img width="50" height="30" src="@Model.营业执照信息.税务登记证电子扫描件" title="查看大图" /></a>
+                                                                        if (!Model.供应商用户信息.已提交)
+                                                                        {
+                                                                            <a title="点击查看大图" href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this, 'file6')">修改</a>
+                                                                        }
+                                                                        <input type="file" style="display:none; width:72px;" onchange="fileChange(this, '#box6', 'upload6')" accept="image/jpeg" name="file6" />
+                                                                        <div class="out_box">
+                                                                            <div class="arrow"></div>
+                                                                            <div class="con_box">请选择并上传税务登记证电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                        </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span style="color:red;">
+                                                                            您还没有上传税务登记证电子扫描件
+                                                                            @if (!Model.供应商用户信息.已提交)
+                                                                            {
+                                                                                <a href="###" style="color:red; margin-right:30px; text-decoration:underline;" onclick="showButton(this, 'file6')">【点击添加】</a>
+                                                                            }
+                                                                        </span>
+                                                                        <input type="file" style="display:none;" onchange="fileChange(this, '#box6', 'upload6')" accept="image/jpeg" name="file6" size="40" />
+                                                                        <div class="out_box">
+                                                                            <div class="arrow"></div>
+                                                                            <div class="con_box">请选择并上传税务登记证电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
+                                                                        </div>
+                                                                    }
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </form>
+                                                    <div id="framebox" style="display:none;margin-left:150px; width:700px; margin-right: auto;">
+                                                        <iframe name="showPic6" id="showPic6" frameborder="0" height="150" width="100%"></iframe>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-left:0px;border-color:rgb(207, 197, 197); margin-top:0px;margin-bottom: 10px; border-style:solid; border-width:1px;">
+                            <div id="title_div" class="index_bottom_zb_top_title title_addsupplier">法定代表人信息</div>
+                            <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-bottom:10px; margin-right:auto;">
+                                <div style="margin-left:20px;">
+                                    <table width="57%" style="margin-left:-30px; margin-bottom:10px;">
+                                        <tr>
+                                            <td width="20%" align="right">法定代表人姓名：</td>
+                                            <td width="30%">
+                                                @Html.TextBoxFor(m => m.法定代表人信息.法定代表人姓名, new { @class = "info" })<span class="marker">*</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="margin-left:0px; border:1px solid rgb(202, 195, 195); margin-top:0px;margin-bottom: 10px;margin-bottom: 10px;">
+                            <div>
+
+                                <div id="title_div" class="index_bottom_zb_top_title title_addsupplier">
+                                    参标经历
+                                    @if (!Model.供应商用户信息.提交入网)
+                                    {
+                                        <a href="###" onclick="showBox('#Toubiao')">【新增】</a>
+                                    }
+                                </div>
+
+                                <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto; margin-bottom:10px;">
+                                    <div id="toubiao" style="border-color:rgb(207, 197, 197);  margin-bottom:10px; margin-top:10px;">
+                                        <div class="gys_znxx_content">
+                                            @if (Model.历史参标记录.Count != 0)
+                                            {
+                                                <table width="95%" style="margin-left:10px;" cellpadding="0" cellspacing="0">
+                                                    <tr><th>项目名称</th><th>招标方</th><th>参标结果</th><th>参标时间</th><th>是否是本平台项目</th><th>操作</th></tr>
+                                                    @for (int i = 0; i < Model.历史参标记录.Count; i++)
+                                                    {
+                                                        <tr>
+                                                            <td width="30%">@Model.历史参标记录[i].项目名称</td>
+                                                            <td width="20%">@Model.历史参标记录[i].招标方</td>
+                                                            <td width="10%">@Model.历史参标记录[i].参标结果</td>
+                                                            <td width="10%">@Model.历史参标记录[i].参标时间.ToString("yyyy-MM-dd")</td>
+                                                            <td width="10%">
+                                                                @if (Model.历史参标记录[i].本平台项目)
+                                                                {
+                                                                    <span>是</span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>否</span>
+                                                                }
+                                                            </td>
+                                                            <td width="10%"><a href="/供应商后台/Modify_Toubiao?id=@Model.Id&index=@i">修改</a><a href="/供应商后台/Delete_Toubiao?index=@i">删除</a></td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                <h1 style="width: 100%; text-align: center; color: red;"><em>没有招投标信息，点击【新增】按钮添加招投标信息</em></h1>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                if (Model.审核数据.审核状态 != 审核状态.审核通过)
+                {
+                    if (!Model.供应商用户信息.提交入网)
+                    {
+                        <div style="text-align:center;">
+                            <input class="front_login_rightbox_button" style="width:100px;" type="button" onclick="subform()" value="入网提交" />
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" language="javascript">
+    function fileChange(target, str1, str2) {
+        $(str1).children("#framebox").show();
+        document.forms[str2].submit();
+        $("#f1").show();
+        $(target).prev("span").hide();
+    }
+    function checkThis(th) {
+        if (th.checked == true) {
+            $("#allpic").show();
+            $("#depart").hide();
+        }
+        else {
+            $("#allpic").hide();
+            $("#depart").show();
+        }
+    }
+    function showButton(th, str) {
+        $(":file[name='" + str + "']").show();
+        $(th).hide();
+    }
+    $(document).ready(function (e) {
+        $(".list a:first").css({ "background-color": "rgb(94, 111, 0)", "color": "white" });
+
+        $("#入网信息管理").addClass("left_menu_select").children("a").css({ "color": "#fff" });
+        $("#入网信息管理").parents().attr("show", "true").show().prev("li").addClass("open").children("span").css({ "background": "url('../Images/tree_icons.png') -115px -4px" });
+    });
+    function checks(th, str) {
+        $(".list a").each(function () {
+            $(this).css({ "background-image": "url(/images/index_content_bg.jpg)", "color": "black" });
+        });
+        $(th).css({ "background-color": "rgb(94, 111, 0)", "color": "white", "background-image": "" });
+    }
+    function subform() {
+        var isComplete = true;
+        $("div#containerbox :input.info").each(function () {
+            var str = $(this).val();
+            if (str == "" || str == "0") {
+                $(this).css("border", "1px solid #ff0000");
+                isComplete = false;
+            } else {
+                $(this).css("border", "1px solid #BFBEBE");
+            }
+        });
+        if (!isComplete) {
+            alert("您还没有完善所有入网的信息，请继续完善");
+            return;
+        }
+        document.forms["data"].submit();
+    }
+    $(function () {
+        var optionlist = $(".industry").children();
+        optionlist.each(function (index, domEle) {
+            if ($(domEle).text() == $("#hidden").val()) {
+                $(domEle).attr("selected", "selected");
+            }
+        });
+    });
+    $(".industry").change(function () {
+        var val = $(".industry option:selected").text();
+        $("#hidden").val(val);
+    });
+    $("#deliverprovince").change(function () {
+        var val = $("#deliverprovince option:selected").text();
+        $("#provence").val(val);
+    });
+    $("#deliverprovince").change(function () {
+        var val = $("#deliverprovince option:selected").text();
+        $("#provence").val(val);
+    });
+    $("#delivercity").change(function () {
+        var val = $("#delivercity option:selected").text();
+        $("#city").val(val);
+    });
+    $("#deliverarea").change(function () {
+        var val = $("#deliverarea option:selected").text();
+        $("#area").val(val);
+    });
+    $("#submit_btn").click(function () {
+        var val = $("#delivercity").find("option:selected").text();
+        var vall = $("#deliverarea").find("option:selected").text();
+        $("#city").val(val);
+        $("#area").val(vall);
+    });
+    $("document").ready(function () {
+        $(":checkbox.nianshen").click(function () {
+            if (this.checked) {
+                $(this).val("1");
+            } else {
+                $(this).val("0");
+            }
+        });
+        $("select.twoCls").blur(function () {
+            var val = $(this).val();
+            $("#twoClass").val(val);
+        });
+    });
+    $("#area1").click(function () {
+        if (this.checked) {
+            $("#gysarea").show(500);
+        }
+    });
+    $("a").each(function () {
+        if ($(this).text() == "修改" || $(this).text() == "删除" || $(this).text() == "查看") {
+            $(this).css("color", "red");
+            $(this).mouseover(function () { $(this).css("text-decoration", "underline"); });
+            $(this).mouseout(function () { $(this).css("text-decoration", "none"); });
+        }
+    });
+    function message(th) {
+        if (th.checked) {
+            $(th).val(1);
+        }
+        else {
+            $(th).val(-1);
+        }
+    }
+    $(document).ready(function () {
+        var val = $("#IsSubmit").val();
+        if (val == "1") {
+            $("div#containerbox :input").attr("disabled", true);
+        }
+    });
+    function show_tip(th) {
+        $(th).next("div").show();
+        $(th).next("div").css("display", "inline-block");
+    }
+    function hide_tip(th) {
+        $(th).next("div").hide();
+    }
+    function showBox(th) {
+        $(th).show(500);
+    }
+    function hidebox(th) {
+        $(th).hide(500);
+    }
+    function Reason(th) {
+        if ($(th).val() == "2") {
+            $("#f").show();
+        }
+    }
+    function setReason(obj) {
+        var r = $(obj).val();
+        $("#reason").val(r);
+        $("#f").hide();
+    }
+    function modify(th) {
+        $(th).prev("span").show();
+        $(th).next("span").remove();
+        $(th).remove();
+    }
+    function delPic(th) {
+        if (confirm("确定删除吗？")) {
+            var path = $(th).attr("lang");
+            $.get('/供应商后台/Del_gysPic', { n: path },
+                function (data) {
+                    if (data == 1) {
+                        $(th).parent().remove();
+                    }
+                });
+        }
+    }
+</script>

@@ -1,8 +1,8 @@
 ﻿@model Go81WebApp.Models.数据模型.用户数据模型.供应商
 @using Go81WebApp.Models.数据模型.商品数据模型
+@using Go81WebApp.Models.数据模型.用户数据模型
 <link href="~/css/css.css" rel=" stylesheet" />
 <link href="~/css/index.css" rel="stylesheet" />
-<link href="~/css/Msg_Tips.css" rel="stylesheet" />
 <script src="~/JS/provinceandcity_all.js"></script>
 <script type="text/javascript" src="~/JS/My97DatePicker/calendar.js"></script>
 <script type="text/javascript" src="~/JS/My97DatePicker/config.js"></script>
@@ -13,8 +13,9 @@
         color: red;
     }
 
-    table tr td {
+    td {
         font-size: 14px;
+        position: relative;
     }
 
     .list {
@@ -32,6 +33,9 @@
             text-align: center;
             line-height: 30px;
         }
+        select {
+            width: 170px;
+        }
 </style>
 <div class="title-base-out">
     <div class="title-base-middle">
@@ -40,11 +44,11 @@
 </div>
 @using (Html.BeginForm("AddSupplier", "运营团队后台", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
-    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m=>m.Id)
     <div class="gys_znxx_box">
         <div style="width:920px;overflow: hidden;margin:20px auto;">
             <div class="list">
-                <a onclick="checks(this,'.Fifth_Page')">登录信息</a><a onclick="checks(this, '.First_Page')">企业基本信息</a><a onclick="checks(this, '.Second_Page')">账号基本信息</a><a onclick="checks(this, '.Third_Page')">营业信息</a><a onclick="checks(this, '.Forth_Page')">财务税务信息</a>
+                <a onclick="checks(this,'.Fifth_Page')">登录信息</a><a onclick="checks(this, '.First_Page')">企业基本信息</a><a onclick="checks(this, '.Second_Page')">联系人信息</a><a onclick="checks(this, '.Third_Page')">营业信息</a><a onclick="checks(this, '.Forth_Page')">财务信息</a><a onclick="checks(this, '.seven_Page')">税务信息</a><a onclick="checks(this, '.six_Page')">法定代表人信息</a>
             </div>
             <div class="Fifth_Page" style="margin-left:0px;border-color:rgb(207, 197, 197); margin-top:0px; border-style:solid;border-width:1px;">
                 <div id="title_div" class="other_title title_addsupplier">登录信息</div>
@@ -54,10 +58,6 @@
                             <td width="15%" align="right">登录名：</td>
                             <td width="50%">
                                 @Html.TextBoxFor(m => m.登录信息.登录名, new { id = "loginName" })
-                                <div class="out_box">
-                                    <div class="arrow"></div>
-                                    <div class="con_box">请填写登录名,如:张珊,Tom,Marry等</div>
-                                </div>
                                 <span id="warn"></span>
                                 @Html.ValidationMessageFor(m => m.登录信息.登录名)
                             </td>
@@ -66,10 +66,6 @@
                             <td align="right">登录密码：</td>
                             <td>
                                 @Html.PasswordFor(m => m.登录信息.密码)
-                                <div class="out_box">
-                                    <div class="arrow"></div>
-                                    <div class="con_box">请填写用户登录的初始密码,如:123456xy</div>
-                                </div>
                                 @Html.ValidationMessageFor(m => m.登录信息.密码)
                             </td>
                         </tr>
@@ -84,20 +80,13 @@
                             <tr>
                                 <td width="15%" align="right" class="lab">企业名称：</td>
                                 <td width="35%">
-                                    @Html.TextBoxFor(m => m.企业基本信息.企业名称)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写企业名称,如:未来科技有限企业</div>
-                                    </div>
+                                    @Html.TextBoxFor(m => m.企业基本信息.企业名称,new{style="border:1px solid #ff0000;"})
                                     @Html.ValidationMessageFor(m => m.企业基本信息.企业名称)
                                 </td>
                                 <td width="15%" align="right" class="lab">注册地址：</td>
                                 <td width="35%">
-                                    @Html.TextBoxFor(m => m.企业基本信息.注册地址)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写注册地址,如:四川省成都市工商局</div>
-                                    </div>
+                                    @Html.TextBoxFor(m => m.企业基本信息.注册地址, new { style = "border:1px solid #ff0000;" })
+                                    
                                     @Html.ValidationMessageFor(m => m.企业基本信息.注册地址)
                                 </td>
                             </tr>
@@ -105,43 +94,23 @@
                                 <td align="right" class="lab">成立时间：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.企业基本信息.成立时间, new { onfocus = "WdatePicker({isShowWeek:true})" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写企业成立时间,如:2012/02/02</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.企业基本信息.成立时间)
                                 </td>
                                 <td align="right" class="lab">邮政编码：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.企业基本信息.邮政编码)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写企业所在地的邮编号码,如:614002</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.企业基本信息.邮政编码)
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right" class="lab">供应商编码：</td>
                                 <td>
-                                    @Html.EditorFor(m => m.供应商用户信息.供应商编码)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写供应商编码</div>
-                                    </div>
+                                    @Html.TextBoxFor(m => m.供应商用户信息.供应商编码,new{style="border:1px solid #ff0000;"})
+                                    
                                     @Html.ValidationMessageFor(m => m.供应商用户信息.供应商编码)
                                 </td>
-                                <td align="right" class="lab">认证级别：</td>
-                                <td>
-                                    @Html.TextBoxFor(m => m.供应商用户信息.认证级别, new { @readonly = "readonly" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">此处是贵企业的认证级别</div>
-                                    </div>
-                                    @Html.ValidationMessageFor(m => m.供应商用户信息.认证级别)
-                                </td>
-                            </tr>
-                            <tr>
                                 <td align="right" class="lab">所属行业：</td>
                                 <td>
                                     @Html.HiddenFor(m => m.企业基本信息.所属行业, new { id = "hidden" })@Html.ValidationMessageFor(m => m.企业基本信息.所属行业)
@@ -149,7 +118,7 @@
     IEnumerable<商品分类> goodclass = ViewData["行业列表"] as IEnumerable<商品分类>;
     if (goodclass.Count() != 0)
     {
-                                <select class="industry" style="width:153px; margin-left:2px;">
+                            <select class="industry" style=" margin-left:2px;border:1px solid #ff0000;">
                                     <option>请选择行业</option>
                                     @foreach (var i in goodclass)
             {
@@ -158,76 +127,35 @@
                                 </select>
     }
                                     }
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择贵企业所属行业,如零售业</div>
-                                    </div>
+                                    
                                 </td>
-                                <td align="right" class="lab">所属地域：</td>
-                                <td>
-                                    @Html.HiddenFor(m => m.所属地域.省份, new { id = "provence" })
-                                    @Html.HiddenFor(m => m.所属地域.城市, new { id = "city" })
-                                    @Html.HiddenFor(m => m.所属地域.区县, new { id = "area" })
-                                    <select id="deliverprovince" name="deliverprovince" style="width:153px; margin-left:2px;"></select>
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择贵企业所在省份</div>
-                                    </div>
-                                    <br />
-                                    <select id="delivercity" name="delivercity" style="width:153px; margin-left:2px;"></select>
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择贵企业所在城市</div>
-                                    </div>
-                                    <br />
-                                    <select id="deliverarea" name="deliverarea" style="width:153px; margin-left:2px;"></select>
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择贵企业所在区县</div>
-                                    </div>
-                                    <script>
-                                    window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
-                                    </script>
-                                </td>
-
+                                    
                             </tr>
                             <tr>
                                 <td align="right" class="lab">经营类型：</td>
                                 <td>
-                                    @Html.EnumDropDownListFor(m => m.企业基本信息.经营类型, new { @style = "width:153px; margin-left:2px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择企业经营类型</div>
-                                    </div>
+                                    @Html.EnumDropDownListFor(m => m.企业基本信息.经营类型, new { @style = "margin-left:2px;" })
+                                   
                                     @Html.ValidationMessageFor(m => m.企业基本信息.经营类型)
                                 </td>
                                 <td align="right" class="lab">经营子类型：</td>
                                 <td>
-                                    @Html.EnumDropDownListFor(m => m.企业基本信息.经营子类型, new { @style = "width:153px; margin-left:2px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择经营子类型</div>
-                                    </div>
+                                    @Html.EnumDropDownListFor(m => m.企业基本信息.经营子类型, new { @style = "margin-left:2px;" })
+                                    
                                     @Html.ValidationMessageFor(m => m.企业基本信息.经营子类型)
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right" class="lab">员工人数：</td>
                                 <td>
-                                    @Html.EnumDropDownListFor(m => m.企业基本信息.员工人数, new { @style = "width:153px; margin-left:2px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择员工人数</div>
-                                    </div>
+                                    @Html.EnumDropDownListFor(m => m.企业基本信息.员工人数, new { @style = "margin-left:2px;" })
+                                    
                                     @Html.ValidationMessageFor(m => m.企业基本信息.员工人数)
                                 </td>
                                 <td align="right" class="lab">经济性质：</td>
                                 <td>
-                                    @Html.EnumDropDownListFor(m => m.企业基本信息.经济性质, new { @style = "width:153px; margin-left:2px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择贵企业的经济性质</div>
-                                    </div>
+                                    @Html.EnumDropDownListFor(m => m.企业基本信息.经济性质, new { @style = "margin-left:2px;border:1px solid #ff0000;" })
+                                    
                                     @Html.ValidationMessageFor(m => m.企业基本信息.经济性质)
                                 </td>
                             </tr>
@@ -235,19 +163,13 @@
                                 <td align="right" class="lab">网站地址：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.企业基本信息.网站网址)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择贵企业网址</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.企业基本信息.网站网址)
                                 </td>
                                 <td align="right" class="lab">供应商名称：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.供应商用户信息.供应商显示名)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择供应商名称，如：未来科技有限企业</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.供应商用户信息.供应商显示名)
                                 </td>
                             </tr>
@@ -255,114 +177,125 @@
                                 <td align="right">展示图片：</td>
                                 <td>
                                     <input type="file" name="file" style="width:130px; height:30px;" />
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请上传企业电子原件扫描件图片，本图片用于网站首页展示。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
-                                    </div>
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" class="lab" valign="top">供应商类型：</td>
+                                <td colspan="3">
+                                    @Html.EnumDropDownListFor(m => m.供应商用户信息.供应商类型, new { id = "gystype", @style = "width:150px;border:1px solid #ff0000;" })
+                                    @Html.EnumDropDownListFor(m => m.供应商用户信息.供应商细分类型, new { id = "gystypename", @style = "width:150px;" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" class="lab">所属地域：</td>
+                                <td colspan="3">
+                                    @Html.HiddenFor(m => m.所属地域.省份, new { id = "provence" })
+                                    @Html.HiddenFor(m => m.所属地域.城市, new { id = "city" })
+                                    @Html.HiddenFor(m => m.所属地域.区县, new { id = "area" })
+                                    <select id="deliverprovince" name="deliverprovince" style="margin-left:2px;"></select>
+
+
+                                    <select id="delivercity" name="delivercity" style="margin-left:2px;"></select>
+
+
+                                    <select id="deliverarea" name="deliverarea" style="margin-left:2px;"></select>
+
+                                    <script>
+                                        window.onload = function () { new PCAS("deliverprovince", "delivercity", "deliverarea"); }
+                                    </script>
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right" class="lab" valign="top">企业简介：</td>
                                 <td align="left" colspan="3">
                                     @Html.TextAreaFor(m => m.企业基本信息.企业简介, new { cols = "80", rows = "5" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请对贵企业做简单介绍</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.企业基本信息.企业简介)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" class="lab" valign="top">主营范围：</td>
+                                <td align="left" colspan="3">
+                                    @Html.TextAreaFor(m => m.营业执照信息.经营范围, new { cols = "80", rows = "5" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" class="lab" valign="top">兼营范围：</td>
+                                <td align="left" colspan="3">
+                                    @Html.TextAreaFor(m => m.营业执照信息.兼营范围, new { cols = "80", rows = "5" })
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right" class="lab" valign="top">参加投标经历：</td>
                                 <td colspan="3">
                                     @Html.TextAreaFor(m => m.企业基本信息.参加投标经历, new { rows = "5", cols = "80" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写贵企业近年的投标经历</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.企业基本信息.参加投标经历)
                                 </td>
                             </tr>
                         </table>
                         </div>
                     </div>
-                <div>
-                    <div id="title_div" class="other_title title_addsupplier">企业联系方式</div>
+                @*<div>
+                    <div id="title_div" class="index_bottom_zb_top_title title_addsupplier">企业联系方式</div>
                     <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto;">
                         <table width="80%" style="margin-left:50px;">
                             <tr>
-                                <td width="25%" align="right" class="lab">联系人姓名：</td>
+                                <td width="25%" align="right">联系人姓名：</td>
                                 <td width="25%">
                                     @Html.TextBoxFor(m => m.企业联系人信息.联系人姓名)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写联系人姓名,如张晓东</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.企业联系人信息.联系人姓名)
                                 </td>
-                                <td width="25%" align="right" class="lab">联系人手机：</td>
+                                <td width="25%" align="right">联系人手机：</td>
                                 <td width="25%">
                                     @Html.TextBoxFor(m => m.企业联系人信息.联系人手机)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写联系人手机号码,如18280465879,15112567894</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.企业联系人信息.联系人手机)
                                 </td>
                             </tr>
                             <tr>
-                                <td align="right" class="lab">联系人邮箱：</td>
+                                <td align="right">联系人邮箱：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.企业联系人信息.联系人邮箱)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写联系人邮箱，可以是QQ邮箱，如：1487589621@qq.com</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.企业联系人信息.联系人邮箱)
                                 </td>
-                                <td align="right" class="lab">联系人固定电话：</td>
+                                <td align="right">联系人固定电话：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.企业联系人信息.联系人固定电话)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写联系人固定电话,格式为028-54892547或者0816-4587456</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.企业联系人信息.联系人固定电话)
                                 </td>
                             </tr>
                             <tr>
-                                <td align="right" class="lab">联系人传真：</td>
+                                <td align="right">联系人传真：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.企业联系人信息.联系人传真)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写联系人的传真，格式：028-45628976或者0816-4586579</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.企业联系人信息.联系人传真)
                                 </td>
-                                <td align="right" class="lab">联系人地址：</td>
+                                <td align="right">联系人地址：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.企业联系人信息.联系人地址)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写联系人的联系地址</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.企业联系人信息.联系人地址)
                                 </td>
                             </tr>
                         </table>
                         </div>
-                    </div>
-                <div id="title_div" class="other_title title_addsupplier">参标经历<a href="###" onclick="addtoubiao(this)">【新增】</a></div>
+                    </div>*@
+                <div id="title_div" class="index_bottom_zb_top_title title_addsupplier">参标经历<a href="###" onclick="addtoubiao(this)">【新增】</a></div>
                 <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto;">
                     <div id="toubiao" style="border-color:rgb(207, 197, 197);  margin-bottom:10px; margin-top:10px;">
                         <script>
                             var s = '<table width="80%" style="margin-left:35px;"><tr><td width="25%" align="right">项目名称：</td>' +
-                                '<td width="25%"><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="历史参标记录[`].项目名称"/><div class="out_box"><div class="arrow"></div><div class="con_box">请填写项目名称</div></div></td>' +
-                                '<td width="25%" align="right">招标方：</td><td width="25%"><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="历史参标记录[`].招标方"/><div class="out_box"><div class="arrow"></div><div class="con_box">请填写招标方</div></div></td>' +
-                                '</tr><tr><td  align="right">参标结果：</td><td><select style="width:153px; margin-left:2px;"  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="历史参标记录[`].参标结果"><option value="0">请选择参标结果</option><option value="1">中标</option><option value="2">落标</option><option value="3">流标</option><option value="4">废标</option><option value="9999">其他</option></select><div class="out_box"><div class="arrow"></div><div class="con_box">请选择参标结果</div></div></td>' +
-                                '<td  align="right">参标时间：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" onfocus="WdatePicker({isShowWeek:true})" type="text" name="历史参标记录[`].参标时间"/><div class="out_box"><div class="arrow"></div><div class="con_box">请填写参标时间</div></div></td></tr>' +
-                                '<tr><td align="right"><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" value="true" type="checkbox" name="历史参标记录[`].本平台项目"/><div class="out_box"><div class="arrow"></div><div class="con_box">请确认是否是本平台项目</div></div></td><td>是否是本平添项目</td></tr></table><hr />';
+                                '<td width="25%" style="position:relative;"><input type="text" name="历史参标记录[`].项目名称"/></td>' +
+                                '<td width="25%" align="right">招标方：</td><td width="25%" style="position:relative;"><input type="text" name="历史参标记录[`].招标方"/></td>' +
+                                '</tr><tr><td  align="right">参标结果：</td><td><select style="margin-left:2px;"  name="历史参标记录[`].参标结果"><option value="0">请选择参标结果</option><option value="1">中标</option><option value="2">落标</option><option value="3">流标</option><option value="4">废标</option><option value="9999">其他</option></select></td>' +
+                                '<td  align="right">参标时间：</td><td style="position:relative;"><input onfocus="WdatePicker({isShowWeek:true})" type="text" name="历史参标记录[`].参标时间"/></td></tr>' +
+                                '<tr><td align="right" style="position:relative;"><input value="true" type="checkbox" name="历史参标记录[`].本平台项目"/></td><td>是否是本平添项目</td></tr></table><hr />';
                             var c = @Model.历史参标记录.Count;
                             function addtoubiao(th) {
                                 $(th).remove();
@@ -379,19 +312,13 @@
                                 <td width="25%" align="right">项目名称：</td>
                                 <td width="25%">
                                     @Html.TextBoxFor(m => m.历史参标记录[i].项目名称)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写项目名称</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.历史参标记录[i].项目名称)
                                 </td>
                                 <td width="25%" align="right" class="lab">招标方：</td>
                                 <td width="25%">
                                     @Html.TextBoxFor(m => m.历史参标记录[i].招标方)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写招标方</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.历史参标记录[i].招标方)
                                 </td>
                             </tr>
@@ -399,18 +326,12 @@
                                 <td align="right" class="lab">招标结果：</td>
                                 <td>
                                     @Html.EnumDropDownListFor(m => m.历史参标记录[i].参标结果)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择参标结果</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.历史参标记录[i].参标结果)
+                                    
+                                      @Html.ValidationMessageFor(m => m.历史参标记录[i].参标结果)
                                 </td>
                                 <td align="right" class="lab">
                                     @Html.EditorFor(m => m.历史参标记录[i].本平台项目)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请确认是否是本平台项目</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.历史参标记录[i].本平台项目)
                                 </td>
                                 <td>
@@ -421,11 +342,8 @@
                                 <td align="right" class="lab">参标时间：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.历史参标记录[i].参标时间)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写参标时间</div>
-                                    </div>
-                                    <br />
+                                    
+                                      
                                     @Html.ValidationMessageFor(m => m.历史参标记录[i].参标时间)
                                 </td>
                             </tr>
@@ -444,7 +362,7 @@
                     <div id="user">
                         <script type="text/javascript">
                     //出资人信息
-                            var t = '<table width="80%"  style="margin-left:30px;"><tbody><tr><td width="25%" align="right" class="lab">出资人或股东姓名：</td><td width="25%"><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[`].出资人或股东姓名" type="text" value=""><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的姓名,如张晓东</div></div> <span class="field-validation-valid" data-valmsg-for="出资人或股东信息[`].出资人或股东姓名" data-valmsg-replace="true"></span></td><td width="25%" align="right" class="lab">国籍：</td><td width="25%"><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[`].国籍" type="text" value=""><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的国籍,如中国</div></div> <span class="field-validation-valid" data-valmsg-for="出资人或股东信息[`].国籍" data-valmsg-replace="true"></span></td></tr><tr><td align="right" class="lab">身份证号：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[`].身份证号码" type="text" value=""><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的18位身份证号,如511352123545670708</div></div> <span class="field-validation-valid" data-valmsg-for="出资人或股东信息[`].身份证号码" data-valmsg-replace="true"></span></td><td align="right" class="lab">出资人或股东性质：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" name="出资人或股东信息[`].出资人或股东性质" type="text" value=""><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的性质</div></div></td></tr><tr><td align="right" class="lab">出资金额(万元)：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" data-val="true" data-val-number="字段 出资金额 必须是一个数字。" data-val-required="出资金额 字段是必需的。" name="出资人或股东信息[`].出资金额" type="text" value="0"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资人的出资金额,如120</div></div><span class="field-validation-valid" data-valmsg-for="出资人或股东信息[`].出资金额" data-valmsg-replace="true"></span></td><td align="right" class="lab">所占比例(%)：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" data-val="true" data-val-number="字段 所占比例 必须是一个数字。" data-val-required="所占比例 字段是必需的。" name="出资人或股东信息[`].所占比例" type="text" value="0"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写出资所占比例(25)</div></div></td></tr></tbody></table><hr />';
+                            var t = '<table width="80%"  style="margin-left:30px;"><tbody><tr><td width="25%" align="right" class="lab">出资人或股东姓名：</td><td width="25%"><input name="出资人或股东信息[`].出资人或股东姓名" type="text" value=""></td><td width="25%" align="right" class="lab">国籍：</td><td width="25%"><input name="出资人或股东信息[`].国籍" type="text" value=""></td></tr><tr><td align="right" class="lab">身份证号：</td><td><input  name="出资人或股东信息[`].身份证号码" type="text" value=""></td><td align="right" class="lab">出资人或股东性质：</td><td><input name="出资人或股东信息[`].出资人或股东性质" type="text" value=""</td></tr><tr><td align="right" class="lab">出资金额(万元)：</td><td><input data-val="true" data-val-number="字段 出资金额 必须是一个数字。" data-val-required="出资金额 字段是必需的。" name="出资人或股东信息[`].出资金额" type="text" value="0"></td><td align="right" class="lab">所占比例(%)：</td><td><input data-val="true" data-val-number="字段 所占比例 必须是一个数字。" data-val-required="所占比例 字段是必需的。" name="出资人或股东信息[`].所占比例" type="text" value="0"></td></tr></tbody></table><hr />';
                     var count = @Model.出资人或股东信息.Count;
                             function addFi(th) {
                                 $(th).remove();
@@ -463,19 +381,13 @@
                                 </td>
                                 <td width="25%">
                                     @Html.TextBoxFor(m => m.出资人或股东信息[i].出资人或股东姓名)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写出资人的姓名,如张晓东</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.出资人或股东信息[i].出资人或股东姓名)
                                 </td>
                                 <td width="25%" align="right" class="lab">国籍：</td>
                                 <td width="25%">
                                     @Html.TextBoxFor(m => m.出资人或股东信息[i].国籍)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写出资人的国籍，如中国</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.出资人或股东信息[i].国籍)
                                 </td>
                             </tr>
@@ -483,20 +395,14 @@
                                 <td align="right" class="lab">身份证号：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.出资人或股东信息[i].身份证号码)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写出资人的18位身份证号，如511352123545670708</div>
-                                    </div>
-                                    <br />
+                                    
+                                      
                                     @Html.ValidationMessageFor(m => m.出资人或股东信息[i].身份证号码)
                                 </td>
                                 <td align="right" class="lab">出资人或股东性质：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.出资人或股东信息[i].出资人或股东性质)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写出资人的性质</div>
-                                    </div>
+                                    
                                     @Html.ValidationMessageFor(m => m.出资人或股东信息[i].出资人或股东性质)
                                 </td>
                             </tr>
@@ -504,20 +410,14 @@
                                 <td align="right" class="lab">出资金额(万元)：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.出资人或股东信息[i].出资金额)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写出资人的出资金额,如120</div>
-                                    </div><br />
+                                      
                                     @Html.ValidationMessageFor(m => m.出资人或股东信息[i].出资金额)
                                 </td>
                                 <td align="right" class="lab">所占比例(%)：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.出资人或股东信息[i].所占比例)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写出资所占比例</div>
-                                    </div>
-                                    <br />
+                                    
+                                      
                                     @Html.ValidationMessageFor(m => m.出资人或股东信息[i].所占比例)
                                 </td>
                             </tr>
@@ -533,32 +433,67 @@
                 <div>
                     <div id="title_div" class="other_title title_addsupplier">其他信息</div>
                     <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto; margin-bottom:10px;">
-                        <table style="margin-left:100px;">
+                        <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto;">
+                            <table width="100%" style="margin-left:10px; margin-top:10px; margin-bottom:10px;">
                             <tr>
-                                <td>@Html.CheckBoxFor(m => m.供应商用户信息.协议供应商, new { @type = "checkbox" })</td>
+                                    <td>@Html.CheckBoxFor(m => m.供应商用户信息.协议供应商, new { @type = "checkbox", id = "area1" })</td>
                                 <td align="left">是否是协议供应商</td>
-                            </tr>
-                            <tr>
                                 <td>@Html.CheckBoxFor(m => m.供应商用户信息.应急供应商, new { @type = "checkbox" })</td>
                                 <td align="left">是否是应急供应商</td>
-                            </tr>
-                            <tr>
-                                @if (Model.供应商用户信息.年检列表 != null && Model.供应商用户信息.年检列表.Any() && Model.供应商用户信息.年检列表.ContainsKey(DateTime.Now.Year.ToString()))
+                                    @if (Model.供应商用户信息.年检列表 != null && Model.供应商用户信息.年检列表.ContainsKey(DateTime.Now.Year.ToString()))
                             {
-                            <td><input type="checkbox" checked="checked" value="0" class="nianshen" name="nianshen" /></td>
+                                        <td>
+                                            <input type="checkbox" checked="checked" value="1" class="nianshen" name="nianshen" />
+                                            @Html.HiddenFor(m => m.供应商用户信息.年检列表)
+                                        </td>
                             }
                             else
                             {
                             <td><input type="checkbox" value="0" class="nianshen" name="nianshen" /></td>
                             }
                                 <td align="left">是否通过年检</td>
+                                    <td>@Html.CheckBoxFor(m => m.供应商用户信息.符合入库标准, new { @type = "checkbox", id = "rkbz" })是否符合入库标准</td>
+                                    <td>@Html.CheckBoxFor(m => m.供应商用户信息.已提交)</td>
+                                    <td align="left">提交入库</td>
+                                    <td>@Html.CheckBoxFor(m => m.供应商用户信息.提交入网)</td>
+                                    <td align="left">提交入网</td>
+                                    <td><input type="checkbox" name="msg" id="msg" value="-1" onclick="message(this)" />发送短信</td>
+
                             </tr>
                         </table>
+                            <table width="100%" style="margin-left:10px; margin-top:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td>@Html.CheckBoxFor(m => m.供应商用户信息.实地考察) 实地考察</td>
+                                </tr>
+                            </table>
+                            <table width="100%" style="margin-left:10px; margin-top:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td>申请入库：@Html.EnumDropDownListFor(m => m.审核数据.审核状态, new { onchange = "Reason(this)" })</td>
+                                    @Html.HiddenFor(m => m.审核数据.审核不通过原因, new { id = "reason" })
+                                    <td align="left">入库级别：@Html.EnumDropDownListFor(m => m.供应商用户信息.入库级别)</td>
+                                </tr>
+                            </table>
+                            <table width="100%" style="margin-left:10px; margin-top:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td>申请入网：@Html.EnumDropDownListFor(m => m.入网审核数据.审核状态, new { onchange = "Reason(this)" })</td>
+                                    <td align="left">
+                                        入网方式：@Html.EnumDropDownListFor(m => m.供应商用户信息.用户来源)
+                                    </td>
+                                </tr>
+                            </table>
+                            <table width="100%" style="margin-left:10px; margin-top:10px; margin-bottom:10px;">
+                                <tr>
+                                    <td>
+                                        认证级别：@Html.EnumDropDownListFor(m => m.供应商用户信息.认证级别)
+                                    </td>
+                                </tr>
+                            </table>
                     </div>
                     </div>
             </div>
+            </div>
             <div class="Second_Page" style="margin-left:0px; display:none;border-color:rgb(207, 197, 197); margin-top:0px; border-style:solid; border-width:1px;">
-                <div id="title_div" class="other_title title_addsupplier">会员信息管理</div>
+                <div id="title_div" class="index_bottom_zb_top_title title_addsupplier">联系人信息管理</div>
                 <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-right:auto;">
                     <table width="80%">
                         <tr>
@@ -566,111 +501,43 @@
                                 联系人：
                             </td>
                             <td width="25%">
-                                @Html.EditorFor(m => m.联系方式.联系人)
-                                <div class="out_box">
-                                    <div class="arrow"></div>
-                                    <div class="con_box">请填写联系人的姓名,如张晓东</div>
-                                </div>
-                                @Html.ValidationMessageFor(m => Model.联系方式.联系人)
+                                @Html.TextBoxFor(m => m.企业联系人信息.联系人姓名, new { style = "border:1px solid #ff0000;" })
                             </td>
                             <td width="25%" align="right">
                                 性别：
                             </td>
                             <td width="25%">
-                                @Html.EnumDropDownListFor(m => m.联系方式.性别, new { @style = "width:153px; margin-left:2px;" })
-                                <div class="out_box">
-                                    <div class="arrow"></div>
-                                    <div class="con_box">请选择联系人的性别</div>
-                                </div>
-                                @Html.ValidationMessageFor(m => Model.联系方式.性别)
+                                @Html.EnumDropDownListFor(m => m.企业联系人信息.联系人性别, new { @style = "width:153px; margin-left:2px;" })
                             </td>
                         <tr>
                             <td align="right">
                                 电子邮件：
                             </td>
                             <td>
-                                @Html.EditorFor(m => m.联系方式.电子邮件)
-                                <div class="out_box">
-                                    <div class="arrow"></div>
-                                    <div class="con_box">请填写联系人的电子邮件,可以使QQ邮箱号等</div>
-                                </div>
-                                @Html.ValidationMessageFor(m => Model.联系方式.电子邮件)
+                                @Html.TextBoxFor(m => m.企业联系人信息.联系人邮箱, new { style = "border:1px solid #ff0000;" })
                             </td>
                             <td align="right">
                                 手机：
                             </td>
                             <td>
-                                @Html.EditorFor(m => m.联系方式.手机)
-                                <div class="out_box">
-                                    <div class="arrow"></div>
-                                    <div class="con_box">请填写联系人的手机号码,如15145891257、13145892475、19214785623等</div>
-                                </div>
-                                @Html.ValidationMessageFor(m => Model.联系方式.手机)
+                                @Html.TextBoxFor(m => m.企业联系人信息.联系人手机, new { style = "border:1px solid #ff0000;" })
                             </td>
                         <tr>
                             <td align="right">
                                 固定电话：
                             </td>
                             <td>
-                                @Html.EditorFor(m => m.联系方式.固定电话)
-                                <div class="out_box">
-                                    <div class="arrow"></div>
-                                    <div class="con_box">请填写联系人的固定电话号码,如028-15784589,0817-4587651</div>
-                                </div>
-                                @Html.ValidationMessageFor(m => Model.联系方式.固定电话)
+                                @Html.TextBoxFor(m => m.企业联系人信息.联系人固定电话, new { style = "border:1px solid #ff0000;" })
                             </td>
-                            <td align="right">
-                                QQ：
-                            </td>
-                            <td>
-                                @Html.EditorFor(m => m.联系方式.QQ)
-                                <div class="out_box">
-                                    <div class="arrow"></div>
-                                    <div class="con_box">请填写联系人的QQ号码</div>
-                                </div>
-                                @Html.ValidationMessageFor(m => Model.联系方式.QQ)
-                            </td>
-                        <tr>
-                            <td align="right">
-                                微信：
-                            </td>
-                            <td>
-                                @Html.EditorFor(m => m.联系方式.微信)
-                                <div class="out_box">
-                                    <div class="arrow"></div>
-                                    <div class="con_box">请填写联系人的微信号</div>
-                                </div>
-                                @Html.ValidationMessageFor(m => Model.联系方式.微信)
-                            </td>
-                            <td align="right">
-                                微博：
-                            </td>
-                            <td>
-                                @Html.EditorFor(m => m.联系方式.微博)
-                                <div class="out_box">
-                                    <div class="arrow"></div>
-                                    <div class="con_box">请填写联系人的微博号</div>
-                                </div>
-                                @Html.ValidationMessageFor(m => Model.联系方式.微博)
-                            </td>
-                        </tr>
-                        <tr>
                             <td align="right">
                                 传真：
                             </td>
                             <td>
-                                @Html.EditorFor(m => m.联系方式.传真)
-                                <div class="out_box">
-                                    <div class="arrow"></div>
-                                    <div class="con_box">请填写联系人的传真，格式：028-45628976或者0816-4586579</div>
-                                </div>
-                                @Html.ValidationMessageFor(m => Model.联系方式.传真)
+                                @Html.EditorFor(m => m.企业联系人信息.联系人传真)
                             </td>
-
-                        </tr>
                     </table>
                     </div>
-                <div id="title_div" class="other_title title_addsupplier">联系地址信息<a href="###" onclick="addAddr(this)">【添加】</a></div>
+                    @*<div id="title_div" class="index_bottom_zb_top_title title_addsupplier">联系地址信息<a href="###" onclick="addAddr(this)">【添加】</a></div>
                     <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-bottom:10px; margin-right:auto;">
                         <div id="addr">
                             @if(Model.地址信息!=null&&Model.地址信息.Count()!=0)
@@ -684,11 +551,8 @@
                                     </td>
                                     <td width="25%">
                                         @Html.EnumDropDownListFor(m => m.地址信息[i].地址类型)
-                                        <div class="out_box">
-                                            <div class="arrow"></div>
-                                            <div class="con_box">请选择地址类型</div>
-                                        </div>
-                                        <br />
+                                        
+                                          
                                         @Html.ValidationMessageFor(m => m.地址信息[i].地址类型)
                                     </td>
 
@@ -697,10 +561,7 @@
                                     </td>
                                     <td width="25%">
                                         @Html.EditorFor(m => m.地址信息[i].省份)
-                                        <div class="out_box">
-                                            <div class="arrow"></div>
-                                            <div class="con_box">请填写省份,如四川省</div>
-                                        </div>
+                                        
                                         @Html.ValidationMessageFor(m => m.地址信息[i].省份)
                                     </td>
 
@@ -711,10 +572,7 @@
                                     </td>
                                     <td>
                                         @Html.EditorFor(m => m.地址信息[i].城市)
-                                        <div class="out_box">
-                                            <div class="arrow"></div>
-                                            <div class="con_box">请填写城市名称,如成都市</div>
-                                        </div>
+                                        
                                         @Html.ValidationMessageFor(m => m.地址信息[i].城市)
                                     </td>
 
@@ -723,10 +581,7 @@
                                     </td>
                                     <td>
                                         @Html.EditorFor(m => m.地址信息[i].区县)
-                                        <div class="out_box">
-                                            <div class="arrow"></div>
-                                            <div class="con_box">请填写区县,如郫县</div>
-                                        </div>
+                                       
                                         @Html.ValidationMessageFor(m => m.地址信息[i].区县)
                                     </td>
 
@@ -737,10 +592,7 @@
                                     </td>
                                     <td>
                                         @Html.EditorFor(m => m.地址信息[i].街道)
-                                        <div class="out_box">
-                                            <div class="arrow"></div>
-                                            <div class="con_box">请填写街道名称,如跑马街</div>
-                                        </div>
+                                        
                                         @Html.ValidationMessageFor(m => m.地址信息[i].街道)
                                     </td>
                                     <td align="right">
@@ -748,10 +600,7 @@
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(m => m.地址信息[i].邮政编码, new { id = "Post_Num" })
-                                        <div class="out_box">
-                                            <div class="arrow"></div>
-                                            <div class="con_box">请填写所在地的邮政编码,如614001</div>
-                                        </div>
+                                        
                                         @Html.ValidationMessageFor(m => m.地址信息[i].邮政编码)
                                     </td>
                                 </tr>
@@ -761,11 +610,8 @@
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(m => m.地址信息[i].联系人)
-                                        <div class="out_box">
-                                            <div class="arrow"></div>
-                                            <div class="con_box">请填写所在的的联系人姓名,如张晓东</div>
-                                        </div>
-                                        <br />
+                                        
+                                          
                                         @Html.ValidationMessageFor(m => m.地址信息[i].联系人)
                                     </td>
 
@@ -774,10 +620,7 @@
                                     </td>
                                     <td>
                                         @Html.EditorFor(m => m.地址信息[i].手机)
-                                        <div class="out_box">
-                                            <div class="arrow"></div>
-                                            <div class="con_box">请填写所在地的联系人的手机号码,如15112456786,13214578956等,请注意格式</div>
-                                        </div>
+                                        
                                         @Html.ValidationMessageFor(m => m.地址信息[i].手机)
                                     </td>
 
@@ -788,21 +631,15 @@
                                     </td>
                                     <td>
                                         @Html.TextBoxFor(m => m.地址信息[i].固定电话)
-                                        <div class="out_box">
-                                            <div class="arrow"></div>
-                                            <div class="con_box">请填写所在地的固定电话,如028-45628761或0815-2456178</div>
-                                        </div>
-                                        <br />
+                                       
+                                          
                                         @Html.ValidationMessageFor(m => m.地址信息[i].固定电话)
                                     </td>
                                     <td align="right"></td>
                                     <td>
                                         电子邮件：
                                         @Html.EditorFor(m => m.地址信息[i].电子邮件)
-                                        <div class="out_box">
-                                            <div class="arrow"></div>
-                                            <div class="con_box">请填写所在地的电子邮件,可以是QQ邮箱等</div>
-                                        </div>
+                                        
                                         @Html.ValidationMessageFor(m => m.地址信息[i].电子邮件)
                                     </td>
 
@@ -816,7 +653,7 @@
                                 <h1 style="width: 100%; text-align: center; color: lightgray;"><em>没有地址信息！</em></h1>
                     }
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             <div class="Third_Page" style="margin-left:0px;display:none;border-color:rgb(207, 197, 197); margin-top:0px; border-style:solid; border-width:1px;">
                 <div id="title_div" class="other_title title_addsupplier">营业信息管理</div>
@@ -827,122 +664,58 @@
                                 <td width="25%" align="right">组织机构代码：</td>
                                 <td width="25%">
                                     @Html.EditorFor(m => m.工商注册信息.组织机构代码)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写组织机构代码</div>
-                                    </div>
-                                    <br /> @Html.ValidationMessageFor(m => m.工商注册信息.组织机构代码)
+                                       @Html.ValidationMessageFor(m => m.工商注册信息.组织机构代码)
                                 </td>
-                                <td width="25%" align="right">组织机构代码证电子扫描件：</td>
-                                <td width="25%">
-                                    @Html.TextBoxFor(m => m.工商注册信息.组织机构代码证电子扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请上传组织机构代码证电子扫描件图片。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
-                                    </div> <br />
-                                </td>
-                            </tr>
-                            <tr>
                                 <td align="right">基本账户开户银行：</td>
                                 <td>
                                     @Html.EditorFor(m => m.工商注册信息.基本账户开户银行)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写开户银行的名称</div>
-                                    </div>
-                                    <br />
+
+
                                     @Html.ValidationMessageFor(m => m.工商注册信息.基本账户开户银行)
-                                </td>
-                                <td align="right">基本账户银行帐号：</td>
-                                <td>
-                                    @Html.EditorFor(m => m.工商注册信息.基本账户银行帐号)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写银行账号</div>
-                                    </div>
-                                    <br />
-                                    @Html.ValidationMessageFor(m => m.工商注册信息.基本账户银行帐号)
                                 </td>
                             </tr>
                             <tr>
+                               
+                                <td align="right">基本账户银行帐号：</td>
+                                <td>
+                                    @Html.EditorFor(m => m.工商注册信息.基本账户银行帐号)
+                                    @Html.ValidationMessageFor(m => m.工商注册信息.基本账户银行帐号)
+                                </td>
                                 <td align="right">
                                     @Html.EditorFor(m => m.工商注册信息.基本账户开户银行资信证明)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请确认开户证明</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.工商注册信息.基本账户开户银行资信证明)
+
+                                    @Html.ValidationMessageFor(m => m.工商注册信息.基本账户开户银行资信证明)
                                 </td>
                                 <td>基本账户开户银行资信证明</td>
-                                <td align="right"> 基本账户开户银行资信证明电子扫描件:</td>
-                                <td>
-                                    @Html.TextBoxFor(m => m.工商注册信息.基本账户开户银行资信证明电子扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请上传基本账户开户银行资信证明电子扫描件图片。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
-                                    </div>
-                                    <br />
-                                </td>
                             </tr>
                             <tr>
                                 <td align="right">
                                     @Html.EditorFor(m => m.工商注册信息.近3年缴纳社会保证金证明)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写缴纳社会保证金证明</div>
-                                    </div>
-                                    <br />
+                                    
+                                      
                                     @Html.ValidationMessageFor(m => m.工商注册信息.近3年缴纳社会保证金证明)
                                 </td>
                                 <td>近3年缴纳社会保证金证明</td>
-                                <td align="right">近3年缴纳社会保证金证明电子扫描件：</td>
-                                <td>
-                                    @Html.TextBoxFor(m => m.工商注册信息.近3年缴纳社会保证金证明电子扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请上传近3年缴纳社会保证金证明电子扫描件图片。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
-                                    </div>
-                                    <br />
-                                </td>
-                            </tr>
-                            <tr>
                                 <td align="right">
                                     @Html.EditorFor(m => m.工商注册信息.近3年有无重大违法记录)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写近3年有无重大违纪</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.工商注册信息.近3年有无重大违法记录)
+
+                                    @Html.ValidationMessageFor(m => m.工商注册信息.近3年有无重大违法记录)
                                 </td>
                                 <td>近3年有无重大违法记录</td>
+                            </tr>
+                            <tr>
+                                
                                 <td align="right">近3年有无重大违法记录电子扫描件：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.工商注册信息.近3年有无重大违法记录电子扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请上传近3年有无重大违纪的电子扫描件图片。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
-                                    </div>
-                                    <br />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="right">营业执照电子扫描件：</td>
-                                <td>
-                                    @Html.TextBoxFor(m => m.营业执照信息.营业执照电子扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请上传营业执照电子扫描件图片。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
-                                    </div>
-                                    <br />
+                                    
+                                      
                                 </td>
                                 <td align="right">营业执照发证机关：</td>
                                 <td>
                                     @Html.EditorFor(m => m.营业执照信息.营业执照发证机关)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写营业执照发证机关名称</div>
-                                    </div>
-                                    <br />
+
+
                                     @Html.ValidationMessageFor(m => m.营业执照信息.营业执照发证机关)
                                 </td>
                             </tr>
@@ -950,21 +723,15 @@
                                 <td align="right">营业执照注册号：</td>
                                 <td>
                                     @Html.EditorFor(m => m.营业执照信息.营业执照注册号)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写营业执照注册号</div>
-                                    </div>
-                                    <br />
+                                    
+                                      
                                     @Html.ValidationMessageFor(m => m.营业执照信息.营业执照注册号)
                                 </td>
                                 <td align="right">营业执照注册地址：</td>
                                 <td>
                                     @Html.EditorFor(m => m.营业执照信息.营业执照注册地址)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写营业执照注册地址,如四川省成都市工商局</div>
-                                    </div>
-                                    <br />
+                                    
+                                      
                                     @Html.ValidationMessageFor(m => m.营业执照信息.营业执照注册地址)
                                 </td>
                             </tr>
@@ -972,112 +739,76 @@
                                 <td align="right">营业执照注册资金(万元)：</td>
                                 <td>
                                     @Html.EditorFor(m => m.营业执照信息.营业执照注册资金)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写注册资金,如200</div>
-                                    </div>
-                                    <br />
+                                    
+                                      
                                     @Html.ValidationMessageFor(m => m.营业执照信息.营业执照注册资金)
                                 </td>
                                 <td align="right">营业执照有效期类型：</td>
                                 <td>
                                     @Html.EnumDropDownListFor(m => m.营业执照信息.营业执照有效期类型)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择营业执照的有效期类型</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.营业执照信息.营业执照有效期类型)
+                                    
+                                      @Html.ValidationMessageFor(m => m.营业执照信息.营业执照有效期类型)
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right">营业执照有效期起始日期：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.营业执照信息.营业执照有效期起始日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写营业执照的有效起始日期</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.营业执照信息.营业执照有效期起始日期)
+                                    
+                                      @Html.ValidationMessageFor(m => m.营业执照信息.营业执照有效期起始日期)
                                 </td>
                                 <td align="right">营业执照有效期结束日期：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.营业执照信息.营业执照有效期结束日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写营业执照的有效结束日期</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.营业执照信息.营业执照有效期结束日期)
+                                    
+                                      @Html.ValidationMessageFor(m => m.营业执照信息.营业执照有效期结束日期)
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right">营业执照最近年检日期：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.营业执照信息.营业执照最近年检日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写营业执照最近的年检日期</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.营业执照信息.营业执照最近年检日期)
+                                    
+                                      @Html.ValidationMessageFor(m => m.营业执照信息.营业执照最近年检日期)
                                 </td>
                                 <td align="right">经营范围：</td>
                                 <td>
                                     @Html.EditorFor(m => m.营业执照信息.经营范围)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写企业经营范围</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.营业执照信息.经营范围)
+                                    
+                                      @Html.ValidationMessageFor(m => m.营业执照信息.经营范围)
                                 </td>
                             </tr>
                             <tr>
-                                <td align="right">法定代表人姓名：</td>
-                                <td>
-                                    @Html.EditorFor(m => m.法定代表人信息.法定代表人姓名)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写法人代表姓名</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人姓名)
+                                <td width="25%" align="right">组织机构代码证电子扫描件：</td>
+                                <td width="25%">
+                                    @Html.TextBoxFor(m => m.工商注册信息.组织机构代码证电子扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
+
                                 </td>
-                                <td align="right">法定代表人身份证号：</td>
+                                <td align="right"> 基本账户开户银行资信证明电子扫描件:</td>
                                 <td>
-                                    @Html.EditorFor(m => m.法定代表人信息.法定代表人身份证号)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写法人代表18位身份证号,如5115211466502547895</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人身份证号)
+                                    @Html.TextBoxFor(m => m.工商注册信息.基本账户开户银行资信证明电子扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
+
+
                                 </td>
                             </tr>
                             <tr>
-                                <td align="right">法定代表人身份证电子扫描件：</td>
+                                <td align="right">近3年缴纳社会保证金证明电子扫描件：</td>
                                 <td>
-                                    @Html.TextBoxFor(m => m.法定代表人信息.法定代表人身份证电子扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请上传法人代表的身份证扫描件图片。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
-                                    </div>
-                                    <br />
+                                    @Html.TextBoxFor(m => m.工商注册信息.近3年缴纳社会保证金证明电子扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
+
+
                                 </td>
-                                <td align="right">法定代表人手机：</td>
+                                <td align="right">营业执照电子扫描件：</td>
                                 <td>
-                                    @Html.EditorFor(m => m.法定代表人信息.法定代表人手机)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写法人代表的手机号码，如13245782546，14725637895等</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人手机)
+                                    @Html.TextBoxFor(m => m.营业执照信息.营业执照电子扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
+
+
                                 </td>
-                            </tr>
-                            <tr>
-                                <td align="right"> 法定代表人固定电话：</td>
+                                <td align="right">三证合一：</td>
                                 <td>
-                                    @Html.EditorFor(m => m.法定代表人信息.法定代表人固定电话)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写法定代表的固定电话，如028-14568792或0815-1478569</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人固定电话)
+                                    @Html.TextBoxFor(m => m.营业执照信息.三证合一扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
+
+
                                 </td>
                             </tr>
                         </table>
@@ -1099,19 +830,13 @@
                                         <td align="right">年份：</td>
                                         <td>
                                             @Html.EditorFor(m => m.财务状况信息[i].年份)
-                                            <div class="out_box">
-                                                <div class="arrow"></div>
-                                                <div class="con_box">请填写年份,如2014/05/03</div>
-                                            </div>
+                                            
                                         </td>
                                         <td align="right">会计事务所名称：</td>
                                         <td>
                                             @Html.EditorFor(m => m.财务状况信息[i].会计事务所名称)
-                                            <div class="out_box">
-                                                <div class="arrow"></div>
-                                                <div class="con_box">请填写会计事务所名称</div>
-                                            </div>
-                                            <br />
+                                            
+                                              
                                             @Html.ValidationMessageFor(m => m.财务状况信息[i].会计事务所名称)
                                         </td>
                                     </tr>
@@ -1119,11 +844,8 @@
                                         <td align="right">会计事务所联系电话：</td>
                                         <td>
                                             @Html.EditorFor(m => m.财务状况信息[i].会计事务所联系电话)
-                                            <div class="out_box">
-                                                <div class="arrow"></div>
-                                                <div class="con_box">会计事务所联系电话，如:13214786542或028-14786523或0816-25894562</div>
-                                            </div>
-                                            <br />@Html.ValidationMessageFor(m => m.财务状况信息[i].会计事务所联系电话)
+                                            
+                                              @Html.ValidationMessageFor(m => m.财务状况信息[i].会计事务所联系电话)
                                         </td>
                                         <td align="right">@Html.EditorFor(m => m.财务状况信息[i].会计报表是否经注册会计师审计) 会计报表是否经注册会计师审计</td>
                                         <td></td>
@@ -1132,50 +854,35 @@
                                         <td align="right">资产总额(万元)：</td>
                                         <td>
                                             @Html.EditorFor(m => m.财务状况信息[i].资产总额)
-                                            <div class="out_box">
-                                                <div class="arrow"></div>
-                                                <div class="con_box">请填写资产总额,如100</div>
-                                            </div>
-                                            <br />@Html.ValidationMessageFor(m => m.财务状况信息[i].资产总额)
+                                            
+                                              @Html.ValidationMessageFor(m => m.财务状况信息[i].资产总额)
                                         </td>
                                         <td align="right"> 负债总额(万元)：</td>
                                         <td>
                                             @Html.EditorFor(m => m.财务状况信息[i].负债总额)
-                                            <div class="out_box">
-                                                <div class="arrow"></div>
-                                                <div class="con_box">请填写负债总额,如100</div>
-                                            </div>
-                                            <br />@Html.ValidationMessageFor(m => m.财务状况信息[i].负债总额)
+                                            
+                                              @Html.ValidationMessageFor(m => m.财务状况信息[i].负债总额)
                                         </td>
                                     </tr>
                                     <tr>
                                         <td align="right">销售收入(万元)：</td>
                                         <td>
                                             @Html.EditorFor(m => m.财务状况信息[i].销售收入)
-                                            <div class="out_box">
-                                                <div class="arrow"></div>
-                                                <div class="con_box">请填写销售收入,如120</div>
-                                            </div>
-                                            <br />@Html.ValidationMessageFor(m => m.财务状况信息[i].销售收入)
+                                            
+                                              @Html.ValidationMessageFor(m => m.财务状况信息[i].销售收入)
                                         </td>
                                         <td align="right">资产负债率(%)：</td>
                                         <td>
                                             @Html.EditorFor(m => m.财务状况信息[i].资产负债率)
-                                            <div class="out_box">
-                                                <div class="arrow"></div>
-                                                <div class="con_box">请填写资产负债率,如15</div>
-                                            </div>
-                                            <br />@Html.ValidationMessageFor(m => m.财务状况信息[i].资产负债率)
+                                            
+                                              @Html.ValidationMessageFor(m => m.财务状况信息[i].资产负债率)
                                         </td>
                                     </tr>
                                     <tr>
                                         <td align="right">净利润(万元)：</td>
                                         <td>
                                             @Html.EditorFor(m => m.财务状况信息[i].净利润)
-                                            <div class="out_box">
-                                                <div class="arrow"></div>
-                                                <div class="con_box">请填写净利润,如22</div>
-                                            </div>
+                                            
                                         </td>
                                     </tr>
                                 </table>
@@ -1188,6 +895,53 @@
                         }
                     </div>
                 </div>
+            </div>
+            <div class="six_Page" style="margin-left:0px;display:none;border-color:rgb(207, 197, 197); margin-top:0px; border-style:solid;border-width:1px;">
+                <div>
+                    <div id="title_div" class="index_bottom_zb_top_title title_addsupplier">法定代表人信息</div>
+                    <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-bottom:10px; margin-right:auto;">
+                        <table width="100%">
+                            <tr>
+                                <td align="right">法定代表人姓名：</td>
+                                <td>
+                                    @Html.EditorFor(m => m.法定代表人信息.法定代表人姓名)
+
+                                    @Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人姓名)
+                                </td>
+                                <td align="right">法定代表人身份证号：</td>
+                                <td>
+                                    @Html.EditorFor(m => m.法定代表人信息.法定代表人身份证号)
+
+                                    @Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人身份证号)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">法定代表人手机：</td>
+                                <td>
+                                    @Html.EditorFor(m => m.法定代表人信息.法定代表人手机)
+
+                                    @Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人手机)
+                                </td>
+                                <td align="right"> 法定代表人固定电话：</td>
+                                <td>
+                                    @Html.EditorFor(m => m.法定代表人信息.法定代表人固定电话)
+
+                                    @Html.ValidationMessageFor(m => m.法定代表人信息.法定代表人固定电话)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right">法定代表人身份证电子扫描件：</td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.法定代表人信息.法定代表人身份证电子扫描件, new { @type = "file", @name = "file", @style = "width:130px; height:30px;" })
+
+
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="seven_Page" style="margin-left:0px;display:none;border-color:rgb(207, 197, 197); margin-top:0px; border-style:solid;border-width:1px;">
                 <div>
                     <div id="title_div" class="other_title title_addsupplier">税务信息</div>
                     <div class="gys_znxx_box" style="width:95%; margin-left:auto; margin-bottom:10px; margin-right:auto;">
@@ -1196,125 +950,90 @@
                                 <td width="25%" align="right">国税税务登记证号：</td>
                                 <td width="25%">
                                     @Html.EditorFor(m => m.税务信息.国税税务登记证号)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写国税登记号</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.税务信息.国税税务登记证号)
+                                    
+                                      @Html.ValidationMessageFor(m => m.税务信息.国税税务登记证号)
                                 </td>
                                 <td width="25%" align="right">国税税务登记证发证机关：</td>
                                 <td width="25%">
                                     @Html.EditorFor(m => m.税务信息.国税税务登记证发证机关)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写国税税务登记证发证机关,如四川省国税局</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.税务信息.国税税务登记证发证机关)
+                                    
+                                      @Html.ValidationMessageFor(m => m.税务信息.国税税务登记证发证机关)
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right">国税税务登记证有效期类型：</td>
                                 <td>
-                                    @Html.EnumDropDownListFor(m => m.税务信息.国税税务登记证有效期类型, new { @style = "width:153px; margin-left:2px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择国税登记有效期类型</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.税务信息.国税税务登记证有效期类型)
+                                    @Html.EnumDropDownListFor(m => m.税务信息.国税税务登记证有效期类型, new { @style = "margin-left:2px;" })
+                                    
+                                      @Html.ValidationMessageFor(m => m.税务信息.国税税务登记证有效期类型)
                                 </td>
                                 <td align="right">国税税务登记证有效期起始日期：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.税务信息.国税税务登记证有效期起始日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写国税税务登记证有效期起始日期</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.税务信息.国税税务登记证有效期起始日期)
+                                    
+                                      @Html.ValidationMessageFor(m => m.税务信息.国税税务登记证有效期起始日期)
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right">国税税务登记证有效期结束日期：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.税务信息.国税税务登记证有效期结束日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写国税税务登记证有效期结束日期</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.税务信息.国税税务登记证有效期结束日期)
+                                    
+                                      @Html.ValidationMessageFor(m => m.税务信息.国税税务登记证有效期结束日期)
                                 </td>
                                 <td align="right"> 地税税务登记证号：</td>
                                 <td>
                                     @Html.EditorFor(m => m.税务信息.地税税务登记证号)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写地税税务登记证号</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.税务信息.地税税务登记证号)
+                                    
+                                      @Html.ValidationMessageFor(m => m.税务信息.地税税务登记证号)
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right">地税税务登记证发证机关：</td>
                                 <td>
                                     @Html.EditorFor(m => m.税务信息.地税税务登记证发证机关)
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写地税税务登记证发证机关,如四川省地税局</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.税务信息.地税税务登记证发证机关)
+                                    
+                                      @Html.ValidationMessageFor(m => m.税务信息.地税税务登记证发证机关)
                                 </td>
                                 <td align="right">地税税务登记证有效期类型：</td>
                                 <td>
-                                    @Html.EnumDropDownListFor(m => m.税务信息.地税税务登记证有效期类型, new { @style = "width:153px; margin-left:2px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择地税税务登记证有效期类型</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.税务信息.地税税务登记证有效期类型)
+                                    @Html.EnumDropDownListFor(m => m.税务信息.地税税务登记证有效期类型, new { @style = "margin-left:2px;" })
+                                    
+                                      @Html.ValidationMessageFor(m => m.税务信息.地税税务登记证有效期类型)
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right">地税税务登记证有效期起始日期：</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.税务信息.地税税务登记证有效期起始日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写地税税务登记证有效期起始日期</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.税务信息.地税税务登记证有效期起始日期)
+                                    
+                                      @Html.ValidationMessageFor(m => m.税务信息.地税税务登记证有效期起始日期)
                                 </td>
                                 <td align="right">地税税务登记证有效期结束日期:</td>
                                 <td>
                                     @Html.TextBoxFor(m => m.税务信息.地税税务登记证有效期结束日期, new { onfocus = "WdatePicker({isShowWeek:true})" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请填写地税税务登记证有效期结束日期</div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.税务信息.地税税务登记证有效期结束日期)
+                                    
+                                      @Html.ValidationMessageFor(m => m.税务信息.地税税务登记证有效期结束日期)
                                 </td>
                             </tr>
                             <tr>
                                 <td align="right">近3年纳税证明：</td>
                                 <td>
-                                    @Html.EnumDropDownListFor(m => m.税务信息.地税税务登记证有效期类型, new { @style = "width:153px; margin-left:2px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请选择地税登记证有效期类型</div>
-                                    </div>
+                                    @Html.EnumDropDownListFor(m => m.税务信息.地税税务登记证有效期类型, new { @style = "margin-left:2px;" })
+                                    
                                 </td>
                                 <td align="right">近3年纳税证明电子扫描件:
                                 <td>
                                     @Html.TextBoxFor(m => m.税务信息.近3年完税证明电子扫描件, new { @type = "file", @style = "width:130px; height:30px;" })
-                                    <div class="out_box">
-                                        <div class="arrow"></div>
-                                        <div class="con_box">请上传近3年纳税证明电子扫描件。<em style="color:red;">注：请上传2M以下的jpg格式的彩色扫描件图片</em></div>
-                                    </div>
-                                    <br />@Html.ValidationMessageFor(m => m.税务信息.近3年完税证明电子扫描件)
+                                    
+                                      @Html.ValidationMessageFor(m => m.税务信息.近3年完税证明电子扫描件)
                                 </td>
                             </tr>
                         </table>
                     </div>
                     </div>
             </div>
+            
         </div>
     </div>
     <div style="text-align:center;">
@@ -1323,7 +1042,7 @@
 }
 <script type="text/javascript" language="javascript">
     //财务信息
-    var Finance = '<table width="100%"><tbody><tr><td align="right">年份：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line input-validation-error" data-val="true" data-val-number="字段 年份 必须是一个数字。" data-val-required="请输入年份" name="财务状况信息[`].年份" type="text" value="0" aria-required="true" aria-invalid="true"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写年份,如2014/02/05</div></div></td><td align="right">会计事务所名称：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-required="*请输入会计事务所名称" name="财务状况信息[`].会计事务所名称" type="text" value="" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写会计事务所名称</div></div></td></tr><tr><td align="right">会计事务所联系电话：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-regex="*请输入手机号码或固话号码" data-val-regex-pattern="[0-9]{11}|[0-9]{3}-[0-9]{8}" data-val-required="*请输入会计事务所联系电话" name="财务状况信息[`].会计事务所联系电话" type="text" value="" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">会计事务所联系电话，如：13214786542或028-14786523或0816-25894562</div></div><br><span class="field-validation-valid" data-valmsg-for="财务状况信息[`].会计事务所联系电话" data-valmsg-replace="true"></span></td><td align="right"><input class="check-box valid" data-val="true" data-val-required="*请确认是否注册会计师审计" name="财务状况信息[`].会计报表是否经注册会计师审计" type="checkbox" value="true"><input name="财务状况信息[`].会计报表是否经注册会计师审计" type="hidden" value="false"> </td><td>会计报表是否经注册会计师审计</td></tr><tr><td align="right">资产总额(万元)：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 资产总额 必须是一个数字。" data-val-required="*请输入资产总额" name="财务状况信息[`].资产总额" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写资产总额,如100</div></div><br><span class="field-validation-valid" data-valmsg-for="财务状况信息[`].资产总额" data-valmsg-replace="true"></span></td><td align="right"> 负债总额(万元)：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 负债总额 必须是一个数字。" data-val-required="*请输入负债总额" name="财务状况信息[`].负债总额" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写负债总额,如100</div></div><br><span class="field-validation-valid" data-valmsg-for="财务状况信息[`].负债总额" data-valmsg-replace="true"></span></td></tr><tr><td align="right">销售收入(万元)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)"  class="text-box single-line valid" data-val="true" data-val-number="字段 销售收入 必须是一个数字。" data-val-required="*请输入销售收入" name="财务状况信息[`].销售收入" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写销售收入,如120</div></div><br><span class="field-validation-valid" data-valmsg-for="财务状况信息[`].销售收入" data-valmsg-replace="true"></span></td><td align="right">资产负债率(%)：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 资产负债率 必须是一个数字。" data-val-required="*请输入资产负债率" name="财务状况信息[`].资产负债率" type="text" value="0" aria-required="true"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写资产负债率,如15</div></div><br><span class="field-validation-valid" data-valmsg-for="财务状况信息[`].资产负债率" data-valmsg-replace="true"></span></td></tr><tr><td align="right">净利润(万元)：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line valid" data-val="true" data-val-number="字段 净利润 必须是一个数字。" data-val-required="*请输入净利润" name="财务状况信息[`].净利润" type="text" value="0.00" aria-required="true" aria-invalid="false"><div class="out_box"><div class="arrow"></div><div class="con_box">请填写净利润,如22</div></div></td></tr></tbody></table><hr/>';
+    var Finance = '<table width="100%"><tbody><tr><td align="right">年份：</td><td><input class="text-box single-line input-validation-error" data-val="true" data-val-number="字段 年份 必须是一个数字。" data-val-required="请输入年份" name="财务状况信息[`].年份" type="text" value="0" aria-required="true" aria-invalid="true"></td><td align="right">会计事务所名称：</td><td><input class="text-box single-line valid" data-val="true" data-val-required="*请输入会计事务所名称" name="财务状况信息[`].会计事务所名称" type="text" value="" aria-required="true" aria-invalid="false"></td></tr><tr><td align="right">会计事务所联系电话：</td><td><input class="text-box single-line valid" data-val="true" data-val-regex="*请输入手机号码或固话号码" data-val-regex-pattern="[0-9]{11}|[0-9]{3}-[0-9]{8}" data-val-required="*请输入会计事务所联系电话" name="财务状况信息[`].会计事务所联系电话" type="text" value="" aria-required="true" aria-invalid="false"></td><td align="right"><input class="check-box valid" data-val="true" data-val-required="*请确认是否注册会计师审计" name="财务状况信息[`].会计报表是否经注册会计师审计" type="checkbox" value="true"><input name="财务状况信息[`].会计报表是否经注册会计师审计" type="hidden" value="false"> </td><td>会计报表是否经注册会计师审计</td></tr><tr><td align="right">资产总额(万元)：</td><td><input class="text-box single-line valid" data-val="true" data-val-number="字段 资产总额 必须是一个数字。" data-val-required="*请输入资产总额" name="财务状况信息[`].资产总额" type="text" value="0.00" aria-required="true" aria-invalid="false"></td><td align="right"> 负债总额(万元)：</td><td><input class="text-box single-line valid" data-val="true" data-val-number="字段 负债总额 必须是一个数字。" data-val-required="*请输入负债总额" name="财务状况信息[`].负债总额" type="text" value="0.00" aria-required="true" aria-invalid="false"></td></tr><tr><td align="right">销售收入(万元)：</td><td><input class="text-box single-line valid" data-val="true" data-val-number="字段 销售收入 必须是一个数字。" data-val-required="*请输入销售收入" name="财务状况信息[`].销售收入" type="text" value="0.00" aria-required="true" aria-invalid="false"></td><td align="right">资产负债率(%)：</td><td><input class="text-box single-line valid" data-val="true" data-val-number="字段 资产负债率 必须是一个数字。" data-val-required="*请输入资产负债率" name="财务状况信息[`].资产负债率" type="text" value="0" aria-required="true"></td></tr><tr><td align="right">净利润(万元)：</td><td><input class="text-box single-line valid" data-val="true" data-val-number="字段 净利润 必须是一个数字。" data-val-required="*请输入净利润" name="财务状况信息[`].净利润" type="text" value="0.00" aria-required="true" aria-invalid="false"></td></tr></tbody></table><hr/>';
     var count1 = @Model.财务状况信息.Count
     function addFinance(th) {
         $(th).remove();
@@ -1331,7 +1050,7 @@
         $('#financialInfo h1').hide();
     }
     //联系地址
-    var addr = '<table width="80%"><tbody><tr><td align="right" width="25%">地址类型：</td><td><select style="width:153px; margin-left:2px;"  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" data-val="true" data-val-required="地址类型 字段是必需的。" name="地址信息[`].地址类型" aria-required="true" aria-invalid="false" class="valid"><option selected="selected" value="0">未指定</option><option value="1">联络地址</option><option value="2">单位地址</option><option value="3">经营地址</option><option value="4">收货地址</option><option value="5">发货地址</option><option value="6">工作地址</option><option value="7">居住地址</option><option value="99">其他</option></select><div class="out_box"><div class="arrow"></div><div class="con_box">请选择地址类型</div></div></td><td align="right" width="25%">省份：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line" name="地址信息[`].省份" type="text" value=""><div class="out_box"><div class="arrow"></div><div class="con_box">请填写省份,如四川省</div></div></td> </tr><tr><td align="right" width="25%">城市：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line" name="地址信息[`].城市" type="text" value=""><div class="out_box"><div class="arrow"></div><div class="con_box">请填写城市名称,如成都市</div></div></td><td align="right" width="25%">区县：</td><td><input onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line" name="地址信息[`].区县" type="text" value=""><div class="out_box"><div class="arrow"></div><div class="con_box">请填写区县,如郫县</div></div></td></tr><tr><td align="right">街道：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line" name="地址信息[`].街道" type="text" value=""><div class="out_box"><div class="arrow"></div><div class="con_box">请填写街道名称,如跑马街</div></div></td><td align="right">邮政编码：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" class="text-box single-line" data-val="true" data-val-regex="请输入正确的邮政编码" data-val-regex-pattern="^/d{6}$" name="地址信息[`].邮政编码" id="Post_Num" type="text" value=""><div class="out_box"><div class="arrow"></div><div class="con_box">请填写所在地的邮政编码,如614001</div></div></td></tr><tr><td  align="right">联系人：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="地址信息[`].联系人"/><div class="out_box"><div class="arrow"></div><div class="con_box">请填写所在的的联系人姓名,如张晓东</div></div></td><td  align="right">手机：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="地址信息[`].手机"/><div class="out_box"><div class="arrow"></div><div class="con_box">请填写所在地的联系人的手机号码,如15112456786,13214578956等,请注意格式</div></div></td></tr><tr><td  align="right">固定电话：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="地址信息[`].固定电话"/><div class="out_box"><div class="arrow"></div><div class="con_box">请填写所在地的固定电话，如028-45628761或0815-2456178</div></div></td><td align="right">电子邮件：</td><td><input  onmouseover="show_tip(this)" onmouseout="hide_tip(this)" type="text" name="地址信息[`].电子邮件"/><div class="out_box"><div class="arrow"></div><div class="con_box">请填写所在地的电子邮件,可以是QQ邮箱等</div></div></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><hr />';
+    var addr = '<table width="80%"><tbody><tr><td align="right" width="25%">地址类型：</td><td><select style="margin-left:2px;" data-val="true" data-val-required="地址类型 字段是必需的。" name="地址信息[`].地址类型" aria-required="true" aria-invalid="false" class="valid"><option selected="selected" value="0">未指定</option><option value="1">联络地址</option><option value="2">单位地址</option><option value="3">经营地址</option><option value="4">收货地址</option><option value="5">发货地址</option><option value="6">工作地址</option><option value="7">居住地址</option><option value="99">其他</option></select></td><td align="right" width="25%">省份：</td><td><input class="text-box single-line" name="地址信息[`].省份" type="text" value=""></td> </tr><tr><td align="right" width="25%">城市：</td><td><input class="text-box single-line" name="地址信息[`].城市" type="text" value=""></td><td align="right" width="25%">区县：</td><td><input class="text-box single-line" name="地址信息[`].区县" type="text" value=""></td></tr><tr><td align="right">街道：</td><td><input class="text-box single-line" name="地址信息[`].街道" type="text" value=""></td><td align="right">邮政编码：</td><td><input class="text-box single-line" data-val="true" data-val-regex="请输入正确的邮政编码" data-val-regex-pattern="^/d{6}$" name="地址信息[`].邮政编码" id="Post_Num" type="text" value=""></td></tr><tr><td  align="right">联系人：</td><td><input type="text" name="地址信息[`].联系人"/></td><td  align="right">手机：</td><td><input type="text" name="地址信息[`].手机"/></td></tr><tr><td  align="right">固定电话：</td><td><input type="text" name="地址信息[`].固定电话"/></td><td align="right">电子邮件：</td><td><input type="text" name="地址信息[`].电子邮件"/></td></tr><tr><td></td><td></td><td></td></tr></tbody></table><hr />';
     var count2 = @Model.地址信息.Count
     function addAddr(th) {
         $(th).remove();
@@ -1346,7 +1065,7 @@
             $(this).css({ "background-image": "url(/images/index_content_bg.jpg)", "color": "black" });
         });
         $(th).css({ "background-color": "rgb(94, 111, 0)", "color": "white", "background-image": "" });
-        $(".First_Page,.Second_Page,.Third_Page,.Forth_Page,.Fifth_Page").hide();
+        $(".First_Page,.Second_Page,.Third_Page,.Forth_Page,.Fifth_Page,.six_Page,.seven_Page").hide();
         $(str).show();
     }
     $(function () {
@@ -1397,6 +1116,15 @@
             }
         });
     });
+    $("#gystype").change(function () {
+        var val=$("#gystype option:selected").text();
+        if (val == "服务供应商") {
+            $("#gystypename").show();
+        }
+        else {
+            $("#gystypename").val("未填写").hide();
+        }
+    });
     $(document).ready(function () {
         $(":text#loginName").focus(function () { $("span#warn").text(""); });
         $(":text#loginName").blur(function() {
@@ -1407,17 +1135,6 @@
             });
         });
     });
-    $(document).ready(function () {
-        $("table tr td :input").mouseover(function () { $(this).next("div").show(); $(this).next("div").css("display", "inline-block"); });
-        $("table tr td :input").mouseout(function () { $(this).next("div").hide(); });
-    });
-    function show_tip(th) {
-        $(th).next("div").show();
-        $(th).next("div").css("display", "inline-block");
-    }
-    function hide_tip(th) {
-        $(th).next("div").hide();
-    }
 </script>
 
 
